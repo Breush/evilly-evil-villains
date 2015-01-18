@@ -1,0 +1,49 @@
+# SOME DESCRIPTIVE TITLE.
+# This file is put in the public domain.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid   ""
+msgstr  "Project-Id-Version: evily-evil-villains\n"
+        "Report-Msgid-Bugs-To: alexis.breust@gmail.com\n"
+        "POT-Creation-Date: 2015-01-18 11:02+0100\n"
+        "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+        "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+        "Language-Team: LANGUAGE <LL@li.org>\n"
+        "Language: \n"
+        "MIME-Version: 1.0\n"
+        "Content-Type: text/plain; charset=CHARSET\n"
+        "Content-Transfer-Encoding: 8bit\n"
+
+msgid   "Victim and alone"
+msgstr  ""
+
+msgid   "I sometimes have friends"
+msgstr  ""
+
+msgid   "Looking at who I am"
+msgstr  ""
+
+msgid   "Yet I want to choose"
+msgstr  ""
+
+msgid   "Someone who runs away"
+msgstr  ""
+
+msgid   "World name"
+msgstr  ""
+
+msgid   "Nahan"
+msgstr  ""
+
+msgid   "Last played"
+msgstr  ""
+
+msgid   "Play"
+msgstr  ""
+
+msgid   "Back"
+msgstr  ""
+
+msgid   "Create new world"
+msgstr  ""

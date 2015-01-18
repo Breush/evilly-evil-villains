@@ -1,0 +1,81 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-18 10:31+0100\n"
+"PO-Revision-Date: 2015-01-18 10:34+0100\n"
+"Last-Translator: Alexis Breust <alexis.breust@gmail.com>\n"
+"Language-Team: Français <>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+
+#: states/menu/main.cpp:51
+msgid "Victim and alone"
+msgstr "Victime solitaire"
+
+#: states/menu/main.cpp:52
+msgid "I sometimes have friends"
+msgstr "Illusions d'amitié"
+
+#: states/menu/main.cpp:53
+msgid "Looking at who I am"
+msgstr "Louchant sur qui je suis"
+
+#: states/menu/main.cpp:54
+msgid "Yet I want to choose"
+msgstr "Y a pourtant qu'un choix"
+
+#: states/menu/main.cpp:55
+msgid "Someone who runs away"
+msgstr "Synonyme de fuite"
+
+#: states/menu/selectworld.cpp:26
+msgid "World name"
+msgstr "Nom du monde"
+
+#: states/menu/selectworld.cpp:26
+msgid "Nahan"
+msgstr "Nahan"
+
+#: states/menu/selectworld.cpp:26
+msgid "Last played"
+msgstr "Dernière fois joué"
+
+#: states/menu/selectworld.cpp:48
+msgid "Play"
+msgstr "Jouer"
+
+#: states/menu/selectworld.cpp:53
+msgid "Back"
+msgstr "Retour"
+
+#: states/menu/selectworld.cpp:56
+msgid "Create new world"
+msgstr "Créer un nouveau monde"
+
+#~ msgid "Now you can play"
+#~ msgstr "Nous pouvons jouer"
+
+#~ msgid "a multiplayer game"
+#~ msgstr "avec des amis"
+
+#~ msgid "here is what you are"
+#~ msgstr "héros que vous êtes"
+
+#~ msgid "you always choose"
+#~ msgstr "y a toujours un choix"
+
+#~ msgid "Avatar"
+#~ msgstr "Avatar"
+
+#~ msgid "Test"
+#~ msgstr "French toast"
