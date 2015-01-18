@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.0\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-18 10:31+0100\n"
-"PO-Revision-Date: 2015-01-18 10:34+0100\n"
+"Report-Msgid-Bugs-To: alexis.breust@gmail.com\n"
+"POT-Creation-Date: 2015-01-18 12:13+0100\n"
+"PO-Revision-Date: 2015-01-18 12:26+0100\n"
 "Last-Translator: Alexis Breust <alexis.breust@gmail.com>\n"
 "Language-Team: Français <>\n"
 "Language: fr\n"
@@ -18,49 +18,41 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 
-#: states/menu/main.cpp:51
 msgid "Victim and alone"
 msgstr "Victime solitaire"
 
-#: states/menu/main.cpp:52
 msgid "I sometimes have friends"
 msgstr "Illusions d'amitié"
 
-#: states/menu/main.cpp:53
 msgid "Looking at who I am"
 msgstr "Louchant sur qui je suis"
 
-#: states/menu/main.cpp:54
 msgid "Yet I want to choose"
 msgstr "Y a pourtant qu'un choix"
 
-#: states/menu/main.cpp:55
 msgid "Someone who runs away"
 msgstr "Synonyme de fuite"
 
-#: states/menu/selectworld.cpp:26
 msgid "World name"
 msgstr "Nom du monde"
 
-#: states/menu/selectworld.cpp:26
-msgid "Nahan"
-msgstr "Nahan"
+msgid "Villain"
+msgstr "Méchant"
 
-#: states/menu/selectworld.cpp:26
 msgid "Last played"
 msgstr "Dernière fois joué"
 
-#: states/menu/selectworld.cpp:48
 msgid "Play"
 msgstr "Jouer"
 
-#: states/menu/selectworld.cpp:53
 msgid "Back"
 msgstr "Retour"
 
-#: states/menu/selectworld.cpp:56
 msgid "Create new world"
 msgstr "Créer un nouveau monde"
+
+#~ msgid "Nahan"
+#~ msgstr "Nahan"
 
 #~ msgid "Now you can play"
 #~ msgstr "Nous pouvons jouer"

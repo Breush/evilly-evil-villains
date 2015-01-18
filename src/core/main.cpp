@@ -11,8 +11,8 @@ int main(int argc, char *argv[])
     // Internationalization initiation
     // TODO Move in its own file
     setlocale(LC_ALL, "");
-    bindtextdomain("nahys", "res/po/");
-    textdomain("nahys");
+    bindtextdomain("eev", "res/po/");
+    textdomain("eev");
 
     // Handle arguments
 #if DEBUG_LEVEL >= 1

@@ -23,7 +23,7 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack, Context context)
     m_uiCore.add(&m_list);
     m_list.setPosition(0.1f * viewSize.x, 0.1f * viewSize.y);
     m_list.setSize({0.8f * viewSize.x, 0.7f * viewSize.y});
-    m_list.setColumns({_("World name"), _("Nahan"), _("Last played")});
+    m_list.setColumns({_("World name"), _("Villain"), _("Last played")});
     m_list.setColumnFillClip(2, false, false);
 
     // TODO Charger la liste des mondes
