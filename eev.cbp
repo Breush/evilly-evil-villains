@@ -51,7 +51,6 @@
 			<Add option="-Wextra" />
 			<Add option="-Wall" />
 			<Add directory="inc/" />
-			<Add directory="/usr/local/include/" />
 		</Compiler>
 		<Linker>
 			<Add library="sfml-audio" />
@@ -60,7 +59,6 @@
 			<Add library="sfml-system" />
 			<Add library="pugixml" />
 			<Add library="GL" />
-			<Add directory="/usr/local/lib/" />
 		</Linker>
 		<Unit filename="inc/core/application.hpp" />
 		<Unit filename="inc/core/gettext.hpp" />
