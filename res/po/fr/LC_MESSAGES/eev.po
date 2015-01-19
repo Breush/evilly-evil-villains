@@ -50,24 +50,3 @@ msgstr "Retour"
 
 msgid "Create new world"
 msgstr "Créer un nouveau monde"
-
-#~ msgid "Nahan"
-#~ msgstr "Nahan"
-
-#~ msgid "Now you can play"
-#~ msgstr "Nous pouvons jouer"
-
-#~ msgid "a multiplayer game"
-#~ msgstr "avec des amis"
-
-#~ msgid "here is what you are"
-#~ msgstr "héros que vous êtes"
-
-#~ msgid "you always choose"
-#~ msgstr "y a toujours un choix"
-
-#~ msgid "Avatar"
-#~ msgstr "Avatar"
-
-#~ msgid "Test"
-#~ msgstr "French toast"
