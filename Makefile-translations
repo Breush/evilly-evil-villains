@@ -12,7 +12,7 @@ TRANSLATABLE_FILES=					\
 	
 TRANSLATIONS_FILES=$(LANGUAGES_SUPPORTED:%=res/po/%/LC_MESSAGES/eev.mo)
 
-pot:
+pot: translations
 	xgettext -Dsrc/ -k_ --c++ --msgid-bugs-address=sherlock.breust@gmail.com --package-name=evily-evil-villains --foreign-user -i --no-location -o res/po/eev.pot $(TRANSLATABLE_FILES)
 
 translations: $(TRANSLATIONS_FILES)
