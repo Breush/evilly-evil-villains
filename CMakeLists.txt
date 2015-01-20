@@ -17,7 +17,6 @@ endmacro()
 # Set a default build type if none was provided
 # This has to be done before the project() instruction!
 eev_set_option(CMAKE_BUILD_TYPE Debug STRING "Choose the type of build (Debug or Release)")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE})
 
 # Add project and includes
 project(EEV)
@@ -29,12 +28,14 @@ add_executable(${EXECUTABLE_NAME} ${SOURCES_FILES})
 include_directories(${CMAKE_SOURCE_DIR}/inc/)
 include_directories(${CMAKE_SOURCE_DIR}/ext/pugixml/)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE})
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 #=====
 # Find SFML 2.X
 
+eev_set_option(SFML_ROOT "" STRING "Where is SFML installed")
 find_package(SFML 2 REQUIRED system window graphics audio)
 if(SFML_FOUND)
 	include_directories(${SFML_INCLUDE_DIR})
@@ -57,5 +58,14 @@ find_package(Gettext REQUIRED)
 if (GETTEXT_FOUND)
 	include_directories(${GETTEXT_INCLUDE_DIR})
 	target_link_libraries(${EXECUTABLE_NAME} ${GETTEXT_LIBRARIES})
+endif()
+
+#=====
+# Find LibIntl (comes with gettext)
+
+find_package(LibIntl REQUIRED)
+if (LibIntl_FOUND)
+	include_directories(${LibIntl_INCLUDE_DIR})
+	target_link_libraries(${EXECUTABLE_NAME} ${LibIntl_LIBRARIES})
 endif()
 
