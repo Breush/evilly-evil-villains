@@ -7,5 +7,5 @@ All documents within this repository are written in English for an unknown reaso
 ## External librairies used
 
 - SFML 2.2
-- pugixml
 - gettext
+- pugixml (integrated)
