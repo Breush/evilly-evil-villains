@@ -6,8 +6,8 @@
 #include "tools/debug.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
-
 #include <pugixml.hpp>
+#include <string>
 
 using namespace nui;
 

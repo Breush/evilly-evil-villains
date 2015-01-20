@@ -1,11 +1,10 @@
 #pragma once
 
 #include "nui/object.hpp"
-
+#include "tools/int.hpp"
 #include "drawables/line.hpp"
 
 #include <initializer_list>
-
 #include <SFML/Graphics/Text.hpp>
 
 namespace nui

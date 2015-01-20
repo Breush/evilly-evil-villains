@@ -1,6 +1,7 @@
 #pragma once
 
 #include "nui/object.hpp"
+#include "tools/int.hpp"
 #include "drawables/line.hpp"
 #include "drawables/arrow.hpp"
 

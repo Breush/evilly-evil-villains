@@ -1,6 +1,7 @@
 #include "nui/hstacker.hpp"
 
 #include "tools/debug.hpp"
+#include "tools/int.hpp"
 
 using namespace nui;
 

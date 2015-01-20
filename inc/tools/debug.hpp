@@ -10,6 +10,7 @@
     #define DEBUG_MODE
 
     #include <iostream>
+    #include <cstdlib>
 
     #define assert(bool_expr) \
         do { if (!(bool_expr)) {\

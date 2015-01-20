@@ -11,3 +11,5 @@ typedef uint_fast8_t    uintf8;
 typedef uint_fast16_t   uintf16;
 typedef uint_fast32_t   uintf32;
 typedef uint_fast64_t   uintf64;
+
+typedef unsigned int uint;

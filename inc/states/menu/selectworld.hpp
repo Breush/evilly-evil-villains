@@ -6,6 +6,7 @@
 #include "nui/hstacker.hpp"
 #include "nui/button.hpp"
 
+#include <array>
 #include <SFML/Graphics/RectangleShape.hpp>
 
 class MenuSelectWorldState : public State

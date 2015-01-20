@@ -1,5 +1,6 @@
 #pragma once
 
+#include "tools/int.hpp"
 #include "resources/holder.hpp"
 #include "resources/identifiers.hpp"
 
