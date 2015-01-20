@@ -4,6 +4,7 @@
 #include "resources/soundplayer.hpp"
 #include "tools/math.hpp"
 #include "tools/debug.hpp"
+#include "tools/platform-fixes.hpp" // std::stoi
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <pugixml.hpp>
