@@ -1,3 +1,4 @@
+#include "core/application.hpp"
 #include "game/game.hpp"
 #include "player/player.hpp"
 #include "tools/tools.hpp"
@@ -15,10 +16,9 @@ Game::Context::Context(Camera& inCamera)
 //----------------//
 //----- Game -----//
 
-Game::Game(State::Context inContext)
-    : m_context(inContext)
-    , m_viewSize(context().window->getView().getSize())
-    , m_camera(viewSize())
+Game::Game()
+    : m_viewSize(Application::context().resolution)
+    , m_camera(m_viewSize)
     , m_gameContext(m_camera)
 {
 }

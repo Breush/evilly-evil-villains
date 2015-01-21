@@ -22,7 +22,7 @@ namespace nui
         // Virtual
         void init() override;
         void update() override;
-        void handleMouseEvent(const sf::Event& event) override;
+        void handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos) override;
 
         // React handling
         std::string& getReact() { return m_react; }
@@ -45,8 +45,8 @@ namespace nui
         void selectActiveRect();
 
         // Mouse events
-        void handleMousePressed(const sf::Event& event);
-        void handleMouseMoved(const sf::Event& event);
+        void handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos);
+        void handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos);
         void handleMouseLeft();
 
         struct ReactInfo {

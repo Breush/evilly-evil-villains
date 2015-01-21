@@ -1,5 +1,5 @@
+#include "core/application.hpp"
 #include "nui/contextmenu.hpp"
-
 #include "nui/uicore.hpp"
 #include "resources/holder.hpp"
 
@@ -13,7 +13,7 @@ ContextMenu::ContextMenu()
 void ContextMenu::init()
 {
     // Getting font from holder
-    sf::Font& font = core()->context().fonts->get(Fonts::NUI);
+    sf::Font& font = Application::context().fonts.get(Fonts::NUI);
     m_text.setCharacterSize(16);
     m_text.setFont(font);
     m_text.setString("Hello");

@@ -1,3 +1,5 @@
+#include "core/application.hpp"
+
 #include "nui/uicore.hpp"
 #include "nui/object.hpp"
 
@@ -7,6 +9,7 @@
 #include "tools/event.hpp"
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
+#include "tools/math.hpp" // clamp
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -16,9 +19,8 @@
 
 using namespace nui;
 
-uiCore::uiCore(State::Context inContext)
-    : m_context(inContext)
-    , m_viewSize(inContext.window->getView().getSize())
+uiCore::uiCore()
+    : m_viewSize(Application::context().resolution)
     , m_hoveredChild(nullptr)
     , m_focusedChild(nullptr)
     , m_focusAnimation(0)
@@ -29,7 +31,7 @@ uiCore::uiCore(State::Context inContext)
     m_detectTarget.setSmooth(false);
 
     // Focusing system
-    m_focusSprite.setTexture(context().textures->get(Textures::NUI_FOCUS));
+    m_focusSprite.setTexture(Application::context().textures.get(Textures::NUI_FOCUS));
     m_focusSprite.setColor( {255, 255, 255, 100});
 }
 
@@ -92,14 +94,14 @@ void uiCore::drawDetectImage()
     m_detectImage = m_detectTarget.getTexture().copyToImage();
 }
 
-uint8 uiCore::getDetectValue(const sf::Event::MouseMoveEvent& pos) const
+uint8 uiCore::getDetectValue(const sf::Vector2u& pos) const
 {
-    return m_detectImage.getPixel(pos.x, pos.y).r;
+    return getDetectValue(pos.x, pos.y);
 }
 
-uint8 uiCore::getDetectValue(const sf::Event::MouseButtonEvent& pos) const
+uint8 uiCore::getDetectValue(const uint& x, const uint& y) const
 {
-    return m_detectImage.getPixel(pos.x, pos.y).r;
+    return m_detectImage.getPixel(x, y).r;
 }
 
 //------------------//
@@ -112,23 +114,33 @@ void uiCore::handleEvent(const sf::Event& event)
 
     // Mouse moving - setting hovered child
     if (event.type == sf::Event::MouseMoved) {
-        auto object = m_detectMap.find(getDetectValue(event.mouseMove));
-        // If mouse does not select any child
+        auto& window = Application::context().window;
+        sf::Vector2f relPos = window.mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
+        clamp(relPos, Application::context().resolution);
+
+        // Does mouse select any child?
+        auto object = m_detectMap.find(getDetectValue(uint(relPos.x), uint(relPos.y)));
         if (object == m_detectMap.end()) {
             setHoveredChild(nullptr);
             return;
         }
+
         setHoveredChild(object->second);
-        object->second->handleMouseEvent(event);
+        object->second->handleMouseEvent(event, relPos);
         return;
     }
 
     // Mouse : click or wheel action
     if (isMouse(event)) {
-        auto object = m_detectMap.find(getDetectValue(event.mouseButton));
+        auto& window = Application::context().window;
+        sf::Vector2f relPos = window.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
+        clamp(relPos, Application::context().resolution);
+
+        auto object = m_detectMap.find(getDetectValue(uint(relPos.x), uint(relPos.y)));
         returnif (object == m_detectMap.end());
+
         setFocusedChild(object->second);
-        object->second->handleMouseEvent(event);
+        object->second->handleMouseEvent(event, relPos);
         return;
     }
 
@@ -237,7 +249,7 @@ void uiCore::setHoveredChild(Object* inHoveredChild)
     // Emit MouseLeft if mouse was over an other child
     sf::Event event;
     event.type = sf::Event::MouseLeft;
-    m_hoveredChild->handleMouseEvent(event);
+    m_hoveredChild->handleMouseEvent(event, sf::Vector2f());
     m_hoveredChild = inHoveredChild;
 }
 
@@ -251,7 +263,7 @@ void uiCore::draw(sf::RenderTarget& target, sf::RenderStates states) const
         // Mark focused child
         if (child == focusedChild()) {
             sf::RenderStates focusStates(states);
-            focusStates.shader = &context().shaders->get(Shaders::NUI_FOCUS);
+            focusStates.shader = &Application::context().shaders.get(Shaders::NUI_FOCUS);
             target.draw(m_focusSprite, focusStates);
         }
         target.draw(*child, states);
@@ -276,9 +288,9 @@ void uiCore::update(sf::Time dt)
             m_focusSprite.setOrigin(child->getOrigin());
             m_focusSprite.move(focusRect().left, focusRect().top);
             sf::Vector2f textureSize(focusRect().width, focusRect().height);
-            sf::Vector2f position(m_focusSprite.getPosition() - m_focusSprite.getOrigin());
-            context().shaders->setParameter(Shaders::NUI_FOCUS, "textureSize", textureSize);
-            context().shaders->setParameter(Shaders::NUI_FOCUS, "position", position);
+            sf::Vector2i position = Application::context().window.mapCoordsToPixel(m_focusSprite.getPosition() - m_focusSprite.getOrigin());
+            Application::context().shaders.setParameter(Shaders::NUI_FOCUS, "textureSize", textureSize);
+            Application::context().shaders.setParameter(Shaders::NUI_FOCUS, "position", sf::Vector2f(position.x, position.y));
         }
 
         child->update(dt);

@@ -13,7 +13,7 @@ class Player : public sf::Drawable, private sf::NonCopyable
 {
 public:
     // Constructors
-    Player(State::Context inContext, Game::Context& inGameContext);
+    Player(Game::Context& inGameContext);
     virtual ~Player();
 
     // Routine
@@ -25,7 +25,6 @@ public:
     void checkOnGround();
 
     // Params
-    PARAMG(State::Context, m_context, context)
     PARAMGS(bool, m_onGround, onGround, setOnGround)
     PARAMGS(sf::Vector2f, m_position, position, setPosition)
     PARAMGS(sf::Vector2f, m_speed, speed, setSpeed)

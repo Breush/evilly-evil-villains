@@ -1,5 +1,5 @@
+#include "core/application.hpp"
 #include "states/game/pause.hpp"
-
 #include "tools/tools.hpp"
 #include "resources/holder.hpp"
 
@@ -8,14 +8,14 @@
 #include <SFML/Graphics/View.hpp>
 
 
-GamePauseState::GamePauseState(StateStack& stack, Context context)
-    : State(stack, context)
+GamePauseState::GamePauseState(StateStack& stack)
+    : State(stack)
     , mBackgroundSprite()
     , mPausedText()
     , mInstructionText()
 {
-    sf::Font& font = context.fonts->get(Fonts::NUI);
-    sf::Vector2f viewSize = context.window->getView().getSize();
+    sf::Font& font = Application::context().fonts.get(Fonts::NUI);
+    sf::Vector2f viewSize = Application::context().resolution;
 
     mPausedText.setFont(font);
     mPausedText.setString("Game Paused");
@@ -33,12 +33,11 @@ GamePauseState::GamePauseState(StateStack& stack, Context context)
 
 void GamePauseState::draw()
 {
-    sf::RenderWindow& window = *getContext().window;
-    window.setView(window.getDefaultView());
+    sf::RenderWindow& window = Application::context().window;
 
     sf::RectangleShape backgroundShape;
     backgroundShape.setFillColor(sf::Color(0, 0, 0, 150));
-    backgroundShape.setSize(window.getView().getSize());
+    backgroundShape.setSize(Application::context().resolution);
 
     window.draw(backgroundShape);
     window.draw(mPausedText);

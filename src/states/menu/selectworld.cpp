@@ -1,5 +1,6 @@
 #include "states/menu/selectworld.hpp"
 
+#include "core/application.hpp"
 #include "core/gettext.hpp"
 #include "tools/tools.hpp"
 #include "resources/holder.hpp"
@@ -9,11 +10,11 @@
 #include <SFML/Graphics/View.hpp>
 
 
-MenuSelectWorldState::MenuSelectWorldState(StateStack& stack, Context context)
-    : baseClass(stack, context)
-    , m_uiCore(context)
+MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
+    : baseClass(stack)
+    , m_uiCore()
 {
-    const sf::Vector2f& viewSize = context.window->getView().getSize();
+    auto& viewSize = Application::context().resolution;
 
     // Background
     m_bgRect.setFillColor(sf::Color(0, 0, 0, 230));
@@ -58,7 +59,7 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack, Context context)
     });
 
     // Ambient feeling music
-    context.music->setVolume(25);
+    Application::context().music.setVolume(25);
 }
 
 MenuSelectWorldState::~MenuSelectWorldState()
@@ -68,7 +69,7 @@ MenuSelectWorldState::~MenuSelectWorldState()
             delete button;
 
     // Ambient feeling music
-    m_uiCore.context().music->setVolume(75);
+    Application::context().music.setVolume(75);
 }
 
 void MenuSelectWorldState::onShow()
@@ -78,14 +79,11 @@ void MenuSelectWorldState::onShow()
 
 void MenuSelectWorldState::draw()
 {
-    sf::RenderWindow& window = *getContext().window;
-    window.setView(window.getDefaultView());
-
     // Background
-    window.draw(m_bgRect);
+    Application::context().window.draw(m_bgRect);
 
     // Menu ui
-    window.draw(m_uiCore);
+    Application::context().window.draw(m_uiCore);
 }
 
 bool MenuSelectWorldState::update(sf::Time dt)

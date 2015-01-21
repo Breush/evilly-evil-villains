@@ -1,5 +1,5 @@
+#include "core/application.hpp"
 #include "nui/object.hpp"
-
 #include "resources/holder.hpp"
 #include "nui/uicore.hpp"
 
@@ -103,7 +103,7 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const
     {
         // Setting shader if needed
         if (part.shader != Shaders::NONE)
-            states.shader = &core()->context().shaders->get(part.shader);
+            states.shader = &Application::context().shaders.get(part.shader);
         else
             states.shader = shader;
 

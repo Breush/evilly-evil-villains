@@ -1,3 +1,4 @@
+#include "core/application.hpp"
 #include "states/loading.hpp"
 #include "tools/tools.hpp"
 #include "resources/holder.hpp"
@@ -6,11 +7,10 @@
 #include <SFML/Graphics/View.hpp>
 
 
-LoadingState::LoadingState(StateStack& stack, Context context)
-    : State(stack, context)
+LoadingState::LoadingState(StateStack& stack)
+    : State(stack)
 {
-    sf::RenderWindow& window = *getContext().window;
-    sf::Vector2f viewSize = window.getView().getSize();
+    auto& viewSize = Application::context().resolution;
 
     mLoadingText.setString("Loading Resources");
     mLoadingText.setPosition(viewSize.x / 2.f, viewSize.y / 2.f + 50.f);
@@ -32,13 +32,9 @@ LoadingState::LoadingState(StateStack& stack, Context context)
 
 void LoadingState::draw()
 {
-    sf::RenderWindow& window = *getContext().window;
-
-    window.setView(window.getDefaultView());
-
-    window.draw(mLoadingText);
-    window.draw(mProgressBarBackground);
-    window.draw(mProgressBar);
+    Application::context().window.draw(mLoadingText);
+    Application::context().window.draw(mProgressBarBackground);
+    Application::context().window.draw(mProgressBar);
 }
 
 bool LoadingState::update(sf::Time)

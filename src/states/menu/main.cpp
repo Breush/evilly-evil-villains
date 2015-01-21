@@ -1,6 +1,7 @@
 #include "states/menu/main.hpp"
 
 #include "core/gettext.hpp"
+#include "core/application.hpp"
 #include "tools/tools.hpp"
 #include "resources/holder.hpp"
 #include "resources/musicplayer.hpp"
@@ -9,22 +10,19 @@
 #include <SFML/Graphics/View.hpp>
 
 
-MenuMainState::MenuMainState(StateStack& stack, Context context)
-    : baseClass(stack, context)
-    , m_uiCore(context)
-    , m_choiceBox()
-    , m_reactImage()
+MenuMainState::MenuMainState(StateStack& stack)
+    : baseClass(stack)
     , m_bgRotAngle(0.f)
 {
-    const sf::Vector2f& viewSize = context.window->getView().getSize();
+    const sf::Vector2f& viewSize = Application::context().resolution;
 
     // Background
-    sf::Texture& texture = context.textures->get(Textures::MENU_BG);
+    sf::Texture& texture = Application::context().textures.get(Textures::MENU_BG);
     m_bgSprite.setTexture(texture);
     m_bgSprite.setPosition((viewSize - sf::Vector2f(texture.getSize())) / 2.f);
 
     // Shaders
-    m_bgShader = &context.shaders->get(Shaders::MENU_BG);
+    m_bgShader = &Application::context().shaders.get(Shaders::MENU_BG);
 
     // Choices
     m_choices.push_back("V");
@@ -71,8 +69,8 @@ MenuMainState::MenuMainState(StateStack& stack, Context context)
     m_reactImage.setReactCallback(m_choices[4], quitGame);
 
     // Menu theme
-    // FIXME context.music->play(Music::MENU_THEME);
-    context.music->setVolume(75);
+    // Application::context().music.play(Music::MENU_THEME);
+    Application::context().music.setVolume(75);
 }
 
 void MenuMainState::onShow()
@@ -82,8 +80,7 @@ void MenuMainState::onShow()
 
 void MenuMainState::draw()
 {
-    sf::RenderWindow& window = *getContext().window;
-    window.setView(window.getDefaultView());
+    auto& window = Application::context().window;
 
     // Animated background and menu
     window.draw(m_bgSprite, m_bgShader);

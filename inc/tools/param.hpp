@@ -8,6 +8,12 @@
         type  getter() const { return name; }   \
         type& getter() { return name; }
 
+#define PARAMGNR(type, name, getter)              \
+    private:                                    \
+        type name;                              \
+    public:                                     \
+        type  getter() const { return name; }
+
 // Getter and setter
 #define PARAMGS(type, name, getter, setter)         \
     private:                                        \

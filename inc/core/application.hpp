@@ -11,12 +11,28 @@
 #include <SFML/Graphics/Shader.hpp>
 #include <SFML/Graphics/Text.hpp>
 
-
 class Application
 {
+    struct Context {
+        Context(sf::Vector2f dimensions, const std::string& title, uint32_t style = sf::Style::Default)
+            : resolution(dimensions)
+            , window(sf::VideoMode(dimensions.x, dimensions.y), title, style)
+        {}
+
+        sf::Vector2f resolution;
+        sf::RenderWindow window;
+        TextureHolder textures;
+        ShaderHolder shaders;
+        FontHolder fonts;
+        MusicPlayer music;
+        SoundPlayer sounds;
+    };
+
 public:
     Application();
     void run();
+
+    static inline Context& context() { return s_context; }
 
 protected:
     void processInput();
@@ -31,16 +47,14 @@ protected:
     // States
     void registerStates();
 
-private:
-    static const sf::Time TimePerFrame;
+    // Window management
+    sf::View bestView(const sf::Vector2f& windowSize);
 
-    sf::RenderWindow m_window;
-    TextureHolder m_textures;
-    FontHolder m_fonts;
-    ShaderHolder m_shaders;
+private:
+    static const sf::Time s_timePerFrame;
+    static Context s_context;
+
     StateStack m_stateStack;
-    MusicPlayer	m_music;
-    SoundPlayer	m_sounds;
 
     States::ID m_initialState;
     float m_gameTime;

@@ -9,7 +9,7 @@
 class GamePauseState : public State
 {
 public:
-    GamePauseState(StateStack& stack, Context context);
+    GamePauseState(StateStack& stack);
 
     virtual void draw();
     virtual bool update(sf::Time dt);

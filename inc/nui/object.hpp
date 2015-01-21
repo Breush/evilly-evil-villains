@@ -25,7 +25,7 @@ namespace nui
         virtual void update() = 0;
 
         // Events
-        virtual void handleMouseEvent(const sf::Event&) {}
+        virtual void handleMouseEvent(const sf::Event&, const sf::Vector2f&) {}
         virtual bool handleKeyboardEvent(const sf::Event&) { return false; }
         virtual bool handleJoystickEvent(const sf::Event&) { return false; }
 

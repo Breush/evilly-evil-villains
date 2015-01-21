@@ -20,7 +20,7 @@ namespace nui
         // Virtual
         void init() override;
         void update() override;
-        void handleMouseEvent(const sf::Event& event) override;
+        void handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos) override;
         //void handleKeyboardEvent(const sf::Event& event) override;
         //void handleJoystickEvent(const sf::Event& event) override;
 
@@ -35,8 +35,8 @@ namespace nui
 
     protected:
         // Mouse events
-        virtual void handleMousePressed(const sf::Event& event);
-        virtual void handleMouseMoved(const sf::Event& event);
+        virtual void handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos);
+        virtual void handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos);
         virtual void handleMouseLeft();
 
         // Updates

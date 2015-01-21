@@ -1,17 +1,17 @@
+#include "core/application.hpp"
 #include "states/game/donjondesign.hpp"
-
 #include "resources/musicplayer.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
-GameDonjonDesignState::GameDonjonDesignState(StateStack& stack, Context context)
-    : State(stack, context)
-    , m_uiCore(context)
+GameDonjonDesignState::GameDonjonDesignState(StateStack& stack)
+    : State(stack)
+    , m_uiCore()
 {
-    auto& viewSize = context.window->getView().getSize();
+    auto& viewSize = Application::context().resolution;
 
     // Stop music if any
-    context.music->stop();
+    Application::context().music.stop();
 
     // Donjon Inter
     m_uiCore.add(&m_donjonInter);
@@ -21,9 +21,7 @@ GameDonjonDesignState::GameDonjonDesignState(StateStack& stack, Context context)
 
 void GameDonjonDesignState::draw()
 {
-    sf::RenderWindow& window = *getContext().window;
-
-    window.draw(m_donjonInter);
+    Application::context().window.draw(m_donjonInter);
 }
 
 bool GameDonjonDesignState::update(sf::Time dt)

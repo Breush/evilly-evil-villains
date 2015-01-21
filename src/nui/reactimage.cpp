@@ -1,5 +1,5 @@
+#include "core/application.hpp"
 #include "nui/reactimage.hpp"
-
 #include "nui/uicore.hpp"
 #include "resources/soundplayer.hpp"
 #include "tools/math.hpp"
@@ -53,7 +53,7 @@ void ReactImage::update()
 
 void ReactImage::setImageTexture(Textures::ID id)
 {
-    sf::Texture& texture = core()->context().textures->get(id);
+    sf::Texture& texture = Application::context().textures.get(id);
     m_image.setTexture(texture);
 
     // Getting size and reconfiguring visual
@@ -126,7 +126,7 @@ void ReactImage::activateReact(const std::string& key)
         return;
 
     setActiveReact(key);
-    core()->context().sounds->play(Sounds::NUI_SELECT);
+    Application::context().sounds.play(Sounds::NUI_SELECT);
 }
 
 //--------------------------------//
@@ -159,14 +159,14 @@ void ReactImage::selectActiveRect()
 //------------------------//
 //----- Mouse events -----//
 
-void ReactImage::handleMouseEvent(const sf::Event& event)
+void ReactImage::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
 {
     switch (event.type) {
     case sf::Event::MouseButtonPressed:
-        handleMousePressed(event);
+        handleMousePressed(event, relPos);
         break;
     case sf::Event::MouseMoved:
-        handleMouseMoved(event);
+        handleMouseMoved(event, relPos);
         break;
     case sf::Event::MouseLeft:
         handleMouseLeft();
@@ -176,7 +176,7 @@ void ReactImage::handleMouseEvent(const sf::Event& event)
     }
 }
 
-void ReactImage::handleMousePressed(const sf::Event& event)
+void ReactImage::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos)
 {
     // Just manage left click
     if (event.mouseButton.button != sf::Mouse::Left)
@@ -184,19 +184,19 @@ void ReactImage::handleMousePressed(const sf::Event& event)
 
     // Maybe callback is not set
     if (m_reacts[m_react].callback == nullptr) {
-        core()->context().sounds->play(Sounds::NUI_REFUSE);
+        Application::context().sounds.play(Sounds::NUI_REFUSE);
         return;
     }
 
     // Accept callback
-    core()->context().sounds->play(Sounds::NUI_ACCEPT);
+    Application::context().sounds.play(Sounds::NUI_ACCEPT);
     m_reacts[m_react].callback();
 }
 
-void ReactImage::handleMouseMoved(const sf::Event& event)
+void ReactImage::handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos)
 {
     // Getting mouse position relatively to image
-    sf::Vector2f pos = getInverseTransform().transformPoint(event.mouseMove.x, event.mouseMove.y);
+    sf::Vector2f pos = getInverseTransform().transformPoint(relPos);
 
     // Looking for active react
     for (auto& react : m_reacts) {

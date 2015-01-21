@@ -22,21 +22,8 @@ class State
 public:
     typedef std::unique_ptr<State> Ptr;
 
-    struct Context {
-        Context(sf::RenderWindow& window, TextureHolder& textures, ShaderHolder& shaders,
-                FontHolder& fonts, MusicPlayer& music, SoundPlayer& sounds);
-
-        sf::RenderWindow* window;
-        TextureHolder* textures;
-        ShaderHolder* shaders;
-        FontHolder*	fonts;
-        MusicPlayer* music;
-        SoundPlayer* sounds;
-    };
-
-
 public:
-    State(StateStack& stack, Context context);
+    State(StateStack& stack);
     virtual	~State();
 
     virtual void draw() = 0;
@@ -52,9 +39,6 @@ protected:
     void stackPop();
     void stackClear();
 
-    Context	getContext() const;
-
 private:
-    StateStack*			mStack;
-    Context				mContext;
+    StateStack*	mStack;
 };

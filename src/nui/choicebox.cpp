@@ -1,3 +1,5 @@
+#include "core/application.hpp"
+
 #include "nui/choicebox.hpp"
 #include "nui/uicore.hpp"
 
@@ -29,7 +31,7 @@ ChoiceBox::ChoiceBox()
 void ChoiceBox::init()
 {
     // Getting font from holder
-    sf::Font& font = core()->context().fonts->get(Fonts::NUI);
+    sf::Font& font = Application::context().fonts.get(Fonts::NUI);
     m_text.setCharacterSize(16);
     m_text.setFont(font);
 
@@ -96,11 +98,11 @@ void ChoiceBox::acceptChoice()
 {
     // Maybe callback is not set
     if (m_choices[m_choice].callback == nullptr) {
-        core()->context().sounds->play(Sounds::NUI_REFUSE);
+        Application::context().sounds.play(Sounds::NUI_REFUSE);
         return;
     }
 
-    core()->context().sounds->play(Sounds::NUI_ACCEPT);
+    Application::context().sounds.play(Sounds::NUI_ACCEPT);
     m_choices[m_choice].callback();
 }
 
@@ -108,7 +110,7 @@ void ChoiceBox::switchChoiceLeft()
 {
     if (m_nChoices <= 1) return;
     m_choice = ((m_choice == 0)? m_nChoices : m_choice) - 1;
-    core()->context().sounds->play(Sounds::NUI_SELECT);
+    Application::context().sounds.play(Sounds::NUI_SELECT);
     setChoice(m_choice);
 }
 
@@ -116,7 +118,7 @@ void ChoiceBox::switchChoiceRight()
 {
     if (m_nChoices <= 1) return;
     if (++m_choice == m_nChoices) m_choice = 0;
-    core()->context().sounds->play(Sounds::NUI_SELECT);
+    Application::context().sounds.play(Sounds::NUI_SELECT);
     setChoice(m_choice);
 }
 
@@ -170,14 +172,14 @@ void ChoiceBox::setChoiceCallback(uint choice, Callback callback)
 //------------------------//
 //----- Mouse events -----//
 
-void ChoiceBox::handleMouseEvent(const sf::Event& event)
+void ChoiceBox::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
 {
     switch (event.type) {
     case sf::Event::MouseButtonPressed:
-        handleMousePressed(event);
+        handleMousePressed(event, relPos);
         break;
     case sf::Event::MouseMoved:
-        handleMouseMoved(event);
+        handleMouseMoved(event, relPos);
         break;
     case sf::Event::MouseLeft:
         handleMouseLeft();
@@ -187,9 +189,9 @@ void ChoiceBox::handleMouseEvent(const sf::Event& event)
     }
 }
 
-void ChoiceBox::handleMousePressed(const sf::Event& event)
+void ChoiceBox::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos)
 {
-    uint x = getInverseTransform().transformPoint(event.mouseButton.x, event.mouseButton.y).x;
+    uint x = getInverseTransform().transformPoint(relPos).x;
 
     // Just manage left click
     if (event.mouseButton.button != sf::Mouse::Left)
@@ -216,9 +218,9 @@ void ChoiceBox::handleMousePressed(const sf::Event& event)
     acceptChoice();
 }
 
-void ChoiceBox::handleMouseMoved(const sf::Event& event)
+void ChoiceBox::handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos)
 {
-    uint x = getInverseTransform().transformPoint(event.mouseMove.x, event.mouseMove.y).x;
+    uint x = getInverseTransform().transformPoint(relPos).x;
 
     resetPartsShader();
 

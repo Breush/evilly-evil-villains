@@ -7,7 +7,7 @@
 class GameDonjonDesignState : public State
 {
 public:
-    GameDonjonDesignState(StateStack& stack, Context context);
+    GameDonjonDesignState(StateStack& stack);
 
     virtual void draw();
     virtual bool update(sf::Time dt);

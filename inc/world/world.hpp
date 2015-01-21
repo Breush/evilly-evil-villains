@@ -22,7 +22,7 @@ class World : public sf::Drawable, private sf::NonCopyable
 {
 public:
     // Constructors
-    World(State::Context inContext, Game::Context& inGameContext);
+    World(Game::Context& inGameContext);
     virtual ~World();
 
     // Routine
@@ -49,7 +49,6 @@ public:
     static bool touch(sf::Vector2u32& block, Blocks::ID neighbourg, bool diagonally);
 
     // Params
-    PARAMG(State::Context, m_context, context)
     PARAMG(sf::Vector2u32, m_size, size)
     PARAMG(sf::Vector2u32, m_viewSize, viewSize)
 

@@ -1,17 +1,17 @@
+#include "core/application.hpp"
 #include "states/game/game.hpp"
-
 #include "resources/musicplayer.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
-GameGameState::GameGameState(StateStack& stack, Context context)
-    : State(stack, context)
-    , m_game(context)
-    , m_world(context, m_game.gameContext())
-    , m_player(context, m_game.gameContext())
+GameGameState::GameGameState(StateStack& stack)
+    : State(stack)
+    , m_game()
+    , m_world(m_game.gameContext())
+    , m_player(m_game.gameContext())
 {
     // Interaction
-    context.window->setKeyRepeatEnabled(true);
+    Application::context().window.setKeyRepeatEnabled(true);
 
     // Init world
     m_game.init();
@@ -19,12 +19,12 @@ GameGameState::GameGameState(StateStack& stack, Context context)
     m_player.init();
 
     // Stop music if any
-    context.music->stop();
+    Application::context().music.stop();
 }
 
 void GameGameState::draw()
 {
-    sf::RenderWindow& window = *getContext().window;
+    sf::RenderWindow& window = Application::context().window;
 
     window.draw(m_world);
     window.draw(m_player);

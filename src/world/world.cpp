@@ -1,7 +1,7 @@
+#include "core/application.hpp"
 #include "world/world.hpp"
 #include "world/flat.hpp"
 #include "world/fractal.hpp"
-
 #include "tools/debug.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -10,9 +10,8 @@
 // Static variable
 Block* World::m_blocks(nullptr);
 
-World::World(State::Context inContext, Game::Context& inGameContext)
-    : m_context(inContext)
-    , m_size(WORLD_SIZE_X, WORLD_SIZE_Y)
+World::World(Game::Context& inGameContext)
+    : m_size(WORLD_SIZE_X, WORLD_SIZE_Y)
     , m_gameContext(inGameContext)
 {
     // Registering
@@ -22,7 +21,7 @@ World::World(State::Context inContext, Game::Context& inGameContext)
     m_blocks = new Block[WORLD_SIZE_XY];
 
     // Initializations
-    m_viewSize = sf::Vector2<uint32>(context().window->getView().getSize());
+    m_viewSize = sf::Vector2u32(Application::context().resolution);
     m_viewSize.x = BLOCK_PIXEL_SIZE_X + m_viewSize.x / BLOCK_PIXEL_SIZE_X;
     m_viewSize.y = BLOCK_PIXEL_SIZE_Y + m_viewSize.y / BLOCK_PIXEL_SIZE_Y;
 }

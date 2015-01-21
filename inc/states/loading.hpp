@@ -9,7 +9,7 @@
 class LoadingState : public State
 {
 public:
-    LoadingState(StateStack& stack, Context context);
+    LoadingState(StateStack& stack);
 
     virtual void			draw();
     virtual bool			update(sf::Time dt);

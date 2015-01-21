@@ -6,9 +6,8 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-Player::Player(State::Context inContext, Game::Context& inGameContext)
-    : m_context(inContext)
-    , m_onGround(false)
+Player::Player(Game::Context& inGameContext)
+    : m_onGround(false)
     , m_gameContext(inGameContext)
 {
     // Registering

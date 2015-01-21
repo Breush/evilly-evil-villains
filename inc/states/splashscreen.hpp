@@ -9,7 +9,7 @@
 class SplashScreenState : public State
 {
 public:
-    SplashScreenState(StateStack& stack, Context context);
+    SplashScreenState(StateStack& stack);
 
     virtual void draw();
     virtual bool update(sf::Time dt);

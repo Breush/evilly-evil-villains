@@ -1,3 +1,5 @@
+#include "core/application.hpp"
+
 #include "nui/donjon/inter.hpp"
 #include "nui/uicore.hpp"
 
@@ -25,7 +27,7 @@ void DonjonInter::init()
     update();
 }
 
-void DonjonInter::handleMouseEvent(const sf::Event& event)
+void DonjonInter::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
 {
     // Mouse events
     if (event.type == sf::Event::MouseButtonPressed)
@@ -33,10 +35,9 @@ void DonjonInter::handleMouseEvent(const sf::Event& event)
         if (event.mouseButton.button == sf::Mouse::Right)
         {
             // Get coords for donjon inter positions
-            sf::Vector2f coords(core()->context().window->mapPixelToCoords(mouseButtonToVector2i(event.mouseButton)));
-            coords = getInverseTransform().transformPoint(coords);
-
+            sf::Vector2f coords = getInverseTransform().transformPoint(relPos);
             sf::Vector2u roomFloor = m_grid.rowColumnFromCoords(coords);
+
             std::cout << roomFloor.x << ", " << roomFloor.y << std::endl;
 
             addPart(&m_contextMenu);

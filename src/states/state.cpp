@@ -1,21 +1,8 @@
 #include "states/state.hpp"
 #include "states/statestack.hpp"
 
-
-State::Context::Context(sf::RenderWindow& pwindow, TextureHolder& ptextures, ShaderHolder& pshaders,
-                        FontHolder& pfonts, MusicPlayer& pMusic, SoundPlayer& pSounds)
-    : window(&pwindow)
-    , textures(&ptextures)
-    , shaders(&pshaders)
-    , fonts(&pfonts)
-    , music(&pMusic)
-    , sounds(&pSounds)
-{
-}
-
-State::State(StateStack& stack, Context context)
+State::State(StateStack& stack)
     : mStack(&stack)
-    , mContext(context)
 {
 }
 
@@ -42,9 +29,4 @@ void State::stackPop()
 void State::stackClear()
 {
     mStack->clearStates();
-}
-
-State::Context State::getContext() const
-{
-    return mContext;
 }

@@ -38,7 +38,7 @@ void Button::setAction(std::wstring text, Callback callback)
 //------------------//
 //----- Events -----//
 
-void Button::handleMousePressed(const sf::Event& event)
+void Button::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos)
 {
     // Just manage left click
     if (event.mouseButton.button != sf::Mouse::Left)

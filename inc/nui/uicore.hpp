@@ -29,7 +29,7 @@ namespace nui
     class uiCore : public sf::Drawable
     {
     public:
-        uiCore(State::Context inContext);
+        uiCore();
         ~uiCore();
 
         // Main functions called by states
@@ -48,8 +48,8 @@ namespace nui
     protected:
         // Detection buffer methods
         void drawDetectImage();
-        uint8 getDetectValue(const sf::Event::MouseMoveEvent& pos) const;
-        uint8 getDetectValue(const sf::Event::MouseButtonEvent& pos) const;
+        uint8 getDetectValue(const sf::Vector2u& pos) const;
+        uint8 getDetectValue(const uint& x, const uint& y) const;
 
         // Focusing system
         void updateFocusSprite();
@@ -59,8 +59,7 @@ namespace nui
         void setHoveredChild(Object* inHoveredChild);
 
         // Params
-        PARAMG(State::Context, m_context, context)
-        PARAMG(sf::Vector2u, m_viewSize, viewSize)
+        PARAMGNR(const sf::Vector2f&, m_viewSize, viewSize)
         PARAMG(Object*, m_hoveredChild, hoveredChild)
         PARAMG(Object*, m_focusedChild, focusedChild)
         PARAMGS(sf::IntRect, m_focusRect, focusRect, setFocusRect)

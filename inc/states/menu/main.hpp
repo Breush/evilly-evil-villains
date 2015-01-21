@@ -13,7 +13,7 @@ class MenuMainState : public State
     typedef State baseClass;
 
 public:
-    MenuMainState(StateStack& stack, Context context);
+    MenuMainState(StateStack& stack);
 
     void draw() override;
     bool update(sf::Time dt) override;

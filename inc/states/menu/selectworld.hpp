@@ -14,7 +14,7 @@ class MenuSelectWorldState : public State
     typedef State baseClass;
 
 public:
-    MenuSelectWorldState(StateStack& stack, Context context);
+    MenuSelectWorldState(StateStack& stack);
     virtual ~MenuSelectWorldState();
 
     void draw() override;

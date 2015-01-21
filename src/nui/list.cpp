@@ -1,3 +1,5 @@
+#include "core/application.hpp"
+
 #include "nui/list.hpp"
 #include "nui/uicore.hpp"
 
@@ -96,7 +98,7 @@ void List::setColumns(std::initializer_list<std::wstring> columns)
     m_columns.clear();
 
     sf::Text text;
-    sf::Font& font = core()->context().fonts->get(Fonts::NUI);
+    sf::Font& font = Application::context().fonts.get(Fonts::NUI);
     text.setCharacterSize(16);
     text.setFont(font);
 
@@ -159,7 +161,7 @@ void List::addLine(std::initializer_list<std::wstring> values)
     massert(values.size() == m_columns.size(), "List - expected " << m_columns.size() << " values");
 
     sf::Text text;
-    sf::Font& font = core()->context().fonts->get(Fonts::NUI);
+    sf::Font& font = Application::context().fonts.get(Fonts::NUI);
     text.setCharacterSize(16);
     text.setFont(font);
 
@@ -179,14 +181,14 @@ void List::addLine(std::initializer_list<std::wstring> values)
 //------------------------//
 //----- Mouse events -----//
 
-void List::handleMouseEvent(const sf::Event& event)
+void List::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
 {
     switch (event.type) {
     case sf::Event::MouseButtonPressed:
-        handleMousePressed(event);
+        handleMousePressed(event, relPos);
         break;
     case sf::Event::MouseMoved:
-        handleMouseMoved(event);
+        handleMouseMoved(event, relPos);
         break;
     case sf::Event::MouseLeft:
         handleMouseLeft();
@@ -196,9 +198,9 @@ void List::handleMouseEvent(const sf::Event& event)
     }
 }
 
-void List::handleMousePressed(const sf::Event& event)
+void List::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos)
 {
-    sf::Vector2f pos = getInverseTransform().transformPoint(event.mouseButton.x, event.mouseButton.y);
+    sf::Vector2f pos = getInverseTransform().transformPoint(relPos.x, relPos.y);
 
     // TODO Select row
     uint line = pos.y/lineHeight() - 1;
@@ -206,7 +208,7 @@ void List::handleMousePressed(const sf::Event& event)
         setFocusedLine(line);
 }
 
-void List::handleMouseMoved(const sf::Event&)
+void List::handleMouseMoved(const sf::Event&, const sf::Vector2f&)
 {
     //uint x = getInverseTransform().transformPoint(event.mouseMove.x, event.mouseMove.y).x;
     // TODO Hovering parts

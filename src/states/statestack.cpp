@@ -1,11 +1,9 @@
 #include "states/statestack.hpp"
-
 #include "tools/debug.hpp"
 
-StateStack::StateStack(State::Context context)
+StateStack::StateStack()
     : m_stack()
     , m_pendingList()
-    , m_context(context)
     , m_factories()
 {
 }

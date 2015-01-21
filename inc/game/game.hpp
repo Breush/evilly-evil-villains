@@ -22,7 +22,7 @@ public:
     };
 
     // Constructors
-    Game(State::Context inContext);
+    Game();
     virtual ~Game();
 
     // Routine
@@ -31,8 +31,7 @@ public:
     bool handleEvent(const sf::Event& event);
 
     // Params
-    PARAMG(State::Context, m_context, context)
-    PARAMG(sf::Vector2f, m_viewSize, viewSize)
+    PARAMGNR(sf::Vector2f&, m_viewSize, viewSize)
     PARAMG(Camera, m_camera, camera)
     PARAMG(Context, m_gameContext, gameContext)
 };
