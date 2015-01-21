@@ -61,11 +61,13 @@ if (GETTEXT_FOUND)
 endif()
 
 #=====
-# Find LibIntl (comes with gettext)
+# Find LibIntl (comes with gettext on Linux)
 
-find_package(LibIntl REQUIRED)
-if (LibIntl_FOUND)
-	include_directories(${LibIntl_INCLUDE_DIR})
-	target_link_libraries(${EXECUTABLE_NAME} ${LibIntl_LIBRARIES})
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+	find_package(LibIntl REQUIRED)
+	if (LibIntl_FOUND)
+		include_directories(${LibIntl_INCLUDE_DIR})
+		target_link_libraries(${EXECUTABLE_NAME} ${LibIntl_LIBRARIES})
+	endif()
 endif()
 
