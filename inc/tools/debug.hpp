@@ -1,7 +1,8 @@
 #pragma once
 
-// Set debug level here...
-#define DEBUG_LEVEL 1
+#ifndef DEBUG_LEVEL
+    #define DEBUG_LEVEL 1
+#endif
 
 //--------------------//
 //---- Debug mode ----//
