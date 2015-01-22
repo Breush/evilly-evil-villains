@@ -1,5 +1,6 @@
 #include "core/application.hpp"
 
+#include "tools/debug.hpp"
 #include "states/splashscreen.hpp"
 #include "states/menu/main.hpp"
 #include "states/menu/selectworld.hpp"
@@ -7,8 +8,8 @@
 #include "states/game/donjondesign.hpp"
 #include "states/game/pause.hpp"
 
-#include <SFML/Window/Event.hpp>
 
+#include <SFML/Window/Event.hpp>
 #include <string>
 
 const sf::Time Application::s_timePerFrame = sf::seconds(1.f/60.f);
@@ -68,7 +69,8 @@ void Application::processInput()
             m_running = false;
         }
         else if (event.type == sf::Event::Resized) {
-            s_context.window.setView(bestView(sf::Vector2f(event.size.width, event.size.height)));
+            s_context.screenSize = sf::Vector2f(event.size.width, event.size.height);
+            refresh();
         }
     }
 }
@@ -114,14 +116,33 @@ void Application::loadShaders()
     s_context.shaders.load(Shaders::NUI_HOVER, "res/shd/nui/hover.frag", sf::Shader::Fragment);
     s_context.shaders.load(Shaders::NUI_FOCUS, "res/shd/nui/focus.frag", sf::Shader::Fragment);
 
+    refreshShaders();
+}
+
+void Application::refreshShaders()
+{
+    auto screenSize = sf::v2f(s_context.window.getSize());
+    auto& resolution = s_context.resolution;
+    auto& effectiveDisplay = s_context.effectiveDisplay;
+
+#if DEBUG_LEVEL >= 2
+    std::cout << "[DEBUG_LEVEL 2 - refreshShaders()]" << std::endl;
+    std::cout << "    Screen size: " << screenSize.x << " " << screenSize.y << std::endl;
+    std::cout << "    Resolution: "  << resolution.x << " " << resolution.y << std::endl;
+    std::cout << "    Effective display: " << effectiveDisplay.x << " " << effectiveDisplay.y << std::endl;
+#endif
+
     // Parameters
-    s_context.shaders.setParameter(Shaders::MENU_BG, "screenSize", s_context.resolution);
+    s_context.shaders.setParameter(Shaders::MENU_BG, "screenSize", screenSize);
+    s_context.shaders.setParameter(Shaders::MENU_BG, "resolution", resolution);
+    s_context.shaders.setParameter(Shaders::MENU_BG, "effectiveDisplay", effectiveDisplay);
     s_context.shaders.setParameter(Shaders::MENU_BG, "texture", sf::Shader::CurrentTexture);
 
-    s_context.shaders.setParameter(Shaders::NUI_HOVER, "textureSize", s_context.resolution);
     s_context.shaders.setParameter(Shaders::NUI_HOVER, "texture", sf::Shader::CurrentTexture);
 
-    s_context.shaders.setParameter(Shaders::NUI_FOCUS, "screenSize", s_context.resolution);
+    s_context.shaders.setParameter(Shaders::NUI_FOCUS, "screenSize", screenSize);
+    s_context.shaders.setParameter(Shaders::NUI_FOCUS, "resolution", resolution);
+    s_context.shaders.setParameter(Shaders::NUI_FOCUS, "effectiveDisplay", effectiveDisplay);
 }
 
 void Application::loadFonts()
@@ -147,9 +168,18 @@ void Application::registerStates()
 //-----------------------------//
 //----- Window management -----//
 
-sf::View Application::bestView(const sf::Vector2f& windowSize)
+void Application::refresh()
+{
+    s_context.window.setView(bestView());
+    m_stateStack.refresh();
+    refreshShaders();
+}
+
+sf::View Application::bestView()
 {
     sf::FloatRect viewport(0.f, 0.f, 1.f, 1.f);
+
+    auto& windowSize = s_context.screenSize;
     float screenWidth = windowSize.x / s_context.resolution.x;
     float screenHeight = windowSize.y / s_context.resolution.y;
 
@@ -162,6 +192,7 @@ sf::View Application::bestView(const sf::Vector2f& windowSize)
         viewport.top = (1.f - viewport.height) / 2.f;
     }
 
+    s_context.effectiveDisplay = sf::Vector2f(windowSize.x * viewport.width, windowSize.y * viewport.height);
     sf::View view(sf::FloatRect(0, 0, s_context.resolution.x, s_context.resolution.y));
     view.setViewport(viewport);
     return view;

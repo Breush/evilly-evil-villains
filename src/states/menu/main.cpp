@@ -60,7 +60,7 @@ MenuMainState::MenuMainState(StateStack& stack)
     m_reactImage.setImageTexture(Textures::MENU_NAME);
     m_reactImage.setImageShader(Shaders::MENU_NAME);
     m_reactImage.setMouseLeftDeselect(false);
-    // TODO Faire un XML Holder ?
+    // TODO Implement an XML Holder ?
     m_reactImage.addReactFromFile("res/tex/menu/name.xml");
     m_reactImage.setReactCallback(m_choices[0], singlePlayer);
     m_reactImage.setReactCallback(m_choices[1], multiPlayer);
@@ -73,11 +73,6 @@ MenuMainState::MenuMainState(StateStack& stack)
     Application::context().music.setVolume(75);
 }
 
-void MenuMainState::onShow()
-{
-    m_uiCore.refresh();
-}
-
 void MenuMainState::draw()
 {
     auto& window = Application::context().window;
@@ -85,6 +80,16 @@ void MenuMainState::draw()
     // Animated background and menu
     window.draw(m_bgSprite, m_bgShader);
     window.draw(m_uiCore);
+}
+
+void MenuMainState::onHide()
+{
+    m_uiCore.forgetFocusedChild();
+}
+
+void MenuMainState::onShow()
+{
+    m_uiCore.rememberFocusedChild();
 }
 
 bool MenuMainState::update(sf::Time dt)
@@ -120,4 +125,9 @@ bool MenuMainState::handleEvent(const sf::Event& event)
     // Let ui core handle events
     m_uiCore.handleEvent(event);
     return false;
+}
+
+void MenuMainState::refresh()
+{
+    m_uiCore.refresh();
 }

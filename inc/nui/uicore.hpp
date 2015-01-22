@@ -44,6 +44,8 @@ namespace nui
 
         // Focusing system
         void setFocusedChild(Object* inFocusedChild);
+        void forgetFocusedChild();
+        void rememberFocusedChild();
 
     protected:
         // Detection buffer methods
@@ -69,6 +71,7 @@ namespace nui
         std::list<Object*> m_children;
 
         // Focusing system
+        Object* m_forgottenFocusedChild;
         sf::Sprite m_focusSprite;
         int m_focusAnimation;
 

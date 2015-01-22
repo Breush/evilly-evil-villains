@@ -112,7 +112,9 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const
             glEnable(GL_SCISSOR_TEST);
             sf::FloatRect r(*part.clippingRect);
             r = getTransform().transformRect(r);
-            glScissor(r.left, core()->viewSize().y - r.height - r.top, r.width, r.height);
+            // FIXER CA!
+            auto& screenSize = Application::context().screenSize;
+            glScissor(r.left, screenSize.y - r.height - r.top, r.width, r.height);
         }
 
         target.draw(*part.drawable, states);

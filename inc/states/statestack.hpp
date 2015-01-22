@@ -44,6 +44,9 @@ public:
 
     bool isEmpty() const;
 
+    // Called whenever display changes
+    void refresh();
+
 private:
     State::Ptr createState(States::ID stateID);
     void applyPendingChanges();

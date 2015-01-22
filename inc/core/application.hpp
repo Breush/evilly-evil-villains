@@ -16,10 +16,14 @@ class Application
     struct Context {
         Context(sf::Vector2f dimensions, const std::string& title, uint32_t style = sf::Style::Default)
             : resolution(dimensions)
+            , screenSize(dimensions)
+            , effectiveDisplay(dimensions)
             , window(sf::VideoMode(dimensions.x, dimensions.y), title, style)
         {}
 
         sf::Vector2f resolution;
+        sf::Vector2f screenSize;
+        sf::Vector2f effectiveDisplay;
         sf::RenderWindow window;
         TextureHolder textures;
         ShaderHolder shaders;
@@ -44,11 +48,14 @@ protected:
     void loadShaders();
     void loadFonts();
 
+    void refreshShaders();
+
     // States
     void registerStates();
 
     // Window management
-    sf::View bestView(const sf::Vector2f& windowSize);
+    void refresh();
+    sf::View bestView();
 
 private:
     static const sf::Time s_timePerFrame;

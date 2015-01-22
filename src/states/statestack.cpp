@@ -60,6 +60,13 @@ bool StateStack::isEmpty() const
     return m_stack.empty();
 }
 
+void StateStack::refresh()
+{
+    for (auto& state : m_stack) {
+        state->refresh();
+    }
+}
+
 State::Ptr StateStack::createState(States::ID stateID)
 {
     auto found = m_factories.find(stateID);
@@ -90,7 +97,7 @@ void StateStack::applyPendingChanges()
             break;
 
         default:
-            // TODO Gestion des erreurs
+            // TODO Manage errors
             break;
         }
     }

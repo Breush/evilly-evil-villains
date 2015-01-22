@@ -23,6 +23,7 @@ uiCore::uiCore()
     : m_viewSize(Application::context().resolution)
     , m_hoveredChild(nullptr)
     , m_focusedChild(nullptr)
+    , m_forgottenFocusedChild(nullptr)
     , m_focusAnimation(0)
 {
     // Hovering system
@@ -168,6 +169,22 @@ void uiCore::setFocusedChild(Object* inFocusedChild)
         m_focusedChild->setStatus(true);
 }
 
+void uiCore::forgetFocusedChild()
+{
+    m_forgottenFocusedChild = m_focusedChild;
+    m_focusedChild = nullptr;
+    refresh();
+}
+
+void uiCore::rememberFocusedChild()
+{
+    massert(m_forgottenFocusedChild != nullptr, "Calling remember focused without forgetting it previously.");
+
+    m_focusedChild = m_forgottenFocusedChild;
+    m_forgottenFocusedChild = nullptr;
+    refresh();
+}
+
 void uiCore::manageFocusedChild(const sf::Event& event)
 {
     massert(focusedChild() != nullptr, "Internal logical error for focus");
@@ -259,14 +276,14 @@ void uiCore::setHoveredChild(Object* inHoveredChild)
 void uiCore::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     // Drawing children
-    for (auto& child : m_children) {
-        // Mark focused child
-        if (child == focusedChild()) {
-            sf::RenderStates focusStates(states);
-            focusStates.shader = &Application::context().shaders.get(Shaders::NUI_FOCUS);
-            target.draw(m_focusSprite, focusStates);
-        }
+    for (auto& child : m_children)
         target.draw(*child, states);
+
+    // Focusing system
+    if (focusedChild()) {
+        sf::RenderStates focusStates(states);
+        focusStates.shader = &Application::context().shaders.get(Shaders::NUI_FOCUS);
+        target.draw(m_focusSprite, focusStates);
     }
 
     // /!\ UI Debug mode
@@ -279,27 +296,31 @@ void uiCore::update(sf::Time dt)
 {
     bool redrawDetectImage = false;
 
+    // Checking for children updates
     for (auto& child : m_children) {
         redrawDetectImage |= child->status();
 
         if (child == focusedChild() && child->status()) {
             setFocusRect(sf::IntRect(child->focusRect()));
+
             m_focusSprite.setPosition(child->getPosition());
             m_focusSprite.setOrigin(child->getOrigin());
             m_focusSprite.move(focusRect().left, focusRect().top);
+
             sf::Vector2f textureSize(focusRect().width, focusRect().height);
-            sf::Vector2i position = Application::context().window.mapCoordsToPixel(m_focusSprite.getPosition() - m_focusSprite.getOrigin());
+            sf::Vector2f position = m_focusSprite.getPosition() - m_focusSprite.getOrigin();
+
             Application::context().shaders.setParameter(Shaders::NUI_FOCUS, "textureSize", textureSize);
-            Application::context().shaders.setParameter(Shaders::NUI_FOCUS, "position", sf::Vector2f(position.x, position.y));
+            Application::context().shaders.setParameter(Shaders::NUI_FOCUS, "position", position);
         }
 
         child->update(dt);
     }
 
-    // Focusing system
+    // Focusing system - animation
     if (focusedChild() != nullptr) {
         ++m_focusAnimation;
-        m_focusSprite.setTextureRect( {-m_focusAnimation, -m_focusAnimation, focusRect().width, focusRect().height});
+        m_focusSprite.setTextureRect({-m_focusAnimation, -m_focusAnimation, focusRect().width, focusRect().height});
     }
 
     // Hovering system
@@ -309,7 +330,6 @@ void uiCore::update(sf::Time dt)
 
 void uiCore::refresh()
 {
-    // Refresh focused child
-    if (focusedChild())
-        focusedChild()->setStatus(true);
+    for (auto& child : m_children)
+        child->setStatus(true);
 }

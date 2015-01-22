@@ -22,7 +22,7 @@ eev_set_option(CMAKE_BUILD_TYPE Debug STRING "Choose the type of build (Debug or
 project(EEV)
 set(EXECUTABLE_NAME eev)
 
-file(GLOB_RECURSE SOURCES_FILES src/* inc/*)
+file(GLOB_RECURSE SOURCES_FILES src/* inc/* res/shd/*)
 add_executable(${EXECUTABLE_NAME} ${SOURCES_FILES})
 
 include_directories(${CMAKE_SOURCE_DIR}/inc/)

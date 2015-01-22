@@ -31,7 +31,7 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     m_list.addLine({L"Petit", L"Homme", L"1er mai 1991 - 10:10"});
     m_list.addLine({L"Black chocolate", L"Breush", L"23 mai 2014 - 10:40"});
     m_list.addLine({L"Ceci est peut-être un peu long", L"Breush", L"23 mai 2014 - 10:40"});
-    m_list.addLine({L"Miami", L"Breush qui dépasse un chouillas", L"23 mai 2014 - 10:40"});
+    m_list.addLine({L"Miami", L"Breush qui dépasse un chouillas mais de rien", L"23 mai 2014 - 10:40"});
     m_list.addLine({L"Super long nom de monde tellement abusé que j'en ai les yeux qui me chatouillent la gorge",
                     L"Super Breush de la mort qui tue", L"31 avril 2013 - 01:23"});
 
@@ -72,11 +72,6 @@ MenuSelectWorldState::~MenuSelectWorldState()
     Application::context().music.setVolume(75);
 }
 
-void MenuSelectWorldState::onShow()
-{
-    m_uiCore.refresh();
-}
-
 void MenuSelectWorldState::draw()
 {
     // Background
@@ -104,5 +99,10 @@ bool MenuSelectWorldState::handleEvent(const sf::Event& event)
     // Let ui core handle events
     m_uiCore.handleEvent(event);
     return false;
+}
+
+void MenuSelectWorldState::refresh()
+{
+    m_uiCore.refresh();
 }
 

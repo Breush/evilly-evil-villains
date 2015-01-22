@@ -19,7 +19,8 @@ public:
     bool update(sf::Time dt) override;
     bool handleEvent(const sf::Event& event) override;
 
-protected:
+    void refresh() override;
+    void onHide() override;
     void onShow() override;
 
 private:

@@ -20,9 +20,7 @@ public:
     void draw() override;
     bool update(sf::Time dt) override;
     bool handleEvent(const sf::Event& event) override;
-
-protected:
-    void onShow() override;
+    void refresh() override;
 
 private:
     // NUI

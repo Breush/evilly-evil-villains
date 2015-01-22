@@ -30,8 +30,10 @@ public:
     virtual bool update(sf::Time dt) = 0;
     virtual bool handleEvent(const sf::Event& event) = 0;
 
-    virtual void onShow() {}
-    virtual void onHide() {}
+    // Called whenever display changes
+    virtual void onShow() { refresh(); }
+    virtual void onHide() { refresh(); }
+    virtual void refresh() {}
 
 protected:
     void stackPopPush(States::ID stateID);
