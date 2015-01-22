@@ -110,11 +110,23 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const
         // Clipping if needed
         if (part.clippingRect != nullptr) {
             glEnable(GL_SCISSOR_TEST);
+
             sf::FloatRect r(*part.clippingRect);
             r = getTransform().transformRect(r);
-            // FIXER CA!
-            auto& screenSize = Application::context().screenSize;
-            glScissor(r.left, screenSize.y - r.height - r.top, r.width, r.height);
+
+            const auto& screenSize = Application::context().screenSize;
+            const auto& resolution = Application::context().resolution;
+            const auto& effectiveDisplay = Application::context().effectiveDisplay;
+
+            auto halfGap = (screenSize - effectiveDisplay) / 2.f;
+            auto viewRatio = sf::vdiv(effectiveDisplay, resolution);
+
+            // Correct position and ratio SFML <-> GLSL
+            r.top = resolution.y - r.height - r.top;
+            sf::rmulin(r, viewRatio);
+            sf::raddin(r, halfGap);
+
+            glScissor(r.left, r.top, r.width, r.height);
         }
 
         target.draw(*part.drawable, states);

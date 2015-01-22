@@ -2,6 +2,7 @@
 
 #include "resources/identifiers.hpp"
 #include "tools/param.hpp"
+#include "tools/tools.hpp"
 
 #include <SFML/System.hpp>
 #include <SFML/Window/Event.hpp>
