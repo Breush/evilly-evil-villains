@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     // Handle arguments
 #if DEBUG_LEVEL >= 1
     if (argc > 1) {
-        std::cout << argv[0] << std::endl;
+        std::cout << "Arguments passed: " << argv[0] << std::endl;
     }
 #endif // DEBUG_LEVEL
 

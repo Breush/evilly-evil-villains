@@ -63,15 +63,29 @@ void Application::processInput()
     sf::Event event;
 
     while (s_context.window.pollEvent(event)) {
-        m_stateStack.handleEvent(event);
+
+        if (event.type == sf::Event::KeyPressed
+            && event.key.code == sf::Keyboard::F11) {
+            s_context.window.close();
+            s_context.window.create(sf::VideoMode(960.f, 540.f), "Evily Evil Villains", sf::Style::Close | sf::Style::Fullscreen);
+            const auto& desktopMode = sf::VideoMode::getDesktopMode();
+            s_context.screenSize = sf::Vector2f(desktopMode.width, desktopMode.height);
+            refresh();
+            return;
+        }
 
         if (event.type == sf::Event::Closed) {
             m_running = false;
+            return;
         }
-        else if (event.type == sf::Event::Resized) {
+
+        if (event.type == sf::Event::Resized) {
             s_context.screenSize = sf::Vector2f(event.size.width, event.size.height);
             refresh();
+            return;
         }
+
+        m_stateStack.handleEvent(event);
     }
 }
 
