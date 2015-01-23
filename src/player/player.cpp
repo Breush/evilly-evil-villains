@@ -30,7 +30,6 @@ void Player::init()
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    // TODO
     sf::Vector2f& camPos(m_gameContext.camera->position());
     sf::Vector2f pos(position().x - camPos.x, position().y - camPos.y);
 

@@ -19,7 +19,7 @@ List::List()
     , m_lineHeight(32)
     , m_linesCount(0)
 {
-    // TODO Calculer lineHeight en fonction de la taille NUI
+    // TODO #3 - Use config parameter to determine size
 }
 
 void List::init()

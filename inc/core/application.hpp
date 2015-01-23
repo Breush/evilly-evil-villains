@@ -61,12 +61,11 @@ protected:
 
 private:
     static const sf::Time s_timePerFrame;
-    static const std::string s_title;
     static Context s_context;
 
     StateStack m_stateStack;
-
     States::ID m_initialState;
+
     float m_gameTime;
     bool m_running;
 };

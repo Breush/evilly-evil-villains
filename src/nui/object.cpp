@@ -27,7 +27,20 @@ void Object::clearParts()
 
 void Object::addPart(sf::Drawable* drawable, Shaders::ID shader)
 {
+    for (auto& part : m_parts)
+        returnif (part.drawable == drawable);
+
     m_parts.push_back({drawable, shader, nullptr});
+}
+
+void Object::removePart(sf::Drawable* drawable)
+{
+    for (uint i = 0; i < m_parts.size(); ++i) {
+        if (m_parts[i].drawable == drawable) {
+            m_parts.erase(m_parts.begin() + i);
+            return;
+        }
+    }
 }
 
 void Object::setPartShader(sf::Drawable* drawable, Shaders::ID shader)

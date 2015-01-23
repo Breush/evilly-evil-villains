@@ -8,7 +8,7 @@ GameDonjonDesignState::GameDonjonDesignState(StateStack& stack)
     : State(stack)
     , m_uiCore()
 {
-    auto& viewSize = Application::context().resolution;
+    auto& resolution = Application::context().resolution;
 
     // Stop music if any
     Application::context().music.stop();
@@ -16,7 +16,7 @@ GameDonjonDesignState::GameDonjonDesignState(StateStack& stack)
     // Donjon Inter
     m_uiCore.add(&m_donjonInter);
     m_donjonInter.setSize({350, 450});
-    m_donjonInter.setPosition((viewSize - m_donjonInter.size()) / 2.f);
+    m_donjonInter.setPosition((resolution - m_donjonInter.size()) / 2.f);
 }
 
 void GameDonjonDesignState::draw()

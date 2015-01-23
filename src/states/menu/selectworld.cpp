@@ -27,7 +27,7 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     m_list.setColumns({_("World name"), _("Villain"), _("Last played")});
     m_list.setColumnFillClip(2, false, false);
 
-    // TODO Charger la liste des mondes
+    // TODO Load list of worlds
     m_list.addLine({L"Petit", L"Homme", L"1er mai 1991 - 10:10"});
     m_list.addLine({L"Black chocolate", L"Breush", L"23 mai 2014 - 10:40"});
     m_list.addLine({L"Ceci est peut-être un peu long", L"Breush", L"23 mai 2014 - 10:40"});

@@ -44,6 +44,7 @@ namespace nui
 
         void clearParts();
         void resetPartsShader();
+        void removePart(sf::Drawable* drawable);
         void setPartShader(sf::Drawable* drawable, Shaders::ID shader);
         void setPartClippingRect(sf::Drawable* drawable, sf::IntRect* clippingRect);
         void addPart(sf::Drawable* drawable, Shaders::ID shader = Shaders::NONE);

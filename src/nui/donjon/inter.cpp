@@ -7,6 +7,7 @@
 #include "tools/event.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <sstream>
 
 using namespace nui;
 
@@ -30,31 +31,44 @@ void DonjonInter::init()
 void DonjonInter::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
 {
     // Mouse events
-    if (event.type == sf::Event::MouseButtonPressed)
-    {
-        if (event.mouseButton.button == sf::Mouse::Right)
-        {
+    if (event.type == sf::Event::MouseButtonPressed) {
+        if (event.mouseButton.button == sf::Mouse::Right) {
             // Get coords for donjon inter positions
             sf::Vector2f coords = getInverseTransform().transformPoint(relPos);
-            sf::Vector2u roomFloor = m_grid.rowColumnFromCoords(coords);
+            m_selectedRoom = m_grid.rowColumnFromCoords(coords);
 
-            std::cout << roomFloor.x << ", " << roomFloor.y << std::endl;
+            std::stringstream str;
+            str << "Example choice" << std::endl;
+            str << "Destroy room " << m_selectedRoom.x << ", " << m_selectedRoom.y << std::endl;
+            str << "Create ladder here";
+
+            m_contextMenu.setPosition(coords);
+            m_contextMenu.setMessage(str.str());
 
             addPart(&m_contextMenu);
+        }
+        else {
+            removePart(&m_contextMenu);
         }
     }
 }
 
 bool DonjonInter::handleKeyboardEvent(const sf::Event& event)
 {
-#ifdef DEBUG_MODE
+#if defined(DEBUG_MODE)
     // Keyboard event
-    if (event.type == sf::Event::KeyPressed)
-    {
+    if (event.type == sf::Event::KeyPressed) {
+        // Add rows
         if (event.key.code == sf::Keyboard::Add)
             m_grid.setRowsColumns(m_grid.rows() + 1, m_grid.columns());
         else if (event.key.code == sf::Keyboard::Subtract)
             m_grid.setRowsColumns(m_grid.rows() - 1, m_grid.columns());
+
+        // Add columns
+        else if (event.key.code == sf::Keyboard::Multiply)
+            m_grid.setRowsColumns(m_grid.rows(), m_grid.columns() + 1);
+        else if (event.key.code == sf::Keyboard::Divide)
+            m_grid.setRowsColumns(m_grid.rows(), m_grid.columns() - 1);
     }
 #endif
 

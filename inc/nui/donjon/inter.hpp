@@ -25,5 +25,7 @@ namespace nui
     private:
         sfe::Grid m_grid;
         nui::ContextMenu m_contextMenu;
+
+        sf::Vector2u m_selectedRoom;
     };
 }

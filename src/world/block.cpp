@@ -4,7 +4,7 @@
 
 sf::Color Block::color()
 {
-    // TODO Faire un register de blocks, tous init au lancement
+    // TODO Make a register of all blocks, initialized at launch
     returnif (id == Blocks::AIR) sf::Color::Transparent;
     returnif (id == Blocks::DIRT) sf::Color(150, 150, 50);
     returnif (id == Blocks::ROCK) sf::Color(150, 150, 150);

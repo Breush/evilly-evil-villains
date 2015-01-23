@@ -12,12 +12,14 @@
 #include <SFML/Window/Event.hpp>
 #include <string>
 
-// ----- Static variables
+//----------------------------//
+//----- Static variables -----//
 
 const sf::Time Application::s_timePerFrame = sf::seconds(1.f/60.f);
 Application::Context Application::s_context;
 
-// ----- Context
+//-------------------//
+//----- Context -----//
 
 void Application::Context::init(const sf::Vector2f& iResolution, const std::string& iTitle, const uint32_t& iStyle)
 {
@@ -37,10 +39,11 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
     screenSize = sf::v2f(window.getSize());
 }
 
-// ----- Application
+//-----------------------//
+//----- Application -----//
 
 Application::Application()
-    : m_initialState(States::SPLASHCREEN)
+    : m_initialState(States::GAME_DONJON_DESIGN)
     , m_gameTime(0.f)
     , m_running(false)
 {
