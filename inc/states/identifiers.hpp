@@ -4,7 +4,7 @@ namespace States
 {
     enum ID {
         NONE,
-        SPLASHCREEN,
+        SPLASHSCREEN,
         MENU_MAIN,
         MENU_SELECTWORLD,
         GAME_GAME,

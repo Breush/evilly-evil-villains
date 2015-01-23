@@ -43,7 +43,8 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
 //----- Application -----//
 
 Application::Application()
-    : m_initialState(States::GAME_DONJON_DESIGN)
+    //: m_initialState(States::GAME_DONJON_DESIGN)
+    : m_initialState(States::SPLASHSCREEN)
     , m_gameTime(0.f)
     , m_running(false)
 {
@@ -197,7 +198,7 @@ void Application::loadFonts()
 
 void Application::registerStates()
 {
-    m_stateStack.registerState<SplashScreenState>(States::SPLASHCREEN);
+    m_stateStack.registerState<SplashScreenState>(States::SPLASHSCREEN);
 
     m_stateStack.registerState<MenuMainState>(States::MENU_MAIN);
     m_stateStack.registerState<MenuSelectWorldState>(States::MENU_SELECTWORLD);
