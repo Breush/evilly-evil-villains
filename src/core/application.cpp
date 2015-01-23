@@ -12,14 +12,39 @@
 #include <SFML/Window/Event.hpp>
 #include <string>
 
+// ----- Static variables
+
 const sf::Time Application::s_timePerFrame = sf::seconds(1.f/60.f);
-Application::Context Application::s_context(sf::Vector2f(960.f, 540.f), "Evily Evil Villains", sf::Style::Close | sf::Style::Resize);
+Application::Context Application::s_context;
+
+// ----- Context
+
+void Application::Context::init(const sf::Vector2f& iResolution, const std::string& iTitle, const uint32_t& iStyle)
+{
+    title = iTitle;
+    style = iStyle;
+    resolution = iResolution;
+    effectiveDisplay = iResolution;
+
+    if (window.isOpen())
+        window.close();
+
+    window.create(sf::VideoMode(resolution.x, resolution.y), title, style);
+
+    if (!window.isOpen())
+        std::cerr << "Cannot initialize window" << std::endl;
+
+    screenSize = sf::v2f(window.getSize());
+}
+
+// ----- Application
 
 Application::Application()
     : m_initialState(States::SPLASHCREEN)
     , m_gameTime(0.f)
     , m_running(false)
 {
+    s_context.init(sf::Vector2f(960.f, 540.f), "Evily Evil Villains", sf::Style::Default);
     s_context.window.setKeyRepeatEnabled(false);
     s_context.window.setVerticalSyncEnabled(true);
 
@@ -55,7 +80,8 @@ void Application::run()
         render();
     }
 
-    s_context.window.close();
+    if (s_context.window.isOpen())
+        s_context.window.close();
 }
 
 void Application::processInput()
@@ -64,21 +90,20 @@ void Application::processInput()
 
     while (s_context.window.pollEvent(event)) {
 
+        // Switch fullscreen mode
         if (event.type == sf::Event::KeyPressed
             && event.key.code == sf::Keyboard::F11) {
-            s_context.window.close();
-            s_context.window.create(sf::VideoMode(960.f, 540.f), "Evily Evil Villains", sf::Style::Close | sf::Style::Fullscreen);
-            const auto& desktopMode = sf::VideoMode::getDesktopMode();
-            s_context.screenSize = sf::Vector2f(desktopMode.width, desktopMode.height);
-            refresh();
+            switchFullscreenMode();
             return;
         }
 
+        // Closing window
         if (event.type == sf::Event::Closed) {
             m_running = false;
             return;
         }
 
+        // Resizing window
         if (event.type == sf::Event::Resized) {
             s_context.screenSize = sf::Vector2f(event.size.width, event.size.height);
             refresh();
@@ -135,9 +160,9 @@ void Application::loadShaders()
 
 void Application::refreshShaders()
 {
-    auto screenSize = sf::v2f(s_context.window.getSize());
-    auto& resolution = s_context.resolution;
-    auto& effectiveDisplay = s_context.effectiveDisplay;
+    const auto& screenSize = s_context.screenSize;
+    const auto& resolution = s_context.resolution;
+    const auto& effectiveDisplay = s_context.effectiveDisplay;
 
 #if DEBUG_LEVEL >= 2
     std::cout << "[DEBUG_LEVEL 2 - refreshShaders()]" << std::endl;
@@ -189,25 +214,33 @@ void Application::refresh()
     refreshShaders();
 }
 
+void Application::switchFullscreenMode()
+{
+    // Switching fullscreen flag
+    s_context.style ^= sf::Style::Fullscreen;
+    s_context.init(s_context.resolution, s_context.title, s_context.style);
+    refresh();
+}
+
 sf::View Application::bestView()
 {
     sf::FloatRect viewport(0.f, 0.f, 1.f, 1.f);
+    const auto& screenSize = s_context.screenSize;
+    const auto& resolution = s_context.resolution;
+    sf::Vector2f viewRatio = sf::vdiv(screenSize, resolution);
 
-    auto& windowSize = s_context.screenSize;
-    float screenWidth = windowSize.x / s_context.resolution.x;
-    float screenHeight = windowSize.y / s_context.resolution.y;
-
-    if (screenWidth > screenHeight) {
-        viewport.width = screenHeight / screenWidth;
+    if (viewRatio.x > viewRatio.y) {
+        viewport.width = viewRatio.y / viewRatio.x;
         viewport.left = (1.f - viewport.width) / 2.f;
     }
-    else if (screenWidth < screenHeight) {
-        viewport.height = screenWidth / screenHeight;
+    else if (viewRatio.x < viewRatio.y) {
+        viewport.height = viewRatio.x / viewRatio.y;
         viewport.top = (1.f - viewport.height) / 2.f;
     }
 
-    s_context.effectiveDisplay = sf::Vector2f(windowSize.x * viewport.width, windowSize.y * viewport.height);
-    sf::View view(sf::FloatRect(0, 0, s_context.resolution.x, s_context.resolution.y));
+    s_context.effectiveDisplay = sf::Vector2f(screenSize.x * viewport.width, screenSize.y * viewport.height);
+
+    sf::View view(sf::FloatRect(0.f, 0.f, resolution.x, resolution.y));
     view.setViewport(viewport);
     return view;
 }

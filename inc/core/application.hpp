@@ -14,16 +14,17 @@
 class Application
 {
     struct Context {
-        Context(sf::Vector2f dimensions, const std::string& title, uint32_t style = sf::Style::Default)
-            : resolution(dimensions)
-            , screenSize(dimensions)
-            , effectiveDisplay(dimensions)
-            , window(sf::VideoMode(dimensions.x, dimensions.y), title, style)
-        {}
+        Context() {}
+        ~Context() {}
+
+        void init(const sf::Vector2f& iResolution, const std::string& iTitle, const uint32_t& iStyle);
 
         sf::Vector2f resolution;
         sf::Vector2f screenSize;
         sf::Vector2f effectiveDisplay;
+        std::string title;
+        uint32_t style;
+
         sf::RenderWindow window;
         TextureHolder textures;
         ShaderHolder shaders;
@@ -56,9 +57,11 @@ protected:
     // Window management
     void refresh();
     sf::View bestView();
+    void switchFullscreenMode();
 
 private:
     static const sf::Time s_timePerFrame;
+    static const std::string s_title;
     static Context s_context;
 
     StateStack m_stateStack;
