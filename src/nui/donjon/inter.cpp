@@ -16,6 +16,8 @@ DonjonInter::DonjonInter()
 {
     // TODO Get from donjoninfo (in game::context)?
     m_grid.setRowsColumns(7, 5);
+
+    m_contextMenu.setVisible(false);
 }
 
 //-------------------//
@@ -24,8 +26,6 @@ DonjonInter::DonjonInter()
 void DonjonInter::init()
 {
     core()->add(&m_contextMenu);
-    m_contextMenu.init();
-
     update();
 }
 
@@ -74,24 +74,23 @@ void DonjonInter::handleMousePressed(const sf::Event& event, const sf::Vector2f&
         m_contextMenu.addChoice(L"Test callback", constructRoom);
         m_contextMenu.addChoice(L"Nothing happens here", nullptr);
 
-        m_contextMenu.setPosition(fixPos);
-        addPart(&m_contextMenu);
+        m_contextMenu.setPosition(relPos);
+        m_contextMenu.setVisible(true);
+        setStatus(true);
     }
     else {
-        m_contextMenu.handleMouseEvent(event, fixPos);
-        removePart(&m_contextMenu);
+        m_contextMenu.setVisible(false);
     }
 }
 
 void DonjonInter::handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos)
 {
-    sf::Vector2f fixPos = getInverseTransform().transformPoint(relPos);
-    m_contextMenu.handleMouseEvent(event, fixPos);
 }
 
 void DonjonInter::handleMouseLeft()
 {
-    removePart(&m_contextMenu);
+    // Not usable yet...
+    // m_contextMenu.setVisible(false);
 }
 
 bool DonjonInter::handleKeyboardEvent(const sf::Event& event)

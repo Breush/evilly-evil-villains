@@ -13,6 +13,7 @@ Object::Object()
     , m_centered(false)
     , m_focusable(true)
     , m_detectable(true)
+    , m_visible(true)
     , m_parent(nullptr)
 {
 }
@@ -93,6 +94,11 @@ void Object::changedParent()
 }
 
 void Object::changedFocusRect()
+{
+    setStatus(true);
+}
+
+void Object::changedVisible()
 {
     setStatus(true);
 }

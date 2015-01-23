@@ -48,16 +48,16 @@ uiCore::~uiCore()
 
 void uiCore::add(Object* child)
 {
-    child->m_core = this;
-    child->init();
-
     // First child gets focus
     if (focusedChild() == nullptr)
         setFocusedChild(child);
 
     m_children.push_back(child);
-    if ( child->detectable() )
+    if (child->detectable())
         addToDetectMap(child);
+
+    child->m_core = this;
+    child->init();
 }
 
 void uiCore::addToDetectMap(Object* object)
@@ -80,15 +80,22 @@ void uiCore::drawDetectImage()
     debug(2, uint8 blueColor = 0);
     debug(2, uint8 greenColor = 255);
 
-    for (auto& it : m_detectMap) {
-        sf::RectangleShape rectangleShape(it.second->size());
-        rectangleShape.setPosition(it.second->getPosition());
-        rectangleShape.setOrigin(it.second->getOrigin());
-        rectangleShape.setFillColor(sf::Color(it.first, 0, 0));
-        debug(2, rectangleShape.setFillColor( {it.first, greenColor, blueColor}));
-        debug(2, blueColor += 25);
-        debug(2, greenColor -= 25);
-        m_detectTarget.draw(rectangleShape);
+    for (auto& pair : m_detectMap) {
+        if (pair.second->visible()) {
+            sf::RectangleShape rectangleShape;
+            rectangleShape.setFillColor(sf::Color(pair.first, 0, 0));
+
+            // /!\ UI Debug mode - shapes are more visible
+            debug(2, rectangleShape.setFillColor({pair.first, greenColor, blueColor}));
+            debug(2, blueColor += 25);
+            debug(2, greenColor -= 25);
+
+            // Draw main object
+            rectangleShape.setSize(pair.second->size());
+            rectangleShape.setPosition(pair.second->getPosition());
+            rectangleShape.setOrigin(pair.second->getOrigin());
+            m_detectTarget.draw(rectangleShape);
+        }
     }
 
     m_detectTarget.display();
@@ -277,10 +284,11 @@ void uiCore::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     // Drawing children
     for (auto& child : m_children)
-        target.draw(*child, states);
+        if (child->visible())
+            target.draw(*child, states);
 
     // Focusing system
-    if (focusedChild()) {
+    if (focusedChild() && focusedChild()->visible()) {
         sf::RenderStates focusStates(states);
         focusStates.shader = &Application::context().shaders.get(Shaders::NUI_FOCUS);
         target.draw(m_focusSprite, focusStates);
@@ -288,7 +296,7 @@ void uiCore::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
     // /!\ UI Debug mode
     debug(2, sf::Sprite sprite(m_detectTarget.getTexture()));
-    debug(2, sprite.setColor({255, 255, 255, 120}));
+    debug(2, sprite.setColor({255, 255, 255, 150}));
     debug(2, target.draw(sprite));
 }
 
@@ -300,6 +308,7 @@ void uiCore::update(sf::Time dt)
     for (auto& child : m_children) {
         redrawDetectImage |= child->status();
 
+        // Child is focused - update shader
         if (child == focusedChild() && child->status()) {
             setFocusRect(sf::IntRect(child->focusRect()));
 

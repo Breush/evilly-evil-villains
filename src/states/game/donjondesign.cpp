@@ -21,7 +21,7 @@ GameDonjonDesignState::GameDonjonDesignState(StateStack& stack)
 
 void GameDonjonDesignState::draw()
 {
-    Application::context().window.draw(m_donjonInter);
+    Application::context().window.draw(m_uiCore);
 }
 
 bool GameDonjonDesignState::update(sf::Time dt)

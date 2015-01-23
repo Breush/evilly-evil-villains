@@ -53,6 +53,7 @@ namespace nui
         virtual void changedSize();
         virtual void changedParent();
         virtual void changedFocusRect();
+        virtual void changedVisible();
         virtual void changedChild(Object* child);
 
         // Focus interactions
@@ -64,6 +65,7 @@ namespace nui
         PARAMGS(bool, m_centered, centered, setCentered)
         PARAMGS(bool, m_focusable, focusable, setFocusable)
         PARAMGS(bool, m_detectable, detectable, setDetectable)
+        PARAMGSU(bool, m_visible, visible, setVisible, changedVisible)
         PARAMGSU(sf::FloatRect, m_focusRect, focusRect, setFocusRect, changedFocusRect)
         PARAMGSU(Object*, m_parent, parent, setParent, changedParent)
         PARAMGSU(sf::Vector2f, m_size, size, setSize, changedSize)

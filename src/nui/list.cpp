@@ -200,7 +200,7 @@ void List::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
 
 void List::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos)
 {
-    sf::Vector2f pos = getInverseTransform().transformPoint(relPos.x, relPos.y);
+    sf::Vector2f pos = getInverseTransform().transformPoint(relPos);
 
     // TODO Select row
     uint line = pos.y/lineHeight() - 1;

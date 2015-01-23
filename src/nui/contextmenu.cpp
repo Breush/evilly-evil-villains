@@ -42,6 +42,8 @@ void ContextMenu::update()
     addPart(&m_bg);
     for (auto& choice : m_choices)
         addPart(&choice.text);
+
+    setStatus(true);
 }
 
 //------------------------//
@@ -67,22 +69,30 @@ void ContextMenu::handleMouseEvent(const sf::Event& event, const sf::Vector2f& r
 void ContextMenu::handleMousePressed(const sf::Event&, const sf::Vector2f& relPos)
 {
     sf::Vector2f fixPos = getInverseTransform().transformPoint(relPos);
-
     uint choice = (fixPos.y - padding()) / choiceHeight();
 
     if (choice < m_choices.size() && m_choices[choice].callback != nullptr) {
         Application::context().sounds.play(Sounds::NUI_ACCEPT);
         m_choices[choice].callback();
+        setVisible(false);
+    } else {
+        Application::context().sounds.play(Sounds::NUI_REFUSE);
     }
 }
 
-void ContextMenu::handleMouseMoved(const sf::Event&, const sf::Vector2f&)
+void ContextMenu::handleMouseMoved(const sf::Event&, const sf::Vector2f& relPos)
 {
-    // TODO Separate m_message so that we can have a "hover" on each choice
+    sf::Vector2f fixPos = getInverseTransform().transformPoint(relPos);
+    uint choice = (fixPos.y - padding()) / choiceHeight();
+
+    resetPartsShader();
+    if (choice < m_choices.size())
+        setPartShader(&m_choices[choice].text, Shaders::NUI_HOVER);
 }
 
 void ContextMenu::handleMouseLeft()
 {
+    resetPartsShader();
 }
 
 //-------------------//
