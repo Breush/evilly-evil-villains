@@ -31,9 +31,7 @@ namespace nui
 
         // Choices
         void add(std::wstring text, Callback callback = nullptr);
-        uint getChoice() {
-            return m_choice;
-        }
+        uint getChoice() { return m_choice; } // TODO Make in a PARAMGSU() and a choiceChanged
         void acceptChoice();
         void switchChoiceLeft();
         void switchChoiceRight();

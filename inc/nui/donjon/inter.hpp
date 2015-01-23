@@ -20,6 +20,11 @@ namespace nui
         //bool handleJoystickEvent(const sf::Event& event) override;
 
     protected:
+        // Mouse events
+        void handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos);
+        void handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos);
+        void handleMouseLeft();
+
         void changedSize() override;
 
     private:

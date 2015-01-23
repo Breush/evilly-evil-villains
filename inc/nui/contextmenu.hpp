@@ -5,6 +5,8 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
+#include <sstream>
+
 namespace nui
 {
     class ContextMenu : public Object
@@ -12,24 +14,42 @@ namespace nui
         typedef Object baseClass;
 
     public:
+        typedef std::function<void()> Callback;
+
         ContextMenu();
         virtual ~ContextMenu() {}
 
         // Virtual
         void init() override;
         void update() override;
+        void handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos) override;
+
+        // Choices
+        void clearChoices();
+        void addChoice(std::wstring text, Callback callback = nullptr);
 
     protected:
-        // Updates
-        virtual void changedMessage();
+        // Mouse events
+        virtual void handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos);
+        virtual void handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos);
+        virtual void handleMouseLeft();
 
         // Params
-        PARAMG(float, m_padding, padding)
-        PARAMGSU(std::string, m_message, message, setMessage, changedMessage)
+        PARAMG(uint, m_padding, padding)
+        PARAMG(uint, m_choiceHeight, choiceHeight)
+
+        // Keep infos
+        struct ChoiceInfo {
+            sf::Text text;
+            Callback callback;
+        };
 
     private:
-        sf::Text m_text;
+        // Decorum
         sf::RectangleShape m_bg; // TODO To be a sf::Sprite for looks
+
+        // Choices
+        std::vector<ChoiceInfo> m_choices;
     };
 }
 

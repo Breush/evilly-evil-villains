@@ -7,23 +7,17 @@ using namespace nui;
 
 ContextMenu::ContextMenu()
     : baseClass()
-    , m_padding(5.f)
+    , m_padding(5)
+    , m_choiceHeight(22)
 {
 }
 
 void ContextMenu::init()
 {
-    // Getting font from holder
-    sf::Font& font = Application::context().fonts.get(Fonts::NUI);
-    m_text.setCharacterSize(16);
-    m_text.setFont(font);
-    m_text.setColor(sf::Color::White);
-    m_text.setPosition(m_padding, m_padding);
-
     // Background
     m_bg.setFillColor(sf::Color::Blue);
     m_bg.setOutlineColor(sf::Color::White);
-    m_bg.setOutlineThickness(2);
+    m_bg.setOutlineThickness(1); // TODO Have variable
 
     update();
 }
@@ -32,17 +26,87 @@ void ContextMenu::update()
 {
     // Reset
     clearParts();
-    auto bounds = m_text.getLocalBounds();
-    setSize({bounds.left + bounds.width + 2.f * m_padding, bounds.top + bounds.height + 2.f * m_padding});
+
+    // Getting size
+    sf::Vector2f border(2.f * padding(), 2.f * padding());
+    for (auto& choice : m_choices) {
+        auto bounds = choice.text.getLocalBounds();
+        border.x = std::max(border.x, 2.f * padding() + bounds.left + bounds.width);
+        border.y += choiceHeight();
+    }
+
+    setSize(border);
     m_bg.setSize(size());
 
-    // Adding parts
+    // Adding parts in the correct order
     addPart(&m_bg);
-    addPart(&m_text);
+    for (auto& choice : m_choices)
+        addPart(&choice.text);
 }
 
-void ContextMenu::changedMessage()
+//------------------------//
+//----- Mouse events -----//
+
+void ContextMenu::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
 {
-    m_text.setString(m_message);
+    switch (event.type) {
+    case sf::Event::MouseButtonPressed:
+        handleMousePressed(event, relPos);
+        break;
+    case sf::Event::MouseMoved:
+        handleMouseMoved(event, relPos);
+        break;
+    case sf::Event::MouseLeft:
+        handleMouseLeft();
+        break;
+    default:
+        break;
+    }
+}
+
+void ContextMenu::handleMousePressed(const sf::Event&, const sf::Vector2f& relPos)
+{
+    sf::Vector2f fixPos = getInverseTransform().transformPoint(relPos);
+
+    uint choice = (fixPos.y - padding()) / choiceHeight();
+
+    if (choice < m_choices.size() && m_choices[choice].callback != nullptr) {
+        Application::context().sounds.play(Sounds::NUI_ACCEPT);
+        m_choices[choice].callback();
+    }
+}
+
+void ContextMenu::handleMouseMoved(const sf::Event&, const sf::Vector2f&)
+{
+    // TODO Separate m_message so that we can have a "hover" on each choice
+}
+
+void ContextMenu::handleMouseLeft()
+{
+}
+
+//-------------------//
+//----- Choices -----//
+
+void ContextMenu::clearChoices()
+{
+    m_choices.clear();
+}
+
+void ContextMenu::addChoice(std::wstring text, Callback callback)
+{
+    ChoiceInfo choiceInfo;
+
+    choiceInfo.text.setString(text);
+    choiceInfo.callback = callback;
+
+    // Getting font from holder
+    sf::Font& font = Application::context().fonts.get(Fonts::NUI);
+    choiceInfo.text.setCharacterSize(16);
+    choiceInfo.text.setFont(font);
+    choiceInfo.text.setColor(sf::Color::White);
+    choiceInfo.text.setPosition(padding(), choiceHeight() * m_choices.size() + padding());
+
+    m_choices.push_back(choiceInfo);
     update();
 }

@@ -1,4 +1,5 @@
 #include "core/application.hpp"
+#include "core/gettext.hpp"
 
 #include "nui/donjon/inter.hpp"
 #include "nui/uicore.hpp"
@@ -28,29 +29,69 @@ void DonjonInter::init()
     update();
 }
 
+void DonjonInter::update()
+{
+    clearParts();
+    addPart(&m_grid);
+}
+
+//------------------------//
+//----- Mouse events -----//
+
 void DonjonInter::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
 {
-    // Mouse events
-    if (event.type == sf::Event::MouseButtonPressed) {
-        if (event.mouseButton.button == sf::Mouse::Right) {
-            // Get coords for donjon inter positions
-            sf::Vector2f coords = getInverseTransform().transformPoint(relPos);
-            m_selectedRoom = m_grid.rowColumnFromCoords(coords);
-
-            std::stringstream str;
-            str << "Example choice" << std::endl;
-            str << "Destroy room " << m_selectedRoom.x << ", " << m_selectedRoom.y << std::endl;
-            str << "Create ladder here";
-
-            m_contextMenu.setPosition(coords);
-            m_contextMenu.setMessage(str.str());
-
-            addPart(&m_contextMenu);
-        }
-        else {
-            removePart(&m_contextMenu);
-        }
+    switch (event.type) {
+    case sf::Event::MouseButtonPressed:
+        handleMousePressed(event, relPos);
+        break;
+    case sf::Event::MouseMoved:
+        handleMouseMoved(event, relPos);
+        break;
+    case sf::Event::MouseLeft:
+        handleMouseLeft();
+        break;
+    default:
+        break;
     }
+}
+
+void DonjonInter::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos)
+{
+    sf::Vector2f fixPos = getInverseTransform().transformPoint(relPos);
+
+    if (event.mouseButton.button == sf::Mouse::Right) {
+        // Get coords for donjon inter positions
+        m_selectedRoom = m_grid.rowColumnFromCoords(fixPos);
+
+        std::function<void()> constructRoom = [] { std::cout << "Click -> room constructed!" << std::endl; };
+
+        std::wstringstream roomName;
+        roomName << _("Room") << " " << m_selectedRoom.x << " - " << m_selectedRoom.y;
+
+        // Examples of choices
+        m_contextMenu.clearChoices();
+        m_contextMenu.addChoice(roomName.str());
+        m_contextMenu.addChoice(L"Test callback", constructRoom);
+        m_contextMenu.addChoice(L"Nothing happens here", nullptr);
+
+        m_contextMenu.setPosition(fixPos);
+        addPart(&m_contextMenu);
+    }
+    else {
+        m_contextMenu.handleMouseEvent(event, fixPos);
+        removePart(&m_contextMenu);
+    }
+}
+
+void DonjonInter::handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos)
+{
+    sf::Vector2f fixPos = getInverseTransform().transformPoint(relPos);
+    m_contextMenu.handleMouseEvent(event, fixPos);
+}
+
+void DonjonInter::handleMouseLeft()
+{
+    removePart(&m_contextMenu);
 }
 
 bool DonjonInter::handleKeyboardEvent(const sf::Event& event)
@@ -73,12 +114,6 @@ bool DonjonInter::handleKeyboardEvent(const sf::Event& event)
 #endif
 
     return false;
-}
-
-void DonjonInter::update()
-{
-    clearParts();
-    addPart(&m_grid);
 }
 
 //-------------------//
