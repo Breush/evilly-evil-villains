@@ -171,7 +171,7 @@ void List::addLine(std::initializer_list<std::wstring> values)
         auto bounds = text.getLocalBounds();
         uint width = bounds.left + bounds.width;
         uint height = bounds.top + bounds.height;
-        line.push_back( {text, width, height, sf::IntRect(0, 0, width, height)});
+        line.push_back({text, width, height, sf::IntRect(0, 0, width, height)});
     }
     m_lines.push_back(line);
 
@@ -198,20 +198,26 @@ void List::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
     }
 }
 
-void List::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos)
+void List::handleMousePressed(const sf::Event&, const sf::Vector2f& relPos)
 {
-    sf::Vector2f pos = getInverseTransform().transformPoint(relPos);
+    // Do not take first line, they are the columns titles
+    sf::Vector2f fixPos = getInverseTransform().transformPoint(relPos);
+    uint line = fixPos.y / lineHeight() - 1;
 
     // TODO Select row
-    uint line = pos.y/lineHeight() - 1;
-    if (line < linesCount())
+    if (line < m_lines.size())
         setFocusedLine(line);
 }
 
-void List::handleMouseMoved(const sf::Event&, const sf::Vector2f&)
+void List::handleMouseMoved(const sf::Event&, const sf::Vector2f& relPos)
 {
-    //uint x = getInverseTransform().transformPoint(event.mouseMove.x, event.mouseMove.y).x;
-    // TODO Hovering parts
+    sf::Vector2f fixPos = getInverseTransform().transformPoint(relPos);
+    uint line = fixPos.y / lineHeight() - 1;
+
+    resetPartsShader();
+    if (line < m_lines.size())
+        for (auto& cell : m_lines[line])
+            setPartShader(&cell.text, Shaders::NUI_HOVER);
 }
 
 void List::handleMouseLeft()

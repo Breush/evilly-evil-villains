@@ -10,6 +10,7 @@ ContextMenu::ContextMenu()
     , m_padding(5)
     , m_choiceHeight(22)
 {
+    setFocusable(false);
 }
 
 void ContextMenu::init()
