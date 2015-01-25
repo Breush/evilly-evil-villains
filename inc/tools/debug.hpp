@@ -40,7 +40,7 @@
 #endif
 
 // TODO Make a better debug system
-#define debug_scml(...) debug_1(__VA_ARGS__)
+#define debug_scml(...) debug_2(__VA_ARGS__)
 
 //------------------//
 //---- No debug ----//
