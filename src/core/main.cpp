@@ -11,6 +11,7 @@ int main(int argc, char *argv[])
     // Internationalization initiation
     // TODO Move in its own file
     setlocale(LC_ALL, "");
+    setlocale(LC_NUMERIC, "C"); // Really needed for pugixml... otherwise parsing issues.
     bindtextdomain("eev", "res/po/");
     textdomain("eev");
 

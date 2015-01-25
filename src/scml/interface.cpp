@@ -99,9 +99,7 @@ void Entity::draw_internal(int folderID, int fileID, float x, float y, float ang
     angle = 360 - angle;
 
     sf::Texture* img = file_system->getImage(folderID, fileID);
-
-    if(img == NULL)
-        return;
+    returnif (img == NULL);
 
     // FIXME It's recreating a sprite each time
     sf::Sprite sprite(*img);
@@ -109,6 +107,10 @@ void Entity::draw_internal(int folderID, int fileID, float x, float y, float ang
     sprite.setScale(scale_x, scale_y);
     sprite.setRotation(angle);
     sprite.setPosition(x, y);
+
+    //std::cout << "Pos " << x << " " << y << std::endl;
+    //std::cout << "Scale " << scale_x << " " << scale_y << std::endl;
+    //std::cout << "Origine " << img->getSize().x/2 << " " << img->getSize().y/2 << std::endl;
 
     screen->draw(sprite);
 }

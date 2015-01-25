@@ -36,13 +36,10 @@ public:
     Data();
     Data(const std::string& file);
     Data(pugi::xml_node& elem);
-    Data(const Data& copy);
-    Data& operator=(const Data& copy);
     ~Data();
 
     bool load(const std::string& file);
     bool load(pugi::xml_node& elem);
-    Data& clone(const Data& copy, bool skip_base = false);
     void log() const;
     void clear();
 
@@ -615,17 +612,14 @@ public:
                     {
                     public:
 
-                        //std::string object_type; // Does this exist?
                         int atlas;
                         int folder;
                         int file;
-                        //std::string usage;  // Does this exist?
                         std::string name;
                         float x;
                         float y;
                         float pivot_x;
                         float pivot_y;
-                        // pixel_art_mode stuff?
                         float angle;
                         float w;
                         float h;
@@ -636,7 +630,6 @@ public:
                         float b;
                         float a;
                         std::string blend_mode;
-                        //std::string variable_type; // Does this exist?
                         std::string value_string;
                         int value_int;
                         int min_int;
@@ -646,7 +639,6 @@ public:
                         float max_float;
                         int animation;
                         float t;
-                        //int z_index; // Does this exist?  Object_Ref has it, so probably not.
                         float volume;
                         float panning;
                         Meta_Data_Tweenable* meta_data;
