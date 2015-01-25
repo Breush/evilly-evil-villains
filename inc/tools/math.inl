@@ -43,3 +43,9 @@ void clamp(sf::Vector2<T1>& pos, const sf::Vector2<T2>& maxPos)
 {
     return clamp(pos.x, pos.y, maxPos.x, maxPos.y);
 }
+
+template<typename T>
+inline T interpolate(T a, T b, float t)
+{
+    return T(a + (b - a) * t);
+}

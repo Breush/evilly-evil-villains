@@ -19,7 +19,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+#ifndef assert
 #include <assert.h>
+#endif
 
 #ifdef PUGIXML_WCHAR_MODE
 #	include <wchar.h>

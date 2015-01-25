@@ -11,9 +11,7 @@
 
 SplashScreenState::SplashScreenState(StateStack& stack)
     : State(stack)
-    , mText()
-    , mShowText(true)
-    , mTextEffectTime(sf::Time::Zero)
+    //, m_data("res/scml/hero/hero.scml")
 {
     const sf::Vector2f& windowSize = Application::context().resolution;
 
@@ -25,31 +23,48 @@ SplashScreenState::SplashScreenState(StateStack& stack)
     // Shader
     m_bgShader = &Application::context().shaders.get(Shaders::MENU_BG);
 
-    // Text
-    mText.setFont(Application::context().fonts.get(Fonts::NUI)); // TODO Main font
-    mText.setString("Press any key to start");
-    mText.setPosition(windowSize / 2.f);
-    auto bounds = mText.getLocalBounds();
-    mText.setOrigin((bounds.left + bounds.width) / 2.f, (bounds.top + bounds.height) / 2.f);
+    /*// TODO Animation Handler
+    // Loading animation
+    m_fs.load(&m_data);
+    printf("Loaded %zu images.\n", m_fs.images.size());
+
+    for(const auto& entityInfo : m_data.entities) {
+        SCML::Entity* entity = new SCML::Entity(&m_data, entityInfo.first);
+        entity->setFileSystem(&m_fs);
+        entity->setScreen(&Application::context().window);
+        entity->getAnimation(0)->looping = "true";
+        m_entities.push_back(entity);
+    }
+    printf("Loaded %zu entities.\n", m_entities.size());*/
+}
+
+SplashScreenState::~SplashScreenState()
+{
+    m_entities.clear();
+    m_data.clear();
 }
 
 void SplashScreenState::draw()
 {
-    // Animated background
-    Application::context().window.draw(m_bgSprite, m_bgShader);
+    auto& window = Application::context().window;
+    const auto& resolution = Application::context().resolution;
+//    const auto& window = Application::context().window;
 
-    if (mShowText)
-        Application::context().window.draw(mText);
+    // Animated background
+    window.draw(m_bgSprite, m_bgShader);
+
+    // TODO Animation handler
+    // Draw animated entities
+    /*for(const auto& entity : m_entities)
+        entity->draw(resolution.x / 2.f, resolution.y / 2.f, 0.f, 1.f);*/
 }
 
 bool SplashScreenState::update(sf::Time dt)
 {
-    mTextEffectTime += dt;
-
-    if (mTextEffectTime >= sf::seconds(0.5f)) {
-        mShowText = !mShowText;
-        mTextEffectTime = sf::Time::Zero;
-    }
+    // TODO Animation handler
+    // Update animated entities
+    /*for(const auto& entity : m_entities)
+        entity->update(dt.asMilliseconds());*/
 
     return true;
 }

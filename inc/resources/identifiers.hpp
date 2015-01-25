@@ -18,6 +18,13 @@ namespace Textures
     };
 }
 
+/*namespace Animations
+{
+    enum ID {
+        CHARACTER_HERO,
+    };
+}*/
+
 namespace Shaders
 {
     enum ID {

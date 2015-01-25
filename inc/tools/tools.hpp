@@ -11,6 +11,7 @@
 
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Rect.hpp>
+#include <map>
 
 namespace sf
 {
@@ -36,4 +37,16 @@ namespace sf
         r.top  *= v.y; r.height *= v.y;
         return r;
     }
-};
+
+}
+
+namespace tools
+{
+    template<typename T1, typename T2>
+    inline T2 mapFind(const std::map<T1, T2>& map, T1 const& key)
+    {
+        const auto& element = map.find(key);
+        if (element == map.end()) return T2();
+        return element->second;
+    }
+}
