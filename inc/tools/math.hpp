@@ -1,5 +1,8 @@
 #pragma once
 
+#define _USE_MATH_DEFINES // Useful on Windows
+#include <cmath>
+
 #include <SFML/Graphics/Rect.hpp>
 
 //-----------------------//

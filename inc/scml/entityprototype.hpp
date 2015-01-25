@@ -2,6 +2,7 @@
 
 #include "scml/data.hpp"
 #include "scml/transform.hpp"
+#include "tools/int.hpp"
 
 #include <vector>
 #include <string>

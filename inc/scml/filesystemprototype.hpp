@@ -1,6 +1,7 @@
 #pragma once
 
 #include "scml/data.hpp"
+#include "tools/int.hpp"
 
 namespace SCML
 {

@@ -1,6 +1,6 @@
-#include "scml/entityprototype.hpp"
-
+#include "tools/math.hpp"
 #include "tools/tools.hpp" // mapFind
+#include "scml/entityprototype.hpp"
 
 #include <cstring> // strcmp
 
