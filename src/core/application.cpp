@@ -4,7 +4,6 @@
 #include "states/splashscreen.hpp"
 #include "states/menu/main.hpp"
 #include "states/menu/selectworld.hpp"
-#include "states/game/game.hpp"
 #include "states/game/donjondesign.hpp"
 #include "states/game/pause.hpp"
 
@@ -203,7 +202,6 @@ void Application::registerStates()
     m_stateStack.registerState<MenuMainState>(States::MENU_MAIN);
     m_stateStack.registerState<MenuSelectWorldState>(States::MENU_SELECTWORLD);
 
-    m_stateStack.registerState<GameGameState>(States::GAME_GAME);
     m_stateStack.registerState<GameDonjonDesignState>(States::GAME_DONJON_DESIGN);
     m_stateStack.registerState<GamePauseState>(States::GAME_PAUSE);
 }
