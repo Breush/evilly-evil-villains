@@ -101,7 +101,6 @@ void Entity::draw_internal(int folderID, int fileID, float x, float y, float ang
     sf::Texture* img = file_system->getImage(folderID, fileID);
     returnif (img == NULL);
 
-    // FIXME It's recreating a sprite each time
     sf::Sprite sprite(*img);
     sprite.setOrigin(img->getSize().x/2, img->getSize().y/2);
     sprite.setScale(scale_x, scale_y);

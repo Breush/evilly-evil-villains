@@ -11,7 +11,7 @@
 
 SplashScreenState::SplashScreenState(StateStack& stack)
     : State(stack)
-    //, m_data("res/scml/jumping-toasts/jumping-toasts.scml")
+    , m_data("res/scml/jumping-toasts/jumping-toasts.scml")
 {
     const sf::Vector2f& windowSize = Application::context().resolution;
     float maxSize = std::max(windowSize.x, windowSize.y);
@@ -28,7 +28,7 @@ SplashScreenState::SplashScreenState(StateStack& stack)
 
     // TODO Animation Handler
     // Loading animation
-    /*m_fs.load(&m_data);
+    m_fs.load(&m_data);
     //printf("Loaded %zu images.\n", m_fs.images.size());
 
     for(const auto& entityInfo : m_data.entities) {
@@ -38,7 +38,7 @@ SplashScreenState::SplashScreenState(StateStack& stack)
         entity->getAnimation(0)->looping = "false";
         m_entities.push_back(entity);
     }
-    //printf("Loaded %zu entities.\n", m_entities.size());*/
+    //printf("Loaded %zu entities.\n", m_entities.size());
 }
 
 SplashScreenState::~SplashScreenState()
@@ -57,16 +57,16 @@ void SplashScreenState::draw()
 
     // TODO Animation handler
     // Draw animated entities
-    /*for(const auto& entity : m_entities)
-        entity->draw(resolution.x / 2.f, resolution.y / 2.f, 0.f, 1.f);*/
+    for(const auto& entity : m_entities)
+        entity->draw(resolution.x / 2.f, resolution.y / 2.f, 0.f, 1.f);
 }
 
 bool SplashScreenState::update(sf::Time dt)
 {
     // TODO Animation handler
     // Update animated entities
-    /*for(const auto& entity : m_entities)
-        entity->update(dt.asMilliseconds());*/
+    for(const auto& entity : m_entities)
+        entity->update(dt.asMilliseconds());
 
     return true;
 }
