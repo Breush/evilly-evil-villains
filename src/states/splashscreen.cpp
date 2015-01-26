@@ -11,31 +11,34 @@
 
 SplashScreenState::SplashScreenState(StateStack& stack)
     : State(stack)
-    //, m_data("res/scml/hero/hero.scml")
+    //, m_data("res/scml/jumping-toasts/jumping-toasts.scml")
 {
     const sf::Vector2f& windowSize = Application::context().resolution;
+    float maxSize = std::max(windowSize.x, windowSize.y);
 
     // Background
-    sf::Texture& texture = Application::context().textures.get(Textures::MENU_BG);
+    const auto& texture = Application::context().textures.get(Textures::MENU_SPLASH);
+    const auto& textureSize = texture.getSize();
     m_bgSprite.setTexture(texture);
-    m_bgSprite.setPosition((windowSize - sf::Vector2f(texture.getSize())) / 2.f);
+    m_bgSprite.setTextureRect({0, 0, int(maxSize), int(maxSize)});
+    m_bgSprite.setPosition(sf::vsub(windowSize, maxSize) / 2.f);
 
     // Shader
     m_bgShader = &Application::context().shaders.get(Shaders::MENU_BG);
 
-    /*// TODO Animation Handler
+    // TODO Animation Handler
     // Loading animation
-    m_fs.load(&m_data);
-    printf("Loaded %zu images.\n", m_fs.images.size());
+    /*m_fs.load(&m_data);
+    //printf("Loaded %zu images.\n", m_fs.images.size());
 
     for(const auto& entityInfo : m_data.entities) {
         SCML::Entity* entity = new SCML::Entity(&m_data, entityInfo.first);
         entity->setFileSystem(&m_fs);
         entity->setScreen(&Application::context().window);
-        entity->getAnimation(0)->looping = "true";
+        entity->getAnimation(0)->looping = "false";
         m_entities.push_back(entity);
     }
-    printf("Loaded %zu entities.\n", m_entities.size());*/
+    //printf("Loaded %zu entities.\n", m_entities.size());*/
 }
 
 SplashScreenState::~SplashScreenState()
@@ -48,7 +51,6 @@ void SplashScreenState::draw()
 {
     auto& window = Application::context().window;
     const auto& resolution = Application::context().resolution;
-//    const auto& window = Application::context().window;
 
     // Animated background
     window.draw(m_bgSprite, m_bgShader);

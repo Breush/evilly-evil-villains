@@ -146,6 +146,7 @@ void Application::loadTextures()
     s_context.textures.setRepeated(Textures::NUI_FOCUS, true);
 
     // Menu
+    s_context.textures.load(Textures::MENU_SPLASH, "res/tex/menu/splash.png");
     s_context.textures.load(Textures::MENU_BG, "res/tex/menu/bg.png");
     s_context.textures.load(Textures::MENU_NAME, "res/tex/menu/name.png");
 }

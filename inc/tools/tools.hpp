@@ -25,14 +25,19 @@ namespace sf
     template<typename T> Vector2<T> vdiv(const Vector2<T>& v1, const Vector2<T>& v2) { return Vector2<T>(v1.x / v2.x, v1.y / v2.y); }
     template<typename T> Vector2<T> vmul(const Vector2<T>& v1, const Vector2<T>& v2) { return Vector2<T>(v1.x * v2.x, v1.y * v2.y); }
 
-    template<typename T> Rect<T>& raddin(Rect<T>& r, const Vector2<T>& v)
-    {
+    template<typename T> Vector2<T> vsub(const Vector2<T>& v, const T& z) { return Vector2<T>(v.x - z, v.y - z); }
+
+    template<typename T> Vector2<T>& vsubin(Vector2<T>& v, const T& x) {
+        v.x -= x; v.y -= x;
+        return v;
+    }
+
+    template<typename T> Rect<T>& raddin(Rect<T>& r, const Vector2<T>& v) {
         r.left += v.x; r.top += v.y;
         return r;
     }
 
-    template<typename T> Rect<T>& rmulin(Rect<T>& r, const Vector2<T>& v)
-    {
+    template<typename T> Rect<T>& rmulin(Rect<T>& r, const Vector2<T>& v) {
         r.left *= v.x; r.width  *= v.x;
         r.top  *= v.y; r.height *= v.y;
         return r;

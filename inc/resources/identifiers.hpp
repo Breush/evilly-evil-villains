@@ -13,6 +13,7 @@ namespace Textures
 {
     enum ID {
         NUI_FOCUS,
+        MENU_SPLASH,
         MENU_BG,
         MENU_NAME,
     };

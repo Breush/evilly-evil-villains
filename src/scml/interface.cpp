@@ -23,7 +23,7 @@ bool FileSystem::loadImageFile(int folderID, int fileID, const std::string& file
     img->loadFromFile(filename);
 
     returnif (img == nullptr) false;
-    img->setSmooth(true);
+    // img->setSmooth(true); TODO Does not work well with splashscreen
 
     if (!images.insert(std::make_pair(std::make_pair(folderID, fileID), img)).second)
     {
