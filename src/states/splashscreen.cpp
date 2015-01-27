@@ -11,7 +11,7 @@
 
 SplashScreenState::SplashScreenState(StateStack& stack)
     : State(stack)
-    , m_data("res/scml/jumping-toasts/jumping-toasts.scml")
+    , m_data("res/scml/jumping-toasts.scml")
 {
     const sf::Vector2f& windowSize = Application::context().resolution;
     float maxSize = std::max(windowSize.x, windowSize.y);
@@ -31,7 +31,7 @@ SplashScreenState::SplashScreenState(StateStack& stack)
     m_fs.load(&m_data);
     //printf("Loaded %zu images.\n", m_fs.images.size());
 
-    for(const auto& entityInfo : m_data.entities) {
+    for (const auto& entityInfo : m_data.entities) {
         SCML::Entity* entity = new SCML::Entity(&m_data, entityInfo.first);
         entity->setFileSystem(&m_fs);
         entity->setScreen(&Application::context().window);
@@ -57,7 +57,7 @@ void SplashScreenState::draw()
 
     // TODO Animation handler
     // Draw animated entities
-    for(const auto& entity : m_entities)
+    for (const auto& entity : m_entities)
         entity->draw(resolution.x / 2.f, resolution.y / 2.f, 0.f, 1.f);
 }
 
@@ -65,18 +65,17 @@ bool SplashScreenState::update(sf::Time dt)
 {
     // TODO Animation handler
     // Update animated entities
-    for(const auto& entity : m_entities)
+    for (const auto& entity : m_entities) {
+        if (entity->time == entity->getAnimation(0)->length )
+            stackPopPush(States::MENU_MAIN);
+
         entity->update(dt.asMilliseconds());
+    }
 
     return true;
 }
 
 bool SplashScreenState::handleEvent(const sf::Event& event)
 {
-    // If any key is pressed, trigger the next screen
-    if(event.type == sf::Event::KeyPressed) {
-        stackPopPush(States::MENU_MAIN);
-    }
-
     return true;
 }

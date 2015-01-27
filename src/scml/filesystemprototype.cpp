@@ -51,6 +51,8 @@ void FileSystemPrototype::load(SCML::Data* data)
         if (file.second->type == "image") {
             debug_scml(std::cout << "# FS: Loading " << basedir << file.second->name << std::endl);
             loadImageFile(folder.second->id, file.second->id, basedir + file.second->name);
+        } else {
+            debug_scml(std::cout << "# FS: NOT Loading " << basedir << file.second->name << std::endl);
         }
     }
 }

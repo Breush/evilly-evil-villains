@@ -655,6 +655,60 @@ public:
                     Object object;
                 };
             };
+
+            // Soundline
+            class Soundline
+            {
+            public:
+
+                int id;
+                std::string name;
+
+                Soundline();
+                Soundline(pugi::xml_node& elem);
+                ~Soundline();
+
+                bool load(pugi::xml_node& elem);
+                void log() const;
+                void clear();
+
+                class Key;
+                std::map<int, Key*> keys;
+
+                class Key
+                {
+                public:
+
+                    int id;
+
+                    Key();
+                    Key(pugi::xml_node& elem);
+                    ~Key();
+
+                    bool load(pugi::xml_node& elem);
+                    void log() const;
+                    void clear();
+
+                    class Object
+                    {
+                    public:
+                        int atlas;
+                        int folder;
+                        int file;
+
+                        Object();
+                        Object(pugi::xml_node& elem);
+
+                        bool load(pugi::xml_node& elem);
+                        void log() const;
+                        void clear();
+                    };
+
+                    Object object;
+                };
+            };
+
+            Soundline soundline;
         };
     };
 

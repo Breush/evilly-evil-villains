@@ -40,6 +40,9 @@ public:
     std::pair<uint, uint> getImageDimensions(int folderID, int fileID) const override;
     void draw_internal(int folderID, int fileID, float x, float y, float angle, float scale_x, float scale_y) override;
 
+    // TODO Can do much better by using SoundEffectHolder
+    void play_sound(int folderID, int fileID) override;
+
 private:
     FileSystem* file_system;
     sf::RenderTarget* screen;

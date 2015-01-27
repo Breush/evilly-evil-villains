@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r2">
     <folder id="0" name="img">
-        <file id="0" name="../../tex/jumping-toasts/toast.png" width="213" height="186" pivot_x="0" pivot_y="1"/>
-        <file id="1" name="../../tex/jumping-toasts/toaster-bottom.png" width="512" height="40" pivot_x="0" pivot_y="1"/>
-        <file id="2" name="../../tex/jumping-toasts/toaster-middle.png" width="512" height="80" pivot_x="0" pivot_y="1"/>
-        <file id="3" name="../../tex/jumping-toasts/toaster-top.png" width="512" height="40" pivot_x="0" pivot_y="1"/>
-        <file id="4" name="../../tex/jumping-toasts/toast-cut.png" width="213" height="186" pivot_x="0" pivot_y="1"/>
-        <file id="5" name="../../tex/jumping-toasts/toaster-background.png" width="512" height="80" pivot_x="0" pivot_y="1"/>
-        <file id="6" name="../../tex/jumping-toasts/jumping.png" width="444" height="102" pivot_x="0" pivot_y="1"/>
-        <file id="7" name="../../tex/jumping-toasts/toasts.png" width="375" height="101" pivot_x="0" pivot_y="1"/>
+        <file id="0" name="../tex/jumping-toasts/toast.png" width="213" height="186" pivot_x="0" pivot_y="1"/>
+        <file id="1" name="../tex/jumping-toasts/toaster-bottom.png" width="512" height="40" pivot_x="0" pivot_y="1"/>
+        <file id="2" name="../tex/jumping-toasts/toaster-middle.png" width="512" height="80" pivot_x="0" pivot_y="1"/>
+        <file id="3" name="../tex/jumping-toasts/toaster-top.png" width="512" height="40" pivot_x="0" pivot_y="1"/>
+        <file id="4" name="../tex/jumping-toasts/toast-cut.png" width="213" height="186" pivot_x="0" pivot_y="1"/>
+        <file id="5" name="../tex/jumping-toasts/toaster-background.png" width="512" height="80" pivot_x="0" pivot_y="1"/>
+        <file id="6" name="../tex/jumping-toasts/jumping.png" width="444" height="102" pivot_x="0" pivot_y="1"/>
+        <file id="7" name="../tex/jumping-toasts/toasts.png" width="375" height="101" pivot_x="0" pivot_y="1"/>
     </folder>
     <folder id="1" name="snd">
-        <file id="0" name="../../snd/jumping-toasts/jumping-toasts.wav" type="sound"/>
+        <file id="0" name="../snd/jumping-toasts.wav" type="sound"/>
     </folder>
     <entity id="0" name="Toaster">
         <animation id="0" name="Jumping" length="6000" interval="100">

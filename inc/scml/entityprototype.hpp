@@ -26,6 +26,8 @@ public:
     /*! Integer index of the current animation's current mainline keyframe */
     int key;
 
+    int prevKey;
+
     /*! Time (in milliseconds) tracking the position of the animation from its beginning. */
     int time;
 
@@ -393,6 +395,51 @@ public:
                 Object object;
             };
         };
+
+        class Soundline
+        {
+        public:
+
+            int id;
+            std::string name;
+
+            Soundline(SCML::Data::Entity::Animation::Soundline* timeline);
+            ~Soundline();
+
+            void clear();
+
+            class Key;
+            std::map<int, Key*> keys;
+
+            class Key
+            {
+            public:
+
+                int id;
+
+                Key(SCML::Data::Entity::Animation::Soundline::Key* key);
+                ~Key();
+
+                void clear();
+
+                class Object
+                {
+                public:
+
+                    int atlas;
+                    int folder;
+                    int file;
+
+                    Object(SCML::Data::Entity::Animation::Soundline::Key::Object* object);
+
+                    void clear();
+                };
+
+                Object object;
+            };
+        };
+
+        Soundline soundline;
     };
 
 
@@ -462,6 +509,8 @@ public:
     virtual void startAnimation(int animation);
     virtual void startAnimation(const char* animationName);
 
+    // TODO Can do much better by using SoundEffectHolder
+    virtual void play_sound(int folderID, int fileID) = 0;
 
     int getNumAnimations() const;
     Animation* getAnimation(int animation) const;

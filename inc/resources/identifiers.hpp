@@ -19,12 +19,12 @@ namespace Textures
     };
 }
 
-/*namespace Animations
+namespace Animations
 {
     enum ID {
-        CHARACTER_HERO,
+        JUMPING_TOASTS,
     };
-}*/
+}
 
 namespace Shaders
 {
@@ -47,6 +47,7 @@ namespace Fonts
 namespace Sounds
 {
     enum ID {
+        JUMPING_TOASTS,
         NUI_ACCEPT,
         NUI_REFUSE,
         NUI_SELECT,

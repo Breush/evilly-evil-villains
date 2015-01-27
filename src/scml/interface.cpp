@@ -1,5 +1,6 @@
 #include "scml/interface.hpp"
 
+#include "core/application.hpp"
 #include "tools/tools.hpp" // mapFind
 
 #include <SFML/Graphics.hpp>
@@ -32,22 +33,21 @@ bool FileSystem::loadImageFile(int folderID, int fileID, const std::string& file
         delete img;
         return false;
     }
+
     return true;
 }
 
 void FileSystem::clear()
 {
     typedef std::pair<int,int> pair_type;
-    for(auto& image : images)
-        delete image.second;
+    for(auto& image : images) delete image.second;
     images.clear();
 }
 
 std::pair<uint, uint> FileSystem::getImageDimensions(int folderID, int fileID) const
 {
     sf::Texture* img = tools::mapFind(images, std::make_pair(folderID, fileID));
-    if(img == NULL)
-        return std::make_pair(0,0);
+    returnif (img == nullptr) std::make_pair(0,0);
     return std::make_pair(img->getSize().x, img->getSize().y);
 }
 
@@ -112,4 +112,10 @@ void Entity::draw_internal(int folderID, int fileID, float x, float y, float ang
     //std::cout << "Origine " << img->getSize().x/2 << " " << img->getSize().y/2 << std::endl;
 
     screen->draw(sprite);
+}
+
+void Entity::play_sound(int folderID, int fileID)
+{
+    // FIXME Hum... Cheating here... should not
+    Application::context().sounds.play(Sounds::JUMPING_TOASTS);
 }

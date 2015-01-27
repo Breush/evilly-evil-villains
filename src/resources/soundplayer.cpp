@@ -18,6 +18,9 @@ SoundPlayer::SoundPlayer()
     : mSoundBuffers()
     , mSounds()
 {
+    // TODO Move all to Application?
+    mSoundBuffers.load(Sounds::JUMPING_TOASTS, "res/snd/jumping-toasts.wav");
+
     mSoundBuffers.load(Sounds::NUI_ACCEPT, "res/snd/accept.wav");
     mSoundBuffers.load(Sounds::NUI_REFUSE, "res/snd/refuse.wav");
     mSoundBuffers.load(Sounds::NUI_SELECT, "res/snd/select.wav");

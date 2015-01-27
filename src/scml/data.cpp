@@ -284,7 +284,7 @@ bool Data::Meta_Data::Variable::load(pugi::xml_node& elem)
     else if (type == "float")value_float = elem.attribute("value").as_float(value_float);
     else throw std::runtime_error("Data::Meta_Data::Variable loaded invalid variable type " + type + " named " + name);
 
-    debug_scml(log());
+    //debug_scml(log());
 
     return true;
 }
@@ -324,7 +324,7 @@ Data::Meta_Data::Tag::Tag(pugi::xml_node& elem)
 bool Data::Meta_Data::Tag::load(pugi::xml_node& elem)
 {
     name = elem.attribute("name").as_string(name.c_str());
-    debug_scml(log());
+    //debug_scml(log());
 
     return true;
 }
@@ -510,7 +510,7 @@ bool Data::Atlas::load(pugi::xml_node& elem)
     id = elem.attribute("id").as_int(id);
     data_path = elem.attribute("data_path").as_string(data_path.c_str());
     image_path = elem.attribute("image_path").as_string(image_path.c_str());
-    debug_scml(log());
+    //debug_scml(log());
 
     // Folder
     for (auto& child : elem.children("folder")) {
@@ -643,7 +643,6 @@ void Data::Atlas::Folder::Image::clear()
 //------------------//
 //----- Entity -----//
 
-// TODO /!\ RENAME TO ENTITY
 Data::Entity::Entity()
     : id(0)
     , name("")
@@ -744,7 +743,7 @@ bool Data::Entity::Animation::load(pugi::xml_node& elem)
     length = elem.attribute("length").as_int(length);
     looping = elem.attribute("looping").as_string(looping.c_str());
     loop_to = elem.attribute("loop_to").as_int(loop_to);
-    debug_scml(log());
+    //debug_scml(log());
 
     // Meta data
     auto meta_data_child = elem.child("meta_data");
@@ -773,6 +772,13 @@ bool Data::Entity::Animation::load(pugi::xml_node& elem)
             throw std::runtime_error("SCML::Data::Entity::Animation failed to load a timeline.");
             delete timeline;
         }
+    }
+
+    // Soundline
+    auto soundline_elem = elem.child("soundline");
+    if (!soundline_elem || !soundline.load(soundline_elem)) {
+        throw std::runtime_error("SCML::Data::Entity::Animation failed to load the soundline.");
+        soundline.clear();
     }
 
     return true;
@@ -876,7 +882,7 @@ bool Data::Entity::Animation::Mainline::Key::load(pugi::xml_node& elem)
 {
     id = elem.attribute("id").as_int(id);
     time = elem.attribute("time").as_int(time);
-    debug_scml(log());
+    //debug_scml(log());
 
     // Meta data
     auto meta_data_child = elem.child("meta_data");
@@ -1085,14 +1091,14 @@ bool Data::Entity::Animation::Mainline::Key::Bone_Ref::load(pugi::xml_node& elem
     parent = elem.attribute("parent").as_int(parent);
     timeline = elem.attribute("timeline").as_int(timeline);
     key = elem.attribute("key").as_int(key);
-    debug_scml(log());
+    //debug_scml(log());
 
     return true;
 }
 
 void Data::Entity::Animation::Mainline::Key::Bone_Ref::log() const
 {
-    std::cout << "# Entity :: Mainline :: Key :: Bone_Ref" << std::endl;
+    std::cout << "# Entity :: Mainline :: Key :: Bone_Ref >> ";
     std::cout << "id=" << id << " | ";
     std::cout << "parent=" << parent << " | ";
     std::cout << "timeline=" << timeline << " | ";
@@ -1191,7 +1197,7 @@ bool Data::Entity::Animation::Mainline::Key::Object::load(pugi::xml_node& elem)
     b = elem.attribute("b").as_float(b);
     a = elem.attribute("a").as_float(a);
     variable_type = elem.attribute("variable_type").as_string(variable_type.c_str());
-    debug_scml(log());
+    //debug_scml(log());
 
     if (variable_type == "string") {
         value_string = elem.attribute("value").as_string(value_string.c_str());
@@ -1228,7 +1234,7 @@ bool Data::Entity::Animation::Mainline::Key::Object::load(pugi::xml_node& elem)
 
 void Data::Entity::Animation::Mainline::Key::Object::log() const
 {
-    std::cout << "# Entity :: Animation :: Mainline :: Key :: Object" << std::endl;
+    std::cout << "# Entity :: Animation :: Mainline :: Key :: Object >> ";
     std::cout << "id=" << id << " | ";
     std::cout << "parent=" << parent << " | ";
     std::cout << "object_type=" << object_type << " | ";
@@ -1340,7 +1346,7 @@ bool Data::Entity::Animation::Mainline::Key::Object_Ref::load(pugi::xml_node& el
     timeline = elem.attribute("timeline").as_int(timeline);
     key = elem.attribute("key").as_int(key);
     z_index = elem.attribute("z_index").as_int(z_index);
-    debug_scml(log());
+    //debug_scml(log());
 
     abs_x = elem.attribute("abs_x").as_float(abs_x);
     abs_y = elem.attribute("abs_y").as_float(abs_y);
@@ -1356,7 +1362,7 @@ bool Data::Entity::Animation::Mainline::Key::Object_Ref::load(pugi::xml_node& el
 
 void Data::Entity::Animation::Mainline::Key::Object_Ref::log() const
 {
-    std::cout << "# Entity :: Animation :: Mainline :: Key" << std::endl;
+    std::cout << "# Entity :: Animation :: Mainline :: Key >> ";
     std::cout << "id=" << id << " | ";
     std::cout << "parent=" << parent << " | ";
     std::cout << "timeline=" << timeline << " | ";
@@ -1416,7 +1422,7 @@ bool Data::Entity::Animation::Timeline::load(pugi::xml_node& elem)
     id = elem.attribute("id").as_int(id);
     object_type = elem.attribute("object_type").as_string(object_type.c_str());
     variable_type = elem.attribute("variable_type").as_string(variable_type.c_str());
-    debug_scml(log());
+    //debug_scml(log());
 
     if (object_type != "sound") name = elem.attribute("name").as_string(name.c_str());
 
@@ -1451,7 +1457,7 @@ bool Data::Entity::Animation::Timeline::load(pugi::xml_node& elem)
 
 void Data::Entity::Animation::Timeline::log() const
 {
-    std::cout << "# Entity :: Animation :: Timeline" << std::endl;
+    std::cout << "# Entity :: Animation :: Timeline >> ";
     std::cout << "id=" << id << " | ";
     std::cout << "name=" << name << " | ";
     std::cout << "object_type=" << object_type << " | ";
@@ -1512,7 +1518,7 @@ bool Data::Entity::Animation::Timeline::Key::load(pugi::xml_node& elem)
     c1 = elem.attribute("c1").as_float(c1);
     c2 = elem.attribute("c2").as_float(c2);
     spin = elem.attribute("spin").as_int(spin);
-    debug_scml(log());
+    //debug_scml(log());
 
     // Meta data tweenable
     auto meta_data_child = elem.child("meta_data");
@@ -1545,7 +1551,7 @@ bool Data::Entity::Animation::Timeline::Key::load(pugi::xml_node& elem)
 
 void Data::Entity::Animation::Timeline::Key::log() const
 {
-    std::cout << "# Entity :: Animation :: Timeline :: Key" << std::endl;
+    std::cout << "# Entity :: Animation :: Timeline :: Key >> ";
     std::cout << "id=" << id << " | ";
     std::cout << "time=" << time << " | ";
     std::cout << "curve_type=" << curve_type << " | ";
@@ -1643,14 +1649,14 @@ bool Data::Meta_Data_Tweenable::Variable::load(pugi::xml_node& elem)
     curve_type = elem.attribute("curve_type").as_string(curve_type.c_str());
     c1 = elem.attribute("c1").as_float(c1);
     c2 = elem.attribute("c2").as_float(c2);
-    debug_scml(log());
+    //debug_scml(log());
 
     return true;
 }
 
 void Data::Meta_Data_Tweenable::Variable::log() const
 {
-    std::cout << "# Meta_Data_Tweenable :: Variable" << std::endl;
+    std::cout << "# Meta_Data_Tweenable :: Variable >> ";
     std::cout << "type=" << type << std::endl;
     if (type == "string") std::cout << "value=" << value_string << std::endl;
     else if (type == "int") std::cout << "value=" << value_int << std::endl;
@@ -1815,7 +1821,7 @@ bool Data::Entity::Animation::Timeline::Key::Object::load(pugi::xml_node& elem)
     t = elem.attribute("t").as_float(t);
     volume = elem.attribute("volume").as_float(volume);
     panning = elem.attribute("panning").as_float(panning);
-    debug_scml(log());
+    //debug_scml(log());
 
     // Meta data
     auto meta_data_child = elem.child("meta_data");
@@ -1830,7 +1836,7 @@ bool Data::Entity::Animation::Timeline::Key::Object::load(pugi::xml_node& elem)
 
 void Data::Entity::Animation::Timeline::Key::Object::log() const
 {
-    std::cout << "# Entity :: Animation :: Timeline :: Key :: Object" << std::endl;
+    std::cout << "# Entity :: Animation :: Timeline :: Key :: Object >> ";
     std::cout << "atlas=" << atlas << " | ";
     std::cout << "folder=" << folder << " | ";
     std::cout << "file=" << file << " | ";
@@ -1887,6 +1893,144 @@ void Data::Entity::Animation::Timeline::Key::Object::clear()
     panning = 0.0f;
 }
 
+//---------------------//
+//----- Soundline -----//
+
+Data::Entity::Animation::Soundline::Soundline()
+    : id(0)
+    , name("")
+{}
+
+Data::Entity::Animation::Soundline::Soundline(pugi::xml_node& elem)
+    : id(0)
+    , name("")
+{}
+
+Data::Entity::Animation::Soundline::~Soundline()
+{
+    clear();
+}
+
+bool Data::Entity::Animation::Soundline::load(pugi::xml_node& elem)
+{
+    id = elem.attribute("id").as_int(id);
+    name = elem.attribute("name").as_string(name.c_str());
+    debug_scml(log());
+
+    for (auto& child : elem.children("key")) {
+        Key* key = new Key;
+        if (key->load(child)) {
+            if (!keys.insert(std::make_pair(key->id, key)).second) {
+                throw std::runtime_error("SCML::Data::Entity::Animation::Soundline loaded a key with the duplicated id " + key->id);
+                delete key;
+            }
+        } else {
+            throw std::runtime_error("SCML::Data::Entity::Animation::Soundline failed to load a key.");
+            delete key;
+        }
+    }
+
+    return true;
+}
+
+void Data::Entity::Animation::Soundline::log() const
+{
+    std::cout << "# Entity :: Animation :: Soundline >> ";
+    std::cout << "id=" << id << " | ";
+    std::cout << "name=" << name << std::endl;
+}
+
+void Data::Entity::Animation::Soundline::clear()
+{
+    id = 0;
+    name.clear();
+
+    keys.clear();
+}
+
+//------------------------//
+//----- Soundline key -----//
+
+Data::Entity::Animation::Soundline::Key::Key()
+    : id(0)
+{}
+
+Data::Entity::Animation::Soundline::Key::Key(pugi::xml_node& elem)
+    : id(0)
+{
+    load(elem);
+}
+
+Data::Entity::Animation::Soundline::Key::~Key()
+{
+    clear();
+}
+
+bool Data::Entity::Animation::Soundline::Key::load(pugi::xml_node& elem)
+{
+    id = elem.attribute("id").as_int(id);
+    debug_scml(log());
+
+    // Object
+    auto child = elem.child("object");
+    if (child != nullptr && !object.load(child)) {
+        throw std::runtime_error("SCML::Data::Entity::Animation::Soundline::Key failed to load an object.");
+    }
+
+    return true;
+}
+
+void Data::Entity::Animation::Soundline::Key::log() const
+{
+    std::cout << "# Entity :: Animation :: Soundline :: Key >> ";
+    std::cout << "id=" << id << " | " << std::endl;
+}
+
+void Data::Entity::Animation::Soundline::Key::clear()
+{
+    id = 0;
+
+    object.clear();
+}
+
+//--------------------------------//
+//----- Soundline Key Object -----//
+
+Data::Entity::Animation::Soundline::Key::Object::Object()
+    : atlas(0), folder(0), file(0)
+{}
+
+Data::Entity::Animation::Soundline::Key::Object::Object(pugi::xml_node& elem)
+    : atlas(0), folder(0), file(0)
+{
+    load(elem);
+}
+
+bool Data::Entity::Animation::Soundline::Key::Object::load(pugi::xml_node& elem)
+{
+    atlas = elem.attribute("atlas").as_int(atlas);
+    folder = elem.attribute("folder").as_int(folder);
+    file = elem.attribute("file").as_int(file);
+    debug_scml(log());
+
+    return true;
+}
+
+void Data::Entity::Animation::Soundline::Key::Object::log() const
+{
+    std::cout << "# Entity :: Animation :: Soundline :: Key :: Object >> ";
+    std::cout << "atlas=" << atlas << " | ";
+    std::cout << "folder=" << folder << " | ";
+    std::cout << "file=" << file << " | " << std::endl;
+}
+
+void Data::Entity::Animation::Soundline::Key::Object::clear()
+{
+    atlas = 0;
+    folder = 0;
+    file = 0;
+}
+
 //-------------------------//
 //----- Character map -----//
 
@@ -1906,6 +2050,7 @@ bool Data::Character_Map::load(pugi::xml_node& elem)
 {
     id = elem.attribute("id").as_int(id);
     name = elem.attribute("name").as_string(name.c_str());
+    debug_scml(log());
 
     auto child = elem.child("map");
     if (child || !map.load(child))
@@ -1916,6 +2061,7 @@ bool Data::Character_Map::load(pugi::xml_node& elem)
 
 void Data::Character_Map::log() const
 {
+    std::cout << "# Character map >> ";
     std::cout << "id=" << id << " | ";
     std::cout << "name=" << name << std::endl;
 }
@@ -1956,6 +2102,7 @@ bool Data::Character_Map::Map::load(pugi::xml_node& elem)
 
 void Data::Character_Map::Map::log() const
 {
+    std::cout << "# Character map :: Map >> ";
     std::cout << "atlas=" << atlas << " | ";
     std::cout << "folder=" << folder << " | ";
     std::cout << "file=" << file << " | ";
