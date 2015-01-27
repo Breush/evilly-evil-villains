@@ -15,31 +15,34 @@ namespace
 }
 
 SoundPlayer::SoundPlayer()
-    : mSoundBuffers()
-    , mSounds()
+    : m_soundBuffers()
+    , m_sounds()
 {
-    // TODO Move all to Application?
-    mSoundBuffers.load(Sounds::JUMPING_TOASTS, "res/snd/jumping-toasts.wav");
-
-    mSoundBuffers.load(Sounds::NUI_ACCEPT, "res/snd/accept.wav");
-    mSoundBuffers.load(Sounds::NUI_REFUSE, "res/snd/refuse.wav");
-    mSoundBuffers.load(Sounds::NUI_SELECT, "res/snd/select.wav");
-
     // Listener points towards the screen (default in SFML)
     sf::Listener::setDirection(0.f, 0.f, -1.f);
 }
 
-void SoundPlayer::play(Sounds::ID effect)
+void SoundPlayer::load(Sounds::ID id, const std::string& filename)
 {
-    play(effect, getListenerPosition());
+    m_soundBuffers.load(id, filename);
 }
 
-void SoundPlayer::play(Sounds::ID effect, sf::Vector2f position)
+Sounds::ID SoundPlayer::getID(const std::string& filename)
 {
-    mSounds.push_back(sf::Sound());
-    sf::Sound& sound = mSounds.back();
+    m_soundBuffers.getID(filename);
+}
 
-    sound.setBuffer(mSoundBuffers.get(effect));
+void SoundPlayer::play(Sounds::ID id)
+{
+    play(id, getListenerPosition());
+}
+
+void SoundPlayer::play(Sounds::ID id, sf::Vector2f position)
+{
+    m_sounds.push_back(sf::Sound());
+    sf::Sound& sound = m_sounds.back();
+
+    sound.setBuffer(m_soundBuffers.get(id));
     sound.setPosition(position.x, -position.y, 0.f);
     sound.setAttenuation(Attenuation);
     sound.setMinDistance(MinDistance3D);
@@ -49,7 +52,7 @@ void SoundPlayer::play(Sounds::ID effect, sf::Vector2f position)
 
 void SoundPlayer::removeStoppedSounds()
 {
-    mSounds.remove_if([](const sf::Sound& s) {
+    m_sounds.remove_if([](const sf::Sound& s) {
         return s.getStatus() == sf::Sound::Stopped;
     });
 }

@@ -8,6 +8,7 @@ inline void ResourceHolder<Resource, Identifier>::load(Identifier id, const std:
 
     // If loading successful, insert resource to map
     insertResource(id, std::move(resource));
+    insertFilename(id, filename);
 }
 
 template <typename Resource, typename Identifier>
@@ -21,13 +22,14 @@ inline void ResourceHolder<Resource, Identifier>::load(Identifier id, const std:
 
     // If loading successful, insert resource to map
     insertResource(id, std::move(resource));
+    insertFilename(id, filename);
 }
 
 template <typename Resource, typename Identifier>
 inline Resource& ResourceHolder<Resource, Identifier>::get(Identifier id)
 {
-    auto found = mResourceMap.find(id);
-    massert(found != mResourceMap.end(), "Resource not found");
+    auto found = m_resourcesMap.find(id);
+    massert(found != m_resourcesMap.end(), "Resource not found");
 
     return *found->second;
 }
@@ -35,26 +37,42 @@ inline Resource& ResourceHolder<Resource, Identifier>::get(Identifier id)
 template <typename Resource, typename Identifier>
 inline const Resource& ResourceHolder<Resource, Identifier>::get(Identifier id) const
 {
-    auto found = mResourceMap.find(id);
-    massert(found != mResourceMap.end(), "Resource not found");
+    auto found = m_resourcesMap.find(id);
+    massert(found != m_resourcesMap.end(), "Resource not found");
 
     return *found->second;
+}
+
+template <typename Resource, typename Identifier>
+inline Identifier ResourceHolder<Resource, Identifier>::getID(const std::string& filename)
+{
+    auto found = m_filenameMap.find(filename);
+    massert(found != m_filenameMap.end(), "ID from filename " + filename + " not found");
+    return found->second;
 }
 
 template <typename Resource, typename Identifier>
 inline void ResourceHolder<Resource, Identifier>::insertResource(Identifier id, std::unique_ptr<Resource> resource)
 {
     // Insert and check success
-    auto inserted = mResourceMap.insert(std::make_pair(id, std::move(resource)));
+    auto inserted = m_resourcesMap.insert(std::make_pair(id, std::move(resource)));
     massert(inserted.second, "Cannot add resource");
+}
+
+template <typename Resource, typename Identifier>
+inline void ResourceHolder<Resource, Identifier>::insertFilename(Identifier id, const std::string& filename)
+{
+    // Insert and check success
+    auto inserted = m_filenameMap.insert(std::make_pair(filename, id));
+    massert(inserted.second, "Cannot add filename " + filename + ". Was it already added?");
 }
 
 // For textures
 template <typename Resource, typename Identifier>
 inline void ResourceHolder<Resource, Identifier>::setSmooth(Identifier id, bool smoothActive)
 {
-    auto found = mResourceMap.find(id);
-    massert(found != mResourceMap.end(), "Resource not found");
+    auto found = m_resourcesMap.find(id);
+    massert(found != m_resourcesMap.end(), "Resource not found");
 
     found->second->setSmooth(smoothActive);
 }
@@ -62,8 +80,8 @@ inline void ResourceHolder<Resource, Identifier>::setSmooth(Identifier id, bool 
 template <typename Resource, typename Identifier>
 inline void ResourceHolder<Resource, Identifier>::setRepeated(Identifier id, bool repeated)
 {
-    auto found = mResourceMap.find(id);
-    massert(found != mResourceMap.end(), "Resource not found");
+    auto found = m_resourcesMap.find(id);
+    massert(found != m_resourcesMap.end(), "Resource not found");
 
     found->second->setRepeated(repeated);
 }
@@ -73,8 +91,8 @@ template <typename Resource, typename Identifier>
 template <typename Parameter>
 inline void ResourceHolder<Resource, Identifier>::setParameter(Identifier id, const std::string& name, const Parameter& param)
 {
-    auto found = mResourceMap.find(id);
-    massert(found != mResourceMap.end(), "Resource not found");
+    auto found = m_resourcesMap.find(id);
+    massert(found != m_resourcesMap.end(), "Resource not found");
 
     found->second->setParameter(name, param);
 }

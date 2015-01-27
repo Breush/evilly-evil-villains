@@ -47,6 +47,7 @@ protected:
     // Resources
     void loadTextures();
     void loadShaders();
+    void loadSounds();
     void loadFonts();
 
     void refreshShaders();

@@ -17,7 +17,7 @@ SplashScreenState::SplashScreenState(StateStack& stack)
     float maxSize = std::max(windowSize.x, windowSize.y);
 
     // Background
-    const auto& texture = Application::context().textures.get(Textures::MENU_SPLASH);
+    const auto& texture = Application::context().textures.get(Textures::JUMPINGTOASTS_BG);
     const auto& textureSize = texture.getSize();
     m_bgSprite.setTexture(texture);
     m_bgSprite.setTextureRect({0, 0, int(maxSize), int(maxSize)});

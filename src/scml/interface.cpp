@@ -11,49 +11,62 @@ using namespace SCML;
 //-----------------------//
 //----- File system -----//
 
-// TODO Remove: Use textureHandler instead
-
 FileSystem::~FileSystem()
 {
     clear();
 }
 
+void FileSystem::clear()
+{
+    textures.clear();
+    sounds.clear();
+}
+
+//----- Image
+
 bool FileSystem::loadImageFile(int folderID, int fileID, const std::string& filename)
 {
-    sf::Texture* img = new sf::Texture;
-    img->loadFromFile(filename);
+    Textures::ID id = Application::context().textures.getID(filename);
 
-    returnif (img == nullptr) false;
-    // img->setSmooth(true); TODO Does not work well with splashscreen
-
-    if (!images.insert(std::make_pair(std::make_pair(folderID, fileID), img)).second)
-    {
+    if (!textures.insert(std::make_pair(std::make_pair(folderID, fileID), id)).second) {
         std::cerr << "SCML::FileSystem failed to load image: Loading " << filename
                   << " duplicates the folder/file id " << folderID << "/" << fileID << std::endl;
-        delete img;
         return false;
     }
 
     return true;
 }
 
-void FileSystem::clear()
-{
-    typedef std::pair<int,int> pair_type;
-    for(auto& image : images) delete image.second;
-    images.clear();
-}
-
 std::pair<uint, uint> FileSystem::getImageDimensions(int folderID, int fileID) const
 {
-    sf::Texture* img = tools::mapFind(images, std::make_pair(folderID, fileID));
-    returnif (img == nullptr) std::make_pair(0,0);
-    return std::make_pair(img->getSize().x, img->getSize().y);
+    // TODO There is certainly a better way to do
+    const auto& texture = Application::context().textures.get(getTexture(folderID, fileID));
+    return std::make_pair(texture.getSize().x, texture.getSize().y);
 }
 
-sf::Texture* FileSystem::getImage(int folderID, int fileID) const
+Textures::ID FileSystem::getTexture(int folderID, int fileID) const
 {
-    return tools::mapFind(images, std::make_pair(folderID, fileID));
+    return tools::mapFind(textures, std::make_pair(folderID, fileID));
+}
+
+//----- Sounds
+
+bool FileSystem::loadSoundFile(int folderID, int fileID, const std::string& filename)
+{
+    Sounds::ID id = Application::context().sounds.getID(filename);
+
+    if (!sounds.insert(std::make_pair(std::make_pair(folderID, fileID), id)).second) {
+        std::cerr << "SCML::FileSystem failed to load sound: Loading " << filename
+                  << " duplicates the folder/file id " << folderID << "/" << fileID << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+Sounds::ID FileSystem::getSound(int folderID, int fileID) const
+{
+    return tools::mapFind(sounds, std::make_pair(folderID, fileID));
 }
 
 //------------------//
@@ -98,24 +111,18 @@ void Entity::draw_internal(int folderID, int fileID, float x, float y, float ang
     y = -y;
     angle = 360 - angle;
 
-    sf::Texture* img = file_system->getImage(folderID, fileID);
-    returnif (img == NULL);
+    const auto& texture = Application::context().textures.get(file_system->getTexture(folderID, fileID));
 
-    sf::Sprite sprite(*img);
-    sprite.setOrigin(img->getSize().x/2, img->getSize().y/2);
+    sf::Sprite sprite(texture);
+    sprite.setOrigin(sf::v2f(texture.getSize() / 2u));
     sprite.setScale(scale_x, scale_y);
     sprite.setRotation(angle);
     sprite.setPosition(x, y);
-
-    //std::cout << "Pos " << x << " " << y << std::endl;
-    //std::cout << "Scale " << scale_x << " " << scale_y << std::endl;
-    //std::cout << "Origine " << img->getSize().x/2 << " " << img->getSize().y/2 << std::endl;
 
     screen->draw(sprite);
 }
 
 void Entity::play_sound(int folderID, int fileID)
 {
-    // FIXME Hum... Cheating here... should not
-    Application::context().sounds.play(Sounds::JUMPING_TOASTS);
+    Application::context().sounds.play(file_system->getSound(folderID, fileID));
 }

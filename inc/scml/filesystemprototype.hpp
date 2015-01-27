@@ -26,6 +26,7 @@ public:
      * \return true on success, false on failure
      */
     virtual bool loadImageFile(int folderID, int fileID, const std::string& filename) = 0;
+    virtual bool loadSoundFile(int folderID, int fileID, const std::string& filename) = 0;
 
     /*! \brief Cleans up all memory used by the FileSystem to store images, resetting it to an empty state.
      */

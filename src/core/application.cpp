@@ -53,6 +53,7 @@ Application::Application()
 
     loadTextures();
     loadShaders();
+    loadSounds();
     loadFonts();
 
     registerStates();
@@ -141,23 +142,38 @@ void Application::render()
 
 void Application::loadTextures()
 {
+    // Splash-screen
+    s_context.textures.load(Textures::JUMPINGTOASTS_BG, "res/tex/jumping-toasts/bg.png");
+    s_context.textures.load(Textures::JUMPINGTOASTS_JUMPING, "res/tex/jumping-toasts/jumping.png");
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTS, "res/tex/jumping-toasts/toasts.png");
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOAST, "res/tex/jumping-toasts/toast.png");
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTCUT, "res/tex/jumping-toasts/toast-cut.png");
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERBACKGROUND, "res/tex/jumping-toasts/toaster-background.png");
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERBOTTOM, "res/tex/jumping-toasts/toaster-bottom.png");
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERMIDDLE, "res/tex/jumping-toasts/toaster-middle.png");
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERTOP, "res/tex/jumping-toasts/toaster-top.png");
+
+    s_context.textures.setSmooth(Textures::JUMPINGTOASTS_TOAST, false);
+    s_context.textures.setSmooth(Textures::JUMPINGTOASTS_TOASTCUT, false);
+
     // NUI
     s_context.textures.load(Textures::NUI_FOCUS, "res/tex/nui/focus.png");
     s_context.textures.setRepeated(Textures::NUI_FOCUS, true);
 
     // Menu
-    s_context.textures.load(Textures::MENU_SPLASH, "res/tex/menu/splash.png");
     s_context.textures.load(Textures::MENU_BG, "res/tex/menu/bg.png");
     s_context.textures.load(Textures::MENU_NAME, "res/tex/menu/name.png");
 }
 
 void Application::loadShaders()
 {
-    // Need to load all shaders before setting parameters
-    s_context.shaders.load(Shaders::MENU_BG, "res/shd/menu/bg.vert", "res/shd/menu/bg.frag");
-    s_context.shaders.load(Shaders::MENU_NAME, "res/shd/menu/name.vert", sf::Shader::Vertex);
+    // NUI
     s_context.shaders.load(Shaders::NUI_HOVER, "res/shd/nui/hover.frag", sf::Shader::Fragment);
     s_context.shaders.load(Shaders::NUI_FOCUS, "res/shd/nui/focus.frag", sf::Shader::Fragment);
+
+    // Menu
+    s_context.shaders.load(Shaders::MENU_BG, "res/shd/menu/bg.vert", "res/shd/menu/bg.frag");
+    s_context.shaders.load(Shaders::MENU_NAME, "res/shd/menu/name.vert", sf::Shader::Vertex);
 
     refreshShaders();
 }
@@ -168,29 +184,33 @@ void Application::refreshShaders()
     const auto& resolution = s_context.resolution;
     const auto& effectiveDisplay = s_context.effectiveDisplay;
 
-#if DEBUG_LEVEL >= 2
-    std::cout << "[DEBUG_LEVEL 2 - refreshShaders()]" << std::endl;
-    std::cout << "    Screen size: " << screenSize.x << " " << screenSize.y << std::endl;
-    std::cout << "    Resolution: "  << resolution.x << " " << resolution.y << std::endl;
-    std::cout << "    Effective display: " << effectiveDisplay.x << " " << effectiveDisplay.y << std::endl;
-#endif
+    // NUI
+    s_context.shaders.setParameter(Shaders::NUI_HOVER, "texture", sf::Shader::CurrentTexture);
+    s_context.shaders.setParameter(Shaders::NUI_FOCUS, "screenSize", screenSize);
+    s_context.shaders.setParameter(Shaders::NUI_FOCUS, "resolution", resolution);
+    s_context.shaders.setParameter(Shaders::NUI_FOCUS, "effectiveDisplay", effectiveDisplay);
 
-    // Parameters
+    // Menu
     s_context.shaders.setParameter(Shaders::MENU_BG, "screenSize", screenSize);
     s_context.shaders.setParameter(Shaders::MENU_BG, "resolution", resolution);
     s_context.shaders.setParameter(Shaders::MENU_BG, "effectiveDisplay", effectiveDisplay);
     s_context.shaders.setParameter(Shaders::MENU_BG, "texture", sf::Shader::CurrentTexture);
-
-    s_context.shaders.setParameter(Shaders::NUI_HOVER, "texture", sf::Shader::CurrentTexture);
-
-    s_context.shaders.setParameter(Shaders::NUI_FOCUS, "screenSize", screenSize);
-    s_context.shaders.setParameter(Shaders::NUI_FOCUS, "resolution", resolution);
-    s_context.shaders.setParameter(Shaders::NUI_FOCUS, "effectiveDisplay", effectiveDisplay);
 }
 
 void Application::loadFonts()
 {
     s_context.fonts.load(Fonts::NUI, "res/font/dream_orphans.ttf");
+}
+
+void Application::loadSounds()
+{
+    // Splash-screen
+    s_context.sounds.load(Sounds::JUMPING_TOASTS, "res/snd/jumping-toasts.wav");
+
+    // NUI
+    s_context.sounds.load(Sounds::NUI_ACCEPT, "res/snd/accept.wav");
+    s_context.sounds.load(Sounds::NUI_REFUSE, "res/snd/refuse.wav");
+    s_context.sounds.load(Sounds::NUI_SELECT, "res/snd/select.wav");
 }
 
 //------------------//

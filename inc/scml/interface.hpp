@@ -2,6 +2,7 @@
 
 #include "scml/filesystemprototype.hpp"
 #include "scml/entityprototype.hpp"
+#include "resources/identifiers.hpp"
 
 #include <SFML/Graphics/Texture.hpp>
 
@@ -14,16 +15,21 @@ class FileSystem : public FileSystemPrototype
 {
 public:
 
-    // Folder, File
-    std::map<std::pair<int, int>, sf::Texture*> images;
-
     virtual ~FileSystem();
+    void clear() override;
 
     bool loadImageFile(int folderID, int fileID, const std::string& filename) override;
-    void clear() override;
+    bool loadSoundFile(int folderID, int fileID, const std::string& filename) override;
+
     std::pair<uint, uint> getImageDimensions(int folderID, int fileID) const override;
 
-    sf::Texture* getImage(int folderID, int fileID) const;
+    Textures::ID getTexture(int folderID, int fileID) const;
+    Sounds::ID getSound(int folderID, int fileID) const;
+
+private:
+    // Folder, File
+    std::map<std::pair<int, int>, Textures::ID> textures;
+    std::map<std::pair<int, int>, Sounds::ID> sounds;
 };
 
 class Entity : public EntityPrototype

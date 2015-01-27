@@ -49,10 +49,14 @@ void FileSystemPrototype::load(SCML::Data* data)
     for (auto const& folder : data->folders)
     for (auto const& file : folder.second->files) {
         if (file.second->type == "image") {
-            debug_scml(std::cout << "# FS: Loading " << basedir << file.second->name << std::endl);
-            loadImageFile(folder.second->id, file.second->id, basedir + file.second->name);
+            debug_scml(std::cout << "# FS: Loading image " << file.second->name << std::endl);
+            loadImageFile(folder.second->id, file.second->id, file.second->name);
+        } else if (file.second->type == "sound") {
+            debug_scml(std::cout << "# FS: Loading sound " << file.second->name << std::endl);
+            loadSoundFile(folder.second->id, file.second->id, file.second->name);
         } else {
-            debug_scml(std::cout << "# FS: NOT Loading " << basedir << file.second->name << std::endl);
+            debug_scml(std::cout << "# FS: NOT Loading unknown file type " << file.second->type
+                                 << " for file " << file.second->name << std::endl);
         }
     }
 }

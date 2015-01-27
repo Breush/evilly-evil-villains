@@ -15,16 +15,18 @@ class SoundPlayer : private sf::NonCopyable
 public:
     SoundPlayer();
 
-    void play(Sounds::ID effect);
-    void play(Sounds::ID effect, sf::Vector2f position);
+    void load(Sounds::ID id, const std::string& filename);
+    Sounds::ID getID(const std::string& filename);
+
+    void play(Sounds::ID id);
+    void play(Sounds::ID id, sf::Vector2f position);
 
     void removeStoppedSounds();
     void setListenerPosition(sf::Vector2f position);
     sf::Vector2f getListenerPosition() const;
 
-
 private:
-    SoundBufferHolder mSoundBuffers;
-    std::list<sf::Sound> mSounds;
+    SoundBufferHolder m_soundBuffers;
+    std::list<sf::Sound> m_sounds;
 };
 
