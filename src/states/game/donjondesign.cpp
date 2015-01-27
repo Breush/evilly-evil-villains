@@ -24,7 +24,7 @@ void GameDonjonDesignState::draw()
     Application::context().window.draw(m_uiCore);
 }
 
-bool GameDonjonDesignState::update(sf::Time dt)
+bool GameDonjonDesignState::update(const sf::Time& dt)
 {
     m_uiCore.update(dt);
     return true;

@@ -92,7 +92,7 @@ void MenuMainState::onShow()
     m_uiCore.rememberFocusedChild();
 }
 
-bool MenuMainState::update(sf::Time dt)
+bool MenuMainState::update(const sf::Time& dt)
 {
     // Checking if choiceBox changed
     if (m_choiceBox.status()) {

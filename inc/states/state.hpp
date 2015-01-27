@@ -24,10 +24,10 @@ public:
 
 public:
     State(StateStack& stack);
-    virtual	~State();
+    virtual	~State() {}
 
     virtual void draw() = 0;
-    virtual bool update(sf::Time dt) = 0;
+    virtual bool update(const sf::Time& dt) = 0;
     virtual bool handleEvent(const sf::Event& event) = 0;
 
     // Called whenever display changes
@@ -40,7 +40,8 @@ protected:
     void stackPush(States::ID stateID);
     void stackPop();
     void stackClear();
+    void stackClear(States::ID stateID);
 
 private:
-    StateStack*	mStack;
+    StateStack*	m_stack;
 };

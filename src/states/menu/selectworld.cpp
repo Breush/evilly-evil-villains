@@ -47,8 +47,7 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     }
 
     m_buttons[2]->setAction(_("Play"), [this]() {
-        stackClear();
-        stackPush(States::GAME_DONJON_DESIGN);
+        stackClear(States::GAME_DONJON_DESIGN);
     });
     m_buttons[1]->setAction(_("Back"), [this]() {
         stackPop();
@@ -80,7 +79,7 @@ void MenuSelectWorldState::draw()
     Application::context().window.draw(m_uiCore);
 }
 
-bool MenuSelectWorldState::update(sf::Time dt)
+bool MenuSelectWorldState::update(const sf::Time& dt)
 {
     m_uiCore.update(dt);
     return true;

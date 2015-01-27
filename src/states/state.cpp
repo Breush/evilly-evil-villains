@@ -2,31 +2,35 @@
 #include "states/statestack.hpp"
 
 State::State(StateStack& stack)
-    : mStack(&stack)
+    : m_stack(&stack)
 {
 }
 
-State::~State()
-{
-}
+//----- Stack operations -----//
 
 void State::stackPopPush(States::ID stateID)
 {
-    mStack->popState();
-    mStack->pushState(stateID);
+    m_stack->popState();
+    m_stack->pushState(stateID);
 }
 
 void State::stackPush(States::ID stateID)
 {
-    mStack->pushState(stateID);
+    m_stack->pushState(stateID);
 }
 
 void State::stackPop()
 {
-    mStack->popState();
+    m_stack->popState();
 }
 
 void State::stackClear()
 {
-    mStack->clearStates();
+    m_stack->clearStates();
+}
+
+void State::stackClear(States::ID stateID)
+{
+    m_stack->clearStates();
+    m_stack->pushState(stateID);
 }

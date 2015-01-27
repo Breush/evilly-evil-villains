@@ -18,7 +18,7 @@ public:
     virtual ~MenuSelectWorldState();
 
     void draw() override;
-    bool update(sf::Time dt) override;
+    bool update(const sf::Time& dt) override;
     bool handleEvent(const sf::Event& event) override;
     void refresh() override;
 

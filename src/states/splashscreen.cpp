@@ -48,7 +48,7 @@ void SplashScreenState::draw()
     window.draw(m_logo);
 }
 
-bool SplashScreenState::update(sf::Time dt)
+bool SplashScreenState::update(const sf::Time& dt)
 {
     // Check on animated entities
     if (!m_logo.started())

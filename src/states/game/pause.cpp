@@ -10,61 +10,55 @@
 
 GamePauseState::GamePauseState(StateStack& stack)
     : State(stack)
-    , mBackgroundSprite()
-    , mPausedText()
-    , mInstructionText()
 {
-    sf::Font& font = Application::context().fonts.get(Fonts::NUI);
-    sf::Vector2f viewSize = Application::context().resolution;
+    const auto& font = Application::context().fonts.get(Fonts::NUI);
+    const auto& resolution = Application::context().resolution;
 
-    mPausedText.setFont(font);
-    mPausedText.setString("Game Paused");
-    mPausedText.setCharacterSize(70);
-    mPausedText.setPosition(0.5f * viewSize.x, 0.4f * viewSize.y);
-    auto bounds = mPausedText.getLocalBounds();
-    mPausedText.setOrigin((bounds.left + bounds.width) / 2.f, (bounds.top + bounds.height) / 2.f);
+    // Background
+    m_bg.setFillColor(sf::Color(0, 0, 0, 150));
+    m_bg.setSize(Application::context().resolution);
 
-    mInstructionText.setFont(font);
-    mInstructionText.setString("(Press Backspace to return to the main menu)");
-    mInstructionText.setPosition(0.5f * viewSize.x, 0.6f * viewSize.y);
-    bounds = mInstructionText.getLocalBounds();
-    mInstructionText.setOrigin((bounds.left + bounds.width) / 2.f, (bounds.top + bounds.height) / 2.f);
+    // Pause text
+    m_pausedText.setFont(font);
+    m_pausedText.setString("Game Paused");
+    m_pausedText.setCharacterSize(70);
+    m_pausedText.setPosition(0.5f * resolution.x, 0.4f * resolution.y);
+    auto bounds = m_pausedText.getLocalBounds();
+    m_pausedText.setOrigin((bounds.left + bounds.width) / 2.f, (bounds.top + bounds.height) / 2.f);
+
+    // Instruction
+    m_instructionText.setFont(font);
+    m_instructionText.setString("(Press Backspace to return to the main menu)");
+    m_instructionText.setPosition(0.5f * resolution.x, 0.6f * resolution.y);
+    bounds = m_instructionText.getLocalBounds();
+    m_instructionText.setOrigin((bounds.left + bounds.width) / 2.f, (bounds.top + bounds.height) / 2.f);
 }
 
 void GamePauseState::draw()
 {
-    sf::RenderWindow& window = Application::context().window;
+    auto& window = Application::context().window;
 
-    sf::RectangleShape backgroundShape;
-    backgroundShape.setFillColor(sf::Color(0, 0, 0, 150));
-    backgroundShape.setSize(Application::context().resolution);
-
-    window.draw(backgroundShape);
-    window.draw(mPausedText);
-    window.draw(mInstructionText);
+    window.draw(m_bg);
+    window.draw(m_pausedText);
+    window.draw(m_instructionText);
 }
 
-bool GamePauseState::update(sf::Time)
+bool GamePauseState::update(const sf::Time&)
 {
     return false;
 }
 
 bool GamePauseState::handleEvent(const sf::Event& event)
 {
-    if(event.type != sf::Event::KeyPressed) {
-        return false;
-    }
+    returnif (event.type != sf::Event::KeyPressed) false;
 
-    if(event.key.code == sf::Keyboard::Escape) {
-        // Escape pressed, remove itself to return to the game
+    // Back to previous state
+    if (event.key.code == sf::Keyboard::Escape)
         stackPop();
-    }
 
-    if(event.key.code == sf::Keyboard::BackSpace) {
-        // Escape pressed, remove itself to return to the game
-        stackClear();
-        stackPush(States::MENU_MAIN);
-    }
+    // Return to main menu
+    else if (event.key.code == sf::Keyboard::BackSpace)
+        stackClear(States::MENU_MAIN);
 
     return false;
 }

@@ -13,9 +13,9 @@ public:
     SplashScreenState(StateStack& stack);
     virtual ~SplashScreenState();
 
-    virtual void draw();
-    virtual bool update(sf::Time dt);
-    virtual bool handleEvent(const sf::Event& event);
+    void draw() override;
+    bool update(const sf::Time& dt) override;
+    bool handleEvent(const sf::Event& event) override;
 
 private:
     sf::Sprite m_bgSprite;

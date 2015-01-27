@@ -10,7 +10,7 @@ public:
     GameDonjonDesignState(StateStack& stack);
 
     virtual void draw();
-    virtual bool update(sf::Time dt);
+    virtual bool update(const sf::Time& dt);
     virtual bool handleEvent(const sf::Event& event);
 
 private:
