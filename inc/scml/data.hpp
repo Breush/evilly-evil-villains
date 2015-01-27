@@ -39,6 +39,7 @@ public:
     ~Data();
 
     bool load(const std::string& file);
+    bool loadFromFile(const std::string& file);
     bool load(pugi::xml_node& elem);
     void log() const;
     void clear();

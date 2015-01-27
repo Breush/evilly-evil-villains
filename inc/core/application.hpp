@@ -3,6 +3,7 @@
 #include "resources/holder.hpp"
 #include "resources/musicplayer.hpp"
 #include "resources/soundplayer.hpp"
+#include "resources/animationholder.hpp"
 #include "resources/identifiers.hpp"
 #include "states/statestack.hpp"
 
@@ -31,6 +32,7 @@ class Application
         FontHolder fonts;
         MusicPlayer music;
         SoundPlayer sounds;
+        AnimationHolder animations;
     };
 
 public:
@@ -49,6 +51,7 @@ protected:
     void loadShaders();
     void loadSounds();
     void loadFonts();
+    void loadAnimations();
 
     void refreshShaders();
 

@@ -11,7 +11,6 @@
 
 SplashScreenState::SplashScreenState(StateStack& stack)
     : State(stack)
-    , m_data("res/scml/jumping-toasts.scml")
 {
     const sf::Vector2f& windowSize = Application::context().resolution;
     float maxSize = std::max(windowSize.x, windowSize.y);
@@ -26,25 +25,15 @@ SplashScreenState::SplashScreenState(StateStack& stack)
     // Shader
     m_bgShader = &Application::context().shaders.get(Shaders::MENU_BG);
 
-    // TODO Animation Handler
-    // Loading animation
-    m_fs.load(&m_data);
-    //printf("Loaded %zu images.\n", m_fs.images.size());
-
-    for (const auto& entityInfo : m_data.entities) {
-        SCML::Entity* entity = new SCML::Entity(&m_data, entityInfo.first);
-        entity->setFileSystem(&m_fs);
-        entity->setScreen(&Application::context().window);
-        entity->getAnimation(0)->looping = "false";
-        m_entities.push_back(entity);
-    }
-    //printf("Loaded %zu entities.\n", m_entities.size());
+    // Animation
+    m_logo.load(Animations::JUMPINGTOASTS);
+    m_logo.setPosition(windowSize / 2.f);
+    m_logo.setLooping(false);
+    m_logo.restart();
 }
 
 SplashScreenState::~SplashScreenState()
 {
-    m_entities.clear();
-    m_data.clear();
 }
 
 void SplashScreenState::draw()
@@ -55,22 +44,15 @@ void SplashScreenState::draw()
     // Animated background
     window.draw(m_bgSprite, m_bgShader);
 
-    // TODO Animation handler
-    // Draw animated entities
-    for (const auto& entity : m_entities)
-        entity->draw(resolution.x / 2.f, resolution.y / 2.f, 0.f, 1.f);
+    // Draw animated logo
+    window.draw(m_logo);
 }
 
 bool SplashScreenState::update(sf::Time dt)
 {
-    // TODO Animation handler
-    // Update animated entities
-    for (const auto& entity : m_entities) {
-        if (entity->time == entity->getAnimation(0)->length )
-            stackPopPush(States::MENU_MAIN);
-
-        entity->update(dt.asMilliseconds());
-    }
+    // Check on animated entities
+    if (!m_logo.started())
+        stackPopPush(States::MENU_MAIN);
 
     return true;
 }

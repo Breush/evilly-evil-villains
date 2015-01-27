@@ -55,6 +55,7 @@ Application::Application()
     loadShaders();
     loadSounds();
     loadFonts();
+    loadAnimations();
 
     registerStates();
     m_stateStack.pushState(m_initialState);
@@ -127,6 +128,7 @@ void Application::update(sf::Time dt)
     s_context.shaders.setParameter(Shaders::MENU_BG, "time", m_gameTime/5.f);
     s_context.shaders.setParameter(Shaders::MENU_NAME, "time", m_gameTime/5.f);
 
+    s_context.animations.update(dt);
     m_stateStack.update(dt);
 }
 
@@ -158,7 +160,6 @@ void Application::loadTextures()
 
     // NUI
     s_context.textures.load(Textures::NUI_FOCUS, "res/tex/nui/focus.png");
-    s_context.textures.setRepeated(Textures::NUI_FOCUS, true);
 
     // Menu
     s_context.textures.load(Textures::MENU_BG, "res/tex/menu/bg.png");
@@ -205,12 +206,18 @@ void Application::loadFonts()
 void Application::loadSounds()
 {
     // Splash-screen
-    s_context.sounds.load(Sounds::JUMPING_TOASTS, "res/snd/jumping-toasts.wav");
+    s_context.sounds.load(Sounds::JUMPINGTOASTS, "res/snd/jumping-toasts.wav");
 
     // NUI
     s_context.sounds.load(Sounds::NUI_ACCEPT, "res/snd/accept.wav");
     s_context.sounds.load(Sounds::NUI_REFUSE, "res/snd/refuse.wav");
     s_context.sounds.load(Sounds::NUI_SELECT, "res/snd/select.wav");
+}
+
+void Application::loadAnimations()
+{
+    // Splash-screen
+    s_context.animations.load(Animations::JUMPINGTOASTS, "res/scml/jumping-toasts.scml");
 }
 
 //------------------//

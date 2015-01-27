@@ -59,6 +59,11 @@ bool Data::load(const std::string& file)
     return true;
 }
 
+bool Data::loadFromFile(const std::string& file)
+{
+    return load(file);
+}
+
 bool Data::load(pugi::xml_node& elem)
 {
     returnif (!elem) false;

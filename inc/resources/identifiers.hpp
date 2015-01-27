@@ -1,6 +1,7 @@
 #pragma once
 
-// Forward declaration of SFML classes
+//----- Forward declarations
+
 namespace sf
 {
     class Texture;
@@ -8,6 +9,13 @@ namespace sf
     class Font;
     class SoundBuffer;
 }
+
+namespace SCML
+{
+    class Data;
+}
+
+//----- Effective defines
 
 namespace Textures
 {
@@ -30,7 +38,7 @@ namespace Textures
 namespace Animations
 {
     enum ID {
-        JUMPING_TOASTS,
+        JUMPINGTOASTS,
     };
 }
 
@@ -55,7 +63,7 @@ namespace Fonts
 namespace Sounds
 {
     enum ID {
-        JUMPING_TOASTS,
+        JUMPINGTOASTS,
         NUI_ACCEPT,
         NUI_REFUSE,
         NUI_SELECT,
@@ -69,7 +77,8 @@ namespace Music
     };
 }
 
-// Forward declaration and a few type definitions
+//----- Few type definitions
+
 template <typename Resource, typename Identifier>
 class ResourceHolder;
 
@@ -77,3 +86,4 @@ typedef ResourceHolder<sf::Texture, Textures::ID>		TextureHolder;
 typedef ResourceHolder<sf::Shader, Shaders::ID>			ShaderHolder;
 typedef ResourceHolder<sf::Font, Fonts::ID>			    FontHolder;
 typedef ResourceHolder<sf::SoundBuffer, Sounds::ID>	    SoundBufferHolder;
+typedef ResourceHolder<SCML::Data, Animations::ID>	    SCMLHolder;
