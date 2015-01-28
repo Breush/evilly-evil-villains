@@ -18,19 +18,19 @@ void AnimationHolder::load(Animations::ID id, const std::string& filename)
     m_scmlHolder.load(id, filename);
 
     // File system
-    std::unique_ptr<SCML::FileSystem> fs(new SCML::FileSystem());
+    std::unique_ptr<scml::FileSystem> fs(new scml::FileSystem());
     m_fsMap.insert(std::make_pair(id, std::move(fs)));
     m_fsMap[id]->load(&getData(id));
 }
 
 //----- Getters -----//
 
-SCML::Data& AnimationHolder::getData(Animations::ID id)
+scml::Data& AnimationHolder::getData(Animations::ID id)
 {
     return m_scmlHolder.get(id);
 }
 
-SCML::FileSystem& AnimationHolder::getFileSystem(Animations::ID id)
+scml::FileSystem& AnimationHolder::getFileSystem(Animations::ID id)
 {
     return *m_fsMap[id];
 }

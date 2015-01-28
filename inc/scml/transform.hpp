@@ -1,6 +1,7 @@
 #pragma once
 
-namespace SCML {
+namespace scml
+{
 
 // The coordinate transform for a bone or object.
 

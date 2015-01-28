@@ -97,7 +97,6 @@ void StateStack::applyPendingChanges()
             break;
 
         default:
-            // TODO Manage errors
             break;
         }
     }

@@ -9,9 +9,11 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <sstream>
 
-DungeonInter::DungeonInter()
+using namespace dungeon;
+
+Inter::Inter()
 {
-    // TODO Get from DungeonData
+    // TODO Get from dungeon::Data
     m_grid.setRowsColumns(7, 5);
 
     m_contextMenu.setVisible(false);
@@ -20,13 +22,13 @@ DungeonInter::DungeonInter()
 //-------------------//
 //----- Routine -----//
 
-void DungeonInter::init()
+void Inter::init()
 {
     core()->add(&m_contextMenu);
     update();
 }
 
-void DungeonInter::update()
+void Inter::update()
 {
     clearParts();
     addPart(&m_grid);
@@ -35,7 +37,7 @@ void DungeonInter::update()
 //------------------------//
 //----- Mouse events -----//
 
-void DungeonInter::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
+void Inter::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
 {
     switch (event.type) {
     case sf::Event::MouseButtonPressed:
@@ -52,7 +54,7 @@ void DungeonInter::handleMouseEvent(const sf::Event& event, const sf::Vector2f& 
     }
 }
 
-void DungeonInter::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos)
+void Inter::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos)
 {
     sf::Vector2f fixPos = getInverseTransform().transformPoint(relPos);
 
@@ -79,17 +81,17 @@ void DungeonInter::handleMousePressed(const sf::Event& event, const sf::Vector2f
     }
 }
 
-void DungeonInter::handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos)
+void Inter::handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos)
 {
 }
 
-void DungeonInter::handleMouseLeft()
+void Inter::handleMouseLeft()
 {
     // Not usable yet...
     // m_contextMenu.setVisible(false);
 }
 
-bool DungeonInter::handleKeyboardEvent(const sf::Event& event)
+bool Inter::handleKeyboardEvent(const sf::Event& event)
 {
 #if defined(DEBUG_MODE)
     // Keyboard event
@@ -114,7 +116,7 @@ bool DungeonInter::handleKeyboardEvent(const sf::Event& event)
 //-------------------//
 //----- Refresh -----//
 
-void DungeonInter::changedSize()
+void Inter::changedSize()
 {
     m_grid.setSize(size());
 }

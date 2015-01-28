@@ -5,7 +5,7 @@
 #include <climits> // PATH_MAX
 #include <algorithm> // find
 
-using namespace SCML;
+using namespace scml;
 
 std::string dirname(std::string source)
 {
@@ -27,10 +27,10 @@ bool pathIsAbsolute(const std::string& path)
     return false;
 }
 
-void FileSystemPrototype::load(SCML::Data* data)
+void FileSystemPrototype::load(scml::Data* data)
 {
     if (data == NULL || data->name.size() == 0) {
-        throw std::runtime_error("SCML::FileSystemPrototype called with an empty data");
+        throw std::runtime_error("scml::FileSystemPrototype called with an empty data");
         return;
     }
 

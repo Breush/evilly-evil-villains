@@ -127,7 +127,6 @@ void Application::update(sf::Time dt)
     // TODO Move to a shader code
     s_context.shaders.setParameter(Shaders::MENU_BG, "time", m_gameTime/5.f);
     s_context.shaders.setParameter(Shaders::MENU_NAME, "time", m_gameTime/5.f);
-
     s_context.animations.update(dt);
     m_stateStack.update(dt);
 }

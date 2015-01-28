@@ -8,7 +8,7 @@
 #include <string>
 #include <map>
 
-namespace SCML
+namespace scml
 {
 
 /*! \brief A class to directly interface with SCML character data and draw it (to be inherited).
@@ -57,7 +57,7 @@ public:
 
     //Meta_Data* meta_data;
 
-    /*! \brief Stores all of the data that the EntityPrototype needs to update and draw itself, independent of the definition in SCML::Data.
+    /*! \brief Stores all of the data that the EntityPrototype needs to update and draw itself, independent of the definition in scml::Data.
      */
     class Animation
     {
@@ -75,7 +75,7 @@ public:
         {
         public:
 
-            Mainline(SCML::Data::Entity::Animation::Mainline* mainline);
+            Mainline(scml::Data::Entity::Animation::Mainline* mainline);
 
             ~Mainline();
 
@@ -92,7 +92,7 @@ public:
                 int time;
                 //Meta_Data* meta_data;
 
-                Key(SCML::Data::Entity::Animation::Mainline::Key* key);
+                Key(scml::Data::Entity::Animation::Mainline::Key* key);
 
                 ~Key();
 
@@ -179,7 +179,7 @@ public:
                     float a;
                     //Meta_Data* meta_data;
 
-                    Bone(SCML::Data::Entity::Animation::Mainline::Key::Bone* bone);
+                    Bone(scml::Data::Entity::Animation::Mainline::Key::Bone* bone);
 
                     void clear();
 
@@ -194,7 +194,7 @@ public:
                     int timeline;
                     int key;
 
-                    Bone_Ref(SCML::Data::Entity::Animation::Mainline::Key::Bone_Ref* bone_ref);
+                    Bone_Ref(scml::Data::Entity::Animation::Mainline::Key::Bone_Ref* bone_ref);
 
                     void clear();
                 };
@@ -245,7 +245,7 @@ public:
 
                     //Meta_Data* meta_data;
 
-                    Object(SCML::Data::Entity::Animation::Mainline::Key::Object* object);
+                    Object(scml::Data::Entity::Animation::Mainline::Key::Object* object);
 
                     void clear();
 
@@ -261,7 +261,7 @@ public:
                     int key;
                     int z_index;
 
-                    Object_Ref(SCML::Data::Entity::Animation::Mainline::Key::Object_Ref* object_ref);
+                    Object_Ref(scml::Data::Entity::Animation::Mainline::Key::Object_Ref* object_ref);
 
                     void clear();
                 };
@@ -274,7 +274,7 @@ public:
         class Timeline;
         std::map<int, Timeline*> timelines;
 
-        Animation(SCML::Data::Entity::Animation* animation);
+        Animation(scml::Data::Entity::Animation* animation);
 
         ~Animation();
 
@@ -293,7 +293,7 @@ public:
             std::string usage;
             //Meta_Data* meta_data;
 
-            Timeline(SCML::Data::Entity::Animation::Timeline* timeline);
+            Timeline(scml::Data::Entity::Animation::Timeline* timeline);
 
             ~Timeline();
 
@@ -315,7 +315,7 @@ public:
 
                 bool has_object;
 
-                Key(SCML::Data::Entity::Animation::Timeline::Key* key);
+                Key(scml::Data::Entity::Animation::Timeline::Key* key);
 
                 ~Key();
 
@@ -339,7 +339,7 @@ public:
                     float a;
                     //Meta_Data_Tweenable* meta_data;
 
-                    Bone(SCML::Data::Entity::Animation::Timeline::Key::Bone* bone);
+                    Bone(scml::Data::Entity::Animation::Timeline::Key::Bone* bone);
 
                     void clear();
                 };
@@ -386,7 +386,7 @@ public:
                     float panning;
                     //Meta_Data_Tweenable* meta_data;
 
-                    Object(SCML::Data::Entity::Animation::Timeline::Key::Object* object);
+                    Object(scml::Data::Entity::Animation::Timeline::Key::Object* object);
 
                     void clear();
 
@@ -403,7 +403,7 @@ public:
             int id;
             std::string name;
 
-            Soundline(SCML::Data::Entity::Animation::Soundline* timeline);
+            Soundline(scml::Data::Entity::Animation::Soundline* timeline);
             ~Soundline();
 
             void clear();
@@ -417,7 +417,7 @@ public:
 
                 int id;
 
-                Key(SCML::Data::Entity::Animation::Soundline::Key* key);
+                Key(scml::Data::Entity::Animation::Soundline::Key* key);
                 ~Key();
 
                 void clear();
@@ -430,7 +430,7 @@ public:
                     int folder;
                     int file;
 
-                    Object(SCML::Data::Entity::Animation::Soundline::Key::Object* object);
+                    Object(scml::Data::Entity::Animation::Soundline::Key::Object* object);
 
                     void clear();
                 };
@@ -445,11 +445,11 @@ public:
 
 
     EntityPrototype();
-    EntityPrototype(SCML::Data* data, int entity, int animation = 0, int key = 0);
-    EntityPrototype(SCML::Data* data, const char* entityName, int animation = 0, int key = 0);
+    EntityPrototype(scml::Data* data, int entity, int animation = 0, int key = 0);
+    EntityPrototype(scml::Data* data, const char* entityName, int animation = 0, int key = 0);
     virtual ~EntityPrototype();
 
-    virtual void load(SCML::Data* data);
+    virtual void load(scml::Data* data);
 
     virtual void clear();
 
@@ -509,7 +509,6 @@ public:
     virtual void startAnimation(int animation);
     virtual void startAnimation(const char* animationName);
 
-    // TODO Can do much better by using SoundEffectHolder
     virtual void play_sound(int folderID, int fileID) = 0;
 
     int getNumAnimations() const;

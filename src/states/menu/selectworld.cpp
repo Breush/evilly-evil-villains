@@ -47,6 +47,7 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     }
 
     m_buttons[2]->setAction(_("Play"), [this]() {
+        std::cout << "Playing on world " << m_list.selectedLine() << std::endl;
         stackClear(States::GAME_DUNGEON_DESIGN);
     });
     m_buttons[1]->setAction(_("Back"), [this]() {

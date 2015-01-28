@@ -2,7 +2,7 @@
 
 #include "tools/math.hpp" // lerp
 
-using namespace SCML;
+using namespace scml;
 
 // This is for rotating untranslated points and offsetting them to a new origin.
 static void rotate_point(float& x, float& y, float angle, float origin_x, float origin_y, bool flipped)

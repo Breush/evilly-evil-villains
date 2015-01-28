@@ -96,7 +96,7 @@ bool MenuMainState::update(const sf::Time& dt)
 {
     // Checking if choiceBox changed
     if (m_choiceBox.status()) {
-        m_reactImage.setActiveReact(m_choices[m_choiceBox.getChoice()]);
+        m_reactImage.setActiveReact(m_choices[m_choiceBox.choice()]);
     }
     // Checking if reactImage changed
     else if (m_reactImage.status()) {

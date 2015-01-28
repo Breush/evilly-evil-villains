@@ -13,6 +13,10 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     // Stop music if any
     Application::context().music.stop();
 
+    // Dungeon data
+    // TODO Get from game context?
+    m_dungeonData.load("");
+
     // Dungeon inter
     m_uiCore.add(&m_dungeonInter);
     m_dungeonInter.setSize({350, 450});

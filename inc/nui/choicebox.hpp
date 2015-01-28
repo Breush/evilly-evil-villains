@@ -31,7 +31,6 @@ namespace nui
 
         // Choices
         void add(std::wstring text, Callback callback = nullptr);
-        uint getChoice() { return m_choice; } // TODO Make in a PARAMGSU() and a choiceChanged
         void acceptChoice();
         void switchChoiceLeft();
         void switchChoiceRight();
@@ -57,6 +56,7 @@ namespace nui
         PARAMG(float, m_lineOffset, lineOffset)
         PARAMG(float, m_arrowSize, arrowSize)
         PARAMG(float, m_lineSize, lineSize)
+        PARAMG(uint, m_choice, choice)
 
         // Keep infos
         struct ChoiceInfo {
@@ -68,7 +68,6 @@ namespace nui
         // Choices
         std::vector<ChoiceInfo> m_choices;
         uint m_nChoices;
-        uint m_choice;
 
         // Text
         sf::Text m_text;

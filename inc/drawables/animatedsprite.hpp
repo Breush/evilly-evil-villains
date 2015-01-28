@@ -38,7 +38,7 @@ namespace sfe
         PARAMGSU(bool, m_looping, looping, setLooping, refresh)
 
     private:
-        std::list<std::unique_ptr<SCML::Entity>> m_entities;
+        std::list<std::unique_ptr<scml::Entity>> m_entities;
         int m_number;
     };
 

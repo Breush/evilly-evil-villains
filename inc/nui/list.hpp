@@ -59,8 +59,9 @@ namespace nui
             sf::IntRect clippingRect;
         };
 
-        // Updates
+        // Changes
         void changedSize() override;
+        void changedSelectedLine();
 
         // Focus interactions
         bool ownsFocus() override { return true; }
@@ -73,6 +74,7 @@ namespace nui
         PARAMG(uint, m_sbWidth, sbWidth)
         PARAMG(uint, m_lineHeight, lineHeight)
         PARAMG(uint, m_linesCount, linesCount)
+        PARAMGSU(uint, m_selectedLine, selectedLine, setSelectedLine, changedSelectedLine);
 
     private:
         // Columns

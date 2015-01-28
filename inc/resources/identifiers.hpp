@@ -10,7 +10,7 @@ namespace sf
     class SoundBuffer;
 }
 
-namespace SCML
+namespace scml
 {
     class Data;
 }
@@ -86,4 +86,4 @@ typedef ResourceHolder<sf::Texture, Textures::ID>		TextureHolder;
 typedef ResourceHolder<sf::Shader, Shaders::ID>			ShaderHolder;
 typedef ResourceHolder<sf::Font, Fonts::ID>			    FontHolder;
 typedef ResourceHolder<sf::SoundBuffer, Sounds::ID>	    SoundBufferHolder;
-typedef ResourceHolder<SCML::Data, Animations::ID>	    SCMLHolder;
+typedef ResourceHolder<scml::Data, Animations::ID>	    SCMLHolder;

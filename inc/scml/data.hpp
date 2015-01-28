@@ -9,7 +9,7 @@ namespace pugi
     class xml_node;
 }
 
-namespace SCML
+namespace scml
 {
 
 // Representation and storage of an SCML file in memory

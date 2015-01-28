@@ -3,7 +3,7 @@
 #include "scml/data.hpp"
 #include "tools/int.hpp"
 
-namespace SCML
+namespace scml
 {
 
 // A storage class for images in a renderer-specific format (to be inherited)
@@ -17,7 +17,7 @@ public:
     /*! \brief Loads all images referenced by the given SCML data.
      * \param data SCML data object
      */
-    virtual void load(SCML::Data* data);
+    virtual void load(scml::Data* data);
 
     /*! \brief Loads an image from a file and stores it so that the folderID and fileID can be used to reference the image.
      * \param folderID Integer folder ID

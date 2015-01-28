@@ -8,7 +8,7 @@
 
 // To render with SFML
 
-namespace SCML
+namespace scml
 {
 
 class FileSystem : public FileSystemPrototype
@@ -37,7 +37,7 @@ class Entity : public EntityPrototype
 public:
 
     Entity();
-    Entity(SCML::Data* data, int entity, int animation = 0, int key = 0);
+    Entity(scml::Data* data, int entity, int animation = 0, int key = 0);
 
     FileSystem* setFileSystem(FileSystem* fs);
     sf::RenderTarget* setScreen(sf::RenderTarget* scr);
@@ -46,7 +46,6 @@ public:
     std::pair<uint, uint> getImageDimensions(int folderID, int fileID) const override;
     void draw_internal(int folderID, int fileID, float x, float y, float angle, float scale_x, float scale_y) override;
 
-    // TODO Can do much better by using SoundEffectHolder
     void play_sound(int folderID, int fileID) override;
 
 private:

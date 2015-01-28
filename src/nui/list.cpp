@@ -18,6 +18,7 @@ List::List()
     , m_sbWidth(31)
     , m_lineHeight(32)
     , m_linesCount(0)
+    , m_selectedLine(uint(-1))
 {
     // TODO #3 - Use config parameter to determine size
 }
@@ -204,9 +205,8 @@ void List::handleMousePressed(const sf::Event&, const sf::Vector2f& relPos)
     sf::Vector2f fixPos = getInverseTransform().transformPoint(relPos);
     uint line = fixPos.y / lineHeight() - 1;
 
-    // TODO Select row
     if (line < m_lines.size())
-        setFocusedLine(line);
+        setSelectedLine(line);
 }
 
 void List::handleMouseMoved(const sf::Event&, const sf::Vector2f& relPos)
@@ -234,7 +234,7 @@ void List::handleMouseLeft()
 }*/
 
 //-------------------//
-//----- Updates -----//
+//----- Changes -----//
 
 void List::changedSize()
 {
@@ -242,6 +242,11 @@ void List::changedSize()
     m_hBorders.resize(linesCount() + 2);
 
     baseClass::changedSize();
+}
+
+void List::changedSelectedLine()
+{
+    setFocusedLine(m_selectedLine);
 }
 
 //-----------------------------//

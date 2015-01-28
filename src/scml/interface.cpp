@@ -6,7 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-using namespace SCML;
+using namespace scml;
 
 //-----------------------//
 //----- File system -----//
@@ -29,7 +29,7 @@ bool FileSystem::loadImageFile(int folderID, int fileID, const std::string& file
     Textures::ID id = Application::context().textures.getID(filename);
 
     if (!textures.insert(std::make_pair(std::make_pair(folderID, fileID), id)).second) {
-        std::cerr << "SCML::FileSystem failed to load image: Loading " << filename
+        std::cerr << "scml::FileSystem failed to load image: Loading " << filename
                   << " duplicates the folder/file id " << folderID << "/" << fileID << std::endl;
         return false;
     }
@@ -56,7 +56,7 @@ bool FileSystem::loadSoundFile(int folderID, int fileID, const std::string& file
     Sounds::ID id = Application::context().sounds.getID(filename);
 
     if (!sounds.insert(std::make_pair(std::make_pair(folderID, fileID), id)).second) {
-        std::cerr << "SCML::FileSystem failed to load sound: Loading " << filename
+        std::cerr << "scml::FileSystem failed to load sound: Loading " << filename
                   << " duplicates the folder/file id " << folderID << "/" << fileID << std::endl;
         return false;
     }
@@ -73,11 +73,11 @@ Sounds::ID FileSystem::getSound(int folderID, int fileID) const
 //----- Entity -----//
 
 Entity::Entity()
-    : SCML::EntityPrototype()
+    : scml::EntityPrototype()
 {}
 
-Entity::Entity(SCML::Data* data, int entity, int animation, int key)
-    : SCML::EntityPrototype(data, entity, animation, key)
+Entity::Entity(scml::Data* data, int entity, int animation, int key)
+    : scml::EntityPrototype(data, entity, animation, key)
 {}
 
 FileSystem* Entity::setFileSystem(FileSystem* fs)

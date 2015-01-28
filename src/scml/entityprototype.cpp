@@ -4,19 +4,19 @@
 
 #include <cstring> // strcmp
 
-using namespace SCML;
+using namespace scml;
 
 EntityPrototype::EntityPrototype()
     : entity(-1), animation(-1), prevKey(-1), key(-1), time(0)
 {}
 
-EntityPrototype::EntityPrototype(SCML::Data* data, int entity, int animation, int key)
+EntityPrototype::EntityPrototype(scml::Data* data, int entity, int animation, int key)
     : entity(entity), animation(animation), prevKey(-1), key(key), time(0)
 {
     load(data);
 }
 
-EntityPrototype::EntityPrototype(SCML::Data* data, const char* entityName, int animation, int key)
+EntityPrototype::EntityPrototype(scml::Data* data, const char* entityName, int animation, int key)
     : entity(-1), animation(animation), prevKey(-1), key(key), time(0)
 {
     load(data);
@@ -34,11 +34,11 @@ EntityPrototype::~EntityPrototype()
     clear();
 }
 
-void EntityPrototype::load(SCML::Data* data)
+void EntityPrototype::load(scml::Data* data)
 {
     returnif (data == NULL);
 
-    SCML::Data::Entity* entity_ptr = tools::mapFind(data->entities, entity);
+    scml::Data::Entity* entity_ptr = tools::mapFind(data->entities, entity);
     returnif (entity_ptr == NULL);
 
     name = entity_ptr->name;
@@ -71,7 +71,7 @@ void EntityPrototype::startAnimation(int animation)
 
 void EntityPrototype::startAnimation(const char* animationName)
 {
-    SCML::EntityPrototype::Animation* animation_ptr = getAnimation(animationName);
+    scml::EntityPrototype::Animation* animation_ptr = getAnimation(animationName);
     this->animation = (animation_ptr == NULL)? -1 : animation_ptr->id;
 
     prevKey = -1;
@@ -83,7 +83,7 @@ void EntityPrototype::update(int dt_ms)
 {
     returnif (entity < 0 || animation < 0 || key < 0);
 
-    SCML::EntityPrototype::Animation* animation_ptr = getAnimation(animation);
+    scml::EntityPrototype::Animation* animation_ptr = getAnimation(animation);
     returnif (animation_ptr == NULL);
 
     time += dt_ms;
@@ -378,7 +378,7 @@ void EntityPrototype::Bone_Transform_State::rebuild(int entity, int animation, i
 
 
 
-EntityPrototype::Animation::Animation(SCML::Data::Entity::Animation* animation)
+EntityPrototype::Animation::Animation(scml::Data::Entity::Animation* animation)
     : id(animation->id), name(animation->name), length(animation->length), looping(animation->looping), loop_to(animation->loop_to)
     , mainline(&animation->mainline), soundline(&animation->soundline)
 {
@@ -399,7 +399,7 @@ void EntityPrototype::Animation::clear()
 }
 
 
-EntityPrototype::Animation::Mainline::Mainline(SCML::Data::Entity::Animation::Mainline* mainline)
+EntityPrototype::Animation::Mainline::Mainline(scml::Data::Entity::Animation::Mainline* mainline)
 {
     for (auto const& key : mainline->keys)
         keys.insert(std::make_pair(key.second->id, new Key(key.second)));
@@ -418,7 +418,7 @@ void EntityPrototype::Animation::Mainline::clear()
 }
 
 
-EntityPrototype::Animation::Mainline::Key::Key(SCML::Data::Entity::Animation::Mainline::Key* key)
+EntityPrototype::Animation::Mainline::Key::Key(scml::Data::Entity::Animation::Mainline::Key* key)
     : id(key->id), time(key->time)
 {
     // Load bones and objects
@@ -471,7 +471,7 @@ void EntityPrototype::Animation::Mainline::Key::clear()
 }
 
 
-EntityPrototype::Animation::Mainline::Key::Bone::Bone(SCML::Data::Entity::Animation::Mainline::Key::Bone* bone)
+EntityPrototype::Animation::Mainline::Key::Bone::Bone(scml::Data::Entity::Animation::Mainline::Key::Bone* bone)
     : parent(bone->parent)
     , x(bone->x), y(bone->y), angle(bone->angle), scale_x(bone->scale_x), scale_y(bone->scale_y), r(bone->r), g(bone->g), b(bone->b), a(bone->a)
 {}
@@ -480,7 +480,7 @@ void EntityPrototype::Animation::Mainline::Key::Bone::clear()
 {}
 
 
-EntityPrototype::Animation::Mainline::Key::Bone_Ref::Bone_Ref(SCML::Data::Entity::Animation::Mainline::Key::Bone_Ref* bone_ref)
+EntityPrototype::Animation::Mainline::Key::Bone_Ref::Bone_Ref(scml::Data::Entity::Animation::Mainline::Key::Bone_Ref* bone_ref)
     : id(bone_ref->id), parent(bone_ref->parent), timeline(bone_ref->timeline), key(bone_ref->key)
 {}
 
@@ -488,7 +488,7 @@ void EntityPrototype::Animation::Mainline::Key::Bone_Ref::clear()
 {}
 
 
-EntityPrototype::Animation::Mainline::Key::Object::Object(SCML::Data::Entity::Animation::Mainline::Key::Object* object)
+EntityPrototype::Animation::Mainline::Key::Object::Object(scml::Data::Entity::Animation::Mainline::Key::Object* object)
     : id(object->id), parent(object->parent), object_type(object->object_type), atlas(object->atlas), folder(object->folder), file(object->file)
     , usage(object->usage), blend_mode(object->blend_mode), name(object->name)
     , x(object->x), y(object->y), pivot_x(object->pivot_x), pivot_y(object->pivot_y)
@@ -504,7 +504,7 @@ void EntityPrototype::Animation::Mainline::Key::Object::clear()
 {}
 
 
-EntityPrototype::Animation::Mainline::Key::Object_Ref::Object_Ref(SCML::Data::Entity::Animation::Mainline::Key::Object_Ref* object_ref)
+EntityPrototype::Animation::Mainline::Key::Object_Ref::Object_Ref(scml::Data::Entity::Animation::Mainline::Key::Object_Ref* object_ref)
     : id(object_ref->id), parent(object_ref->parent), timeline(object_ref->timeline), key(object_ref->key), z_index(object_ref->z_index)
 {}
 
@@ -514,7 +514,7 @@ void EntityPrototype::Animation::Mainline::Key::Object_Ref::clear()
 //--------------------//
 //----- Timeline -----//
 
-EntityPrototype::Animation::Timeline::Timeline(SCML::Data::Entity::Animation::Timeline* timeline)
+EntityPrototype::Animation::Timeline::Timeline(scml::Data::Entity::Animation::Timeline* timeline)
     : id(timeline->id), name(timeline->name), object_type(timeline->object_type), variable_type(timeline->variable_type), usage(timeline->usage)
 {
     for (auto const& key : timeline->keys)
@@ -534,7 +534,7 @@ void EntityPrototype::Animation::Timeline::clear()
 }
 
 
-EntityPrototype::Animation::Timeline::Key::Key(SCML::Data::Entity::Animation::Timeline::Key* key)
+EntityPrototype::Animation::Timeline::Key::Key(scml::Data::Entity::Animation::Timeline::Key* key)
     : id(key->id), time(key->time), curve_type(key->curve_type), c1(key->c1), c2(key->c2), spin(key->spin), has_object(key->has_object), bone(&key->bone), object(&key->object)
 {
 
@@ -552,7 +552,7 @@ void EntityPrototype::Animation::Timeline::Key::clear()
 }
 
 
-EntityPrototype::Animation::Timeline::Key::Bone::Bone(SCML::Data::Entity::Animation::Timeline::Key::Bone* bone)
+EntityPrototype::Animation::Timeline::Key::Bone::Bone(scml::Data::Entity::Animation::Timeline::Key::Bone* bone)
     : x(bone->x), y(bone->y), angle(bone->angle), scale_x(bone->scale_x), scale_y(bone->scale_y), r(bone->r), g(bone->g), b(bone->b), a(bone->a)
 {}
 
@@ -560,7 +560,7 @@ void EntityPrototype::Animation::Timeline::Key::Bone::clear()
 {}
 
 
-EntityPrototype::Animation::Timeline::Key::Object::Object(SCML::Data::Entity::Animation::Timeline::Key::Object* object)
+EntityPrototype::Animation::Timeline::Key::Object::Object(scml::Data::Entity::Animation::Timeline::Key::Object* object)
     : atlas(object->atlas), folder(object->folder), file(object->file), name(object->name)
     , x(object->x), y(object->y), pivot_x(object->pivot_x), pivot_y(object->pivot_y), angle(object->angle)
     , w(object->w), h(object->h), scale_x(object->scale_x), scale_y(object->scale_y), r(object->r), g(object->g), b(object->b), a(object->a)
@@ -579,7 +579,7 @@ void EntityPrototype::Animation::Timeline::Key::Object::clear()
 //--------------------//
 //----- Soundline -----//
 
-EntityPrototype::Animation::Soundline::Soundline(SCML::Data::Entity::Animation::Soundline* soundline)
+EntityPrototype::Animation::Soundline::Soundline(scml::Data::Entity::Animation::Soundline* soundline)
     : id(soundline->id), name(soundline->name)
 {
     for (auto const& key : soundline->keys)
@@ -598,7 +598,7 @@ void EntityPrototype::Animation::Soundline::clear()
     keys.clear();
 }
 
-EntityPrototype::Animation::Soundline::Key::Key(SCML::Data::Entity::Animation::Soundline::Key* key)
+EntityPrototype::Animation::Soundline::Key::Key(scml::Data::Entity::Animation::Soundline::Key* key)
     : id(key->id), object(&key->object)
 {
 }
@@ -614,7 +614,7 @@ void EntityPrototype::Animation::Soundline::Key::clear()
     object.clear();
 }
 
-EntityPrototype::Animation::Soundline::Key::Object::Object(SCML::Data::Entity::Animation::Soundline::Key::Object* object)
+EntityPrototype::Animation::Soundline::Key::Object::Object(scml::Data::Entity::Animation::Soundline::Key::Object* object)
     : atlas(object->atlas), folder(object->folder), file(object->file)
 {
 
@@ -814,7 +814,7 @@ bool EntityPrototype::getObjectTransform(Transform& result, int objectID)
     return false;
 }
 
-bool EntityPrototype::getSimpleObjectTransform(Transform& result, SCML::EntityPrototype::Animation::Mainline::Key::Object* obj1)
+bool EntityPrototype::getSimpleObjectTransform(Transform& result, scml::EntityPrototype::Animation::Mainline::Key::Object* obj1)
 {
     if (obj1 == NULL) {
         return false;
@@ -859,7 +859,7 @@ bool EntityPrototype::getSimpleObjectTransform(Transform& result, SCML::EntityPr
     return true;
 }
 
-bool EntityPrototype::getTweenedObjectTransform(Transform& result, SCML::EntityPrototype::Animation::Mainline::Key::Object_Ref* ref)
+bool EntityPrototype::getTweenedObjectTransform(Transform& result, scml::EntityPrototype::Animation::Mainline::Key::Object_Ref* ref)
 {
     // Dereference object_ref and get the next one in the timeline for tweening
     Animation* animation_ptr = getAnimation(animation);  // Only needed if looping...
