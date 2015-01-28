@@ -13,6 +13,8 @@
 #define DEBUG_NUI           0
 // SCML parsing
 #define DEBUG_SCML          0
+// Dungeon design
+#define DEBUG_DUNGEON       2
 
 //--------------------//
 //---- Debug mode ----//
@@ -185,4 +187,47 @@
 #else
     #define debug_scml_5(...)  ((void) 0)
     #define mdebug_scml_5(...) ((void) 0)
+#endif
+
+//-----------------//
+//---- Dungeon ----//
+
+#if DEBUG_DUNGEON >= 1
+    #define debug_dungeon_1(...)   debug_generic("[D1] DUNGEON: ", __VA_ARGS__)
+    #define mdebug_dungeon_1(...) mdebug_generic("[D1] DUNGEON: ", __VA_ARGS__)
+#else
+    #define debug_dungeon_1(...)  ((void) 0)
+    #define mdebug_dungeon_1(...) ((void) 0)
+#endif
+
+#if DEBUG_DUNGEON >= 2
+    #define debug_dungeon_2(...)   debug_generic("[D2] DUNGEON: ", __VA_ARGS__)
+    #define mdebug_dungeon_2(...) mdebug_generic("[D2] DUNGEON: ", __VA_ARGS__)
+#else
+    #define debug_dungeon_2(...)  ((void) 0)
+    #define mdebug_dungeon_2(...) ((void) 0)
+#endif
+
+#if DEBUG_DUNGEON >= 3
+    #define debug_dungeon_3(...)   debug_generic("[D3] DUNGEON: ", __VA_ARGS__)
+    #define mdebug_dungeon_3(...) mdebug_generic("[D3] DUNGEON: ", __VA_ARGS__)
+#else
+    #define debug_dungeon_3(...)  ((void) 0)
+    #define mdebug_dungeon_3(...) ((void) 0)
+#endif
+
+#if DEBUG_DUNGEON >= 4
+    #define debug_dungeon_4(...)   debug_generic("[D4] DUNGEON: ", __VA_ARGS__)
+    #define mdebug_dungeon_4(...) mdebug_generic("[D4] DUNGEON: ", __VA_ARGS__)
+#else
+    #define debug_dungeon_4(...)  ((void) 0)
+    #define mdebug_dungeon_4(...) ((void) 0)
+#endif
+
+#if DEBUG_DUNGEON >= 5
+    #define debug_dungeon_5(...)   debug_generic("[D5] DUNGEON: ", __VA_ARGS__)
+    #define mdebug_dungeon_5(...) mdebug_generic("[D5] DUNGEON: ", __VA_ARGS__)
+#else
+    #define debug_dungeon_5(...)  ((void) 0)
+    #define mdebug_dungeon_5(...) ((void) 0)
 #endif

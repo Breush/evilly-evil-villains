@@ -59,7 +59,7 @@ void Grid::setRowsColumns(const uint& inRows, const uint& inColumns)
 
 //----- Interaction -----//
 
-sf::Vector2u Grid::rowColumnFromCoords(const sf::Vector2f& coords)
+sf::Vector2u Grid::rowColumnFromCoords(const sf::Vector2f& coords) const
 {
     if (coords.x < 0 || coords.x >= m_size.x || coords.y < 0 || coords.y >= m_size.y)
         return sf::Vector2u(-1, -1);
@@ -67,5 +67,15 @@ sf::Vector2u Grid::rowColumnFromCoords(const sf::Vector2f& coords)
     float cellHeight = m_size.y / m_rows;
     float cellWidth = m_size.x / m_columns;
 
-    return sf::Vector2u(coords.x / cellWidth, coords.y / cellHeight);
+    return sf::Vector2u(coords.y / cellHeight, coords.x / cellWidth);
+}
+
+sf::Vector2f Grid::cellPosition(uint row, uint column) const
+{
+    return sf::Vector2f(column * cellSize().x, row * cellSize().y);
+}
+
+sf::Vector2f Grid::cellSize() const
+{
+    return sf::Vector2f(m_size.x / m_columns, m_size.y / m_rows);
 }

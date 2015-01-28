@@ -95,11 +95,20 @@ void Application::processInput()
 
     while (s_context.window.pollEvent(event)) {
 
-        // Switch fullscreen mode
-        if (event.type == sf::Event::KeyPressed
-            && event.key.code == sf::Keyboard::F11) {
-            switchFullscreenMode();
-            return;
+        // Keyboard
+        if (event.type == sf::Event::KeyPressed) {
+            // Switch fullscreen mode
+            if (event.key.code == sf::Keyboard::F11) {
+                switchFullscreenMode();
+                return;
+            }
+
+            // Hard reset - TODO Enable only on debug mode
+            if (event.key.code == sf::Keyboard::BackSlash) {
+                m_stateStack.clearStates();
+                m_stateStack.pushState(States::SPLASHSCREEN);
+                return;
+            }
         }
 
         // Closing window
@@ -154,11 +163,12 @@ void Application::loadTextures()
     s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERMIDDLE, "res/tex/jumping-toasts/toaster-middle.png");
     s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERTOP, "res/tex/jumping-toasts/toaster-top.png");
 
-    s_context.textures.setSmooth(Textures::JUMPINGTOASTS_TOAST, false);
     s_context.textures.setSmooth(Textures::JUMPINGTOASTS_TOASTCUT, false);
 
     // NUI
     s_context.textures.load(Textures::NUI_FOCUS, "res/tex/nui/focus.png");
+
+    s_context.textures.setRepeated(Textures::NUI_FOCUS, true);
 
     // Menu
     s_context.textures.load(Textures::MENU_BG, "res/tex/menu/bg.png");

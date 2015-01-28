@@ -81,12 +81,12 @@ void ReactImage::addReactFromFile(const std::string& file)
     doc.load_file(file.c_str());
 
     // Adding children
-    for (auto& react : doc.child("reactimage").children()) {
-        std::string key = react.attribute("key").value();
-        float left = std::stoi( react.attribute("left").value() );
-        float top = std::stoi( react.attribute("top").value() );
-        float width = std::stoi( react.attribute("width").value() );
-        float height = std::stoi( react.attribute("height").value() );
+    for (const auto& react : doc.child("reactimage").children()) {
+        std::string key = react.attribute("key").as_string();
+        float left = react.attribute("left").as_float();
+        float top = react.attribute("top").as_float();
+        float width = react.attribute("width").as_float();
+        float height = react.attribute("height").as_float();
         addReact(key, {left, top, width, height});
     }
 }

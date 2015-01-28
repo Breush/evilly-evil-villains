@@ -30,7 +30,9 @@ namespace sfe
 
         // Interaction
         // Returns (-1, -1) as uint if not inside
-        sf::Vector2u rowColumnFromCoords(const sf::Vector2f& coords);
+        sf::Vector2u rowColumnFromCoords(const sf::Vector2f& coords) const;
+        sf::Vector2f cellPosition(uint row, uint column) const;
+        sf::Vector2f cellSize() const;
 
     protected:
         // Update lines positions

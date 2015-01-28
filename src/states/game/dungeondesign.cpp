@@ -15,10 +15,11 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
 
     // Dungeon data
     // TODO Get from game context?
-    m_dungeonData.load("");
+    m_dungeonData.load("worlds/example/dungeon.xml");
 
     // Dungeon inter
     m_uiCore.add(&m_dungeonInter);
+    m_dungeonInter.useData(m_dungeonData);
     m_dungeonInter.setSize({350, 450});
     m_dungeonInter.setPosition((resolution - m_dungeonInter.size()) / 2.f);
 }
