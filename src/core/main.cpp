@@ -1,5 +1,5 @@
 #include "core/application.hpp"
-#include "core/gettext.hpp" // TODO Not needed anymore if moved
+#include "core/gettext.hpp"
 
 #include <stdexcept>
 #include <iostream>
@@ -7,20 +7,10 @@
 int main(int argc, char *argv[])
 {
     Application app;
-
-    // Internationalization initiation
-    // TODO Move in its own file
-    setlocale(LC_ALL, "");
-    setlocale(LC_NUMERIC, "C"); // Really needed for pugixml... otherwise parsing issues.
-    bindtextdomain("eev", "res/po/");
-    textdomain("eev");
+    internationalization::init();
 
     // Handle arguments
-#if DEBUG_LEVEL >= 1
-    if (argc > 1) {
-        std::cout << "Arguments passed: " << argv[0] << std::endl;
-    }
-#endif // DEBUG_LEVEL
+    debug_1(if (argc > 1) std::cout << "Arguments passed: " << argv[0] << std::endl;)
 
     // Running application
     try {
