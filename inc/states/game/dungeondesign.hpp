@@ -1,13 +1,13 @@
 #pragma once
 
 #include "nui/uicore.hpp"
-#include "nui/donjon/inter.hpp"
+#include "dungeon/inter.hpp"
 #include "states/state.hpp"
 
-class GameDonjonDesignState : public State
+class GameDungeonDesignState : public State
 {
 public:
-    GameDonjonDesignState(StateStack& stack);
+    GameDungeonDesignState(StateStack& stack);
 
     virtual void draw();
     virtual bool update(const sf::Time& dt);
@@ -16,5 +16,7 @@ public:
 private:
     // NUI
     nui::uiCore m_uiCore;
-    nui::DonjonInter m_donjonInter;
+
+    // Dungeon
+    DungeonInter m_dungeonInter;
 };

@@ -1,20 +1,17 @@
+#include "dungeon/inter.hpp"
+
 #include "core/application.hpp"
 #include "core/gettext.hpp"
-
-#include "nui/donjon/inter.hpp"
 #include "nui/uicore.hpp"
-
 #include "tools/debug.hpp"
 #include "tools/event.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <sstream>
 
-using namespace nui;
-
-DonjonInter::DonjonInter()
+DungeonInter::DungeonInter()
 {
-    // TODO Get from donjoninfo (in game::context)?
+    // TODO Get from DungeonData
     m_grid.setRowsColumns(7, 5);
 
     m_contextMenu.setVisible(false);
@@ -23,13 +20,13 @@ DonjonInter::DonjonInter()
 //-------------------//
 //----- Routine -----//
 
-void DonjonInter::init()
+void DungeonInter::init()
 {
     core()->add(&m_contextMenu);
     update();
 }
 
-void DonjonInter::update()
+void DungeonInter::update()
 {
     clearParts();
     addPart(&m_grid);
@@ -38,7 +35,7 @@ void DonjonInter::update()
 //------------------------//
 //----- Mouse events -----//
 
-void DonjonInter::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
+void DungeonInter::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
 {
     switch (event.type) {
     case sf::Event::MouseButtonPressed:
@@ -55,12 +52,11 @@ void DonjonInter::handleMouseEvent(const sf::Event& event, const sf::Vector2f& r
     }
 }
 
-void DonjonInter::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos)
+void DungeonInter::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos)
 {
     sf::Vector2f fixPos = getInverseTransform().transformPoint(relPos);
 
     if (event.mouseButton.button == sf::Mouse::Right) {
-        // Get coords for donjon inter positions
         m_selectedRoom = m_grid.rowColumnFromCoords(fixPos);
 
         std::function<void()> constructRoom = [] { std::cout << "Click -> room constructed!" << std::endl; };
@@ -83,17 +79,17 @@ void DonjonInter::handleMousePressed(const sf::Event& event, const sf::Vector2f&
     }
 }
 
-void DonjonInter::handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos)
+void DungeonInter::handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos)
 {
 }
 
-void DonjonInter::handleMouseLeft()
+void DungeonInter::handleMouseLeft()
 {
     // Not usable yet...
     // m_contextMenu.setVisible(false);
 }
 
-bool DonjonInter::handleKeyboardEvent(const sf::Event& event)
+bool DungeonInter::handleKeyboardEvent(const sf::Event& event)
 {
 #if defined(DEBUG_MODE)
     // Keyboard event
@@ -118,7 +114,7 @@ bool DonjonInter::handleKeyboardEvent(const sf::Event& event)
 //-------------------//
 //----- Refresh -----//
 
-void DonjonInter::changedSize()
+void DungeonInter::changedSize()
 {
     m_grid.setSize(size());
 }

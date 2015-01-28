@@ -7,7 +7,7 @@ namespace States
         SPLASHSCREEN,
         MENU_MAIN,
         MENU_SELECTWORLD,
-        GAME_DONJON_DESIGN,
+        GAME_DUNGEON_DESIGN,
         GAME_PAUSE
     };
 }

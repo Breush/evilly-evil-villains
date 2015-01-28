@@ -47,7 +47,7 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     }
 
     m_buttons[2]->setAction(_("Play"), [this]() {
-        stackClear(States::GAME_DONJON_DESIGN);
+        stackClear(States::GAME_DUNGEON_DESIGN);
     });
     m_buttons[1]->setAction(_("Back"), [this]() {
         stackPop();

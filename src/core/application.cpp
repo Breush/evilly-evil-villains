@@ -4,7 +4,7 @@
 #include "states/splashscreen.hpp"
 #include "states/menu/main.hpp"
 #include "states/menu/selectworld.hpp"
-#include "states/game/donjondesign.hpp"
+#include "states/game/dungeondesign.hpp"
 #include "states/game/pause.hpp"
 
 
@@ -42,7 +42,7 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
 //----- Application -----//
 
 Application::Application()
-    //: m_initialState(States::GAME_DONJON_DESIGN)
+    //: m_initialState(States::GAME_DUNGEON_DESIGN)
     : m_initialState(States::SPLASHSCREEN)
     , m_gameTime(0.f)
     , m_running(false)
@@ -230,7 +230,7 @@ void Application::registerStates()
     m_stateStack.registerState<MenuMainState>(States::MENU_MAIN);
     m_stateStack.registerState<MenuSelectWorldState>(States::MENU_SELECTWORLD);
 
-    m_stateStack.registerState<GameDonjonDesignState>(States::GAME_DONJON_DESIGN);
+    m_stateStack.registerState<GameDungeonDesignState>(States::GAME_DUNGEON_DESIGN);
     m_stateStack.registerState<GamePauseState>(States::GAME_PAUSE);
 }
 

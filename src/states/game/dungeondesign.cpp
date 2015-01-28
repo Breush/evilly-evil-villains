@@ -1,10 +1,10 @@
 #include "core/application.hpp"
-#include "states/game/donjondesign.hpp"
+#include "states/game/dungeondesign.hpp"
 #include "resources/musicplayer.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
-GameDonjonDesignState::GameDonjonDesignState(StateStack& stack)
+GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     : State(stack)
     , m_uiCore()
 {
@@ -13,24 +13,24 @@ GameDonjonDesignState::GameDonjonDesignState(StateStack& stack)
     // Stop music if any
     Application::context().music.stop();
 
-    // Donjon Inter
-    m_uiCore.add(&m_donjonInter);
-    m_donjonInter.setSize({350, 450});
-    m_donjonInter.setPosition((resolution - m_donjonInter.size()) / 2.f);
+    // Dungeon inter
+    m_uiCore.add(&m_dungeonInter);
+    m_dungeonInter.setSize({350, 450});
+    m_dungeonInter.setPosition((resolution - m_dungeonInter.size()) / 2.f);
 }
 
-void GameDonjonDesignState::draw()
+void GameDungeonDesignState::draw()
 {
     Application::context().window.draw(m_uiCore);
 }
 
-bool GameDonjonDesignState::update(const sf::Time& dt)
+bool GameDungeonDesignState::update(const sf::Time& dt)
 {
     m_uiCore.update(dt);
     return true;
 }
 
-bool GameDonjonDesignState::handleEvent(const sf::Event& event)
+bool GameDungeonDesignState::handleEvent(const sf::Event& event)
 {
     // Escape pressed, trigger the pause screen
     if (event.type == sf::Event::KeyPressed) {
