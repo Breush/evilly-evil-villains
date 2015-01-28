@@ -10,7 +10,8 @@ int main(int argc, char *argv[])
     internationalization::init();
 
     // Handle arguments
-    debug_1(if (argc > 1) std::cout << "Arguments passed: " << argv[0] << std::endl;)
+    if (argc > 1)
+        mdebug_application_1("First argument passed: " << argv[0]);
 
     // Running application
     try {

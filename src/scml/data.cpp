@@ -72,7 +72,7 @@ bool Data::load(pugi::xml_node& elem)
     generator = elem.attribute("generator").as_string(generator.c_str());
     generator_version = elem.attribute("generator_version").as_string(generator_version.c_str());
     pixel_art_mode = elem.attribute("pixel_art_mode").as_bool(pixel_art_mode);
-    debug_scml(log());
+    debug_scml_1(log());
 
     // Meta data
     auto meta_data_child = elem.child("meta_data");
@@ -289,7 +289,7 @@ bool Data::Meta_Data::Variable::load(pugi::xml_node& elem)
     else if (type == "float")value_float = elem.attribute("value").as_float(value_float);
     else throw std::runtime_error("Data::Meta_Data::Variable loaded invalid variable type " + type + " named " + name);
 
-    //debug_scml(log());
+    debug_scml_2(log());
 
     return true;
 }
@@ -329,7 +329,7 @@ Data::Meta_Data::Tag::Tag(pugi::xml_node& elem)
 bool Data::Meta_Data::Tag::load(pugi::xml_node& elem)
 {
     name = elem.attribute("name").as_string(name.c_str());
-    //debug_scml(log());
+    debug_scml_2(log());
 
     return true;
 }
@@ -369,7 +369,7 @@ bool Data::Folder::load(pugi::xml_node& elem)
 {
     id = elem.attribute("id").as_int(id);
     name = elem.attribute("name").as_string(name.c_str());
-    debug_scml(log());
+    debug_scml_1(log());
 
     // File
     for (auto& child : elem.children("file")) {
@@ -448,7 +448,7 @@ bool Data::Folder::File::load(pugi::xml_node& elem)
     offset_y = elem.attribute("offset_y").as_int(offset_y);
     original_width = elem.attribute("original_width").as_int(original_width);
     original_height = elem.attribute("original_height").as_int(original_height);
-    debug_scml(log());
+    debug_scml_1(log());
 
     return true;
 }
@@ -515,7 +515,7 @@ bool Data::Atlas::load(pugi::xml_node& elem)
     id = elem.attribute("id").as_int(id);
     data_path = elem.attribute("data_path").as_string(data_path.c_str());
     image_path = elem.attribute("image_path").as_string(image_path.c_str());
-    //debug_scml(log());
+    debug_scml_2(log());
 
     // Folder
     for (auto& child : elem.children("folder")) {
@@ -627,7 +627,7 @@ bool Data::Atlas::Folder::Image::load(pugi::xml_node& elem)
 {
     id = elem.attribute("id").as_int(id);
     full_path = elem.attribute("full_path").as_string(full_path.c_str());
-    debug_scml(log());
+    debug_scml_1(log());
 
     return true;
 }
@@ -748,7 +748,7 @@ bool Data::Entity::Animation::load(pugi::xml_node& elem)
     length = elem.attribute("length").as_int(length);
     looping = elem.attribute("looping").as_string(looping.c_str());
     loop_to = elem.attribute("loop_to").as_int(loop_to);
-    //debug_scml(log());
+    debug_scml_2(log());
 
     // Meta data
     auto meta_data_child = elem.child("meta_data");
@@ -887,7 +887,7 @@ bool Data::Entity::Animation::Mainline::Key::load(pugi::xml_node& elem)
 {
     id = elem.attribute("id").as_int(id);
     time = elem.attribute("time").as_int(time);
-    //debug_scml(log());
+    debug_scml_2(log());
 
     // Meta data
     auto meta_data_child = elem.child("meta_data");
@@ -1096,7 +1096,7 @@ bool Data::Entity::Animation::Mainline::Key::Bone_Ref::load(pugi::xml_node& elem
     parent = elem.attribute("parent").as_int(parent);
     timeline = elem.attribute("timeline").as_int(timeline);
     key = elem.attribute("key").as_int(key);
-    //debug_scml(log());
+    debug_scml_2(log());
 
     return true;
 }
@@ -1202,7 +1202,7 @@ bool Data::Entity::Animation::Mainline::Key::Object::load(pugi::xml_node& elem)
     b = elem.attribute("b").as_float(b);
     a = elem.attribute("a").as_float(a);
     variable_type = elem.attribute("variable_type").as_string(variable_type.c_str());
-    //debug_scml(log());
+    debug_scml_2(log());
 
     if (variable_type == "string") {
         value_string = elem.attribute("value").as_string(value_string.c_str());
@@ -1351,7 +1351,7 @@ bool Data::Entity::Animation::Mainline::Key::Object_Ref::load(pugi::xml_node& el
     timeline = elem.attribute("timeline").as_int(timeline);
     key = elem.attribute("key").as_int(key);
     z_index = elem.attribute("z_index").as_int(z_index);
-    //debug_scml(log());
+    debug_scml_2(log());
 
     abs_x = elem.attribute("abs_x").as_float(abs_x);
     abs_y = elem.attribute("abs_y").as_float(abs_y);
@@ -1427,7 +1427,7 @@ bool Data::Entity::Animation::Timeline::load(pugi::xml_node& elem)
     id = elem.attribute("id").as_int(id);
     object_type = elem.attribute("object_type").as_string(object_type.c_str());
     variable_type = elem.attribute("variable_type").as_string(variable_type.c_str());
-    //debug_scml(log());
+    debug_scml_2(log());
 
     if (object_type != "sound") name = elem.attribute("name").as_string(name.c_str());
 
@@ -1523,7 +1523,7 @@ bool Data::Entity::Animation::Timeline::Key::load(pugi::xml_node& elem)
     c1 = elem.attribute("c1").as_float(c1);
     c2 = elem.attribute("c2").as_float(c2);
     spin = elem.attribute("spin").as_int(spin);
-    //debug_scml(log());
+    debug_scml_2(log());
 
     // Meta data tweenable
     auto meta_data_child = elem.child("meta_data");
@@ -1654,7 +1654,7 @@ bool Data::Meta_Data_Tweenable::Variable::load(pugi::xml_node& elem)
     curve_type = elem.attribute("curve_type").as_string(curve_type.c_str());
     c1 = elem.attribute("c1").as_float(c1);
     c2 = elem.attribute("c2").as_float(c2);
-    //debug_scml(log());
+    debug_scml_2(log());
 
     return true;
 }
@@ -1826,7 +1826,7 @@ bool Data::Entity::Animation::Timeline::Key::Object::load(pugi::xml_node& elem)
     t = elem.attribute("t").as_float(t);
     volume = elem.attribute("volume").as_float(volume);
     panning = elem.attribute("panning").as_float(panning);
-    //debug_scml(log());
+    debug_scml_2(log());
 
     // Meta data
     auto meta_data_child = elem.child("meta_data");
@@ -1920,7 +1920,7 @@ bool Data::Entity::Animation::Soundline::load(pugi::xml_node& elem)
 {
     id = elem.attribute("id").as_int(id);
     name = elem.attribute("name").as_string(name.c_str());
-    debug_scml(log());
+    debug_scml_1(log());
 
     for (auto& child : elem.children("key")) {
         Key* key = new Key;
@@ -1974,7 +1974,7 @@ Data::Entity::Animation::Soundline::Key::~Key()
 bool Data::Entity::Animation::Soundline::Key::load(pugi::xml_node& elem)
 {
     id = elem.attribute("id").as_int(id);
-    debug_scml(log());
+    debug_scml_1(log());
 
     // Object
     auto child = elem.child("object");
@@ -2016,7 +2016,7 @@ bool Data::Entity::Animation::Soundline::Key::Object::load(pugi::xml_node& elem)
     atlas = elem.attribute("atlas").as_int(atlas);
     folder = elem.attribute("folder").as_int(folder);
     file = elem.attribute("file").as_int(file);
-    debug_scml(log());
+    debug_scml_1(log());
 
     return true;
 }
@@ -2055,7 +2055,7 @@ bool Data::Character_Map::load(pugi::xml_node& elem)
 {
     id = elem.attribute("id").as_int(id);
     name = elem.attribute("name").as_string(name.c_str());
-    debug_scml(log());
+    debug_scml_1(log());
 
     auto child = elem.child("map");
     if (child || !map.load(child))

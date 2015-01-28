@@ -77,8 +77,8 @@ void uiCore::drawDetectImage()
     m_detectTarget.clear(sf::Color::Black);
 
     // /!\ UI Debug mode
-    debug(2, uint8 blueColor = 0);
-    debug(2, uint8 greenColor = 255);
+    debug_nui_2(uint8 blueColor = 0);
+    debug_nui_2(uint8 greenColor = 255);
 
     for (auto& pair : m_detectMap) {
         if (pair.second->visible()) {
@@ -86,9 +86,9 @@ void uiCore::drawDetectImage()
             rectangleShape.setFillColor(sf::Color(pair.first, 0, 0));
 
             // /!\ UI Debug mode - shapes are more visible
-            debug(2, rectangleShape.setFillColor({pair.first, greenColor, blueColor}));
-            debug(2, blueColor += 25);
-            debug(2, greenColor -= 25);
+            debug_nui_2(rectangleShape.setFillColor({pair.first, greenColor, blueColor}));
+            debug_nui_2(blueColor += 25);
+            debug_nui_2(greenColor -= 25);
 
             // Draw main object
             rectangleShape.setSize(pair.second->size());
@@ -295,9 +295,9 @@ void uiCore::draw(sf::RenderTarget& target, sf::RenderStates states) const
     }
 
     // /!\ UI Debug mode
-    debug(2, sf::Sprite sprite(m_detectTarget.getTexture()));
-    debug(2, sprite.setColor({255, 255, 255, 150}));
-    debug(2, target.draw(sprite));
+    debug_nui_2(sf::Sprite sprite(m_detectTarget.getTexture()));
+    debug_nui_2(sprite.setColor({255, 255, 255, 150}));
+    debug_nui_2(target.draw(sprite));
 }
 
 void uiCore::update(sf::Time dt)
