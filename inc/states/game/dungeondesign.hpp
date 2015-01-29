@@ -11,9 +11,11 @@ public:
     GameDungeonDesignState(StateStack& stack);
     virtual ~GameDungeonDesignState() {}
 
-    virtual void draw();
-    virtual bool update(const sf::Time& dt);
-    virtual bool handleEvent(const sf::Event& event);
+    void draw() override;
+    bool update(const sf::Time& dt) override;
+    bool handleEvent(const sf::Event& event) override;
+
+    void onQuit() override;
 
 private:
     // NUI

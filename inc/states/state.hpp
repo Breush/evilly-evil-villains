@@ -33,6 +33,7 @@ public:
     // Called whenever display changes
     virtual void onShow() { refresh(); }
     virtual void onHide() { refresh(); }
+    virtual void onQuit() {}
     virtual void refresh() {}
 
 protected:

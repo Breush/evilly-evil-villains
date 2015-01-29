@@ -122,22 +122,24 @@ void Inter::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPo
     sf::Vector2f fixPos = getInverseTransform().transformPoint(relPos);
 
     if (event.mouseButton.button == sf::Mouse::Right) {
-        m_selectedRoom = m_grid.rowColumnFromCoords(fixPos);
-
-        std::function<void()> constructRoom = [] { std::cout << "Click -> that's so fun!" << std::endl; };
-
+        // Context title
+        std::function<void()> constructRoom = [this]() { switchSelectedRoomState(); };
         std::wstringstream roomName;
-        roomName << _("Room") << " " << m_data->floorsCount() - m_selectedRoom.x - 1 << " - " << m_selectedRoom.y;
+        selectRoomFromCoords(fixPos);
+        roomName << _("Room") << " " << m_selectedRoom.x << " - " << m_selectedRoom.y;
 
-        // Examples of choices
+        // Context construct or destroy room
+        std::wstring constructRoomString;
+        if (m_data->room(m_selectedRoom).state == Data::RoomState::VOID) constructRoomString = L"Construct";
+        else constructRoomString = L"Destroy";
+
+        // Context choices
         m_contextMenu.clearChoices();
-        m_contextMenu.addChoice(roomName.str());
-        m_contextMenu.addChoice(L"Test callback", constructRoom);
-        m_contextMenu.addChoice(L"Nothing happens here", nullptr);
+        m_contextMenu.setTitle(roomName.str());
+        m_contextMenu.addChoice(constructRoomString, constructRoom);
 
         m_contextMenu.setPosition(relPos);
         m_contextMenu.setVisible(true);
-        setStatus(true);
     }
     else {
         m_contextMenu.setVisible(false);
@@ -174,6 +176,26 @@ bool Inter::handleKeyboardEvent(const sf::Event& event)
 #endif
 
     return false;
+}
+
+//-----------------------//
+//----- Interaction -----//
+
+void Inter::switchSelectedRoomState()
+{
+    if (m_data->room(m_selectedRoom).state == Data::RoomState::VOID)
+        m_data->room(m_selectedRoom).state = Data::RoomState::CONSTRUCTED;
+    else if (m_data->room(m_selectedRoom).state == Data::RoomState::CONSTRUCTED)
+        m_data->room(m_selectedRoom).state = Data::RoomState::VOID;
+
+    refreshRoomTiles();
+}
+
+sf::Vector2u& Inter::selectRoomFromCoords(const sf::Vector2f& coords)
+{
+    m_selectedRoom = m_grid.rowColumnFromCoords(coords);
+    m_selectedRoom.x = m_data->floorsCount() - m_selectedRoom.x - 1;
+    return m_selectedRoom;
 }
 
 //-------------------//

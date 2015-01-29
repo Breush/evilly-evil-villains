@@ -36,7 +36,12 @@ namespace dungeon
         void handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos);
         void handleMouseLeft();
 
+        // Changes
         void changedSize() override;
+
+        // Room management
+        void switchSelectedRoomState();
+        sf::Vector2u& selectRoomFromCoords(const sf::Vector2f& coords);
 
     private:
         // Display

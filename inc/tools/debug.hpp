@@ -14,7 +14,7 @@
 // SCML parsing
 #define DEBUG_SCML          0
 // Dungeon design
-#define DEBUG_DUNGEON       2
+#define DEBUG_DUNGEON       1
 
 //--------------------//
 //---- Debug mode ----//

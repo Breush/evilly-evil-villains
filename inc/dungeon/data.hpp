@@ -2,6 +2,7 @@
 
 #include "tools/param.hpp"
 
+#include <SFML/System/Vector2.hpp>
 #include <string>
 #include <vector>
 
@@ -35,11 +36,13 @@ namespace dungeon
         Data();
         virtual ~Data() {}
 
-        // Import
+        // Import/Export
         void load(const std::string& file);
+        void save(const std::string& file);
 
         // Getters
         std::vector<Floor>& floors() { return m_floors; }
+        Room& room(const sf::Vector2u& floorRoom) { return m_floors[floorRoom.x].rooms[floorRoom.y]; }
 
     protected:
         // Changes

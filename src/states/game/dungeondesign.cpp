@@ -35,6 +35,12 @@ bool GameDungeonDesignState::update(const sf::Time& dt)
     return true;
 }
 
+void GameDungeonDesignState::onQuit()
+{
+    // TODO Where to get file name?
+    m_dungeonData.save("worlds/example/dungeon_saved.xml");
+}
+
 bool GameDungeonDesignState::handleEvent(const sf::Event& event)
 {
     // Escape pressed, trigger the pause screen

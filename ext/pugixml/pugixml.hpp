@@ -472,6 +472,8 @@ namespace pugi
 		bool set_value(const char_t* rhs);
 
 		// Add attribute with specified name. Returns added attribute, or empty attribute on errors.
+        template<typename T> xml_attribute append_attribute(const T& name_);
+        xml_attribute append_attribute(const std::string& name_);
 		xml_attribute append_attribute(const char_t* name);
 		xml_attribute prepend_attribute(const char_t* name);
 		xml_attribute insert_attribute_after(const char_t* name, const xml_attribute& attr);

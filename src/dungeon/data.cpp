@@ -54,6 +54,42 @@ void Data::load(const std::string& file)
     }
 }
 
+void Data::save(const std::string& file)
+{
+    mdebug_dungeon_1("Saving dungeon " << m_name << " to file " << file);
+
+    // Creating XML
+    pugi::xml_document doc;
+    auto dungeon = doc.append_child("dungeon");
+
+    // Dungeon
+    dungeon.append_attribute("name") = m_name.c_str();
+    dungeon.append_attribute("floorsCount") = m_floorsCount;
+    dungeon.append_attribute("roomsByFloor") = m_roomsByFloor;
+
+    // Floors
+    for (uint floorPos = 0; floorPos < m_floors.size(); ++floorPos) {
+        mdebug_dungeon_2("Saving floor " << floorPos);
+        auto floor = dungeon.append_child("floor");
+        floor.append_attribute("pos") = floorPos;
+
+        // Rooms
+        for (uint roomPos = 0; roomPos < m_floors[floorPos].rooms.size(); ++roomPos) {
+            mdebug_dungeon_3("Saving room " << roomPos);
+            auto room = floor.append_child("room");
+            room.append_attribute("pos") = roomPos;
+
+            RoomState roomState = m_floors[floorPos].rooms[roomPos].state;
+            std::string roomStateString = "unknown";
+            if (roomState == RoomState::VOID) roomStateString = "void";
+            else if (roomState == RoomState::CONSTRUCTED) roomStateString = "constructed";
+            room.append_attribute("state") = roomStateString.c_str();
+        }
+    }
+
+    doc.save_file(file.c_str());
+}
+
 //-------------------//
 //----- Changes -----//
 

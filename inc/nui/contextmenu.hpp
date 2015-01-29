@@ -26,7 +26,8 @@ namespace nui
 
         // Choices
         void clearChoices();
-        void addChoice(std::wstring text, Callback callback = nullptr);
+        void setTitle(const std::wstring& title);
+        void addChoice(const std::wstring& text, Callback callback = nullptr);
 
     protected:
         // Mouse events
@@ -37,6 +38,9 @@ namespace nui
         // Params
         PARAMG(uint, m_padding, padding)
         PARAMG(uint, m_choiceHeight, choiceHeight)
+
+        // Choices
+        uint choiceFromCoords(const sf::Vector2f& coords) const;
 
         // Keep infos
         struct ChoiceInfo {
@@ -49,6 +53,7 @@ namespace nui
         sf::RectangleShape m_bg; // TODO To be a sf::Sprite for looks
 
         // Choices
+        sf::Text m_title;
         std::vector<ChoiceInfo> m_choices;
     };
 }

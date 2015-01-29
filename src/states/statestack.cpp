@@ -87,12 +87,16 @@ void StateStack::applyPendingChanges()
             break;
 
         case Pop:
+            if (!m_stack.empty())
+                m_stack.back()->onQuit();
             m_stack.pop_back();
             if (!m_stack.empty())
                 m_stack.back()->onShow();
             break;
 
         case Clear:
+            for (auto& state : m_stack)
+                state->onQuit();
             m_stack.clear();
             break;
 
