@@ -1,0 +1,241 @@
+<?xml version="1.0"?>
+<dungeon name="No woman, no pancakes" floorsCount="17" roomsByFloor="12">
+	<floor pos="0">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="void" />
+		<room pos="6" state="void" />
+		<room pos="7" state="void" />
+		<room pos="8" state="void" />
+		<room pos="9" state="constructed" />
+		<room pos="10" state="constructed" />
+		<room pos="11" state="constructed" />
+	</floor>
+	<floor pos="1">
+		<room pos="0" state="void" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="constructed" />
+		<room pos="6" state="constructed" />
+		<room pos="7" state="constructed" />
+		<room pos="8" state="constructed" />
+		<room pos="9" state="constructed" />
+		<room pos="10" state="void" />
+		<room pos="11" state="constructed" />
+	</floor>
+	<floor pos="2">
+		<room pos="0" state="void" />
+		<room pos="1" state="void" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="void" />
+		<room pos="5" state="void" />
+		<room pos="6" state="void" />
+		<room pos="7" state="constructed" />
+		<room pos="8" state="constructed" />
+		<room pos="9" state="void" />
+		<room pos="10" state="void" />
+		<room pos="11" state="constructed" />
+	</floor>
+	<floor pos="3">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="void" />
+		<room pos="6" state="void" />
+		<room pos="7" state="void" />
+		<room pos="8" state="constructed" />
+		<room pos="9" state="constructed" />
+		<room pos="10" state="constructed" />
+		<room pos="11" state="constructed" />
+	</floor>
+	<floor pos="4">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="constructed" />
+		<room pos="6" state="constructed" />
+		<room pos="7" state="void" />
+		<room pos="8" state="constructed" />
+		<room pos="9" state="void" />
+		<room pos="10" state="void" />
+		<room pos="11" state="void" />
+	</floor>
+	<floor pos="5">
+		<room pos="0" state="void" />
+		<room pos="1" state="void" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="void" />
+		<room pos="4" state="void" />
+		<room pos="5" state="void" />
+		<room pos="6" state="constructed" />
+		<room pos="7" state="void" />
+		<room pos="8" state="constructed" />
+		<room pos="9" state="void" />
+		<room pos="10" state="void" />
+		<room pos="11" state="void" />
+	</floor>
+	<floor pos="6">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="constructed" />
+		<room pos="6" state="void" />
+		<room pos="7" state="void" />
+		<room pos="8" state="constructed" />
+		<room pos="9" state="void" />
+		<room pos="10" state="constructed" />
+		<room pos="11" state="constructed" />
+	</floor>
+	<floor pos="7">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="void" />
+		<room pos="2" state="void" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="void" />
+		<room pos="5" state="constructed" />
+		<room pos="6" state="constructed" />
+		<room pos="7" state="constructed" />
+		<room pos="8" state="constructed" />
+		<room pos="9" state="constructed" />
+		<room pos="10" state="constructed" />
+		<room pos="11" state="void" />
+	</floor>
+	<floor pos="8">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="void" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="void" />
+		<room pos="6" state="void" />
+		<room pos="7" state="constructed" />
+		<room pos="8" state="void" />
+		<room pos="9" state="void" />
+		<room pos="10" state="void" />
+		<room pos="11" state="void" />
+	</floor>
+	<floor pos="9">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="void" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="constructed" />
+		<room pos="6" state="constructed" />
+		<room pos="7" state="constructed" />
+		<room pos="8" state="constructed" />
+		<room pos="9" state="void" />
+		<room pos="10" state="void" />
+		<room pos="11" state="void" />
+	</floor>
+	<floor pos="10">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="void" />
+		<room pos="3" state="void" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="void" />
+		<room pos="6" state="constructed" />
+		<room pos="7" state="constructed" />
+		<room pos="8" state="void" />
+		<room pos="9" state="void" />
+		<room pos="10" state="void" />
+		<room pos="11" state="void" />
+	</floor>
+	<floor pos="11">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="void" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="void" />
+		<room pos="6" state="void" />
+		<room pos="7" state="constructed" />
+		<room pos="8" state="void" />
+		<room pos="9" state="constructed" />
+		<room pos="10" state="void" />
+		<room pos="11" state="void" />
+	</floor>
+	<floor pos="12">
+		<room pos="0" state="void" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="void" />
+		<room pos="4" state="void" />
+		<room pos="5" state="void" />
+		<room pos="6" state="constructed" />
+		<room pos="7" state="constructed" />
+		<room pos="8" state="constructed" />
+		<room pos="9" state="constructed" />
+		<room pos="10" state="constructed" />
+		<room pos="11" state="constructed" />
+	</floor>
+	<floor pos="13">
+		<room pos="0" state="void" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="void" />
+		<room pos="3" state="void" />
+		<room pos="4" state="void" />
+		<room pos="5" state="void" />
+		<room pos="6" state="constructed" />
+		<room pos="7" state="void" />
+		<room pos="8" state="void" />
+		<room pos="9" state="constructed" />
+		<room pos="10" state="void" />
+		<room pos="11" state="void" />
+	</floor>
+	<floor pos="14">
+		<room pos="0" state="void" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="void" />
+		<room pos="3" state="void" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="constructed" />
+		<room pos="6" state="constructed" />
+		<room pos="7" state="constructed" />
+		<room pos="8" state="void" />
+		<room pos="9" state="constructed" />
+		<room pos="10" state="constructed" />
+		<room pos="11" state="void" />
+	</floor>
+	<floor pos="15">
+		<room pos="0" state="void" />
+		<room pos="1" state="void" />
+		<room pos="2" state="void" />
+		<room pos="3" state="void" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="void" />
+		<room pos="6" state="void" />
+		<room pos="7" state="constructed" />
+		<room pos="8" state="void" />
+		<room pos="9" state="void" />
+		<room pos="10" state="constructed" />
+		<room pos="11" state="void" />
+	</floor>
+	<floor pos="16">
+		<room pos="0" state="void" />
+		<room pos="1" state="void" />
+		<room pos="2" state="void" />
+		<room pos="3" state="void" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="void" />
+		<room pos="6" state="void" />
+		<room pos="7" state="void" />
+		<room pos="8" state="void" />
+		<room pos="9" state="void" />
+		<room pos="10" state="constructed" />
+		<room pos="11" state="void" />
+	</floor>
+</dungeon>

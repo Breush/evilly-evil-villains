@@ -1,12 +1,12 @@
 #include "core/application.hpp"
 
 #include "tools/debug.hpp"
+#include "states/quit.hpp"
 #include "states/splashscreen.hpp"
 #include "states/menu/main.hpp"
 #include "states/menu/selectworld.hpp"
 #include "states/game/dungeondesign.hpp"
 #include "states/game/pause.hpp"
-
 
 #include <SFML/Window/Event.hpp>
 #include <string>
@@ -113,7 +113,8 @@ void Application::processInput()
 
         // Closing window
         if (event.type == sf::Event::Closed) {
-            m_running = false;
+            if (!m_stateStack.isStateVisible(States::QUIT))
+                m_stateStack.pushState(States::QUIT);
             return;
         }
 
@@ -234,6 +235,7 @@ void Application::loadAnimations()
 
 void Application::registerStates()
 {
+    m_stateStack.registerState<QuitState>(States::QUIT);
     m_stateStack.registerState<SplashScreenState>(States::SPLASHSCREEN);
 
     m_stateStack.registerState<MenuMainState>(States::MENU_MAIN);

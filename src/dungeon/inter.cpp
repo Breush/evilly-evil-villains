@@ -84,6 +84,7 @@ void Inter::refreshRoomTiles()
     }
 
     setStatus(true);
+    update();
 }
 
 void Inter::setRoomTileState(const uint floor, const uint room, const Data::RoomState state)
@@ -126,7 +127,7 @@ void Inter::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPo
         std::function<void()> constructRoom = [this]() { switchSelectedRoomState(); };
         std::wstringstream roomName;
         selectRoomFromCoords(fixPos);
-        roomName << _("Room") << " " << m_selectedRoom.x << " - " << m_selectedRoom.y;
+        roomName << _("Room") << " " << m_selectedRoom.x << "/" << m_selectedRoom.y;
 
         // Context construct or destroy room
         std::wstring constructRoomString;
@@ -163,19 +164,44 @@ bool Inter::handleKeyboardEvent(const sf::Event& event)
     if (event.type == sf::Event::KeyPressed) {
         // Add rows
         if (event.key.code == sf::Keyboard::Add)
-            m_grid.setRowsColumns(m_grid.rows() + 1, m_grid.columns());
+            adaptFloorsCount(1);
         else if (event.key.code == sf::Keyboard::Subtract)
-            m_grid.setRowsColumns(m_grid.rows() - 1, m_grid.columns());
+            adaptFloorsCount(-1);
 
         // Add columns
         else if (event.key.code == sf::Keyboard::Multiply)
-            m_grid.setRowsColumns(m_grid.rows(), m_grid.columns() + 1);
+            adaptRoomsByFloor(1);
         else if (event.key.code == sf::Keyboard::Divide)
-            m_grid.setRowsColumns(m_grid.rows(), m_grid.columns() - 1);
+            adaptRoomsByFloor(-1);
     }
 #endif
 
     return false;
+}
+
+//----------------------------------//
+//----- Direct data management -----//
+
+void Inter::adaptFloorsCount(int relativeValue)
+{
+    setFloorsCount(m_data->floorsCount() + relativeValue);
+}
+
+void Inter::adaptRoomsByFloor(int relativeValue)
+{
+    setRoomsByFloor(m_data->roomsByFloor() + relativeValue);
+}
+
+void Inter::setFloorsCount(uint value)
+{
+    m_data->setFloorsCount(value);
+    refreshFromData();
+}
+
+void Inter::setRoomsByFloor(uint value)
+{
+    m_data->setRoomsByFloor(value);
+    refreshFromData();
 }
 
 //-----------------------//

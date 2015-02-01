@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<dungeon name="The Mighty Example" floorsCount="17" roomsByFloor="2">
+	<floor pos="0">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+	</floor>
+	<floor pos="1">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+	</floor>
+	<floor pos="2">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="void" />
+	</floor>
+	<floor pos="3">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+	</floor>
+	<floor pos="4">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+	</floor>
+	<floor pos="5">
+		<room pos="0" state="void" />
+		<room pos="1" state="constructed" />
+	</floor>
+	<floor pos="6">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+	</floor>
+	<floor pos="7">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="void" />
+	</floor>
+	<floor pos="8">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="void" />
+	</floor>
+	<floor pos="9">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+	</floor>
+	<floor pos="10">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+	</floor>
+	<floor pos="11">
+		<room pos="0" state="void" />
+		<room pos="1" state="constructed" />
+	</floor>
+	<floor pos="12">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+	</floor>
+	<floor pos="13">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="void" />
+	</floor>
+	<floor pos="14">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="void" />
+	</floor>
+	<floor pos="15">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="void" />
+	</floor>
+	<floor pos="16">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+	</floor>
+</dungeon>

@@ -19,9 +19,8 @@ namespace dungeon
         };
 
         // A room as in the xml spec'
-        struct Floor;
         struct Room {
-            Floor& floor;
+            uint floorPos;
             uint pos;
             RoomState state;
         };
@@ -48,6 +47,9 @@ namespace dungeon
         // Changes
         void changedFloorsCount();
         void changedRoomsByFloor();
+
+        // Inconsistencies
+        void correctFloorsRooms();
 
         // Params
         PARAMG(std::string, m_name, name);

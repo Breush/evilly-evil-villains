@@ -48,7 +48,7 @@ void Data::load(const std::string& file)
             if (roomStateString == "void") roomState = RoomState::VOID;
             else if (roomStateString == "constructed") roomState = RoomState::CONSTRUCTED;
 
-            m_floors[floorPos].rooms.push_back(Room{m_floors[floorPos], roomPos, roomState});
+            m_floors[floorPos].rooms.push_back(Room{floorPos, roomPos, roomState});
             mdebug_dungeon_3("Found room " << roomPos << " of state " << roomStateString);
         }
     }
@@ -90,13 +90,38 @@ void Data::save(const std::string& file)
     doc.save_file(file.c_str());
 }
 
+//---------------------------//
+//----- Inconsistencies -----//
+
+void Data::correctFloorsRooms()
+{
+    // Floors
+    m_floors.resize(m_floorsCount);
+    for (uint floorPos = 0; floorPos < m_floorsCount; ++floorPos) {
+        auto& floor = m_floors[floorPos];
+        floor.pos = floorPos;
+        // Rooms by floor
+        floor.rooms.resize(m_roomsByFloor);
+        for (uint roomPos = 0; roomPos < m_roomsByFloor; ++roomPos) {
+            auto& ownRoom = floor.rooms[roomPos];
+            ownRoom.floorPos = floorPos;
+            ownRoom.pos = roomPos;
+            // Unknown rooms become empty
+            if (ownRoom.state == RoomState::UNKNOWN)
+                ownRoom.state = RoomState::VOID;
+        }
+    }
+}
+
 //-------------------//
 //----- Changes -----//
 
 void Data::changedFloorsCount()
 {
+    correctFloorsRooms();
 }
 
 void Data::changedRoomsByFloor()
 {
+    correctFloorsRooms();
 }

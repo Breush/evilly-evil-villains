@@ -30,6 +30,12 @@ namespace dungeon
         void refreshRoomTiles();
         void setRoomTileState(const uint floor, const uint room, const Data::RoomState state);
 
+        // Global data management
+        void adaptFloorsCount(int relativeValue);
+        void adaptRoomsByFloor(int relativeValue);
+        void setFloorsCount(uint value);
+        void setRoomsByFloor(uint value);
+
     protected:
         // Mouse events
         void handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos);

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<worlds>
+	<world name="Example" villain="Breush" dungeons="1" mainDungeon="The Mighty Example" created="2014-01-01" lastPlayed="2015-02-02" folder="example/" />
+	<world name="Big bobby" villain="The Revolted Waffle" dungeons="2" mainDungeon="No woman, no pancakes" created="1991-05-03" lastPlayed="2000-08-24" folder="big_bobby/" />
+	<world name="You might think it's a stupid name" villain="Le Précurseur" dungeons="1" mainDungeon="Château d'eau" created="2010-10-10" lastPlayed="2012-12-12" folder="stupid_name/" />
+</worlds>
