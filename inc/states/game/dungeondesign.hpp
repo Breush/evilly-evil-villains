@@ -10,6 +10,7 @@ class GameDungeonDesignState : public State
 public:
     GameDungeonDesignState(StateStack& stack);
     virtual ~GameDungeonDesignState() {}
+    States::ID id() const override { return States::GAME_DUNGEON_DESIGN; }
 
     void draw() override;
     bool update(const sf::Time& dt) override;

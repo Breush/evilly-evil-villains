@@ -41,34 +41,18 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     m_stacker.setSize({viewSize.x, 0.95f * viewSize.y});
 
     // Buttons
-    for (auto& button : m_buttons) {
-        button = new nui::Button();
-        m_stacker.add(button, nui::Stacker::OPPOSITE);
-    }
+    for (auto& button : m_buttons)
+        m_stacker.add(&button, nui::Stacker::OPPOSITE);
 
-    m_buttons[2]->setAction(_("Play"), [this]() {
+    m_buttons[2].setAction(_("Play"), [this]() {
         std::cout << "Playing on world " << m_list.selectedLine() << std::endl;
         stackClear(States::GAME_DUNGEON_DESIGN);
     });
-    m_buttons[1]->setAction(_("Back"), [this]() {
-        stackPop();
-    });
-    m_buttons[0]->setAction(_("Create new world"), [this]() {
-        stackPop();
-    });
+    m_buttons[1].setAction(_("Back"), [this]() { stackPop(); });
+    m_buttons[0].setAction(_("Create new world"), nullptr);
 
     // Ambient feeling music
     Application::context().music.setVolume(25);
-}
-
-MenuSelectWorldState::~MenuSelectWorldState()
-{
-    for (auto& button : m_buttons)
-        if (button != nullptr)
-            delete button;
-
-    // Ambient feeling music
-    Application::context().music.setVolume(75);
 }
 
 void MenuSelectWorldState::draw()
@@ -90,7 +74,7 @@ bool MenuSelectWorldState::handleEvent(const sf::Event& event)
 {
     // Escape quits current state
     if (event.type == sf::Event::KeyPressed
-            && event.key.code == sf::Keyboard::Escape) {
+        && event.key.code == sf::Keyboard::Escape) {
         stackPop();
         return false;
     }

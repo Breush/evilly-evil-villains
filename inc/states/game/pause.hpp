@@ -10,6 +10,8 @@ class GamePauseState : public State
 {
 public:
     GamePauseState(StateStack& stack);
+    virtual ~GamePauseState() {}
+    States::ID id() const override { return States::GAME_PAUSE; }
 
     void draw() override;
     bool update(const sf::Time& dt) override;

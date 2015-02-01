@@ -4,14 +4,14 @@
 #include "drawables/animatedsprite.hpp"
 
 #include <SFML/Graphics/Sprite.hpp>
-#include <SFML/Graphics/Text.hpp>
 #include <list>
 
 class SplashScreenState : public State
 {
 public:
     SplashScreenState(StateStack& stack);
-    virtual ~SplashScreenState();
+    virtual ~SplashScreenState() {}
+    States::ID id() const override { return States::SPLASHSCREEN; }
 
     void draw() override;
     bool update(const sf::Time& dt) override;

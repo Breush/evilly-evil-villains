@@ -5,8 +5,9 @@
 LANGUAGES_SUPPORTED=fr
 
 TRANSLATABLE_FILES=					\
+	states/quit.cpp					\
 	states/menu/main.cpp			\
-	states/menu/selectworld.cpp
+	states/menu/selectworld.cpp		\
 	
 OUTPUT_POT=res/po/eev.pot
 	

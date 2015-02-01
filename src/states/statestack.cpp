@@ -23,7 +23,7 @@ void StateStack::update(sf::Time dt)
 void StateStack::draw()
 {
     // Draw all active states from bottom to top
-    for (State::Ptr& state : m_stack) {
+    for (auto& state : m_stack) {
         state->draw();
     }
 }
@@ -60,6 +60,15 @@ bool StateStack::isEmpty() const
     return m_stack.empty();
 }
 
+bool StateStack::isStateVisible(States::ID stateID) const
+{
+    for (const auto& state : m_stack)
+        if (state->id() == stateID)
+            return true;
+
+    return false;
+}
+
 void StateStack::refresh()
 {
     for (auto& state : m_stack) {
@@ -67,7 +76,7 @@ void StateStack::refresh()
     }
 }
 
-State::Ptr StateStack::createState(States::ID stateID)
+std::unique_ptr<State> StateStack::createState(States::ID stateID)
 {
     auto found = m_factories.find(stateID);
     massert(found != m_factories.end(), "Cannot find state " << stateID);
@@ -107,10 +116,4 @@ void StateStack::applyPendingChanges()
 
     // Clear list
     m_pendingList.clear();
-}
-
-StateStack::PendingChange::PendingChange(Action paction, States::ID pstateID)
-    : action(paction)
-    , stateID(pstateID)
-{
 }

@@ -43,25 +43,26 @@ public:
     void clearStates();
 
     bool isEmpty() const;
+    bool isStateVisible(States::ID stateID) const;
 
     // Called whenever display changes
     void refresh();
 
 private:
-    State::Ptr createState(States::ID stateID);
+    std::unique_ptr<State> createState(States::ID stateID);
     void applyPendingChanges();
 
     struct PendingChange {
-        explicit PendingChange(Action action, States::ID stateID = States::NONE);
+        explicit PendingChange(Action inAction, States::ID inStateID = States::NONE)
+            : action(inAction), stateID(inStateID) {}
         Action action;
         States::ID stateID;
     };
 
-
 private:
-    std::vector<State::Ptr> m_stack;
+    std::vector<std::unique_ptr<State>> m_stack;
     std::vector<PendingChange> m_pendingList;
-    std::map<States::ID, std::function<State::Ptr()>> m_factories;
+    std::map<States::ID, std::function<std::unique_ptr<State>()>> m_factories;
 };
 
 
@@ -69,6 +70,6 @@ template <typename T>
 void StateStack::registerState(States::ID stateID)
 {
     m_factories[stateID] = [this]() {
-        return State::Ptr(new T(*this));
+        return std::unique_ptr<State>(new T(*this));
     };
 }

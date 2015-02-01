@@ -1,12 +1,12 @@
-#include "core/application.hpp"
 #include "states/game/pause.hpp"
+
+#include "core/application.hpp"
 #include "tools/tools.hpp"
 #include "resources/holder.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
-
 
 GamePauseState::GamePauseState(StateStack& stack)
     : State(stack)
@@ -26,7 +26,7 @@ GamePauseState::GamePauseState(StateStack& stack)
     auto bounds = m_pausedText.getLocalBounds();
     m_pausedText.setOrigin((bounds.left + bounds.width) / 2.f, (bounds.top + bounds.height) / 2.f);
 
-    // Instruction
+    // Instruction TODO Use UI to access options etc.
     m_instructionText.setFont(font);
     m_instructionText.setString("(Press Backspace to return to the main menu)");
     m_instructionText.setPosition(0.5f * resolution.x, 0.6f * resolution.y);

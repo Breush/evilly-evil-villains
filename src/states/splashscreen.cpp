@@ -32,10 +32,6 @@ SplashScreenState::SplashScreenState(StateStack& stack)
     m_logo.restart();
 }
 
-SplashScreenState::~SplashScreenState()
-{
-}
-
 void SplashScreenState::draw()
 {
     auto& window = Application::context().window;

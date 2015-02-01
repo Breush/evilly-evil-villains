@@ -20,11 +20,9 @@ class SoundPlayer;
 class State
 {
 public:
-    typedef std::unique_ptr<State> Ptr;
-
-public:
     State(StateStack& stack);
     virtual	~State() {}
+    virtual States::ID id() const { return States::NONE; }
 
     virtual void draw() = 0;
     virtual bool update(const sf::Time& dt) = 0;

@@ -14,6 +14,8 @@ class MenuMainState : public State
 
 public:
     MenuMainState(StateStack& stack);
+    virtual ~MenuMainState() {}
+    States::ID id() const override { return States::MENU_MAIN; }
 
     void draw() override;
     bool update(const sf::Time& dt) override;

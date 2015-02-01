@@ -15,7 +15,8 @@ class MenuSelectWorldState : public State
 
 public:
     MenuSelectWorldState(StateStack& stack);
-    virtual ~MenuSelectWorldState();
+    virtual ~MenuSelectWorldState() {}
+    States::ID id() const override { return States::MENU_SELECTWORLD; }
 
     void draw() override;
     bool update(const sf::Time& dt) override;
@@ -27,7 +28,7 @@ private:
     nui::uiCore m_uiCore;
     nui::List m_list;
     nui::HStacker m_stacker;
-    std::array<nui::Button*, 3> m_buttons;
+    std::array<nui::Button, 3> m_buttons;
 
     // Background
     sf::RectangleShape m_bgRect;
