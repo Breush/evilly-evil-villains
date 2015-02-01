@@ -21,6 +21,8 @@ public:
     void play(Sounds::ID id);
     void play(Sounds::ID id, sf::Vector2f position);
 
+    void stopAll();
+
     void removeStoppedSounds();
     void setListenerPosition(sf::Vector2f position);
     sf::Vector2f getListenerPosition() const;

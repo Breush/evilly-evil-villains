@@ -50,6 +50,12 @@ void SoundPlayer::play(Sounds::ID id, sf::Vector2f position)
     sound.play();
 }
 
+void SoundPlayer::stopAll()
+{
+    for (auto& sound : m_sounds)
+        sound.stop();
+}
+
 void SoundPlayer::removeStoppedSounds()
 {
     m_sounds.remove_if([](const sf::Sound& s) {

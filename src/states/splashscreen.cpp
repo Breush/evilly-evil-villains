@@ -55,5 +55,12 @@ bool SplashScreenState::update(const sf::Time& dt)
 
 bool SplashScreenState::handleEvent(const sf::Event& event)
 {
-    return true;
+    // Back to previous state on Escape
+    if (event.type == sf::Event::KeyPressed
+        && event.key.code == sf::Keyboard::Escape) {
+        stackPopPush(States::MENU_MAIN);
+        Application::context().sounds.stopAll();
+    }
+
+    return false;
 }
