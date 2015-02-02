@@ -1,6 +1,7 @@
 #pragma once
 
 #include "tools/time.hpp"
+#include "tools/int.hpp"
 
 #include <vector>
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "tools/param.hpp"
+#include "tools/int.hpp"
 
 #include <SFML/System/Vector2.hpp>
 #include <string>

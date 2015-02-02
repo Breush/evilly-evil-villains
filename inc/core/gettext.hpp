@@ -1,5 +1,6 @@
 #pragma once
 
+#include <libintl.h>
 #include <cstdlib>
 #include <string>
 
