@@ -18,76 +18,79 @@ void Data::load(const std::string& file)
     // Parsing XML
     pugi::xml_document doc;
     doc.load_file(file.c_str());
+    mdebug_dungeon_1("Loading file " << file);
 
-    const auto& dungeon = doc.child("dungeon");
+    const auto& dungeon = doc.child(L"dungeon");
     if (!dungeon) throw std::runtime_error("File " + file + " is not a valid dungeon file.");
 
     // Dungeon
-    m_name = dungeon.attribute("name").as_string();
-    m_floorsCount = dungeon.attribute("floorsCount").as_uint();
-    m_roomsByFloor = dungeon.attribute("roomsByFloor").as_uint();
+    m_name = dungeon.attribute(L"name").as_string();
+    m_floorsCount = dungeon.attribute(L"floorsCount").as_uint();
+    m_roomsByFloor = dungeon.attribute(L"roomsByFloor").as_uint();
 
-    mdebug_dungeon_1("Loading file " << file);
-    mdebug_dungeon_1("Dungeon is " << m_name << " of size " << m_floorsCount << "x" << m_roomsByFloor);
+    wdebug_dungeon_1(L"Dungeon is " << m_name << L" of size " << m_floorsCount << "x" << m_roomsByFloor);
 
     // Floors
     m_floors.reserve(m_floorsCount);
-    for (auto& floor : dungeon.children("floor")) {
-        auto floorPos = floor.attribute("pos").as_uint();
+    for (auto& floor : dungeon.children(L"floor")) {
+        auto floorPos = floor.attribute(L"pos").as_uint();
 
         m_floors.push_back(Floor{floorPos});
         mdebug_dungeon_2("Found floor " << floorPos);
 
         // Rooms
         m_floors[floorPos].rooms.reserve(m_roomsByFloor);
-        for (auto& room : floor.children("room")) {
-            auto roomPos = room.attribute("pos").as_uint();
-            std::string roomStateString = room.attribute("state").as_string();
+        for (auto& roomInfo : floor.children(L"room")) {
+            Room room;
+            room.floorPos = floorPos;
+            room.pos = roomInfo.attribute(L"pos").as_uint();
+            room.state = RoomState::UNKNOWN;
 
-            RoomState roomState(RoomState::UNKNOWN);
-            if (roomStateString == "void") roomState = RoomState::VOID;
-            else if (roomStateString == "constructed") roomState = RoomState::CONSTRUCTED;
+            std::wstring roomStateString = roomInfo.attribute(L"state").as_string();
+            if (roomStateString == L"void") room.state = RoomState::VOID;
+            else if (roomStateString == L"constructed") room.state = RoomState::CONSTRUCTED;
 
-            m_floors[floorPos].rooms.push_back(Room{floorPos, roomPos, roomState});
-            mdebug_dungeon_3("Found room " << roomPos << " of state " << roomStateString);
+            m_floors[floorPos].rooms.push_back(room);
+            wdebug_dungeon_3(L"Found room " << room.pos << L" of state " << roomStateString);
         }
     }
 }
 
 void Data::save(const std::string& file)
 {
-    mdebug_dungeon_1("Saving dungeon " << m_name << " to file " << file);
+    wdebug_dungeon_1(L"Saving dungeon " << m_name);
 
     // Creating XML
     pugi::xml_document doc;
-    auto dungeon = doc.append_child("dungeon");
+    auto dungeon = doc.append_child(L"dungeon");
 
     // Dungeon
-    dungeon.append_attribute("name") = m_name.c_str();
-    dungeon.append_attribute("floorsCount") = m_floorsCount;
-    dungeon.append_attribute("roomsByFloor") = m_roomsByFloor;
+    dungeon.append_attribute(L"name") = m_name.c_str();
+    dungeon.append_attribute(L"floorsCount") = m_floorsCount;
+    dungeon.append_attribute(L"roomsByFloor") = m_roomsByFloor;
 
     // Floors
     for (uint floorPos = 0; floorPos < m_floors.size(); ++floorPos) {
         mdebug_dungeon_2("Saving floor " << floorPos);
-        auto floor = dungeon.append_child("floor");
-        floor.append_attribute("pos") = floorPos;
+        auto floor = dungeon.append_child(L"floor");
+        floor.append_attribute(L"pos") = floorPos;
 
         // Rooms
         for (uint roomPos = 0; roomPos < m_floors[floorPos].rooms.size(); ++roomPos) {
             mdebug_dungeon_3("Saving room " << roomPos);
-            auto room = floor.append_child("room");
-            room.append_attribute("pos") = roomPos;
+            auto room = floor.append_child(L"room");
+            room.append_attribute(L"pos") = roomPos;
 
             RoomState roomState = m_floors[floorPos].rooms[roomPos].state;
-            std::string roomStateString = "unknown";
-            if (roomState == RoomState::VOID) roomStateString = "void";
-            else if (roomState == RoomState::CONSTRUCTED) roomStateString = "constructed";
-            room.append_attribute("state") = roomStateString.c_str();
+            std::wstring roomStateString = L"unknown";
+            if (roomState == RoomState::VOID) roomStateString = L"void";
+            else if (roomState == RoomState::CONSTRUCTED) roomStateString = L"constructed";
+            room.append_attribute(L"state") = roomStateString.c_str();
         }
     }
 
     doc.save_file(file.c_str());
+    mdebug_dungeon_1("Saved to file " << file);
 }
 
 //---------------------------//

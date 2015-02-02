@@ -154,15 +154,15 @@ void Application::render()
 void Application::loadTextures()
 {
     // Splash-screen
-    s_context.textures.load(Textures::JUMPINGTOASTS_BG, "res/tex/jumping-toasts/bg.png");
-    s_context.textures.load(Textures::JUMPINGTOASTS_JUMPING, "res/tex/jumping-toasts/jumping.png");
-    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTS, "res/tex/jumping-toasts/toasts.png");
-    s_context.textures.load(Textures::JUMPINGTOASTS_TOAST, "res/tex/jumping-toasts/toast.png");
-    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTCUT, "res/tex/jumping-toasts/toast-cut.png");
-    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERBACKGROUND, "res/tex/jumping-toasts/toaster-background.png");
-    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERBOTTOM, "res/tex/jumping-toasts/toaster-bottom.png");
-    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERMIDDLE, "res/tex/jumping-toasts/toaster-middle.png");
-    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERTOP, "res/tex/jumping-toasts/toaster-top.png");
+    s_context.textures.load(Textures::JUMPINGTOASTS_BG, "res/tex/jumping-toasts/bg.png", true);
+    s_context.textures.load(Textures::JUMPINGTOASTS_JUMPING, "res/tex/jumping-toasts/jumping.png", true);
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTS, "res/tex/jumping-toasts/toasts.png", true);
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOAST, "res/tex/jumping-toasts/toast.png", true);
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTCUT, "res/tex/jumping-toasts/toast-cut.png", true);
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERBACKGROUND, "res/tex/jumping-toasts/toaster-background.png", true);
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERBOTTOM, "res/tex/jumping-toasts/toaster-bottom.png", true);
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERMIDDLE, "res/tex/jumping-toasts/toaster-middle.png", true);
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERTOP, "res/tex/jumping-toasts/toaster-top.png", true);
 
     s_context.textures.setSmooth(Textures::JUMPINGTOASTS_TOASTCUT, false);
 
@@ -216,7 +216,7 @@ void Application::loadFonts()
 void Application::loadSounds()
 {
     // Splash-screen
-    s_context.sounds.load(Sounds::JUMPINGTOASTS, "res/snd/jumping-toasts.wav");
+    s_context.sounds.load(Sounds::JUMPINGTOASTS, "res/snd/jumping-toasts.wav", true);
 
     // NUI
     s_context.sounds.load(Sounds::NUI_ACCEPT, "res/snd/accept.wav");

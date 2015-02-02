@@ -25,13 +25,13 @@ namespace nui
         //void handleJoystickEvent(const sf::Event& event) override;
 
         // Columns
-        void setColumns(std::initializer_list<std::wstring> columns);
+        void setColumns(const std::initializer_list<std::wstring>& columns);
         void setColumnFillClip(uint index, bool fill, bool clip);
         uint getColumnWidthMax(uint index);
         uint getColumnWidthHint();
 
         // Lines
-        void addLine(std::initializer_list<std::wstring> values);
+        void addLine(const std::initializer_list<std::wstring>& values);
 
     protected:
         // Mouse events

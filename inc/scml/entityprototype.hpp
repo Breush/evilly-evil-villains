@@ -50,7 +50,7 @@ public:
 
     Bone_Transform_State bone_transform_state;
 
-    std::string name;
+    std::wstring name;
 
     class Animation;
     std::map<int, Animation*> animations;
@@ -64,9 +64,9 @@ public:
     public:
 
         int id;
-        std::string name;
+        std::wstring name;
         int length;
-        std::string looping;
+        std::wstring looping;
         int loop_to;
 
         //Meta_Data* meta_data;
@@ -205,13 +205,13 @@ public:
 
                     int id;
                     int parent; // a bone id
-                    std::string object_type;
+                    std::wstring object_type;
                     int atlas;
                     int folder;
                     int file;
-                    std::string usage;
-                    std::string blend_mode;
-                    std::string name;
+                    std::wstring usage;
+                    std::wstring blend_mode;
+                    std::wstring name;
                     float x;
                     float y;
                     float pivot_x;
@@ -229,8 +229,8 @@ public:
                     float g;
                     float b;
                     float a;
-                    std::string variable_type;
-                    std::string value_string;
+                    std::wstring variable_type;
+                    std::wstring value_string;
                     int value_int;
                     int min_int;
                     int max_int;
@@ -287,10 +287,10 @@ public:
         public:
 
             int id;
-            std::string name;
-            std::string object_type;
-            std::string variable_type;
-            std::string usage;
+            std::wstring name;
+            std::wstring object_type;
+            std::wstring variable_type;
+            std::wstring usage;
             //Meta_Data* meta_data;
 
             Timeline(scml::Data::Entity::Animation::Timeline* timeline);
@@ -308,7 +308,7 @@ public:
 
                 int id;
                 int time;
-                std::string curve_type;
+                std::wstring curve_type;
                 float c1;
                 float c2;
                 int spin;
@@ -350,17 +350,14 @@ public:
                 {
                 public:
 
-                    //std::string object_type; // Does this exist?
                     int atlas;
                     int folder;
                     int file;
-                    //std::string usage;  // Does this exist?
-                    std::string name;
+                    std::wstring name;
                     float x;
                     float y;
                     float pivot_x;
                     float pivot_y;
-                    // pixel_art_mode stuff?
                     float angle;
                     float w;
                     float h;
@@ -370,9 +367,8 @@ public:
                     float g;
                     float b;
                     float a;
-                    std::string blend_mode;
-                    //std::string variable_type; // Does this exist?
-                    std::string value_string;
+                    std::wstring blend_mode;
+                    std::wstring value_string;
                     int value_int;
                     int min_int;
                     int max_int;
@@ -381,10 +377,8 @@ public:
                     float max_float;
                     int animation;
                     float t;
-                    //int z_index; // Does this exist?  Object_Ref has it, so probably not.
                     float volume;
                     float panning;
-                    //Meta_Data_Tweenable* meta_data;
 
                     Object(scml::Data::Entity::Animation::Timeline::Key::Object* object);
 
@@ -401,7 +395,7 @@ public:
         public:
 
             int id;
-            std::string name;
+            std::wstring name;
 
             Soundline(scml::Data::Entity::Animation::Soundline* timeline);
             ~Soundline();
@@ -446,7 +440,7 @@ public:
 
     EntityPrototype();
     EntityPrototype(scml::Data* data, int entity, int animation = 0, int key = 0);
-    EntityPrototype(scml::Data* data, const char* entityName, int animation = 0, int key = 0);
+    EntityPrototype(scml::Data* data, const std::wstring& entityName, int animation = 0, int key = 0);
     virtual ~EntityPrototype();
 
     virtual void load(scml::Data* data);
@@ -507,13 +501,13 @@ public:
      * \param animation Integer animation ID
      */
     virtual void startAnimation(int animation);
-    virtual void startAnimation(const char* animationName);
+    virtual void startAnimation(const std::wstring& animationName);
 
     virtual void play_sound(int folderID, int fileID) = 0;
 
     int getNumAnimations() const;
     Animation* getAnimation(int animation) const;
-    Animation* getAnimation(const char* animationName) const;
+    Animation* getAnimation(const std::wstring& animationName) const;
     Animation::Mainline::Key* getKey(int animation, int key) const;
     Animation::Mainline::Key::Bone_Ref* getBoneRef(int animation, int key, int bone_ref) const;
     Animation::Mainline::Key::Object_Ref* getObjectRef(int animation, int key, int object_ref) const;

@@ -25,11 +25,11 @@ MenuMainState::MenuMainState(StateStack& stack)
     m_bgShader = &Application::context().shaders.get(Shaders::MENU_BG);
 
     // Choices
-    m_choices.push_back("V");
-    m_choices.push_back("I");
-    m_choices.push_back("L");
-    m_choices.push_back("Y");
-    m_choices.push_back("S");
+    m_choices.push_back(L"V");
+    m_choices.push_back(L"I");
+    m_choices.push_back(L"L");
+    m_choices.push_back(L"Y");
+    m_choices.push_back(L"S");
 
     // Fonctors
     std::function<void()> singlePlayer = [this]() {

@@ -71,5 +71,5 @@ void AnimatedSprite::restart()
 void AnimatedSprite::refresh()
 {
     for (const auto& entity : m_entities)
-        entity->getAnimation(m_number)->looping = (m_looping)? "true" : "false";
+        entity->getAnimation(m_number)->looping = (m_looping)? L"true" : L"false";
 }

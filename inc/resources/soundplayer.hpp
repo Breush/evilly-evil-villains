@@ -15,8 +15,10 @@ class SoundPlayer : private sf::NonCopyable
 public:
     SoundPlayer();
 
-    void load(Sounds::ID id, const std::string& filename);
-    Sounds::ID getID(const std::string& filename);
+    void load(Sounds::ID id, const std::string& filename, bool store = false);
+
+    void storeID(Sounds::ID id, const std::wstring& filename);
+    Sounds::ID getID(const std::wstring& filename);
 
     void play(Sounds::ID id);
     void play(Sounds::ID id, sf::Vector2f position);

@@ -24,13 +24,13 @@ void FileSystem::clear()
 
 //----- Image
 
-bool FileSystem::loadImageFile(int folderID, int fileID, const std::string& filename)
+bool FileSystem::loadImageFile(int folderID, int fileID, const std::wstring& filename)
 {
     Textures::ID id = Application::context().textures.getID(filename);
 
     if (!textures.insert(std::make_pair(std::make_pair(folderID, fileID), id)).second) {
-        std::cerr << "scml::FileSystem failed to load image: Loading " << filename
-                  << " duplicates the folder/file id " << folderID << "/" << fileID << std::endl;
+        std::wcerr << L"scml::FileSystem failed to load image: Loading " << filename
+                  << L" duplicates the folder/file id " << folderID << "/" << fileID << std::endl;
         return false;
     }
 
@@ -51,13 +51,13 @@ Textures::ID FileSystem::getTexture(int folderID, int fileID) const
 
 //----- Sounds
 
-bool FileSystem::loadSoundFile(int folderID, int fileID, const std::string& filename)
+bool FileSystem::loadSoundFile(int folderID, int fileID, const std::wstring& filename)
 {
     Sounds::ID id = Application::context().sounds.getID(filename);
 
     if (!sounds.insert(std::make_pair(std::make_pair(folderID, fileID), id)).second) {
-        std::cerr << "scml::FileSystem failed to load sound: Loading " << filename
-                  << " duplicates the folder/file id " << folderID << "/" << fileID << std::endl;
+        std::wcerr << L"scml::FileSystem failed to load sound: Loading " << filename
+                  << L" duplicates the folder/file id " << folderID << "/" << fileID << std::endl;
         return false;
     }
 

@@ -37,6 +37,8 @@ class Application
 
 public:
     Application();
+    virtual ~Application() {}
+
     void run();
 
     static inline Context& context() { return s_context; }

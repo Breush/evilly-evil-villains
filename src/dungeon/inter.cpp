@@ -123,22 +123,24 @@ void Inter::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPo
     sf::Vector2f fixPos = getInverseTransform().transformPoint(relPos);
 
     if (event.mouseButton.button == sf::Mouse::Right) {
-        // Context title
-        std::function<void()> constructRoom = [this]() { switchSelectedRoomState(); };
-        std::wstringstream roomName;
         selectRoomFromCoords(fixPos);
+
+        // Context title
+        std::wstringstream roomName;
         roomName << _("Room") << " " << m_selectedRoom.x << "/" << m_selectedRoom.y;
 
         // Context construct or destroy room
         std::wstring constructRoomString;
         if (m_data->room(m_selectedRoom).state == Data::RoomState::VOID) constructRoomString = L"Construct";
         else constructRoomString = L"Destroy";
+        std::function<void()> constructRoom = [this]() { switchSelectedRoomState(); };
 
         // Context choices
         m_contextMenu.clearChoices();
         m_contextMenu.setTitle(roomName.str());
         m_contextMenu.addChoice(constructRoomString, constructRoom);
 
+        // Context positions
         m_contextMenu.setPosition(relPos);
         m_contextMenu.setVisible(true);
     }

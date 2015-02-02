@@ -32,7 +32,7 @@ private:
     nui::ReactImage m_reactImage;
 
     // Choices possibilities
-    std::vector<std::string> m_choices;
+    std::vector<std::wstring> m_choices;
 
     // Background animation control
     sf::Sprite m_bgSprite;

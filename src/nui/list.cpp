@@ -94,7 +94,7 @@ void List::update()
 //-------------------//
 //----- Columns -----//
 
-void List::setColumns(std::initializer_list<std::wstring> columns)
+void List::setColumns(const std::initializer_list<std::wstring>& columns)
 {
     m_columns.clear();
 
@@ -157,7 +157,7 @@ uint List::getColumnWidthHint()
 //-----------------//
 //----- Lines -----//
 
-void List::addLine(std::initializer_list<std::wstring> values)
+void List::addLine(const std::initializer_list<std::wstring>& values)
 {
     massert(values.size() == m_columns.size(), "List - expected " << m_columns.size() << " values");
 
@@ -175,6 +175,9 @@ void List::addLine(std::initializer_list<std::wstring> values)
         line.push_back({text, width, height, sf::IntRect(0, 0, width, height)});
     }
     m_lines.push_back(line);
+
+    if (m_lines.size() == 1)
+        setSelectedLine(0);
 
     updateColumnInfos();
 }

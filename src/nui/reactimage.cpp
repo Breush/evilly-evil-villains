@@ -16,7 +16,7 @@ ReactImage::ReactImage()
     : baseClass()
     , m_mouseLeftDeselect(true)
     , m_activeRect(nullptr)
-    , m_react("")
+    , m_react()
 {
     addPart(&m_sprite);
 }
@@ -81,17 +81,17 @@ void ReactImage::addReactFromFile(const std::string& file)
     doc.load_file(file.c_str());
 
     // Adding children
-    for (const auto& react : doc.child("reactimage").children()) {
-        std::string key = react.attribute("key").as_string();
-        float left = react.attribute("left").as_float();
-        float top = react.attribute("top").as_float();
-        float width = react.attribute("width").as_float();
-        float height = react.attribute("height").as_float();
+    for (const auto& react : doc.child(L"reactimage").children()) {
+        std::wstring key = react.attribute(L"key").as_string();
+        auto left = react.attribute(L"left").as_float();
+        auto top = react.attribute(L"top").as_float();
+        auto width = react.attribute(L"width").as_float();
+        auto height = react.attribute(L"height").as_float();
         addReact(key, {left, top, width, height});
     }
 }
 
-void ReactImage::addReact(const std::string& key, sf::FloatRect rect, const Callback callback)
+void ReactImage::addReact(const std::wstring& key, sf::FloatRect rect, const Callback callback)
 {
     massert(!key.empty(), "Cannot add react with empty key");
 
@@ -103,15 +103,15 @@ void ReactImage::addReact(const std::string& key, sf::FloatRect rect, const Call
     m_reacts[key] = {rect, callback};
 }
 
-void ReactImage::setReactCallback(const std::string& key, Callback callback)
+void ReactImage::setReactCallback(const std::wstring& key, Callback callback)
 {
-    massert(m_reacts.find(key) != m_reacts.end(), "Key " << key << " not found");
+    wassert(m_reacts.find(key) != m_reacts.end(), L"Key " << key << L" not found");
     m_reacts[key].callback = callback;
 }
 
-void ReactImage::setActiveReact(const std::string& key)
+void ReactImage::setActiveReact(const std::wstring& key)
 {
-    massert(key.empty() || m_reacts.find(key) != m_reacts.end(), "Key " << key << " not found");
+    wassert(key.empty() || m_reacts.find(key) != m_reacts.end(), L"Key " << key << L" not found");
 
     if (!key.empty()) m_activeRect = &m_reacts[key].rect;
     m_react = key;
@@ -119,7 +119,7 @@ void ReactImage::setActiveReact(const std::string& key)
     update();
 }
 
-void ReactImage::activateReact(const std::string& key)
+void ReactImage::activateReact(const std::wstring& key)
 {
     // Do not change if already set
     if (m_react == key)
@@ -213,5 +213,5 @@ void ReactImage::handleMouseMoved(const sf::Event& event, const sf::Vector2f& re
 void ReactImage::handleMouseLeft()
 {
     if (m_mouseLeftDeselect)
-        setActiveReact("");
+        setActiveReact(L"");
 }
