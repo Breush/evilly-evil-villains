@@ -38,8 +38,10 @@
     #define debug_generic(...) \
             __VA_ARGS__;
 
+    // Note: std::cout and std::wcout can not be used at the same time
+    // So we use std::cerr and std::wcout to handle both narrow and wide encodings
     #define mdebug_generic(PRINT, ...) \
-            std::cout << PRINT << __VA_ARGS__ << std::endl;
+            std::cerr << PRINT << __VA_ARGS__ << std::endl;
 
     #define wdebug_generic(PRINT, ...) \
             std::wcout << PRINT << __VA_ARGS__ << std::endl;
@@ -64,10 +66,10 @@
 
     #define wassert(bool_expr, ...) \
         do { if (!(bool_expr)) {\
-            std::wcerr << L"Assertion failed: " << #bool_expr << std::endl;\
-            std::wcerr << L"Message: " << __VA_ARGS__ << std::endl;\
-            std::wcerr << L"    File: " << __FILE__ << L" l." << __LINE__ << std::endl;\
-            std::wcerr << L"    Function: " << __func__ << std::endl;\
+            std::wcout << L"Assertion failed: " << #bool_expr << std::endl;\
+            std::wcout << L"Message: " << __VA_ARGS__ << std::endl;\
+            std::wcout << L"    File: " << __FILE__ << L" l." << __LINE__ << std::endl;\
+            std::wcout << L"    Function: " << __func__ << std::endl;\
             exit(1);\
         } } while (false)
 #endif

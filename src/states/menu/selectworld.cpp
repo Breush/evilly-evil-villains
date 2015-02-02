@@ -47,6 +47,7 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     m_buttons[2].setAction(_("Play"), [this]() {
         auto selectedWorld = m_list.selectedLine();
         const auto& worldInfo = m_worldsData.worlds()[selectedWorld];
+        wdebug_application_1(L"Loading world " + worldInfo.name);
         world::context.info = worldInfo;
         stackClear(States::GAME_DUNGEON_DESIGN);
     });

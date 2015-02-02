@@ -63,7 +63,6 @@ bool QuitState::handleEvent(const sf::Event& event)
 
 void QuitState::onHide()
 {
-    std::cout << "Forget" << std::endl;
     m_uiCore.forgetFocusedChild();
 }
 

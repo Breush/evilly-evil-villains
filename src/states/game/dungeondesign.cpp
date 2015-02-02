@@ -39,7 +39,7 @@ bool GameDungeonDesignState::update(const sf::Time& dt)
 
 void GameDungeonDesignState::onQuit()
 {
-    //m_dungeonData.load("worlds/" + world::context.info.folder + "dungeon_saved.xml");
+    m_dungeonData.save("worlds/" + world::context.info.folder + "dungeon_saved.xml");
 }
 
 bool GameDungeonDesignState::handleEvent(const sf::Event& event)

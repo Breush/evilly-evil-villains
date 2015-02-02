@@ -33,7 +33,7 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
     window.create(sf::VideoMode(resolution.x, resolution.y), title, style);
 
     if (!window.isOpen())
-        std::cerr << "Cannot initialize window" << std::endl;
+        throw std::runtime_error("Cannot initialize window.");
 
     screenSize = sf::v2f(window.getSize());
 }
