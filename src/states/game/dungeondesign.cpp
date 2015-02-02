@@ -1,6 +1,8 @@
-#include "core/application.hpp"
 #include "states/game/dungeondesign.hpp"
+
+#include "core/application.hpp"
 #include "resources/musicplayer.hpp"
+#include "world/context.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
@@ -14,8 +16,8 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     Application::context().music.stop();
 
     // Dungeon data
-    // TODO Get from game context?
-    m_dungeonData.load("worlds/example/dungeon.xml");
+    massert(!world::context.info.folder.empty(), "Selected world is in an empty folder.");
+    m_dungeonData.load("worlds/" + world::context.info.folder + "dungeon.xml");
 
     // Dungeon inter
     m_uiCore.add(&m_dungeonInter);
@@ -37,8 +39,7 @@ bool GameDungeonDesignState::update(const sf::Time& dt)
 
 void GameDungeonDesignState::onQuit()
 {
-    // TODO Where to get file name?
-    m_dungeonData.save("worlds/example/dungeon_saved.xml");
+    //m_dungeonData.load("worlds/" + world::context.info.folder + "dungeon_saved.xml");
 }
 
 bool GameDungeonDesignState::handleEvent(const sf::Event& event)

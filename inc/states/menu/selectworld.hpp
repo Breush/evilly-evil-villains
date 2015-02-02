@@ -5,6 +5,7 @@
 #include "nui/list.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/button.hpp"
+#include "world/worldsdata.hpp"
 
 #include <array>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -32,5 +33,8 @@ private:
 
     // Background
     sf::RectangleShape m_bgRect;
+
+    // Data
+    world::WorldsData m_worldsData;
 };
 

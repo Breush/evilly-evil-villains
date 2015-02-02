@@ -5,6 +5,7 @@
 #include "tools/tools.hpp"
 #include "resources/holder.hpp"
 #include "resources/musicplayer.hpp"
+#include "world/context.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
@@ -27,13 +28,12 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     m_list.setColumns({_("World name"), _("Villain"), _("Last played")});
     m_list.setColumnFillClip(2, false, false);
 
-    // TODO Load list of worlds
-    m_list.addLine({L"Petit", L"Homme", L"1er mai 1991 - 10:10"});
-    m_list.addLine({L"Black chocolate", L"Breush", L"23 mai 2014 - 10:40"});
-    m_list.addLine({L"Ceci est peut-être un peu long", L"Breush", L"23 mai 2014 - 10:40"});
-    m_list.addLine({L"Miami", L"Breush qui dépasse un chouillas mais de rien", L"23 mai 2014 - 10:40"});
-    m_list.addLine({L"Super long nom de monde tellement abusé que j'en ai les yeux qui me chatouillent la gorge",
-                    L"Super Breush de la mort qui tue", L"31 avril 2013 - 01:23"});
+    // Load list of worlds
+    // TODO Choose which columns to show (more?)
+    // TODO Have time format within gettext so that each country can choose its own representation
+    m_worldsData.load("worlds/worlds.xml");
+    for (const auto& world : m_worldsData.worlds())
+        m_list.addLine({world.name, world.villain, time2wstring("%F", world.lastPlayed)});
 
     // Stacker for buttons
     m_uiCore.add(&m_stacker);
@@ -45,7 +45,9 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
         m_stacker.add(&button, nui::Stacker::OPPOSITE);
 
     m_buttons[2].setAction(_("Play"), [this]() {
-        std::cout << "Playing on world " << m_list.selectedLine() << std::endl;
+        auto selectedWorld = m_list.selectedLine();
+        const auto& worldInfo = m_worldsData.worlds()[selectedWorld];
+        world::context.info = worldInfo;
         stackClear(States::GAME_DUNGEON_DESIGN);
     });
     m_buttons[1].setAction(_("Back"), [this]() { stackPop(); });
