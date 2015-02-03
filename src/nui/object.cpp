@@ -107,6 +107,37 @@ void Object::changedChild(Object*)
 {
 }
 
+//--------------------------//
+//----- Parent-related -----//
+
+sf::Vector2f Object::getGlobalPosition() const
+{
+    sf::Vector2f position = getPosition();
+
+    if (parent() != nullptr)
+        position += parent()->getGlobalPosition();
+
+    return position;
+}
+
+sf::Transform Object::getGlobalTransform() const
+{
+    sf::Transform transform;
+
+    if (parent() != nullptr)
+        parent()->applyGlobalTransform(transform);
+
+    return transform * getTransform();
+}
+
+void Object::applyGlobalTransform(sf::Transform& transform) const
+{
+    if (parent() != nullptr)
+        parent()->applyGlobalTransform(transform);
+
+    transform *= getTransform();
+}
+
 //-------------------//
 //----- Drawing -----//
 
@@ -115,7 +146,7 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const
     const sf::Shader* shader = states.shader;
 
     // Transform from sf::Tranformable
-    states.transform *= getTransform();
+    applyGlobalTransform(states.transform);
 
     // Drawing parts
     for (auto& part : m_parts)
@@ -131,7 +162,7 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const
             glEnable(GL_SCISSOR_TEST);
 
             sf::FloatRect r(*part.clippingRect);
-            r = getTransform().transformRect(r);
+            r = states.transform.transformRect(r);
 
             const auto& screenSize = Application::context().screenSize;
             const auto& resolution = Application::context().resolution;

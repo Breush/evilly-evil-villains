@@ -91,9 +91,10 @@ void uiCore::drawDetectImage()
             debug_nui_2(greenColor -= 25);
 
             // Draw main object
-            rectangleShape.setSize(pair.second->size());
-            rectangleShape.setPosition(pair.second->getPosition());
-            rectangleShape.setOrigin(pair.second->getOrigin());
+            sf::FloatRect r({0.f, 0.f, pair.second->size().x, pair.second->size().y});
+            r = pair.second->getGlobalTransform().transformRect(r);
+            rectangleShape.setPosition({r.left, r.top});
+            rectangleShape.setSize({r.width, r.height});
             m_detectTarget.draw(rectangleShape);
         }
     }
@@ -310,17 +311,14 @@ void uiCore::update(sf::Time dt)
 
         // Child is focused - update shader
         if (child == focusedChild() && child->status()) {
-            setFocusRect(sf::IntRect(child->focusRect()));
+            sf::FloatRect r(child->getGlobalTransform().transformRect(child->focusRect()));
+            m_focusSprite.setPosition(r.left, r.top);
+            setFocusRect(sf::IntRect(r));
 
-            m_focusSprite.setPosition(child->getPosition());
-            m_focusSprite.setOrigin(child->getOrigin());
-            m_focusSprite.move(focusRect().left, focusRect().top);
-
-            sf::Vector2f textureSize(focusRect().width, focusRect().height);
-            sf::Vector2f position = m_focusSprite.getPosition() - m_focusSprite.getOrigin();
+            sf::Vector2f textureSize(r.width, r.height);
 
             Application::context().shaders.setParameter(Shaders::NUI_FOCUS, "textureSize", textureSize);
-            Application::context().shaders.setParameter(Shaders::NUI_FOCUS, "position", position);
+            Application::context().shaders.setParameter(Shaders::NUI_FOCUS, "position", m_focusSprite.getPosition());
         }
 
         child->update(dt);

@@ -59,6 +59,11 @@ namespace nui
         // Focus interactions
         virtual bool ownsFocus() { return false; }
 
+        // Parent-related
+        sf::Vector2f getGlobalPosition() const;
+        sf::Transform getGlobalTransform() const;
+        void applyGlobalTransform(sf::Transform& tansform) const;
+
         // Params
         PARAMG(uiCore*, m_core, core)
         PARAMGS(bool, m_status, status, setStatus)

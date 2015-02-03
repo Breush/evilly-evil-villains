@@ -2,8 +2,6 @@
 
 #include "world/worldsdata.hpp"
 
-#include <iostream> // FIXME
-
 namespace world
 {
     //----- Context -----//

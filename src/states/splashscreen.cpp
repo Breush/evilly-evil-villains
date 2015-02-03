@@ -35,7 +35,6 @@ SplashScreenState::SplashScreenState(StateStack& stack)
 void SplashScreenState::draw()
 {
     auto& window = Application::context().window;
-    const auto& resolution = Application::context().resolution;
 
     // Animated background
     window.draw(m_bgSprite, m_bgShader);
