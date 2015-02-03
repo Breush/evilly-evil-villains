@@ -32,7 +32,7 @@ namespace nui
 
         // Virtual
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-        virtual void update(sf::Time dt);
+        virtual void update(const sf::Time& dt);
 
     protected:
         // Sub-parts of drawing

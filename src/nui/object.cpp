@@ -187,7 +187,7 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const
     }
 }
 
-void Object::update(sf::Time)
+void Object::update(const sf::Time&)
 {
     if (status() && parent() != nullptr)
         parent()->changedChild(this);
