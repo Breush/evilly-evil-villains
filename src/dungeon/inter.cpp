@@ -22,6 +22,7 @@ Inter::Inter()
 void Inter::init()
 {
     core()->add(&m_contextMenu);
+    m_contextMenu.setParent(this);
     update();
 }
 
@@ -99,16 +100,16 @@ void Inter::setRoomTileState(const uint floor, const uint room, const Data::Room
 //------------------------//
 //----- Mouse events -----//
 
-void Inter::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
+void Inter::handleMouseEvent(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
 {
     returnif (m_data == nullptr);
 
     switch (event.type) {
     case sf::Event::MouseButtonPressed:
-        handleMousePressed(event, relPos);
+        handleMousePressed(event, absPos, relPos);
         break;
     case sf::Event::MouseMoved:
-        handleMouseMoved(event, relPos);
+        handleMouseMoved(event, absPos, relPos);
         break;
     case sf::Event::MouseLeft:
         handleMouseLeft();
@@ -118,12 +119,10 @@ void Inter::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
     }
 }
 
-void Inter::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos)
+void Inter::handleMousePressed(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
 {
-    sf::Vector2f fixPos = getInverseTransform().transformPoint(relPos);
-
     if (event.mouseButton.button == sf::Mouse::Right) {
-        selectRoomFromCoords(fixPos);
+        selectRoomFromCoords(relPos);
 
         // Context title
         std::wstringstream roomName;
@@ -149,7 +148,7 @@ void Inter::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPo
     }
 }
 
-void Inter::handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos)
+void Inter::handleMouseMoved(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
 {
 }
 

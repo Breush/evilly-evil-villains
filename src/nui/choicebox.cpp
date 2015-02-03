@@ -172,14 +172,14 @@ void ChoiceBox::setChoiceCallback(uint choice, Callback callback)
 //------------------------//
 //----- Mouse events -----//
 
-void ChoiceBox::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
+void ChoiceBox::handleMouseEvent(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
 {
     switch (event.type) {
     case sf::Event::MouseButtonPressed:
-        handleMousePressed(event, relPos);
+        handleMousePressed(event, absPos, relPos);
         break;
     case sf::Event::MouseMoved:
-        handleMouseMoved(event, relPos);
+        handleMouseMoved(event, absPos, relPos);
         break;
     case sf::Event::MouseLeft:
         handleMouseLeft();
@@ -189,10 +189,8 @@ void ChoiceBox::handleMouseEvent(const sf::Event& event, const sf::Vector2f& rel
     }
 }
 
-void ChoiceBox::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos)
+void ChoiceBox::handleMousePressed(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
 {
-    uint x = getInverseTransform().transformPoint(relPos).x;
-
     // Just manage left click
     if (event.mouseButton.button != sf::Mouse::Left)
         return;
@@ -204,12 +202,12 @@ void ChoiceBox::handleMousePressed(const sf::Event& event, const sf::Vector2f& r
     }
 
     // With arrows and arrow selected
-    if (isLeftArrowSelected(x)) {
+    if (isLeftArrowSelected(relPos.x)) {
         switchChoiceLeft();
         return;
     }
 
-    if (isRightArrowSelected(x)) {
+    if (isRightArrowSelected(relPos.x)) {
         switchChoiceRight();
         return;
     }
@@ -218,21 +216,17 @@ void ChoiceBox::handleMousePressed(const sf::Event& event, const sf::Vector2f& r
     acceptChoice();
 }
 
-void ChoiceBox::handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos)
+void ChoiceBox::handleMouseMoved(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
 {
-    uint x = getInverseTransform().transformPoint(relPos).x;
-
     resetPartsShader();
 
     // Hovering arrows
-    if (isLeftArrowSelected(x))
-    {
+    if (isLeftArrowSelected(relPos.x)) {
         setPartShader(&m_lArrow, Shaders::NUI_HOVER);
         return;
     }
 
-    if (isRightArrowSelected(x))
-    {
+    if (isRightArrowSelected(relPos.x)) {
         setPartShader(&m_rArrow, Shaders::NUI_HOVER);
         return;
     }

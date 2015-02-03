@@ -42,7 +42,7 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
 //----- Application -----//
 
 Application::Application()
-    //: m_initialState(States::GAME_DUNGEON_DESIGN)
+    //: m_initialState(States::MENU_SELECTWORLD)
     : m_initialState(States::SPLASHSCREEN)
     , m_gameTime(0.f)
     , m_running(false)

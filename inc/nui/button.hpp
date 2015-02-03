@@ -16,7 +16,7 @@ namespace nui
         virtual void init() override;
 
         // Get events to valid action
-        void handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos) override;
+        void handleMousePressed(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos) override;
         bool handleKeyboardEvent(const sf::Event& event) override;
 //        bool handleJoystickEvent(const sf::Event& event) override;
 

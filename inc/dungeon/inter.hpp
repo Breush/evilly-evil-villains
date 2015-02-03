@@ -18,7 +18,7 @@ namespace dungeon
         // Virtual
         void init() override;
         void update() override;
-        void handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos) override;
+        void handleMouseEvent(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos) override;
         bool handleKeyboardEvent(const sf::Event& event) override;
         //bool handleJoystickEvent(const sf::Event& event) override;
 
@@ -38,8 +38,8 @@ namespace dungeon
 
     protected:
         // Mouse events
-        void handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos);
-        void handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos);
+        void handleMousePressed(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos);
+        void handleMouseMoved(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos);
         void handleMouseLeft();
 
         // Changes

@@ -1,10 +1,10 @@
-#include "core/application.hpp"
 #include "nui/reactimage.hpp"
+
+#include "core/application.hpp"
 #include "nui/uicore.hpp"
 #include "resources/soundplayer.hpp"
 #include "tools/math.hpp"
 #include "tools/debug.hpp"
-#include "tools/platform-fixes.hpp" // std::stoi
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <pugixml.hpp>
@@ -159,14 +159,14 @@ void ReactImage::selectActiveRect()
 //------------------------//
 //----- Mouse events -----//
 
-void ReactImage::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
+void ReactImage::handleMouseEvent(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
 {
     switch (event.type) {
     case sf::Event::MouseButtonPressed:
-        handleMousePressed(event, relPos);
+        handleMousePressed(event, absPos, relPos);
         break;
     case sf::Event::MouseMoved:
-        handleMouseMoved(event, relPos);
+        handleMouseMoved(event, absPos, relPos);
         break;
     case sf::Event::MouseLeft:
         handleMouseLeft();
@@ -176,7 +176,7 @@ void ReactImage::handleMouseEvent(const sf::Event& event, const sf::Vector2f& re
     }
 }
 
-void ReactImage::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos)
+void ReactImage::handleMousePressed(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
 {
     // Just manage left click
     if (event.mouseButton.button != sf::Mouse::Left)
@@ -193,14 +193,11 @@ void ReactImage::handleMousePressed(const sf::Event& event, const sf::Vector2f& 
     m_reacts[m_react].callback();
 }
 
-void ReactImage::handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos)
+void ReactImage::handleMouseMoved(const sf::Event&, const sf::Vector2f&, const sf::Vector2f& relPos)
 {
-    // Getting mouse position relatively to image
-    sf::Vector2f pos = getInverseTransform().transformPoint(relPos);
-
     // Looking for active react
     for (auto& react : m_reacts) {
-        if (isInsideRect(pos, react.second.rect)) {
+        if (isInsideRect(relPos, react.second.rect)) {
             activateReact(react.first);
             return;
         }

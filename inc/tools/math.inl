@@ -1,5 +1,5 @@
 template<typename T1, typename T2>
-inline bool isInsideRect(sf::Vector2<T1>& point , const sf::Rect<T2>& rect)
+inline bool isInsideRect(const sf::Vector2<T1>& point, const sf::Rect<T2>& rect)
 {
     return isInsideRect(point.x, point.y, rect);
 }

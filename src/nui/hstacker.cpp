@@ -20,12 +20,11 @@ void HStacker::update()
 
     // Children positions
     uint x = getInitX();
-    uint y;
 
     // Setting children positions
     for (auto& childInfo : m_children) {
         // Vertical alignment
-        y = getY(childInfo.child->size().y, childInfo.align);
+        uint y = getY(childInfo.child->size().y, childInfo.align);
 
         // Horizontal pre-alignment
         x += getPreX(childInfo.child->size().x);

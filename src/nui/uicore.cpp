@@ -124,32 +124,34 @@ void uiCore::handleEvent(const sf::Event& event)
     // Mouse moving - setting hovered child
     if (event.type == sf::Event::MouseMoved) {
         auto& window = Application::context().window;
-        sf::Vector2f relPos = window.mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
-        clamp(relPos, Application::context().resolution);
+        sf::Vector2f absPos = window.mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
+        clamp(absPos, Application::context().resolution);
 
         // Does mouse select any child?
-        auto object = m_detectMap.find(getDetectValue(uint(relPos.x), uint(relPos.y)));
+        auto object = m_detectMap.find(getDetectValue(uint(absPos.x), uint(absPos.y)));
         if (object == m_detectMap.end()) {
             setHoveredChild(nullptr);
             return;
         }
 
         setHoveredChild(object->second);
-        object->second->handleMouseEvent(event, relPos);
+        sf::Vector2f relPos = object->second->getGlobalTransform().getInverse().transformPoint(absPos);
+        object->second->handleMouseEvent(event, absPos, relPos);
         return;
     }
 
     // Mouse : click or wheel action
     if (isMouse(event)) {
         auto& window = Application::context().window;
-        sf::Vector2f relPos = window.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
-        clamp(relPos, Application::context().resolution);
+        sf::Vector2f absPos = window.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
+        clamp(absPos, Application::context().resolution);
 
-        auto object = m_detectMap.find(getDetectValue(uint(relPos.x), uint(relPos.y)));
+        auto object = m_detectMap.find(getDetectValue(uint(absPos.x), uint(absPos.y)));
         returnif (object == m_detectMap.end());
 
         setFocusedChild(object->second);
-        object->second->handleMouseEvent(event, relPos);
+        sf::Vector2f relPos = object->second->getGlobalTransform().getInverse().transformPoint(absPos);
+        object->second->handleMouseEvent(event, absPos, relPos);
         return;
     }
 
@@ -274,7 +276,7 @@ void uiCore::setHoveredChild(Object* inHoveredChild)
     // Emit MouseLeft if mouse was over an other child
     sf::Event event;
     event.type = sf::Event::MouseLeft;
-    m_hoveredChild->handleMouseEvent(event, sf::Vector2f());
+    m_hoveredChild->handleMouseEvent(event, sf::Vector2f(), sf::Vector2f());
     m_hoveredChild = inHoveredChild;
 }
 

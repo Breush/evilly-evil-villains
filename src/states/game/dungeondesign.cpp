@@ -24,6 +24,11 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     m_dungeonInter.useData(m_dungeonData);
     m_dungeonInter.setSize({350, 450});
     m_dungeonInter.setPosition((resolution - m_dungeonInter.size()) / 2.f);
+
+    // Dungeon panel
+    m_uiCore.add(&m_dungeonPanel);
+    m_dungeonPanel.setPosition({0, resolution.y - 100});
+    m_dungeonPanel.setSize({resolution.x, 100});
 }
 
 void GameDungeonDesignState::draw()
