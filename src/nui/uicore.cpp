@@ -303,7 +303,7 @@ void uiCore::draw(sf::RenderTarget& target, sf::RenderStates states) const
     debug_nui_2(target.draw(sprite));
 }
 
-void uiCore::update(sf::Time dt)
+void uiCore::update(const sf::Time& dt)
 {
     bool redrawDetectImage = false;
 

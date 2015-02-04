@@ -45,7 +45,7 @@ public:
 
 protected:
     void processInput();
-    void update(sf::Time dt);
+    void update(const sf::Time& dt);
     void render();
 
     // Resources

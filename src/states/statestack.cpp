@@ -8,14 +8,12 @@ StateStack::StateStack()
 {
 }
 
-void StateStack::update(sf::Time dt)
+void StateStack::update(const sf::Time& dt)
 {
     // Iterate from top to bottom, stop as soon as update() returns false
-    for (auto itr = m_stack.rbegin(); itr != m_stack.rend(); ++itr) {
-        if (!(*itr)->update(dt)) {
+    for (auto itr = m_stack.rbegin(); itr != m_stack.rend(); ++itr)
+        if (!(*itr)->update(dt))
             break;
-        }
-    }
 
     applyPendingChanges();
 }
@@ -23,19 +21,16 @@ void StateStack::update(sf::Time dt)
 void StateStack::draw()
 {
     // Draw all active states from bottom to top
-    for (auto& state : m_stack) {
+    for (auto& state : m_stack)
         state->draw();
-    }
 }
 
 void StateStack::handleEvent(const sf::Event& event)
 {
     // Iterate from top to bottom, stop as soon as handleEvent() returns false
-    for (auto itr = m_stack.rbegin(); itr != m_stack.rend(); ++itr) {
-        if (!(*itr)->handleEvent(event)) {
+    for (auto itr = m_stack.rbegin(); itr != m_stack.rend(); ++itr)
+        if (!(*itr)->handleEvent(event))
             break;
-        }
-    }
 
     applyPendingChanges();
 }
@@ -71,9 +66,8 @@ bool StateStack::isStateVisible(States::ID stateID) const
 
 void StateStack::refresh()
 {
-    for (auto& state : m_stack) {
+    for (auto& state : m_stack)
         state->refresh();
-    }
 }
 
 std::unique_ptr<State> StateStack::createState(States::ID stateID)

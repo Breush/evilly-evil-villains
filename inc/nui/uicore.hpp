@@ -34,7 +34,7 @@ namespace nui
 
         // Main functions called by states
         void refresh();
-        void update(sf::Time dt);
+        void update(const sf::Time& dt);
         void handleEvent(const sf::Event& event);
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
