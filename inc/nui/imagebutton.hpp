@@ -23,6 +23,9 @@ namespace nui
         void setVisual(const std::wstring& text, Textures::ID imageID, const sf::Vector2f& inImageSize);
 
     protected:
+        // Mouse events
+        virtual void handleMouseMoved(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos) override;
+
         // Updates
         virtual void updateSize() override;
 

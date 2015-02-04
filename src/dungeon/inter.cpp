@@ -228,6 +228,11 @@ sf::Vector2u& Inter::selectRoomFromCoords(const sf::Vector2f& coords)
 //-------------------//
 //----- Refresh -----//
 
+void Inter::changedStatus()
+{
+    m_contextMenu.setStatus(true);
+}
+
 void Inter::changedSize()
 {
     m_grid.setSize(size());

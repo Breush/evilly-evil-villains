@@ -32,6 +32,9 @@ namespace nui
         void add(Object* child, Align align);
 
     protected:
+        // Changes
+        void changedStatus() override;
+
         // Params
         PARAMGSU(float, m_margin, margin, setMargin, update)
         PARAMGSU(Align, m_align, align, setAlign, update)

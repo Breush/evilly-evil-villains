@@ -43,6 +43,7 @@ namespace dungeon
         void handleMouseLeft();
 
         // Changes
+        void changedStatus() override;
         void changedSize() override;
 
         // Room management

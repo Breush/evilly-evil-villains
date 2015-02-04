@@ -50,6 +50,7 @@ namespace nui
         void addPart(sf::Drawable* drawable, Shaders::ID shader = Shaders::NONE);
 
         // Updates
+        virtual void changedStatus();
         virtual void changedSize();
         virtual void changedParent();
         virtual void changedFocusRect();
@@ -66,10 +67,10 @@ namespace nui
 
         // Params
         PARAMG(uiCore*, m_core, core)
-        PARAMGS(bool, m_status, status, setStatus)
         PARAMGS(bool, m_centered, centered, setCentered)
         PARAMGS(bool, m_focusable, focusable, setFocusable)
         PARAMGS(bool, m_detectable, detectable, setDetectable)
+        PARAMGSU(bool, m_status, status, setStatus, changedStatus)
         PARAMGSU(bool, m_visible, visible, setVisible, changedVisible)
         PARAMGSU(sf::FloatRect, m_focusRect, focusRect, setFocusRect, changedFocusRect)
         PARAMGSU(Object*, m_parent, parent, setParent, changedParent)

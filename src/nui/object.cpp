@@ -98,6 +98,10 @@ void Object::changedFocusRect()
     setStatus(true);
 }
 
+void Object::changedStatus()
+{
+}
+
 void Object::changedVisible()
 {
     setStatus(true);

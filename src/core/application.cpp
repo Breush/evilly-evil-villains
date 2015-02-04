@@ -153,6 +153,10 @@ void Application::render()
 
 void Application::loadTextures()
 {
+    // Default - debug texture
+    s_context.textures.load(Textures::DEFAULT, "res/tex/default.png", true);
+    s_context.textures.setRepeated(Textures::DEFAULT, true);
+
     // Splash-screen
     s_context.textures.load(Textures::JUMPINGTOASTS_BG, "res/tex/jumping-toasts/bg.png", true);
     s_context.textures.load(Textures::JUMPINGTOASTS_JUMPING, "res/tex/jumping-toasts/jumping.png", true);

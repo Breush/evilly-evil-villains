@@ -243,14 +243,16 @@ void ChoiceBox::handleMouseLeft()
 
 bool ChoiceBox::isLeftArrowSelected(const float& x)
 {
+    returnif (!showArrows()) false;
     float arrowRange = arrowSize() + arrowOffset() / 2.f;
-    return showArrows() && (x < arrowRange);
+    return (x < arrowRange);
 }
 
 bool ChoiceBox::isRightArrowSelected(const float& x)
 {
+    returnif (!showArrows()) false;
     float arrowRange = arrowSize() + arrowOffset() / 2.f;
-    return showArrows() && (x > size().x - arrowRange);
+    return (x > size().x - arrowRange);
 }
 
 //---------------------------//

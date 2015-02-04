@@ -33,6 +33,7 @@ namespace dungeon
         void handleMouseLeft();
 
         // Changes
+        void changedStatus() override;
         void changedSize() override;
         void changedReduced();
 
@@ -46,11 +47,10 @@ namespace dungeon
 
         // Tabs
         nui::HStacker m_tabsStacker;
-        // TODO Make a tab nui Object with is clickable text + image
         nui::ImageButton m_monstersTab;
         nui::ImageButton m_trapsTab;
         nui::ImageButton m_facilitiesTab;
-        nui::ImageButton m_tresuresTab;
+        nui::ImageButton m_treasuresTab;
 
         // Animation
         sf::Vector2f m_reducedVectorAnimation;

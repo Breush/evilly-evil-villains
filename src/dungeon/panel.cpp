@@ -32,13 +32,14 @@ void Panel::init()
     m_tabsStacker.add(&m_monstersTab,   nui::Stacker::Align::CENTER);
     m_tabsStacker.add(&m_trapsTab,      nui::Stacker::Align::CENTER);
     m_tabsStacker.add(&m_facilitiesTab, nui::Stacker::Align::CENTER);
-    m_tabsStacker.add(&m_tresuresTab,   nui::Stacker::Align::CENTER);
+    m_tabsStacker.add(&m_treasuresTab,   nui::Stacker::Align::CENTER);
 
     // Tabs
-    m_monstersTab.setText(_("Monsters"));
+    // TODO Get display size from somewhere
+    m_monstersTab.setVisual(_("Monsters"), Textures::DUNGEON_PANEL_MONSTERS, {80.f, 80.f});
     m_trapsTab.setVisual(_("Traps"), Textures::DUNGEON_PANEL_TRAPS, {80.f, 80.f});
-    m_facilitiesTab.setText(_("Facilities"));
-    m_tresuresTab.setText(_("Treasures"));
+    m_facilitiesTab.setVisual(_("Facilities"), Textures::DUNGEON_PANEL_FACILITIES, {80.f, 80.f});
+    m_treasuresTab.setVisual(_("Treasures"), Textures::DUNGEON_PANEL_TREASURES, {80.f, 80.f});
 
     update();
 }
@@ -66,6 +67,7 @@ void Panel::update()
     if (reduced()) setReducedVector({0.f, size().y - 20.f});
     else setReducedVector({0.f, 0.f});
 
+    m_tabsStacker.update();
     setStatus(true);
 }
 
@@ -87,8 +89,11 @@ void Panel::update(const sf::Time& dt)
     }
 
     // Animate
-    m_reducedVectorAnimation += sf::Vector2f(x, y);
-    move({x, y});
+    if (x != 0.f || y != 0.f) {
+        m_reducedVectorAnimation += sf::Vector2f(x, y);
+        setStatus(true);
+        move({x, y});
+    }
 }
 
 //------------------------//
@@ -135,6 +140,11 @@ void Panel::switchReduced()
 
 //-------------------//
 //----- Changes -----//
+
+void Panel::changedStatus()
+{
+    m_tabsStacker.setStatus(true);
+}
 
 void Panel::changedSize()
 {

@@ -36,3 +36,10 @@ void Stacker::changedChild(Object*)
 {
     update();
 }
+
+void Stacker::changedStatus()
+{
+    // Need to refresh all children if one is focused
+    for (auto& childInfo : m_children)
+        childInfo.child->setStatus(true);
+}

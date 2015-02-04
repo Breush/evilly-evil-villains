@@ -28,7 +28,15 @@ template <typename Resource, typename Identifier>
 inline Resource& ResourceHolder<Resource, Identifier>::get(Identifier id)
 {
     auto found = m_resourcesMap.find(id);
-    massert(found != m_resourcesMap.end(), "Resource not found");
+
+    if (found == m_resourcesMap.end()) {
+        if (id != Identifier::DEFAULT) {
+            std::cerr << "/!\\ Resource not found. Using DEFAULT instead." << std::endl;
+            return get(Identifier::DEFAULT);
+        } else {
+            throw std::runtime_error("DEFAULT resource not found. Ouch.");
+        }
+    }
 
     return *found->second;
 }
@@ -37,7 +45,15 @@ template <typename Resource, typename Identifier>
 inline const Resource& ResourceHolder<Resource, Identifier>::get(Identifier id) const
 {
     auto found = m_resourcesMap.find(id);
-    massert(found != m_resourcesMap.end(), "Resource not found");
+
+    if (found == m_resourcesMap.end()) {
+        if (id != Identifier::DEFAULT) {
+            std::cerr << "/!\\ Resource not found. Using DEFAULT instead." << std::endl;
+            return get(Identifier::DEFAULT);
+        } else {
+            throw std::runtime_error("DEFAULT resource not found. Ouch.");
+        }
+    }
 
     return *found->second;
 }
