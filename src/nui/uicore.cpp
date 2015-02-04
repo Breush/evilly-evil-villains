@@ -317,9 +317,7 @@ void uiCore::update(const sf::Time& dt)
             m_focusSprite.setPosition(r.left, r.top);
             setFocusRect(sf::IntRect(r));
 
-            sf::Vector2f textureSize(r.width, r.height);
-
-            Application::context().shaders.setParameter(Shaders::NUI_FOCUS, "textureSize", textureSize);
+            Application::context().shaders.setParameter(Shaders::NUI_FOCUS, "textureSize", sf::Vector2f(r.width, r.height));
             Application::context().shaders.setParameter(Shaders::NUI_FOCUS, "position", m_focusSprite.getPosition());
         }
 

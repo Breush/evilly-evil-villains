@@ -17,7 +17,6 @@ SplashScreenState::SplashScreenState(StateStack& stack)
 
     // Background
     const auto& texture = Application::context().textures.get(Textures::JUMPINGTOASTS_BG);
-    const auto& textureSize = texture.getSize();
     m_bgSprite.setTexture(texture);
     m_bgSprite.setTextureRect({0, 0, int(maxSize), int(maxSize)});
     m_bgSprite.setPosition(sf::vsub(windowSize, maxSize) / 2.f);
