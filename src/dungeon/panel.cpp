@@ -36,7 +36,7 @@ void Panel::init()
 
     // Tabs
     m_monstersTab.setText(_("Monsters"));
-    m_trapsTab.setText(_("Traps"));
+    m_trapsTab.setVisual(_("Traps"), Textures::DUNGEON_PANEL_TRAPS, {80.f, 80.f});
     m_facilitiesTab.setText(_("Facilities"));
     m_tresuresTab.setText(_("Treasures"));
 

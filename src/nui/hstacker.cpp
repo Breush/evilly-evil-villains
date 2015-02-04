@@ -19,22 +19,25 @@ void HStacker::update()
         return;
 
     // Children positions
-    uint x = getInitX();
+    float x = getInitX();
 
     // Setting children positions
     for (auto& childInfo : m_children) {
         // Vertical alignment
-        uint y = getY(childInfo.child->size().y, childInfo.align);
+        float y = getY(childInfo.child->size().y, childInfo.align);
 
         // Horizontal pre-alignment
         x += getPreX(childInfo.child->size().x);
 
         // Setting position
         childInfo.child->setPosition(x, y);
+        childInfo.child->setStatus(true);
 
         // Horizontal post-alignment
         x += getPostX(childInfo.child->size().x);
     }
+
+    setStatus(true);
 }
 
 inline float HStacker::getY(float& childHeight, Align& inAlign)

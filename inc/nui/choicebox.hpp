@@ -24,19 +24,19 @@ namespace nui
 
         // Virtual
         virtual void init() override;
-        void update() override;
+        virtual void update() override;
         void handleMouseEvent(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos) override;
         bool handleKeyboardEvent(const sf::Event& event) override;
         //bool handleJoystickEvent(const sf::Event& event) override;
 
         // Choices
-        void add(std::wstring text, Callback callback = nullptr);
+        void add(const std::wstring& text, const Callback callback = nullptr);
         void acceptChoice();
         void switchChoiceLeft();
         void switchChoiceRight();
         void setChoice(uint choice);
-        void setChoiceText(uint choice, std::wstring text);
-        void setChoiceCallback(uint choice, Callback callback);
+        void setChoiceText(uint choice, const std::wstring& text);
+        void setChoiceCallback(uint choice, const Callback callback);
 
     protected:
         // Mouse events
@@ -47,11 +47,13 @@ namespace nui
         bool isRightArrowSelected(const float& x);
 
         // Updates
-        void updateSize();
+        void updateButtonSize();
+        virtual void updateSize();
 
         // Params
         PARAMGSU(bool, m_showArrows, showArrows, setShowArrows, updateSize)
         PARAMGSU(bool, m_showLines, showLines, setShowLines, updateSize)
+        PARAMG(sf::Vector2f, m_buttonSize, buttonSize)
         PARAMG(float, m_arrowOffset, arrowOffset)
         PARAMG(float, m_lineOffset, lineOffset)
         PARAMG(float, m_arrowSize, arrowSize)
@@ -63,6 +65,12 @@ namespace nui
             std::wstring text;
             Callback callback;
         };
+
+        // Getters for children
+        sf::Text& text() { return m_text; }
+        sfe::HLine& topLine() { return m_topLine; }
+        sfe::HLine& botLine() { return m_botLine; }
+        const sf::Vector2f& maxTextSize() const { return m_maxTextSize; }
 
     private:
         // Choices

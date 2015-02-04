@@ -32,6 +32,10 @@ namespace Textures
         NUI_FOCUS,
         MENU_BG,
         MENU_NAME,
+        DUNGEON_PANEL_MONSTERS,
+        DUNGEON_PANEL_TRAPS,
+        DUNGEON_PANEL_FACILITIES,
+        DUNGEON_PANEL_TREASURES,
     };
 }
 

@@ -19,17 +19,17 @@ void Button::init()
 //-------------------//
 //----- Setters -----//
 
-void Button::setText(std::wstring text)
+void Button::setText(const std::wstring& text)
 {
     setChoiceText(0, text);
 }
 
-void Button::setCallback(Callback callback)
+void Button::setCallback(const Callback callback)
 {
     setChoiceCallback(0, callback);
 }
 
-void Button::setAction(std::wstring text, Callback callback)
+void Button::setAction(const std::wstring& text, const Callback callback)
 {
     setText(text);
     setCallback(callback);

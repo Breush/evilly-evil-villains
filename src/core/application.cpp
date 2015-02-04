@@ -42,8 +42,8 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
 //----- Application -----//
 
 Application::Application()
-    //: m_initialState(States::MENU_SELECTWORLD)
-    : m_initialState(States::SPLASHSCREEN)
+    : m_initialState(States::MENU_SELECTWORLD)
+    //: m_initialState(States::SPLASHSCREEN)
     , m_gameTime(0.f)
     , m_running(false)
 {
@@ -174,6 +174,9 @@ void Application::loadTextures()
     // Menu
     s_context.textures.load(Textures::MENU_BG, "res/tex/menu/bg.png");
     s_context.textures.load(Textures::MENU_NAME, "res/tex/menu/name.png");
+
+    // Dungeon
+    s_context.textures.load(Textures::DUNGEON_PANEL_TRAPS, "res/tex/dungeon/panel/traps.png");
 }
 
 void Application::loadShaders()

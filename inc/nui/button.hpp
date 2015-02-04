@@ -21,9 +21,9 @@ namespace nui
 //        bool handleJoystickEvent(const sf::Event& event) override;
 
         // Action
-        void setText(std::wstring text);
-        void setCallback(Callback callback);
-        void setAction(std::wstring text, Callback callback);
+        void setText(const std::wstring& text);
+        void setCallback(const Callback callback);
+        void setAction(const std::wstring& text, const Callback callback);
     };
 }
 

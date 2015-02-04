@@ -2,7 +2,7 @@
 
 #include "nui/object.hpp"
 #include "nui/hstacker.hpp"
-#include "nui/button.hpp"
+#include "nui/imagebutton.hpp"
 #include "tools/param.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -47,10 +47,10 @@ namespace dungeon
         // Tabs
         nui::HStacker m_tabsStacker;
         // TODO Make a tab nui Object with is clickable text + image
-        nui::Button m_monstersTab;
-        nui::Button m_trapsTab;
-        nui::Button m_facilitiesTab;
-        nui::Button m_tresuresTab;
+        nui::ImageButton m_monstersTab;
+        nui::ImageButton m_trapsTab;
+        nui::ImageButton m_facilitiesTab;
+        nui::ImageButton m_tresuresTab;
 
         // Animation
         sf::Vector2f m_reducedVectorAnimation;
