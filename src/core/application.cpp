@@ -180,7 +180,10 @@ void Application::loadTextures()
     s_context.textures.load(Textures::MENU_NAME, "res/tex/menu/name.png");
 
     // Dungeon
+    s_context.textures.load(Textures::DUNGEON_PANEL_MONSTERS, "res/tex/dungeon/panel/monsters.png");
     s_context.textures.load(Textures::DUNGEON_PANEL_TRAPS, "res/tex/dungeon/panel/traps.png");
+    s_context.textures.load(Textures::DUNGEON_PANEL_FACILITIES, "res/tex/dungeon/panel/facilities.png");
+    s_context.textures.load(Textures::DUNGEON_PANEL_TREASURES, "res/tex/dungeon/panel/treasures.png");
 }
 
 void Application::loadShaders()
