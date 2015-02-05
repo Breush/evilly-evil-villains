@@ -5,12 +5,19 @@
 
 #include <vector>
 
+// Forward declarations
+namespace pugi
+{
+    class xml_node;
+}
+
 namespace world
 {
     class WorldsData {
     public:
         // Defines world attributes
         struct World {
+            pugi::xml_node* ref;
             std::wstring name;
             std::wstring villain;
             uint dungeons;
@@ -26,7 +33,10 @@ namespace world
 
         // Import/Export
         void load(const std::string& file);
-        // TODO void save(const std::string& file);
+        void save(const std::string& file);
+
+        // Updates
+        void updateLastPlayed(World& worldInfo);
 
         // Getters
         std::vector<World>& worlds() { return m_worlds; }

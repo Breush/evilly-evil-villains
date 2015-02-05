@@ -33,8 +33,5 @@ private:
 
     // Background
     sf::RectangleShape m_bgRect;
-
-    // Data
-    world::WorldsData m_worldsData;
 };
 

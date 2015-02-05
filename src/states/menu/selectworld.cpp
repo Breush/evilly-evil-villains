@@ -25,15 +25,15 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     m_uiCore.add(&m_list);
     m_list.setPosition(0.1f * viewSize.x, 0.1f * viewSize.y);
     m_list.setSize({0.8f * viewSize.x, 0.7f * viewSize.y});
-    m_list.setColumns({_("World name"), _("Villain"), _("Last played")});
+    m_list.setColumns({_("Villain"), _("World name"), _("Main dungeon"), _("Last played")});
     m_list.setColumnFillClip(2, false, false);
 
     // Load list of worlds
     // TODO Choose which columns to show (more?)
     // TODO Have time format within gettext so that each country can choose its own representation
-    m_worldsData.load("worlds/worlds.xml");
-    for (const auto& world : m_worldsData.worlds())
-        m_list.addLine({world.name, world.villain, time2wstring("%F", world.lastPlayed)});
+    world::context.worldsData.load("worlds/worlds.xml");
+    for (const auto& world : world::context.worldsData.worlds())
+        m_list.addLine({world.villain, world.name, world.mainDungeon, time2wstring("%F", world.lastPlayed)});
 
     // Stacker for buttons
     m_uiCore.add(&m_stacker);
@@ -46,9 +46,9 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
 
     m_buttons[2].setAction(_("Play"), [this]() {
         auto selectedWorld = m_list.selectedLine();
-        const auto& worldInfo = m_worldsData.worlds()[selectedWorld];
+        auto& worldInfo = world::context.worldsData.worlds()[selectedWorld];
         wdebug_application_1(L"Loading world " + worldInfo.name);
-        world::context.info = worldInfo;
+        world::context.info = &worldInfo;
         stackClear(States::GAME_DUNGEON_DESIGN);
     });
     m_buttons[1].setAction(_("Back"), [this]() { stackPop(); });

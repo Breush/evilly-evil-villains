@@ -16,8 +16,8 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     Application::context().music.stop();
 
     // Dungeon data
-    massert(!world::context.info.folder.empty(), "Selected world is in an empty folder.");
-    m_dungeonData.load("worlds/" + world::context.info.folder + "dungeon.xml");
+    massert(!world::context.info->folder.empty(), "Selected world is in an empty folder.");
+    m_dungeonData.load("worlds/" + world::context.info->folder + "dungeon.xml");
 
     // Dungeon inter
     m_uiCore.add(&m_dungeonInter);
@@ -44,7 +44,9 @@ bool GameDungeonDesignState::update(const sf::Time& dt)
 
 void GameDungeonDesignState::onQuit()
 {
-    m_dungeonData.save("worlds/" + world::context.info.folder + "dungeon_saved.xml");
+    // TODO Remove suffix (used to not compromise svn archive)
+    m_dungeonData.save("worlds/" + world::context.info->folder + "dungeon_saved.xml");
+    world::context.updateLastPlayed();
 }
 
 bool GameDungeonDesignState::handleEvent(const sf::Event& event)

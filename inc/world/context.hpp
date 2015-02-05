@@ -6,11 +6,17 @@ namespace world
 {
     //----- Context -----//
 
-    struct Context {
+    class Context {
+    public:
         Context() {}
         ~Context() {}
 
-        WorldsData::World info;
+        // Interaction
+        void updateLastPlayed();
+
+        // Attributes
+        WorldsData::World* info; //< The current selected world
+        WorldsData worldsData;  //< The global worlds infos
     };
 
     extern Context context;
