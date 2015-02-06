@@ -25,12 +25,12 @@ QuitState::QuitState(StateStack& stack)
     // Buttons
     m_uiCore.add(&m_noButton);
     m_noButton.setAction(_("No, sorry, it is a mistake."), [this]() { stackPop(); });
-    m_noButton.setPosition(0.5f * resolution.x, 0.5f * resolution.y);
+    m_noButton.setLocalPosition(0.5f * resolution);
     m_noButton.setOrigin(m_noButton.size() / 2.f);
 
     m_uiCore.add(&m_yesButton);
     m_yesButton.setAction(_("Yes, I will lose everything not saved."), [this]() { stackClear(); });
-    m_yesButton.setPosition(0.5f * resolution.x, 0.6f * resolution.y);
+    m_yesButton.setLocalPosition({0.5f * resolution.x, 0.6f * resolution.y});
     m_yesButton.setOrigin(m_yesButton.size() / 2.f);
 }
 

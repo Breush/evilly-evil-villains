@@ -9,7 +9,6 @@
 #include "tools/event.hpp"
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
-#include "tools/math.hpp" // clamp
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -20,16 +19,13 @@
 using namespace nui;
 
 uiCore::uiCore()
-    : m_viewSize(Application::context().resolution)
-    , m_hoveredChild(nullptr)
+    : m_hoveredChild(nullptr)
     , m_focusedChild(nullptr)
     , m_forgottenFocusedChild(nullptr)
     , m_focusAnimation(0)
 {
     // Hovering system
-    m_detectImage.create(viewSize().x, viewSize().y);
-    m_detectTarget.create(viewSize().x, viewSize().y);
-    m_detectTarget.setSmooth(false);
+    m_mouseDetector.init();
 
     // Focusing system
     m_focusSprite.setTexture(Application::context().textures.get(Textures::NUI_FOCUS));
@@ -39,7 +35,6 @@ uiCore::uiCore()
 uiCore::~uiCore()
 {
     m_children.clear();
-    m_detectMap.clear();
     m_focusedChild = nullptr;
 }
 
@@ -48,69 +43,17 @@ uiCore::~uiCore()
 
 void uiCore::add(Object* child)
 {
+    m_children.push_back(child);
+    child->m_core = this;
+    child->init();
+
+    // Add to detection
+    m_mouseDetector.add(child);
+
     // First child gets focus
     if (focusedChild() == nullptr)
         setFocusedChild(child);
 
-    m_children.push_back(child);
-    if (child->detectable())
-        addToDetectMap(child);
-
-    child->m_core = this;
-    child->init();
-}
-
-void uiCore::addToDetectMap(Object* object)
-{
-    // Increase current color (limited to red for now)
-    massert(m_detectColor.r != 255, "Object number exceeds core limit");
-    ++m_detectColor.r;
-
-    m_detectMap[m_detectColor.r] = object;
-}
-
-//-------------------------//
-//----- Detect buffer -----//
-
-void uiCore::drawDetectImage()
-{
-    m_detectTarget.clear(sf::Color::Black);
-
-    // /!\ UI Debug mode
-    debug_nui_2(uint8 blueColor = 0);
-    debug_nui_2(uint8 greenColor = 255);
-
-    for (auto& pair : m_detectMap) {
-        if (pair.second->visible()) {
-            sf::RectangleShape rectangleShape;
-            rectangleShape.setFillColor(sf::Color(pair.first, 0, 0));
-
-            // /!\ UI Debug mode - shapes are more visible
-            debug_nui_2(rectangleShape.setFillColor({pair.first, greenColor, blueColor}));
-            debug_nui_2(blueColor += 25);
-            debug_nui_2(greenColor -= 25);
-
-            // Draw main object
-            sf::FloatRect r({0.f, 0.f, pair.second->size().x, pair.second->size().y});
-            r = pair.second->getGlobalTransform().transformRect(r);
-            rectangleShape.setPosition({r.left, r.top});
-            rectangleShape.setSize({r.width, r.height});
-            m_detectTarget.draw(rectangleShape);
-        }
-    }
-
-    m_detectTarget.display();
-    m_detectImage = m_detectTarget.getTexture().copyToImage();
-}
-
-uint8 uiCore::getDetectValue(const sf::Vector2u& pos) const
-{
-    return getDetectValue(pos.x, pos.y);
-}
-
-uint8 uiCore::getDetectValue(const uint& x, const uint& y) const
-{
-    return m_detectImage.getPixel(x, y).r;
 }
 
 //------------------//
@@ -121,37 +64,9 @@ void uiCore::handleEvent(const sf::Event& event)
     // Window events are not considered (maybe later)
     returnif (isWindow(event));
 
-    // Mouse moving - setting hovered child
-    if (event.type == sf::Event::MouseMoved) {
-        auto& window = Application::context().window;
-        sf::Vector2f absPos = window.mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
-        clamp(absPos, Application::context().resolution);
-
-        // Does mouse select any child?
-        auto object = m_detectMap.find(getDetectValue(uint(absPos.x), uint(absPos.y)));
-        if (object == m_detectMap.end()) {
-            setHoveredChild(nullptr);
-            return;
-        }
-
-        setHoveredChild(object->second);
-        sf::Vector2f relPos = object->second->getGlobalTransform().getInverse().transformPoint(absPos);
-        object->second->handleMouseEvent(event, absPos, relPos);
-        return;
-    }
-
-    // Mouse : click or wheel action
+    // Delegate for mouse
     if (isMouse(event)) {
-        auto& window = Application::context().window;
-        sf::Vector2f absPos = window.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
-        clamp(absPos, Application::context().resolution);
-
-        auto object = m_detectMap.find(getDetectValue(uint(absPos.x), uint(absPos.y)));
-        returnif (object == m_detectMap.end());
-
-        setFocusedChild(object->second);
-        sf::Vector2f relPos = object->second->getGlobalTransform().getInverse().transformPoint(absPos);
-        object->second->handleMouseEvent(event, absPos, relPos);
+        m_mouseDetector.handleMouseEvent(event);
         return;
     }
 
@@ -261,25 +176,6 @@ void uiCore::manageFocusedChild(const sf::Event& event)
 
 }
 
-//--------------------//
-//----- Hovering -----//
-
-void uiCore::setHoveredChild(Object* inHoveredChild)
-{
-    returnif (m_hoveredChild == inHoveredChild);
-
-    if (m_hoveredChild == nullptr) {
-        m_hoveredChild = inHoveredChild;
-        return;
-    }
-
-    // Emit MouseLeft if mouse was over an other child
-    sf::Event event;
-    event.type = sf::Event::MouseLeft;
-    m_hoveredChild->handleMouseEvent(event, sf::Vector2f(), sf::Vector2f());
-    m_hoveredChild = inHoveredChild;
-}
-
 //-------------------//
 //----- Drawing -----//
 
@@ -297,23 +193,18 @@ void uiCore::draw(sf::RenderTarget& target, sf::RenderStates states) const
         target.draw(m_focusSprite, focusStates);
     }
 
-    // /!\ UI Debug mode
-    debug_nui_2(sf::Sprite sprite(m_detectTarget.getTexture()));
-    debug_nui_2(sprite.setColor({255, 255, 255, 150}));
-    debug_nui_2(target.draw(sprite));
+    // Detection
+    // TODO Colors are not visible
+    debug_nui_2(m_mouseDetector.draw());
 }
 
 void uiCore::update(const sf::Time& dt)
 {
-    bool redrawDetectImage = false;
-
     // Checking for children updates
     for (auto& child : m_children) {
-        redrawDetectImage |= child->status();
-
         // Child is focused - update shader
         if (child == focusedChild() && child->status()) {
-            sf::FloatRect r(child->getGlobalTransform().transformRect(child->focusRect()));
+            sf::FloatRect r(child->getTransform().transformRect(child->focusRect()));
             m_focusSprite.setPosition(r.left, r.top);
             setFocusRect(sf::IntRect(r));
 
@@ -331,12 +222,11 @@ void uiCore::update(const sf::Time& dt)
     }
 
     // Hovering system
-    if (redrawDetectImage)
-        drawDetectImage();
+    m_mouseDetector.update(dt);
 }
 
 void uiCore::refresh()
 {
     for (auto& child : m_children)
-        child->setStatus(true);
+        child->refresh();
 }

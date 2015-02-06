@@ -9,12 +9,9 @@ using namespace nui;
 
 Object::Object()
     : m_core(nullptr)
-    , m_status(true)
     , m_centered(false)
     , m_focusable(true)
-    , m_detectable(true)
     , m_visible(true)
-    , m_parent(nullptr)
 {
 }
 
@@ -88,58 +85,14 @@ void Object::changedSize()
     setStatus(true);
 }
 
-void Object::changedParent()
-{
-    setStatus(true);
-}
-
 void Object::changedFocusRect()
 {
     setStatus(true);
 }
 
-void Object::changedStatus()
-{
-}
-
 void Object::changedVisible()
 {
     setStatus(true);
-}
-
-void Object::changedChild(Object*)
-{
-}
-
-//--------------------------//
-//----- Parent-related -----//
-
-sf::Vector2f Object::getGlobalPosition() const
-{
-    sf::Vector2f position = getPosition();
-
-    if (parent() != nullptr)
-        position += parent()->getGlobalPosition();
-
-    return position;
-}
-
-sf::Transform Object::getGlobalTransform() const
-{
-    sf::Transform transform;
-
-    if (parent() != nullptr)
-        parent()->applyGlobalTransform(transform);
-
-    return transform * getTransform();
-}
-
-void Object::applyGlobalTransform(sf::Transform& transform) const
-{
-    if (parent() != nullptr)
-        parent()->applyGlobalTransform(transform);
-
-    transform *= getTransform();
 }
 
 //-------------------//
@@ -150,7 +103,7 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const
     const sf::Shader* shader = states.shader;
 
     // Transform from sf::Tranformable
-    applyGlobalTransform(states.transform);
+    states.transform = getTransform();
 
     // Drawing parts
     for (auto& part : m_parts)
@@ -189,12 +142,7 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const
         if (part.clippingRect != nullptr)
             glDisable(GL_SCISSOR_TEST);
     }
-}
 
-void Object::update(const sf::Time&)
-{
-    if (status() && parent() != nullptr)
-        parent()->changedChild(this);
-
-    setStatus(false);
+    // Mouse detector
+    detectableDraw(states);
 }

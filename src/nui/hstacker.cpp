@@ -30,7 +30,7 @@ void HStacker::update()
         x += getPreX(childInfo.child->size().x);
 
         // Setting position
-        childInfo.child->setPosition(x, y);
+        childInfo.child->setLocalPosition({x, y}, false);
 
         // Horizontal post-alignment
         x += getPostX(childInfo.child->size().x);

@@ -2,8 +2,8 @@
 
 #include "nui/object.hpp"
 #include "tools/int.hpp"
-#include "drawables/line.hpp"
-#include "drawables/arrow.hpp"
+#include "sfe/line.hpp"
+#include "sfe/arrow.hpp"
 
 #include <SFML/Graphics/Text.hpp>
 
@@ -25,7 +25,6 @@ namespace nui
         // Virtual
         virtual void init() override;
         virtual void update() override;
-        void handleMouseEvent(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos) override;
         bool handleKeyboardEvent(const sf::Event& event) override;
         //bool handleJoystickEvent(const sf::Event& event) override;
 
@@ -40,9 +39,10 @@ namespace nui
 
     protected:
         // Mouse events
-        virtual void handleMousePressed(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos);
-        virtual void handleMouseMoved(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos);
-        virtual void handleMouseLeft();
+        virtual void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
+        virtual void handleMouseMoved(const sf::Vector2f& mousePos) override;
+        virtual void handleMouseLeft() override;
+
         bool isLeftArrowSelected(const float& x);
         bool isRightArrowSelected(const float& x);
 

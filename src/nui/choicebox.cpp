@@ -172,28 +172,9 @@ void ChoiceBox::setChoiceCallback(uint choice, Callback callback)
 //------------------------//
 //----- Mouse events -----//
 
-void ChoiceBox::handleMouseEvent(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
+void ChoiceBox::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos)
 {
-    switch (event.type) {
-    case sf::Event::MouseButtonPressed:
-        handleMousePressed(event, absPos, relPos);
-        break;
-    case sf::Event::MouseMoved:
-        handleMouseMoved(event, absPos, relPos);
-        break;
-    case sf::Event::MouseLeft:
-        handleMouseLeft();
-        break;
-    default:
-        break;
-    }
-}
-
-void ChoiceBox::handleMousePressed(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
-{
-    // Just manage left click
-    if (event.mouseButton.button != sf::Mouse::Left)
-        return;
+    returnif (button != sf::Mouse::Left);
 
     // Without arrows: choices loop
     if (!showArrows()) {
@@ -202,12 +183,12 @@ void ChoiceBox::handleMousePressed(const sf::Event& event, const sf::Vector2f& a
     }
 
     // With arrows and arrow selected
-    if (isLeftArrowSelected(relPos.x)) {
+    if (isLeftArrowSelected(mousePos.x)) {
         switchChoiceLeft();
         return;
     }
 
-    if (isRightArrowSelected(relPos.x)) {
+    if (isRightArrowSelected(mousePos.x)) {
         switchChoiceRight();
         return;
     }
@@ -216,17 +197,17 @@ void ChoiceBox::handleMousePressed(const sf::Event& event, const sf::Vector2f& a
     acceptChoice();
 }
 
-void ChoiceBox::handleMouseMoved(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
+void ChoiceBox::handleMouseMoved(const sf::Vector2f& mousePos)
 {
     resetPartsShader();
 
     // Hovering arrows
-    if (isLeftArrowSelected(relPos.x)) {
+    if (isLeftArrowSelected(mousePos.x)) {
         setPartShader(&m_lArrow, Shaders::NUI_HOVER);
         return;
     }
 
-    if (isRightArrowSelected(relPos.x)) {
+    if (isRightArrowSelected(mousePos.x)) {
         setPartShader(&m_rArrow, Shaders::NUI_HOVER);
         return;
     }

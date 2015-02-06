@@ -32,13 +32,15 @@ void Stacker::add(Object* child)
     add(child, Align::STANDARD);
 }
 
-void Stacker::changedChild(Object*)
+void Stacker::childChangedStatus(LocalTransformable*)
 {
     update();
 }
 
 void Stacker::changedStatus()
 {
+    returnif (!status());
+
     // Need to refresh all children if one is focused
     for (auto& childInfo : m_children)
         childInfo.child->setStatus(true);

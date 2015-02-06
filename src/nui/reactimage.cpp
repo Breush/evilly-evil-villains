@@ -159,28 +159,9 @@ void ReactImage::selectActiveRect()
 //------------------------//
 //----- Mouse events -----//
 
-void ReactImage::handleMouseEvent(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
+void ReactImage::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos)
 {
-    switch (event.type) {
-    case sf::Event::MouseButtonPressed:
-        handleMousePressed(event, absPos, relPos);
-        break;
-    case sf::Event::MouseMoved:
-        handleMouseMoved(event, absPos, relPos);
-        break;
-    case sf::Event::MouseLeft:
-        handleMouseLeft();
-        break;
-    default:
-        break;
-    }
-}
-
-void ReactImage::handleMousePressed(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
-{
-    // Just manage left click
-    if (event.mouseButton.button != sf::Mouse::Left)
-        return;
+    returnif (button != sf::Mouse::Left);
 
     // Maybe callback is not set
     if (m_reacts[m_react].callback == nullptr) {
@@ -193,11 +174,11 @@ void ReactImage::handleMousePressed(const sf::Event& event, const sf::Vector2f& 
     m_reacts[m_react].callback();
 }
 
-void ReactImage::handleMouseMoved(const sf::Event&, const sf::Vector2f&, const sf::Vector2f& relPos)
+void ReactImage::handleMouseMoved(const sf::Vector2f& mousePos)
 {
     // Looking for active react
     for (auto& react : m_reacts) {
-        if (isInsideRect(relPos, react.second.rect)) {
+        if (isInsideRect(mousePos, react.second.rect)) {
             activateReact(react.first);
             return;
         }

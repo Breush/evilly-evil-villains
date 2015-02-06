@@ -55,9 +55,9 @@ void ImageButton::updateSize()
 //------------------------//
 //----- Mouse events -----//
 
-void ImageButton::handleMouseMoved(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
+void ImageButton::handleMouseMoved(const sf::Vector2f& mousePos)
 {
-    baseClass::handleMouseMoved(event, absPos, relPos);
+    baseClass::handleMouseMoved(mousePos);
 
     setPartShader(&m_image, Shaders::NUI_HOVER);
 }

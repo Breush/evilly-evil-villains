@@ -25,7 +25,7 @@ namespace nui
         // Virtual
         void init() override {}
         virtual void update() override = 0;
-        void changedChild(Object* child) override;
+        void childChangedStatus(LocalTransformable* child) override;
 
         // Children management
         void add(Object* child);

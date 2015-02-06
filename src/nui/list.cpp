@@ -185,35 +185,18 @@ void List::addLine(const std::initializer_list<std::wstring>& values)
 //------------------------//
 //----- Mouse events -----//
 
-void List::handleMouseEvent(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
-{
-    switch (event.type) {
-    case sf::Event::MouseButtonPressed:
-        handleMousePressed(event, absPos, relPos);
-        break;
-    case sf::Event::MouseMoved:
-        handleMouseMoved(event, absPos, relPos);
-        break;
-    case sf::Event::MouseLeft:
-        handleMouseLeft();
-        break;
-    default:
-        break;
-    }
-}
-
-void List::handleMousePressed(const sf::Event&, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
+void List::handleMouseButtonPressed(const sf::Mouse::Button&, const sf::Vector2f& mousePos)
 {
     // Do not take first line, they are the columns titles
-    uint line = relPos.y / lineHeight() - 1;
+    uint line = mousePos.y / lineHeight() - 1;
 
     if (line < m_lines.size())
         setSelectedLine(line);
 }
 
-void List::handleMouseMoved(const sf::Event&, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
+void List::handleMouseMoved(const sf::Vector2f& mousePos)
 {
-    uint line = relPos.y / lineHeight() - 1;
+    uint line = mousePos.y / lineHeight() - 1;
 
     resetPartsShader();
     if (line < m_lines.size())

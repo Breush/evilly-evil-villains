@@ -138,6 +138,8 @@ void Application::update(const sf::Time& dt)
     s_context.shaders.setParameter(Shaders::MENU_BG, "time", m_gameTime/5.f);
     s_context.shaders.setParameter(Shaders::MENU_NAME, "time", m_gameTime/5.f);
     s_context.animations.update(dt);
+
+    // Stack of states
     m_stateStack.update(dt);
 }
 

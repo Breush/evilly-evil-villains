@@ -40,6 +40,7 @@ void Panel::init()
     m_trapsTab.setVisual(_("Traps"), Textures::DUNGEON_PANEL_TRAPS, {80.f, 80.f});
     m_facilitiesTab.setVisual(_("Facilities"), Textures::DUNGEON_PANEL_FACILITIES, {80.f, 80.f});
     m_treasuresTab.setVisual(_("Treasures"), Textures::DUNGEON_PANEL_TREASURES, {80.f, 80.f});
+    m_tabsStacker.update();
 
     update();
 }
@@ -60,14 +61,13 @@ void Panel::update()
     // Tabs stacker
     m_tabsStacker.setAlign(nui::Stacker::CENTER);
     m_tabsStacker.setSize(0.95f * size());
-    m_tabsStacker.setPosition((1.f - 0.95f) * size() / 2.f);
+    m_tabsStacker.setLocalPosition((1.f - 0.95f) * size() / 2.f, false);
 
     // Reduced
     // Set target with the new parameters
     if (reduced()) setReducedVector({0.f, size().y - 20.f});
     else setReducedVector({0.f, 0.f});
 
-    m_tabsStacker.update();
     setStatus(true);
 }
 
@@ -91,38 +91,20 @@ void Panel::update(const sf::Time& dt)
     // Animate
     if (x != 0.f || y != 0.f) {
         m_reducedVectorAnimation += sf::Vector2f(x, y);
-        setStatus(true);
-        move({x, y});
+        localMove({x, y});
     }
 }
 
 //------------------------//
 //----- Mouse events -----//
 
-void Panel::handleMouseEvent(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
+void Panel::handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos)
 {
-    switch (event.type) {
-    case sf::Event::MouseButtonPressed:
-        handleMousePressed(event, absPos, relPos);
-        break;
-    case sf::Event::MouseMoved:
-        handleMouseMoved(event, absPos, relPos);
-        break;
-    case sf::Event::MouseLeft:
-        handleMouseLeft();
-        break;
-    default:
-        break;
-    }
-}
-
-void Panel::handleMousePressed(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
-{
-    if (isInsideRect(relPos, m_switchReducedButton.getGlobalBounds()))
+    if (isInsideRect(mousePos, m_switchReducedButton.getGlobalBounds()))
         switchReduced();
 }
 
-void Panel::handleMouseMoved(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
+void Panel::handleMouseMoved(const sf::Vector2f& mousePos)
 {
 }
 

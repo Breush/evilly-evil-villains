@@ -4,7 +4,7 @@
 #include "scml/interface.hpp"
 #include "resources/holder.hpp"
 #include "resources/identifiers.hpp"
-#include "drawables/animatedsprite.hpp"
+#include "sfe/animatedsprite.hpp"
 
 #include <SFML/System/NonCopyable.hpp>
 #include <list>

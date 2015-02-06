@@ -68,26 +68,9 @@ void ContextMenu::update()
 //------------------------//
 //----- Mouse events -----//
 
-void ContextMenu::handleMouseEvent(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
+void ContextMenu::handleMouseButtonPressed(const sf::Mouse::Button&, const sf::Vector2f& mousePos)
 {
-    switch (event.type) {
-    case sf::Event::MouseButtonPressed:
-        handleMousePressed(event, absPos, relPos);
-        break;
-    case sf::Event::MouseMoved:
-        handleMouseMoved(event, absPos, relPos);
-        break;
-    case sf::Event::MouseLeft:
-        handleMouseLeft();
-        break;
-    default:
-        break;
-    }
-}
-
-void ContextMenu::handleMousePressed(const sf::Event&, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
-{
-    uint choice = choiceFromCoords(relPos);
+    uint choice = choiceFromCoords(mousePos);
 
     if (choice < m_choices.size() && m_choices[choice].callback != nullptr) {
         Application::context().sounds.play(Sounds::NUI_ACCEPT);
@@ -98,9 +81,9 @@ void ContextMenu::handleMousePressed(const sf::Event&, const sf::Vector2f& absPo
     }
 }
 
-void ContextMenu::handleMouseMoved(const sf::Event&, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
+void ContextMenu::handleMouseMoved(const sf::Vector2f& mousePos)
 {
-    uint choice = choiceFromCoords(relPos);
+    uint choice = choiceFromCoords(mousePos);
 
     resetPartsShader();
     if (choice < m_choices.size())

@@ -24,7 +24,7 @@ namespace nui
 
     protected:
         // Mouse events
-        virtual void handleMouseMoved(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos) override;
+        virtual void handleMouseMoved(const sf::Vector2f& mousePos) override;
 
         // Updates
         virtual void updateSize() override;

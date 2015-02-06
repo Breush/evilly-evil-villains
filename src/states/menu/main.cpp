@@ -14,12 +14,12 @@ MenuMainState::MenuMainState(StateStack& stack)
     : baseClass(stack)
     , m_bgRotAngle(0.f)
 {
-    const sf::Vector2f& viewSize = Application::context().resolution;
+    const sf::Vector2f& resolution = Application::context().resolution;
 
     // Background
     sf::Texture& texture = Application::context().textures.get(Textures::MENU_BG);
     m_bgSprite.setTexture(texture);
-    m_bgSprite.setPosition((viewSize - sf::Vector2f(texture.getSize())) / 2.f);
+    m_bgSprite.setPosition((resolution - sf::Vector2f(texture.getSize())) / 2.f);
 
     // Shaders
     m_bgShader = &Application::context().shaders.get(Shaders::MENU_BG);
@@ -45,7 +45,7 @@ MenuMainState::MenuMainState(StateStack& stack)
     // Menu choice box (be sure not to mess with order)
     m_uiCore.add(&m_choiceBox);
     m_choiceBox.setCentered(true);
-    m_choiceBox.setPosition(0.5f * viewSize.x, 0.9f * viewSize.y);
+    m_choiceBox.setLocalPosition({0.5f * resolution.x, 0.9f * resolution.y});
     m_choiceBox.add(_("Victim and alone"), singlePlayer);
     m_choiceBox.add(_("I sometimes have friends"), multiPlayer);
     m_choiceBox.add(_("Looking at who I am"), personalization);
@@ -56,7 +56,7 @@ MenuMainState::MenuMainState(StateStack& stack)
     m_uiCore.add(&m_reactImage);
     m_reactImage.setCentered(true);
     m_reactImage.setFocusable(false);
-    m_reactImage.setPosition(0.5f * viewSize.x, 0.2f * viewSize.y);
+    m_reactImage.setLocalPosition({0.5f * resolution.x, 0.2f * resolution.y});
     m_reactImage.setImageTexture(Textures::MENU_NAME);
     m_reactImage.setImageShader(Shaders::MENU_NAME);
     m_reactImage.setMouseLeftDeselect(false);

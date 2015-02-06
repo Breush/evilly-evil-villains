@@ -15,16 +15,16 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     : baseClass(stack)
     , m_uiCore()
 {
-    auto& viewSize = Application::context().resolution;
+    auto& resolution = Application::context().resolution;
 
     // Background
     m_bgRect.setFillColor(sf::Color(0, 0, 0, 230));
-    m_bgRect.setSize(viewSize);
+    m_bgRect.setSize(resolution);
 
     // List for existing worlds
     m_uiCore.add(&m_list);
-    m_list.setPosition(0.1f * viewSize.x, 0.1f * viewSize.y);
-    m_list.setSize({0.8f * viewSize.x, 0.7f * viewSize.y});
+    m_list.setLocalPosition(0.1f * resolution);
+    m_list.setSize({0.8f * resolution.x, 0.7f * resolution.y});
     m_list.setColumns({_("Villain"), _("World name"), _("Main dungeon"), _("Last played")});
     m_list.setColumnFillClip(2, false, false);
 
@@ -38,7 +38,7 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     // Stacker for buttons
     m_uiCore.add(&m_stacker);
     m_stacker.setAlign(nui::Stacker::CENTER);
-    m_stacker.setSize({viewSize.x, 0.95f * viewSize.y});
+    m_stacker.setSize({resolution.x, 0.95f * resolution.y});
 
     // Buttons
     for (auto& button : m_buttons)
@@ -54,17 +54,21 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     m_buttons[1].setAction(_("Back"), [this]() { stackPop(); });
     m_buttons[0].setAction(_("Create new world"), nullptr);
 
+    m_stacker.update();
+
     // Ambient feeling music
     Application::context().music.setVolume(25);
 }
 
 void MenuSelectWorldState::draw()
 {
+    auto& window = Application::context().window;
+
     // Background
-    Application::context().window.draw(m_bgRect);
+    window.draw(m_bgRect);
 
     // Menu ui
-    Application::context().window.draw(m_uiCore);
+    window.draw(m_uiCore);
 }
 
 bool MenuSelectWorldState::update(const sf::Time& dt)

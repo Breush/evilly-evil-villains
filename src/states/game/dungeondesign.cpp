@@ -23,12 +23,15 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     m_uiCore.add(&m_dungeonInter);
     m_dungeonInter.useData(m_dungeonData);
     m_dungeonInter.setSize({350, 450});
-    m_dungeonInter.setPosition((resolution - m_dungeonInter.size()) / 2.f);
+    m_dungeonInter.setLocalPosition((resolution - m_dungeonInter.size()) / 2.f);
 
     // Dungeon panel
     m_uiCore.add(&m_dungeonPanel);
-    m_dungeonPanel.setPosition({200, resolution.y - 100});
+    m_dungeonPanel.setLocalPosition({200, resolution.y - 100});
     m_dungeonPanel.setSize({resolution.x - 400, 100});
+
+    // Reload everything once so that all is in correct place
+    m_uiCore.refresh();
 }
 
 void GameDungeonDesignState::draw()

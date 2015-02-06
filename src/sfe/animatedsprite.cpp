@@ -1,4 +1,4 @@
-#include "drawables/animatedsprite.hpp"
+#include "sfe/animatedsprite.hpp"
 
 #include "core/application.hpp"
 

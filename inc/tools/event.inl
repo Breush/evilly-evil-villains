@@ -10,10 +10,10 @@ inline bool isWindow(const sf::Event& e)
 
 inline bool isMouse(const sf::Event& e)
 {
-    return (e.type == sf::Event::MouseWheelMoved)
+    return (e.type == sf::Event::MouseMoved)
            || (e.type == sf::Event::MouseButtonPressed)
            || (e.type == sf::Event::MouseButtonReleased)
-           || (e.type == sf::Event::MouseMoved);
+           || (e.type == sf::Event::MouseWheelMoved);
 }
 
 inline bool isKeyboard(const sf::Event& e)
@@ -32,7 +32,15 @@ inline bool isJoystick(const sf::Event& e)
            || (e.type == sf::Event::JoystickDisconnected);
 }
 
-inline sf::Vector2i mouseButtonToVector2i(const sf::Event::MouseButtonEvent& mouseButtonEvent)
+inline sf::Vector2i mousePosition(const sf::Event& event)
 {
-    return sf::Vector2i(mouseButtonEvent.x, mouseButtonEvent.y);
+    if (event.type == sf::Event::MouseMoved)
+        return sf::Vector2i(event.mouseMove.x, event.mouseMove.y);
+    else if (event.type == sf::Event::MouseButtonPressed
+             || event.type == sf::Event::MouseButtonReleased)
+        return sf::Vector2i(event.mouseButton.x, event.mouseButton.y);
+    else if (event.type == sf::Event::MouseWheelMoved)
+        return sf::Vector2i(event.mouseWheel.x, event.mouseWheel.y);
+
+    return sf::Vector2i();
 }

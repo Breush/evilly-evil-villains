@@ -38,11 +38,9 @@ void Button::setAction(const std::wstring& text, const Callback callback)
 //------------------//
 //----- Events -----//
 
-void Button::handleMousePressed(const sf::Event& event, const sf::Vector2f&, const sf::Vector2f&)
+void Button::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f&)
 {
-    // Just manage left click
-    if (event.mouseButton.button != sf::Mouse::Left)
-        return;
+    returnif (button != sf::Mouse::Left);
 
     acceptChoice();
 }
@@ -50,11 +48,8 @@ void Button::handleMousePressed(const sf::Event& event, const sf::Vector2f&, con
 bool Button::handleKeyboardEvent(const sf::Event& event)
 {
     // Just manage pressed keys and Return
-    if (event.type != sf::Event::KeyPressed)
-        return false;
-
-    if (event.key.code != sf::Keyboard::Return)
-        return false;
+    returnif (event.type != sf::Event::KeyPressed) false;
+    returnif (event.key.code != sf::Keyboard::Return) false;
 
     acceptChoice();
     return true;

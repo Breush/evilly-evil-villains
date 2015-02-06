@@ -100,29 +100,11 @@ void Inter::setRoomTileState(const uint floor, const uint room, const Data::Room
 //------------------------//
 //----- Mouse events -----//
 
-void Inter::handleMouseEvent(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
+void Inter::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos)
 {
-    returnif (m_data == nullptr);
-
-    switch (event.type) {
-    case sf::Event::MouseButtonPressed:
-        handleMousePressed(event, absPos, relPos);
-        break;
-    case sf::Event::MouseMoved:
-        handleMouseMoved(event, absPos, relPos);
-        break;
-    case sf::Event::MouseLeft:
-        handleMouseLeft();
-        break;
-    default:
-        break;
-    }
-}
-
-void Inter::handleMousePressed(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
-{
-    if (event.mouseButton.button == sf::Mouse::Right) {
-        selectRoomFromCoords(relPos);
+    if (button == sf::Mouse::Right) {
+        // Getting grid info
+        selectRoomFromCoords(mousePos);
 
         // Context title
         std::wstringstream roomName;
@@ -140,7 +122,7 @@ void Inter::handleMousePressed(const sf::Event& event, const sf::Vector2f& absPo
         m_contextMenu.addChoice(constructRoomString, constructRoom);
 
         // Context positions
-        m_contextMenu.setPosition(relPos);
+        m_contextMenu.setLocalPosition(mousePos, false);
         m_contextMenu.setVisible(true);
     }
     else {
@@ -148,7 +130,7 @@ void Inter::handleMousePressed(const sf::Event& event, const sf::Vector2f& absPo
     }
 }
 
-void Inter::handleMouseMoved(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos)
+void Inter::handleMouseMoved(const sf::Vector2f& mouseButton)
 {
 }
 
@@ -230,6 +212,8 @@ sf::Vector2u& Inter::selectRoomFromCoords(const sf::Vector2f& coords)
 
 void Inter::changedStatus()
 {
+    returnif (!status());
+
     m_contextMenu.setStatus(true);
 }
 

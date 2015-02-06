@@ -2,7 +2,7 @@
 
 #include "nui/object.hpp"
 #include "tools/int.hpp"
-#include "drawables/line.hpp"
+#include "sfe/line.hpp"
 
 #include <initializer_list>
 #include <SFML/Graphics/Text.hpp>
@@ -20,7 +20,6 @@ namespace nui
         // Virtual
         void init() override;
         void update() override;
-        void handleMouseEvent(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos) override;
         //void handleKeyboardEvent(const sf::Event& event) override;
         //void handleJoystickEvent(const sf::Event& event) override;
 
@@ -35,9 +34,9 @@ namespace nui
 
     protected:
         // Mouse events
-        virtual void handleMousePressed(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos);
-        virtual void handleMouseMoved(const sf::Event& event, const sf::Vector2f& absPos, const sf::Vector2f& relPos);
-        virtual void handleMouseLeft();
+        void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
+        void handleMouseMoved(const sf::Vector2f& mousePos) override;
+        void handleMouseLeft() override;
 
         // Updates
         void updateColumnInfos();

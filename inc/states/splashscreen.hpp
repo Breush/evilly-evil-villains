@@ -1,7 +1,7 @@
 #pragma once
 
 #include "states/state.hpp"
-#include "drawables/animatedsprite.hpp"
+#include "sfe/animatedsprite.hpp"
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <list>
