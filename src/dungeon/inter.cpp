@@ -104,6 +104,23 @@ void Inter::setRoomTileState(const uint floor, const uint room, const Data::Room
 void Inter::handleGlobalEvent(const sf::Event& event)
 {
     m_contextMenu.handleGlobalEvent(event);
+
+#if DEBUG_GLOBAL >= 1
+    // Keyboard event
+    if (event.type == sf::Event::KeyPressed) {
+        // Add rows
+        if (event.key.code == sf::Keyboard::Add)
+            adaptFloorsCount(1);
+        else if (event.key.code == sf::Keyboard::Subtract)
+            adaptFloorsCount(-1);
+
+        // Add columns
+        else if (event.key.code == sf::Keyboard::Multiply)
+            adaptRoomsByFloor(1);
+        else if (event.key.code == sf::Keyboard::Divide)
+            adaptRoomsByFloor(-1);
+    }
+#endif
 }
 
 void Inter::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos)
@@ -140,29 +157,10 @@ void Inter::handleMouseMoved(const sf::Vector2f& mouseButton)
 
 void Inter::handleMouseLeft()
 {
-    // Not usable yet...
-    // m_contextMenu.setVisible(false);
 }
 
 bool Inter::handleKeyboardEvent(const sf::Event& event)
 {
-#if DEBUG_GLOBAL >= 1
-    // Keyboard event
-    if (event.type == sf::Event::KeyPressed) {
-        // Add rows
-        if (event.key.code == sf::Keyboard::Add)
-            adaptFloorsCount(1);
-        else if (event.key.code == sf::Keyboard::Subtract)
-            adaptFloorsCount(-1);
-
-        // Add columns
-        else if (event.key.code == sf::Keyboard::Multiply)
-            adaptRoomsByFloor(1);
-        else if (event.key.code == sf::Keyboard::Divide)
-            adaptRoomsByFloor(-1);
-    }
-#endif
-
     return false;
 }
 
