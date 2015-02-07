@@ -46,6 +46,8 @@ namespace interaction
         Detectable* childFromPosition(const sf::Vector2u& pos) const;
 
     private:
+        // Mouse picking
+        bool m_needRedraw;
         sf::Color m_color;
         sf::Image m_image;
         sf::RenderTexture m_texture;
@@ -53,5 +55,6 @@ namespace interaction
 
         // Hovering
         Detectable* m_hoveredChild;
+
     };
 }

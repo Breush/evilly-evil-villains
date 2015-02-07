@@ -13,6 +13,7 @@ using namespace interaction;
 
 MouseDetector::MouseDetector()
     : m_hoveredChild(nullptr)
+    , m_needRedraw(true)
 {
 }
 
@@ -27,7 +28,7 @@ void MouseDetector::init()
 
 void MouseDetector::draw(const Detectable& child, sf::RenderStates states)
 {
-    returnif (!child.detectable());
+    returnif (!m_needRedraw || !child.detectable());
 
     // We are just interested in the transform
     states.texture = nullptr;
@@ -66,8 +67,8 @@ void MouseDetector::draw() const
 
 void MouseDetector::update(const sf::Time& dt)
 {
-    // TODO Currently resetting each time, can be more clever
-    m_texture.clear(sf::Color::Black);
+    if (m_needRedraw)
+        m_texture.clear(sf::Color::Black);
 }
 
 //------------------//
@@ -75,6 +76,9 @@ void MouseDetector::update(const sf::Time& dt)
 
 Detectable* MouseDetector::handleMouseEvent(const sf::Event& event)
 {
+    // Redraw only when mouse is moved
+    m_needRedraw = true;
+
     // Extrapolating position
     auto& window = Application::context().window;
     sf::Vector2f absPos(window.mapPixelToCoords(mousePosition(event)));
