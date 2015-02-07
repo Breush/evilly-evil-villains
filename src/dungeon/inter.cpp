@@ -17,6 +17,7 @@ Inter::Inter()
 {
     setFocusable(false);
     m_contextMenu.setVisible(false);
+    m_contextMenu.setZDepth(10);
 }
 
 void Inter::init()
@@ -100,6 +101,11 @@ void Inter::setRoomTileState(const uint floor, const uint room, const Data::Room
 //------------------------//
 //----- Mouse events -----//
 
+void Inter::handleGlobalEvent(const sf::Event& event)
+{
+    m_contextMenu.handleGlobalEvent(event);
+}
+
 void Inter::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos)
 {
     if (button == sf::Mouse::Right) {
@@ -123,10 +129,8 @@ void Inter::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::
 
         // Context positions
         m_contextMenu.setLocalPosition(mousePos, false);
+        m_contextMenu.setOrigin({m_contextMenu.size().x / 2.f, 10.f});
         m_contextMenu.setVisible(true);
-    }
-    else {
-        m_contextMenu.setVisible(false);
     }
 }
 

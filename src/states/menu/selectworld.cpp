@@ -13,9 +13,12 @@
 
 MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     : baseClass(stack)
-    , m_uiCore()
+    , m_uiCore(&m_mouseDetector)
 {
     auto& resolution = Application::context().resolution;
+
+    // Hovering system
+    m_mouseDetector.init();
 
     // Background
     m_bgRect.setFillColor(sf::Color(0, 0, 0, 230));
@@ -74,6 +77,8 @@ void MenuSelectWorldState::draw()
 bool MenuSelectWorldState::update(const sf::Time& dt)
 {
     m_uiCore.update(dt);
+    m_mouseDetector.update(dt);
+
     return true;
 }
 
@@ -88,6 +93,7 @@ bool MenuSelectWorldState::handleEvent(const sf::Event& event)
 
     // Let ui core handle events
     m_uiCore.handleEvent(event);
+
     return false;
 }
 

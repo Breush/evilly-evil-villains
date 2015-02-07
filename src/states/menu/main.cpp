@@ -13,8 +13,12 @@
 MenuMainState::MenuMainState(StateStack& stack)
     : baseClass(stack)
     , m_bgRotAngle(0.f)
+    , m_uiCore(&m_mouseDetector)
 {
     const sf::Vector2f& resolution = Application::context().resolution;
+
+    // Hovering system
+    m_mouseDetector.init();
 
     // Background
     sf::Texture& texture = Application::context().textures.get(Textures::MENU_BG);
@@ -108,7 +112,9 @@ bool MenuMainState::update(const sf::Time& dt)
         }
     }
 
+    // System
     m_uiCore.update(dt);
+    m_mouseDetector.update(dt);
 
     return true;
 }
@@ -124,6 +130,7 @@ bool MenuMainState::handleEvent(const sf::Event& event)
 
     // Let ui core handle events
     m_uiCore.handleEvent(event);
+
     return false;
 }
 

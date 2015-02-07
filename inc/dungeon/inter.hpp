@@ -18,6 +18,7 @@ namespace dungeon
         // Virtual
         void init() override;
         void update() override;
+        void handleGlobalEvent(const sf::Event&) override;
         bool handleKeyboardEvent(const sf::Event& event) override;
         //bool handleJoystickEvent(const sf::Event& event) override;
 

@@ -12,6 +12,7 @@ Object::Object()
     , m_centered(false)
     , m_focusable(true)
     , m_visible(true)
+    , m_zDepth(50)
 {
 }
 

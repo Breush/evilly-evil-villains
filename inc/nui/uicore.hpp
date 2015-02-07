@@ -20,7 +20,7 @@ namespace nui
     class uiCore : public sf::Drawable
     {
     public:
-        uiCore();
+        uiCore(interaction::MouseDetector* mouseDetector);
         ~uiCore();
 
         // Main functions called by states
@@ -58,6 +58,6 @@ namespace nui
         int m_focusAnimation;
 
         // Hovering system
-        interaction::MouseDetector m_mouseDetector;
+        interaction::MouseDetector* m_mouseDetector;
     };
 }

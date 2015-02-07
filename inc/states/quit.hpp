@@ -27,6 +27,7 @@ private:
     sf::Text m_text;
 
     // NUI
+    interaction::MouseDetector m_mouseDetector;
     nui::uiCore m_uiCore;
     nui::Button m_noButton;
     nui::Button m_yesButton;

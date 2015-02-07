@@ -8,9 +8,12 @@
 
 GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     : State(stack)
-    , m_uiCore()
+    , m_uiCore(&m_mouseDetector)
 {
     auto& resolution = Application::context().resolution;
+
+    // Hovering system
+    m_mouseDetector.init();
 
     // Stop music if any
     Application::context().music.stop();
@@ -42,6 +45,8 @@ void GameDungeonDesignState::draw()
 bool GameDungeonDesignState::update(const sf::Time& dt)
 {
     m_uiCore.update(dt);
+    m_mouseDetector.update(dt);
+
     return true;
 }
 
@@ -54,6 +59,9 @@ void GameDungeonDesignState::onQuit()
 
 bool GameDungeonDesignState::handleEvent(const sf::Event& event)
 {
+    // Global events
+    m_dungeonInter.handleGlobalEvent(event);
+
     // Escape pressed, trigger the pause screen
     if (event.type == sf::Event::KeyPressed) {
         if (event.key.code == sf::Keyboard::Escape) {

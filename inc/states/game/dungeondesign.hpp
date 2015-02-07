@@ -21,6 +21,7 @@ public:
 
 private:
     // NUI
+    interaction::MouseDetector m_mouseDetector;
     nui::uiCore m_uiCore;
 
     // Dungeon

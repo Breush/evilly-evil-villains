@@ -26,6 +26,7 @@ public:
 
 private:
     // NUI
+    interaction::MouseDetector m_mouseDetector;
     nui::uiCore m_uiCore;
     nui::List m_list;
     nui::HStacker m_stacker;

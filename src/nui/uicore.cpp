@@ -18,15 +18,13 @@
 
 using namespace nui;
 
-uiCore::uiCore()
+uiCore::uiCore(interaction::MouseDetector* mouseDetector)
     : m_hoveredChild(nullptr)
     , m_focusedChild(nullptr)
     , m_forgottenFocusedChild(nullptr)
     , m_focusAnimation(0)
+    , m_mouseDetector(mouseDetector)
 {
-    // Hovering system
-    m_mouseDetector.init();
-
     // Focusing system
     m_focusSprite.setTexture(Application::context().textures.get(Textures::NUI_FOCUS));
     m_focusSprite.setColor( {255, 255, 255, 100});
@@ -44,11 +42,14 @@ uiCore::~uiCore()
 void uiCore::add(Object* child)
 {
     m_children.push_back(child);
+    m_children.sort([](Object* a, Object* b) { return a->zDepth() > b->zDepth(); });
+
     child->m_core = this;
     child->init();
 
     // Add to detection
-    m_mouseDetector.add(child);
+    if (m_mouseDetector != nullptr)
+        m_mouseDetector->add(child);
 
     // First child gets focus
     if (focusedChild() == nullptr)
@@ -65,11 +66,13 @@ void uiCore::handleEvent(const sf::Event& event)
     returnif (isWindow(event));
 
     // Delegate for mouse
-    if (isMouse(event)) {
-        interaction::Detectable* child = m_mouseDetector.handleMouseEvent(event);
-        // Focus on click
+    if (m_mouseDetector != nullptr && isMouse(event)) {
+        interaction::Detectable* child = m_mouseDetector->handleMouseEvent(event);
+
+        // Set focus on click
         if (child != nullptr && event.type == sf::Event::MouseButtonPressed)
             setFocusedChild(child->asObject());
+
         return;
     }
 
@@ -89,12 +92,12 @@ void uiCore::handleEvent(const sf::Event& event)
 
 void uiCore::setFocusedChild(Object* inFocusedChild)
 {
+    returnif (inFocusedChild == nullptr);
     returnif (!inFocusedChild->focusable());
     returnif (m_focusedChild == inFocusedChild);
 
     m_focusedChild = inFocusedChild;
-    if (m_focusedChild != nullptr)
-        m_focusedChild->setStatus(true);
+    m_focusedChild->setStatus(true);
 }
 
 void uiCore::forgetFocusedChild()
@@ -198,7 +201,7 @@ void uiCore::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
     // Detection
     // TODO Colors are not visible
-    debug_nui_2(m_mouseDetector.draw());
+    debug_nui_2(if (m_mouseDetector != nullptr) m_mouseDetector.draw());
 }
 
 void uiCore::update(const sf::Time& dt)
@@ -223,9 +226,6 @@ void uiCore::update(const sf::Time& dt)
         ++m_focusAnimation;
         m_focusSprite.setTextureRect({-m_focusAnimation, -m_focusAnimation, focusRect().width, focusRect().height});
     }
-
-    // Hovering system
-    m_mouseDetector.update(dt);
 }
 
 void uiCore::refresh()

@@ -27,6 +27,7 @@ public:
 
 private:
     // NUI
+    interaction::MouseDetector m_mouseDetector;
     nui::uiCore m_uiCore;
     nui::ChoiceBox m_choiceBox;
     nui::ReactImage m_reactImage;

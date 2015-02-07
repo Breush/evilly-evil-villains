@@ -68,6 +68,13 @@ void ContextMenu::update()
 //------------------------//
 //----- Mouse events -----//
 
+void ContextMenu::handleGlobalEvent(const sf::Event& event)
+{
+    // Hide on click anywhere
+    if (event.type == sf::Event::MouseButtonPressed)
+        setVisible(false);
+}
+
 void ContextMenu::handleMouseButtonPressed(const sf::Mouse::Button&, const sf::Vector2f& mousePos)
 {
     uint choice = choiceFromCoords(mousePos);
@@ -75,9 +82,9 @@ void ContextMenu::handleMouseButtonPressed(const sf::Mouse::Button&, const sf::V
     if (choice < m_choices.size() && m_choices[choice].callback != nullptr) {
         Application::context().sounds.play(Sounds::NUI_ACCEPT);
         m_choices[choice].callback();
-        setVisible(false);
     } else {
         Application::context().sounds.play(Sounds::NUI_REFUSE);
+        setVisible(true);
     }
 }
 

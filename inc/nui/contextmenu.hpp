@@ -23,6 +23,7 @@ namespace nui
         // Virtual
         void init() override;
         void update() override;
+        void handleGlobalEvent(const sf::Event&) override;
 
         // Choices
         void clearChoices();
