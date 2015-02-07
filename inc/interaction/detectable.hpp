@@ -6,6 +6,12 @@
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Window/Event.hpp>
 
+// Forward declaration
+namespace nui
+{
+    class Object;
+}
+
 namespace interaction
 {
     // Forward declaration
@@ -19,6 +25,9 @@ namespace interaction
     public:
         Detectable();
         virtual ~Detectable();
+
+        // Polymorphism
+        virtual nui::Object* asObject() { return nullptr; }
 
         // Calls mouseDetector drawing function
         void detectableDraw(sf::RenderStates states) const;

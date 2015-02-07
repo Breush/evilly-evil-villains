@@ -66,7 +66,10 @@ void uiCore::handleEvent(const sf::Event& event)
 
     // Delegate for mouse
     if (isMouse(event)) {
-        m_mouseDetector.handleMouseEvent(event);
+        interaction::Detectable* child = m_mouseDetector.handleMouseEvent(event);
+        // Focus on click
+        if (child != nullptr && event.type == sf::Event::MouseButtonPressed)
+            setFocusedChild(child->asObject());
         return;
     }
 

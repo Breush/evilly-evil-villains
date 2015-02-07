@@ -22,6 +22,9 @@ namespace nui
         Object();
         virtual ~Object() {}
 
+        // Polymorphism
+        Object* asObject() override { return this; }
+
         // Init or update
         virtual void init() = 0;
         virtual void update() = 0;
