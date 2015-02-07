@@ -16,14 +16,14 @@ namespace nui
         virtual void init() override;
 
         // Get events to valid action
-        void handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos) override;
-        bool handleKeyboardEvent(const sf::Event& event) override;
-//        bool handleJoystickEvent(const sf::Event& event) override;
+        virtual void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
+        virtual bool handleKeyboardEvent(const sf::Event& event) override;
+        //virtual bool handleJoystickEvent(const sf::Event& event) override;
 
         // Action
-        void setText(std::wstring text);
-        void setCallback(Callback callback);
-        void setAction(std::wstring text, Callback callback);
+        void setText(const std::wstring& text);
+        void setCallback(const Callback callback);
+        void setAction(const std::wstring& text, const Callback callback);
     };
 }
 

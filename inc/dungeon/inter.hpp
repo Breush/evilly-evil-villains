@@ -2,7 +2,7 @@
 
 #include "nui/object.hpp"
 #include "nui/contextmenu.hpp"
-#include "drawables/grid.hpp"
+#include "sfe/grid.hpp"
 #include "dungeon/data.hpp"
 
 namespace dungeon
@@ -18,7 +18,6 @@ namespace dungeon
         // Virtual
         void init() override;
         void update() override;
-        void handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos) override;
         bool handleKeyboardEvent(const sf::Event& event) override;
         //bool handleJoystickEvent(const sf::Event& event) override;
 
@@ -38,11 +37,12 @@ namespace dungeon
 
     protected:
         // Mouse events
-        void handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos);
-        void handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos);
-        void handleMouseLeft();
+        void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
+        void handleMouseMoved(const sf::Vector2f& mousePos) override;
+        void handleMouseLeft() override;
 
         // Changes
+        void changedStatus() override;
         void changedSize() override;
 
         // Room management

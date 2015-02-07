@@ -20,6 +20,7 @@ namespace scml
 namespace Textures
 {
     enum ID {
+        DEFAULT,
         JUMPINGTOASTS_BG,
         JUMPINGTOASTS_JUMPING,
         JUMPINGTOASTS_TOASTS,
@@ -32,12 +33,17 @@ namespace Textures
         NUI_FOCUS,
         MENU_BG,
         MENU_NAME,
+        DUNGEON_PANEL_MONSTERS,
+        DUNGEON_PANEL_TRAPS,
+        DUNGEON_PANEL_FACILITIES,
+        DUNGEON_PANEL_TREASURES,
     };
 }
 
 namespace Animations
 {
     enum ID {
+        DEFAULT,
         JUMPINGTOASTS,
     };
 }
@@ -45,6 +51,7 @@ namespace Animations
 namespace Shaders
 {
     enum ID {
+        DEFAULT,
         NONE,
         MENU_BG,
         MENU_NAME,
@@ -56,6 +63,7 @@ namespace Shaders
 namespace Fonts
 {
     enum ID {
+        DEFAULT,
         NUI,
     };
 }
@@ -63,6 +71,7 @@ namespace Fonts
 namespace Sounds
 {
     enum ID {
+        DEFAULT,
         JUMPINGTOASTS,
         NUI_ACCEPT,
         NUI_REFUSE,
@@ -73,6 +82,7 @@ namespace Sounds
 namespace Music
 {
     enum ID {
+        DEFAULT,
         MENU_THEME,
     };
 }

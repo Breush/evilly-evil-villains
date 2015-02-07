@@ -18,8 +18,8 @@ public:
     virtual ~FileSystem();
     void clear() override;
 
-    bool loadImageFile(int folderID, int fileID, const std::string& filename) override;
-    bool loadSoundFile(int folderID, int fileID, const std::string& filename) override;
+    bool loadImageFile(int folderID, int fileID, const std::wstring& filename) override;
+    bool loadSoundFile(int folderID, int fileID, const std::wstring& filename) override;
 
     std::pair<uint, uint> getImageDimensions(int folderID, int fileID) const override;
 

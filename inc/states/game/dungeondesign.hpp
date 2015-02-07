@@ -3,6 +3,7 @@
 #include "nui/uicore.hpp"
 #include "dungeon/data.hpp"
 #include "dungeon/inter.hpp"
+#include "dungeon/panel.hpp"
 #include "states/state.hpp"
 
 class GameDungeonDesignState : public State
@@ -25,4 +26,5 @@ private:
     // Dungeon
     dungeon::Data m_dungeonData;
     dungeon::Inter m_dungeonInter;
+    dungeon::Panel m_dungeonPanel;
 };

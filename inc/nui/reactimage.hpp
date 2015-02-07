@@ -22,10 +22,9 @@ namespace nui
         // Virtual
         void init() override;
         void update() override;
-        void handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos) override;
 
         // React handling
-        std::string& getReact() { return m_react; }
+        std::wstring& getReact() { return m_react; }
 
         // Texture
         void setImageTexture(Textures::ID id);
@@ -33,21 +32,21 @@ namespace nui
 
         // React management
         void addReactFromFile(const std::string& file);
-        void addReact(const std::string& key, sf::FloatRect rect, const Callback callback = nullptr);
-        void setReactCallback(const std::string& key, const Callback callback);
-        void setActiveReact(const std::string& key);
+        void addReact(const std::wstring& key, sf::FloatRect rect, const Callback callback = nullptr);
+        void setReactCallback(const std::wstring& key, const Callback callback);
+        void setActiveReact(const std::wstring& key);
 
     protected:
-        void activateReact(const std::string& key);
+        void activateReact(const std::wstring& key);
 
         // Affect visible rectangles to sprite
         void selectImageRect();
         void selectActiveRect();
 
         // Mouse events
-        void handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos);
-        void handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos);
-        void handleMouseLeft();
+        void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
+        void handleMouseMoved(const sf::Vector2f& mousePos) override;
+        void handleMouseLeft() override;
 
         struct ReactInfo {
             sf::FloatRect rect;
@@ -69,8 +68,8 @@ namespace nui
         sf::FloatRect* m_activeRect;
 
         // React
-        std::map<std::string, ReactInfo> m_reacts;
-        std::string m_react;
+        std::map<std::wstring, ReactInfo> m_reacts;
+        std::wstring m_react;
     };
 }
 

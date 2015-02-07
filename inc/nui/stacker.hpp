@@ -25,13 +25,16 @@ namespace nui
         // Virtual
         void init() override {}
         virtual void update() override = 0;
-        void changedChild(Object* child) override;
+        void childChangedStatus(LocalTransformable* child) override;
 
         // Children management
         void add(Object* child);
         void add(Object* child, Align align);
 
     protected:
+        // Changes
+        void changedStatus() override;
+
         // Params
         PARAMGSU(float, m_margin, margin, setMargin, update)
         PARAMGSU(Align, m_align, align, setAlign, update)

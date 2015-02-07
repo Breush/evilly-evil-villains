@@ -16,13 +16,13 @@ EntityPrototype::EntityPrototype(scml::Data* data, int entity, int animation, in
     load(data);
 }
 
-EntityPrototype::EntityPrototype(scml::Data* data, const char* entityName, int animation, int key)
+EntityPrototype::EntityPrototype(scml::Data* data, const std::wstring& entityName, int animation, int key)
     : entity(-1), animation(animation), prevKey(-1), key(key), time(0)
 {
     load(data);
     for (auto const& e : data->entities) {
         auto const& entity_ptr = e.second;
-        if (std::strcmp(entity_ptr->name.c_str(), entityName) == 0) {
+        if (entity_ptr->name == entityName) {
             entity = entity_ptr->id;
             break;
         }
@@ -69,7 +69,7 @@ void EntityPrototype::startAnimation(int animation)
     time = 0;
 }
 
-void EntityPrototype::startAnimation(const char* animationName)
+void EntityPrototype::startAnimation(const std::wstring& animationName)
 {
     scml::EntityPrototype::Animation* animation_ptr = getAnimation(animationName);
     this->animation = (animation_ptr == NULL)? -1 : animation_ptr->id;
@@ -88,7 +88,7 @@ void EntityPrototype::update(int dt_ms)
 
     time += dt_ms;
 
-    if (animation_ptr->looping == "true") {
+    if (animation_ptr->looping == L"true") {
         time %= animation_ptr->length;
     } else {
         if (time > animation_ptr->length) {
@@ -635,12 +635,12 @@ EntityPrototype::Animation* EntityPrototype::getAnimation(int animation) const
     return tools::mapFind(animations, animation);
 }
 
-EntityPrototype::Animation* EntityPrototype::getAnimation(const char* animationName) const
+EntityPrototype::Animation* EntityPrototype::getAnimation(const std::wstring& animationName) const
 {
-    for (auto const& animation : animations) {
-        if (std::strcmp( animation.second->name.c_str(), animationName ) == 0)
+    for (auto const& animation : animations)
+        if (animation.second->name == animationName)
             return animation.second;
-    }
+
     return NULL;
 }
 
@@ -689,14 +689,14 @@ int EntityPrototype::getNextKeyID(int animation, int lastKey) const
     Animation* animation_ptr = getAnimation(animation);
     returnif (animation_ptr == NULL) -2;
 
-    if (animation_ptr->looping == "true") {
+    if (animation_ptr->looping == L"true") {
         // If we've reached the end of the keys, loop.
         if (lastKey+1 >= int(animation_ptr->mainline.keys.size())) {
             return animation_ptr->loop_to;
         } else {
             return lastKey+1;
         }
-    } else if (animation_ptr->looping == "ping_pong") {
+    } else if (animation_ptr->looping == L"ping_pong") {
         // TODO: Implement ping_pong animation
     } else { // assume "false"
         // If we've haven't reached the end of the keys, return the next one.
@@ -719,7 +719,7 @@ EntityPrototype::Animation::Timeline::Key* EntityPrototype::getTimelineKey(int a
 
     int no_keys = t->keys.size();
     if (key >= no_keys) {
-        if (a->looping == "true") {
+        if (a->looping == L"true") {
             return tools::mapFind(t->keys, 0);
         } else {
             return tools::mapFind(t->keys, no_keys);

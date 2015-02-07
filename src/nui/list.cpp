@@ -94,7 +94,7 @@ void List::update()
 //-------------------//
 //----- Columns -----//
 
-void List::setColumns(std::initializer_list<std::wstring> columns)
+void List::setColumns(const std::initializer_list<std::wstring>& columns)
 {
     m_columns.clear();
 
@@ -157,7 +157,7 @@ uint List::getColumnWidthHint()
 //-----------------//
 //----- Lines -----//
 
-void List::addLine(std::initializer_list<std::wstring> values)
+void List::addLine(const std::initializer_list<std::wstring>& values)
 {
     massert(values.size() == m_columns.size(), "List - expected " << m_columns.size() << " values");
 
@@ -176,43 +176,27 @@ void List::addLine(std::initializer_list<std::wstring> values)
     }
     m_lines.push_back(line);
 
+    if (m_lines.size() == 1)
+        setSelectedLine(0);
+
     updateColumnInfos();
 }
 
 //------------------------//
 //----- Mouse events -----//
 
-void List::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
-{
-    switch (event.type) {
-    case sf::Event::MouseButtonPressed:
-        handleMousePressed(event, relPos);
-        break;
-    case sf::Event::MouseMoved:
-        handleMouseMoved(event, relPos);
-        break;
-    case sf::Event::MouseLeft:
-        handleMouseLeft();
-        break;
-    default:
-        break;
-    }
-}
-
-void List::handleMousePressed(const sf::Event&, const sf::Vector2f& relPos)
+void List::handleMouseButtonPressed(const sf::Mouse::Button&, const sf::Vector2f& mousePos)
 {
     // Do not take first line, they are the columns titles
-    sf::Vector2f fixPos = getInverseTransform().transformPoint(relPos);
-    uint line = fixPos.y / lineHeight() - 1;
+    uint line = mousePos.y / lineHeight() - 1;
 
     if (line < m_lines.size())
         setSelectedLine(line);
 }
 
-void List::handleMouseMoved(const sf::Event&, const sf::Vector2f& relPos)
+void List::handleMouseMoved(const sf::Vector2f& mousePos)
 {
-    sf::Vector2f fixPos = getInverseTransform().transformPoint(relPos);
-    uint line = fixPos.y / lineHeight() - 1;
+    uint line = mousePos.y / lineHeight() - 1;
 
     resetPartsShader();
     if (line < m_lines.size())

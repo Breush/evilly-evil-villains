@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<dungeon name="The Mighty Example" floorsCount="17" roomsByFloor="2">
+<dungeon name="Château d'eau" floorsCount="17" roomsByFloor="2">
 	<floor pos="0">
 		<room pos="0" state="constructed" />
 		<room pos="1" state="constructed" />

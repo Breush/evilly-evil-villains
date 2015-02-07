@@ -1,20 +1,21 @@
 #pragma once
 
 #include "resources/identifiers.hpp"
+#include "interaction/detectable.hpp"
 #include "tools/param.hpp"
 #include "tools/tools.hpp"
 
 #include <SFML/System.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/Transformable.hpp>
 
 namespace nui
 {
     class uiCore;
 
-    class Object : public sf::Drawable, public sf::Transformable
+    class Object : public sf::Drawable, public interaction::Detectable
     {
+        typedef interaction::Detectable baseClass;
         friend class uiCore;
 
     public:
@@ -26,13 +27,12 @@ namespace nui
         virtual void update() = 0;
 
         // Events
-        virtual void handleMouseEvent(const sf::Event&, const sf::Vector2f&) {}
         virtual bool handleKeyboardEvent(const sf::Event&) { return false; }
         virtual bool handleJoystickEvent(const sf::Event&) { return false; }
 
         // Virtual
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-        virtual void update(sf::Time dt);
+        void update(const sf::Time& dt) override { baseClass::update(dt); }
 
     protected:
         // Sub-parts of drawing
@@ -50,25 +50,19 @@ namespace nui
         void addPart(sf::Drawable* drawable, Shaders::ID shader = Shaders::NONE);
 
         // Updates
-        virtual void changedSize();
-        virtual void changedParent();
+        virtual void changedSize() override;
         virtual void changedFocusRect();
         virtual void changedVisible();
-        virtual void changedChild(Object* child);
 
         // Focus interactions
         virtual bool ownsFocus() { return false; }
 
         // Params
         PARAMG(uiCore*, m_core, core)
-        PARAMGS(bool, m_status, status, setStatus)
         PARAMGS(bool, m_centered, centered, setCentered)
         PARAMGS(bool, m_focusable, focusable, setFocusable)
-        PARAMGS(bool, m_detectable, detectable, setDetectable)
         PARAMGSU(bool, m_visible, visible, setVisible, changedVisible)
         PARAMGSU(sf::FloatRect, m_focusRect, focusRect, setFocusRect, changedFocusRect)
-        PARAMGSU(Object*, m_parent, parent, setParent, changedParent)
-        PARAMGSU(sf::Vector2f, m_size, size, setSize, changedSize)
 
     private:
         std::vector<Part> m_parts;

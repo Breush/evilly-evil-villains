@@ -21,6 +21,7 @@ namespace sf
 
     template<typename T> Vector2f v2f(const Vector2<T>& v) { return Vector2f(float(v.x), float(v.y)); }
     template<typename T> Vector2i v2i(const Vector2<T>& v) { return Vector2i(int(v.x), int(v.y)); }
+    template<typename T> Vector2u v2u(const Vector2<T>& v) { return Vector2u(uint(v.x), uint(v.y)); }
 
     template<typename T> Vector2<T> vdiv(const Vector2<T>& v1, const Vector2<T>& v2) { return Vector2<T>(v1.x / v2.x, v1.y / v2.y); }
     template<typename T> Vector2<T> vmul(const Vector2<T>& v1, const Vector2<T>& v2) { return Vector2<T>(v1.x * v2.x, v1.y * v2.y); }

@@ -1,5 +1,5 @@
 template <typename Resource, typename Identifier>
-inline void ResourceHolder<Resource, Identifier>::load(Identifier id, const std::string& filename)
+inline void ResourceHolder<Resource, Identifier>::load(Identifier id, const std::string& filename, bool store)
 {
     // Create and load resource
     std::unique_ptr<Resource> resource(new Resource());
@@ -8,7 +8,7 @@ inline void ResourceHolder<Resource, Identifier>::load(Identifier id, const std:
 
     // If loading successful, insert resource to map
     insertResource(id, std::move(resource));
-    insertFilename(id, filename);
+    if (store) storeID(id, internationalization::string2wstring(filename));
 }
 
 template <typename Resource, typename Identifier>
@@ -22,14 +22,21 @@ inline void ResourceHolder<Resource, Identifier>::load(Identifier id, const std:
 
     // If loading successful, insert resource to map
     insertResource(id, std::move(resource));
-    insertFilename(id, filename);
 }
 
 template <typename Resource, typename Identifier>
 inline Resource& ResourceHolder<Resource, Identifier>::get(Identifier id)
 {
     auto found = m_resourcesMap.find(id);
-    massert(found != m_resourcesMap.end(), "Resource not found");
+
+    if (found == m_resourcesMap.end()) {
+        if (id != Identifier::DEFAULT) {
+            std::cerr << "/!\\ Resource not found. Using DEFAULT instead." << std::endl;
+            return get(Identifier::DEFAULT);
+        } else {
+            throw std::runtime_error("DEFAULT resource not found. Ouch.");
+        }
+    }
 
     return *found->second;
 }
@@ -38,16 +45,30 @@ template <typename Resource, typename Identifier>
 inline const Resource& ResourceHolder<Resource, Identifier>::get(Identifier id) const
 {
     auto found = m_resourcesMap.find(id);
-    massert(found != m_resourcesMap.end(), "Resource not found");
+
+    if (found == m_resourcesMap.end()) {
+        if (id != Identifier::DEFAULT) {
+            std::cerr << "/!\\ Resource not found. Using DEFAULT instead." << std::endl;
+            return get(Identifier::DEFAULT);
+        } else {
+            throw std::runtime_error("DEFAULT resource not found. Ouch.");
+        }
+    }
 
     return *found->second;
 }
 
 template <typename Resource, typename Identifier>
-inline Identifier ResourceHolder<Resource, Identifier>::getID(const std::string& filename)
+inline void ResourceHolder<Resource, Identifier>::storeID(Identifier id, const std::wstring& filename)
+{
+    insertFilename(id, filename);
+}
+
+template <typename Resource, typename Identifier>
+inline Identifier ResourceHolder<Resource, Identifier>::getID(const std::wstring& filename)
 {
     auto found = m_filenameMap.find(filename);
-    massert(found != m_filenameMap.end(), "ID from filename " + filename + " not found");
+    wassert(found != m_filenameMap.end(), L"ID from filename " << filename << L" not found");
     return found->second;
 }
 
@@ -60,11 +81,11 @@ inline void ResourceHolder<Resource, Identifier>::insertResource(Identifier id, 
 }
 
 template <typename Resource, typename Identifier>
-inline void ResourceHolder<Resource, Identifier>::insertFilename(Identifier id, const std::string& filename)
+inline void ResourceHolder<Resource, Identifier>::insertFilename(Identifier id, const std::wstring& filename)
 {
     // Insert and check success
     auto inserted = m_filenameMap.insert(std::make_pair(filename, id));
-    massert(inserted.second, "Cannot add filename " + filename + ". Was it already added?");
+    wassert(inserted.second, L"Cannot add filename " << filename << L". Was it already added?");
 }
 
 // For textures

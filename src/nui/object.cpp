@@ -9,12 +9,9 @@ using namespace nui;
 
 Object::Object()
     : m_core(nullptr)
-    , m_status(true)
     , m_centered(false)
     , m_focusable(true)
-    , m_detectable(true)
     , m_visible(true)
-    , m_parent(nullptr)
 {
 }
 
@@ -88,11 +85,6 @@ void Object::changedSize()
     setStatus(true);
 }
 
-void Object::changedParent()
-{
-    setStatus(true);
-}
-
 void Object::changedFocusRect()
 {
     setStatus(true);
@@ -103,10 +95,6 @@ void Object::changedVisible()
     setStatus(true);
 }
 
-void Object::changedChild(Object*)
-{
-}
-
 //-------------------//
 //----- Drawing -----//
 
@@ -115,7 +103,7 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const
     const sf::Shader* shader = states.shader;
 
     // Transform from sf::Tranformable
-    states.transform *= getTransform();
+    states.transform = getTransform();
 
     // Drawing parts
     for (auto& part : m_parts)
@@ -131,7 +119,7 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const
             glEnable(GL_SCISSOR_TEST);
 
             sf::FloatRect r(*part.clippingRect);
-            r = getTransform().transformRect(r);
+            r = states.transform.transformRect(r);
 
             const auto& screenSize = Application::context().screenSize;
             const auto& resolution = Application::context().resolution;
@@ -154,12 +142,7 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const
         if (part.clippingRect != nullptr)
             glDisable(GL_SCISSOR_TEST);
     }
-}
 
-void Object::update(sf::Time)
-{
-    if (status() && parent() != nullptr)
-        parent()->changedChild(this);
-
-    setStatus(false);
+    // Mouse detector
+    detectableDraw(states);
 }

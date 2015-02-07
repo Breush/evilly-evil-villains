@@ -37,13 +37,15 @@ class Application
 
 public:
     Application();
+    virtual ~Application() {}
+
     void run();
 
     static inline Context& context() { return s_context; }
 
 protected:
     void processInput();
-    void update(sf::Time dt);
+    void update(const sf::Time& dt);
     void render();
 
     // Resources

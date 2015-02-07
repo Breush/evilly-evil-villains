@@ -1,32 +1,22 @@
 uniform sampler2D texture;
-uniform vec2 textureSize;
 
 void main()
 {
     vec2 texCoord = gl_TexCoord[0].xy;
-    vec2 step = vec2(1) / textureSize;
+    vec4 original = texture2D(texture, texCoord);
     vec4 pixel = vec4(0.f);
 
-    // The original one
-    pixel += texture2D(texture, texCoord);
+    // Having range bigger to get a better effect
+    // can slow the computer down
+    const float step = 0.005;
+    const int range = 3;
 
-    // Add power given nearby pixels
-    pixel += texture2D(texture, texCoord + vec2(-1.f,  0.f) * step) * 0.7;
-    pixel += texture2D(texture, texCoord + vec2( 1.f,  0.f) * step) * 0.7;
-    pixel += texture2D(texture, texCoord + vec2( 0.f, -1.f) * step) * 0.7;
-    pixel += texture2D(texture, texCoord + vec2( 0.f,  1.f) * step) * 0.7;
+    // Blur
+    for (int x = -range; x <= range; ++x)
+    for (int y = -range; y <= range; ++y)
+        pixel += texture2D(texture, texCoord + vec2(x, y) * step);
 
-    pixel += texture2D(texture, texCoord + vec2(-1.f, -1.f) * step) * 0.4;
-    pixel += texture2D(texture, texCoord + vec2( 1.f, -1.f) * step) * 0.4;
-    pixel += texture2D(texture, texCoord + vec2(-1.f,  1.f) * step) * 0.4;
-    pixel += texture2D(texture, texCoord + vec2( 1.f,  1.f) * step) * 0.4;
-
-    // Clamping
-    if (pixel.r > 1.f) pixel.r = 1.f;
-    if (pixel.g > 1.f) pixel.g = 1.f;
-    if (pixel.b > 1.f) pixel.b = 1.f;
-    if (pixel.a > 1.f) pixel.a = 1.f;
-
-    gl_FragColor = gl_Color * pixel;
+    // Adding original gives a bloom effect
+    // by reinforcing the original colors
+    gl_FragColor = original + pixel / (4.f * float(range) * float(range));
 }
-

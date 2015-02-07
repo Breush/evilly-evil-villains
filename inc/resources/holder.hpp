@@ -1,6 +1,7 @@
 #pragma once
 
 #include "tools/debug.hpp"
+#include "core/gettext.hpp" // string2wstring
 
 #include <SFML/System/Time.hpp>
 
@@ -13,7 +14,7 @@ template <typename Resource, typename Identifier>
 class ResourceHolder
 {
 public:
-    void load(Identifier id, const std::string& filename);
+    void load(Identifier id, const std::string& filename, bool store = false);
 
     template <typename Parameter>
     void load(Identifier id, const std::string& filename, const Parameter& param);
@@ -23,7 +24,8 @@ public:
     const Resource& get(Identifier id) const;
 
     // If a load has been done, return ID from filename
-    Identifier getID(const std::string& filename);
+    void storeID(Identifier id, const std::wstring& filename);
+    Identifier getID(const std::wstring& filename);
 
     // For textures
     void setSmooth(Identifier id, bool smoothActive);
@@ -35,11 +37,11 @@ public:
 
 protected:
     void insertResource(Identifier id, std::unique_ptr<Resource> resource);
-    void insertFilename(Identifier id, const std::string& filename);
+    void insertFilename(Identifier id, const std::wstring& filename);
 
 private:
     std::map<Identifier, std::unique_ptr<Resource>>	m_resourcesMap;
-    std::map<std::string, Identifier> m_filenameMap;
+    std::map<std::wstring, Identifier> m_filenameMap;
 };
 
 #include "holder.inl"

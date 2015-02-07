@@ -1,6 +1,5 @@
 #include "core/gettext.hpp"
 
-#include <libintl.h>
 #include <locale>
 
 void internationalization::init()

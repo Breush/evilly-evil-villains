@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     try {
         app.run();
     } catch(std::exception& e) {
-        std::cerr << std::endl << "[!] Exception: " << e.what() << std::endl;
+        std::cerr << std::endl << "[!] Exception caught: " << e.what() << std::endl;
     }
 
     return EXIT_SUCCESS;

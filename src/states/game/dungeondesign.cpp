@@ -1,6 +1,8 @@
-#include "core/application.hpp"
 #include "states/game/dungeondesign.hpp"
+
+#include "core/application.hpp"
 #include "resources/musicplayer.hpp"
+#include "world/context.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
@@ -14,14 +16,22 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     Application::context().music.stop();
 
     // Dungeon data
-    // TODO Get from game context?
-    m_dungeonData.load("worlds/example/dungeon.xml");
+    massert(!world::context.info->folder.empty(), "Selected world is in an empty folder.");
+    m_dungeonData.load("worlds/" + world::context.info->folder + "dungeon.xml");
 
     // Dungeon inter
     m_uiCore.add(&m_dungeonInter);
     m_dungeonInter.useData(m_dungeonData);
     m_dungeonInter.setSize({350, 450});
-    m_dungeonInter.setPosition((resolution - m_dungeonInter.size()) / 2.f);
+    m_dungeonInter.setLocalPosition((resolution - m_dungeonInter.size()) / 2.f);
+
+    // Dungeon panel
+    m_uiCore.add(&m_dungeonPanel);
+    m_dungeonPanel.setLocalPosition({200, resolution.y - 100});
+    m_dungeonPanel.setSize({resolution.x - 400, 100});
+
+    // Reload everything once so that all is in correct place
+    m_uiCore.refresh();
 }
 
 void GameDungeonDesignState::draw()
@@ -37,8 +47,9 @@ bool GameDungeonDesignState::update(const sf::Time& dt)
 
 void GameDungeonDesignState::onQuit()
 {
-    // TODO Where to get file name?
-    m_dungeonData.save("worlds/example/dungeon_saved.xml");
+    // TODO Remove suffix (used to not compromise svn archive)
+    m_dungeonData.save("worlds/" + world::context.info->folder + "dungeon_saved.xml");
+    world::context.updateLastPlayed();
 }
 
 bool GameDungeonDesignState::handleEvent(const sf::Event& event)

@@ -1,5 +1,5 @@
-#include "drawables/grid.hpp"
-#include "drawables/line.hpp"
+#include "sfe/grid.hpp"
+#include "sfe/line.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 

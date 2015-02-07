@@ -18,9 +18,9 @@ class Data
 {
 public:
     std::string name;
-    std::string scml_version;
-    std::string generator;
-    std::string generator_version;
+    std::wstring scml_version;
+    std::wstring generator;
+    std::wstring generator_version;
     bool pixel_art_mode;
 
     class Folder;
@@ -54,8 +54,8 @@ public:
         class Variable;
         class Tag;
 
-        std::map<std::string, Variable*> variables;
-        std::map<std::string, Tag*> tags;
+        std::map<std::wstring, Variable*> variables;
+        std::map<std::wstring, Tag*> tags;
 
         Meta_Data();
         Meta_Data(pugi::xml_node& elem);
@@ -69,10 +69,10 @@ public:
         {
         public:
 
-            std::string name;
-            std::string type;
+            std::wstring name;
+            std::wstring type;
 
-            std::string value_string;
+            std::wstring value_string;
             int value_int;
             float value_float;
 
@@ -90,7 +90,7 @@ public:
         {
         public:
 
-            std::string name;
+            std::wstring name;
 
             Tag();
             Tag(pugi::xml_node& elem);
@@ -109,8 +109,8 @@ public:
         class Variable;
         class Tag;
 
-        std::map<std::string, Variable*> variables;
-        std::map<std::string, Tag*> tags;
+        std::map<std::wstring, Variable*> variables;
+        std::map<std::wstring, Tag*> tags;
 
         Meta_Data_Tweenable();
         Meta_Data_Tweenable(pugi::xml_node& elem);
@@ -123,12 +123,12 @@ public:
         {
         public:
 
-            std::string name;
-            std::string type;
-            std::string value_string;
+            std::wstring name;
+            std::wstring type;
+            std::wstring value_string;
             int value_int;
             float value_float;
-            std::string curve_type;
+            std::wstring curve_type;
             float c1;
             float c2;
 
@@ -145,7 +145,7 @@ public:
         {
         public:
 
-            std::string name;
+            std::wstring name;
 
             Tag();
             Tag(pugi::xml_node& elem);
@@ -163,7 +163,7 @@ public:
     public:
 
         int id;
-        std::string name;
+        std::wstring name;
 
         class File;
         std::map<int, File*> files;
@@ -181,9 +181,9 @@ public:
         {
         public:
 
-            std::string type;
+            std::wstring type;
             int id;
-            std::string name;
+            std::wstring name;
             float pivot_x;
             float pivot_y;
             int width;
@@ -209,8 +209,8 @@ public:
     {
     public:
         int id;
-        std::string data_path;
-        std::string image_path;
+        std::wstring data_path;
+        std::wstring image_path;
 
         class Folder;
         std::map<int, Folder*> folders;
@@ -229,7 +229,7 @@ public:
         public:
 
             int id;
-            std::string name;
+            std::wstring name;
 
             class Image;
             std::map<int, Image*> images;
@@ -247,7 +247,7 @@ public:
             public:
 
                 int id;
-                std::string full_path;
+                std::wstring full_path;
 
                 Image();
                 Image(pugi::xml_node& elem);
@@ -265,7 +265,7 @@ public:
     public:
 
         int id;
-        std::string name;
+        std::wstring name;
 
         class Animation;
         std::map<int, Animation*> animations;
@@ -286,9 +286,9 @@ public:
         public:
 
             int id;
-            std::string name;
+            std::wstring name;
             int length;
-            std::string looping;
+            std::wstring looping;
             int loop_to;
 
             Meta_Data* meta_data;
@@ -441,13 +441,13 @@ public:
 
                         int id;
                         int parent; // a bone id
-                        std::string object_type;
+                        std::wstring object_type;
                         int atlas;
                         int folder;
                         int file;
-                        std::string usage;
-                        std::string blend_mode;
-                        std::string name;
+                        std::wstring usage;
+                        std::wstring blend_mode;
+                        std::wstring name;
                         float x;
                         float y;
                         float pivot_x;
@@ -465,8 +465,8 @@ public:
                         float g;
                         float b;
                         float a;
-                        std::string variable_type;
-                        std::string value_string;
+                        std::wstring variable_type;
+                        std::wstring value_string;
                         int value_int;
                         int min_int;
                         int max_int;
@@ -541,10 +541,10 @@ public:
             public:
 
                 int id;
-                std::string name;
-                std::string object_type;
-                std::string variable_type;
-                std::string usage;
+                std::wstring name;
+                std::wstring object_type;
+                std::wstring variable_type;
+                std::wstring usage;
                 Meta_Data* meta_data;
 
                 Timeline();
@@ -565,7 +565,7 @@ public:
 
                     int id;
                     int time;
-                    std::string curve_type;
+                    std::wstring curve_type;
                     float c1;
                     float c2;
                     int spin;
@@ -616,7 +616,7 @@ public:
                         int atlas;
                         int folder;
                         int file;
-                        std::string name;
+                        std::wstring name;
                         float x;
                         float y;
                         float pivot_x;
@@ -630,8 +630,8 @@ public:
                         float g;
                         float b;
                         float a;
-                        std::string blend_mode;
-                        std::string value_string;
+                        std::wstring blend_mode;
+                        std::wstring value_string;
                         int value_int;
                         int min_int;
                         int max_int;
@@ -663,7 +663,7 @@ public:
             public:
 
                 int id;
-                std::string name;
+                std::wstring name;
 
                 Soundline();
                 Soundline(pugi::xml_node& elem);
@@ -718,7 +718,7 @@ public:
     public:
 
         int id;
-        std::string name;
+        std::wstring name;
 
         Character_Map();
         Character_Map(pugi::xml_node& elem);
@@ -753,12 +753,12 @@ public:
     {
     public:
 
-        std::string author;
-        std::string copyright;
-        std::string license;
-        std::string version;
-        std::string last_modified;
-        std::string notes;
+        std::wstring author;
+        std::wstring copyright;
+        std::wstring license;
+        std::wstring version;
+        std::wstring last_modified;
+        std::wstring notes;
 
         Document_Info();
         Document_Info(pugi::xml_node& elem);

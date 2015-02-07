@@ -1,7 +1,8 @@
 #include "resources/soundplayer.hpp"
 
-#include <SFML/Audio/Listener.hpp>
+#include "core/gettext.hpp" // string2wstring
 
+#include <SFML/Audio/Listener.hpp>
 #include <cmath>
 
 namespace
@@ -22,12 +23,12 @@ SoundPlayer::SoundPlayer()
     sf::Listener::setDirection(0.f, 0.f, -1.f);
 }
 
-void SoundPlayer::load(Sounds::ID id, const std::string& filename)
+void SoundPlayer::load(Sounds::ID id, const std::string& filename, bool store)
 {
-    m_soundBuffers.load(id, filename);
+    m_soundBuffers.load(id, filename, store);
 }
 
-Sounds::ID SoundPlayer::getID(const std::string& filename)
+Sounds::ID SoundPlayer::getID(const std::wstring& filename)
 {
     m_soundBuffers.getID(filename);
 }

@@ -2,8 +2,8 @@
 
 #include "nui/object.hpp"
 #include "tools/int.hpp"
-#include "drawables/line.hpp"
-#include "drawables/arrow.hpp"
+#include "sfe/line.hpp"
+#include "sfe/arrow.hpp"
 
 #include <SFML/Graphics/Text.hpp>
 
@@ -25,34 +25,36 @@ namespace nui
 
         // Virtual
         virtual void init() override;
-        void update() override;
-        void handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos) override;
+        virtual void update() override;
         bool handleKeyboardEvent(const sf::Event& event) override;
         //bool handleJoystickEvent(const sf::Event& event) override;
 
         // Choices
-        void add(std::wstring text, Callback callback = nullptr);
+        void add(const std::wstring& text, const Callback callback = nullptr);
         void acceptChoice();
         void switchChoiceLeft();
         void switchChoiceRight();
         void setChoice(uint choice);
-        void setChoiceText(uint choice, std::wstring text);
-        void setChoiceCallback(uint choice, Callback callback);
+        void setChoiceText(uint choice, const std::wstring& text);
+        void setChoiceCallback(uint choice, const Callback callback);
 
     protected:
         // Mouse events
-        virtual void handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos);
-        virtual void handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos);
-        virtual void handleMouseLeft();
+        virtual void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
+        virtual void handleMouseMoved(const sf::Vector2f& mousePos) override;
+        virtual void handleMouseLeft() override;
+
         bool isLeftArrowSelected(const float& x);
         bool isRightArrowSelected(const float& x);
 
         // Updates
-        void updateSize();
+        void updateButtonSize();
+        virtual void updateSize();
 
         // Params
         PARAMGSU(bool, m_showArrows, showArrows, setShowArrows, updateSize)
         PARAMGSU(bool, m_showLines, showLines, setShowLines, updateSize)
+        PARAMG(sf::Vector2f, m_buttonSize, buttonSize)
         PARAMG(float, m_arrowOffset, arrowOffset)
         PARAMG(float, m_lineOffset, lineOffset)
         PARAMG(float, m_arrowSize, arrowSize)
@@ -64,6 +66,12 @@ namespace nui
             std::wstring text;
             Callback callback;
         };
+
+        // Getters for children
+        sf::Text& text() { return m_text; }
+        sfe::HLine& topLine() { return m_topLine; }
+        sfe::HLine& botLine() { return m_botLine; }
+        const sf::Vector2f& maxTextSize() const { return m_maxTextSize; }
 
     private:
         // Choices

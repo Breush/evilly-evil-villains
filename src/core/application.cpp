@@ -33,7 +33,7 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
     window.create(sf::VideoMode(resolution.x, resolution.y), title, style);
 
     if (!window.isOpen())
-        std::cerr << "Cannot initialize window" << std::endl;
+        throw std::runtime_error("Cannot initialize window.");
 
     screenSize = sf::v2f(window.getSize());
 }
@@ -42,7 +42,7 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
 //----- Application -----//
 
 Application::Application()
-    //: m_initialState(States::GAME_DUNGEON_DESIGN)
+    //: m_initialState(States::MENU_SELECTWORLD)
     : m_initialState(States::SPLASHSCREEN)
     , m_gameTime(0.f)
     , m_running(false)
@@ -129,7 +129,7 @@ void Application::processInput()
     }
 }
 
-void Application::update(sf::Time dt)
+void Application::update(const sf::Time& dt)
 {
     // Shaders can be animated
     m_gameTime += dt.asSeconds();
@@ -138,6 +138,8 @@ void Application::update(sf::Time dt)
     s_context.shaders.setParameter(Shaders::MENU_BG, "time", m_gameTime/5.f);
     s_context.shaders.setParameter(Shaders::MENU_NAME, "time", m_gameTime/5.f);
     s_context.animations.update(dt);
+
+    // Stack of states
     m_stateStack.update(dt);
 }
 
@@ -153,16 +155,20 @@ void Application::render()
 
 void Application::loadTextures()
 {
+    // Default - debug texture
+    s_context.textures.load(Textures::DEFAULT, "res/tex/default.png", true);
+    s_context.textures.setRepeated(Textures::DEFAULT, true);
+
     // Splash-screen
-    s_context.textures.load(Textures::JUMPINGTOASTS_BG, "res/tex/jumping-toasts/bg.png");
-    s_context.textures.load(Textures::JUMPINGTOASTS_JUMPING, "res/tex/jumping-toasts/jumping.png");
-    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTS, "res/tex/jumping-toasts/toasts.png");
-    s_context.textures.load(Textures::JUMPINGTOASTS_TOAST, "res/tex/jumping-toasts/toast.png");
-    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTCUT, "res/tex/jumping-toasts/toast-cut.png");
-    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERBACKGROUND, "res/tex/jumping-toasts/toaster-background.png");
-    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERBOTTOM, "res/tex/jumping-toasts/toaster-bottom.png");
-    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERMIDDLE, "res/tex/jumping-toasts/toaster-middle.png");
-    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERTOP, "res/tex/jumping-toasts/toaster-top.png");
+    s_context.textures.load(Textures::JUMPINGTOASTS_BG, "res/tex/jumping-toasts/bg.png", true);
+    s_context.textures.load(Textures::JUMPINGTOASTS_JUMPING, "res/tex/jumping-toasts/jumping.png", true);
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTS, "res/tex/jumping-toasts/toasts.png", true);
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOAST, "res/tex/jumping-toasts/toast.png", true);
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTCUT, "res/tex/jumping-toasts/toast-cut.png", true);
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERBACKGROUND, "res/tex/jumping-toasts/toaster-background.png", true);
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERBOTTOM, "res/tex/jumping-toasts/toaster-bottom.png", true);
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERMIDDLE, "res/tex/jumping-toasts/toaster-middle.png", true);
+    s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERTOP, "res/tex/jumping-toasts/toaster-top.png", true);
 
     s_context.textures.setSmooth(Textures::JUMPINGTOASTS_TOASTCUT, false);
 
@@ -174,6 +180,12 @@ void Application::loadTextures()
     // Menu
     s_context.textures.load(Textures::MENU_BG, "res/tex/menu/bg.png");
     s_context.textures.load(Textures::MENU_NAME, "res/tex/menu/name.png");
+
+    // Dungeon
+    s_context.textures.load(Textures::DUNGEON_PANEL_MONSTERS, "res/tex/dungeon/panel/monsters.png");
+    s_context.textures.load(Textures::DUNGEON_PANEL_TRAPS, "res/tex/dungeon/panel/traps.png");
+    s_context.textures.load(Textures::DUNGEON_PANEL_FACILITIES, "res/tex/dungeon/panel/facilities.png");
+    s_context.textures.load(Textures::DUNGEON_PANEL_TREASURES, "res/tex/dungeon/panel/treasures.png");
 }
 
 void Application::loadShaders()
@@ -216,7 +228,7 @@ void Application::loadFonts()
 void Application::loadSounds()
 {
     // Splash-screen
-    s_context.sounds.load(Sounds::JUMPINGTOASTS, "res/snd/jumping-toasts.wav");
+    s_context.sounds.load(Sounds::JUMPINGTOASTS, "res/snd/jumping-toasts.wav", true);
 
     // NUI
     s_context.sounds.load(Sounds::NUI_ACCEPT, "res/snd/accept.wav");

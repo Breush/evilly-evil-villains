@@ -1,6 +1,6 @@
 #pragma once
 
-#include "drawables/line.hpp"
+#include "sfe/line.hpp"
 #include "tools/int.hpp"
 
 #include <SFML/Graphics/Drawable.hpp>

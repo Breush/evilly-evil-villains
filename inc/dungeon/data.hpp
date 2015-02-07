@@ -1,6 +1,7 @@
 #pragma once
 
 #include "tools/param.hpp"
+#include "tools/int.hpp"
 
 #include <SFML/System/Vector2.hpp>
 #include <string>
@@ -52,7 +53,7 @@ namespace dungeon
         void correctFloorsRooms();
 
         // Params
-        PARAMG(std::string, m_name, name);
+        PARAMG(std::wstring, m_name, name);
         PARAMGSU(uint, m_floorsCount, floorsCount, setFloorsCount, changedFloorsCount)
         PARAMGSU(uint, m_roomsByFloor, roomsByFloor, setRoomsByFloor, changedRoomsByFloor)
 

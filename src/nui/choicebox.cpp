@@ -56,10 +56,10 @@ void ChoiceBox::update()
         addPart(&m_botLine);
 
         m_text.move(0.f, lineSpace);
-        m_topLine.setLength(size().x);
-        m_botLine.setLength(size().x);
+        m_topLine.setLength(m_buttonSize.x);
+        m_botLine.setLength(m_buttonSize.x);
         m_topLine.setPosition(0.f, 0.f);
-        m_botLine.setPosition(0.f, size().y);
+        m_botLine.setPosition(0.f, m_buttonSize.y);
     }
 
     // Arrows
@@ -70,8 +70,8 @@ void ChoiceBox::update()
         m_text.setPosition(m_text.getPosition() + sf::Vector2f(arrowSpace, 0.f));
         m_lArrow.setLength(arrowSize());
         m_rArrow.setLength(arrowSize());
-        m_lArrow.setPosition(0.f, 0.5f * size().y);
-        m_rArrow.setPosition(size().x - arrowSize(), 0.5f * size().y);
+        m_lArrow.setPosition(0.f, 0.5f * m_buttonSize.y);
+        m_rArrow.setPosition(m_buttonSize.x - arrowSize(), 0.5f * m_buttonSize.y);
         m_lArrow.setOrigin(0.f, 0.5f * arrowSize());
         m_rArrow.setOrigin(0.f, 0.5f * arrowSize());
     }
@@ -82,7 +82,7 @@ void ChoiceBox::update()
 //-----------------------------//
 //----- Choice management -----//
 
-void ChoiceBox::add(std::wstring text, Callback callback)
+void ChoiceBox::add(const std::wstring& text, const Callback callback)
 {
     m_choices.push_back(ChoiceInfo {text, callback});
 
@@ -144,7 +144,7 @@ void ChoiceBox::setChoice(uint choice)
     update();
 }
 
-void ChoiceBox::setChoiceText(uint choice, std::wstring text)
+void ChoiceBox::setChoiceText(uint choice, const std::wstring& text)
 {
     // Confirm valid choice
     massert(choice < m_nChoices, "Choice " << choice << " out of range");
@@ -172,30 +172,9 @@ void ChoiceBox::setChoiceCallback(uint choice, Callback callback)
 //------------------------//
 //----- Mouse events -----//
 
-void ChoiceBox::handleMouseEvent(const sf::Event& event, const sf::Vector2f& relPos)
+void ChoiceBox::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos)
 {
-    switch (event.type) {
-    case sf::Event::MouseButtonPressed:
-        handleMousePressed(event, relPos);
-        break;
-    case sf::Event::MouseMoved:
-        handleMouseMoved(event, relPos);
-        break;
-    case sf::Event::MouseLeft:
-        handleMouseLeft();
-        break;
-    default:
-        break;
-    }
-}
-
-void ChoiceBox::handleMousePressed(const sf::Event& event, const sf::Vector2f& relPos)
-{
-    uint x = getInverseTransform().transformPoint(relPos).x;
-
-    // Just manage left click
-    if (event.mouseButton.button != sf::Mouse::Left)
-        return;
+    returnif (button != sf::Mouse::Left);
 
     // Without arrows: choices loop
     if (!showArrows()) {
@@ -204,12 +183,12 @@ void ChoiceBox::handleMousePressed(const sf::Event& event, const sf::Vector2f& r
     }
 
     // With arrows and arrow selected
-    if (isLeftArrowSelected(x)) {
+    if (isLeftArrowSelected(mousePos.x)) {
         switchChoiceLeft();
         return;
     }
 
-    if (isRightArrowSelected(x)) {
+    if (isRightArrowSelected(mousePos.x)) {
         switchChoiceRight();
         return;
     }
@@ -218,21 +197,17 @@ void ChoiceBox::handleMousePressed(const sf::Event& event, const sf::Vector2f& r
     acceptChoice();
 }
 
-void ChoiceBox::handleMouseMoved(const sf::Event& event, const sf::Vector2f& relPos)
+void ChoiceBox::handleMouseMoved(const sf::Vector2f& mousePos)
 {
-    uint x = getInverseTransform().transformPoint(relPos).x;
-
     resetPartsShader();
 
     // Hovering arrows
-    if (isLeftArrowSelected(x))
-    {
+    if (isLeftArrowSelected(mousePos.x)) {
         setPartShader(&m_lArrow, Shaders::NUI_HOVER);
         return;
     }
 
-    if (isRightArrowSelected(x))
-    {
+    if (isRightArrowSelected(mousePos.x)) {
         setPartShader(&m_rArrow, Shaders::NUI_HOVER);
         return;
     }
@@ -249,14 +224,16 @@ void ChoiceBox::handleMouseLeft()
 
 bool ChoiceBox::isLeftArrowSelected(const float& x)
 {
+    returnif (!showArrows()) false;
     float arrowRange = arrowSize() + arrowOffset() / 2.f;
-    return showArrows() && (x < arrowRange);
+    return (x < arrowRange);
 }
 
 bool ChoiceBox::isRightArrowSelected(const float& x)
 {
+    returnif (!showArrows()) false;
     float arrowRange = arrowSize() + arrowOffset() / 2.f;
-    return showArrows() && (x > size().x - arrowRange);
+    return (x > size().x - arrowRange);
 }
 
 //---------------------------//
@@ -293,29 +270,33 @@ bool ChoiceBox::handleKeyboardEvent(const sf::Event& event)
 //-------------------//
 //----- Updates -----//
 
-void ChoiceBox::updateSize()
+void ChoiceBox::updateButtonSize()
 {
-    sf::Vector2f newSize;
+    m_buttonSize = {0.f, 0.f};
 
     // Getting max size of all choices
     for (auto& choice : m_choices) {
-        m_text.setString(choice.text);
-        auto bounds = m_text.getLocalBounds();
-        newSize.x = std::max(newSize.x, (bounds.left + bounds.width));
-        newSize.y = std::max(newSize.y, (bounds.top + bounds.height));
+        sf::Text text(m_text);
+        text.setString(choice.text);
+        const auto& bounds = text.getLocalBounds();
+        m_buttonSize.x = std::max(m_buttonSize.x, (bounds.left + bounds.width));
+        m_buttonSize.y = std::max(m_buttonSize.y, (bounds.top + bounds.height));
     }
-    m_text.setString(m_choices[m_choice].text);
-    m_maxTextSize = newSize;
+    m_maxTextSize = m_buttonSize;
 
     // Lines
     if (showLines())
-        newSize.y += 2 * (lineOffset() + lineSize());
+        m_buttonSize.y += 2 * (lineOffset() + lineSize());
 
     // Arrows
     if (showArrows())
-        newSize.x += 2 * (arrowOffset() + arrowSize());
+        m_buttonSize.x += 2 * (arrowOffset() + arrowSize());
+}
 
-    setSize(newSize);
+void ChoiceBox::updateSize()
+{
+    updateButtonSize();
+    setSize(buttonSize());
     update();
 }
 

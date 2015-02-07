@@ -19,42 +19,43 @@ void HStacker::update()
         return;
 
     // Children positions
-    uint x = getInitX();
-    uint y;
+    float x = getInitX();
 
     // Setting children positions
     for (auto& childInfo : m_children) {
         // Vertical alignment
-        y = getY(childInfo.child->size().y, childInfo.align);
+        float y = getY(childInfo.child->size().y, childInfo.align);
 
         // Horizontal pre-alignment
         x += getPreX(childInfo.child->size().x);
 
         // Setting position
-        childInfo.child->setPosition(x, y);
+        childInfo.child->setLocalPosition({x, y}, false);
 
         // Horizontal post-alignment
         x += getPostX(childInfo.child->size().x);
     }
+
+    setStatus(true);
 }
 
 inline float HStacker::getY(float& childHeight, Align& inAlign)
 {
     // Max height
-    float height = 0;
+    float height = 0.f;
     for (auto& childInfo : m_children)
         height = std::max(height, childInfo.child->size().y);
 
     // Center
     if (inAlign == Stacker::CENTER)
-        return (size().y - childHeight) / 2;
+        return (size().y - childHeight) / 2.f;
 
     // Opposite : bottom
     else if (inAlign == Stacker::OPPOSITE)
-        return (size().y - margin()) - (height + childHeight) / 2;
+        return (size().y - margin()) - (height + childHeight) / 2.f;
 
     // Standard : top
-    return margin() + (height - childHeight) / 2;
+    return margin() + (height - childHeight) / 2.f;
 }
 
 inline float HStacker::getInitX()
@@ -64,7 +65,7 @@ inline float HStacker::getInitX()
         uint width = (m_children.size() - 1) * margin();
         for (auto& childInfo : m_children)
             width += childInfo.child->size().x;
-        return (size().x - width) / 2;
+        return (size().x - width) / 2.f;
     }
 
     // Opposite : right
@@ -82,7 +83,7 @@ inline float HStacker::getPreX(float& childWidth)
         return -childWidth;
 
     // Center or Standard
-    return 0;
+    return 0.f;
 }
 
 inline float HStacker::getPostX(float& childWidth)
