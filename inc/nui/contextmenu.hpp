@@ -6,6 +6,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 
 #include <sstream>
+#include <functional>
 
 namespace nui
 {

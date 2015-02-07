@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <string>
+#include <functional>
 
 namespace nui
 {
