@@ -202,6 +202,9 @@ void Application::loadTextures()
     s_context.textures.load(Textures::MENU_NAME, "res/tex/menu/name.png");
 
     // Dungeon
+    s_context.textures.load(Textures::DUNGEON_SCENE_GRASSYHILLS_BACK, "res/tex/dungeon/scene/grassyhills_back.png");
+    s_context.textures.load(Textures::DUNGEON_SCENE_GRASSYHILLS_FRONT, "res/tex/dungeon/scene/grassyhills_front.png");
+
     s_context.textures.load(Textures::DUNGEON_PANEL_MONSTERS, "res/tex/dungeon/panel/monsters.png");
     s_context.textures.load(Textures::DUNGEON_PANEL_TRAPS, "res/tex/dungeon/panel/traps.png");
     s_context.textures.load(Textures::DUNGEON_PANEL_FACILITIES, "res/tex/dungeon/panel/facilities.png");
@@ -300,7 +303,7 @@ sf::View Application::bestView()
     sf::FloatRect viewport(0.f, 0.f, 1.f, 1.f);
     const auto& screenSize = s_context.screenSize;
     const auto& resolution = s_context.resolution;
-    sf::Vector2f viewRatio = sf::vdiv(screenSize, resolution);
+    const sf::Vector2f viewRatio = sf::vdiv(screenSize, resolution);
 
     if (viewRatio.x > viewRatio.y) {
         viewport.width = viewRatio.y / viewRatio.x;

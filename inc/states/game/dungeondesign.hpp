@@ -6,6 +6,8 @@
 #include "dungeon/panel.hpp"
 #include "states/state.hpp"
 
+#include <SFML/Graphics/Sprite.hpp>
+
 class GameDungeonDesignState : public State
 {
 public:
@@ -28,4 +30,8 @@ private:
     dungeon::Data m_dungeonData;
     dungeon::Inter m_dungeonInter;
     dungeon::Panel m_dungeonPanel;
+
+    // Decorum
+    sf::Sprite m_decorumBack;
+    sf::Sprite m_decorumFront;
 };
