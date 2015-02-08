@@ -201,7 +201,7 @@ void uiCore::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
     // Detection
     // TODO Colors are not visible
-    debug_nui_2(if (m_mouseDetector != nullptr) m_mouseDetector.draw());
+    debug_nui_2(if (m_mouseDetector != nullptr) m_mouseDetector->debugDraw());
 }
 
 void uiCore::update(const sf::Time& dt)

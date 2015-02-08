@@ -49,14 +49,20 @@ void MouseDetector::draw(const Detectable& child, sf::RenderStates states)
     sf::RectangleShape rectangleShape;
     rectangleShape.setFillColor(childInfo->color);
     rectangleShape.setSize(child.size());
-
     m_texture.draw(rectangleShape, states);
-    m_texture.display();
-
-    m_image = m_texture.getTexture().copyToImage();
 }
 
-void MouseDetector::draw() const
+void MouseDetector::draw()
+{
+    returnif (!m_needRedraw);
+
+    m_texture.display();
+    m_image = m_texture.getTexture().copyToImage();
+
+    m_needRedraw = false;
+}
+
+void MouseDetector::debugDraw() const
 {
     auto& window = Application::context().window;
 

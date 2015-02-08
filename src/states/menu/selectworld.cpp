@@ -72,6 +72,9 @@ void MenuSelectWorldState::draw()
 
     // Menu ui
     window.draw(m_uiCore);
+
+    // Hovering system
+    m_mouseDetector.draw();
 }
 
 bool MenuSelectWorldState::update(const sf::Time& dt)

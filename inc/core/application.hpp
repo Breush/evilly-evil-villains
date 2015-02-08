@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/visualdebug.hpp"
 #include "resources/holder.hpp"
 #include "resources/musicplayer.hpp"
 #include "resources/soundplayer.hpp"
@@ -74,4 +75,6 @@ private:
 
     float m_gameTime;
     bool m_running;
+
+    VisualDebug m_visualDebug;
 };

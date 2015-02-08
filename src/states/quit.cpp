@@ -64,6 +64,9 @@ bool QuitState::handleEvent(const sf::Event& event)
     // Let ui core handle events
     m_uiCore.handleEvent(event);
 
+    // Hovering system
+    m_mouseDetector.draw();
+
     return false;
 }
 

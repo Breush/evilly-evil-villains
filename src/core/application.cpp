@@ -59,6 +59,7 @@ Application::Application()
 
     registerStates();
     m_stateStack.pushState(m_initialState);
+    m_visualDebug.init();
 }
 
 void Application::run()
@@ -68,23 +69,28 @@ void Application::run()
 
     m_running = true;
     while (m_running) {
-        sf::Time dt = clock.restart();
+        // Getting time
+        sf::Time dt(clock.restart());
         timeSinceLastUpdate += dt;
 
+        // Update until frame limit is hit
         while (timeSinceLastUpdate > s_timePerFrame) {
             timeSinceLastUpdate -= s_timePerFrame;
 
+            // Game logic core
             processInput();
             update(s_timePerFrame);
 
-            if (m_stateStack.isEmpty()) {
+            // Quit if no more states
+            if (m_stateStack.isEmpty())
                 m_running = false;
-            }
         }
 
+        // Rendering
         render();
     }
 
+    // Finish closing
     if (s_context.window.isOpen())
         s_context.window.close();
 }
@@ -97,18 +103,26 @@ void Application::processInput()
 
         // Keyboard
         if (event.type == sf::Event::KeyPressed) {
+            // Switch visual debug mode
+            if (event.key.code == sf::Keyboard::F3) {
+                m_visualDebug.switchVisible();
+                return;
+            }
+
             // Switch fullscreen mode
             if (event.key.code == sf::Keyboard::F11) {
                 switchFullscreenMode();
                 return;
             }
 
-            // Hard reset - TODO Enable only on debug mode
+#if DEBUG_GLOBAL > 0
+            // Hard reset on debug mode
             if (event.key.code == sf::Keyboard::BackSlash) {
                 m_stateStack.clearStates();
                 m_stateStack.pushState(States::SPLASHSCREEN);
                 return;
             }
+#endif
         }
 
         // Closing window
@@ -134,6 +148,9 @@ void Application::update(const sf::Time& dt)
     // Shaders can be animated
     m_gameTime += dt.asSeconds();
 
+    // Visual debug
+    m_visualDebug.update(dt);
+
     // TODO Move to a shader code
     s_context.shaders.setParameter(Shaders::MENU_BG, "time", m_gameTime/5.f);
     s_context.shaders.setParameter(Shaders::MENU_NAME, "time", m_gameTime/5.f);
@@ -146,7 +163,10 @@ void Application::update(const sf::Time& dt)
 void Application::render()
 {
     s_context.window.clear();
+
     m_stateStack.draw();
+    m_visualDebug.draw();
+
     s_context.window.display();
 }
 

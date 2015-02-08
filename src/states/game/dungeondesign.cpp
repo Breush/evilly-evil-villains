@@ -39,7 +39,13 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
 
 void GameDungeonDesignState::draw()
 {
-    Application::context().window.draw(m_uiCore);
+    auto& window = Application::context().window;
+
+    // UI
+    window.draw(m_uiCore);
+
+    // Hovering system
+    m_mouseDetector.draw();
 }
 
 bool GameDungeonDesignState::update(const sf::Time& dt)

@@ -20,13 +20,14 @@ namespace interaction
 
         void init();
         void update(const sf::Time& dt);
+        void draw();
 
         // Children management
         void add(Detectable* child);
         void draw(const Detectable& child, sf::RenderStates states);
 
         // Debug drawing to see hitboxes
-        void draw() const;
+        void debugDraw() const;
 
         // Events - detect mouse and pick child
         Detectable* handleMouseEvent(const sf::Event& event);

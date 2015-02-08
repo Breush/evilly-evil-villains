@@ -84,6 +84,9 @@ void MenuMainState::draw()
     // Animated background and menu
     window.draw(m_bgSprite, m_bgShader);
     window.draw(m_uiCore);
+
+    // Hovering system
+    m_mouseDetector.draw();
 }
 
 void MenuMainState::onHide()
