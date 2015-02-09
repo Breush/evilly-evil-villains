@@ -9,18 +9,21 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
 
-
 MenuMainState::MenuMainState(StateStack& stack)
     : baseClass(stack)
     , m_bgRotAngle(0.f)
     , m_uiCore(&m_mouseDetector)
 {
     const sf::Vector2f& resolution = Application::context().resolution;
+    float maxSize = std::max(resolution.x, resolution.y);
 
     // Background
-    sf::Texture& texture = Application::context().textures.get(Textures::MENU_BG);
+    const auto& texture = Application::context().textures.get(Textures::MENU_BG);
+    const auto& textureSize = texture.getSize();
     m_bgSprite.setTexture(texture);
-    m_bgSprite.setPosition((resolution - sf::Vector2f(texture.getSize())) / 2.f);
+    m_bgSprite.setScale(maxSize / textureSize.x, maxSize / textureSize.y);
+    m_bgSprite.setPosition(sf::vsub(resolution, maxSize) / 2.f);
+    m_bgSprite.setTexture(texture);
 
     // Shaders
     m_bgShader = &Application::context().shaders.get(Shaders::MENU_BG);
@@ -61,7 +64,8 @@ MenuMainState::MenuMainState(StateStack& stack)
     m_reactImage.setImageTexture(Textures::MENU_NAME);
     m_reactImage.setImageShader(Shaders::MENU_NAME);
     m_reactImage.setMouseLeftDeselect(false);
-    // TODO Implement an XML Holder ?
+
+    // Setting callbacks
     m_reactImage.addReactFromFile("res/tex/menu/name.xml");
     m_reactImage.setReactCallback(m_choices[0], singlePlayer);
     m_reactImage.setReactCallback(m_choices[1], multiPlayer);

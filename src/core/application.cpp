@@ -47,7 +47,7 @@ Application::Application()
     , m_gameTime(0.f)
     , m_running(false)
 {
-    s_context.init(sf::Vector2f(960.f, 540.f), "Evily Evil Villains", sf::Style::Default);
+    s_context.init({1360.f, 768.f}, "Evily Evil Villains", sf::Style::Default);
     s_context.window.setKeyRepeatEnabled(false);
     s_context.window.setVerticalSyncEnabled(true);
 
@@ -192,6 +192,7 @@ void Application::loadTextures()
     s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERMIDDLE, "res/tex/jumping-toasts/toaster-middle.png", true);
     s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERTOP, "res/tex/jumping-toasts/toaster-top.png", true);
 
+    s_context.textures.setRepeated(Textures::JUMPINGTOASTS_BG, true);
     s_context.textures.setSmooth(Textures::JUMPINGTOASTS_TOASTCUT, false);
 
     // NUI
