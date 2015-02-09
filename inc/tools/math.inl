@@ -1,22 +1,4 @@
 template<typename T1, typename T2>
-inline bool isInsideRect(const sf::Vector2<T1>& point, const sf::Rect<T2>& rect)
-{
-    return isInsideRect(point.x, point.y, rect);
-}
-
-template<typename T1, typename T2>
-inline bool isInsideRect(const T1& x, const T1& y, const sf::Rect<T2>& rect)
-{
-    if (x < rect.left || x > rect.left + rect.width)
-        return false;
-
-    if (y < rect.top || y > rect.top + rect.height)
-        return false;
-
-    return true;
-}
-
-template<typename T1, typename T2>
 void clamp(T1& x, T1& y, const T2& maxX, const T2& maxY)
 {
     if (x < 0) x = 0;

@@ -178,7 +178,7 @@ void ReactImage::handleMouseMoved(const sf::Vector2f& mousePos)
 {
     // Looking for active react
     for (auto& react : m_reacts) {
-        if (isInsideRect(mousePos, react.second.rect)) {
+        if (react.second.rect.contains(mousePos)) {
             activateReact(react.first);
             return;
         }
