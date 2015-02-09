@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.0\n"
-"Report-Msgid-Bugs-To: alexis.breust@gmail.com\n"
-"POT-Creation-Date: 2015-01-18 12:13+0100\n"
-"PO-Revision-Date: 2015-01-18 12:26+0100\n"
+"Report-Msgid-Bugs-To: sherlock.breust@gmail.com\n"
+"POT-Creation-Date: 2015-02-09 19:26+0100\n"
+"PO-Revision-Date: 2015-02-09 19:28+0100\n"
 "Last-Translator: Alexis Breust <alexis.breust@gmail.com>\n"
 "Language-Team: Français <>\n"
 "Language: fr\n"
@@ -17,6 +17,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.4\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+
+msgid "Do you really want to quit?"
+msgstr "Vous souhaitez vraiment partir ?"
+
+msgid "No, sorry, it is a mistake."
+msgstr "Non, désolé, c'est une erreur."
+
+msgid "Yes, I will lose everything not saved."
+msgstr "Oui, je vais perdre tout ce qui n'est pas sauvegardé."
 
 msgid "Victim and alone"
 msgstr "Victime solitaire"
@@ -33,11 +42,14 @@ msgstr "Y a pourtant qu'un choix"
 msgid "Someone who runs away"
 msgstr "Synonyme de fuite"
 
+msgid "Villain"
+msgstr "Méchant"
+
 msgid "World name"
 msgstr "Nom du monde"
 
-msgid "Villain"
-msgstr "Méchant"
+msgid "Main dungeon"
+msgstr "Donjon principal"
 
 msgid "Last played"
 msgstr "Dernière fois joué"

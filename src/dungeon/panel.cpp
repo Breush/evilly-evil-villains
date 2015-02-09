@@ -19,9 +19,7 @@ void Panel::init()
     m_background.setTexture(&Application::context().textures.get(Textures::DUNGEON_PANEL_BACKGROUND));
 
     // Reduced button
-    m_switchReducedButton.setFillColor(sf::Color(150, 140, 10, 255));
-    m_switchReducedButton.setOutlineColor(sf::Color::White);
-    m_switchReducedButton.setOutlineThickness(1);
+    m_switchReducedButton.setTexture(&Application::context().textures.get(Textures::DUNGEON_PANEL_SWITCH));
     m_switchReducedButton.setSize({20.f, 20.f});
 
     // Tabs stacker
