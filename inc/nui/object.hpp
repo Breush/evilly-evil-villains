@@ -42,7 +42,7 @@ namespace nui
         // Sub-parts of drawing
         struct Part {
             sf::Drawable* drawable;
-            Shaders::ID shader;
+            sf::Shader* shader;
             sf::IntRect* clippingRect;
         };
 

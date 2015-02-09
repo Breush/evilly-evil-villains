@@ -26,6 +26,7 @@ uiCore::uiCore(interaction::MouseDetector* mouseDetector)
     , m_mouseDetector(mouseDetector)
 {
     // Focusing system
+    m_focusShader = &Application::context().shaders.get(Shaders::NUI_FOCUS);
     m_focusSprite.setTexture(Application::context().textures.get(Textures::NUI_FOCUS));
     m_focusSprite.setColor( {255, 255, 255, 100});
 }
@@ -195,7 +196,7 @@ void uiCore::draw(sf::RenderTarget& target, sf::RenderStates states) const
     // Focusing system
     if (focusedChild() && focusedChild()->visible()) {
         sf::RenderStates focusStates(states);
-        focusStates.shader = &Application::context().shaders.get(Shaders::NUI_FOCUS);
+        focusStates.shader = m_focusShader;
         target.draw(m_focusSprite, focusStates);
     }
 

@@ -217,6 +217,11 @@ void Application::loadTextures()
 
 void Application::loadShaders()
 {
+    // Default is empty
+    s_context.shaders.loadVoid(Shaders::DEFAULT);
+
+    returnif (!sf::Shader::isAvailable());
+
     // NUI
     s_context.shaders.load(Shaders::NUI_HOVER, "res/shd/nui/hover.frag", sf::Shader::Fragment);
     s_context.shaders.load(Shaders::NUI_FOCUS, "res/shd/nui/focus.frag", sf::Shader::Fragment);
@@ -230,6 +235,8 @@ void Application::loadShaders()
 
 void Application::refreshShaders()
 {
+    returnif (!sf::Shader::isAvailable());
+
     const auto& screenSize = s_context.screenSize;
     const auto& resolution = s_context.resolution;
     const auto& effectiveDisplay = s_context.effectiveDisplay;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "tools/debug.hpp"
+#include "tools/tools.hpp"
 #include "core/gettext.hpp" // string2wstring
 
 #include <SFML/System/Time.hpp>
@@ -18,6 +19,8 @@ public:
 
     template <typename Parameter>
     void load(Identifier id, const std::string& filename, const Parameter& param);
+
+    void loadVoid(Identifier id);
 
     // Returns resource from ID
     Resource& get(Identifier id);

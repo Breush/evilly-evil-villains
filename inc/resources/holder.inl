@@ -25,6 +25,12 @@ inline void ResourceHolder<Resource, Identifier>::load(Identifier id, const std:
 }
 
 template <typename Resource, typename Identifier>
+inline void ResourceHolder<Resource, Identifier>::loadVoid(Identifier id)
+{
+    m_resourcesMap.insert(std::make_pair(id, nullptr));
+}
+
+template <typename Resource, typename Identifier>
 inline Resource& ResourceHolder<Resource, Identifier>::get(Identifier id)
 {
     auto found = m_resourcesMap.find(id);
@@ -113,7 +119,7 @@ template <typename Parameter>
 inline void ResourceHolder<Resource, Identifier>::setParameter(Identifier id, const std::string& name, const Parameter& param)
 {
     auto found = m_resourcesMap.find(id);
-    massert(found != m_resourcesMap.end(), "Resource not found");
+    returnif (found == m_resourcesMap.end());
 
     found->second->setParameter(name, param);
 }

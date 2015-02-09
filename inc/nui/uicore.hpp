@@ -54,6 +54,7 @@ namespace nui
 
         // Focusing system
         Object* m_forgottenFocusedChild;
+        sf::Shader* m_focusShader;
         sf::Sprite m_focusSprite;
         int m_focusAnimation;
 

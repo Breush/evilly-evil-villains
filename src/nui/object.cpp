@@ -35,12 +35,13 @@ void Object::clearParts()
     m_parts.clear();
 }
 
-void Object::addPart(sf::Drawable* drawable, Shaders::ID shader)
+void Object::addPart(sf::Drawable* drawable, Shaders::ID shaderID)
 {
     for (auto& part : m_parts)
         returnif (part.drawable == drawable);
 
-    m_parts.push_back({drawable, shader, nullptr});
+    if (shaderID == Shaders::NONE) m_parts.push_back({drawable, nullptr, nullptr});
+    else m_parts.push_back({drawable, &Application::context().shaders.get(shaderID), nullptr});
 }
 
 void Object::removePart(sf::Drawable* drawable)
@@ -53,13 +54,15 @@ void Object::removePart(sf::Drawable* drawable)
     }
 }
 
-void Object::setPartShader(sf::Drawable* drawable, Shaders::ID shader)
+void Object::setPartShader(sf::Drawable* drawable, Shaders::ID shaderID)
 {
+    returnif (!sf::Shader::isAvailable());
+
     for (auto& part : m_parts)
     {
         if (part.drawable == drawable)
         {
-            part.shader = shader;
+            part.shader = &Application::context().shaders.get(shaderID);
             return;
         }
     }
@@ -80,7 +83,7 @@ void Object::setPartClippingRect(sf::Drawable* drawable, sf::IntRect* clippingRe
 void Object::resetPartsShader()
 {
     for (auto& part : m_parts)
-        part.shader = Shaders::NONE;
+        part.shader = nullptr;
 }
 
 //-------------------//
@@ -122,10 +125,8 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const
     for (auto& part : m_parts)
     {
         // Setting shader if needed
-        if (part.shader != Shaders::NONE)
-            states.shader = &Application::context().shaders.get(part.shader);
-        else
-            states.shader = shader;
+        if (part.shader != nullptr) states.shader = part.shader;
+        else states.shader = shader;
 
         // Clipping if needed
         if (part.clippingRect != nullptr) {
