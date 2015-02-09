@@ -62,6 +62,7 @@ protected:
     void registerStates();
 
     // Window management
+    void clearWindowEvents();
     void refresh();
     sf::View bestView();
     void switchFullscreenMode();

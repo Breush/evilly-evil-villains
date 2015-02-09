@@ -29,6 +29,13 @@ void Panel::init()
     // Tabs stacker
     core()->add(&m_tabsStacker);
     m_tabsStacker.setParent(this);
+
+    // TODO Make a std::array to store tabs
+    m_monstersTab.setZDepth(zDepth() - 1);
+    m_trapsTab.setZDepth(zDepth() - 1);
+    m_facilitiesTab.setZDepth(zDepth() - 1);
+    m_treasuresTab.setZDepth(zDepth() - 1);
+
     m_tabsStacker.add(&m_monstersTab,   nui::Stacker::Align::CENTER);
     m_tabsStacker.add(&m_trapsTab,      nui::Stacker::Align::CENTER);
     m_tabsStacker.add(&m_facilitiesTab, nui::Stacker::Align::CENTER);
@@ -100,7 +107,7 @@ void Panel::update(const sf::Time& dt)
 
 void Panel::handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos)
 {
-    if (isInsideRect(mousePos, m_switchReducedButton.getGlobalBounds()))
+    if (m_switchReducedButton.getGlobalBounds().contains(mousePos))
         switchReduced();
 }
 

@@ -13,68 +13,24 @@ using namespace interaction;
 
 MouseDetector::MouseDetector()
     : m_hoveredChild(nullptr)
-    , m_needRedraw(true)
 {
 }
 
-void MouseDetector::init()
+void MouseDetector::draw() const
 {
-    const auto& resolution = Application::context().resolution;
+    returnif (m_hoveredChild == nullptr);
 
-    m_image.create(resolution.x, resolution.y);
-    m_texture.create(resolution.x, resolution.y);
-    m_texture.setSmooth(false);
-}
-
-void MouseDetector::draw(const Detectable& child, sf::RenderStates states)
-{
-    returnif (!m_needRedraw || !child.detectable());
-
-    // We are just interested in the transform
-    states.texture = nullptr;
-    states.shader = nullptr;
-
-    // Finding child's info
-    const ChildInfo* childInfo = nullptr;
-    for (const auto& childInfoElement : m_childrenList) {
-        if (childInfoElement.child == &child) {
-            childInfo = &childInfoElement;
-            break;
-        }
-    }
-
-    massert(childInfo != nullptr, "Asking to draw a non-registered child.");
-
-    // Drawing its representation
-    sf::RectangleShape rectangleShape;
-    rectangleShape.setFillColor(childInfo->color);
-    rectangleShape.setSize(child.size());
-    m_texture.draw(rectangleShape, states);
-}
-
-void MouseDetector::draw()
-{
-    returnif (!m_needRedraw);
-
-    m_texture.display();
-    m_image = m_texture.getTexture().copyToImage();
-
-    m_needRedraw = false;
-}
-
-void MouseDetector::debugDraw() const
-{
     auto& window = Application::context().window;
 
-    sf::Sprite sprite(m_texture.getTexture());
-    sprite.setColor({255, 255, 255, 150});
-    window.draw(sprite);
-}
+    sf::RectangleShape rectangleShape;
+    rectangleShape.setFillColor({255, 0, 0, 150});
+    rectangleShape.setSize(m_hoveredChild->size());
+    rectangleShape.setPosition(m_hoveredChild->getPosition());
+    rectangleShape.setRotation(m_hoveredChild->getRotation());
+    rectangleShape.setScale(m_hoveredChild->getScale());
+    rectangleShape.setOrigin(m_hoveredChild->getOrigin());
 
-void MouseDetector::update(const sf::Time& dt)
-{
-    if (m_needRedraw)
-        m_texture.clear(sf::Color::Black);
+    window.draw(rectangleShape);
 }
 
 //------------------//
@@ -82,16 +38,13 @@ void MouseDetector::update(const sf::Time& dt)
 
 Detectable* MouseDetector::handleMouseEvent(const sf::Event& event)
 {
-    // Redraw only when mouse is moved
-    m_needRedraw = true;
-
     // Extrapolating position
     auto& window = Application::context().window;
     sf::Vector2f absPos(window.mapPixelToCoords(mousePosition(event)));
     clamp(absPos, Application::context().resolution);
 
     // Getting child touched if any
-    Detectable* child = childFromPosition(sf::v2u(absPos));
+    Detectable* child = childFromPosition(absPos);
     setHoveredChild(child);
     returnif (child == nullptr) nullptr;
 
@@ -116,14 +69,9 @@ Detectable* MouseDetector::handleMouseEvent(const sf::Event& event)
 
 void MouseDetector::add(Detectable* child)
 {
-    // FIXME With this system not reusing previously attributed colors,
-    // we will possibly hit the maximum capacity in game
-
-    // Increase current color
-    increaseColor();
-    massert(m_color != sf::Color::Black, "Object number exceeds core limit");
-    m_childrenList.push_back({m_color, child});
-    child->setMouseDetector(this);
+    // Adding child to the list
+    m_children.push_back(child);
+    m_children.sort([](Detectable* a, Detectable* b) { return a->zDepth() <= b->zDepth(); });
 }
 
 //--------------------//
@@ -147,27 +95,15 @@ void MouseDetector::setHoveredChild(Detectable* inHoveredChild)
 //---------------------//
 //----- Low-level -----//
 
-void MouseDetector::increaseColor()
+Detectable* MouseDetector::childFromPosition(const sf::Vector2f& mousePos) const
 {
-    // Red
-    ++m_color.r;
-    returnif (m_color.r != 0);
-
-    // Green
-    ++m_color.g;
-    returnif (m_color.g != 0);
-
-    // Blue
-    ++m_color.b;
-}
-
-Detectable* MouseDetector::childFromPosition(const sf::Vector2u& pos) const
-{
-    const auto& color = m_image.getPixel(pos.x, pos.y);
-
-    for (const auto& childInfo : m_childrenList)
-        if (childInfo.color == color)
-            return childInfo.child;
+    for (const auto& child : m_children) {
+        if (child->detectable()) {
+            sf::FloatRect localBounds(0.f, 0.f, child->size().x, child->size().y);
+            if (localBounds.contains(child->getInverseTransform().transformPoint(mousePos)))
+                return child;
+        }
+    }
 
     return nullptr;
 }

@@ -14,9 +14,6 @@ namespace nui
 
 namespace interaction
 {
-    // Forward declaration
-    class MouseDetector;
-
     class Detectable : public sfe::LocalTransformable
     {
         friend class MouseDetector;
@@ -28,9 +25,6 @@ namespace interaction
 
         // Polymorphism
         virtual nui::Object* asObject() { return nullptr; }
-
-        // Calls mouseDetector drawing function
-        void detectableDraw(sf::RenderStates states) const;
 
     protected:
         // Changes
@@ -45,7 +39,7 @@ namespace interaction
 
         // Params
         PARAMGS(bool, m_detectable, detectable, setDetectable)
-        PARAMGS(MouseDetector*, m_mouseDetector, mouseDetector, setMouseDetector)
         PARAMGSU(sf::Vector2f, m_size, size, setSize, changedSize)
+        PARAMGS(uint, m_zDepth, zDepth, setZDepth)
     };
 }

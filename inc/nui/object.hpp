@@ -67,7 +67,6 @@ namespace nui
         PARAMGS(bool, m_focusable, focusable, setFocusable)
         PARAMGSU(bool, m_visible, visible, setVisible, changedVisible)
         PARAMGSU(sf::FloatRect, m_focusRect, focusRect, setFocusRect, changedFocusRect)
-        PARAMGS(uint, m_zDepth, zDepth, setZDepth)
 
     private:
         std::vector<Part> m_parts;

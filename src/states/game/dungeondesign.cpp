@@ -12,9 +12,6 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
 {
     auto& resolution = Application::context().resolution;
 
-    // Hovering system
-    m_mouseDetector.init();
-
     // Stop music if any
     Application::context().music.stop();
 
@@ -29,6 +26,7 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     m_dungeonInter.setLocalPosition((resolution - m_dungeonInter.size()) / 2.f);
 
     // Dungeon panel
+    m_dungeonPanel.setZDepth(40);
     m_uiCore.add(&m_dungeonPanel);
     m_dungeonPanel.setLocalPosition({200, resolution.y - 100});
     m_dungeonPanel.setSize({resolution.x - 400, 100});
@@ -53,15 +51,11 @@ void GameDungeonDesignState::draw()
 
     // UI
     window.draw(m_uiCore);
-
-    // Hovering system
-    m_mouseDetector.draw();
 }
 
 bool GameDungeonDesignState::update(const sf::Time& dt)
 {
     m_uiCore.update(dt);
-    m_mouseDetector.update(dt);
 
     return true;
 }

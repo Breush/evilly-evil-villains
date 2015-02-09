@@ -106,13 +106,14 @@ void Application::processInput()
             // Switch visual debug mode
             if (event.key.code == sf::Keyboard::F3) {
                 m_visualDebug.switchVisible();
-                return;
+                break;
             }
 
             // Switch fullscreen mode
             if (event.key.code == sf::Keyboard::F11) {
                 switchFullscreenMode();
-                return;
+                clearWindowEvents();
+                break;
             }
 
 #if DEBUG_GLOBAL > 0
@@ -120,7 +121,7 @@ void Application::processInput()
             if (event.key.code == sf::Keyboard::BackSlash) {
                 m_stateStack.clearStates();
                 m_stateStack.pushState(States::SPLASHSCREEN);
-                return;
+                break;
             }
 #endif
         }
@@ -129,14 +130,15 @@ void Application::processInput()
         if (event.type == sf::Event::Closed) {
             if (!m_stateStack.isStateVisible(States::QUIT))
                 m_stateStack.pushState(States::QUIT);
-            return;
+            break;
         }
 
         // Resizing window
         if (event.type == sf::Event::Resized) {
             s_context.screenSize = sf::Vector2f(event.size.width, event.size.height);
+            clearWindowEvents();
             refresh();
-            return;
+            break;
         }
 
         m_stateStack.handleEvent(event);
@@ -282,6 +284,12 @@ void Application::registerStates()
 
 //-----------------------------//
 //----- Window management -----//
+
+void Application::clearWindowEvents()
+{
+    sf::Event event;
+    while (s_context.window.pollEvent(event));
+}
 
 void Application::refresh()
 {

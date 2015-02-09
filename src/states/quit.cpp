@@ -11,9 +11,6 @@ QuitState::QuitState(StateStack& stack)
     const auto& font = Application::context().fonts.get(Fonts::NUI);
     const auto& resolution = Application::context().resolution;
 
-    // Hovering system
-    m_mouseDetector.init();
-
     // Background
     m_bg.setFillColor(sf::Color(0, 0, 0, 200));
     m_bg.setSize(Application::context().resolution);
@@ -49,7 +46,6 @@ void QuitState::draw()
 bool QuitState::update(const sf::Time& dt)
 {
     m_uiCore.update(dt);
-    m_mouseDetector.update(dt);
 
     return false;
 }
@@ -63,9 +59,6 @@ bool QuitState::handleEvent(const sf::Event& event)
 
     // Let ui core handle events
     m_uiCore.handleEvent(event);
-
-    // Hovering system
-    m_mouseDetector.draw();
 
     return false;
 }

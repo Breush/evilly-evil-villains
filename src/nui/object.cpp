@@ -12,7 +12,6 @@ Object::Object()
     , m_centered(false)
     , m_focusable(true)
     , m_visible(true)
-    , m_zDepth(50)
 {
 }
 
@@ -93,6 +92,7 @@ void Object::changedFocusRect()
 
 void Object::changedVisible()
 {
+    setDetectable(m_visible);
     setStatus(true);
 }
 
@@ -143,7 +143,4 @@ void Object::draw(sf::RenderTarget& target, sf::RenderStates states) const
         if (part.clippingRect != nullptr)
             glDisable(GL_SCISSOR_TEST);
     }
-
-    // Mouse detector
-    detectableDraw(states);
 }
