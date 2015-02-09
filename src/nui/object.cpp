@@ -12,7 +12,19 @@ Object::Object()
     , m_centered(false)
     , m_focusable(true)
     , m_visible(true)
+    , m_pendingDetectable(false)
 {
+}
+
+void Object::update(const sf::Time& dt)
+{
+    // Pending changes
+    if (m_pendingDetectable) {
+        setDetectable(m_visible);
+        m_pendingDetectable = false;
+    }
+
+    baseClass::update(dt);
 }
 
 //-----------------//
@@ -92,7 +104,7 @@ void Object::changedFocusRect()
 
 void Object::changedVisible()
 {
-    setDetectable(m_visible);
+    m_pendingDetectable = true;
     setStatus(true);
 }
 

@@ -36,7 +36,7 @@ namespace nui
 
         // Virtual
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-        void update(const sf::Time& dt) override { baseClass::update(dt); }
+        void update(const sf::Time& dt) override;
 
     protected:
         // Sub-parts of drawing
@@ -70,5 +70,7 @@ namespace nui
 
     private:
         std::vector<Part> m_parts;
+
+        bool m_pendingDetectable;
     };
 }

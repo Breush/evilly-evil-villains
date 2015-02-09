@@ -41,7 +41,7 @@ namespace dungeon
         PARAMGS(sf::Vector2f, m_reducedVector, reducedVector, setReducedVector)
 
     private:
-        sf::RectangleShape m_bg; // TODO To be a sf::Sprite for looks
+        sf::RectangleShape m_background;
         sf::RectangleShape m_switchReducedButton;
 
         // Tabs

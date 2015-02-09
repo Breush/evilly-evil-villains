@@ -16,9 +16,7 @@ Panel::Panel()
 void Panel::init()
 {
     // Background
-    m_bg.setFillColor(sf::Color(0, 140, 155, 200));
-    m_bg.setOutlineColor(sf::Color::White);
-    m_bg.setOutlineThickness(1); // TODO Have variable
+    m_background.setTexture(&Application::context().textures.get(Textures::DUNGEON_PANEL_BACKGROUND));
 
     // Reduced button
     m_switchReducedButton.setFillColor(sf::Color(150, 140, 10, 255));
@@ -39,7 +37,7 @@ void Panel::init()
     m_tabsStacker.add(&m_monstersTab,   nui::Stacker::Align::CENTER);
     m_tabsStacker.add(&m_trapsTab,      nui::Stacker::Align::CENTER);
     m_tabsStacker.add(&m_facilitiesTab, nui::Stacker::Align::CENTER);
-    m_tabsStacker.add(&m_treasuresTab,   nui::Stacker::Align::CENTER);
+    m_tabsStacker.add(&m_treasuresTab,  nui::Stacker::Align::CENTER);
 
     // Tabs
     // TODO Get display size from somewhere
@@ -57,12 +55,12 @@ void Panel::update()
     clearParts();
 
     // Background
-    m_bg.setSize(size());
-    m_bg.setPosition({0.f, 0.f});
-    addPart(&m_bg);
+    m_background.setSize(size());
+    m_background.setPosition({0.f, 0.f});
+    addPart(&m_background);
 
     // Reduced button
-    m_switchReducedButton.setPosition({size().x - 20.f, 0.f});
+    m_switchReducedButton.setPosition({size().x - 60.f, 20.f});
     addPart(&m_switchReducedButton);
 
     // Tabs stacker
@@ -72,7 +70,7 @@ void Panel::update()
 
     // Reduced
     // Set target with the new parameters
-    if (reduced()) setReducedVector({0.f, size().y - 20.f});
+    if (reduced()) setReducedVector({0.f, size().y - 40.f});
     else setReducedVector({0.f, 0.f});
 
     setStatus(true);

@@ -10,7 +10,7 @@
 // Basic application interactions
 #define DEBUG_APPLICATION   5
 // User interface
-#define DEBUG_NUI           0
+#define DEBUG_NUI           2
 // SCML parsing
 #define DEBUG_SCML          0
 // Dungeon design

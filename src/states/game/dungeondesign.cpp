@@ -28,8 +28,9 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     // Dungeon panel
     m_dungeonPanel.setZDepth(40);
     m_uiCore.add(&m_dungeonPanel);
-    m_dungeonPanel.setLocalPosition({200, resolution.y - 100});
-    m_dungeonPanel.setSize({resolution.x - 400, 100});
+    m_dungeonPanel.setSize({(4 + 1) * 100, 150});
+    m_dungeonPanel.setCentered(true);
+    m_dungeonPanel.setLocalPosition({(resolution.x - m_dungeonPanel.size().x) / 2.f, resolution.y - m_dungeonPanel.size().y});
 
     // Decorum
     m_decorumBack.setTexture(Application::context().textures.get(Textures::DUNGEON_SCENE_GRASSYHILLS_BACK));
@@ -81,6 +82,7 @@ bool GameDungeonDesignState::handleEvent(const sf::Event& event)
 
     // Let ui core handle events
     m_uiCore.handleEvent(event);
+
     return false;
 }
 
