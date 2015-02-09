@@ -130,7 +130,7 @@ void Panel::switchReduced()
 
 void Panel::changedStatus()
 {
-    m_tabsStacker.setStatus(true);
+    m_tabsStacker.parentStatusChanged();
 }
 
 void Panel::changedSize()

@@ -26,8 +26,16 @@ void LocalTransformable::update(const sf::Time&)
     setCallParent(true);
 }
 
+void LocalTransformable::parentStatusChanged()
+{
+    updateLocal();
+    setStatus(true);
+    setCallParent(false);
+}
+
 void LocalTransformable::refresh()
 {
+    updateLocal();
     setStatus(true);
     setCallParent(true);
 }

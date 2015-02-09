@@ -15,6 +15,7 @@ namespace sfe
         virtual ~LocalTransformable() {}
 
         virtual void update(const sf::Time& dt);
+        virtual void parentStatusChanged();
         void refresh();
 
         // Setters

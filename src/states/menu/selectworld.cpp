@@ -26,7 +26,7 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     m_list.setLocalPosition(0.1f * resolution);
     m_list.setSize({0.8f * resolution.x, 0.7f * resolution.y});
     m_list.setColumns({_("Villain"), _("World name"), _("Main dungeon"), _("Last played")});
-    m_list.setColumnFillClip(2, false, false);
+    m_list.setColumnFillClip(3, false, false);
 
     // Load list of worlds
     // TODO Choose which columns to show (more?)
