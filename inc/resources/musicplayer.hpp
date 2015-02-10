@@ -16,16 +16,17 @@ class MusicPlayer : private sf::NonCopyable
 public:
     MusicPlayer();
 
-    void play(Music::ID theme);
+    void load(Musics::ID id, const std::string& filename);
+
+    void play(Musics::ID id);
     void stop();
 
     void setPaused(bool paused);
     void setVolume(uint volume);
 
-
 private:
     sf::Music m_music;
-    std::map<Music::ID, std::string> m_filenames;
+    std::map<Musics::ID, std::string> m_musics;
     uint m_volume;
 };
 

@@ -13,7 +13,7 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     auto& resolution = Application::context().resolution;
 
     // Stop music if any
-    Application::context().music.stop();
+    Application::context().musics.stop();
 
     // Dungeon data
     massert(!world::context.info->folder.empty(), "Selected world is in an empty folder.");

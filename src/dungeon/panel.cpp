@@ -109,10 +109,15 @@ void Panel::handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const
 
 void Panel::handleMouseMoved(const sf::Vector2f& mousePos)
 {
+    resetPartsShader();
+
+    if (m_switchReducedButton.getGlobalBounds().contains(mousePos))
+        setPartShader(&m_switchReducedButton, Shaders::NUI_HOVER);
 }
 
 void Panel::handleMouseLeft()
 {
+    resetPartsShader();
 }
 
 //------------------------//

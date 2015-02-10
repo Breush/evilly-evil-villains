@@ -31,7 +31,7 @@ class Application
         TextureHolder textures;
         ShaderHolder shaders;
         FontHolder fonts;
-        MusicPlayer music;
+        MusicPlayer musics;
         SoundPlayer sounds;
         AnimationHolder animations;
     };
@@ -52,14 +52,18 @@ protected:
     // Resources
     void loadTextures();
     void loadShaders();
-    void loadSounds();
     void loadFonts();
+    void loadMusics();
+    void loadSounds();
     void loadAnimations();
 
     void refreshShaders();
 
+    void updateShaders(const sf::Time& dt);
+    void updateAnimations(const sf::Time& dt);
+
     // States
-    void registerStates();
+    void loadStates();
 
     // Window management
     void clearWindowEvents();

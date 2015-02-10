@@ -1,20 +1,24 @@
 #include "resources/musicplayer.hpp"
 
-
 MusicPlayer::MusicPlayer()
     : m_music()
-    , m_filenames()
     , m_volume(100)
 {
-    m_filenames[Music::MENU_THEME] = "res/mus/menu_theme.ogg";
 }
 
-void MusicPlayer::play(Music::ID theme)
+void MusicPlayer::load(Musics::ID id, const std::string& filename)
 {
-    std::string filename = m_filenames[theme];
+    auto inserted = m_musics.insert(std::make_pair(id, filename));
+    massert(inserted.second, "Cannot add music filename.");
+}
 
-    if (!m_music.openFromFile(filename))
-        throw std::runtime_error("Music " + filename + " could not be loaded.");
+void MusicPlayer::play(Musics::ID id)
+{
+    auto found = m_musics.find(id);
+    massert(found != m_musics.end(), "Musics::ID " << id << " was not previously loaded.");
+
+    if (!m_music.openFromFile(found->second))
+        throw std::runtime_error("Music " + found->second + " could not be loaded.");
 
     m_music.setVolume(m_volume);
     m_music.setLoop(true);

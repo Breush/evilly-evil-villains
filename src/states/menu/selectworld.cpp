@@ -57,7 +57,7 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     m_stacker.update();
 
     // Ambient feeling music
-    Application::context().music.setVolume(25);
+    Application::context().musics.setVolume(25);
 }
 
 void MenuSelectWorldState::draw()

@@ -74,8 +74,8 @@ MenuMainState::MenuMainState(StateStack& stack)
     m_reactImage.setReactCallback(m_choices[4], quitGame);
 
     // Menu theme
-    Application::context().music.play(Music::MENU_THEME);
-    Application::context().music.setVolume(75);
+    Application::context().musics.play(Musics::MENU_THEME);
+    Application::context().musics.setVolume(75);
 }
 
 void MenuMainState::draw()

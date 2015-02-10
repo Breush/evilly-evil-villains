@@ -83,7 +83,7 @@ namespace Sounds
     };
 }
 
-namespace Music
+namespace Musics
 {
     enum ID {
         DEFAULT,
