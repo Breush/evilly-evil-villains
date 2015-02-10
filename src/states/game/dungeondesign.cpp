@@ -31,6 +31,7 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     m_dungeonPanel.setSize({(4 + 1) * 100, 150});
     m_dungeonPanel.setCentered(true);
     m_dungeonPanel.setLocalPosition({(resolution.x - m_dungeonPanel.size().x) / 2.f, resolution.y - m_dungeonPanel.size().y});
+    m_dungeonPanel.saveDefaults();
 
     // Decorum
     m_decorumBack.setTexture(Application::context().textures.get(Textures::DUNGEON_SCENE_GRASSYHILLS_BACK));
@@ -56,6 +57,7 @@ void GameDungeonDesignState::draw()
 
 bool GameDungeonDesignState::update(const sf::Time& dt)
 {
+    // UI
     m_uiCore.update(dt);
 
     return true;

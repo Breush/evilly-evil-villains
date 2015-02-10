@@ -15,10 +15,12 @@ public:
     virtual ~GameDungeonDesignState() {}
     States::ID id() const override { return States::GAME_DUNGEON_DESIGN; }
 
+    // Routines
     void draw() override;
     bool update(const sf::Time& dt) override;
     bool handleEvent(const sf::Event& event) override;
 
+    // Virtual
     void onQuit() override;
 
 private:

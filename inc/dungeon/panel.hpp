@@ -20,7 +20,6 @@ namespace dungeon
         // Virtual
         void init() override;
         void update() override;
-        void update(const sf::Time& dt) override;
 
         // Reduced mode
         void switchReduced();
@@ -34,10 +33,9 @@ namespace dungeon
         // Changes
         void changedStatus() override;
         void changedSize() override;
-        void changedReduced();
 
         // Params
-        PARAMGSU(bool, m_reduced, reduced, setReduced, changedReduced)
+        PARAMGS(bool, m_reduced, reduced, setReduced)
         PARAMGS(sf::Vector2f, m_reducedVector, reducedVector, setReducedVector)
 
     private:
@@ -50,9 +48,5 @@ namespace dungeon
         nui::ImageButton m_trapsTab;
         nui::ImageButton m_facilitiesTab;
         nui::ImageButton m_treasuresTab;
-
-        // Animation
-        sf::Vector2f m_reducedVectorAnimation;
-        float m_reducedSpeedBySecond;
     };
 }

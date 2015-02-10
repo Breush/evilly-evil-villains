@@ -7,10 +7,10 @@
 using namespace dungeon;
 
 Panel::Panel()
-    : m_reducedSpeedBySecond(250.f) // TODO Defined somewhere in config?
-    , m_reduced(true)
+    : m_reduced(false)
 {
     setFocusable(false);
+    setLerpable(true);
 }
 
 void Panel::init()
@@ -66,36 +66,7 @@ void Panel::update()
     m_tabsStacker.setSize(0.95f * size());
     m_tabsStacker.setLocalPosition((1.f - 0.95f) * size() / 2.f, false);
 
-    // Reduced
-    // Set target with the new parameters
-    if (reduced()) setReducedVector({0.f, size().y - 40.f});
-    else setReducedVector({0.f, 0.f});
-
     setStatus(true);
-}
-
-void Panel::update(const sf::Time& dt)
-{
-    // Have it encasulated inside a Animation class
-    float x = 0.f, y = 0.f;
-
-    // Animation of reduced vector
-    if (m_reducedVectorAnimation.y < m_reducedVector.y) {
-        y = m_reducedSpeedBySecond * dt.asSeconds();
-        if (m_reducedVectorAnimation.y + y > m_reducedVector.y)
-            y = m_reducedVector.y - m_reducedVectorAnimation.y;
-    }
-    else if (m_reducedVectorAnimation.y > m_reducedVector.y) {
-        y -= m_reducedSpeedBySecond * dt.asSeconds();
-        if (m_reducedVectorAnimation.y + y < m_reducedVector.y)
-            y = m_reducedVector.y - m_reducedVectorAnimation.y;
-    }
-
-    // Animate
-    if (x != 0.f || y != 0.f) {
-        m_reducedVectorAnimation += sf::Vector2f(x, y);
-        localMove({x, y});
-    }
 }
 
 //------------------------//
@@ -126,6 +97,9 @@ void Panel::handleMouseLeft()
 void Panel::switchReduced()
 {
     setReduced(!reduced());
+
+    if (reduced()) setTargetPositionOffset({0.f, size().y - 40.f});
+    else setTargetPositionOffset({0.f, 0.f});
 }
 
 //-------------------//
@@ -140,9 +114,4 @@ void Panel::changedSize()
 {
     update();
     baseClass::changedSize();
-}
-
-void Panel::changedReduced()
-{
-    update();
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "resources/identifiers.hpp"
-#include "interaction/detectable.hpp"
+#include "sfe/lerpable.hpp"
 #include "tools/param.hpp"
 #include "tools/tools.hpp"
 
@@ -13,9 +13,9 @@ namespace nui
 {
     class uiCore;
 
-    class Object : public sf::Drawable, public interaction::Detectable
+    class Object : public sf::Drawable, public sfe::Lerpable
     {
-        typedef interaction::Detectable baseClass;
+        typedef sfe::Lerpable baseClass;
         friend class uiCore;
 
     public:
