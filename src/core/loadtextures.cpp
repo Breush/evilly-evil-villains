@@ -40,4 +40,6 @@ void Application::loadTextures()
     s_context.textures.load(Textures::DUNGEON_PANEL_TRAPS, "res/tex/dungeon/panel/traps.png");
     s_context.textures.load(Textures::DUNGEON_PANEL_FACILITIES, "res/tex/dungeon/panel/facilities.png");
     s_context.textures.load(Textures::DUNGEON_PANEL_TREASURES, "res/tex/dungeon/panel/treasures.png");
+
+    s_context.textures.load(Textures::DUNGEON_INTER_ROOM, "res/tex/dungeon/inter/room.png");
 }

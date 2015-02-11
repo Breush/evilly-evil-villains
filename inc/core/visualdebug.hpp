@@ -20,6 +20,7 @@ public:
 private:
     bool m_visible;
     uint m_renderedFrames;
+    uint m_renderedUpdates;
     float m_time;
 
     sf::Text m_text;

@@ -8,6 +8,7 @@
 VisualDebug::VisualDebug()
     : m_visible(false)
     , m_renderedFrames(0)
+    , m_renderedUpdates(0)
     , m_time(0.f)
 {
 }
@@ -25,17 +26,20 @@ void VisualDebug::update(const sf::Time& dt)
 {
     returnif (!m_visible);
 
+    ++m_renderedUpdates;
     m_time += dt.asSeconds();
 
     if (m_time >= 1.f) {
         // Update text each second
         std::wstringstream str;
-        str << L"FPS: " << m_renderedFrames << std::endl;
+        str << L"FPS: " << m_renderedFrames
+            << L" [" << m_renderedUpdates << L"]" << std::endl;
         m_text.setString(str.str());
 
         // And reset counters
         m_time -= 1.f;
         m_renderedFrames = 0;
+        m_renderedUpdates = 0;
     }
 }
 
@@ -62,5 +66,6 @@ void VisualDebug::switchVisible()
         m_text.setString(L"FPS: ...");
         m_time = 0.f;
         m_renderedFrames = 0;
+        m_renderedUpdates = 0;
     }
 }

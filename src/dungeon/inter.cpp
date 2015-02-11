@@ -31,13 +31,13 @@ void Inter::update()
 {
     clearParts();
 
+    // Grid
+    addPart(&m_grid);
+
     // Room tiles
     for (auto& roomTile : m_roomTiles)
     for (auto& tile : roomTile)
             addPart(&tile);
-
-    // Grid
-    addPart(&m_grid);
 }
 
 //------------------------//
@@ -80,7 +80,7 @@ void Inter::refreshRoomTiles()
     for (uint floor = 0; floor < floorsCount; ++floor)
     for (uint room = 0; room < roomsByFloor; ++room) {
         auto& tile = m_roomTiles[floor][room];
-        tile.setSize(cellSize);
+        tile.setSize({1.3f * cellSize.x, 1.1f * cellSize.y}); // FIXME Use separate images to get this effect
         tile.setPosition(m_grid.cellPosition(floorsCount - floor - 1, room));
         setRoomTileState(floor, room, floors[floor].rooms[room].state);
     }
@@ -91,11 +91,21 @@ void Inter::refreshRoomTiles()
 
 void Inter::setRoomTileState(const uint floor, const uint room, const Data::RoomState state)
 {
+    auto contructedRoomTexture = &Application::context().textures.get(Textures::DUNGEON_INTER_ROOM);
     auto& tile = m_roomTiles[floor][room];
 
-    if (state == Data::RoomState::VOID) tile.setFillColor(sf::Color::Transparent);
-    else if (state == Data::RoomState::CONSTRUCTED) tile.setFillColor(sf::Color::Green);
-    else tile.setFillColor(sf::Color::Red);
+    // Reset
+    tile.setTexture(nullptr);
+    tile.setFillColor(sf::Color::White);
+
+    // Selecting
+    // TODO See if we can use some prototype design pattern
+    if (state == Data::RoomState::VOID)
+        tile.setFillColor(sf::Color::Transparent);
+    else if (state == Data::RoomState::CONSTRUCTED)
+        tile.setTexture(contructedRoomTexture);
+    else
+        tile.setFillColor(sf::Color::Red);
 }
 
 //------------------------//

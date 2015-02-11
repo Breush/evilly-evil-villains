@@ -35,6 +35,9 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
     if (!window.isOpen())
         throw std::runtime_error("Cannot initialize window.");
 
+    window.setKeyRepeatEnabled(false);
+    window.setVerticalSyncEnabled(true);
+
     screenSize = sf::v2f(window.getSize());
 }
 
@@ -48,8 +51,6 @@ Application::Application()
     , m_running(false)
 {
     s_context.init({1360.f, 768.f}, "Evily Evil Villains", sf::Style::Default);
-    s_context.window.setKeyRepeatEnabled(false);
-    s_context.window.setVerticalSyncEnabled(true);
 
     loadTextures();
     loadShaders();
@@ -66,17 +67,17 @@ Application::Application()
 void Application::run()
 {
     sf::Clock clock;
-    sf::Time timeSinceLastUpdate = sf::Time::Zero;
+    sf::Time lag(sf::Time::Zero);
 
     m_running = true;
     while (m_running) {
         // Getting time
         sf::Time dt(clock.restart());
-        timeSinceLastUpdate += dt;
+        lag += dt;
 
         // Update until frame limit is hit
-        while (timeSinceLastUpdate > s_timePerFrame) {
-            timeSinceLastUpdate -= s_timePerFrame;
+        while (lag >= s_timePerFrame) {
+            lag -= s_timePerFrame;
 
             // Game logic core
             processInput();
@@ -88,6 +89,9 @@ void Application::run()
         }
 
         // Rendering
+        // TODO render(lag/s_timePerFrame);
+        // So that physics can interpolate the effective display
+        // See http://gameprogrammingpatterns.com/game-loop.html
         render();
     }
 

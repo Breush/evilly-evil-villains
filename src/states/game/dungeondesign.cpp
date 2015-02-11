@@ -49,10 +49,12 @@ void GameDungeonDesignState::draw()
 
     // Decorum
     window.draw(m_decorumBack);
-    window.draw(m_decorumFront);
 
     // UI
     window.draw(m_uiCore);
+
+    // Decorum
+    window.draw(m_decorumFront);
 }
 
 bool GameDungeonDesignState::update(const sf::Time& dt)

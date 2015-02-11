@@ -41,6 +41,7 @@ namespace Textures
         DUNGEON_PANEL_TRAPS,
         DUNGEON_PANEL_FACILITIES,
         DUNGEON_PANEL_TREASURES,
+        DUNGEON_INTER_ROOM,
     };
 }
 
