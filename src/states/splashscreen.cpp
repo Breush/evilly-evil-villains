@@ -33,6 +33,7 @@ SplashScreenState::SplashScreenState(StateStack& stack)
 void SplashScreenState::draw()
 {
     auto& window = Application::context().window;
+    window.setView(Application::context().views.get(Views::DEFAULT));
 
     // Animated background
     window.draw(m_bgSprite, m_bgShader);

@@ -52,6 +52,7 @@ void VisualDebug::draw()
 
     // Draw
     auto& window = Application::context().window;
+    window.setView(Application::context().views.get(Views::DEFAULT));
     window.draw(m_text);
 }
 

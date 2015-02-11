@@ -52,6 +52,7 @@ Application::Application()
 {
     s_context.init({1360.f, 768.f}, "Evily Evil Villains", sf::Style::Default);
 
+    loadViews();
     loadTextures();
     loadShaders();
     loadFonts();
@@ -140,8 +141,9 @@ void Application::processInput()
 
         // Resizing window
         if (event.type == sf::Event::Resized) {
+            // Grab only the last resize event
+            clearWindowEvents(event, sf::Event::Resized);
             s_context.screenSize = sf::Vector2f(event.size.width, event.size.height);
-            clearWindowEvents();
             refresh();
             break;
         }
@@ -179,15 +181,23 @@ void Application::render()
 
 void Application::clearWindowEvents()
 {
-    sf::Event event;
-    while (s_context.window.pollEvent(event));
+    sf::Event polledEvent;
+    while (s_context.window.pollEvent(polledEvent));
+}
+
+void Application::clearWindowEvents(sf::Event& event, sf::Event::EventType type)
+{
+    sf::Event polledEvent;
+    while (s_context.window.pollEvent(polledEvent))
+        if (polledEvent.type == type)
+            event = polledEvent;
 }
 
 void Application::refresh()
 {
-    s_context.window.setView(bestView());
-    m_stateStack.refresh();
+    refreshViews();
     refreshShaders();
+    m_stateStack.refresh();
 }
 
 void Application::switchFullscreenMode()
@@ -197,27 +207,3 @@ void Application::switchFullscreenMode()
     s_context.init(s_context.resolution, s_context.title, s_context.style);
     refresh();
 }
-
-sf::View Application::bestView()
-{
-    sf::FloatRect viewport(0.f, 0.f, 1.f, 1.f);
-    const auto& screenSize = s_context.screenSize;
-    const auto& resolution = s_context.resolution;
-    const sf::Vector2f viewRatio = sf::vdiv(screenSize, resolution);
-
-    if (viewRatio.x > viewRatio.y) {
-        viewport.width = viewRatio.y / viewRatio.x;
-        viewport.left = (1.f - viewport.width) / 2.f;
-    }
-    else if (viewRatio.x < viewRatio.y) {
-        viewport.height = viewRatio.x / viewRatio.y;
-        viewport.top = (1.f - viewport.height) / 2.f;
-    }
-
-    s_context.effectiveDisplay = sf::Vector2f(screenSize.x * viewport.width, screenSize.y * viewport.height);
-
-    sf::View view(sf::FloatRect(0.f, 0.f, resolution.x, resolution.y));
-    view.setViewport(viewport);
-    return view;
-}
-

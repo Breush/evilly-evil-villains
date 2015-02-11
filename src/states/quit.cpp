@@ -37,6 +37,7 @@ QuitState::QuitState(StateStack& stack)
 void QuitState::draw()
 {
     auto& window = Application::context().window;
+    window.setView(Application::context().views.get(Views::DEFAULT));
 
     window.draw(m_bg);
     window.draw(m_text);

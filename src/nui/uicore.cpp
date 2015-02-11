@@ -188,6 +188,10 @@ void uiCore::manageFocusedChild(const sf::Event& event)
 
 void uiCore::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+    // Drawing UI in the default view
+    const auto previousView = target.getView();
+    target.setView(Application::context().views.get(Views::DEFAULT));
+
     // Drawing children
     for (auto& child : m_children)
         if (child->visible())
@@ -203,6 +207,9 @@ void uiCore::draw(sf::RenderTarget& target, sf::RenderStates states) const
     // Detection
     // TODO Colors are not visible
     debug_nui_2(if (m_mouseDetector != nullptr) m_mouseDetector->draw());
+
+    // Restoring view
+    target.setView(previousView);
 }
 
 void uiCore::update(const sf::Time& dt)

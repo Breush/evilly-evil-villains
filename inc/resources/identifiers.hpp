@@ -8,6 +8,7 @@ namespace sf
     class Shader;
     class Font;
     class SoundBuffer;
+    class View;
 }
 
 namespace scml
@@ -92,6 +93,14 @@ namespace Musics
     };
 }
 
+namespace Views
+{
+    enum ID {
+        DEFAULT,
+        DUNGEON_DESIGN,
+    };
+}
+
 //----- Few type definitions
 
 template <typename Resource, typename Identifier>
@@ -102,3 +111,4 @@ typedef ResourceHolder<sf::Shader, Shaders::ID>			ShaderHolder;
 typedef ResourceHolder<sf::Font, Fonts::ID>			    FontHolder;
 typedef ResourceHolder<sf::SoundBuffer, Sounds::ID>	    SoundBufferHolder;
 typedef ResourceHolder<scml::Data, Animations::ID>	    SCMLHolder;
+typedef ResourceHolder<sf::View, Views::ID>             ViewHolder;

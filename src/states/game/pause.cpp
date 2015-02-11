@@ -36,7 +36,10 @@ GamePauseState::GamePauseState(StateStack& stack)
 
 void GamePauseState::draw()
 {
+    // TODO UI-tize
+
     auto& window = Application::context().window;
+    window.setView(Application::context().views.get(Views::DEFAULT));
 
     window.draw(m_bg);
     window.draw(m_pausedText);

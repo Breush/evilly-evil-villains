@@ -36,8 +36,6 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     // Decorum
     m_decorumBack.setTexture(Application::context().textures.get(Textures::DUNGEON_SCENE_GRASSYHILLS_BACK));
     m_decorumFront.setTexture(Application::context().textures.get(Textures::DUNGEON_SCENE_GRASSYHILLS_FRONT));
-    tools::adaptTextureRect(m_decorumBack, resolution, tools::Align::END);
-    tools::adaptTextureRect(m_decorumFront, resolution, tools::Align::END);
 
     // Reload everything once so that all is in correct place
     m_uiCore.refresh();
@@ -46,6 +44,7 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
 void GameDungeonDesignState::draw()
 {
     auto& window = Application::context().window;
+    window.setView(Application::context().views.get(Views::DUNGEON_DESIGN));
 
     // Decorum
     window.draw(m_decorumBack);

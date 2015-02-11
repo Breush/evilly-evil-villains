@@ -63,6 +63,7 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
 void MenuSelectWorldState::draw()
 {
     auto& window = Application::context().window;
+    window.setView(Application::context().views.get(Views::DEFAULT));
 
     // Background
     window.draw(m_bgRect);

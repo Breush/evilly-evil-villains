@@ -81,6 +81,7 @@ MenuMainState::MenuMainState(StateStack& stack)
 void MenuMainState::draw()
 {
     auto& window = Application::context().window;
+    window.setView(Application::context().views.get(Views::DEFAULT));
 
     // Animated background and menu
     window.draw(m_bgSprite, m_bgShader);

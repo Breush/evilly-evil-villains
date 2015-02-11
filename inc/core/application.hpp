@@ -28,6 +28,7 @@ class Application
         uint32_t style;
 
         sf::RenderWindow window;
+        ViewHolder views;
         TextureHolder textures;
         ShaderHolder shaders;
         FontHolder fonts;
@@ -50,6 +51,7 @@ protected:
     void render();
 
     // Resources
+    void loadViews();
     void loadTextures();
     void loadShaders();
     void loadFonts();
@@ -57,6 +59,7 @@ protected:
     void loadSounds();
     void loadAnimations();
 
+    void refreshViews();
     void refreshShaders();
 
     void updateShaders(const sf::Time& dt);
@@ -67,9 +70,9 @@ protected:
 
     // Window management
     void clearWindowEvents();
-    void refresh();
-    sf::View bestView();
+    void clearWindowEvents(sf::Event& event, sf::Event::EventType type);
     void switchFullscreenMode();
+    void refresh();
 
 private:
     static const sf::Time s_timePerFrame;

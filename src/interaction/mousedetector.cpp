@@ -40,6 +40,7 @@ Detectable* MouseDetector::handleMouseEvent(const sf::Event& event)
 {
     // Extrapolating position
     auto& window = Application::context().window;
+    window.setView(Application::context().views.get(Views::DEFAULT));
     sf::Vector2f absPos(window.mapPixelToCoords(mousePosition(event)));
     clamp(absPos, Application::context().resolution);
 

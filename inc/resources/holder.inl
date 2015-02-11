@@ -1,3 +1,10 @@
+
+template <typename Resource, typename Identifier>
+inline void ResourceHolder<Resource, Identifier>::load(Identifier id)
+{
+    insertResource(id, std::unique_ptr<Resource>(new Resource));
+}
+
 template <typename Resource, typename Identifier>
 inline void ResourceHolder<Resource, Identifier>::load(Identifier id, const std::string& filename, bool store)
 {
