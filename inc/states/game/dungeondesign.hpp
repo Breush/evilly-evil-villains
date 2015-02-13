@@ -1,6 +1,5 @@
 #pragma once
 
-#include "nui/uicore.hpp"
 #include "dungeon/data.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/panel.hpp"
@@ -17,17 +16,12 @@ public:
 
     // Routines
     void draw() override;
-    bool update(const sf::Time& dt) override;
     bool handleEvent(const sf::Event& event) override;
 
     // Virtual
     void onQuit() override;
 
 private:
-    // NUI
-    interaction::MouseDetector m_mouseDetector;
-    nui::uiCore m_uiCore;
-
     // Dungeon
     dungeon::Data m_dungeonData;
     dungeon::Inter m_dungeonInter;

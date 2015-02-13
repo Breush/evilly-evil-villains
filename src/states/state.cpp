@@ -1,9 +1,32 @@
 #include "states/state.hpp"
+
+#include "core/application.hpp"
 #include "states/statestack.hpp"
 
 State::State(StateStack& stack)
     : m_stack(&stack)
 {
+}
+
+//----- Scene graph calls -----//
+
+// TODO The target should be passed here
+void State::draw()
+{
+    auto& window = Application::context().window;
+    window.draw(m_sceneGraph);
+}
+
+bool State::update(const sf::Time& dt)
+{
+    m_sceneGraph.update(dt);
+    return false;
+}
+
+bool State::handleEvent(const sf::Event& event)
+{
+    m_sceneGraph.handleEvent(event);
+    return false;
 }
 
 //----- Stack operations -----//

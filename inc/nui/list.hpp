@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nui/object.hpp"
+#include "scene/entity.hpp"
 #include "tools/int.hpp"
 #include "sfe/line.hpp"
 
@@ -9,19 +9,13 @@
 
 namespace nui
 {
-    class List : public Object
+    class List : public scene::Entity
     {
-        typedef Object baseClass;
+        typedef scene::Entity baseClass;
 
     public:
         List();
         virtual ~List() {}
-
-        // Virtual
-        void init() override;
-        void update() override;
-        //void handleKeyboardEvent(const sf::Event& event) override;
-        //void handleJoystickEvent(const sf::Event& event) override;
 
         // Columns
         void setColumns(const std::initializer_list<std::wstring>& columns);
@@ -33,7 +27,10 @@ namespace nui
         void addLine(const std::initializer_list<std::wstring>& values);
 
     protected:
-        // Mouse events
+        // Virtual
+        void update() override;
+
+        // Events
         void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
         void handleMouseMoved(const sf::Vector2f& mousePos) override;
         void handleMouseLeft() override;
@@ -55,15 +52,13 @@ namespace nui
             sf::Text text;
             uint textWidth;
             uint textHeight;
-            sf::IntRect clippingRect;
+            sf::FloatRect clippingRect;
         };
 
         // Changes
-        void changedSize() override;
         void changedSelectedLine();
 
         // Focus interactions
-        bool ownsFocus() override { return true; }
         void setFocusedLine(uint line);
 
         // Params

@@ -6,20 +6,16 @@ using namespace nui;
 
 ImageButton::ImageButton()
 {
-}
-
-void ImageButton::init()
-{
-    baseClass::init();
-
     // Display style
     setShowLines(false);
 }
 
 void ImageButton::update()
 {
-    // Text
+    // From button
     baseClass::update();
+
+    returnif (m_image.getTexture() == nullptr);
 
     // Image
     if (m_image.getTexture() != nullptr) {
@@ -36,8 +32,6 @@ void ImageButton::update()
         topLine().move(offset);
         botLine().move(offset);
     }
-
-    setStatus(true);
 }
 
 //-------------------//
@@ -49,7 +43,6 @@ void ImageButton::updateSize()
     const auto& buttonDimensions = buttonSize();
     auto width = std::max(buttonDimensions.x, m_imageSize.x);
     setSize({width, buttonDimensions.y + m_imageSize.y});
-    update();
 }
 
 //------------------------//
@@ -57,6 +50,7 @@ void ImageButton::updateSize()
 
 void ImageButton::handleMouseMoved(const sf::Vector2f& mousePos)
 {
+    // From button
     baseClass::handleMouseMoved(mousePos);
 
     setPartShader(&m_image, Shaders::NUI_HOVER);
@@ -68,7 +62,6 @@ void ImageButton::handleMouseMoved(const sf::Vector2f& mousePos)
 void ImageButton::setImage(Textures::ID imageID)
 {
     m_image.setTexture(Application::context().textures.get(imageID));
-    update();
 }
 
 void ImageButton::setVisual(const std::wstring& text, Textures::ID imageID, const sf::Vector2f& inImageSize)

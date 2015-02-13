@@ -1,14 +1,14 @@
 #pragma once
 
-#include "nui/object.hpp"
+#include "scene/entity.hpp"
 
 #include <list>
 
 namespace nui
 {
-    class Stacker : public Object
+    class Stacker : public scene::Entity
     {
-        typedef Object baseClass;
+        typedef scene::Entity baseClass;
 
     public:
         // Defines children position
@@ -22,26 +22,19 @@ namespace nui
         Stacker();
         virtual ~Stacker() {}
 
-        // Virtual
-        void init() override {}
-        virtual void update() override = 0;
-        void childChangedStatus(LocalTransformable* child) override;
-        void parentStatusChanged() override;
-
         // Children management
-        void add(Object* child);
-        void add(Object* child, Align align);
+        void add(scene::Entity* child, Align align = Align::STANDARD);
 
     protected:
-        // Changes
-        void changedStatus() override;
+        // Pure virtual
+        virtual void update() override = 0;
 
         // Params
         PARAMGSU(float, m_margin, margin, setMargin, update)
         PARAMGSU(Align, m_align, align, setAlign, update)
 
         struct ChildInfo {
-            Object* child;
+            scene::Entity* child;
             Align align;
         };
 

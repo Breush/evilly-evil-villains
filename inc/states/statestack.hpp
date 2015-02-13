@@ -45,9 +45,6 @@ public:
     bool isEmpty() const;
     bool isStateVisible(States::ID stateID) const;
 
-    // Called whenever display changes
-    void refresh();
-
 private:
     std::unique_ptr<State> createState(States::ID stateID);
     void applyPendingChanges();

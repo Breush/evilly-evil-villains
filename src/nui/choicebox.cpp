@@ -1,8 +1,6 @@
-#include "core/application.hpp"
-
 #include "nui/choicebox.hpp"
-#include "nui/uicore.hpp"
 
+#include "core/application.hpp"
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
 #include "resources/soundplayer.hpp"
@@ -22,14 +20,10 @@ ChoiceBox::ChoiceBox()
     , m_lineSize(1.f)
     , m_nChoices(0)
     , m_choice(0)
+    , m_choiceChanged(true)
 {
-}
+    setFocusable(true);
 
-//--------------------//
-//----- Virtuals -----//
-
-void ChoiceBox::init()
-{
     // Getting font from holder
     sf::Font& font = Application::context().fonts.get(Fonts::NUI);
     m_text.setCharacterSize(16);
@@ -38,8 +32,15 @@ void ChoiceBox::init()
     update();
 }
 
+void ChoiceBox::updateRoutine(const sf::Time& dt)
+{
+    m_choiceChanged = false;
+}
+
 void ChoiceBox::update()
 {
+    returnif (m_text.getString().isEmpty());
+
     clearParts();
     addPart(&m_text);
 
@@ -75,8 +76,6 @@ void ChoiceBox::update()
         m_lArrow.setOrigin(0.f, 0.5f * arrowSize());
         m_rArrow.setOrigin(0.f, 0.5f * arrowSize());
     }
-
-    setStatus(true);
 }
 
 //-----------------------------//
@@ -130,6 +129,7 @@ void ChoiceBox::setChoice(uint choice)
     // Setting new choice
     m_choice = choice;
     m_text.setString(m_choices[choice].text);
+    m_choiceChanged = true;
 
     // If new choice need a callback, color if inactive
     if (showArrows() && m_choices[choice].callback == nullptr)
@@ -239,32 +239,32 @@ bool ChoiceBox::isRightArrowSelected(const float& x)
 //---------------------------//
 //----- Keyboard events -----//
 
-bool ChoiceBox::handleKeyboardEvent(const sf::Event& event)
+void ChoiceBox::handleKeyboardEvent(const sf::Event& event)
 {
     // Just manage pressed keys
-    returnif (event.type != sf::Event::KeyPressed) false;
+    returnif (event.type != sf::Event::KeyPressed);
 
     // Left or right to select
     if (event.key.code == sf::Keyboard::Left) {
         switchChoiceLeft();
-        return true;
-    } else if (event.key.code == sf::Keyboard::Right) {
+        return;
+    }
+    else if (event.key.code == sf::Keyboard::Right) {
         switchChoiceRight();
-        return true;
+        return;
     }
 
     // Just pressing Return is interesting now
-    returnif (event.key.code != sf::Keyboard::Return) false;
+    returnif (event.key.code != sf::Keyboard::Return);
 
     // Without arrows: choices loop
     if (!showArrows()) {
         switchChoiceRight();
-        return true;
+        return;
     }
 
     // With arrows, check for callback
     acceptChoice();
-    return true;
 }
 
 //-------------------//

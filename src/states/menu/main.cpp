@@ -12,7 +12,6 @@
 MenuMainState::MenuMainState(StateStack& stack)
     : baseClass(stack)
     , m_bgRotAngle(0.f)
-    , m_uiCore(&m_mouseDetector)
 {
     const sf::Vector2f& resolution = Application::context().resolution;
     float maxSize = std::max(resolution.x, resolution.y);
@@ -47,7 +46,7 @@ MenuMainState::MenuMainState(StateStack& stack)
     };
 
     // Menu choice box (be sure not to mess with order)
-    m_uiCore.add(&m_choiceBox);
+    sceneLayer(Layers::NUI).attachChild(m_choiceBox);
     m_choiceBox.setCentered(true);
     m_choiceBox.setLocalPosition({0.5f * resolution.x, 0.9f * resolution.y});
     m_choiceBox.add(_("Victim and alone"), singlePlayer);
@@ -57,9 +56,8 @@ MenuMainState::MenuMainState(StateStack& stack)
     m_choiceBox.add(_("Someone who runs away"), quitGame);
 
     // Menu react image
-    m_uiCore.add(&m_reactImage);
+    sceneLayer(Layers::NUI).attachChild(m_reactImage);
     m_reactImage.setCentered(true);
-    m_reactImage.setFocusable(false);
     m_reactImage.setLocalPosition({0.5f * resolution.x, 0.2f * resolution.y});
     m_reactImage.setImageTexture(Textures::MENU_NAME);
     m_reactImage.setImageShader(Shaders::MENU_NAME);
@@ -84,28 +82,21 @@ void MenuMainState::draw()
     window.setView(Application::context().views.get(Views::DEFAULT));
 
     // Animated background and menu
+    // TODO Include background as entity
     window.draw(m_bgSprite, m_bgShader);
-    window.draw(m_uiCore);
-}
 
-void MenuMainState::onHide()
-{
-    m_uiCore.forgetFocusedChild();
-}
-
-void MenuMainState::onShow()
-{
-    m_uiCore.rememberFocusedChild();
+    // Should not exists
+    State::draw();
 }
 
 bool MenuMainState::update(const sf::Time& dt)
 {
     // Checking if choiceBox changed
-    if (m_choiceBox.status()) {
+    if (m_choiceBox.choiceChanged()) {
         m_reactImage.setActiveReact(m_choices[m_choiceBox.choice()]);
     }
     // Checking if reactImage changed
-    else if (m_reactImage.status()) {
+    else if (m_reactImage.reactChanged()) {
         for (uint i = 0; i < m_choices.size(); ++i) {
             if (m_choices[i] == m_reactImage.getReact()) {
                 m_choiceBox.setChoice(i);
@@ -114,29 +105,17 @@ bool MenuMainState::update(const sf::Time& dt)
         }
     }
 
-    // System
-    m_uiCore.update(dt);
-    // m_mouseDetector.update(dt);
-
-    return true;
+    return State::update(dt);
 }
 
 bool MenuMainState::handleEvent(const sf::Event& event)
 {
-    // Escape quits current state (and game)
+    // Escape opens quit screen
     if (event.type == sf::Event::KeyPressed
-            && event.key.code == sf::Keyboard::Escape) {
-        stackPop();
+        && event.key.code == sf::Keyboard::Escape) {
+        stackPush(States::QUIT);
         return false;
     }
 
-    // Let ui core handle events
-    m_uiCore.handleEvent(event);
-
-    return false;
-}
-
-void MenuMainState::refresh()
-{
-    m_uiCore.refresh();
+    return State::handleEvent(event);
 }

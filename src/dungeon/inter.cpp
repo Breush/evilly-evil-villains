@@ -3,7 +3,6 @@
 #include "core/application.hpp"
 #include "core/gettext.hpp"
 #include "dungeon/data.hpp"
-#include "nui/uicore.hpp"
 #include "tools/debug.hpp"
 #include "tools/event.hpp"
 
@@ -15,20 +14,23 @@ using namespace dungeon;
 Inter::Inter()
     : m_data(nullptr)
 {
-    setFocusable(false);
-    m_contextMenu.setVisible(false);
-    m_contextMenu.setZDepth(10);
-}
+    // TODO Make contextMenu come from dungeonDesignState
+    // So that it can be a NUI element (and be up everything) and Inter not
+    attachChild(m_contextMenu);
 
-void Inter::init()
-{
-    core()->add(&m_contextMenu);
-    m_contextMenu.setParent(this);
+    m_contextMenu.setVisible(false);
+    m_contextMenu.setDepth(10);
+
     update();
 }
 
 void Inter::update()
 {
+    returnif (m_data == nullptr);
+
+    m_grid.setSize(size());
+    refreshRoomTiles();
+
     clearParts();
 
     // Grid
@@ -37,7 +39,7 @@ void Inter::update()
     // Room tiles
     for (auto& roomTile : m_roomTiles)
     for (auto& tile : roomTile)
-            addPart(&tile);
+        addPart(&tile);
 }
 
 //------------------------//
@@ -64,7 +66,8 @@ void Inter::refreshFromData()
     m_roomTiles.resize(floorsCount);
     for (auto& roomTile : m_roomTiles)
         roomTile.resize(roomsByFloor);
-    refreshRoomTiles();
+
+    update();
 }
 
 //---------------------------//
@@ -84,9 +87,6 @@ void Inter::refreshRoomTiles()
         tile.setPosition(m_grid.cellPosition(floorsCount - floor - 1, room));
         setRoomTileState(floor, room, floors[floor].rooms[room].state);
     }
-
-    setStatus(true);
-    update();
 }
 
 void Inter::setRoomTileState(const uint floor, const uint room, const Data::RoomState state)
@@ -135,6 +135,7 @@ void Inter::handleGlobalEvent(const sf::Event& event)
 
 void Inter::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos)
 {
+    // Pop the context menu up
     if (button == sf::Mouse::Right) {
         // Getting grid info
         selectRoomFromCoords(mousePos);
@@ -155,7 +156,7 @@ void Inter::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::
         m_contextMenu.addChoice(constructRoomString, constructRoom);
 
         // Context positions
-        m_contextMenu.setLocalPosition(mousePos, false);
+        m_contextMenu.setLocalPosition(mousePos);
         m_contextMenu.setOrigin({m_contextMenu.size().x / 2.f, 10.f});
         m_contextMenu.setVisible(true);
     }
@@ -169,9 +170,8 @@ void Inter::handleMouseLeft()
 {
 }
 
-bool Inter::handleKeyboardEvent(const sf::Event& event)
+void Inter::handleKeyboardEvent(const sf::Event& event)
 {
-    return false;
 }
 
 //----------------------------------//
@@ -218,23 +218,3 @@ sf::Vector2u& Inter::selectRoomFromCoords(const sf::Vector2f& coords)
     m_selectedRoom.x = m_data->floorsCount() - m_selectedRoom.x - 1;
     return m_selectedRoom;
 }
-
-//-------------------//
-//----- Refresh -----//
-
-void Inter::changedStatus()
-{
-    returnif (!status());
-
-    m_contextMenu.setStatus(true);
-}
-
-void Inter::changedSize()
-{
-    m_grid.setSize(size());
-    refreshRoomTiles();
-    update();
-
-    baseClass::changedSize();
-}
-

@@ -14,15 +14,14 @@ namespace nui
         ImageButton();
         virtual ~ImageButton() {}
 
-        // Virtual
-        virtual void init() override;
-        virtual void update() override;
-
         // Action
         void setImage(Textures::ID imageID);
         void setVisual(const std::wstring& text, Textures::ID imageID, const sf::Vector2f& inImageSize);
 
     protected:
+        // Virtual
+        virtual void update() override;
+
         // Mouse events
         virtual void handleMouseMoved(const sf::Vector2f& mousePos) override;
 

@@ -1,6 +1,5 @@
 #include "nui/stacker.hpp"
 
-#include "nui/uicore.hpp"
 #include "tools/debug.hpp"
 
 using namespace nui;
@@ -10,44 +9,15 @@ Stacker::Stacker()
     , m_margin(10)
     , m_align(Stacker::STANDARD)
 {
-    setFocusable(false);
     setDetectable(false);
 }
 
 //-------------------------------//
 //----- Children management -----//
 
-void Stacker::add(Object* child, Align inAlign)
+void Stacker::add(scene::Entity* child, Align inAlign)
 {
-    massert(core() != nullptr, "Stacker not affected to a core before adding child");
-    child->setParent(this);
-    core()->add(child);
-
+    attachChild(*child);
     m_children.push_back({child, inAlign});
-    update();
-}
-
-void Stacker::add(Object* child)
-{
-    add(child, Align::STANDARD);
-}
-
-void Stacker::childChangedStatus(LocalTransformable*)
-{
-    update();
-}
-
-void Stacker::changedStatus()
-{
-    returnif (!status());
-
-    // Need to refresh all children if one is focused
-    for (auto& childInfo : m_children)
-        childInfo.child->parentStatusChanged();
-}
-
-void Stacker::parentStatusChanged()
-{
-    baseClass::parentStatusChanged();
     update();
 }

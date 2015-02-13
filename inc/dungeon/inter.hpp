@@ -1,26 +1,26 @@
 #pragma once
 
-#include "nui/object.hpp"
+#include "scene/entity.hpp"
 #include "nui/contextmenu.hpp"
 #include "sfe/grid.hpp"
 #include "dungeon/data.hpp"
 
 namespace dungeon
 {
-    class Inter : public nui::Object
+    class Inter : public scene::Entity
     {
-        typedef nui::Object baseClass;
+        typedef scene::Entity baseClass;
 
     public:
         Inter();
         virtual ~Inter() {}
 
-        // Virtual
-        void init() override;
-        void update() override;
+        // Events
         void handleGlobalEvent(const sf::Event&) override;
-        bool handleKeyboardEvent(const sf::Event& event) override;
-        //bool handleJoystickEvent(const sf::Event& event) override;
+        void handleKeyboardEvent(const sf::Event& event) override;
+        void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
+        void handleMouseMoved(const sf::Vector2f& mousePos) override;
+        void handleMouseLeft() override;
 
         // Dungeon data
         void useData(Data& data);
@@ -37,14 +37,8 @@ namespace dungeon
         void setRoomsByFloor(uint value);
 
     protected:
-        // Mouse events
-        void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
-        void handleMouseMoved(const sf::Vector2f& mousePos) override;
-        void handleMouseLeft() override;
-
-        // Changes
-        void changedStatus() override;
-        void changedSize() override;
+        // Virtual
+        void update() override;
 
         // Room management
         void switchSelectedRoomState();

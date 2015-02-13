@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nui/object.hpp"
+#include "scene/entity.hpp"
 #include "resources/identifiers.hpp"
 
 #include <SFML/Graphics/RenderTexture.hpp>
@@ -10,18 +10,17 @@
 
 namespace nui
 {
-    class ReactImage : public Object
+    class ReactImage : public scene::Entity
     {
-        typedef Object baseClass;
+        typedef scene::Entity baseClass;
         typedef std::function<void()> Callback;
 
     public:
         ReactImage();
         virtual ~ReactImage() {}
 
-        // Virtual
-        void init() override;
-        void update() override;
+        // Routine
+        void updateRoutine(const sf::Time& dt) override;
 
         // React handling
         std::wstring& getReact() { return m_react; }
@@ -37,16 +36,18 @@ namespace nui
         void setActiveReact(const std::wstring& key);
 
     protected:
-        void activateReact(const std::wstring& key);
+        // Virtual
+        void update() override;
+
+        // Events
+        void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
+        void handleMouseMoved(const sf::Vector2f& mousePos) override;
+        void handleMouseLeft() override;
 
         // Affect visible rectangles to sprite
         void selectImageRect();
         void selectActiveRect();
-
-        // Mouse events
-        void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
-        void handleMouseMoved(const sf::Vector2f& mousePos) override;
-        void handleMouseLeft() override;
+        void activateReact(const std::wstring& key);
 
         struct ReactInfo {
             sf::FloatRect rect;
@@ -55,7 +56,7 @@ namespace nui
 
         // Params
         PARAMGS(bool, m_mouseLeftDeselect, mouseLeftDeselect, setMouseLeftDeselect)
-
+        PARAMG(bool, m_reactChanged, reactChanged)
 
     private:
         // Target to store final image

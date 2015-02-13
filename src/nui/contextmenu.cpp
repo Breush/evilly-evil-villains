@@ -1,6 +1,6 @@
-#include "core/application.hpp"
 #include "nui/contextmenu.hpp"
-#include "nui/uicore.hpp"
+
+#include "core/application.hpp"
 #include "resources/holder.hpp"
 
 using namespace nui;
@@ -10,24 +10,36 @@ ContextMenu::ContextMenu()
     , m_padding(5)
     , m_choiceHeight(22)
 {
-    setFocusable(false);
-}
-
-void ContextMenu::init()
-{
     // Background
     m_bg.setFillColor(sf::Color::Blue);
     m_bg.setOutlineColor(sf::Color::White);
-    m_bg.setOutlineThickness(1); // TODO Have variable
+    m_bg.setOutlineThickness(1);
 
     update();
 }
 
 void ContextMenu::update()
 {
+    returnif (m_title.getString().isEmpty());
+
     // Reset
     clearParts();
 
+    // Background
+    addPart(&m_bg);
+    m_bg.setSize(size());
+
+    // Title
+    if (!m_title.getString().isEmpty())
+        addPart(&m_title);
+
+    // Choices
+    for (auto& choice : m_choices)
+        addPart(&choice.text);
+}
+
+void ContextMenu::updateSize()
+{
     // Getting size and setting positions
     auto xOffset = padding();
     auto yOffset = padding();
@@ -53,16 +65,6 @@ void ContextMenu::update()
     }
 
     setSize(border);
-    m_bg.setSize(size());
-
-    // Adding parts in the correct order
-    addPart(&m_bg);
-    if (!m_title.getString().isEmpty())
-        addPart(&m_title);
-    for (auto& choice : m_choices)
-        addPart(&choice.text);
-
-    setStatus(true);
 }
 
 //------------------------//
@@ -71,8 +73,8 @@ void ContextMenu::update()
 void ContextMenu::handleGlobalEvent(const sf::Event& event)
 {
     // Hide on click anywhere
-    if (event.type == sf::Event::MouseButtonPressed)
-        setVisible(false);
+    if (event.type == sf::Event::MouseButtonPressed && visible())
+        markForVisible(false);
 }
 
 void ContextMenu::handleMouseButtonPressed(const sf::Mouse::Button&, const sf::Vector2f& mousePos)
@@ -97,14 +99,6 @@ void ContextMenu::handleMouseMoved(const sf::Vector2f& mousePos)
         setPartShader(&m_choices[choice].text, Shaders::NUI_HOVER);
 }
 
-uint ContextMenu::choiceFromCoords(const sf::Vector2f& coords) const
-{
-    if (m_title.getString().isEmpty())
-        return (coords.y - padding()) / choiceHeight();
-    else
-        return (coords.y - padding()) / choiceHeight() - 1;
-}
-
 void ContextMenu::handleMouseLeft()
 {
     resetPartsShader();
@@ -112,6 +106,14 @@ void ContextMenu::handleMouseLeft()
 
 //-------------------//
 //----- Choices -----//
+
+uint ContextMenu::choiceFromCoords(const sf::Vector2f& coords) const
+{
+    if (m_title.getString().isEmpty())
+        return (coords.y - padding()) / choiceHeight();
+    else
+        return (coords.y - padding()) / choiceHeight() - 1;
+}
 
 void ContextMenu::clearChoices()
 {
@@ -127,7 +129,7 @@ void ContextMenu::setTitle(const std::wstring& title)
     m_title.setColor(sf::Color::White);
     m_title.setString(title);
 
-    update();
+    updateSize();
 }
 
 void ContextMenu::addChoice(const std::wstring& text, Callback callback)
@@ -144,5 +146,5 @@ void ContextMenu::addChoice(const std::wstring& text, Callback callback)
     choiceInfo.text.setColor(sf::Color::White);
 
     m_choices.push_back(choiceInfo);
-    update();
+    updateSize();
 }

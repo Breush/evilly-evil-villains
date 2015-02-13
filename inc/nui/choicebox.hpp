@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nui/object.hpp"
+#include "scene/entity.hpp"
 #include "tools/int.hpp"
 #include "sfe/line.hpp"
 #include "sfe/arrow.hpp"
@@ -13,9 +13,9 @@
 
 namespace nui
 {
-    class ChoiceBox : public Object
+    class ChoiceBox : public scene::Entity
     {
-        typedef Object baseClass;
+        typedef scene::Entity baseClass;
 
     public:
         typedef std::function<void()> Callback;
@@ -23,11 +23,8 @@ namespace nui
         ChoiceBox();
         virtual ~ChoiceBox() {}
 
-        // Virtual
-        virtual void init() override;
-        virtual void update() override;
-        bool handleKeyboardEvent(const sf::Event& event) override;
-        //bool handleJoystickEvent(const sf::Event& event) override;
+        // Routine
+        void updateRoutine(const sf::Time& dt) override;
 
         // Choices
         void add(const std::wstring& text, const Callback callback = nullptr);
@@ -39,7 +36,11 @@ namespace nui
         void setChoiceCallback(uint choice, const Callback callback);
 
     protected:
-        // Mouse events
+        // Virtual
+        virtual void update() override;
+
+        // Events
+        void handleKeyboardEvent(const sf::Event& event) override;
         virtual void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
         virtual void handleMouseMoved(const sf::Vector2f& mousePos) override;
         virtual void handleMouseLeft() override;
@@ -60,6 +61,7 @@ namespace nui
         PARAMG(float, m_arrowSize, arrowSize)
         PARAMG(float, m_lineSize, lineSize)
         PARAMG(uint, m_choice, choice)
+        PARAMG(bool, m_choiceChanged, choiceChanged)
 
         // Keep infos
         struct ChoiceInfo {

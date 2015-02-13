@@ -8,7 +8,6 @@
 
 GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     : State(stack)
-    , m_uiCore(&m_mouseDetector)
 {
     auto& resolution = Application::context().resolution;
 
@@ -19,49 +18,41 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     massert(!world::context.info->folder.empty(), "Selected world is in an empty folder.");
     m_dungeonData.load("worlds/" + world::context.info->folder + "dungeon.xml");
 
-    // Dungeon inter
-    m_uiCore.add(&m_dungeonInter);
+    // Dungeon inter TODO Remove from NUI
+    sceneLayer(Layers::DUNGEON_DESIGN).attachChild(m_dungeonInter);
     m_dungeonInter.useData(m_dungeonData);
     m_dungeonInter.setSize({350, 450});
-    m_dungeonInter.setLocalPosition((resolution - m_dungeonInter.size()) / 2.f);
+    m_dungeonInter.setCentered(true);
+    m_dungeonInter.setLocalPosition(resolution / 2.f);
 
     // Dungeon panel
-    m_dungeonPanel.setZDepth(40);
-    m_uiCore.add(&m_dungeonPanel);
-    m_dungeonPanel.setSize({(4 + 1) * 100, 150});
+    m_dungeonPanel.setDepth(40);
+    sceneLayer(Layers::NUI).attachChild(m_dungeonPanel);
     m_dungeonPanel.setCentered(true);
-    m_dungeonPanel.setLocalPosition({(resolution.x - m_dungeonPanel.size().x) / 2.f, resolution.y - m_dungeonPanel.size().y});
-    m_dungeonPanel.saveDefaults();
+    m_dungeonPanel.setSize({(4 + 1) * 100, 150});
+    m_dungeonPanel.setLocalPosition({resolution.x / 2.f, resolution.y - m_dungeonPanel.size().y / 2.f});
+    m_dungeonPanel.lerpable()->saveDefaults();
 
     // Decorum
     m_decorumBack.setTexture(Application::context().textures.get(Textures::DUNGEON_SCENE_GRASSYHILLS_BACK));
     m_decorumFront.setTexture(Application::context().textures.get(Textures::DUNGEON_SCENE_GRASSYHILLS_FRONT));
-
-    // Reload everything once so that all is in correct place
-    m_uiCore.refresh();
 }
 
 void GameDungeonDesignState::draw()
 {
     auto& window = Application::context().window;
-    window.setView(Application::context().views.get(Views::DUNGEON_DESIGN));
 
     // Decorum
+    window.setView(Application::context().views.get(Views::DUNGEON_DESIGN));
     window.draw(m_decorumBack);
 
-    // UI
-    window.draw(m_uiCore);
+    // UI - Should be removed
+    window.setView(Application::context().views.get(Views::DEFAULT));
+    State::draw();
 
     // Decorum
+    window.setView(Application::context().views.get(Views::DUNGEON_DESIGN));
     window.draw(m_decorumFront);
-}
-
-bool GameDungeonDesignState::update(const sf::Time& dt)
-{
-    // UI
-    m_uiCore.update(dt);
-
-    return true;
 }
 
 void GameDungeonDesignState::onQuit()
@@ -83,9 +74,6 @@ bool GameDungeonDesignState::handleEvent(const sf::Event& event)
         }
     }
 
-    // Let ui core handle events
-    m_uiCore.handleEvent(event);
-
-    return false;
+    return State::handleEvent(event);
 }
 

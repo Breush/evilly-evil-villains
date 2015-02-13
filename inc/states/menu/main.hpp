@@ -1,7 +1,7 @@
 #pragma once
 
 #include "states/state.hpp"
-#include "nui/uicore.hpp"
+#include "scene/graph.hpp"
 #include "nui/choicebox.hpp"
 #include "nui/reactimage.hpp"
 
@@ -21,14 +21,8 @@ public:
     bool update(const sf::Time& dt) override;
     bool handleEvent(const sf::Event& event) override;
 
-    void refresh() override;
-    void onHide() override;
-    void onShow() override;
-
 private:
     // NUI
-    interaction::MouseDetector m_mouseDetector;
-    nui::uiCore m_uiCore;
     nui::ChoiceBox m_choiceBox;
     nui::ReactImage m_reactImage;
 

@@ -197,7 +197,6 @@ void Application::refresh()
 {
     refreshViews();
     refreshShaders();
-    m_stateStack.refresh();
 }
 
 void Application::switchFullscreenMode()

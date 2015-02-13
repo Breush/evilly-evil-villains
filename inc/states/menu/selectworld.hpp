@@ -1,7 +1,6 @@
 #pragma once
 
 #include "states/state.hpp"
-#include "nui/uicore.hpp"
 #include "nui/list.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/button.hpp"
@@ -20,14 +19,10 @@ public:
     States::ID id() const override { return States::MENU_SELECTWORLD; }
 
     void draw() override;
-    bool update(const sf::Time& dt) override;
     bool handleEvent(const sf::Event& event) override;
-    void refresh() override;
 
 private:
     // NUI
-    interaction::MouseDetector m_mouseDetector;
-    nui::uiCore m_uiCore;
     nui::List m_list;
     nui::HStacker m_stacker;
     std::array<nui::Button, 3> m_buttons;

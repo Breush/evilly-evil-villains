@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nui/object.hpp"
+#include "scene/entity.hpp"
 
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -10,9 +10,9 @@
 
 namespace nui
 {
-    class ContextMenu : public Object
+    class ContextMenu : public scene::Entity
     {
-        typedef Object baseClass;
+        typedef scene::Entity baseClass;
 
     public:
         typedef std::function<void()> Callback;
@@ -20,10 +20,11 @@ namespace nui
         ContextMenu();
         virtual ~ContextMenu() {}
 
-        // Virtual
-        void init() override;
-        void update() override;
-        void handleGlobalEvent(const sf::Event&) override;
+        // Events
+        void handleGlobalEvent(const sf::Event& event) override;
+        void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
+        void handleMouseMoved(const sf::Vector2f& mousePos) override;
+        void handleMouseLeft() override;
 
         // Choices
         void clearChoices();
@@ -31,10 +32,9 @@ namespace nui
         void addChoice(const std::wstring& text, Callback callback = nullptr);
 
     protected:
-        // Mouse events
-        void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
-        void handleMouseMoved(const sf::Vector2f& mousePos) override;
-        void handleMouseLeft() override;
+        // Virtual
+        void update() override;
+        void updateSize();
 
         // Params
         PARAMG(uint, m_padding, padding)

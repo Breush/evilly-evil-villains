@@ -1,20 +1,17 @@
 #include "dungeon/panel.hpp"
 
 #include "core/application.hpp"
+#include "sfe/lerpable.hpp"
 #include "tools/math.hpp"
-#include "nui/uicore.hpp"
 
 using namespace dungeon;
 
 Panel::Panel()
-    : m_reduced(false)
+    : baseClass(true)
+    , m_reduced(false)
 {
-    setFocusable(false);
-    setLerpable(true);
-}
+    //setFocusable(false);
 
-void Panel::init()
-{
     // Background
     m_background.setTexture(&Application::context().textures.get(Textures::DUNGEON_PANEL_BACKGROUND));
 
@@ -23,27 +20,21 @@ void Panel::init()
     m_switchReducedButton.setSize({20.f, 20.f});
 
     // Tabs stacker
-    core()->add(&m_tabsStacker);
-    m_tabsStacker.setParent(this);
+    attachChild(m_tabsStacker);
 
     // TODO Make a std::array to store tabs
-    m_monstersTab.setZDepth(zDepth() - 1);
-    m_trapsTab.setZDepth(zDepth() - 1);
-    m_facilitiesTab.setZDepth(zDepth() - 1);
-    m_treasuresTab.setZDepth(zDepth() - 1);
-
     m_tabsStacker.add(&m_monstersTab,   nui::Stacker::Align::CENTER);
     m_tabsStacker.add(&m_trapsTab,      nui::Stacker::Align::CENTER);
     m_tabsStacker.add(&m_facilitiesTab, nui::Stacker::Align::CENTER);
     m_tabsStacker.add(&m_treasuresTab,  nui::Stacker::Align::CENTER);
 
     // Tabs
-    // TODO Get display size from somewhere
-    m_monstersTab.setVisual(_("Monsters"), Textures::DUNGEON_PANEL_MONSTERS, {80.f, 80.f});
-    m_trapsTab.setVisual(_("Traps"), Textures::DUNGEON_PANEL_TRAPS, {80.f, 80.f});
-    m_facilitiesTab.setVisual(_("Facilities"), Textures::DUNGEON_PANEL_FACILITIES, {80.f, 80.f});
-    m_treasuresTab.setVisual(_("Treasures"), Textures::DUNGEON_PANEL_TREASURES, {80.f, 80.f});
-    m_tabsStacker.update();
+    // TODO Get tabImageSize from somewhere
+    sf::Vector2f tabImageSize(80.f, 80.f);
+    m_monstersTab.setVisual  (_("Monsters"),   Textures::DUNGEON_PANEL_MONSTERS,   tabImageSize);
+    m_trapsTab.setVisual     (_("Traps"),      Textures::DUNGEON_PANEL_TRAPS,      tabImageSize);
+    m_facilitiesTab.setVisual(_("Facilities"), Textures::DUNGEON_PANEL_FACILITIES, tabImageSize);
+    m_treasuresTab.setVisual (_("Treasures"),  Textures::DUNGEON_PANEL_TREASURES,  tabImageSize);
 
     update();
 }
@@ -64,9 +55,7 @@ void Panel::update()
     // Tabs stacker
     m_tabsStacker.setAlign(nui::Stacker::CENTER);
     m_tabsStacker.setSize(0.95f * size());
-    m_tabsStacker.setLocalPosition((1.f - 0.95f) * size() / 2.f, false);
-
-    setStatus(true);
+    m_tabsStacker.setLocalPosition((1.f - 0.95f) * size() / 2.f);
 }
 
 //------------------------//
@@ -98,20 +87,6 @@ void Panel::switchReduced()
 {
     setReduced(!reduced());
 
-    if (reduced()) setTargetPositionOffset({0.f, size().y - 40.f});
-    else setTargetPositionOffset({0.f, 0.f});
-}
-
-//-------------------//
-//----- Changes -----//
-
-void Panel::changedStatus()
-{
-    m_tabsStacker.parentStatusChanged();
-}
-
-void Panel::changedSize()
-{
-    update();
-    baseClass::changedSize();
+    if (reduced()) lerpable()->setTargetPositionOffset({0.f, size().y - 40.f});
+    else lerpable()->setTargetPositionOffset({0.f, 0.f});
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "states/identifiers.hpp"
+#include "scene/graph.hpp"
 #include "resources/identifiers.hpp"
 
 #include <SFML/System/Time.hpp>
@@ -24,15 +25,16 @@ public:
     virtual	~State() {}
     virtual States::ID id() const { return States::NONE; }
 
-    virtual void draw() = 0;
-    virtual bool update(const sf::Time& dt) = 0;
-    virtual bool handleEvent(const sf::Event& event) = 0;
+    virtual void draw();
+    virtual bool update(const sf::Time& dt);
+    virtual bool handleEvent(const sf::Event& event);
+    // Getter
+    scene::Entity& sceneLayer(Layers::ID layerID) { return m_sceneGraph[int(layerID)]; }
 
     // Called whenever display changes
-    virtual void onShow() { refresh(); }
-    virtual void onHide() { refresh(); }
+    virtual void onShow() { m_sceneGraph.updateFocusSprite(); }
+    virtual void onHide() {}
     virtual void onQuit() {}
-    virtual void refresh() {}
 
 protected:
     void stackPopPush(States::ID stateID);
@@ -43,4 +45,6 @@ protected:
 
 private:
     StateStack*	m_stack;
+
+    scene::Graph m_sceneGraph;
 };

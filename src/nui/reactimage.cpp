@@ -1,7 +1,6 @@
 #include "nui/reactimage.hpp"
 
 #include "core/application.hpp"
-#include "nui/uicore.hpp"
 #include "resources/soundplayer.hpp"
 #include "tools/math.hpp"
 #include "tools/debug.hpp"
@@ -16,18 +15,28 @@ ReactImage::ReactImage()
     : baseClass()
     , m_mouseLeftDeselect(true)
     , m_activeRect(nullptr)
-    , m_react()
+    , m_reactChanged(true)
 {
-    addPart(&m_sprite);
+    // Sprite
+    m_sprite.setPosition(0.f, 0.f);
+    m_sprite.setOrigin(0.f, 0.f);
+
+    update();
 }
 
-void ReactImage::init()
+void ReactImage::updateRoutine(const sf::Time& dt)
 {
+    m_reactChanged = false;
 }
 
 // When position changed, recompute position of sprite
 void ReactImage::update()
 {
+    returnif (m_image.getTexture() == nullptr);
+
+    clearParts();
+    addPart(&m_sprite);
+
     m_target.clear(sf::Color::Transparent);
 
     // Paint whole image
@@ -43,9 +52,6 @@ void ReactImage::update()
     // Giving buffer to window
     m_target.display();
     m_sprite.setTexture(m_target.getTexture());
-    m_sprite.setPosition(0.f, 0.f);
-    m_sprite.setOrigin(0.f, 0.f);
-    setStatus(true);
 }
 
 //-------------------//
@@ -58,13 +64,14 @@ void ReactImage::setImageTexture(Textures::ID id)
 
     // Getting size and reconfiguring visual
     m_imageRect = m_image.getLocalBounds();
-    setSize({m_imageRect.left + m_imageRect.width, m_imageRect.top + m_imageRect.height});
+    sf::Vector2f imageSize(m_imageRect.left + m_imageRect.width, m_imageRect.top + m_imageRect.height);
 
     // Creating target
-    m_target.create(size().x, size().y);
+    m_target.create(imageSize.x, imageSize.y);
     m_target.setSmooth(true);
 
-    update();
+    // Setting final size
+    setSize(imageSize);
 }
 
 void ReactImage::setImageShader(Shaders::ID id)
@@ -115,6 +122,7 @@ void ReactImage::setActiveReact(const std::wstring& key)
 
     if (!key.empty()) m_activeRect = &m_reacts[key].rect;
     m_react = key;
+    m_reactChanged = true;
 
     update();
 }

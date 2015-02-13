@@ -64,12 +64,6 @@ bool StateStack::isStateVisible(States::ID stateID) const
     return false;
 }
 
-void StateStack::refresh()
-{
-    for (auto& state : m_stack)
-        state->refresh();
-}
-
 std::unique_ptr<State> StateStack::createState(States::ID stateID)
 {
     auto found = m_factories.find(stateID);

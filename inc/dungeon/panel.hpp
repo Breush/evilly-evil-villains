@@ -1,38 +1,33 @@
 #pragma once
 
-#include "nui/object.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/imagebutton.hpp"
+#include "scene/entity.hpp"
 #include "tools/param.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
 namespace dungeon
 {
-    class Panel : public nui::Object
+    class Panel : public scene::Entity
     {
-        typedef nui::Object baseClass;
+        typedef scene::Entity baseClass;
 
     public:
         Panel();
         virtual ~Panel() {}
 
-        // Virtual
-        void init() override;
-        void update() override;
-
         // Reduced mode
         void switchReduced();
 
     protected:
+        // Virtual
+        void update() override;
+
         // Mouse events
         void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
         void handleMouseMoved(const sf::Vector2f& mousePos) override;
         void handleMouseLeft() override;
-
-        // Changes
-        void changedStatus() override;
-        void changedSize() override;
 
         // Params
         PARAMGS(bool, m_reduced, reduced, setReduced)

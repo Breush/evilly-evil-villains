@@ -1,18 +1,14 @@
-#include "core/application.hpp"
-
 #include "nui/list.hpp"
-#include "nui/uicore.hpp"
 
+#include "core/application.hpp"
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
-
 #include "resources/holder.hpp"
 
 using namespace nui;
 
 List::List()
-    : baseClass()
-    , m_hPadding(6)
+    : m_hPadding(6)
     , m_vPadding(6)
     , m_borderThick(1)
     , m_sbWidth(31)
@@ -20,15 +16,20 @@ List::List()
     , m_linesCount(0)
     , m_selectedLine(uint(-1))
 {
-    // TODO #3 - Use config parameter to determine size
-}
+    setFocusable(true);
+    setFocusOwned(true);
 
-void List::init()
-{
+    // TODO #3 - Use config parameter to determine size
+    update();
 }
 
 void List::update()
 {
+    returnif (m_lines.size() == 0);
+
+    m_linesCount = size().y / lineHeight() - 1;
+    m_hBorders.resize(linesCount() + 2);
+
     clearParts();
 
     // Columns
@@ -55,8 +56,8 @@ void List::update()
 
             // Clipping
             if (column.clip && line[i].textWidth > column.width - hPadding()) {
-                line[i].clippingRect = sf::IntRect(column.x, y - vPadding(), column.width - hPadding(), lineHeight());
-                setPartClippingRect(&line[i].text, &line[i].clippingRect);
+                line[i].clippingRect = sf::FloatRect(column.x, y - vPadding(), column.width - hPadding(), lineHeight());
+                setPartClippingRect(&line[i].text, line[i].clippingRect);
             }
 
             y += lineHeight();
@@ -172,7 +173,7 @@ void List::addLine(const std::initializer_list<std::wstring>& values)
         auto bounds = text.getLocalBounds();
         uint width = bounds.left + bounds.width;
         uint height = bounds.top + bounds.height;
-        line.push_back({text, width, height, sf::IntRect(0, 0, width, height)});
+        line.push_back({text, width, height, {0.f, 0.f, float(width), float(height)}});
     }
     m_lines.push_back(line);
 
@@ -210,23 +211,8 @@ void List::handleMouseLeft()
     resetPartsShader();
 }
 
-//---------------------------//
-//----- Keyboard events -----//
-
-/*void List::handleKeyboardEvent(const sf::Event&)
-{
-}*/
-
 //-------------------//
 //----- Changes -----//
-
-void List::changedSize()
-{
-    m_linesCount = size().y / lineHeight() - 1;
-    m_hBorders.resize(linesCount() + 2);
-
-    baseClass::changedSize();
-}
 
 void List::changedSelectedLine()
 {
@@ -240,7 +226,6 @@ void List::setFocusedLine(uint line)
 {
     uint yLine = (line + 1) * lineHeight();
     setFocusRect(sf::FloatRect(0, yLine, size().x, lineHeight()));
-    setStatus(true);
 }
 
 //------------------//

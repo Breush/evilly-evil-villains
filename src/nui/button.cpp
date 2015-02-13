@@ -1,19 +1,15 @@
 #include "nui/button.hpp"
 
+#include "tools/tools.hpp"
+
 using namespace nui;
 
 Button::Button()
     : baseClass()
 {
-}
-
-void Button::init()
-{
     // Adding unique choice
     add(L"", nullptr);
     setShowArrows(false);
-
-    baseClass::init();
 }
 
 //-------------------//
@@ -45,18 +41,12 @@ void Button::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf:
     acceptChoice();
 }
 
-bool Button::handleKeyboardEvent(const sf::Event& event)
+void Button::handleKeyboardEvent(const sf::Event& event)
 {
     // Just manage pressed keys and Return
-    returnif (event.type != sf::Event::KeyPressed) false;
-    returnif (event.key.code != sf::Keyboard::Return) false;
+    returnif (event.type != sf::Event::KeyPressed);
+    returnif (event.key.code != sf::Keyboard::Return);
 
     acceptChoice();
-    return true;
 }
-
-/*void Button::handleJoystickEvent(const sf::Event&)
-{
-    // TODO one day, similar to Keyboard
-}*/
 

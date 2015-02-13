@@ -1,22 +1,27 @@
 #pragma once
 
-#include "interaction/detectable.hpp"
+#include "tools/param.hpp"
 
 #include <SFML/System/Time.hpp>
+#include <SFML/System/Vector2.hpp>
+
+// Forward declarations
+namespace scene
+{
+    class Entity;
+}
 
 namespace sfe
 {
-    class Lerpable : public interaction::Detectable
+    class Lerpable
     {
-        typedef interaction::Detectable baseClass;
-
     public:
-        Lerpable();
+        Lerpable(scene::Entity* entity);
         virtual ~Lerpable() {}
 
         // Virtual
         void saveDefaults();
-        void update(const sf::Time& dt) override;
+        void update(const sf::Time& dt);
 
         // Targets relative
         void setTargetPositionOffset(const sf::Vector2f& positionOffset);
@@ -26,16 +31,18 @@ namespace sfe
         void changedTargetPosition();
 
         // Interpolations
-        sf::Vector2f nextPosition(const sf::Time& dt);
+        sf::Vector2f nextPosition(sf::Vector2f position, const sf::Time& dt);
 
         // Low level
         void converge(float& source, const float target, const float offset);
 
         // Params
-        PARAMGS(bool, m_lerpable, lerpable, setLerpable)
-        PARAMGS(sf::Vector2f, m_lerpablePositionSpeed, lerpablePositionSpeed, setLerpablePositionSpeed)
+        PARAMGS(sf::Vector2f, m_positionSpeed, positionSpeed, setPositionSpeed)
         PARAMGSU(sf::Vector2f, m_targetPosition, targetPosition, setTargetPosition, changedTargetPosition)
         PARAMG(sf::Vector2f, m_defaultPosition, defaultPosition)
+
+    private:
+        scene::Entity* m_entity;
     };
 }
 
