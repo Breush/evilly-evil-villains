@@ -14,8 +14,12 @@ using namespace scene;
 
 Entity::Entity(bool isLerpable)
     : m_parent(nullptr)
+    , m_graph(nullptr)
+    , m_depth(50)
+    , m_localPosition(0.f, 0.f)
     , m_localRotation(0.f)
     , m_localScale(1.f, 1.f)
+    , m_size(0.f, 0.f)
     , m_callParentOnSizeChanges(true)
     , m_callParentOnLocalChanges(false)
     , m_sizeChanges(true)
@@ -26,7 +30,9 @@ Entity::Entity(bool isLerpable)
     , m_visible(true)
     , m_focusOwned(false)
     , m_focused(false)
-    , m_graph(nullptr)
+    , m_centered(false)
+    , m_markedForVisible(false)
+    , m_visibleMark(true)
 {
     // Lerpable component
     if (isLerpable)
