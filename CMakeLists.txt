@@ -14,33 +14,40 @@ endmacro()
 #=====
 # Project
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE})
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
 # Set a default build type if none was provided
 # This has to be done before the project() instruction!
 eev_set_option(CMAKE_BUILD_TYPE Debug STRING "Choose the type of build (Debug or Release)")
 
-# Add project and includes
+# Add project and main executable
 project(EEV)
 set(EXECUTABLE_NAME eev)
-
-file(GLOB_RECURSE SOURCES_FILES src/* inc/* res/shd/*)
-add_executable(${EXECUTABLE_NAME} ${SOURCES_FILES})
 
 include_directories(${CMAKE_SOURCE_DIR}/inc/)
 include_directories(${CMAKE_SOURCE_DIR}/ext/pugixml/)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE})
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+file(GLOB_RECURSE SOURCES_FILES src/* inc/* res/shd/*)
+add_executable(${EXECUTABLE_NAME} ${SOURCES_FILES})
+
+#=====
+# Tests
+
+enable_testing()
+add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
+add_subdirectory(tests EXCLUDE_FROM_ALL)
 
 #=====
 # Find SFML 2.X
 
 eev_set_option(SFML_ROOT "" STRING "Where is SFML installed")
 find_package(SFML 2 REQUIRED system window graphics audio)
-if(SFML_FOUND)
+if (SFML_FOUND)
 	include_directories(${SFML_INCLUDE_DIR})
 	target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
-endif()
+endif ()
 
 #=====
 # Find OpenGL
@@ -49,7 +56,7 @@ find_package(OpenGL REQUIRED)
 if (OPENGL_FOUND)
 	include_directories(${OPENGL_INCLUDE_DIR})
 	target_link_libraries(${EXECUTABLE_NAME} ${OPENGL_LIBRARIES})
-endif()
+endif ()
 
 #=====
 # Find Gettext
@@ -58,16 +65,16 @@ find_package(Gettext REQUIRED)
 if (GETTEXT_FOUND)
 	include_directories(${GETTEXT_INCLUDE_DIR})
 	target_link_libraries(${EXECUTABLE_NAME} ${GETTEXT_LIBRARIES})
-endif()
+endif ()
 
 #=====
 # Find LibIntl (comes with gettext on Linux)
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	find_package(LibIntl REQUIRED)
 	if (LibIntl_FOUND)
 		include_directories(${LibIntl_INCLUDE_DIR})
 		target_link_libraries(${EXECUTABLE_NAME} ${LibIntl_LIBRARIES})
-	endif()
-endif()
+	endif ()
+endif ()
 
