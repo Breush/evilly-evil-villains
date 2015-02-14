@@ -111,6 +111,7 @@ namespace scene
 
         // Graph
         void setGraph(Graph* graph);
+        Entity* root();
 
         // Params
         PARAMG(Graph*, m_graph, graph)

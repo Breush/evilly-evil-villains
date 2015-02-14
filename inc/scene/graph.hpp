@@ -14,8 +14,6 @@ namespace Layers {
     };
 }
 
-// TODO /!\ Init layers with views
-
 namespace scene
 {
     /** scene::Graph
@@ -34,7 +32,8 @@ namespace scene
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
         // Access layers
-        Entity& operator[](int layerID) { return m_layers[layerID]; }
+        Entity& operator[](Layers::ID layerID) { return m_layers[layerID].root; }
+        const sf::View& viewFromLayerRoot(const Entity* root) const;
 
         // Focusing system
         void updateFocusSprite();
@@ -48,19 +47,26 @@ namespace scene
         void drawMouseDetector(sf::RenderTarget& target, sf::RenderStates states) const;
         Entity* handleMouseEvent(const sf::Event& event);
         void setHoveredEntity(Entity* hoveredEntity);
-        Entity* entityFromPosition(const sf::Vector2f& mousePos);
+        Entity* entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos); //< viewPos will be set to the position in the entity view
 
         // Focusing system
         void setFocusedEntity(Entity* focusedEntity);
         void focusHandleEvent(const sf::Event& event);
+
+        // Layer
+        struct Layer {
+            Entity root;
+            sf::View* view;
+        };
 
         // Params
         PARAMG(sf::Shader*, m_focusShader, focusShader)
         PARAMG(sf::RectangleShape, m_focusShape, focusShape)
 
     private:
+
         // Layers
-        std::array<Entity, Layers::COUNT> m_layers;
+        std::array<Layer, Layers::COUNT> m_layers;
 
         // Mouse detection
         Entity* m_hoveredEntity;

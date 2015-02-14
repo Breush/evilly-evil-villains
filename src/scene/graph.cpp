@@ -21,12 +21,26 @@ Graph::Graph()
     m_focusShape.setFillColor({255, 255, 255, 100});
 
     // Default parameters
-    for (auto& layerRootEntity : m_layers) {
-        layerRootEntity.setDetectable(false);
-        layerRootEntity.setFocusable(false);
-        layerRootEntity.setVisible(false);
-        layerRootEntity.setGraph(this);
+    for (auto& layer : m_layers) {
+        layer.root.setDetectable(false);
+        layer.root.setFocusable(false);
+        layer.root.setVisible(false);
+        layer.root.setGraph(this);
     }
+
+    // Initialisation of layers views
+    m_layers[Layers::DUNGEON_DESIGN].view = &Application::context().views.get(Views::DUNGEON_DESIGN);
+    m_layers[Layers::NUI].view = &Application::context().views.get(Views::DEFAULT);
+}
+
+const sf::View& Graph::viewFromLayerRoot(const Entity* root) const
+{
+    for (const auto& layer : m_layers)
+        if (&layer.root == root)
+            return *layer.view;
+
+    // Not found: problem
+    throw std::runtime_error("Scene graph is inconsistent.");
 }
 
 //-------------------//
@@ -36,7 +50,7 @@ void Graph::update(const sf::Time& dt)
 {
     // Update recursively all the entities
     for (auto& layerRootEntity : m_layers)
-        layerRootEntity.update(dt);
+        layerRootEntity.root.update(dt);
 
     // Focusing system - animation
     if (m_focusedEntity != nullptr) {
@@ -75,8 +89,10 @@ void Graph::handleEvent(const sf::Event& event)
 void Graph::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     // Draw all layers
-    for (auto& layerRootEntity : m_layers)
-        target.draw(layerRootEntity, states);
+    for (auto& layer : m_layers) {
+        target.setView(*layer.view);
+        target.draw(layer.root, states);
+    }
 
     // Hovered child on debug
     debug_nui_1(drawMouseDetector(target, states));
@@ -130,7 +146,7 @@ void Graph::focusHandleEvent(const sf::Event& event)
         // Simply get next or restart from the beginning
         Entity* nextFocused = m_focusedEntity->nextFocusable();
         if (nextFocused != nullptr) setFocusedEntity(nextFocused);
-        else setFocusedEntity(m_layers[Layers::NUI].nextFocusable());
+        else setFocusedEntity(m_layers[Layers::NUI].root.nextFocusable());
     }
 
     // Find previous entity
@@ -140,7 +156,7 @@ void Graph::focusHandleEvent(const sf::Event& event)
         Entity* previousFocused = m_focusedEntity->previousFocusable();
         if (previousFocused != nullptr) setFocusedEntity(previousFocused);
         else {
-            previousFocused = m_layers[Layers::NUI].lastDescendant();
+            previousFocused = m_layers[Layers::NUI].root.lastDescendant();
             if (previousFocused->focusable()) setFocusedEntity(previousFocused);
             else setFocusedEntity(previousFocused->previousFocusable());
         }
@@ -154,7 +170,6 @@ void Graph::drawMouseDetector(sf::RenderTarget& target, sf::RenderStates states)
 {
     returnif (m_hoveredEntity == nullptr);
 
-    // TODO How to know the view on the hovered child?
     sf::RectangleShape rectangleShape;
     rectangleShape.setFillColor({255, 0, 0, 150});
     rectangleShape.setSize(m_hoveredEntity->size());
@@ -163,26 +178,20 @@ void Graph::drawMouseDetector(sf::RenderTarget& target, sf::RenderStates states)
     rectangleShape.setScale(m_hoveredEntity->getScale());
     rectangleShape.setOrigin(m_hoveredEntity->getOrigin());
 
+    target.setView(viewFromLayerRoot(m_hoveredEntity->root()));
     target.draw(rectangleShape);
 }
 
 Entity* Graph::handleMouseEvent(const sf::Event& event)
 {
-    // TODO /!\ Use view concerned by layer
-
-    // Extrapolating position
-    auto& window = Application::context().window;
-    const auto& defaultView = Application::context().views.get(Views::DEFAULT);
-    sf::Vector2f absPos(window.mapPixelToCoords(mousePosition(event), defaultView));
-    clamp(absPos, Application::context().resolution);
-
     // Getting entity touched if any
-    Entity* entity = entityFromPosition(absPos);
+    sf::Vector2f viewPos;
+    Entity* entity = entityFromPosition(mousePosition(event), viewPos);
     setHoveredEntity(entity);
     returnif (entity == nullptr) nullptr;
 
     // Getting relative coordinates
-    sf::Vector2f relPos = entity->getInverseTransform().transformPoint(absPos);
+    sf::Vector2f relPos = entity->getInverseTransform().transformPoint(viewPos);
 
     // Calling child callback
     if (event.type == sf::Event::MouseMoved)
@@ -208,11 +217,14 @@ void Graph::setHoveredEntity(Entity* hoveredEntity)
     m_hoveredEntity = hoveredEntity;
 }
 
-Entity* Graph::entityFromPosition(const sf::Vector2f& mousePos)
+Entity* Graph::entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos)
 {
-    // TODO Only in a layer, passed by argument
-    rfor (layerRootEntity, m_layers) {
-        Entity* entity = (*layerRootEntity).firstOver(mousePos);
+    const auto& window = Application::context().window;
+
+    rfor (layer, m_layers) {
+        // Extrapolating position and getting entity if any
+        viewPos = window.mapPixelToCoords(mousePos, *layer->view);
+        Entity* entity = layer->root.firstOver(viewPos);
         returnif (entity != nullptr) entity;
     }
 

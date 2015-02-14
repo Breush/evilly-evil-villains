@@ -464,3 +464,9 @@ void Entity::setGraph(Graph* inGraph)
     if (m_graph != nullptr)
         m_graph->attachedEntity(this);
 }
+
+Entity* Entity::root()
+{
+    returnif (m_parent == nullptr) this;
+    return m_parent->root();
+}

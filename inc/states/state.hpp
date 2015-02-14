@@ -29,7 +29,7 @@ public:
     virtual bool update(const sf::Time& dt);
     virtual bool handleEvent(const sf::Event& event);
     // Getter
-    scene::Entity& sceneLayer(Layers::ID layerID) { return m_sceneGraph[int(layerID)]; }
+    scene::Entity& sceneLayer(Layers::ID layerID) { return m_sceneGraph[layerID]; }
 
     // Called whenever display changes
     virtual void onShow() { m_sceneGraph.updateFocusSprite(); }
