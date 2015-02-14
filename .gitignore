@@ -5,8 +5,10 @@
 CMakeCache.txt
 CMakefiles
 cmake_install.cmake
+CTestTestfile.cmake
 *.pot
 *.mo
 Makefile
 *.cbp
 *.db
+*_saved.xml

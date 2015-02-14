@@ -1,5 +1,7 @@
 #pragma once
 
+#include "tools/int.hpp"
+
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/System/Time.hpp>
 

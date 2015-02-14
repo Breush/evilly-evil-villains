@@ -1,7 +1,7 @@
 #include "states/menu/selectworld.hpp"
 
 #include "core/application.hpp"
-#include "core/gettext.hpp"
+#include "tools/time.hpp"
 #include "tools/tools.hpp"
 #include "resources/holder.hpp"
 #include "resources/musicplayer.hpp"
@@ -9,7 +9,6 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
-
 
 MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     : baseClass(stack)
@@ -32,7 +31,7 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     // TODO Have time format within gettext so that each country can choose its own representation
     world::context.worldsData.load("worlds/worlds.xml");
     for (const auto& world : world::context.worldsData.worlds())
-        m_list.addLine({world.villain, world.name, world.mainDungeon, time2wstring("%F", world.lastPlayed)});
+        m_list.addLine({world.villain, world.name, world.mainDungeon, time2wstring("%Y-%m-%d", world.lastPlayed)});
 
     // Stacker for buttons
     sceneLayer(Layers::NUI).attachChild(m_stacker);

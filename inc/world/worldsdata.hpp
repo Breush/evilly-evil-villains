@@ -1,9 +1,10 @@
 #pragma once
 
-#include "tools/time.hpp"
 #include "tools/int.hpp"
 
+#include <string>
 #include <vector>
+#include <ctime>
 
 // Forward declarations
 namespace pugi
