@@ -8,7 +8,7 @@ void Application::loadTextures()
     s_context.textures.setRepeated(Textures::DEFAULT, true);
 
     // Splash-screen
-    s_context.textures.load(Textures::JUMPINGTOASTS_BG, "res/tex/jumping-toasts/bg.png", true);
+    s_context.textures.load(Textures::JUMPINGTOASTS_BACKGROUND, "res/tex/jumping-toasts/bg.png", true);
     s_context.textures.load(Textures::JUMPINGTOASTS_JUMPING, "res/tex/jumping-toasts/jumping.png", true);
     s_context.textures.load(Textures::JUMPINGTOASTS_TOASTS, "res/tex/jumping-toasts/toasts.png", true);
     s_context.textures.load(Textures::JUMPINGTOASTS_TOAST, "res/tex/jumping-toasts/toast.png", true);
@@ -18,7 +18,7 @@ void Application::loadTextures()
     s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERMIDDLE, "res/tex/jumping-toasts/toaster-middle.png", true);
     s_context.textures.load(Textures::JUMPINGTOASTS_TOASTERTOP, "res/tex/jumping-toasts/toaster-top.png", true);
 
-    s_context.textures.setRepeated(Textures::JUMPINGTOASTS_BG, true);
+    s_context.textures.setRepeated(Textures::JUMPINGTOASTS_BACKGROUND, true);
     s_context.textures.setSmooth(Textures::JUMPINGTOASTS_TOASTCUT, false);
 
     // NUI
@@ -27,7 +27,7 @@ void Application::loadTextures()
     s_context.textures.setRepeated(Textures::NUI_FOCUS, true);
 
     // Menu
-    s_context.textures.load(Textures::MENU_BG, "res/tex/menu/bg.png");
+    s_context.textures.load(Textures::MENU_BACKGROUND, "res/tex/menu/bg.png");
     s_context.textures.load(Textures::MENU_NAME, "res/tex/menu/name.png");
 
     // Dungeon

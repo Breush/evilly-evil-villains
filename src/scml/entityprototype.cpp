@@ -79,7 +79,7 @@ void EntityPrototype::startAnimation(const std::wstring& animationName)
     time = 0;
 }
 
-void EntityPrototype::update(int dt_ms)
+void EntityPrototype::updateAnimation(int dt_ms)
 {
     returnif (entity < 0 || animation < 0 || key < 0);
 

@@ -2,9 +2,8 @@
 
 #include "states/state.hpp"
 #include "nui/button.hpp"
-
-#include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/Text.hpp>
+#include "sfe/rectangleshape.hpp"
+#include "sfe/label.hpp"
 
 class QuitState : public State
 {
@@ -13,13 +12,13 @@ public:
     virtual ~QuitState() {}
     virtual States::ID id() const override { return States::QUIT; }
 
-    void draw() override;
+    // Routines
     bool handleEvent(const sf::Event& event) override;
 
 private:
     // Decorum
-    sf::RectangleShape m_bg;
-    sf::Text m_text;
+    sfe::RectangleShape m_background;
+    sfe::Label m_question;
 
     // NUI
     nui::Button m_noButton;

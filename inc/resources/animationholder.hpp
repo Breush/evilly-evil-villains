@@ -1,14 +1,21 @@
 #pragma once
 
-#include "scml/data.hpp"
 #include "scml/interface.hpp"
 #include "resources/holder.hpp"
 #include "resources/identifiers.hpp"
-#include "sfe/animatedsprite.hpp"
 
 #include <SFML/System/NonCopyable.hpp>
 #include <list>
 #include <map>
+
+// Forward declarations
+namespace sfe {
+    class AnimatedSprite;
+}
+
+namespace scml {
+    class Data;
+}
 
 class AnimationHolder : private sf::NonCopyable
 {

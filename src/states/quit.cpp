@@ -7,19 +7,19 @@
 QuitState::QuitState(StateStack& stack)
     : State(stack)
 {
-    const auto& font = Application::context().fonts.get(Fonts::NUI);
     const auto& resolution = Application::context().resolution;
 
     // Background
-    m_bg.setFillColor(sf::Color(0, 0, 0, 200));
-    m_bg.setSize(Application::context().resolution);
+    sceneLayer(Layers::NUI).attachChild(m_background);
+    m_background.setFillColor(sf::Color(0, 0, 0, 230));
+    m_background.setSize(Application::context().resolution);
 
     // Text
-    m_text.setFont(font);
-    m_text.setString(_("Do you really want to quit?"));
-    m_text.setPosition(0.5f * resolution.x, 0.4f * resolution.y);
-    auto bounds = m_text.getLocalBounds();
-    m_text.setOrigin((bounds.left + bounds.width) / 2.f, (bounds.top + bounds.height) / 2.f);
+    sceneLayer(Layers::NUI).attachChild(m_question);
+    m_question.setFont(Fonts::NUI);
+    m_question.setText(_("Do you really want to quit?"));
+    m_question.setPosition(0.5f * resolution.x, 0.4f * resolution.y);
+    m_question.setCentered(true);
 
     // Buttons
     sceneLayer(Layers::NUI).attachChild(m_noButton);
@@ -31,18 +31,6 @@ QuitState::QuitState(StateStack& stack)
     m_yesButton.setAction(_("Yes, I will lose everything not saved."), [this]() { stackClear(); });
     m_yesButton.setLocalPosition({0.5f * resolution.x, 0.6f * resolution.y});
     m_yesButton.setOrigin(m_yesButton.size() / 2.f);
-}
-
-void QuitState::draw()
-{
-    auto& window = Application::context().window;
-    window.setView(Application::context().views.get(Views::DEFAULT));
-
-    window.draw(m_bg);
-    window.draw(m_text);
-
-    // Should not be there
-    State::draw();
 }
 
 bool QuitState::handleEvent(const sf::Event& event)

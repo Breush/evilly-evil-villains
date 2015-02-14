@@ -11,9 +11,9 @@ ContextMenu::ContextMenu()
     , m_choiceHeight(22)
 {
     // Background
-    m_bg.setFillColor(sf::Color::Blue);
-    m_bg.setOutlineColor(sf::Color::White);
-    m_bg.setOutlineThickness(1);
+    m_background.setFillColor(sf::Color::Blue);
+    m_background.setOutlineColor(sf::Color::White);
+    m_background.setOutlineThickness(1);
 
     update();
 }
@@ -26,8 +26,8 @@ void ContextMenu::update()
     clearParts();
 
     // Background
-    addPart(&m_bg);
-    m_bg.setSize(size());
+    addPart(&m_background);
+    m_background.setSize(size());
 
     // Title
     if (!m_title.getString().isEmpty())

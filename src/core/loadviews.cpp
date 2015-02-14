@@ -8,6 +8,7 @@ void Application::loadViews()
 
     s_context.views.load(Views::DEFAULT);
     s_context.views.load(Views::DUNGEON_DESIGN);
+    s_context.views.load(Views::NUI);
 
     refreshViews();
 }
@@ -32,11 +33,14 @@ void Application::refreshViews()
     s_context.effectiveDisplay = sf::Vector2f(screenSize.x * viewport.width, screenSize.y * viewport.height);
 
     // Refresh all views
-    sf::View& defaultView(s_context.views.get(Views::DEFAULT));
+    auto& defaultView = s_context.views.get(Views::DEFAULT);
     defaultView.setCenter(resolution / 2.f);
     defaultView.setSize(resolution);
     defaultView.setViewport(viewport);
 
-    sf::View& dungeonDesignView(s_context.views.get(Views::DUNGEON_DESIGN));
+    auto& dungeonDesignView = s_context.views.get(Views::DUNGEON_DESIGN);
     dungeonDesignView.setViewport(viewport);
+
+    auto& nuiView = s_context.views.get(Views::NUI);
+    nuiView = defaultView;
 }

@@ -22,7 +22,7 @@ void FileSystem::clear()
     sounds.clear();
 }
 
-//----- Image
+//----- Images
 
 bool FileSystem::loadImageFile(int folderID, int fileID, const std::wstring& filename)
 {
@@ -80,20 +80,6 @@ Entity::Entity(scml::Data* data, int entity, int animation, int key)
     : scml::EntityPrototype(data, entity, animation, key)
 {}
 
-FileSystem* Entity::setFileSystem(FileSystem* fs)
-{
-    FileSystem* old = file_system;
-    file_system = fs;
-    return old;
-}
-
-sf::RenderTarget* Entity::setScreen(sf::RenderTarget* scr)
-{
-    sf::RenderTarget* old = screen;
-    screen = scr;
-    return old;
-}
-
 void Entity::convert_to_SCML_coords(float& x, float& y, float& angle)
 {
     y = -y;
@@ -102,7 +88,7 @@ void Entity::convert_to_SCML_coords(float& x, float& y, float& angle)
 
 std::pair<uint, uint> Entity::getImageDimensions(int folderID, int fileID) const
 {
-    return file_system->getImageDimensions(folderID, fileID);
+    return m_fileSystem->getImageDimensions(folderID, fileID);
 }
 
 // (x, y) specifies the center point of the image.  x, y, and angle are in SCML coordinate system (+x to the right, +y up, +angle counter-clockwise)
@@ -111,18 +97,18 @@ void Entity::draw_internal(int folderID, int fileID, float x, float y, float ang
     y = -y;
     angle = 360 - angle;
 
-    const auto& texture = Application::context().textures.get(file_system->getTexture(folderID, fileID));
+    const auto& texture = Application::context().textures.get(m_fileSystem->getTexture(folderID, fileID));
 
-    sf::Sprite sprite(texture);
-    sprite.setOrigin(sf::v2f(texture.getSize() / 2u));
-    sprite.setScale(scale_x, scale_y);
-    sprite.setRotation(angle);
-    sprite.setPosition(x, y);
+    m_sprite.setTexture(texture, true);
+    m_sprite.setOrigin(sf::v2f(texture.getSize() / 2u));
+    m_sprite.setScale(scale_x, scale_y);
+    m_sprite.setRotation(angle);
+    m_sprite.setPosition(x, y);
 
-    screen->draw(sprite);
+    m_target->draw(m_sprite);
 }
 
 void Entity::play_sound(int folderID, int fileID)
 {
-    Application::context().sounds.play(file_system->getSound(folderID, fileID));
+    Application::context().sounds.play(m_fileSystem->getSound(folderID, fileID));
 }

@@ -8,47 +8,34 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
 
+// TODO What to do with this state? Open config menu?
+// At least, make it use the nui tools (buttons)
+// And make strings translatable
+
 GamePauseState::GamePauseState(StateStack& stack)
     : State(stack)
 {
-    const auto& font = Application::context().fonts.get(Fonts::NUI);
     const auto& resolution = Application::context().resolution;
 
     // Background
-    m_bg.setFillColor(sf::Color(0, 0, 0, 150));
-    m_bg.setSize(Application::context().resolution);
+    sceneLayer(Layers::NUI).attachChild(m_background);
+    m_background.setFillColor(sf::Color(0, 0, 0, 230));
+    m_background.setSize(Application::context().resolution);
 
     // Pause text
-    m_pausedText.setFont(font);
-    m_pausedText.setString("Game Paused");
-    m_pausedText.setCharacterSize(70);
-    m_pausedText.setPosition(0.5f * resolution.x, 0.4f * resolution.y);
-    auto bounds = m_pausedText.getLocalBounds();
-    m_pausedText.setOrigin((bounds.left + bounds.width) / 2.f, (bounds.top + bounds.height) / 2.f);
+    sceneLayer(Layers::NUI).attachChild(m_pauseText);
+    m_pauseText.setFont(Fonts::NUI);
+    m_pauseText.setText(L"Game Paused");
+    m_pauseText.setCharacterSize(70);
+    m_pauseText.setPosition(0.5f * resolution.x, 0.4f * resolution.y);
+    m_pauseText.setCentered(true);
 
     // Instruction TODO Use UI to access options etc.
-    m_instructionText.setFont(font);
-    m_instructionText.setString("(Press Backspace to return to the main menu)");
+    sceneLayer(Layers::NUI).attachChild(m_instructionText);
+    m_instructionText.setFont(Fonts::NUI);
+    m_instructionText.setText(L"(Press Backspace to return to the main menu)");
     m_instructionText.setPosition(0.5f * resolution.x, 0.6f * resolution.y);
-    bounds = m_instructionText.getLocalBounds();
-    m_instructionText.setOrigin((bounds.left + bounds.width) / 2.f, (bounds.top + bounds.height) / 2.f);
-}
-
-void GamePauseState::draw()
-{
-    // TODO UI-tize
-
-    auto& window = Application::context().window;
-    window.setView(Application::context().views.get(Views::DEFAULT));
-
-    window.draw(m_bg);
-    window.draw(m_pausedText);
-    window.draw(m_instructionText);
-}
-
-bool GamePauseState::update(const sf::Time&)
-{
-    return false;
+    m_instructionText.setCentered(true);
 }
 
 bool GamePauseState::handleEvent(const sf::Event& event)
@@ -63,5 +50,5 @@ bool GamePauseState::handleEvent(const sf::Event& event)
     else if (event.key.code == sf::Keyboard::BackSpace)
         stackClear(States::MENU_MAIN);
 
-    return false;
+    return State::handleEvent(event);
 }

@@ -51,7 +51,7 @@ namespace nui
 
     private:
         // Decorum
-        sf::RectangleShape m_bg; // TODO To be a sf::Sprite for looks
+        sf::RectangleShape m_background; // TODO To be a sf::Sprite for looks
 
         // Choices
         sf::Text m_title;

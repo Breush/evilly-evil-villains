@@ -469,7 +469,7 @@ public:
      *
      * \param dt_ms Change in time since last update, in milliseconds
      */
-    virtual void update(int dt_ms);
+    virtual void updateAnimation(int dt_ms);
 
     /*! \brief Draws the entity using a specific renderer by calling draw_internal().
      *

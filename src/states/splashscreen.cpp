@@ -11,35 +11,23 @@ SplashScreenState::SplashScreenState(StateStack& stack)
     : State(stack)
 {
     const sf::Vector2f& resolution = Application::context().resolution;
-    float maxSize = std::max(resolution.x, resolution.y);
+    float maxSide = std::max(resolution.x, resolution.y);
 
     // Background
-    const auto& texture = Application::context().textures.get(Textures::JUMPINGTOASTS_BG);
-    const auto& textureSize = texture.getSize();
-    m_bgSprite.setTexture(texture);
-    m_bgSprite.setScale(maxSize / textureSize.x, maxSize / textureSize.y);
-    m_bgSprite.setPosition(sf::vsub(resolution, maxSize) / 2.f);
-
-    // Shader
-    m_bgShader = &Application::context().shaders.get(Shaders::MENU_BG);
+    const auto& textureSize = Application::context().textures.get(Textures::JUMPINGTOASTS_BACKGROUND).getSize();
+    sceneLayer(Layers::NUI).attachChild(m_background);
+    m_background.setDepth(100.f);
+    m_background.setTexture(Textures::JUMPINGTOASTS_BACKGROUND);
+    m_background.setShader(Shaders::MENU_BACKGROUND);
+    m_background.setLocalScale({maxSide / textureSize.x, maxSide / textureSize.y});
+    m_background.setLocalPosition(sf::vsub(resolution, maxSide) / 2.f);
 
     // Animation
+    sceneLayer(Layers::NUI).attachChild(m_logo);
     m_logo.load(Animations::JUMPINGTOASTS);
-    m_logo.setPosition(resolution / 2.f);
+    m_logo.setLocalPosition(resolution / 2.f);
     m_logo.setLooping(false);
     m_logo.restart();
-}
-
-void SplashScreenState::draw()
-{
-    auto& window = Application::context().window;
-    window.setView(Application::context().views.get(Views::DEFAULT));
-
-    // Animated background
-    window.draw(m_bgSprite, m_bgShader);
-
-    // Draw animated logo
-    window.draw(m_logo);
 }
 
 bool SplashScreenState::update(const sf::Time& dt)
@@ -48,7 +36,7 @@ bool SplashScreenState::update(const sf::Time& dt)
     if (!m_logo.started())
         stackPopPush(States::MENU_MAIN);
 
-    return true;
+    return State::update(dt);
 }
 
 bool SplashScreenState::handleEvent(const sf::Event& event)
@@ -60,5 +48,5 @@ bool SplashScreenState::handleEvent(const sf::Event& event)
         Application::context().sounds.stopAll();
     }
 
-    return false;
+    return State::handleEvent(event);
 }

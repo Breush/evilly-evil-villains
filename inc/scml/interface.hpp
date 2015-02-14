@@ -5,8 +5,7 @@
 #include "resources/identifiers.hpp"
 
 #include <SFML/Graphics/Texture.hpp>
-
-// To render with SFML
+#include <SFML/Graphics/Sprite.hpp>
 
 namespace scml
 {
@@ -39,8 +38,8 @@ public:
     Entity();
     Entity(scml::Data* data, int entity, int animation = 0, int key = 0);
 
-    FileSystem* setFileSystem(FileSystem* fs);
-    sf::RenderTarget* setScreen(sf::RenderTarget* scr);
+    void setFileSystem(FileSystem* fileSystem) { m_fileSystem = fileSystem; }
+    void setScreen(sf::RenderTarget* target) { m_target = target; }
 
     void convert_to_SCML_coords(float& x, float& y, float& angle) override;
     std::pair<uint, uint> getImageDimensions(int folderID, int fileID) const override;
@@ -49,8 +48,10 @@ public:
     void play_sound(int folderID, int fileID) override;
 
 private:
-    FileSystem* file_system;
-    sf::RenderTarget* screen;
+    FileSystem* m_fileSystem;
+    sf::RenderTarget* m_target;
+
+    sf::Sprite m_sprite;
 };
 
 }

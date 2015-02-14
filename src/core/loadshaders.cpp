@@ -12,7 +12,7 @@ void Application::loadShaders()
     s_context.shaders.load(Shaders::NUI_FOCUS, "res/shd/nui/focus.frag", sf::Shader::Fragment);
 
     // Menu
-    s_context.shaders.load(Shaders::MENU_BG, "res/shd/menu/bg.vert", "res/shd/menu/bg.frag");
+    s_context.shaders.load(Shaders::MENU_BACKGROUND, "res/shd/menu/bg.vert", "res/shd/menu/bg.frag");
     s_context.shaders.load(Shaders::MENU_NAME, "res/shd/menu/name.vert", sf::Shader::Vertex);
 
     refreshShaders();
@@ -33,15 +33,15 @@ void Application::refreshShaders()
     s_context.shaders.setParameter(Shaders::NUI_FOCUS, "effectiveDisplay", effectiveDisplay);
 
     // Menu
-    s_context.shaders.setParameter(Shaders::MENU_BG, "screenSize", screenSize);
-    s_context.shaders.setParameter(Shaders::MENU_BG, "resolution", resolution);
-    s_context.shaders.setParameter(Shaders::MENU_BG, "effectiveDisplay", effectiveDisplay);
-    s_context.shaders.setParameter(Shaders::MENU_BG, "texture", sf::Shader::CurrentTexture);
+    s_context.shaders.setParameter(Shaders::MENU_BACKGROUND, "screenSize", screenSize);
+    s_context.shaders.setParameter(Shaders::MENU_BACKGROUND, "resolution", resolution);
+    s_context.shaders.setParameter(Shaders::MENU_BACKGROUND, "effectiveDisplay", effectiveDisplay);
+    s_context.shaders.setParameter(Shaders::MENU_BACKGROUND, "texture", sf::Shader::CurrentTexture);
 }
 
 void Application::updateShaders(const sf::Time& dt)
 {
-    s_context.shaders.setParameter(Shaders::MENU_BG, "time", m_gameTime / 5.f);
+    s_context.shaders.setParameter(Shaders::MENU_BACKGROUND, "time", m_gameTime / 5.f);
     s_context.shaders.setParameter(Shaders::MENU_NAME, "time", m_gameTime / 5.f);
 }
 

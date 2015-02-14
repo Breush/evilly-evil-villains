@@ -1,11 +1,10 @@
 #pragma once
 
+#include "states/state.hpp"
 #include "dungeon/data.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/panel.hpp"
-#include "states/state.hpp"
-
-#include <SFML/Graphics/Sprite.hpp>
+#include "sfe/sprite.hpp"
 
 class GameDungeonDesignState : public State
 {
@@ -15,7 +14,6 @@ public:
     States::ID id() const override { return States::GAME_DUNGEON_DESIGN; }
 
     // Routines
-    void draw() override;
     bool handleEvent(const sf::Event& event) override;
 
     // Virtual
@@ -28,6 +26,6 @@ private:
     dungeon::Panel m_dungeonPanel;
 
     // Decorum
-    sf::Sprite m_decorumBack;
-    sf::Sprite m_decorumFront;
+    sfe::Sprite m_decorumBack;
+    sfe::Sprite m_decorumFront;
 };

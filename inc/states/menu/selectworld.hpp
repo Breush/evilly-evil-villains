@@ -4,10 +4,10 @@
 #include "nui/list.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/button.hpp"
+#include "sfe/rectangleshape.hpp"
 #include "world/worldsdata.hpp"
 
 #include <array>
-#include <SFML/Graphics/RectangleShape.hpp>
 
 class MenuSelectWorldState : public State
 {
@@ -18,7 +18,7 @@ public:
     virtual ~MenuSelectWorldState() {}
     States::ID id() const override { return States::MENU_SELECTWORLD; }
 
-    void draw() override;
+    // Routines
     bool handleEvent(const sf::Event& event) override;
 
 private:
@@ -28,6 +28,6 @@ private:
     std::array<nui::Button, 3> m_buttons;
 
     // Background
-    sf::RectangleShape m_bgRect;
+    sfe::RectangleShape m_background;
 };
 

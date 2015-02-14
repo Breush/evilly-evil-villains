@@ -16,8 +16,10 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     auto& resolution = Application::context().resolution;
 
     // Background
-    m_bgRect.setFillColor(sf::Color(0, 0, 0, 230));
-    m_bgRect.setSize(resolution);
+    sceneLayer(Layers::NUI).attachChild(m_background);
+    m_background.setDepth(100.f);
+    m_background.setFillColor(sf::Color(0, 0, 0, 230));
+    m_background.setSize(resolution);
 
     // List for existing worlds
     sceneLayer(Layers::NUI).attachChild(m_list);
@@ -52,22 +54,8 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     m_buttons[1].setAction(_("Back"), [this]() { stackPop(); });
     m_buttons[0].setAction(_("Create new world"), nullptr);
 
-    //m_stacker.update();
-
     // Ambient feeling music
     Application::context().musics.setVolume(25);
-}
-
-void MenuSelectWorldState::draw()
-{
-    auto& window = Application::context().window;
-    window.setView(Application::context().views.get(Views::DEFAULT));
-
-    // Background
-    window.draw(m_bgRect);
-
-    // Should not exists
-    State::draw();
 }
 
 bool MenuSelectWorldState::handleEvent(const sf::Event& event)

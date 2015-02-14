@@ -15,7 +15,8 @@ using namespace scene;
 Entity::Entity(bool isLerpable)
     : m_parent(nullptr)
     , m_graph(nullptr)
-    , m_depth(50)
+    , m_shader(nullptr)
+    , m_depth(50.f)
     , m_localPosition(0.f, 0.f)
     , m_localRotation(0.f)
     , m_localScale(1.f, 1.f)
@@ -47,13 +48,20 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
     states.transform = getTransform();
 
     // Draw itself
-    if (m_visible)
+    if (m_visible) {
+        const auto initialShader = states.shader;
+        if (m_shader != nullptr) states.shader = m_shader;
+
+        // Sub-parts
         drawParts(target, states);
 
-    // Draw focus shape
-    if (m_focused) {
-        states.shader = m_graph->focusShader();
-        target.draw(m_graph->focusShape(), states);
+        // Draw focus shape
+        if (m_focused) {
+            states.shader = m_graph->focusShader();
+            target.draw(m_graph->focusShape(), states);
+        }
+
+        states.shader = initialShader;
     }
 
     // Draw children - DFS
@@ -159,6 +167,7 @@ void Entity::attachChild(Entity& child)
     child.setGraph(m_graph);
     child.setParent(this);
     m_children.push_back(&child);
+    refreshChildrenOrder();
 }
 
 void Entity::detachChild(Entity& child)
@@ -338,8 +347,8 @@ void Entity::resetPartsShader()
         part.shader = nullptr;
 }
 
-//-----------------------------//
-//----- Size manipulation -----//
+//-------------------------//
+//----- Local actions -----//
 
 void Entity::setSize(const sf::Vector2f& resize)
 {
@@ -351,6 +360,12 @@ void Entity::setSize(const sf::Vector2f& resize)
 
     refreshCentering();
     update();
+}
+
+void Entity::setShader(Shaders::ID shaderID)
+{
+    if (shaderID == Shaders::NONE) m_shader = nullptr;
+    else m_shader = &Application::context().shaders.get(shaderID);
 }
 
 //------------------------------------//
@@ -438,6 +453,17 @@ void Entity::refreshCentering()
 {
     if (m_centered) setOrigin(0.5f * size());
     else setOrigin(0.f, 0.f);
+}
+
+void Entity::refreshDepthOrder()
+{
+    if (m_parent != nullptr)
+        m_parent->refreshChildrenOrder();
+}
+
+void Entity::refreshChildrenOrder()
+{
+    m_children.sort([](Entity* a, Entity* b) { return a->depth() > b->depth(); });
 }
 
 //------------------------------//

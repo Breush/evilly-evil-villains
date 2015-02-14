@@ -1,6 +1,7 @@
 #include "resources/animationholder.hpp"
 
-#include "scml/interface.hpp"
+#include "scml/data.hpp"
+#include "sfe/animatedsprite.hpp"
 
 AnimationHolder::AnimationHolder()
 {
@@ -9,7 +10,7 @@ AnimationHolder::AnimationHolder()
 void AnimationHolder::update(const sf::Time& dt)
 {
     for (auto& animatedSprite : m_animatedSprites)
-        animatedSprite->update(dt);
+        animatedSprite->updateAnimation(dt);
 }
 
 void AnimationHolder::load(Animations::ID id, const std::string& filename)

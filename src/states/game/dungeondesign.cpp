@@ -20,13 +20,13 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
 
     // Dungeon inter TODO Remove from NUI
     sceneLayer(Layers::DUNGEON_DESIGN).attachChild(m_dungeonInter);
+    m_dungeonInter.setDepth(50.f);
     m_dungeonInter.useData(m_dungeonData);
     m_dungeonInter.setSize({350, 450});
     m_dungeonInter.setCentered(true);
     m_dungeonInter.setLocalPosition(resolution / 2.f);
 
     // Dungeon panel
-    m_dungeonPanel.setDepth(40);
     sceneLayer(Layers::NUI).attachChild(m_dungeonPanel);
     m_dungeonPanel.setCentered(true);
     m_dungeonPanel.setSize({(4 + 1) * 100, 150});
@@ -34,25 +34,13 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     m_dungeonPanel.lerpable()->saveDefaults();
 
     // Decorum
-    m_decorumBack.setTexture(Application::context().textures.get(Textures::DUNGEON_SCENE_GRASSYHILLS_BACK));
-    m_decorumFront.setTexture(Application::context().textures.get(Textures::DUNGEON_SCENE_GRASSYHILLS_FRONT));
-}
+    sceneLayer(Layers::DUNGEON_DESIGN).attachChild(m_decorumBack);
+    m_decorumBack.setDepth(100.f);
+    m_decorumBack.setTexture(Textures::DUNGEON_SCENE_GRASSYHILLS_BACK);
 
-void GameDungeonDesignState::draw()
-{
-    auto& window = Application::context().window;
-
-    // Decorum
-    window.setView(Application::context().views.get(Views::DUNGEON_DESIGN));
-    window.draw(m_decorumBack);
-
-    // UI - Should be removed
-    window.setView(Application::context().views.get(Views::DEFAULT));
-    State::draw();
-
-    // Decorum
-    window.setView(Application::context().views.get(Views::DUNGEON_DESIGN));
-    window.draw(m_decorumFront);
+    sceneLayer(Layers::DUNGEON_DESIGN).attachChild(m_decorumFront);
+    m_decorumFront.setDepth(10.f);
+    m_decorumFront.setTexture(Textures::DUNGEON_SCENE_GRASSYHILLS_FRONT);
 }
 
 void GameDungeonDesignState::onQuit()

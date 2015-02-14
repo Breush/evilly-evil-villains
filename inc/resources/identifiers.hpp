@@ -22,7 +22,7 @@ namespace Textures
 {
     enum ID {
         DEFAULT,
-        JUMPINGTOASTS_BG,
+        JUMPINGTOASTS_BACKGROUND,
         JUMPINGTOASTS_JUMPING,
         JUMPINGTOASTS_TOASTS,
         JUMPINGTOASTS_TOAST,
@@ -32,7 +32,7 @@ namespace Textures
         JUMPINGTOASTS_TOASTERMIDDLE,
         JUMPINGTOASTS_TOASTERTOP,
         NUI_FOCUS,
-        MENU_BG,
+        MENU_BACKGROUND,
         MENU_NAME,
         DUNGEON_SCENE_GRASSYHILLS_BACK,
         DUNGEON_SCENE_GRASSYHILLS_FRONT,
@@ -59,7 +59,7 @@ namespace Shaders
     enum ID {
         DEFAULT,
         NONE,
-        MENU_BG,
+        MENU_BACKGROUND,
         MENU_NAME,
         NUI_HOVER,
         NUI_FOCUS,
@@ -98,6 +98,7 @@ namespace Views
     enum ID {
         DEFAULT,
         DUNGEON_DESIGN,
+        NUI,
     };
 }
 

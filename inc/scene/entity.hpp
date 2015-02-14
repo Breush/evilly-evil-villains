@@ -8,8 +8,8 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Window/Event.hpp>
-#include <vector>
 #include <memory>
+#include <list>
 
 // Forward declarations
 namespace sf
@@ -42,7 +42,7 @@ namespace scene
         void update(const sf::Time& dt);
 
         // Children management
-        std::vector<Entity*>& children() { return m_children; }
+        std::list<Entity*>& children() { return m_children; }
         void attachChild(Entity& child);
         void detachChild(Entity& child);
         Entity* firstOver(const sf::Vector2f& position);
@@ -52,6 +52,7 @@ namespace scene
 
         // Local actions
         void setSize(const sf::Vector2f& resize);
+        void setShader(Shaders::ID shaderID);
 
     protected:
         // Virtual
@@ -95,6 +96,8 @@ namespace scene
         void refreshFromLocalScale();
         void refreshFocusRect();
         void refreshCentering();
+        void refreshDepthOrder();
+        void refreshChildrenOrder();
 
         // Focusing system
         void setFocused(bool inFocused);
@@ -115,7 +118,7 @@ namespace scene
 
         // Params
         PARAMG(Graph*, m_graph, graph)
-        PARAMGS(uint, m_depth, depth, setDepth)
+        PARAMGSU(float, m_depth, depth, setDepth, refreshDepthOrder)
         PARAMGSU(Entity*, m_parent, parent, setParent, refreshFromLocal)
 
         PARAMGSU(sf::Vector2f, m_localPosition, localPosition, setLocalPosition, refreshFromLocalPosition)
@@ -133,7 +136,10 @@ namespace scene
 
     private:
         // Children management
-        std::vector<Entity*> m_children;
+        std::list<Entity*> m_children;
+
+        // Drawing
+        sf::Shader* m_shader;
 
         // Focusing
         bool m_focused;

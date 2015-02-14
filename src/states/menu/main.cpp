@@ -11,21 +11,18 @@
 
 MenuMainState::MenuMainState(StateStack& stack)
     : baseClass(stack)
-    , m_bgRotAngle(0.f)
 {
     const sf::Vector2f& resolution = Application::context().resolution;
-    float maxSize = std::max(resolution.x, resolution.y);
+    float maxSide = std::max(resolution.x, resolution.y);
 
-    // Background
-    const auto& texture = Application::context().textures.get(Textures::MENU_BG);
-    const auto& textureSize = texture.getSize();
-    m_bgSprite.setTexture(texture);
-    m_bgSprite.setScale(maxSize / textureSize.x, maxSize / textureSize.y);
-    m_bgSprite.setPosition(sf::vsub(resolution, maxSize) / 2.f);
-    m_bgSprite.setTexture(texture);
-
-    // Shaders
-    m_bgShader = &Application::context().shaders.get(Shaders::MENU_BG);
+    // Background - TODO Make a expandToView() function in sfe::Sprite to adapt to screenSize?
+    const auto& textureSize = Application::context().textures.get(Textures::MENU_BACKGROUND).getSize();
+    sceneLayer(Layers::NUI).attachChild(m_background);
+    m_background.setDepth(100.f);
+    m_background.setTexture(Textures::MENU_BACKGROUND);
+    m_background.setShader(Shaders::MENU_BACKGROUND);
+    m_background.setLocalScale({maxSide / textureSize.x, maxSide / textureSize.y});
+    m_background.setLocalPosition(sf::vsub(resolution, maxSide) / 2.f);
 
     // Choices
     m_choices.push_back(L"V");
@@ -74,19 +71,6 @@ MenuMainState::MenuMainState(StateStack& stack)
     // Menu theme
     Application::context().musics.play(Musics::MENU_THEME);
     Application::context().musics.setVolume(75);
-}
-
-void MenuMainState::draw()
-{
-    auto& window = Application::context().window;
-    window.setView(Application::context().views.get(Views::DEFAULT));
-
-    // Animated background and menu
-    // TODO Include background as entity
-    window.draw(m_bgSprite, m_bgShader);
-
-    // Should not exists
-    State::draw();
 }
 
 bool MenuMainState::update(const sf::Time& dt)

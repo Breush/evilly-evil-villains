@@ -30,7 +30,7 @@ Graph::Graph()
 
     // Initialisation of layers views
     m_layers[Layers::DUNGEON_DESIGN].view = &Application::context().views.get(Views::DUNGEON_DESIGN);
-    m_layers[Layers::NUI].view = &Application::context().views.get(Views::DEFAULT);
+    m_layers[Layers::NUI].view = &Application::context().views.get(Views::NUI);
 }
 
 const sf::View& Graph::viewFromLayerRoot(const Entity* root) const
