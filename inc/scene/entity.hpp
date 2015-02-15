@@ -47,10 +47,8 @@ namespace scene
         void detachChild(Entity& child);
         Entity* firstOver(const sf::Vector2f& position);
 
-        // Events - TODO Can be given to Graph directly
-        virtual void handleGlobalEvent(const sf::Event& event) {}
-
         // Local actions
+        void markForVisible(bool visible);
         void setSize(const sf::Vector2f& resize);
         void setShader(Shaders::ID shaderID);
 
@@ -61,10 +59,10 @@ namespace scene
         // Events - mouse-related are called if entity is detectable
         virtual void handleKeyboardEvent(const sf::Event& event) {}
         virtual void handleJoystickEvent(const sf::Event& event) {}
-        virtual void handleMouseMoved(const sf::Vector2f& mousePos) {}
-        virtual void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) {}
-        virtual void handleMouseButtonReleased(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) {}
-        virtual void handleMouseWheelMoved(const int& delta, const sf::Vector2f& mousePos) {}
+        virtual void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) {}
+        virtual void handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) {}
+        virtual void handleMouseButtonReleased(const sf::Mouse::Button& button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) {}
+        virtual void handleMouseWheelMoved(const int& delta, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) {}
         virtual void handleMouseLeft() {}
 
         // Routine
@@ -109,8 +107,8 @@ namespace scene
         Entity* nextFocusableChild();
         Entity* nextFocusable();
 
-        // Delayed operations
-        void markForVisible(bool visible);
+        // Utilities
+        sf::Vector2i displayedPixel(const sf::Vector2f& position);
 
         // Graph
         void setGraph(Graph* graph);

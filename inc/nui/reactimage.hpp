@@ -40,8 +40,8 @@ namespace nui
         void update() override;
 
         // Events
-        void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
-        void handleMouseMoved(const sf::Vector2f& mousePos) override;
+        void handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
+        void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
         void handleMouseLeft() override;
 
         // Affect visible rectangles to sprite

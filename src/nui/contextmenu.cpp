@@ -7,13 +7,13 @@ using namespace nui;
 
 ContextMenu::ContextMenu()
     : baseClass()
-    , m_padding(5)
+    , m_padding(15)
     , m_choiceHeight(22)
 {
+    setVisible(false);
+
     // Background
-    m_background.setFillColor(sf::Color::Blue);
-    m_background.setOutlineColor(sf::Color::White);
-    m_background.setOutlineThickness(1);
+    m_background.setTexture(&Application::context().textures.get(Textures::DUNGEON_PANEL_BACKGROUND));
 
     update();
 }
@@ -77,7 +77,7 @@ void ContextMenu::handleGlobalEvent(const sf::Event& event)
         markForVisible(false);
 }
 
-void ContextMenu::handleMouseButtonPressed(const sf::Mouse::Button&, const sf::Vector2f& mousePos)
+void ContextMenu::handleMouseButtonPressed(const sf::Mouse::Button&, const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
     uint choice = choiceFromCoords(mousePos);
 
@@ -86,11 +86,11 @@ void ContextMenu::handleMouseButtonPressed(const sf::Mouse::Button&, const sf::V
         m_choices[choice].callback();
     } else {
         Application::context().sounds.play(Sounds::NUI_REFUSE);
-        setVisible(true);
+        markForVisible(true);
     }
 }
 
-void ContextMenu::handleMouseMoved(const sf::Vector2f& mousePos)
+void ContextMenu::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
     uint choice = choiceFromCoords(mousePos);
 

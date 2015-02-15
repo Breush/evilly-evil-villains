@@ -19,7 +19,7 @@ namespace nui
 
     protected:
         // Events
-        virtual void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
+        virtual void handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
         virtual void handleKeyboardEvent(const sf::Event& event) override;
     };
 }

@@ -25,6 +25,9 @@ private:
     dungeon::Inter m_dungeonInter;
     dungeon::Panel m_dungeonPanel;
 
+    // NUI
+    nui::ContextMenu m_contextMenu;
+
     // Decorum
     sfe::Sprite m_decorumBack;
     sfe::Sprite m_decorumFront;

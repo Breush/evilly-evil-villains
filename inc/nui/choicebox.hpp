@@ -41,8 +41,8 @@ namespace nui
 
         // Events
         void handleKeyboardEvent(const sf::Event& event) override;
-        virtual void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
-        virtual void handleMouseMoved(const sf::Vector2f& mousePos) override;
+        virtual void handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
+        virtual void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
         virtual void handleMouseLeft() override;
 
         bool isLeftArrowSelected(const float& x);

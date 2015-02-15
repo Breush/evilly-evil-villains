@@ -466,13 +466,20 @@ void Entity::refreshChildrenOrder()
     m_children.sort([](Entity* a, Entity* b) { return a->depth() > b->depth(); });
 }
 
-//------------------------------//
-//----- Delayed operations -----//
+//---------------------//
+//----- Utilities -----//
 
 void Entity::markForVisible(bool visible)
 {
     m_markedForVisible = true;
     m_visibleMark = visible;
+}
+
+sf::Vector2i Entity::displayedPixel(const sf::Vector2f& position)
+{
+    const auto& window = Application::context().window;
+    auto viewPos = getInverseTransform().transformPoint(position);
+    return window.mapCoordsToPixel(viewPos);
 }
 
 //-----------------//

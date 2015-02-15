@@ -12,14 +12,13 @@ namespace dungeon
         typedef scene::Entity baseClass;
 
     public:
-        Inter();
+        Inter(nui::ContextMenu& contextMenu);
         virtual ~Inter() {}
 
         // Events
-        void handleGlobalEvent(const sf::Event&) override;
-        void handleKeyboardEvent(const sf::Event& event) override;
-        void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
-        void handleMouseMoved(const sf::Vector2f& mousePos) override;
+        void handleGlobalEvent(const sf::Event& event);
+        void handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
+        void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
         void handleMouseLeft() override;
 
         // Dungeon data
@@ -40,17 +39,23 @@ namespace dungeon
         // Virtual
         void update() override;
 
+        // Display
+        void refreshRoomSelectedShader();
+        void setHasRoomSelected(bool hasRoomSelected);
+
         // Room management
         void switchSelectedRoomState();
-        sf::Vector2u& selectRoomFromCoords(const sf::Vector2f& coords);
+        sf::Vector2u roomFromCoords(const sf::Vector2f& coords);
+        void selectRoomFromCoords(const sf::Vector2f& coords);
 
     private:
         // Display
         sfe::Grid m_grid;
-        nui::ContextMenu m_contextMenu;
+        nui::ContextMenu& m_contextMenu;
         std::vector<std::vector<sf::RectangleShape>> m_roomTiles;
 
         // Internal
+        bool m_hasRoomSelected;
         sf::Vector2u m_selectedRoom;
         Data* m_data;
     };

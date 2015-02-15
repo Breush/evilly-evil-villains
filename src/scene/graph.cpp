@@ -184,24 +184,28 @@ void Graph::drawMouseDetector(sf::RenderTarget& target, sf::RenderStates states)
 
 Entity* Graph::handleMouseEvent(const sf::Event& event)
 {
-    // Getting entity touched if any
     sf::Vector2f viewPos;
-    Entity* entity = entityFromPosition(mousePosition(event), viewPos);
+    sf::Vector2i mousePos(mousePosition(event));
+
+    // Getting entity touched if any
+    Entity* entity = entityFromPosition(mousePos, viewPos);
     setHoveredEntity(entity);
     returnif (entity == nullptr) nullptr;
 
     // Getting relative coordinates
+    const auto& window = Application::context().window;
     sf::Vector2f relPos = entity->getInverseTransform().transformPoint(viewPos);
+    sf::Vector2f nuiPos = window.mapPixelToCoords(mousePos, *m_layers[Layers::NUI].view);
 
     // Calling child callback
     if (event.type == sf::Event::MouseMoved)
-        entity->handleMouseMoved(relPos);
+        entity->handleMouseMoved(relPos, nuiPos);
     else if (event.type == sf::Event::MouseButtonPressed)
-        entity->handleMouseButtonPressed(event.mouseButton.button, relPos);
+        entity->handleMouseButtonPressed(event.mouseButton.button, relPos, nuiPos);
     else if (event.type == sf::Event::MouseButtonReleased)
-        entity->handleMouseButtonReleased(event.mouseButton.button, relPos);
+        entity->handleMouseButtonReleased(event.mouseButton.button, relPos, nuiPos);
     else if (event.type == sf::Event::MouseWheelMoved)
-        entity->handleMouseWheelMoved(event.mouseWheel.delta, relPos);
+        entity->handleMouseWheelMoved(event.mouseWheel.delta, relPos, nuiPos);
 
     return entity;
 }

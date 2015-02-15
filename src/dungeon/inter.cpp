@@ -11,16 +11,11 @@
 
 using namespace dungeon;
 
-Inter::Inter()
+Inter::Inter(nui::ContextMenu& contextMenu)
     : m_data(nullptr)
+    , m_contextMenu(contextMenu)
+    , m_hasRoomSelected(false)
 {
-    // TODO Make contextMenu come from dungeonDesignState
-    // So that it can be a NUI element (and be up everything) and Inter not
-    attachChild(m_contextMenu);
-
-    m_contextMenu.setVisible(false);
-    m_contextMenu.setDepth(10);
-
     update();
 }
 
@@ -40,6 +35,9 @@ void Inter::update()
     for (auto& roomTile : m_roomTiles)
     for (auto& tile : roomTile)
         addPart(&tile);
+
+    if (m_hasRoomSelected)
+        setPartShader(&m_roomTiles[m_selectedRoom.x][m_selectedRoom.y], Shaders::NUI_HOVER);
 }
 
 //------------------------//
@@ -67,6 +65,7 @@ void Inter::refreshFromData()
     for (auto& roomTile : m_roomTiles)
         roomTile.resize(roomsByFloor);
 
+    m_hasRoomSelected = false;
     update();
 }
 
@@ -113,7 +112,9 @@ void Inter::setRoomTileState(const uint floor, const uint room, const Data::Room
 
 void Inter::handleGlobalEvent(const sf::Event& event)
 {
-    m_contextMenu.handleGlobalEvent(event);
+    // Remove selection every time
+    if (event.type == sf::Event::MouseButtonPressed)
+        setHasRoomSelected(false);
 
 #if DEBUG_GLOBAL >= 1
     // Keyboard event
@@ -133,13 +134,13 @@ void Inter::handleGlobalEvent(const sf::Event& event)
 #endif
 }
 
-void Inter::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos)
+void Inter::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
+    // Selected new room
+    selectRoomFromCoords(mousePos);
+
     // Pop the context menu up
     if (button == sf::Mouse::Right) {
-        // Getting grid info
-        selectRoomFromCoords(mousePos);
-
         // Context title
         std::wstringstream roomName;
         roomName << _("Room") << " " << m_selectedRoom.x << "/" << m_selectedRoom.y;
@@ -156,22 +157,23 @@ void Inter::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::
         m_contextMenu.addChoice(constructRoomString, constructRoom);
 
         // Context positions
-        m_contextMenu.setLocalPosition(mousePos);
+        m_contextMenu.setLocalPosition(nuiPos);
         m_contextMenu.setOrigin({m_contextMenu.size().x / 2.f, 10.f});
-        m_contextMenu.setVisible(true);
+        m_contextMenu.markForVisible(true);
     }
 }
 
-void Inter::handleMouseMoved(const sf::Vector2f& mouseButton)
+void Inter::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
+    refreshRoomSelectedShader();
+
+    auto room = roomFromCoords(mousePos);
+    setPartShader(&m_roomTiles[room.x][room.y], Shaders::NUI_HOVER);
 }
 
 void Inter::handleMouseLeft()
 {
-}
-
-void Inter::handleKeyboardEvent(const sf::Event& event)
-{
+    refreshRoomSelectedShader();
 }
 
 //----------------------------------//
@@ -212,9 +214,33 @@ void Inter::switchSelectedRoomState()
     refreshRoomTiles();
 }
 
-sf::Vector2u& Inter::selectRoomFromCoords(const sf::Vector2f& coords)
+sf::Vector2u Inter::roomFromCoords(const sf::Vector2f& coords)
 {
-    m_selectedRoom = m_grid.rowColumnFromCoords(coords);
-    m_selectedRoom.x = m_data->floorsCount() - m_selectedRoom.x - 1;
-    return m_selectedRoom;
+    auto room = m_grid.rowColumnFromCoords(coords);
+    room.x = m_data->floorsCount() - room.x - 1;
+    return room;
+}
+
+
+void Inter::selectRoomFromCoords(const sf::Vector2f& coords)
+{
+    m_selectedRoom = roomFromCoords(coords);
+    setHasRoomSelected(true);
+}
+
+//-------------------//
+//----- Display -----//
+
+void Inter::setHasRoomSelected(bool hasRoomSelected)
+{
+    m_hasRoomSelected = hasRoomSelected;
+    refreshRoomSelectedShader();
+}
+
+void Inter::refreshRoomSelectedShader()
+{
+    resetPartsShader();
+
+    if (m_hasRoomSelected)
+        setPartShader(&m_roomTiles[m_selectedRoom.x][m_selectedRoom.y], Shaders::NUI_HOVER);
 }

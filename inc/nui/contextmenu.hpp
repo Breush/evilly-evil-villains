@@ -21,9 +21,9 @@ namespace nui
         virtual ~ContextMenu() {}
 
         // Events
-        void handleGlobalEvent(const sf::Event& event) override;
-        void handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos) override;
-        void handleMouseMoved(const sf::Vector2f& mousePos) override;
+        void handleGlobalEvent(const sf::Event& event);
+        void handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
+        void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
         void handleMouseLeft() override;
 
         // Choices
@@ -32,7 +32,7 @@ namespace nui
         void addChoice(const std::wstring& text, Callback callback = nullptr);
 
     protected:
-        // Virtual
+        // Updates
         void update() override;
         void updateSize();
 
@@ -51,7 +51,7 @@ namespace nui
 
     private:
         // Decorum
-        sf::RectangleShape m_background; // TODO To be a sf::Sprite for looks
+        sf::RectangleShape m_background;
 
         // Choices
         sf::Text m_title;

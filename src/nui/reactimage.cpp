@@ -167,7 +167,7 @@ void ReactImage::selectActiveRect()
 //------------------------//
 //----- Mouse events -----//
 
-void ReactImage::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos)
+void ReactImage::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
     returnif (button != sf::Mouse::Left);
 
@@ -182,7 +182,7 @@ void ReactImage::handleMouseButtonPressed(const sf::Mouse::Button& button, const
     m_reacts[m_react].callback();
 }
 
-void ReactImage::handleMouseMoved(const sf::Vector2f& mousePos)
+void ReactImage::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
     // Looking for active react
     for (auto& react : m_reacts) {

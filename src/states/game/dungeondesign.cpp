@@ -8,6 +8,7 @@
 
 GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     : State(stack)
+    , m_dungeonInter(m_contextMenu)
 {
     auto& resolution = Application::context().resolution;
 
@@ -17,6 +18,10 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     // Dungeon data
     massert(!world::context.info->folder.empty(), "Selected world is in an empty folder.");
     m_dungeonData.load("worlds/" + world::context.info->folder + "dungeon.xml");
+
+    // Context menu
+    sceneLayer(Layers::NUI).attachChild(m_contextMenu);
+    m_contextMenu.setDepth(0.f);
 
     // Dungeon inter TODO Remove from NUI
     sceneLayer(Layers::DUNGEON_DESIGN).attachChild(m_dungeonInter);
@@ -54,6 +59,7 @@ bool GameDungeonDesignState::handleEvent(const sf::Event& event)
 {
     // Global events
     m_dungeonInter.handleGlobalEvent(event);
+    m_contextMenu.handleGlobalEvent(event);
 
     // Escape pressed, trigger the pause screen
     if (event.type == sf::Event::KeyPressed) {

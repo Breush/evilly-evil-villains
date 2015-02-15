@@ -172,7 +172,7 @@ void ChoiceBox::setChoiceCallback(uint choice, Callback callback)
 //------------------------//
 //----- Mouse events -----//
 
-void ChoiceBox::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos)
+void ChoiceBox::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
     returnif (button != sf::Mouse::Left);
 
@@ -197,7 +197,7 @@ void ChoiceBox::handleMouseButtonPressed(const sf::Mouse::Button& button, const 
     acceptChoice();
 }
 
-void ChoiceBox::handleMouseMoved(const sf::Vector2f& mousePos)
+void ChoiceBox::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
     resetPartsShader();
 

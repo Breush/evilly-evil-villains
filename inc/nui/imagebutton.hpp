@@ -23,7 +23,7 @@ namespace nui
         virtual void update() override;
 
         // Mouse events
-        virtual void handleMouseMoved(const sf::Vector2f& mousePos) override;
+        virtual void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
 
         // Updates
         virtual void updateSize() override;

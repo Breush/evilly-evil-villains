@@ -10,8 +10,6 @@ Panel::Panel()
     : baseClass(true)
     , m_reduced(false)
 {
-    //setFocusable(false);
-
     // Background
     m_background.setTexture(&Application::context().textures.get(Textures::DUNGEON_PANEL_BACKGROUND));
 
@@ -61,13 +59,13 @@ void Panel::update()
 //------------------------//
 //----- Mouse events -----//
 
-void Panel::handleMouseButtonPressed(const sf::Mouse::Button& mouseButton, const sf::Vector2f& mousePos)
+void Panel::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
     if (m_switchReducedButton.getGlobalBounds().contains(mousePos))
         switchReduced();
 }
 
-void Panel::handleMouseMoved(const sf::Vector2f& mousePos)
+void Panel::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
     resetPartsShader();
 
