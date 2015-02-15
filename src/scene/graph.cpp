@@ -30,7 +30,10 @@ Graph::Graph()
 
     // Initialisation of layers views
     m_layers[Layers::DUNGEON_DESIGN].view = &Application::context().views.get(Views::DUNGEON_DESIGN);
+    m_layers[Layers::DUNGEON_DESIGN].zoomable = true;
+
     m_layers[Layers::NUI].view = &Application::context().views.get(Views::NUI);
+    m_layers[Layers::NUI].zoomable = false;
 }
 
 const sf::View& Graph::viewFromLayerRoot(const Entity* root) const
@@ -67,9 +70,14 @@ void Graph::handleEvent(const sf::Event& event)
 
     // Delegate for mouse
     if (isMouse(event)) {
-        auto entity = handleMouseEvent(event);
+        // Mouse wheel
+        if (event.type == sf::Event::MouseWheelMoved) {
+            handleMouseWheelEvent(event);
+            return;
+        }
 
         // Set focus on click
+        auto entity = handleMouseEvent(event);
         if (entity != nullptr && event.type == sf::Event::MouseButtonPressed)
             setFocusedEntity(entity);
 
@@ -164,6 +172,33 @@ void Graph::focusHandleEvent(const sf::Event& event)
 }
 
 //---------------------------//
+//----- Zooming feature -----//
+
+void Graph::handleMouseWheelEvent(const sf::Event& event)
+{
+    int delta = event.mouseWheel.delta;
+    auto mousePos = mousePosition(event);
+    const auto& window = Application::context().window;
+
+    // TODO Factor to be in config
+    float zoomFactor = (delta < 0)? 1.05f : 0.95f;
+    zoomFactor *= std::abs(delta);
+
+    // Zoom on all zoomable layers
+    for (auto& layer : m_layers) {
+        if (layer.zoomable) {
+            // Apply new zoom
+            auto initPos = window.mapPixelToCoords(mousePos, *layer.view);
+            layer.view->zoom(zoomFactor);
+
+            // Move to adjust the point below the mouse
+            auto finalPos = window.mapPixelToCoords(mousePos, *layer.view);
+            layer.view->move(initPos - finalPos);
+        }
+    }
+}
+
+//---------------------------//
 //----- Mouse detection -----//
 
 void Graph::drawMouseDetector(sf::RenderTarget& target, sf::RenderStates states) const
@@ -194,8 +229,8 @@ Entity* Graph::handleMouseEvent(const sf::Event& event)
 
     // Getting relative coordinates
     const auto& window = Application::context().window;
-    sf::Vector2f relPos = entity->getInverseTransform().transformPoint(viewPos);
     sf::Vector2f nuiPos = window.mapPixelToCoords(mousePos, *m_layers[Layers::NUI].view);
+    sf::Vector2f relPos = entity->getInverseTransform().transformPoint(viewPos);
 
     // Calling child callback
     if (event.type == sf::Event::MouseMoved)

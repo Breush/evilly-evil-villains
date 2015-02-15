@@ -53,11 +53,15 @@ namespace scene
         void setFocusedEntity(Entity* focusedEntity);
         void focusHandleEvent(const sf::Event& event);
 
+        // Zooming system
+        void handleMouseWheelEvent(const sf::Event& event);
+
         // Layer
         struct Layer {
             Entity root;
             sf::View* view;
-        };
+            bool zoomable;
+	};
 
         // Params
         PARAMG(sf::Shader*, m_focusShader, focusShader)

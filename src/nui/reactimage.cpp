@@ -74,11 +74,6 @@ void ReactImage::setImageTexture(Textures::ID id)
     setSize(imageSize);
 }
 
-void ReactImage::setImageShader(Shaders::ID id)
-{
-    setPartShader(&m_sprite, id);
-}
-
 //----------------------------//
 //----- React management -----//
 

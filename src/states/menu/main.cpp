@@ -57,7 +57,7 @@ MenuMainState::MenuMainState(StateStack& stack)
     m_reactImage.setCentered(true);
     m_reactImage.setLocalPosition({0.5f * resolution.x, 0.2f * resolution.y});
     m_reactImage.setImageTexture(Textures::MENU_NAME);
-    m_reactImage.setImageShader(Shaders::MENU_NAME);
+    m_reactImage.setShader(Shaders::MENU_NAME);
     m_reactImage.setMouseLeftDeselect(false);
 
     // Setting callbacks

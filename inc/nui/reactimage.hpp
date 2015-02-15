@@ -27,7 +27,6 @@ namespace nui
 
         // Texture
         void setImageTexture(Textures::ID id);
-        void setImageShader(Shaders::ID id);
 
         // React management
         void addReactFromFile(const std::string& file);
