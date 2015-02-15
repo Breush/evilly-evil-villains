@@ -43,29 +43,27 @@ void Panel::update()
 
     // Background
     m_background.setSize(size());
-    m_background.setPosition({0.f, 0.f});
     addPart(&m_background);
 
     // Reduced button
-    m_switchReducedButton.setPosition({size().x - 60.f, 20.f});
+    m_switchReducedButton.setPosition({size().x - 40.f, 10.f});
     addPart(&m_switchReducedButton);
 
     // Tabs stacker
     m_tabsStacker.setAlign(nui::Stacker::CENTER);
-    m_tabsStacker.setSize(0.95f * size());
-    m_tabsStacker.setLocalPosition((1.f - 0.95f) * size() / 2.f);
+    m_tabsStacker.setSize(size());
 }
 
 //------------------------//
 //----- Mouse events -----//
 
-void Panel::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
+void Panel::handleMouseButtonPressed(const sf::Mouse::Button&, const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
     if (m_switchReducedButton.getGlobalBounds().contains(mousePos))
         switchReduced();
 }
 
-void Panel::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
+void Panel::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
     resetPartsShader();
 
@@ -81,10 +79,15 @@ void Panel::handleMouseLeft()
 //------------------------//
 //----- Reduced mode -----//
 
+void Panel::setReduced(bool reduced)
+{
+    m_reduced = reduced;
+
+    if (m_reduced) lerpable()->setTargetPositionOffset({0.f, size().y - 30.f});
+    else lerpable()->setTargetPositionOffset({0.f, 0.f});
+}
+
 void Panel::switchReduced()
 {
     setReduced(!reduced());
-
-    if (reduced()) lerpable()->setTargetPositionOffset({0.f, size().y - 40.f});
-    else lerpable()->setTargetPositionOffset({0.f, 0.f});
 }

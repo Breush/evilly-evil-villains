@@ -15,7 +15,8 @@ MenuMainState::MenuMainState(StateStack& stack)
     const sf::Vector2f& resolution = Application::context().resolution;
     float maxSide = std::max(resolution.x, resolution.y);
 
-    // Background - TODO Make a expandToView() function in sfe::Sprite to adapt to screenSize?
+    // Background
+    // TODO Make a expandToView() function in sfe::Sprite to adapt to screenSize?
     const auto& textureSize = Application::context().textures.get(Textures::MENU_BACKGROUND).getSize();
     sceneLayer(Layers::NUI).attachChild(m_background);
     m_background.setDepth(100.f);

@@ -23,7 +23,7 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     sceneLayer(Layers::NUI).attachChild(m_contextMenu);
     m_contextMenu.setDepth(0.f);
 
-    // Dungeon inter TODO Remove from NUI
+    // Dungeon inter
     sceneLayer(Layers::DUNGEON_DESIGN).attachChild(m_dungeonInter);
     m_dungeonInter.setDepth(50.f);
     m_dungeonInter.useData(m_dungeonData);
@@ -34,9 +34,17 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     // Dungeon panel
     sceneLayer(Layers::NUI).attachChild(m_dungeonPanel);
     m_dungeonPanel.setCentered(true);
-    m_dungeonPanel.setSize({(4 + 1) * 100, 150});
+    m_dungeonPanel.setSize({4 * 100 + 25, 125 + 25});
     m_dungeonPanel.setLocalPosition({resolution.x / 2.f, resolution.y - m_dungeonPanel.size().y / 2.f});
     m_dungeonPanel.lerpable()->saveDefaults();
+
+    // Dungeon sidebar
+    sceneLayer(Layers::NUI).attachChild(m_dungeonSidebar);
+    m_dungeonSidebar.setCentered(true);
+    m_dungeonSidebar.setSize({2 * 100 + 25, 5 * 125 + 25});
+    m_dungeonSidebar.setLocalPosition({resolution.x - m_dungeonSidebar.size().x / 2.f, resolution.y / 2.f});
+    m_dungeonSidebar.lerpable()->saveDefaults();
+    m_dungeonSidebar.immediateReduce();
 
     // Decorum
     sceneLayer(Layers::DUNGEON_DESIGN).attachChild(m_decorumBack);

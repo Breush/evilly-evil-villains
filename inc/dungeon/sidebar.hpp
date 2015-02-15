@@ -1,7 +1,6 @@
 #pragma once
 
 #include "nui/hstacker.hpp"
-#include "nui/imagebutton.hpp"
 #include "scene/entity.hpp"
 #include "tools/param.hpp"
 
@@ -9,17 +8,18 @@
 
 namespace dungeon
 {
-    class Panel : public scene::Entity
+    class Sidebar : public scene::Entity
     {
         typedef scene::Entity baseClass;
 
     public:
-        Panel();
-        virtual ~Panel() {}
+        Sidebar();
+        virtual ~Sidebar() {}
 
         // Reduced mode
         void setReduced(bool reduced);
         void switchReduced();
+        void immediateReduce();
 
     protected:
         // Virtual
@@ -39,9 +39,5 @@ namespace dungeon
 
         // Tabs
         nui::HStacker m_tabsStacker;
-        nui::ImageButton m_monstersTab;
-        nui::ImageButton m_trapsTab;
-        nui::ImageButton m_facilitiesTab;
-        nui::ImageButton m_treasuresTab;
     };
 }

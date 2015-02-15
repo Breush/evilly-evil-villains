@@ -158,7 +158,7 @@ void Graph::focusHandleEvent(const sf::Event& event)
 {
     massert(m_focusedEntity != nullptr, "Internal logical error in focusing system.");
 
-    // Just manage pressed keys - TODO Joystick
+    // Just manage pressed keys
     returnif (event.type != sf::Event::KeyPressed);
 
     // Find next entity

@@ -4,6 +4,7 @@
 #include "dungeon/data.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/panel.hpp"
+#include "dungeon/sidebar.hpp"
 #include "sfe/sprite.hpp"
 
 class GameDungeonDesignState : public State
@@ -24,6 +25,7 @@ private:
     dungeon::Data m_dungeonData;
     dungeon::Inter m_dungeonInter;
     dungeon::Panel m_dungeonPanel;
+    dungeon::Sidebar m_dungeonSidebar;
 
     // NUI
     nui::ContextMenu m_contextMenu;
