@@ -14,6 +14,7 @@ Graph::Graph()
     : m_hoveredEntity(nullptr)
     , m_focusedEntity(nullptr)
     , m_focusAnimation(0.f)
+    , m_grabbing(false)
 {
     // Focusing
     m_focusShader = &Application::context().shaders.get(Shaders::NUI_FOCUS);
@@ -30,10 +31,10 @@ Graph::Graph()
 
     // Initialisation of layers views
     m_layers[Layers::DUNGEON_DESIGN].view = &Application::context().views.get(Views::DUNGEON_DESIGN);
-    m_layers[Layers::DUNGEON_DESIGN].zoomable = true;
+    m_layers[Layers::DUNGEON_DESIGN].manipulable = true;
 
     m_layers[Layers::NUI].view = &Application::context().views.get(Views::NUI);
-    m_layers[Layers::NUI].zoomable = false;
+    m_layers[Layers::NUI].manipulable = false;
 }
 
 const sf::View& Graph::viewFromLayerRoot(const Entity* root) const
@@ -72,8 +73,21 @@ void Graph::handleEvent(const sf::Event& event)
     if (isMouse(event)) {
         // Mouse wheel
         if (event.type == sf::Event::MouseWheelMoved) {
-            handleMouseWheelEvent(event);
+            handleMouseWheelMovedEvent(event);
             return;
+        }
+        else if (event.type == sf::Event::MouseButtonPressed
+                && event.mouseButton.button == sf::Mouse::Button::Middle) {
+            handleMouseWheelPressedEvent(event);
+            return;
+        }
+        else if (event.type == sf::Event::MouseButtonReleased
+                && event.mouseButton.button == sf::Mouse::Button::Middle) {
+            handleMouseWheelReleasedEvent(event);
+            return;
+        }
+        else if (event.type == sf::Event::MouseMoved) {
+            returnif (handleMouseMovedEvent(event));
         }
 
         // Set focus on click
@@ -174,7 +188,43 @@ void Graph::focusHandleEvent(const sf::Event& event)
 //---------------------------//
 //----- Zooming feature -----//
 
-void Graph::handleMouseWheelEvent(const sf::Event& event)
+void Graph::handleMouseWheelPressedEvent(const sf::Event& event)
+{
+    const auto& window = Application::context().window;
+    auto mousePos = mousePosition(event);
+    m_grabbing = true;
+
+    for (auto& layer : m_layers) {
+        if (layer.manipulable) {
+            auto position = window.mapPixelToCoords(mousePos, *layer.view);
+            layer.grabbingPosition = position;
+        }
+    }
+}
+
+void Graph::handleMouseWheelReleasedEvent(const sf::Event& event)
+{
+    m_grabbing = false;
+}
+
+bool Graph::handleMouseMovedEvent(const sf::Event& event)
+{
+    returnif (m_grabbing == false) false;
+
+    const auto& window = Application::context().window;
+    auto mousePos = mousePosition(event);
+
+    for (auto& layer : m_layers) {
+        if (layer.manipulable) {
+            auto position = window.mapPixelToCoords(mousePos, *layer.view);
+            layer.view->move(layer.grabbingPosition - position);
+        }
+    }
+
+    return true;
+}
+
+void Graph::handleMouseWheelMovedEvent(const sf::Event& event)
 {
     int delta = event.mouseWheel.delta;
     auto mousePos = mousePosition(event);
@@ -186,7 +236,7 @@ void Graph::handleMouseWheelEvent(const sf::Event& event)
 
     // Zoom on all zoomable layers
     for (auto& layer : m_layers) {
-        if (layer.zoomable) {
+        if (layer.manipulable) {
             // Apply new zoom
             auto initPos = window.mapPixelToCoords(mousePos, *layer.view);
             layer.view->zoom(zoomFactor);
