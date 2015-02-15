@@ -18,6 +18,7 @@ QuitState::QuitState(StateStack& stack)
     sceneLayer(Layers::NUI).attachChild(m_question);
     m_question.setFont(Fonts::NUI);
     m_question.setText(_("Do you really want to quit?"));
+    m_question.setCharacterSize(50);
     m_question.setPosition(0.5f * resolution.x, 0.4f * resolution.y);
     m_question.setCentered(true);
 
@@ -25,12 +26,12 @@ QuitState::QuitState(StateStack& stack)
     sceneLayer(Layers::NUI).attachChild(m_noButton);
     m_noButton.setAction(_("No, sorry, it is a mistake."), [this]() { stackPop(); });
     m_noButton.setLocalPosition(0.5f * resolution);
-    m_noButton.setOrigin(m_noButton.size() / 2.f);
+    m_noButton.setCentered(true);
 
     sceneLayer(Layers::NUI).attachChild(m_yesButton);
     m_yesButton.setAction(_("Yes, I will lose everything not saved."), [this]() { stackClear(); });
     m_yesButton.setLocalPosition({0.5f * resolution.x, 0.6f * resolution.y});
-    m_yesButton.setOrigin(m_yesButton.size() / 2.f);
+    m_yesButton.setCentered(true);
 }
 
 bool QuitState::handleEvent(const sf::Event& event)

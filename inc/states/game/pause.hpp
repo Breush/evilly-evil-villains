@@ -1,6 +1,7 @@
 #pragma once
 
 #include "states/state.hpp"
+#include "nui/button.hpp"
 #include "sfe/rectangleshape.hpp"
 #include "sfe/label.hpp"
 
@@ -17,7 +18,11 @@ public:
     bool handleEvent(const sf::Event& event) override;
 
 private:
+    // Decorum
     sfe::RectangleShape m_background;
     sfe::Label m_pauseText;
-    sfe::Label m_instructionText;
+
+    // NUI
+    nui::Button m_continueButton;
+    nui::Button m_mainMenuButton;
 };

@@ -25,30 +25,31 @@ GamePauseState::GamePauseState(StateStack& stack)
     // Pause text
     sceneLayer(Layers::NUI).attachChild(m_pauseText);
     m_pauseText.setFont(Fonts::NUI);
-    m_pauseText.setText(L"Game Paused");
-    m_pauseText.setCharacterSize(70);
+    m_pauseText.setText(_("Game paused"));
+    m_pauseText.setCharacterSize(50);
     m_pauseText.setPosition(0.5f * resolution.x, 0.4f * resolution.y);
     m_pauseText.setCentered(true);
 
-    // Instruction TODO Use UI to access options etc.
-    sceneLayer(Layers::NUI).attachChild(m_instructionText);
-    m_instructionText.setFont(Fonts::NUI);
-    m_instructionText.setText(L"(Press Backspace to return to the main menu)");
-    m_instructionText.setPosition(0.5f * resolution.x, 0.6f * resolution.y);
-    m_instructionText.setCentered(true);
+    // Buttons
+    sceneLayer(Layers::NUI).attachChild(m_continueButton);
+    m_continueButton.setAction(_("Continue, continue, continue"), [this]() { stackPop(); });
+    m_continueButton.setLocalPosition(0.5f * resolution);
+    m_continueButton.setCentered(true);
+
+    sceneLayer(Layers::NUI).attachChild(m_mainMenuButton);
+    m_mainMenuButton.setAction(_("Save and return to main menu"), [this]() { stackClear(States::MENU_MAIN); });
+    m_mainMenuButton.setLocalPosition({0.5f * resolution.x, 0.6f * resolution.y});
+    m_mainMenuButton.setCentered(true);
 }
 
 bool GamePauseState::handleEvent(const sf::Event& event)
 {
-    returnif (event.type != sf::Event::KeyPressed) false;
-
-    // Back to previous state
-    if (event.key.code == sf::Keyboard::Escape)
+    // Back to previous state on Escape
+    if (event.type == sf::Event::KeyPressed
+        && event.key.code == sf::Keyboard::Escape) {
         stackPop();
-
-    // Return to main menu
-    else if (event.key.code == sf::Keyboard::BackSpace)
-        stackClear(States::MENU_MAIN);
+        return false;
+    }
 
     return State::handleEvent(event);
 }
