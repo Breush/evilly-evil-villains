@@ -30,7 +30,7 @@ void SoundPlayer::load(Sounds::ID id, const std::string& filename, bool store)
 
 Sounds::ID SoundPlayer::getID(const std::wstring& filename)
 {
-    m_soundBuffers.getID(filename);
+    return m_soundBuffers.getID(filename);
 }
 
 void SoundPlayer::play(Sounds::ID id)
