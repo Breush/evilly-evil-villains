@@ -9,6 +9,7 @@
 GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     : State(stack)
     , m_dungeonInter(m_contextMenu)
+    , m_dungeonPanel(m_dungeonSidebar)
 {
     auto& resolution = Application::context().resolution;
 

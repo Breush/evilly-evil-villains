@@ -25,7 +25,7 @@ TRANSLATIONS_FILES=$(LANGUAGES_SUPPORTED:%=res/po/%/LC_MESSAGES/eev.mo)
 all: $(OUTPUT_POT) translations
 
 $(OUTPUT_POT): $(TRANSLATABLE_FILES)
-	xgettext -k_ --c++ --msgid-bugs-address=sherlock.breust@gmail.com --foreign-user -i --no-location -o $(OUTPUT_POT) $(TRANSLATABLE_FILES)
+	xgettext -k_ --c++ --from-code=UTF-8 --msgid-bugs-address=sherlock.breust@gmail.com --foreign-user -i --no-location -o $(OUTPUT_POT) $(TRANSLATABLE_FILES)
 
 translations: $(TRANSLATIONS_FILES)
 

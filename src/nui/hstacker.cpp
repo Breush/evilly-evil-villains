@@ -6,7 +6,6 @@
 using namespace nui;
 
 HStacker::HStacker()
-    : baseClass()
 {
 }
 
@@ -24,25 +23,25 @@ void HStacker::update()
     // Setting children positions
     for (auto& childInfo : m_children) {
         // Vertical alignment
-        float y = getY(childInfo.child->size().y, childInfo.align);
+        float y = getY(childInfo.entity->size().y, childInfo.align);
 
         // Horizontal pre-alignment
-        x += getPreX(childInfo.child->size().x);
+        x += getPreX(childInfo.entity->size().x);
 
         // Setting position
-        childInfo.child->setLocalPosition({x, y});
+        childInfo.entity->setLocalPosition({x, y});
 
         // Horizontal post-alignment
-        x += getPostX(childInfo.child->size().x);
+        x += getPostX(childInfo.entity->size().x);
     }
 }
 
-inline float HStacker::getY(float& childHeight, Align& inAlign)
+inline float HStacker::getY(float childHeight, Align inAlign)
 {
     // Max height
     float height = 0.f;
     for (auto& childInfo : m_children)
-        height = std::max(height, childInfo.child->size().y);
+        height = std::max(height, childInfo.entity->size().y);
 
     // Center
     if (inAlign == Stacker::CENTER)
@@ -60,9 +59,9 @@ inline float HStacker::getInitX()
 {
     // Center
     if (align() == Stacker::CENTER) {
-        uint width = (m_children.size() - 1) * margin();
+        float width = (m_children.size() - 1) * margin();
         for (auto& childInfo : m_children)
-            width += childInfo.child->size().x;
+            width += childInfo.entity->size().x;
         return (size().x - width) / 2.f;
     }
 
@@ -74,7 +73,7 @@ inline float HStacker::getInitX()
     return margin();
 }
 
-inline float HStacker::getPreX(float& childWidth)
+inline float HStacker::getPreX(float childWidth)
 {
     // Opposite
     if (align() == Stacker::OPPOSITE)
@@ -84,7 +83,7 @@ inline float HStacker::getPreX(float& childWidth)
     return 0.f;
 }
 
-inline float HStacker::getPostX(float& childWidth)
+inline float HStacker::getPostX(float childWidth)
 {
     // Opposite
     if (align() == Stacker::OPPOSITE)

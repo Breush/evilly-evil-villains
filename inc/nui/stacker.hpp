@@ -24,6 +24,7 @@ namespace nui
 
         // Children management
         void add(scene::Entity* child, Align align = Align::STANDARD);
+        void clear();
 
     protected:
         // Pure virtual
@@ -34,7 +35,7 @@ namespace nui
         PARAMGSU(Align, m_align, align, setAlign, update)
 
         struct ChildInfo {
-            scene::Entity* child;
+            scene::Entity* entity;
             Align align;
         };
 

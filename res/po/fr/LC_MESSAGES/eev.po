@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.0\n"
 "Report-Msgid-Bugs-To: sherlock.breust@gmail.com\n"
-"POT-Creation-Date: 2015-02-15 22:44+0100\n"
-"PO-Revision-Date: 2015-02-15 22:47+0100\n"
+"POT-Creation-Date: 2015-02-16 22:50+0100\n"
+"PO-Revision-Date: 2015-02-16 22:53+0100\n"
 "Last-Translator: Alexis Breust <alexis.breust@gmail.com>\n"
 "Language-Team: Français <>\n"
 "Language: fr\n"
@@ -73,13 +73,55 @@ msgid "Create new world"
 msgstr "Créer un nouveau monde"
 
 msgid "Monsters"
-msgstr "Monsters"
+msgstr "Monstres"
 
 msgid "Traps"
 msgstr "Pièges"
 
 msgid "Facilities"
-msgstr "Aménagements"
+msgstr "Outils"
 
 msgid "Treasures"
 msgstr "Trésors"
+
+msgid "Grasshopper"
+msgstr "Sauterelle"
+
+msgid "Creepim"
+msgstr "Creesper"
+
+msgid "Fly-man"
+msgstr "Homme-mouche"
+
+msgid "Lezard-man"
+msgstr "Homme-lézard"
+
+msgid "Weremole"
+msgstr "Taupe-garou"
+
+msgid "Bells"
+msgstr "Clochettes"
+
+msgid "Wolf trap"
+msgstr "Piège à loup"
+
+msgid "Trompe l'œil"
+msgstr "Trompe l'œil"
+
+msgid "Tranquilizer darts"
+msgstr "Fléchettes tranquillisantes"
+
+msgid "Ladder"
+msgstr "Échelle"
+
+msgid "Signpost"
+msgstr "Panneau de direction"
+
+msgid "Treasure room"
+msgstr "Salle aux trésors"
+
+msgid "Small chest"
+msgstr "Petit coffre"
+
+msgid "Humble gift"
+msgstr "Cadeau banal"

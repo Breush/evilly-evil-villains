@@ -125,6 +125,7 @@ void Graph::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Graph::updateFocusSprite()
 {
+    returnif (m_focusedEntity == nullptr);
     const sf::FloatRect& focusRect = m_focusedEntity->focusRect();
 
     sf::Vector2f focusPosition(focusRect.left, focusRect.top);
@@ -141,8 +142,7 @@ void Graph::updateFocusSprite()
 
 void Graph::setFocusedEntity(Entity* focusedEntity)
 {
-    returnif (focusedEntity == nullptr);
-    returnif (!focusedEntity->focusable());
+    returnif (focusedEntity != nullptr && !focusedEntity->focusable());
     returnif (m_focusedEntity == focusedEntity);
 
     if (m_focusedEntity != nullptr)

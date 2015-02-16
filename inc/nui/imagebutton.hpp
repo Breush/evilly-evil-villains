@@ -13,6 +13,7 @@ namespace nui
     public:
         ImageButton();
         virtual ~ImageButton() {}
+        ImageButton(const ImageButton& copy);
 
         // Action
         void setImage(Textures::ID imageID);

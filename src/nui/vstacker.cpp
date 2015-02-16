@@ -1,102 +1,94 @@
 #include "nui/vstacker.hpp"
 
 #include "tools/debug.hpp"
+#include "tools/int.hpp"
 
 using namespace nui;
 
-#if 0
-VStacker::VStacker(Object* parent, uiCore* core)
-    : baseClass( parent, core )
+VStacker::VStacker()
 {
 }
 
 //------------------//
 //----- Visual -----//
 
-void VStacker::recomputeChildrenPos()
+void VStacker::update()
 {
     if (m_children.empty())
         return;
 
     // Children positions
-    uint x;
-    uint y = getInitY();
+    float y = getInitY();
 
     // Setting children positions
     for (auto& childInfo : m_children) {
         // Horizontal alignment
-        x = getX(childInfo.child->getSize().x, childInfo.align);
+        float x = getX(childInfo.entity->size().x, childInfo.align);
 
         // Vertical pre-alignment
-        y += getPreY(childInfo.child->getSize().y);
+        y += getPreY(childInfo.entity->size().y);
 
         // Setting position
-        childInfo.child->setPos(sf::Vector2u(x, y));
+        childInfo.entity->setLocalPosition({x, y});
 
         // Vertical post-alignment
-        y += getPostY(childInfo.child->getSize().y);
+        y += getPostY(childInfo.entity->size().y);
     }
 }
 
-inline uint VStacker::getX(uint& childWidth, Align& align)
+inline float VStacker::getX(float childWidth, Align inAlign)
 {
     // Max width
-    uint width = 0;
+    float width = 0.f;
     for (auto& childInfo : m_children)
-        width = std::max(width, childInfo.child->getSize().x);
+        width = std::max(width, childInfo.entity->size().x);
 
     // Center
-    if (align == Stacker::CENTER) {
-        return (getSize().x - childWidth) / 2;
-    }
+    if (inAlign == Stacker::CENTER)
+        return (size().x - childWidth) / 2.f;
 
     // Opposite : right
-    else if (align == Stacker::OPPOSITE) {
-        return (getSize().x - m_margin) - (width + childWidth) / 2;
-    }
+    else if (inAlign == Stacker::OPPOSITE)
+        return (size().x - margin()) - (width + childWidth) / 2.f;
 
     // Standard : left
-    return m_margin + (width - childWidth) / 2;
+    return margin() + (width - childWidth) / 2;
 }
 
-inline uint VStacker::getInitY()
+inline float VStacker::getInitY()
 {
     // Center
-    if (m_align == Stacker::CENTER) {
-        uint height = (m_children.size() - 1) * m_margin;
+    if (align() == Stacker::CENTER) {
+        float height = (m_children.size() - 1) * margin();
         for (auto& childInfo : m_children)
-            height += childInfo.child->getSize().y;
-        return (getSize().y - height) / 2;
+            height += childInfo.entity->size().y;
+        return (size().y - height) / 2;
     }
 
     // Opposite : bottom
-    else if (m_align == Stacker::OPPOSITE) {
-        return getSize().y - m_margin;
-    }
+    else if (align() == Stacker::OPPOSITE)
+        return size().y - margin();
 
     // Standard : top
-    return m_margin;
+    return margin();
 }
 
-inline int VStacker::getPreY(uint& childHeight)
+inline float VStacker::getPreY(float childHeight)
 {
     // Opposite
-    if (m_align == Stacker::OPPOSITE) {
+    if (align() == Stacker::OPPOSITE)
         return -childHeight;
-    }
 
     // Center or Standard
-    return 0;
+    return 0.f;
 }
 
-inline int VStacker::getPostY(uint& childHeight)
+inline float VStacker::getPostY(float childHeight)
 {
     // Opposite
-    if (m_align == Stacker::OPPOSITE) {
-        return -m_margin;
-    }
+    if (align() == Stacker::OPPOSITE)
+        return -margin();
 
     // Center or Standard
-    return childHeight + m_margin;
+    return childHeight + margin();
 }
-#endif

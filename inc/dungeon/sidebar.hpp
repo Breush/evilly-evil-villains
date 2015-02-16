@@ -1,6 +1,7 @@
 #pragma once
 
-#include "nui/hstacker.hpp"
+#include "nui/vstacker.hpp"
+#include "nui/imagebutton.hpp"
 #include "scene/entity.hpp"
 #include "tools/param.hpp"
 
@@ -21,6 +22,16 @@ namespace dungeon
         void switchReduced();
         void immediateReduce();
 
+        // Mode
+        enum Mode {
+            MONSTERS,
+            TRAPS,
+            FACILITIES,
+            TREASURES,
+        };
+
+        void setMode(Mode mode);
+
     protected:
         // Virtual
         void update() override;
@@ -38,6 +49,7 @@ namespace dungeon
         sf::RectangleShape m_switchReducedButton;
 
         // Tabs
-        nui::HStacker m_tabsStacker;
+        std::vector<nui::ImageButton> m_tabs;
+        nui::VStacker m_tabsStacker;
     };
 }

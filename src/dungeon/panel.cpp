@@ -1,14 +1,16 @@
 #include "dungeon/panel.hpp"
 
 #include "core/application.hpp"
+#include "dungeon/sidebar.hpp"
 #include "sfe/lerpable.hpp"
 #include "tools/math.hpp"
 
 using namespace dungeon;
 
-Panel::Panel()
+Panel::Panel(Sidebar& sidebar)
     : baseClass(true)
     , m_reduced(false)
+    , m_sidebar(sidebar)
 {
     // Background
     m_background.setTexture(&Application::context().textures.get(Textures::DUNGEON_PANEL_BACKGROUND));
@@ -33,6 +35,11 @@ Panel::Panel()
     m_trapsTab.setVisual     (_("Traps"),      Textures::DUNGEON_PANEL_TRAPS,      tabImageSize);
     m_facilitiesTab.setVisual(_("Facilities"), Textures::DUNGEON_PANEL_FACILITIES, tabImageSize);
     m_treasuresTab.setVisual (_("Treasures"),  Textures::DUNGEON_PANEL_TREASURES,  tabImageSize);
+
+    m_monstersTab.setCallback  ([&]() { sidebar.setMode(Sidebar::Mode::MONSTERS); });
+    m_trapsTab.setCallback     ([&]() { sidebar.setMode(Sidebar::Mode::TRAPS); });
+    m_facilitiesTab.setCallback([&]() { sidebar.setMode(Sidebar::Mode::FACILITIES); });
+    m_treasuresTab.setCallback ([&]() { sidebar.setMode(Sidebar::Mode::TREASURES); });
 
     update();
 }

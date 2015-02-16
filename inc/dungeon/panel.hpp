@@ -9,12 +9,15 @@
 
 namespace dungeon
 {
+    // Forward declaration
+    class Sidebar;
+
     class Panel : public scene::Entity
     {
         typedef scene::Entity baseClass;
 
     public:
-        Panel();
+        Panel(dungeon::Sidebar& sidebar);
         virtual ~Panel() {}
 
         // Reduced mode
@@ -43,5 +46,8 @@ namespace dungeon
         nui::ImageButton m_trapsTab;
         nui::ImageButton m_facilitiesTab;
         nui::ImageButton m_treasuresTab;
+
+        // Sidebar
+        Sidebar& m_sidebar;
     };
 }

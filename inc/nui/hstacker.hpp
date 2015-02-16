@@ -16,9 +16,9 @@ namespace nui
         void update() override;
 
     protected:
-        float getY(float& childHeight, Align& align);
+        float getY(float childHeight, Align align);
         float getInitX();
-        float getPreX(float& childWidth);
-        float getPostX(float& childWidth);
+        float getPreX(float childWidth);
+        float getPostX(float childWidth);
     };
 }

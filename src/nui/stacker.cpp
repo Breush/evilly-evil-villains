@@ -21,3 +21,10 @@ void Stacker::add(scene::Entity* child, Align inAlign)
     m_children.push_back({child, inAlign});
     update();
 }
+
+void Stacker::clear()
+{
+    for (auto& child : m_children)
+        detachChild(*child.entity);
+    m_children.clear();
+}
