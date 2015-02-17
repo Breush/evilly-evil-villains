@@ -2,8 +2,8 @@
 # Macros
 
 macro(eev_add_test TEST_FILE)
-	string(REGEX REPLACE "(.*).cpp" "\\1" TEST ${TEST_FILE})
-	add_executable(${TEST} ${TEST}.cpp)
+  	get_filename_component(TEST ${TEST_FILE} NAME_WE)
+	add_executable(${TEST} ${TEST_FILE})
 	add_test(${TEST} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST})
 	add_dependencies(check ${TEST})
 	target_link_libraries(${TEST} ${SFML_LIBRARIES})
