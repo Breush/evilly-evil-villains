@@ -7,7 +7,7 @@
 namespace internationalization
 {
     // To be called once at the beginning of the program
-    void init();
+    void init(const std::string& language);
 
     // Convert string to wstring (format used by SFML and pugixml)
     inline std::wstring string2wstring(const std::string& s)

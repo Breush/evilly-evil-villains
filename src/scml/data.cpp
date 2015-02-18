@@ -87,7 +87,7 @@ bool Data::load(pugi::xml_node& elem)
         Folder* folder = new Folder;
         if (folder->load(child)) {
             if (!folders.insert(std::make_pair(folder->id, folder)).second) {
-                throw std::runtime_error("scml::Data loaded a folder with the duplicate id " + folder->id);
+                throw std::runtime_error("scml::Data loaded a folder with a duplicated id.");
                 delete folder;
             }
         } else {
@@ -101,7 +101,7 @@ bool Data::load(pugi::xml_node& elem)
         Atlas* atlas = new Atlas;
         if (atlas->load(child)) {
             if (!atlases.insert(std::make_pair(atlas->id, atlas)).second) {
-                throw std::runtime_error("scml::Data loaded an atlas with the duplicate id " + atlas->id);
+                throw std::runtime_error("scml::Data loaded an atlas with a duplicated id.");
                 delete atlas;
             }
         } else {
@@ -115,7 +115,7 @@ bool Data::load(pugi::xml_node& elem)
         Entity* entity = new Entity;
         if (entity->load(child)) {
             if (!entities.insert(std::make_pair(entity->id, entity)).second) {
-                throw std::runtime_error("scml::Data loaded an entity with the duplicate id " + entity->id);
+                throw std::runtime_error("scml::Data loaded an entity with a duplicated id.");
                 delete entity;
             }
         } else {
@@ -129,7 +129,7 @@ bool Data::load(pugi::xml_node& elem)
         Character_Map* character_map = new Character_Map;
         if (character_map->load(child)) {
             if (!character_maps.insert(std::make_pair(character_map->id, character_map)).second) {
-                throw std::runtime_error("scml::Data loaded a character_map with the duplicate id " + character_map->id);
+                throw std::runtime_error("scml::Data loaded a character_map with a duplicated id.");
                 delete character_map;
             }
         } else {
@@ -362,7 +362,7 @@ bool Data::Folder::load(pugi::xml_node& elem)
         File* file = new File;
         if (file->load(child)) {
             if (!files.insert(std::make_pair(file->id, file)).second) {
-                throw std::runtime_error("scml::Data::Folder loaded a file with the duplicated id " + file->id);
+                throw std::runtime_error("scml::Data::Folder loaded a file with a duplicated id.");
                 delete file;
             }
         } else {
@@ -489,7 +489,7 @@ bool Data::Atlas::load(pugi::xml_node& elem)
         Folder* folder = new Folder;
         if (folder->load(child)) {
             if (!folders.insert(std::make_pair(folder->id, folder)).second) {
-                throw std::runtime_error("scml::Data::Atlas loaded a folder with the duplicated id " + folder->id);
+                throw std::runtime_error("scml::Data::Atlas loaded a folder with a duplicated id.");
                 delete folder;
             }
         } else {
@@ -540,7 +540,7 @@ bool Data::Atlas::Folder::load(pugi::xml_node& elem)
         Image* image = new Image;
         if (image->load(child)) {
             if (!images.insert(std::make_pair(image->id, image)).second) {
-                throw std::runtime_error("scml::Data::Atlas::Folder loaded an image with the duplicated id " + image->id);
+                throw std::runtime_error("scml::Data::Atlas::Folder loaded an image with a duplicated id.");
                 delete image;
             }
         } else {
@@ -639,7 +639,7 @@ bool Data::Entity::load(pugi::xml_node& elem)
         Animation* animation = new Animation;
         if (animation->load(child)) {
             if (!animations.insert(std::make_pair(animation->id, animation)).second) {
-                throw std::runtime_error("scml::Data::Entity loaded an animation with the duplicated id " + animation->id);
+                throw std::runtime_error("scml::Data::Entity loaded an animation with a duplicated id.");
                 delete animation;
             }
         } else {
@@ -714,7 +714,7 @@ bool Data::Entity::Animation::load(pugi::xml_node& elem)
         Timeline* timeline = new Timeline;
         if (timeline->load(child)) {
             if (!timelines.insert(std::make_pair(timeline->id, timeline)).second) {
-                throw std::runtime_error("scml::Data::Entity::Animation loaded a timeline with the duplicated id " + timeline->id);
+                throw std::runtime_error("scml::Data::Entity::Animation loaded a timeline with a duplicated id.");
                 delete timeline;
             }
         } else {
@@ -790,7 +790,7 @@ bool Data::Entity::Animation::Mainline::load(pugi::xml_node& elem)
         Key* key = new Key;
         if (key->load(child)) {
             if (!keys.insert(std::make_pair(key->id, key)).second) {
-                throw std::runtime_error("scml::Data::Entity::Animation::Mainline loaded a key with the duplicated id " + key->id);
+                throw std::runtime_error("scml::Data::Entity::Animation::Mainline loaded a key with a duplicated id.");
                 delete key;
             }
         } else {
@@ -846,7 +846,7 @@ bool Data::Entity::Animation::Mainline::Key::load(pugi::xml_node& elem)
         Bone* bone = new Bone;
         if (bone->load(child)) {
             if (!bones.insert(std::make_pair(bone->id, bone)).second) {
-                throw std::runtime_error("scml::Data::Entity::Animation::Mainline::Key loaded a bone with the duplicated id " + bone->id);
+                throw std::runtime_error("scml::Data::Entity::Animation::Mainline::Key loaded a bone with a duplicated id.");
                 delete bone;
             }
         } else {
@@ -860,7 +860,7 @@ bool Data::Entity::Animation::Mainline::Key::load(pugi::xml_node& elem)
         Bone_Ref* bone_ref = new Bone_Ref;
         if (bone_ref->load(child)) {
             if (!bones.insert(std::make_pair(bone_ref->id, Bone_Container(bone_ref))).second) {
-                throw std::runtime_error("scml::Data::Entity::Animation::Mainline::Key loaded a bone_ref with the duplicated id " + bone_ref->id);
+                throw std::runtime_error("scml::Data::Entity::Animation::Mainline::Key loaded a bone_ref with a duplicated id.");
                 delete bone_ref;
             }
         } else {
@@ -874,7 +874,7 @@ bool Data::Entity::Animation::Mainline::Key::load(pugi::xml_node& elem)
         Object* object = new Object;
         if (object->load(child)) {
             if (!objects.insert(std::make_pair(object->id, object)).second) {
-                throw std::runtime_error("scml::Data::Entity::Animation::Mainline::Key loaded an object with the duplicated id " + object->id);
+                throw std::runtime_error("scml::Data::Entity::Animation::Mainline::Key loaded an object with a duplicated id.");
                 delete object;
             }
         } else {
@@ -888,7 +888,7 @@ bool Data::Entity::Animation::Mainline::Key::load(pugi::xml_node& elem)
         Object_Ref* object_ref = new Object_Ref;
         if (object_ref->load(child)) {
             if (!objects.insert(std::make_pair(object_ref->id, Object_Container(object_ref))).second) {
-                throw std::runtime_error("scml::Data::Entity::Animation::Mainline::Key loaded an object_ref with the duplicated id " + object_ref->id);
+                throw std::runtime_error("scml::Data::Entity::Animation::Mainline::Key loaded an object_ref with a duplicated id.");
                 delete object_ref;
             }
         } else {
@@ -1392,7 +1392,7 @@ bool Data::Entity::Animation::Timeline::load(pugi::xml_node& elem)
         Key* key = new Key;
         if (key->load(child)) {
             if (!keys.insert(std::make_pair(key->id, key)).second) {
-                throw std::runtime_error("scml::Data::Entity::Animation::Timeline loaded a key with the duplicated id " + key->id);
+                throw std::runtime_error("scml::Data::Entity::Animation::Timeline loaded a key with a duplicated id.");
                 delete key;
             }
         } else {
@@ -1870,7 +1870,7 @@ bool Data::Entity::Animation::Soundline::load(pugi::xml_node& elem)
         Key* key = new Key;
         if (key->load(child)) {
             if (!keys.insert(std::make_pair(key->id, key)).second) {
-                throw std::runtime_error("scml::Data::Entity::Animation::Soundline loaded a key with the duplicated id " + key->id);
+                throw std::runtime_error("scml::Data::Entity::Animation::Soundline loaded a key with a duplicated id.");
                 delete key;
             }
         } else {

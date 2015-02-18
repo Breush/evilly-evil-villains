@@ -92,7 +92,7 @@ void Sidebar::setMode(Mode mode)
         m_tabs.resize(4);
         m_tabs[0].setVisual(_("Bells"),              Textures::DUNGEON_TRAPS_BELLS,             tabImageSize);
         m_tabs[1].setVisual(_("Wolf trap"),          Textures::DUNGEON_TRAPS_WOLFTRAP,          tabImageSize);
-        m_tabs[2].setVisual(_("Trompe l'œil"),       Textures::DUNGEON_TRAPS_TROMPELOEIL,       tabImageSize);
+        m_tabs[2].setVisual(_("Trompe l'oeil"),       Textures::DUNGEON_TRAPS_TROMPELOEIL,       tabImageSize);
         m_tabs[3].setVisual(_("Tranquilizer darts"), Textures::DUNGEON_TRAPS_TRANQUILIZERDARTS, tabImageSize);
     }
     else if (mode == Mode::FACILITIES) {

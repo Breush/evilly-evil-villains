@@ -1,0 +1,129 @@
+# English translations for PACKAGE package.
+# This file is put in the public domain.
+# Breust <sherlock.breust@gmail.com>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: EEV\n"
+"Report-Msgid-Bugs-To: sherlock.breust@gmail.com\n"
+"POT-Creation-Date: 2015-02-18 09:49+0100\n"
+"PO-Revision-Date: 2015-02-18 10:54+0100\n"
+"Last-Translator: Alexis Breust <alexis.breust@gmail.com>\n"
+"Language-Team: English\n"
+"Language: en_EN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.4\n"
+
+msgid "Grasshopper"
+msgstr "Grasshopper"
+
+msgid "Creepim"
+msgstr "Creepim"
+
+msgid "Fly-man"
+msgstr "Fly-man"
+
+msgid "Lezard-man"
+msgstr "Lezard-man"
+
+msgid "Weremole"
+msgstr "Weremole"
+
+msgid "Bells"
+msgstr "Bells"
+
+msgid "Wolf trap"
+msgstr "Wolf trap"
+
+msgid "Trompe l'oeil"
+msgstr "Trompe l'œil"
+
+msgid "Tranquilizer darts"
+msgstr "Tranquilizer darts"
+
+msgid "Ladder"
+msgstr "Ladder"
+
+msgid "Signpost"
+msgstr "Signpost"
+
+msgid "Treasure room"
+msgstr "Treasure room"
+
+msgid "Small chest"
+msgstr "Small chest"
+
+msgid "Humble gift"
+msgstr "Humble gift"
+
+msgid "Monsters"
+msgstr "Monsters"
+
+msgid "Traps"
+msgstr "Traps"
+
+msgid "Facilities"
+msgstr "Facilities"
+
+msgid "Treasures"
+msgstr "Treasures"
+
+msgid "Room"
+msgstr "Room"
+
+msgid "Do you really want to quit?"
+msgstr "Do you really want to quit?"
+
+msgid "No, sorry, it is a mistake."
+msgstr "No, sorry, it is a mistake."
+
+msgid "Yes, I will lose everything not saved."
+msgstr "Yes, I will lose everything not saved."
+
+msgid "Game paused"
+msgstr "Game paused"
+
+msgid "Continue, continue, continue"
+msgstr "Continue, continue, continue"
+
+msgid "Save and return to main menu"
+msgstr "Save and return to main menu"
+
+msgid "Victim and alone"
+msgstr "Victim and alone"
+
+msgid "I sometimes have friends"
+msgstr "I sometimes have friends"
+
+msgid "Looking at who I am"
+msgstr "Looking at who I am"
+
+msgid "Yet I want to choose"
+msgstr "Yet I want to choose"
+
+msgid "Someone who runs away"
+msgstr "Someone who runs away"
+
+msgid "Villain"
+msgstr "Villain"
+
+msgid "World name"
+msgstr "World name"
+
+msgid "Main dungeon"
+msgstr "Main dungeon"
+
+msgid "Last played"
+msgstr "Last played"
+
+msgid "Play"
+msgstr "Play"
+
+msgid "Back"
+msgstr "Back"
+
+msgid "Create new world"
+msgstr "Create new world"

@@ -7,7 +7,7 @@
 int main(int argc, char *argv[])
 {
     Application app;
-    internationalization::init();
+    internationalization::init("");
 
     // Handle arguments
     if (argc > 1)
