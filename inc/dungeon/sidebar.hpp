@@ -11,7 +11,7 @@ namespace dungeon
 {
     class Sidebar : public scene::Entity
     {
-        typedef scene::Entity baseClass;
+        using baseClass = scene::Entity;
 
     public:
         Sidebar();

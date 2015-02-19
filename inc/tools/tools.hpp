@@ -17,9 +17,9 @@
 
 namespace sf
 {
-    typedef Vector2<uint16> Vector2u16;
-    typedef Vector2<uint32> Vector2u32;
-    typedef Vector2<uint64> Vector2u64;
+    using Vector2u16 = Vector2<uint16>;
+    using Vector2u32 = Vector2<uint32>;
+    using Vector2u64 = Vector2<uint64>;
 
     template<typename T> Vector2f v2f(const Vector2<T>& v) { return Vector2f(float(v.x), float(v.y)); }
     template<typename T> Vector2i v2i(const Vector2<T>& v) { return Vector2i(int(v.x), int(v.y)); }

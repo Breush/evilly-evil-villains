@@ -14,7 +14,7 @@ namespace dungeon
 
     class Panel : public scene::Entity
     {
-        typedef scene::Entity baseClass;
+        using baseClass = scene::Entity;
 
     public:
         Panel(dungeon::Sidebar& sidebar);

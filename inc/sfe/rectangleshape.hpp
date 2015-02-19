@@ -12,7 +12,7 @@ namespace sfe
 
     class RectangleShape : public scene::Entity
     {
-        typedef scene::Entity baseClass;
+        using baseClass = scene::Entity;
 
     public:
         RectangleShape() { addPart(&m_rectangleShape); }

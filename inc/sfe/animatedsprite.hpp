@@ -13,7 +13,7 @@ namespace sfe
 {
     class AnimatedSprite : public scene::Entity
     {
-        typedef scene::Entity baseClass;
+        using baseClass = scene::Entity;
 
     public:
         AnimatedSprite();

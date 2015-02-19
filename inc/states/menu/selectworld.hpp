@@ -11,7 +11,7 @@
 
 class MenuSelectWorldState : public State
 {
-    typedef State baseClass;
+    using baseClass = State;
 
 public:
     MenuSelectWorldState(StateStack& stack);

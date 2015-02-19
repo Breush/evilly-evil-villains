@@ -12,8 +12,10 @@ namespace nui
 {
     class ReactImage : public scene::Entity
     {
-        typedef scene::Entity baseClass;
-        typedef std::function<void()> Callback;
+        using baseClass = scene::Entity;
+
+    protected:
+        using Callback = std::function<void()>;
 
     public:
         ReactImage();

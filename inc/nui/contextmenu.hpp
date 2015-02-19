@@ -12,10 +12,10 @@ namespace nui
 {
     class ContextMenu : public scene::Entity
     {
-        typedef scene::Entity baseClass;
+        using baseClass = scene::Entity;
 
     public:
-        typedef std::function<void()> Callback;
+        using Callback = std::function<void()>;
 
         ContextMenu();
         virtual ~ContextMenu() {}

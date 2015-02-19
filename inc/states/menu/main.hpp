@@ -9,7 +9,7 @@
 
 class MenuMainState : public State
 {
-    typedef State baseClass;
+    using baseClass = State;
 
 public:
     MenuMainState(StateStack& stack);

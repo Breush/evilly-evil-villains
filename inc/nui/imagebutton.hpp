@@ -8,7 +8,7 @@ namespace nui
 {
     class ImageButton : public Button
     {
-        typedef Button baseClass;
+        using baseClass = Button;
 
     public:
         ImageButton();

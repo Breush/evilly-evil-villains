@@ -7,7 +7,7 @@
 
 class GamePauseState : public State
 {
-    typedef State baseClass;
+    using baseClass = State;
 
 public:
     GamePauseState(StateStack& stack);

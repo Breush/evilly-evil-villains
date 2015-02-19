@@ -8,7 +8,7 @@ namespace nui
 {
     class Stacker : public scene::Entity
     {
-        typedef scene::Entity baseClass;
+        using baseClass = scene::Entity;
 
     public:
         // Defines children position

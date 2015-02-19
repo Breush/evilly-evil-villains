@@ -6,7 +6,7 @@ namespace nui
 {
     class Button : public ChoiceBox
     {
-        typedef ChoiceBox baseClass;
+        using baseClass = ChoiceBox;
 
     public:
         Button();

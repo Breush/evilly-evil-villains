@@ -6,7 +6,7 @@ namespace nui
 {
     class HStacker : public Stacker
     {
-        typedef Stacker baseClass;
+        using baseClass = Stacker;
 
     public:
         HStacker();

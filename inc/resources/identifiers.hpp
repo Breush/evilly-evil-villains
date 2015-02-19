@@ -121,9 +121,9 @@ namespace Views
 template <typename Resource, typename Identifier>
 class ResourceHolder;
 
-typedef ResourceHolder<sf::Texture, Textures::ID>		TextureHolder;
-typedef ResourceHolder<sf::Shader, Shaders::ID>			ShaderHolder;
-typedef ResourceHolder<sf::Font, Fonts::ID>			    FontHolder;
-typedef ResourceHolder<sf::SoundBuffer, Sounds::ID>	    SoundBufferHolder;
-typedef ResourceHolder<scml::Data, Animations::ID>	    SCMLHolder;
-typedef ResourceHolder<sf::View, Views::ID>             ViewHolder;
+using TextureHolder =       ResourceHolder<sf::Texture, Textures::ID>;
+using ShaderHolder =        ResourceHolder<sf::Shader, Shaders::ID>;
+using FontHolder =          ResourceHolder<sf::Font, Fonts::ID>;
+using SoundBufferHolder =   ResourceHolder<sf::SoundBuffer, Sounds::ID>;
+using SCMLHolder =          ResourceHolder<scml::Data, Animations::ID>;
+using ViewHolder =          ResourceHolder<sf::View, Views::ID>;

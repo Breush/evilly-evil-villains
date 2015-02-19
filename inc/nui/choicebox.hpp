@@ -15,11 +15,12 @@ namespace nui
 {
     class ChoiceBox : public scene::Entity
     {
-        typedef scene::Entity baseClass;
+        using baseClass = scene::Entity;
+
+    protected:
+        using Callback = std::function<void()>;
 
     public:
-        typedef std::function<void()> Callback;
-
         ChoiceBox();
         virtual ~ChoiceBox() {}
 

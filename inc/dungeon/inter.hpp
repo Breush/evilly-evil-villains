@@ -9,7 +9,7 @@ namespace dungeon
 {
     class Inter : public scene::Entity
     {
-        typedef scene::Entity baseClass;
+        using baseClass = scene::Entity;
 
     public:
         Inter(nui::ContextMenu& contextMenu);
