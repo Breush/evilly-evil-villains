@@ -1,7 +1,7 @@
 #include "nui/reactimage.hpp"
 
 #include "core/application.hpp"
-#include "resources/soundplayer.hpp"
+#include "resources/identifiers.hpp"
 #include "tools/math.hpp"
 #include "tools/debug.hpp"
 
@@ -57,7 +57,7 @@ void ReactImage::update()
 //-------------------//
 //----- Texture -----//
 
-void ReactImage::setImageTexture(Textures::ID id)
+void ReactImage::setImageTexture(TextureID id)
 {
     sf::Texture& texture = Application::context().textures.get(id);
     m_image.setTexture(texture);
@@ -129,7 +129,7 @@ void ReactImage::activateReact(const std::wstring& key)
         return;
 
     setActiveReact(key);
-    Application::context().sounds.play(Sounds::NUI_SELECT);
+    Application::context().sounds.play(SoundID::NUI_SELECT);
 }
 
 //--------------------------------//
@@ -168,12 +168,12 @@ void ReactImage::handleMouseButtonPressed(const sf::Mouse::Button& button, const
 
     // Maybe callback is not set
     if (m_reacts[m_react].callback == nullptr) {
-        Application::context().sounds.play(Sounds::NUI_REFUSE);
+        Application::context().sounds.play(SoundID::NUI_REFUSE);
         return;
     }
 
     // Accept callback
-    Application::context().sounds.play(Sounds::NUI_ACCEPT);
+    Application::context().sounds.play(SoundID::NUI_ACCEPT);
     m_reacts[m_react].callback();
 }
 

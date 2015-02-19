@@ -1,8 +1,8 @@
 #include "states/game/pause.hpp"
 
 #include "core/application.hpp"
+#include "resources/identifiers.hpp"
 #include "tools/tools.hpp"
-#include "resources/holder.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -18,26 +18,26 @@ GamePauseState::GamePauseState(StateStack& stack)
     const auto& resolution = Application::context().resolution;
 
     // Background
-    sceneLayer(Layers::NUI).attachChild(m_background);
+    sceneLayer(LayerID::NUI).attachChild(m_background);
     m_background.setFillColor(sf::Color(0, 0, 0, 230));
     m_background.setSize(Application::context().resolution);
 
     // Pause text
-    sceneLayer(Layers::NUI).attachChild(m_pauseText);
-    m_pauseText.setFont(Fonts::NUI);
+    sceneLayer(LayerID::NUI).attachChild(m_pauseText);
+    m_pauseText.setFont(FontID::NUI);
     m_pauseText.setText(_("Game paused"));
     m_pauseText.setCharacterSize(50);
     m_pauseText.setPosition(0.5f * resolution.x, 0.4f * resolution.y);
     m_pauseText.setCentered(true);
 
     // Buttons
-    sceneLayer(Layers::NUI).attachChild(m_continueButton);
+    sceneLayer(LayerID::NUI).attachChild(m_continueButton);
     m_continueButton.setAction(_("Continue, continue, continue"), [this]() { stackPop(); });
     m_continueButton.setLocalPosition(0.5f * resolution);
     m_continueButton.setCentered(true);
 
-    sceneLayer(Layers::NUI).attachChild(m_mainMenuButton);
-    m_mainMenuButton.setAction(_("Save and return to main menu"), [this]() { stackClear(States::MENU_MAIN); });
+    sceneLayer(LayerID::NUI).attachChild(m_mainMenuButton);
+    m_mainMenuButton.setAction(_("Save and return to main menu"), [this]() { stackClear(StateID::MENU_MAIN); });
     m_mainMenuButton.setLocalPosition({0.5f * resolution.x, 0.6f * resolution.y});
     m_mainMenuButton.setCentered(true);
 }

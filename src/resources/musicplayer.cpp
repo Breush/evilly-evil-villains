@@ -1,21 +1,24 @@
 #include "resources/musicplayer.hpp"
 
+#include "resources/identifiers.hpp"
+#include "tools/debug.hpp"
+
 MusicPlayer::MusicPlayer()
     : m_music()
     , m_volume(100)
 {
 }
 
-void MusicPlayer::load(Musics::ID id, const std::string& filename)
+void MusicPlayer::load(MusicID id, const std::string& filename)
 {
     auto inserted = m_musics.insert(std::make_pair(id, filename));
     massert(inserted.second, "Cannot add music filename.");
 }
 
-void MusicPlayer::play(Musics::ID id)
+void MusicPlayer::play(MusicID id)
 {
     auto found = m_musics.find(id);
-    massert(found != m_musics.end(), "Musics::ID " << id << " was not previously loaded.");
+    massert(found != m_musics.end(), "MusicID " << static_cast<uint8>(id) << " was not previously loaded.");
 
     if (!m_music.openFromFile(found->second))
         throw std::runtime_error("Music " + found->second + " could not be loaded.");

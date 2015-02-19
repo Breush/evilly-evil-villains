@@ -31,13 +31,13 @@ bool State::handleEvent(const sf::Event& event)
 
 //----- Stack operations -----//
 
-void State::stackPopPush(States::ID stateID)
+void State::stackPopPush(StateID stateID)
 {
     m_stack->popState();
     m_stack->pushState(stateID);
 }
 
-void State::stackPush(States::ID stateID)
+void State::stackPush(StateID stateID)
 {
     m_stack->pushState(stateID);
 }
@@ -52,7 +52,7 @@ void State::stackClear()
     m_stack->clearStates();
 }
 
-void State::stackClear(States::ID stateID)
+void State::stackClear(StateID stateID)
 {
     m_stack->clearStates();
     m_stack->pushState(stateID);

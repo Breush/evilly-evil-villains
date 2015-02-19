@@ -1,4 +1,6 @@
 #include "states/statestack.hpp"
+
+#include "states/identifiers.hpp"
 #include "tools/debug.hpp"
 
 StateStack::StateStack()
@@ -35,19 +37,19 @@ void StateStack::handleEvent(const sf::Event& event)
     applyPendingChanges();
 }
 
-void StateStack::pushState(States::ID stateID)
+void StateStack::pushState(StateID stateID)
 {
-    m_pendingList.push_back(PendingChange(Push, stateID));
+    m_pendingList.push_back(PendingChange(Action::PUSH, stateID));
 }
 
 void StateStack::popState()
 {
-    m_pendingList.push_back(PendingChange(Pop));
+    m_pendingList.push_back(PendingChange(Action::POP, StateID::NONE));
 }
 
 void StateStack::clearStates()
 {
-    m_pendingList.push_back(PendingChange(Clear));
+    m_pendingList.push_back(PendingChange(Action::CLEAR, StateID::NONE));
 }
 
 bool StateStack::isEmpty() const
@@ -55,7 +57,7 @@ bool StateStack::isEmpty() const
     return m_stack.empty();
 }
 
-bool StateStack::isStateVisible(States::ID stateID) const
+bool StateStack::isStateVisible(StateID stateID) const
 {
     for (const auto& state : m_stack)
         if (state->id() == stateID)
@@ -64,10 +66,10 @@ bool StateStack::isStateVisible(States::ID stateID) const
     return false;
 }
 
-std::unique_ptr<State> StateStack::createState(States::ID stateID)
+std::unique_ptr<State> StateStack::createState(StateID stateID)
 {
     auto found = m_factories.find(stateID);
-    massert(found != m_factories.end(), "Cannot find state " << stateID);
+    massert(found != m_factories.end(), "Cannot find state " << static_cast<uint8>(stateID));
 
     return found->second();
 }
@@ -77,13 +79,13 @@ void StateStack::applyPendingChanges()
     // Apply changes
     for (PendingChange change : m_pendingList) {
         switch (change.action) {
-        case Push:
+        case Action::PUSH:
             if (!m_stack.empty())
                 m_stack.back()->onHide();
             m_stack.push_back(createState(change.stateID));
             break;
 
-        case Pop:
+        case Action::POP:
             if (!m_stack.empty())
                 m_stack.back()->onQuit();
             m_stack.pop_back();
@@ -91,7 +93,7 @@ void StateStack::applyPendingChanges()
                 m_stack.back()->onShow();
             break;
 
-        case Clear:
+        case Action::CLEAR:
             for (auto& state : m_stack)
                 state->onQuit();
             m_stack.clear();

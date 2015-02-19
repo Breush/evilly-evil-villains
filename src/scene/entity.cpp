@@ -1,6 +1,7 @@
 #include "scene/entity.hpp"
 
 #include "core/application.hpp"
+#include "resources/identifiers.hpp"
 #include "sfe/lerpable.hpp"
 #include "scene/graph.hpp"
 #include "tools/debug.hpp"
@@ -291,17 +292,13 @@ void Entity::clearParts()
     m_parts.clear();
 }
 
-void Entity::addPart(sf::Drawable* drawable, Shaders::ID shaderID)
+void Entity::addPart(sf::Drawable* drawable)
 {
     // Do not re-add part
     for (auto& part : m_parts)
         returnif (part.drawable == drawable);
 
-    sf::Shader* shader = nullptr;
-    if (shaderID != Shaders::NONE)
-        shader = &Application::context().shaders.get(shaderID);
-
-    m_parts.push_back({drawable, shader, false});
+    m_parts.push_back({drawable, nullptr, false});
 }
 
 void Entity::removePart(sf::Drawable* drawable)
@@ -314,7 +311,7 @@ void Entity::removePart(sf::Drawable* drawable)
     }
 }
 
-void Entity::setPartShader(sf::Drawable* drawable, Shaders::ID shaderID)
+void Entity::setPartShader(sf::Drawable* drawable, ShaderID shaderID)
 {
     returnif (!sf::Shader::isAvailable());
 
@@ -362,9 +359,9 @@ void Entity::setSize(const sf::Vector2f& resize)
     update();
 }
 
-void Entity::setShader(Shaders::ID shaderID)
+void Entity::setShader(ShaderID shaderID)
 {
-    if (shaderID == Shaders::NONE) m_shader = nullptr;
+    if (shaderID == ShaderID::NONE) m_shader = nullptr;
     else m_shader = &Application::context().shaders.get(shaderID);
 }
 

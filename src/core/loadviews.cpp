@@ -1,14 +1,16 @@
 #include "core/application.hpp"
 
+#include "resources/identifiers.hpp"
+
 void Application::loadViews()
 {
     // TODO Currently, the views are stored using the ResourceHolder.
     // This can be pricy because of the map searching and the pointer indirection.
     // Should be more clever to use std::array<sf::View> directly.
 
-    s_context.views.load(Views::DEFAULT);
-    s_context.views.load(Views::DUNGEON_DESIGN);
-    s_context.views.load(Views::NUI);
+    s_context.views.load(ViewID::DEFAULT);
+    s_context.views.load(ViewID::DUNGEON_DESIGN);
+    s_context.views.load(ViewID::NUI);
 
     refreshViews();
 }
@@ -33,14 +35,14 @@ void Application::refreshViews()
     s_context.effectiveDisplay = sf::Vector2f(screenSize.x * viewport.width, screenSize.y * viewport.height);
 
     // Refresh all views
-    auto& defaultView = s_context.views.get(Views::DEFAULT);
+    auto& defaultView = s_context.views.get(ViewID::DEFAULT);
     defaultView.setCenter(resolution / 2.f);
     defaultView.setSize(resolution);
     defaultView.setViewport(viewport);
 
-    auto& dungeonDesignView = s_context.views.get(Views::DUNGEON_DESIGN);
+    auto& dungeonDesignView = s_context.views.get(ViewID::DUNGEON_DESIGN);
     dungeonDesignView.setViewport(viewport);
 
-    auto& nuiView = s_context.views.get(Views::NUI);
+    auto& nuiView = s_context.views.get(ViewID::NUI);
     nuiView = defaultView;
 }

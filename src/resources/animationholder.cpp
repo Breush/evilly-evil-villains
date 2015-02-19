@@ -1,5 +1,6 @@
 #include "resources/animationholder.hpp"
 
+#include "resources/identifiers.hpp"
 #include "scml/data.hpp"
 #include "sfe/animatedsprite.hpp"
 
@@ -13,7 +14,7 @@ void AnimationHolder::update(const sf::Time& dt)
         animatedSprite->updateAnimation(dt);
 }
 
-void AnimationHolder::load(Animations::ID id, const std::string& filename)
+void AnimationHolder::load(AnimationID id, const std::string& filename)
 {
     // Data
     m_scmlHolder.load(id, filename);
@@ -26,12 +27,12 @@ void AnimationHolder::load(Animations::ID id, const std::string& filename)
 
 //----- Getters -----//
 
-scml::Data& AnimationHolder::getData(Animations::ID id)
+scml::Data& AnimationHolder::getData(AnimationID id)
 {
     return m_scmlHolder.get(id);
 }
 
-scml::FileSystem& AnimationHolder::getFileSystem(Animations::ID id)
+scml::FileSystem& AnimationHolder::getFileSystem(AnimationID id)
 {
     return *m_fsMap[id];
 }

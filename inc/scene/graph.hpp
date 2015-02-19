@@ -6,11 +6,20 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <array>
 
-namespace Layers {
-    enum ID {
-        DUNGEON_DESIGN,
-        NUI,            //< Keep it last, to be over everything
-        COUNT = 2,
+// Forward declarations
+
+namespace sf
+{
+    class View;
+}
+
+// Enums
+
+namespace LayerID {
+    enum type {
+        DUNGEON_DESIGN  = 0,
+        NUI             = 1, //< Keep it last, to be over everything
+        COUNT           = 2,
     };
 }
 
@@ -32,7 +41,7 @@ namespace scene
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
         // Access layers
-        Entity& operator[](Layers::ID layerID) { return m_layers[layerID].root; }
+        Entity& operator[](LayerID::type layerID) { return m_layers[static_cast<std::size_t>(layerID)].root; }
         const sf::View& viewFromLayerRoot(const Entity* root) const;
 
         // Focusing system
@@ -65,7 +74,7 @@ namespace scene
             sf::View* view;
             bool manipulable;
             sf::Vector2f grabbingPosition;
-	};
+        };
 
         // Params
         PARAMG(sf::Shader*, m_focusShader, focusShader)
@@ -74,7 +83,7 @@ namespace scene
     private:
 
         // Layers
-        std::array<Layer, Layers::COUNT> m_layers;
+        std::array<Layer, static_cast<std::size_t>(LayerID::COUNT)> m_layers;
 
         // Mouse detection
         Entity* m_hoveredEntity;

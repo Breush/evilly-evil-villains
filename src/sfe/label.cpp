@@ -1,6 +1,7 @@
 #include "sfe/label.hpp"
 
 #include "core/application.hpp"
+#include "resources/identifiers.hpp"
 
 using namespace sfe;
 
@@ -15,7 +16,7 @@ void Label::updateSize()
     setSize({bounds.left + bounds.width, bounds.top + bounds.height});
 }
 
-void Label::setFont(Fonts::ID fontID)
+void Label::setFont(FontID fontID)
 {
     m_text.setFont(Application::context().fonts.get(fontID));
     updateSize();

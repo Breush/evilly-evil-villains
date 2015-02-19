@@ -1,10 +1,9 @@
 #include "states/menu/main.hpp"
 
-#include "core/gettext.hpp"
 #include "core/application.hpp"
+#include "core/gettext.hpp"
+#include "resources/identifiers.hpp"
 #include "tools/tools.hpp"
-#include "resources/holder.hpp"
-#include "resources/musicplayer.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
@@ -17,11 +16,11 @@ MenuMainState::MenuMainState(StateStack& stack)
 
     // Background
     // TODO Make a expandToView() function in sfe::Sprite to adapt to screenSize?
-    const auto& textureSize = Application::context().textures.get(Textures::MENU_BACKGROUND).getSize();
-    sceneLayer(Layers::NUI).attachChild(m_background);
+    const auto& textureSize = Application::context().textures.get(TextureID::MENU_BACKGROUND).getSize();
+    sceneLayer(LayerID::NUI).attachChild(m_background);
     m_background.setDepth(100.f);
-    m_background.setTexture(Textures::MENU_BACKGROUND);
-    m_background.setShader(Shaders::MENU_BACKGROUND);
+    m_background.setTexture(TextureID::MENU_BACKGROUND);
+    m_background.setShader(ShaderID::MENU_BACKGROUND);
     m_background.setLocalScale({maxSide / textureSize.x, maxSide / textureSize.y});
     m_background.setLocalPosition(sf::vsub(resolution, maxSide) / 2.f);
 
@@ -33,18 +32,14 @@ MenuMainState::MenuMainState(StateStack& stack)
     m_choices.push_back(L"S");
 
     // Fonctors
-    std::function<void()> singlePlayer = [this]() {
-        stackPush(States::MENU_SELECTWORLD);
-    };
-    std::function<void()> multiPlayer = nullptr;
-    std::function<void()> personalization = nullptr;
-    std::function<void()> configuration = nullptr;
-    std::function<void()> quitGame = [this]() {
-        stackClear();
-    };
+    auto singlePlayer = [this]() { stackPush(StateID::MENU_SELECTWORLD); };
+    auto multiPlayer = nullptr;
+    auto personalization = nullptr;
+    auto configuration = nullptr;
+    auto quitGame = [this]() { stackClear(); };
 
     // Menu choice box (be sure not to mess with order)
-    sceneLayer(Layers::NUI).attachChild(m_choiceBox);
+    sceneLayer(LayerID::NUI).attachChild(m_choiceBox);
     m_choiceBox.setCentered(true);
     m_choiceBox.setLocalPosition({0.5f * resolution.x, 0.9f * resolution.y});
     m_choiceBox.add(_("Victim and alone"), singlePlayer);
@@ -54,11 +49,11 @@ MenuMainState::MenuMainState(StateStack& stack)
     m_choiceBox.add(_("Someone who runs away"), quitGame);
 
     // Menu react image
-    sceneLayer(Layers::NUI).attachChild(m_reactImage);
+    sceneLayer(LayerID::NUI).attachChild(m_reactImage);
     m_reactImage.setCentered(true);
     m_reactImage.setLocalPosition({0.5f * resolution.x, 0.2f * resolution.y});
-    m_reactImage.setImageTexture(Textures::MENU_NAME);
-    m_reactImage.setShader(Shaders::MENU_NAME);
+    m_reactImage.setImageTexture(TextureID::MENU_NAME);
+    m_reactImage.setShader(ShaderID::MENU_NAME);
     m_reactImage.setMouseLeftDeselect(false);
 
     // Setting callbacks
@@ -70,7 +65,7 @@ MenuMainState::MenuMainState(StateStack& stack)
     m_reactImage.setReactCallback(m_choices[4], quitGame);
 
     // Menu theme
-    Application::context().musics.play(Musics::MENU_THEME);
+    Application::context().musics.play(MusicID::MENU_THEME);
     Application::context().musics.setVolume(75);
 }
 
@@ -98,7 +93,7 @@ bool MenuMainState::handleEvent(const sf::Event& event)
     // Escape opens quit screen
     if (event.type == sf::Event::KeyPressed
         && event.key.code == sf::Keyboard::Escape) {
-        stackPush(States::QUIT);
+        stackPush(StateID::QUIT);
         return false;
     }
 

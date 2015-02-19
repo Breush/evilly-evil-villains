@@ -3,7 +3,7 @@
 #include "core/application.hpp"
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
-#include "resources/holder.hpp"
+#include "resources/identifiers.hpp"
 
 using namespace nui;
 
@@ -100,7 +100,7 @@ void List::setColumns(const std::initializer_list<std::wstring>& columns)
     m_columns.clear();
 
     sf::Text text;
-    sf::Font& font = Application::context().fonts.get(Fonts::NUI);
+    sf::Font& font = Application::context().fonts.get(FontID::NUI);
     text.setCharacterSize(16);
     text.setFont(font);
 
@@ -163,7 +163,7 @@ void List::addLine(const std::initializer_list<std::wstring>& values)
     massert(values.size() == m_columns.size(), "List - expected " << m_columns.size() << " values");
 
     sf::Text text;
-    sf::Font& font = Application::context().fonts.get(Fonts::NUI);
+    sf::Font& font = Application::context().fonts.get(FontID::NUI);
     text.setCharacterSize(16);
     text.setFont(font);
 
@@ -202,7 +202,7 @@ void List::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
     resetPartsShader();
     if (line < m_lines.size())
         for (auto& cell : m_lines[line])
-            setPartShader(&cell.text, Shaders::NUI_HOVER);
+            setPartShader(&cell.text, ShaderID::NUI_HOVER);
 }
 
 void List::handleMouseLeft()

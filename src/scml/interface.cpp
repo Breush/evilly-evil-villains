@@ -1,6 +1,7 @@
 #include "scml/interface.hpp"
 
 #include "core/application.hpp"
+#include "resources/identifiers.hpp"
 #include "tools/tools.hpp" // mapFind
 
 #include <SFML/Graphics.hpp>
@@ -26,7 +27,7 @@ void FileSystem::clear()
 
 bool FileSystem::loadImageFile(int folderID, int fileID, const std::wstring& filename)
 {
-    Textures::ID id = Application::context().textures.getID(filename);
+    TextureID id = Application::context().textures.getID(filename);
 
     if (!textures.insert(std::make_pair(std::make_pair(folderID, fileID), id)).second) {
         std::wcerr << L"scml::FileSystem failed to load image: Loading " << filename
@@ -44,7 +45,7 @@ std::pair<uint, uint> FileSystem::getImageDimensions(int folderID, int fileID) c
     return std::make_pair(texture.getSize().x, texture.getSize().y);
 }
 
-Textures::ID FileSystem::getTexture(int folderID, int fileID) const
+TextureID FileSystem::getTexture(int folderID, int fileID) const
 {
     return tools::mapFind(textures, std::make_pair(folderID, fileID));
 }
@@ -53,7 +54,7 @@ Textures::ID FileSystem::getTexture(int folderID, int fileID) const
 
 bool FileSystem::loadSoundFile(int folderID, int fileID, const std::wstring& filename)
 {
-    Sounds::ID id = Application::context().sounds.getID(filename);
+    SoundID id = Application::context().sounds.getID(filename);
 
     if (!sounds.insert(std::make_pair(std::make_pair(folderID, fileID), id)).second) {
         std::wcerr << L"scml::FileSystem failed to load sound: Loading " << filename
@@ -64,7 +65,7 @@ bool FileSystem::loadSoundFile(int folderID, int fileID, const std::wstring& fil
     return true;
 }
 
-Sounds::ID FileSystem::getSound(int folderID, int fileID) const
+SoundID FileSystem::getSound(int folderID, int fileID) const
 {
     return tools::mapFind(sounds, std::make_pair(folderID, fileID));
 }

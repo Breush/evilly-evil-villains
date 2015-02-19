@@ -1,6 +1,7 @@
 #pragma once
 
 #include "states/state.hpp"
+#include "states/identifiers.hpp"
 #include "dungeon/data.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/panel.hpp"
@@ -12,7 +13,7 @@ class GameDungeonDesignState : public State
 public:
     GameDungeonDesignState(StateStack& stack);
     virtual ~GameDungeonDesignState() {}
-    States::ID id() const override { return States::GAME_DUNGEON_DESIGN; }
+    StateID id() const override { return StateID::GAME_DUNGEON_DESIGN; }
 
     // Routines
     bool handleEvent(const sf::Event& event) override;

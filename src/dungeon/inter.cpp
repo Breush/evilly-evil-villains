@@ -1,6 +1,7 @@
 #include "dungeon/inter.hpp"
 
 #include "core/application.hpp"
+#include "resources/identifiers.hpp"
 #include "core/gettext.hpp"
 #include "dungeon/data.hpp"
 #include "tools/debug.hpp"
@@ -37,7 +38,7 @@ void Inter::update()
         addPart(&tile);
 
     if (m_hasRoomSelected)
-        setPartShader(&m_roomTiles[m_selectedRoom.x][m_selectedRoom.y], Shaders::NUI_HOVER);
+        setPartShader(&m_roomTiles[m_selectedRoom.x][m_selectedRoom.y], ShaderID::NUI_HOVER);
 }
 
 //------------------------//
@@ -90,7 +91,7 @@ void Inter::refreshRoomTiles()
 
 void Inter::setRoomTileState(const uint floor, const uint room, const Data::RoomState state)
 {
-    auto contructedRoomTexture = &Application::context().textures.get(Textures::DUNGEON_INTER_ROOM);
+    auto contructedRoomTexture = &Application::context().textures.get(TextureID::DUNGEON_INTER_ROOM);
     auto& tile = m_roomTiles[floor][room];
 
     // Reset
@@ -168,7 +169,7 @@ void Inter::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
     refreshRoomSelectedShader();
 
     auto room = roomFromCoords(mousePos);
-    setPartShader(&m_roomTiles[room.x][room.y], Shaders::NUI_HOVER);
+    setPartShader(&m_roomTiles[room.x][room.y], ShaderID::NUI_HOVER);
 }
 
 void Inter::handleMouseLeft()
@@ -242,5 +243,5 @@ void Inter::refreshRoomSelectedShader()
     resetPartsShader();
 
     if (m_hasRoomSelected)
-        setPartShader(&m_roomTiles[m_selectedRoom.x][m_selectedRoom.y], Shaders::NUI_HOVER);
+        setPartShader(&m_roomTiles[m_selectedRoom.x][m_selectedRoom.y], ShaderID::NUI_HOVER);
 }

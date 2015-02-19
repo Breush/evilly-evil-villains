@@ -12,7 +12,7 @@ namespace nui
 
     public:
         // Defines children position
-        enum Align {
+        enum class Align {
             STANDARD,
             CENTER,
             OPPOSITE,

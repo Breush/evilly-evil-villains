@@ -1,8 +1,13 @@
 #pragma once
 
 #include "scene/entity.hpp"
+#include "tools/int.hpp"
 
 #include <SFML/Graphics/Text.hpp>
+
+// Forward declarations
+
+enum class FontID : uint8;
 
 namespace sfe
 {
@@ -18,7 +23,7 @@ namespace sfe
         Label();
         virtual ~Label() {}
 
-        void setFont(Fonts::ID fontID);
+        void setFont(FontID fontID);
         void setCharacterSize(uint characterSize);
         void setText(const std::wstring& text);
 

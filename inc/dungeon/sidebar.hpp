@@ -23,7 +23,7 @@ namespace dungeon
         void immediateReduce();
 
         // Mode
-        enum Mode {
+        enum class Mode {
             MONSTERS,
             TRAPS,
             FACILITIES,

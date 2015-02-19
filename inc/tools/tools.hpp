@@ -57,34 +57,4 @@ namespace tools
         if (element == map.end()) return T2();
         return element->second;
     }
-
-    enum Align {
-        START,
-        MIDDLE,
-        END,
-    };
-
-    inline void adaptTextureRect(sf::Sprite& sprite, const sf::Vector2f& size, Align align = Align::MIDDLE)
-    {
-        const auto textureSize = sprite.getTexture()->getSize();
-        const sf::Vector2f ratio(size.x / textureSize.x, size.y / textureSize.y);
-
-        sf::IntRect textureRect({0, 0, int(textureSize.x), int(textureSize.y)});
-
-        if (ratio.x < ratio.y) {
-            sprite.setScale(ratio.y, ratio.y);
-            if (align == Align::MIDDLE)   textureRect.left = int(textureSize.x - size.x / ratio.y) / 2;
-            else if (align == Align::END) textureRect.left = int(textureSize.x - size.x / ratio.y);
-        }
-        else if (ratio.x > ratio.y) {
-            sprite.setScale(ratio.x, ratio.x);
-            if (align == Align::MIDDLE)   textureRect.top = int(textureSize.y - size.y / ratio.x) / 2;
-            else if (align == Align::END) textureRect.top = int(textureSize.y - size.y / ratio.x);
-        }
-        else {
-            sprite.setScale(ratio);
-        }
-
-        sprite.setTextureRect(textureRect);
-    }
 }

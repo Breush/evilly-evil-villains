@@ -1,6 +1,7 @@
 #pragma once
 
 #include "states/state.hpp"
+#include "states/identifiers.hpp"
 #include "nui/button.hpp"
 #include "sfe/rectangleshape.hpp"
 #include "sfe/label.hpp"
@@ -12,7 +13,7 @@ class GamePauseState : public State
 public:
     GamePauseState(StateStack& stack);
     virtual ~GamePauseState() {}
-    States::ID id() const override { return States::GAME_PAUSE; }
+    StateID id() const override { return StateID::GAME_PAUSE; }
 
     // Routines
     bool handleEvent(const sf::Event& event) override;

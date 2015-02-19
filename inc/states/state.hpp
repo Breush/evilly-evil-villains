@@ -1,35 +1,30 @@
 #pragma once
 
-#include "states/identifiers.hpp"
 #include "scene/graph.hpp"
-#include "resources/identifiers.hpp"
+#include "tools/int.hpp"
 
 #include <SFML/System/Time.hpp>
 #include <SFML/Window/Event.hpp>
 
 #include <memory>
 
-namespace sf
-{
-    class RenderWindow;
-}
-
+// Forward declarations
+enum class StateID : uint8;
 class StateStack;
-class MusicPlayer;
-class SoundPlayer;
 
 class State
 {
 public:
     State(StateStack& stack);
     virtual	~State() {}
-    virtual States::ID id() const { return States::NONE; }
+    virtual StateID id() const = 0;
 
     virtual void draw();
     virtual bool update(const sf::Time& dt);
     virtual bool handleEvent(const sf::Event& event);
+
     // Getter
-    scene::Entity& sceneLayer(Layers::ID layerID) { return m_sceneGraph[layerID]; }
+    scene::Entity& sceneLayer(LayerID::type layerID) { return m_sceneGraph[layerID]; }
 
     // Called whenever display changes
     virtual void onShow() { m_sceneGraph.updateFocusSprite(); }
@@ -37,11 +32,11 @@ public:
     virtual void onQuit() {}
 
 protected:
-    void stackPopPush(States::ID stateID);
-    void stackPush(States::ID stateID);
+    void stackPopPush(StateID stateID);
+    void stackPush(StateID stateID);
     void stackPop();
     void stackClear();
-    void stackClear(States::ID stateID);
+    void stackClear(StateID stateID);
 
 private:
     StateStack*	m_stack;

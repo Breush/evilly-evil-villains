@@ -1,129 +1,81 @@
 #pragma once
 
-//----- Forward declarations
+#include "tools/int.hpp"
 
-namespace sf
-{
-    class Texture;
-    class Shader;
-    class Font;
-    class SoundBuffer;
-    class View;
-}
+enum class TextureID : uint8 {
+    DEFAULT,
+    JUMPINGTOASTS_BACKGROUND,
+    JUMPINGTOASTS_JUMPING,
+    JUMPINGTOASTS_TOASTS,
+    JUMPINGTOASTS_TOAST,
+    JUMPINGTOASTS_TOASTCUT,
+    JUMPINGTOASTS_TOASTERBACKGROUND,
+    JUMPINGTOASTS_TOASTERBOTTOM,
+    JUMPINGTOASTS_TOASTERMIDDLE,
+    JUMPINGTOASTS_TOASTERTOP,
+    NUI_FOCUS,
+    MENU_BACKGROUND,
+    MENU_NAME,
+    DUNGEON_SCENE_GRASSYHILLS_BACK,
+    DUNGEON_SCENE_GRASSYHILLS_FRONT,
+    DUNGEON_PANEL_BACKGROUND,
+    DUNGEON_PANEL_SWITCH,
+    DUNGEON_PANEL_MONSTERS,
+    DUNGEON_PANEL_TRAPS,
+    DUNGEON_PANEL_FACILITIES,
+    DUNGEON_PANEL_TREASURES,
+    DUNGEON_MONSTERS_GRASSHOPPER,
+    DUNGEON_MONSTERS_CREEPIM,
+    DUNGEON_MONSTERS_FLYMAN,
+    DUNGEON_MONSTERS_LEZARDMAN,
+    DUNGEON_MONSTERS_WEREMOLE,
+    DUNGEON_TRAPS_BELLS,
+    DUNGEON_TRAPS_WOLFTRAP,
+    DUNGEON_TRAPS_TROMPELOEIL,
+    DUNGEON_TRAPS_TRANQUILIZERDARTS,
+    DUNGEON_FACILITIES_LADDER,
+    DUNGEON_FACILITIES_SIGNPOST,
+    DUNGEON_TREASURES_TREASUREROOM,
+    DUNGEON_TREASURES_SMALLCHEST,
+    DUNGEON_TREASURES_HUMBLEGIFT,
+    DUNGEON_INTER_ROOM,
+};
 
-namespace scml
-{
-    class Data;
-}
+enum class AnimationID : uint8 {
+    DEFAULT,
+    JUMPINGTOASTS,
+};
 
-//----- Effective defines
+enum class ShaderID : uint8 {
+    DEFAULT,
+    NONE,
+    MENU_BACKGROUND,
+    MENU_NAME,
+    NUI_HOVER,
+    NUI_FOCUS,
+};
 
-namespace Textures
-{
-    enum ID {
-        DEFAULT,
-        JUMPINGTOASTS_BACKGROUND,
-        JUMPINGTOASTS_JUMPING,
-        JUMPINGTOASTS_TOASTS,
-        JUMPINGTOASTS_TOAST,
-        JUMPINGTOASTS_TOASTCUT,
-        JUMPINGTOASTS_TOASTERBACKGROUND,
-        JUMPINGTOASTS_TOASTERBOTTOM,
-        JUMPINGTOASTS_TOASTERMIDDLE,
-        JUMPINGTOASTS_TOASTERTOP,
-        NUI_FOCUS,
-        MENU_BACKGROUND,
-        MENU_NAME,
-        DUNGEON_SCENE_GRASSYHILLS_BACK,
-        DUNGEON_SCENE_GRASSYHILLS_FRONT,
-        DUNGEON_PANEL_BACKGROUND,
-        DUNGEON_PANEL_SWITCH,
-        DUNGEON_PANEL_MONSTERS,
-        DUNGEON_PANEL_TRAPS,
-        DUNGEON_PANEL_FACILITIES,
-        DUNGEON_PANEL_TREASURES,
-        DUNGEON_MONSTERS_GRASSHOPPER,
-        DUNGEON_MONSTERS_CREEPIM,
-        DUNGEON_MONSTERS_FLYMAN,
-        DUNGEON_MONSTERS_LEZARDMAN,
-        DUNGEON_MONSTERS_WEREMOLE,
-        DUNGEON_TRAPS_BELLS,
-        DUNGEON_TRAPS_WOLFTRAP,
-        DUNGEON_TRAPS_TROMPELOEIL,
-        DUNGEON_TRAPS_TRANQUILIZERDARTS,
-        DUNGEON_FACILITIES_LADDER,
-        DUNGEON_FACILITIES_SIGNPOST,
-        DUNGEON_TREASURES_TREASUREROOM,
-        DUNGEON_TREASURES_SMALLCHEST,
-        DUNGEON_TREASURES_HUMBLEGIFT,
-        DUNGEON_INTER_ROOM,
-    };
-}
+enum class FontID : uint8 {
+    DEFAULT,
+    MONO,
+    NUI,
+};
 
-namespace Animations
-{
-    enum ID {
-        DEFAULT,
-        JUMPINGTOASTS,
-    };
-}
+enum class SoundID : uint8 {
+    DEFAULT,
+    JUMPINGTOASTS,
+    NUI_ACCEPT,
+    NUI_REFUSE,
+    NUI_SELECT,
+};
 
-namespace Shaders
-{
-    enum ID {
-        DEFAULT,
-        NONE,
-        MENU_BACKGROUND,
-        MENU_NAME,
-        NUI_HOVER,
-        NUI_FOCUS,
-    };
-}
+enum class MusicID : uint8 {
+    DEFAULT,
+    MENU_THEME,
+};
 
-namespace Fonts
-{
-    enum ID {
-        DEFAULT,
-        NUI,
-    };
-}
-
-namespace Sounds
-{
-    enum ID {
-        DEFAULT,
-        JUMPINGTOASTS,
-        NUI_ACCEPT,
-        NUI_REFUSE,
-        NUI_SELECT,
-    };
-}
-
-namespace Musics
-{
-    enum ID {
-        DEFAULT,
-        MENU_THEME,
-    };
-}
-
-namespace Views
-{
-    enum ID {
-        DEFAULT,
-        DUNGEON_DESIGN,
-        NUI,
-    };
-}
-
-//----- Few type definitions
-
-template <typename Resource, typename Identifier>
-class ResourceHolder;
-
-using TextureHolder =       ResourceHolder<sf::Texture, Textures::ID>;
-using ShaderHolder =        ResourceHolder<sf::Shader, Shaders::ID>;
-using FontHolder =          ResourceHolder<sf::Font, Fonts::ID>;
-using SoundBufferHolder =   ResourceHolder<sf::SoundBuffer, Sounds::ID>;
-using SCMLHolder =          ResourceHolder<scml::Data, Animations::ID>;
-using ViewHolder =          ResourceHolder<sf::View, Views::ID>;
+enum class ViewID : uint8 {
+    DEFAULT,
+    DUNGEON_DESIGN,
+    NUI,
+};

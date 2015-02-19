@@ -1,5 +1,6 @@
 #include "resources/soundplayer.hpp"
 
+#include "resources/identifiers.hpp"
 #include "core/gettext.hpp" // string2wstring
 
 #include <SFML/Audio/Listener.hpp>
@@ -23,22 +24,22 @@ SoundPlayer::SoundPlayer()
     sf::Listener::setDirection(0.f, 0.f, -1.f);
 }
 
-void SoundPlayer::load(Sounds::ID id, const std::string& filename, bool store)
+void SoundPlayer::load(SoundID id, const std::string& filename, bool store)
 {
     m_soundBuffers.load(id, filename, store);
 }
 
-Sounds::ID SoundPlayer::getID(const std::wstring& filename)
+SoundID SoundPlayer::getID(const std::wstring& filename)
 {
     return m_soundBuffers.getID(filename);
 }
 
-void SoundPlayer::play(Sounds::ID id)
+void SoundPlayer::play(SoundID id)
 {
     play(id, getListenerPosition());
 }
 
-void SoundPlayer::play(Sounds::ID id, sf::Vector2f position)
+void SoundPlayer::play(SoundID id, sf::Vector2f position)
 {
     m_sounds.push_back(sf::Sound());
     sf::Sound& sound = m_sounds.back();

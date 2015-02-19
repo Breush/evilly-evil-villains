@@ -1,13 +1,17 @@
 #pragma once
 
 #include "scene/entity.hpp"
-#include "tools/param.hpp"
 #include "scml/interface.hpp"
-#include "resources/identifiers.hpp"
+#include "tools/param.hpp"
+#include "tools/int.hpp"
 
 #include <SFML/System/Time.hpp>
 #include <memory> // unique_ptr
 #include <list>
+
+// Forward declarations
+
+enum class AnimationID : uint8;
 
 namespace sfe
 {
@@ -25,7 +29,7 @@ namespace sfe
         void refresh();
 
         // Controls animation
-        void load(Animations::ID id, int number = 0);
+        void load(AnimationID id, int number = 0);
         void restart();
 
     protected:

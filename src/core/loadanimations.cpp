@@ -1,9 +1,11 @@
 #include "core/application.hpp"
 
+#include "resources/identifiers.hpp"
+
 void Application::loadAnimations()
 {
     // Splash-screen
-    s_context.animations.load(Animations::JUMPINGTOASTS, "res/scml/jumping-toasts.scml");
+    s_context.animations.load(AnimationID::JUMPINGTOASTS, "res/scml/jumping-toasts.scml");
 }
 
 void Application::updateAnimations(const sf::Time& dt)

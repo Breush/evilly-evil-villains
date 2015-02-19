@@ -48,4 +48,36 @@ private:
     std::map<std::wstring, Identifier> m_filenameMap;
 };
 
+//----- Few type definitions
+
+// Forward declarations
+
+enum class TextureID : uint8;
+enum class ShaderID : uint8;
+enum class FontID : uint8;
+enum class SoundID : uint8;
+enum class AnimationID : uint8;
+enum class ViewID : uint8;
+
+namespace sf
+{
+    class Texture;
+    class Shader;
+    class Font;
+    class SoundBuffer;
+    class View;
+}
+
+namespace scml
+{
+    class Data;
+}
+
+using TextureHolder =       ResourceHolder<sf::Texture, TextureID>;
+using ShaderHolder =        ResourceHolder<sf::Shader, ShaderID>;
+using FontHolder =          ResourceHolder<sf::Font, FontID>;
+using SoundBufferHolder =   ResourceHolder<sf::SoundBuffer, SoundID>;
+using SCMLHolder =          ResourceHolder<scml::Data, AnimationID>;
+using ViewHolder =          ResourceHolder<sf::View, ViewID>;
+
 #include "holder.inl"

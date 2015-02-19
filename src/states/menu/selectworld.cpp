@@ -3,8 +3,6 @@
 #include "core/application.hpp"
 #include "tools/time.hpp"
 #include "tools/tools.hpp"
-#include "resources/holder.hpp"
-#include "resources/musicplayer.hpp"
 #include "world/context.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -16,13 +14,13 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     auto& resolution = Application::context().resolution;
 
     // Background
-    sceneLayer(Layers::NUI).attachChild(m_background);
+    sceneLayer(LayerID::NUI).attachChild(m_background);
     m_background.setDepth(100.f);
     m_background.setFillColor(sf::Color(0, 0, 0, 230));
     m_background.setSize(resolution);
 
     // List for existing worlds
-    sceneLayer(Layers::NUI).attachChild(m_list);
+    sceneLayer(LayerID::NUI).attachChild(m_list);
     m_list.setLocalPosition(0.1f * resolution);
     m_list.setSize({0.8f * resolution.x, 0.7f * resolution.y});
     m_list.setColumns({_("Villain"), _("World name"), _("Main dungeon"), _("Last played")});
@@ -36,20 +34,20 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
         m_list.addLine({world.villain, world.name, world.mainDungeon, time2wstring("%Y-%m-%d", world.lastPlayed)});
 
     // Stacker for buttons
-    sceneLayer(Layers::NUI).attachChild(m_stacker);
-    m_stacker.setAlign(nui::Stacker::CENTER);
+    sceneLayer(LayerID::NUI).attachChild(m_stacker);
+    m_stacker.setAlign(nui::Stacker::Align::CENTER);
     m_stacker.setSize({resolution.x, 0.95f * resolution.y});
 
     // Buttons
     for (auto& button : m_buttons)
-        m_stacker.add(&button, nui::Stacker::OPPOSITE);
+        m_stacker.add(&button, nui::Stacker::Align::OPPOSITE);
 
     m_buttons[2].setAction(_("Play"), [this]() {
         auto selectedWorld = m_list.selectedLine();
         auto& worldInfo = world::context.worldsData.worlds()[selectedWorld];
         wdebug_application_1(L"Loading world " + worldInfo.name);
         world::context.info = &worldInfo;
-        stackClear(States::GAME_DUNGEON_DESIGN);
+        stackClear(StateID::GAME_DUNGEON_DESIGN);
     });
     m_buttons[1].setAction(_("Back"), [this]() { stackPop(); });
     m_buttons[0].setAction(_("Create new world"), nullptr);

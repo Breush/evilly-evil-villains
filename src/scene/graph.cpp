@@ -1,6 +1,7 @@
 #include "scene/graph.hpp"
 
 #include "core/application.hpp"
+#include "resources/identifiers.hpp"
 #include "tools/math.hpp"
 #include "tools/event.hpp"
 #include "tools/tools.hpp"
@@ -17,8 +18,8 @@ Graph::Graph()
     , m_grabbing(false)
 {
     // Focusing
-    m_focusShader = &Application::context().shaders.get(Shaders::NUI_FOCUS);
-    m_focusShape.setTexture(&Application::context().textures.get(Textures::NUI_FOCUS));
+    m_focusShader = &Application::context().shaders.get(ShaderID::NUI_FOCUS);
+    m_focusShape.setTexture(&Application::context().textures.get(TextureID::NUI_FOCUS));
     m_focusShape.setFillColor({255, 255, 255, 100});
 
     // Default parameters
@@ -30,11 +31,11 @@ Graph::Graph()
     }
 
     // Initialisation of layers views
-    m_layers[Layers::DUNGEON_DESIGN].view = &Application::context().views.get(Views::DUNGEON_DESIGN);
-    m_layers[Layers::DUNGEON_DESIGN].manipulable = true;
+    m_layers[LayerID::DUNGEON_DESIGN].view = &Application::context().views.get(ViewID::DUNGEON_DESIGN);
+    m_layers[LayerID::DUNGEON_DESIGN].manipulable = true;
 
-    m_layers[Layers::NUI].view = &Application::context().views.get(Views::NUI);
-    m_layers[Layers::NUI].manipulable = false;
+    m_layers[LayerID::NUI].view = &Application::context().views.get(ViewID::NUI);
+    m_layers[LayerID::NUI].manipulable = false;
 }
 
 const sf::View& Graph::viewFromLayerRoot(const Entity* root) const
@@ -136,8 +137,8 @@ void Graph::updateFocusSprite()
 
     sf::Vector2f globalFocusPosition = m_focusedEntity->getPosition() - m_focusedEntity->getOrigin() + focusPosition;
 
-    Application::context().shaders.setParameter(Shaders::NUI_FOCUS, "position", globalFocusPosition);
-    Application::context().shaders.setParameter(Shaders::NUI_FOCUS, "textureSize", focusSize);
+    Application::context().shaders.setParameter(ShaderID::NUI_FOCUS, "position", globalFocusPosition);
+    Application::context().shaders.setParameter(ShaderID::NUI_FOCUS, "textureSize", focusSize);
 }
 
 void Graph::setFocusedEntity(Entity* focusedEntity)
@@ -168,7 +169,7 @@ void Graph::focusHandleEvent(const sf::Event& event)
         // Simply get next or restart from the beginning
         Entity* nextFocused = m_focusedEntity->nextFocusable();
         if (nextFocused != nullptr) setFocusedEntity(nextFocused);
-        else setFocusedEntity(m_layers[Layers::NUI].root.nextFocusable());
+        else setFocusedEntity(m_layers[LayerID::NUI].root.nextFocusable());
     }
 
     // Find previous entity
@@ -178,7 +179,7 @@ void Graph::focusHandleEvent(const sf::Event& event)
         Entity* previousFocused = m_focusedEntity->previousFocusable();
         if (previousFocused != nullptr) setFocusedEntity(previousFocused);
         else {
-            previousFocused = m_layers[Layers::NUI].root.lastDescendant();
+            previousFocused = m_layers[LayerID::NUI].root.lastDescendant();
             if (previousFocused->focusable()) setFocusedEntity(previousFocused);
             else setFocusedEntity(previousFocused->previousFocusable());
         }
@@ -279,7 +280,7 @@ Entity* Graph::handleMouseEvent(const sf::Event& event)
 
     // Getting relative coordinates
     const auto& window = Application::context().window;
-    sf::Vector2f nuiPos = window.mapPixelToCoords(mousePos, *m_layers[Layers::NUI].view);
+    sf::Vector2f nuiPos = window.mapPixelToCoords(mousePos, *m_layers[LayerID::NUI].view);
     sf::Vector2f relPos = entity->getInverseTransform().transformPoint(viewPos);
 
     // Calling child callback

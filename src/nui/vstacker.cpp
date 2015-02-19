@@ -44,11 +44,11 @@ inline float VStacker::getX(float childWidth, Align inAlign)
         width = std::max(width, childInfo.entity->size().x);
 
     // Center
-    if (inAlign == Stacker::CENTER)
+    if (inAlign == Stacker::Align::CENTER)
         return (size().x - childWidth) / 2.f;
 
     // Opposite : right
-    else if (inAlign == Stacker::OPPOSITE)
+    else if (inAlign == Stacker::Align::OPPOSITE)
         return (size().x - margin()) - (width + childWidth) / 2.f;
 
     // Standard : left
@@ -58,7 +58,7 @@ inline float VStacker::getX(float childWidth, Align inAlign)
 inline float VStacker::getInitY()
 {
     // Center
-    if (align() == Stacker::CENTER) {
+    if (align() == Stacker::Align::CENTER) {
         float height = (m_children.size() - 1) * margin();
         for (auto& childInfo : m_children)
             height += childInfo.entity->size().y;
@@ -66,7 +66,7 @@ inline float VStacker::getInitY()
     }
 
     // Opposite : bottom
-    else if (align() == Stacker::OPPOSITE)
+    else if (align() == Stacker::Align::OPPOSITE)
         return size().y - margin();
 
     // Standard : top
@@ -76,7 +76,7 @@ inline float VStacker::getInitY()
 inline float VStacker::getPreY(float childHeight)
 {
     // Opposite
-    if (align() == Stacker::OPPOSITE)
+    if (align() == Stacker::Align::OPPOSITE)
         return -childHeight;
 
     // Center or Standard
@@ -86,7 +86,7 @@ inline float VStacker::getPreY(float childHeight)
 inline float VStacker::getPostY(float childHeight)
 {
     // Opposite
-    if (align() == Stacker::OPPOSITE)
+    if (align() == Stacker::Align::OPPOSITE)
         return -margin();
 
     // Center or Standard

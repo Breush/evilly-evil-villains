@@ -1,6 +1,7 @@
 #pragma once
 
 #include "states/state.hpp"
+#include "states/identifiers.hpp"
 #include "nui/choicebox.hpp"
 #include "nui/reactimage.hpp"
 #include "sfe/sprite.hpp"
@@ -14,7 +15,7 @@ class MenuMainState : public State
 public:
     MenuMainState(StateStack& stack);
     virtual ~MenuMainState() {}
-    States::ID id() const override { return States::MENU_MAIN; }
+    StateID id() const override { return StateID::MENU_MAIN; }
 
     // Routines
     bool update(const sf::Time& dt) override;

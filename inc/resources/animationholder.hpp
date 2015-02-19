@@ -2,7 +2,6 @@
 
 #include "scml/interface.hpp"
 #include "resources/holder.hpp"
-#include "resources/identifiers.hpp"
 
 #include <SFML/System/NonCopyable.hpp>
 #include <list>
@@ -22,7 +21,7 @@ class AnimationHolder : private sf::NonCopyable
 public:
     AnimationHolder();
 
-    void load(Animations::ID id, const std::string& filename);
+    void load(AnimationID id, const std::string& filename);
     void update(const sf::Time& dt);
 
     // Called by animated sprites
@@ -30,13 +29,13 @@ public:
     void pop(sfe::AnimatedSprite* animatedSprite);
 
     // Getters
-    scml::Data& getData(Animations::ID id);
-    scml::FileSystem& getFileSystem(Animations::ID id);
+    scml::Data& getData(AnimationID id);
+    scml::FileSystem& getFileSystem(AnimationID id);
 
 
 private:
     SCMLHolder m_scmlHolder;
-    std::map<Animations::ID, std::unique_ptr<scml::FileSystem>> m_fsMap;
+    std::map<AnimationID, std::unique_ptr<scml::FileSystem>> m_fsMap;
     std::list<sfe::AnimatedSprite*> m_animatedSprites;
 };
 

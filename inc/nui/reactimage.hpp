@@ -1,12 +1,16 @@
 #pragma once
 
 #include "scene/entity.hpp"
-#include "resources/identifiers.hpp"
+#include "tools/int.hpp"
 
 #include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 
 #include <map>
+
+// Forward declarations
+
+enum class TextureID : uint8;
 
 namespace nui
 {
@@ -28,7 +32,7 @@ namespace nui
         std::wstring& getReact() { return m_react; }
 
         // Texture
-        void setImageTexture(Textures::ID id);
+        void setImageTexture(TextureID id);
 
         // React management
         void addReactFromFile(const std::string& file);

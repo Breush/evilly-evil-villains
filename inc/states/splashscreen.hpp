@@ -1,6 +1,7 @@
 #pragma once
 
 #include "states/state.hpp"
+#include "states/identifiers.hpp"
 #include "sfe/animatedsprite.hpp"
 #include "sfe/sprite.hpp"
 
@@ -12,7 +13,7 @@ class SplashScreenState : public State
 public:
     SplashScreenState(StateStack& stack);
     virtual ~SplashScreenState() {}
-    States::ID id() const override { return States::SPLASHSCREEN; }
+    StateID id() const override { return StateID::SPLASHSCREEN; }
 
     // Routines
     bool update(const sf::Time& dt) override;

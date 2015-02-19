@@ -1,7 +1,7 @@
 #include "states/game/dungeondesign.hpp"
 
 #include "core/application.hpp"
-#include "resources/musicplayer.hpp"
+#include "resources/identifiers.hpp"
 #include "world/context.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -21,11 +21,11 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     m_dungeonData.load("worlds/" + world::context.info->folder + "dungeon.xml");
 
     // Context menu
-    sceneLayer(Layers::NUI).attachChild(m_contextMenu);
+    sceneLayer(LayerID::NUI).attachChild(m_contextMenu);
     m_contextMenu.setDepth(0.f);
 
     // Dungeon inter
-    sceneLayer(Layers::DUNGEON_DESIGN).attachChild(m_dungeonInter);
+    sceneLayer(LayerID::DUNGEON_DESIGN).attachChild(m_dungeonInter);
     m_dungeonInter.setDepth(50.f);
     m_dungeonInter.useData(m_dungeonData);
     m_dungeonInter.setSize({350, 450});
@@ -33,14 +33,14 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     m_dungeonInter.setLocalPosition(resolution / 2.f);
 
     // Dungeon panel
-    sceneLayer(Layers::NUI).attachChild(m_dungeonPanel);
+    sceneLayer(LayerID::NUI).attachChild(m_dungeonPanel);
     m_dungeonPanel.setCentered(true);
     m_dungeonPanel.setSize({4 * 100 + 25, 125 + 25});
     m_dungeonPanel.setLocalPosition({resolution.x / 2.f, resolution.y - m_dungeonPanel.size().y / 2.f});
     m_dungeonPanel.lerpable()->saveDefaults();
 
     // Dungeon sidebar
-    sceneLayer(Layers::NUI).attachChild(m_dungeonSidebar);
+    sceneLayer(LayerID::NUI).attachChild(m_dungeonSidebar);
     m_dungeonSidebar.setCentered(true);
     m_dungeonSidebar.setSize({2 * 100 + 25, 5 * 125 + 25});
     m_dungeonSidebar.setLocalPosition({resolution.x - m_dungeonSidebar.size().x / 2.f, resolution.y / 2.f});
@@ -48,13 +48,13 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     m_dungeonSidebar.immediateReduce();
 
     // Decorum
-    sceneLayer(Layers::DUNGEON_DESIGN).attachChild(m_decorumBack);
+    sceneLayer(LayerID::DUNGEON_DESIGN).attachChild(m_decorumBack);
     m_decorumBack.setDepth(100.f);
-    m_decorumBack.setTexture(Textures::DUNGEON_SCENE_GRASSYHILLS_BACK);
+    m_decorumBack.setTexture(TextureID::DUNGEON_SCENE_GRASSYHILLS_BACK);
 
-    sceneLayer(Layers::DUNGEON_DESIGN).attachChild(m_decorumFront);
+    sceneLayer(LayerID::DUNGEON_DESIGN).attachChild(m_decorumFront);
     m_decorumFront.setDepth(10.f);
-    m_decorumFront.setTexture(Textures::DUNGEON_SCENE_GRASSYHILLS_FRONT);
+    m_decorumFront.setTexture(TextureID::DUNGEON_SCENE_GRASSYHILLS_FRONT);
 }
 
 void GameDungeonDesignState::onQuit()
@@ -73,7 +73,7 @@ bool GameDungeonDesignState::handleEvent(const sf::Event& event)
     // Escape pressed, trigger the pause screen
     if (event.type == sf::Event::KeyPressed) {
         if (event.key.code == sf::Keyboard::Escape) {
-            stackPush(States::GAME_PAUSE);
+            stackPush(StateID::GAME_PAUSE);
         }
     }
 

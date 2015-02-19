@@ -1,6 +1,7 @@
 #include "core/visualdebug.hpp"
 
 #include "core/application.hpp"
+#include "resources/identifiers.hpp"
 #include "tools/tools.hpp"
 
 #include <sstream>
@@ -16,10 +17,9 @@ VisualDebug::VisualDebug()
 void VisualDebug::init()
 {
     // Getting font from holder
-    sf::Font& font = Application::context().fonts.get(Fonts::NUI);
     m_text.setPosition(10.f, 10.f);
     m_text.setCharacterSize(16);
-    m_text.setFont(font);
+    m_text.setFont(Application::context().fonts.get(FontID::MONO));
 }
 
 void VisualDebug::update(const sf::Time& dt)
@@ -52,7 +52,7 @@ void VisualDebug::draw()
 
     // Draw
     auto& window = Application::context().window;
-    window.setView(Application::context().views.get(Views::DEFAULT));
+    window.setView(Application::context().views.get(ViewID::DEFAULT));
     window.draw(m_text);
 }
 

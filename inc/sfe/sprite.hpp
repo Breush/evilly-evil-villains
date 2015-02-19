@@ -1,8 +1,13 @@
 #pragma once
 
 #include "scene/entity.hpp"
+#include "tools/int.hpp"
 
 #include <SFML/Graphics/Sprite.hpp>
+
+// Forward declarations
+
+enum class TextureID : uint8;
 
 namespace sfe
 {
@@ -18,7 +23,7 @@ namespace sfe
         Sprite();
         virtual ~Sprite() {}
 
-        void setTexture(Textures::ID textureID);
+        void setTexture(TextureID textureID);
 
     protected:
         void update() override;

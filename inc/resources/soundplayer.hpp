@@ -1,7 +1,6 @@
 #pragma once
 
 #include "resources/holder.hpp"
-#include "resources/identifiers.hpp"
 
 #include <SFML/System/Vector2.hpp>
 #include <SFML/System/NonCopyable.hpp>
@@ -15,13 +14,13 @@ class SoundPlayer : private sf::NonCopyable
 public:
     SoundPlayer();
 
-    void load(Sounds::ID id, const std::string& filename, bool store = false);
+    void load(SoundID id, const std::string& filename, bool store = false);
 
-    void storeID(Sounds::ID id, const std::wstring& filename);
-    Sounds::ID getID(const std::wstring& filename);
+    void storeID(SoundID id, const std::wstring& filename);
+    SoundID getID(const std::wstring& filename);
 
-    void play(Sounds::ID id);
-    void play(Sounds::ID id, sf::Vector2f position);
+    void play(SoundID id);
+    void play(SoundID id, sf::Vector2f position);
 
     void stopAll();
 

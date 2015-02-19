@@ -1,6 +1,7 @@
 #include "dungeon/panel.hpp"
 
 #include "core/application.hpp"
+#include "resources/identifiers.hpp"
 #include "dungeon/sidebar.hpp"
 #include "sfe/lerpable.hpp"
 #include "tools/math.hpp"
@@ -13,10 +14,10 @@ Panel::Panel(Sidebar& sidebar)
     , m_sidebar(sidebar)
 {
     // Background
-    m_background.setTexture(&Application::context().textures.get(Textures::DUNGEON_PANEL_BACKGROUND));
+    m_background.setTexture(&Application::context().textures.get(TextureID::DUNGEON_PANEL_BACKGROUND));
 
     // Reduced button
-    m_switchReducedButton.setTexture(&Application::context().textures.get(Textures::DUNGEON_PANEL_SWITCH));
+    m_switchReducedButton.setTexture(&Application::context().textures.get(TextureID::DUNGEON_PANEL_SWITCH));
     m_switchReducedButton.setSize({20.f, 20.f});
 
     // Tabs stacker
@@ -31,10 +32,10 @@ Panel::Panel(Sidebar& sidebar)
     // Tabs
     // TODO Get tabImageSize from somewhere
     sf::Vector2f tabImageSize(80.f, 80.f);
-    m_monstersTab.setVisual  (_("Monsters"),   Textures::DUNGEON_PANEL_MONSTERS,   tabImageSize);
-    m_trapsTab.setVisual     (_("Traps"),      Textures::DUNGEON_PANEL_TRAPS,      tabImageSize);
-    m_facilitiesTab.setVisual(_("Facilities"), Textures::DUNGEON_PANEL_FACILITIES, tabImageSize);
-    m_treasuresTab.setVisual (_("Treasures"),  Textures::DUNGEON_PANEL_TREASURES,  tabImageSize);
+    m_monstersTab.setVisual  (_("Monsters"),   TextureID::DUNGEON_PANEL_MONSTERS,   tabImageSize);
+    m_trapsTab.setVisual     (_("Traps"),      TextureID::DUNGEON_PANEL_TRAPS,      tabImageSize);
+    m_facilitiesTab.setVisual(_("Facilities"), TextureID::DUNGEON_PANEL_FACILITIES, tabImageSize);
+    m_treasuresTab.setVisual (_("Treasures"),  TextureID::DUNGEON_PANEL_TREASURES,  tabImageSize);
 
     m_monstersTab.setCallback  ([&]() { sidebar.setMode(Sidebar::Mode::MONSTERS); });
     m_trapsTab.setCallback     ([&]() { sidebar.setMode(Sidebar::Mode::TRAPS); });
@@ -57,7 +58,7 @@ void Panel::update()
     addPart(&m_switchReducedButton);
 
     // Tabs stacker
-    m_tabsStacker.setAlign(nui::Stacker::CENTER);
+    m_tabsStacker.setAlign(nui::Stacker::Align::CENTER);
     m_tabsStacker.setSize(size());
 }
 
@@ -75,7 +76,7 @@ void Panel::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
     resetPartsShader();
 
     if (m_switchReducedButton.getGlobalBounds().contains(mousePos))
-        setPartShader(&m_switchReducedButton, Shaders::NUI_HOVER);
+        setPartShader(&m_switchReducedButton, ShaderID::NUI_HOVER);
 }
 
 void Panel::handleMouseLeft()

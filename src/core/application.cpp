@@ -45,8 +45,8 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
 //----- Application -----//
 
 Application::Application()
-    //: m_initialState(States::MENU_SELECTWORLD)
-    : m_initialState(States::SPLASHSCREEN)
+    //: m_initialState(StateID::MENU_SELECTWORLD)
+    : m_initialState(StateID::SPLASHSCREEN)
     , m_gameTime(0.f)
     , m_running(false)
 {
@@ -126,7 +126,7 @@ void Application::processInput()
             // Hard reset on debug mode
             if (event.key.code == sf::Keyboard::BackSlash) {
                 m_stateStack.clearStates();
-                m_stateStack.pushState(States::SPLASHSCREEN);
+                m_stateStack.pushState(StateID::SPLASHSCREEN);
                 break;
             }
 #endif
@@ -134,8 +134,8 @@ void Application::processInput()
 
         // Closing window
         if (event.type == sf::Event::Closed) {
-            if (!m_stateStack.isStateVisible(States::QUIT))
-                m_stateStack.pushState(States::QUIT);
+            if (!m_stateStack.isStateVisible(StateID::QUIT))
+                m_stateStack.pushState(StateID::QUIT);
             break;
         }
 

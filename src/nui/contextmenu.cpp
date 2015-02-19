@@ -1,7 +1,7 @@
 #include "nui/contextmenu.hpp"
 
 #include "core/application.hpp"
-#include "resources/holder.hpp"
+#include "resources/identifiers.hpp"
 
 using namespace nui;
 
@@ -13,7 +13,7 @@ ContextMenu::ContextMenu()
     setVisible(false);
 
     // Background
-    m_background.setTexture(&Application::context().textures.get(Textures::DUNGEON_PANEL_BACKGROUND));
+    m_background.setTexture(&Application::context().textures.get(TextureID::DUNGEON_PANEL_BACKGROUND));
 
     update();
 }
@@ -82,10 +82,10 @@ void ContextMenu::handleMouseButtonPressed(const sf::Mouse::Button&, const sf::V
     uint choice = choiceFromCoords(mousePos);
 
     if (choice < m_choices.size() && m_choices[choice].callback != nullptr) {
-        Application::context().sounds.play(Sounds::NUI_ACCEPT);
+        Application::context().sounds.play(SoundID::NUI_ACCEPT);
         m_choices[choice].callback();
     } else {
-        Application::context().sounds.play(Sounds::NUI_REFUSE);
+        Application::context().sounds.play(SoundID::NUI_REFUSE);
         markForVisible(true);
     }
 }
@@ -96,7 +96,7 @@ void ContextMenu::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vecto
 
     resetPartsShader();
     if (choice < m_choices.size())
-        setPartShader(&m_choices[choice].text, Shaders::NUI_HOVER);
+        setPartShader(&m_choices[choice].text, ShaderID::NUI_HOVER);
 }
 
 void ContextMenu::handleMouseLeft()
@@ -122,7 +122,7 @@ void ContextMenu::clearChoices()
 
 void ContextMenu::setTitle(const std::wstring& title)
 {
-    sf::Font& font = Application::context().fonts.get(Fonts::NUI);
+    sf::Font& font = Application::context().fonts.get(FontID::NUI);
     m_title.setFont(font);
     m_title.setCharacterSize(16);
     m_title.setStyle(sf::Text::Bold);
@@ -140,7 +140,7 @@ void ContextMenu::addChoice(const std::wstring& text, Callback callback)
     choiceInfo.callback = callback;
 
     // Getting font from holder
-    sf::Font& font = Application::context().fonts.get(Fonts::NUI);
+    sf::Font& font = Application::context().fonts.get(FontID::NUI);
     choiceInfo.text.setFont(font);
     choiceInfo.text.setCharacterSize(16);
     choiceInfo.text.setColor(sf::Color::White);

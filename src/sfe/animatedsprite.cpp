@@ -53,7 +53,7 @@ void AnimatedSprite::refresh()
 //------------------------------//
 //----- Controls animation -----//
 
-void AnimatedSprite::load(Animations::ID id, int number)
+void AnimatedSprite::load(AnimationID id, int number)
 {
     auto& data = Application::context().animations.getData(id);
     auto& fs = Application::context().animations.getFileSystem(id);

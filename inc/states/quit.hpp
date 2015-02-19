@@ -1,6 +1,7 @@
 #pragma once
 
 #include "states/state.hpp"
+#include "states/identifiers.hpp"
 #include "nui/button.hpp"
 #include "sfe/rectangleshape.hpp"
 #include "sfe/label.hpp"
@@ -10,7 +11,7 @@ class QuitState : public State
 public:
     QuitState(StateStack& stack);
     virtual ~QuitState() {}
-    virtual States::ID id() const override { return States::QUIT; }
+    virtual StateID id() const override { return StateID::QUIT; }
 
     // Routines
     bool handleEvent(const sf::Event& event) override;

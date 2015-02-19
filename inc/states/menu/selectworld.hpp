@@ -1,6 +1,7 @@
 #pragma once
 
 #include "states/state.hpp"
+#include "states/identifiers.hpp"
 #include "nui/list.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/button.hpp"
@@ -16,7 +17,7 @@ class MenuSelectWorldState : public State
 public:
     MenuSelectWorldState(StateStack& stack);
     virtual ~MenuSelectWorldState() {}
-    States::ID id() const override { return States::MENU_SELECTWORLD; }
+    StateID id() const override { return StateID::MENU_SELECTWORLD; }
 
     // Routines
     bool handleEvent(const sf::Event& event) override;

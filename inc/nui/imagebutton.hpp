@@ -4,6 +4,10 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 
+// Forward declarations
+
+enum class TextureID : uint8;
+
 namespace nui
 {
     class ImageButton : public Button
@@ -16,8 +20,8 @@ namespace nui
         ImageButton(const ImageButton& copy);
 
         // Action
-        void setImage(Textures::ID imageID);
-        void setVisual(const std::wstring& text, Textures::ID imageID, const sf::Vector2f& inImageSize);
+        void setImage(TextureID imageID);
+        void setVisual(const std::wstring& text, TextureID imageID, const sf::Vector2f& inImageSize);
 
     protected:
         // Virtual

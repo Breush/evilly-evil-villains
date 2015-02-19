@@ -13,7 +13,7 @@ namespace dungeon
     {
     public:
         // Defines rooms state
-        enum RoomState {
+        enum class RoomState {
             UNKNOWN,
             VOID,
             CONSTRUCTED,

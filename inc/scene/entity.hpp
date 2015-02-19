@@ -1,7 +1,6 @@
 #pragma once
 
 #include "sfe/lerpable.hpp"
-#include "resources/identifiers.hpp"
 #include "tools/param.hpp"
 #include "tools/int.hpp"
 
@@ -12,6 +11,9 @@
 #include <list>
 
 // Forward declarations
+
+enum class ShaderID : uint8;
+
 namespace sf
 {
     class Shader;
@@ -50,7 +52,7 @@ namespace scene
         // Local actions
         void markForVisible(bool visible);
         void setSize(const sf::Vector2f& resize);
-        void setShader(Shaders::ID shaderID);
+        void setShader(ShaderID shaderID);
 
     protected:
         // Virtual
@@ -81,11 +83,11 @@ namespace scene
 
         // Parts management
         void clearParts();
-        void resetPartsShader();
+        void addPart(sf::Drawable* drawable);
         void removePart(sf::Drawable* drawable);
-        void setPartShader(sf::Drawable* drawable, Shaders::ID shader);
+        void resetPartsShader();
+        void setPartShader(sf::Drawable* drawable, ShaderID shader);
         void setPartClippingRect(sf::Drawable* drawable, const sf::FloatRect& clippingRect);
-        void addPart(sf::Drawable* drawable, Shaders::ID shader = Shaders::NONE);
 
         // Refresh on local changes
         void refreshFromLocal();

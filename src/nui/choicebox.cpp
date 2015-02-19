@@ -1,9 +1,9 @@
 #include "nui/choicebox.hpp"
 
 #include "core/application.hpp"
+#include "resources/identifiers.hpp"
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
-#include "resources/soundplayer.hpp"
 
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -25,7 +25,7 @@ ChoiceBox::ChoiceBox()
     setFocusable(true);
 
     // Getting font from holder
-    sf::Font& font = Application::context().fonts.get(Fonts::NUI);
+    sf::Font& font = Application::context().fonts.get(FontID::NUI);
     m_text.setCharacterSize(16);
     m_text.setFont(font);
 
@@ -97,11 +97,11 @@ void ChoiceBox::acceptChoice()
 {
     // Maybe callback is not set
     if (m_choices[m_choice].callback == nullptr) {
-        Application::context().sounds.play(Sounds::NUI_REFUSE);
+        Application::context().sounds.play(SoundID::NUI_REFUSE);
         return;
     }
 
-    Application::context().sounds.play(Sounds::NUI_ACCEPT);
+    Application::context().sounds.play(SoundID::NUI_ACCEPT);
     m_choices[m_choice].callback();
 }
 
@@ -109,7 +109,7 @@ void ChoiceBox::switchChoiceLeft()
 {
     if (m_nChoices <= 1) return;
     m_choice = ((m_choice == 0)? m_nChoices : m_choice) - 1;
-    Application::context().sounds.play(Sounds::NUI_SELECT);
+    Application::context().sounds.play(SoundID::NUI_SELECT);
     setChoice(m_choice);
 }
 
@@ -117,7 +117,7 @@ void ChoiceBox::switchChoiceRight()
 {
     if (m_nChoices <= 1) return;
     if (++m_choice == m_nChoices) m_choice = 0;
-    Application::context().sounds.play(Sounds::NUI_SELECT);
+    Application::context().sounds.play(SoundID::NUI_SELECT);
     setChoice(m_choice);
 }
 
@@ -203,17 +203,17 @@ void ChoiceBox::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2
 
     // Hovering arrows
     if (isLeftArrowSelected(mousePos.x)) {
-        setPartShader(&m_lArrow, Shaders::NUI_HOVER);
+        setPartShader(&m_lArrow, ShaderID::NUI_HOVER);
         return;
     }
 
     if (isRightArrowSelected(mousePos.x)) {
-        setPartShader(&m_rArrow, Shaders::NUI_HOVER);
+        setPartShader(&m_rArrow, ShaderID::NUI_HOVER);
         return;
     }
 
     // Text is being hovered
-    setPartShader(&m_text, Shaders::NUI_HOVER);
+    setPartShader(&m_text, ShaderID::NUI_HOVER);
 }
 
 void ChoiceBox::handleMouseLeft()

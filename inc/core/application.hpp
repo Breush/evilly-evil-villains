@@ -5,13 +5,11 @@
 #include "resources/musicplayer.hpp"
 #include "resources/soundplayer.hpp"
 #include "resources/animationholder.hpp"
-#include "resources/identifiers.hpp"
 #include "states/statestack.hpp"
 
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Shader.hpp>
-#include <SFML/Graphics/Text.hpp>
 
 class Application
 {
@@ -79,7 +77,7 @@ private:
     static Context s_context;
 
     StateStack m_stateStack;
-    States::ID m_initialState;
+    StateID m_initialState;
 
     float m_gameTime;
     bool m_running;
