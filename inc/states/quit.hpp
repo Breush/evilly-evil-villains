@@ -11,7 +11,7 @@ class QuitState : public State
 public:
     QuitState(StateStack& stack);
     virtual ~QuitState() {}
-    virtual StateID id() const override { return StateID::QUIT; }
+    StateID id() const noexcept override { return StateID::QUIT; }
 
     // Routines
     bool handleEvent(const sf::Event& event) override;

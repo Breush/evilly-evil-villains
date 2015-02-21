@@ -10,7 +10,7 @@ Context world::context;
 //-----------------------//
 //----- Interaction -----//
 
-void Context::updateLastPlayed()
+void Context::updateLastPlayed() noexcept
 {
     worldsData.updateLastPlayed(*info);
 }

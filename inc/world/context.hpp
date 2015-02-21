@@ -8,11 +8,8 @@ namespace world
 
     class Context {
     public:
-        Context() {}
-        ~Context() {}
-
         // Interaction
-        void updateLastPlayed();
+        void updateLastPlayed() noexcept;
 
         // Attributes
         WorldsData::World* info; //< The current selected world

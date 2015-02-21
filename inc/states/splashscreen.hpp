@@ -12,8 +12,8 @@ class SplashScreenState : public State
 {
 public:
     SplashScreenState(StateStack& stack);
-    virtual ~SplashScreenState() {}
-    StateID id() const override { return StateID::SPLASHSCREEN; }
+    virtual ~SplashScreenState() = default;
+    StateID id() const noexcept override { return StateID::SPLASHSCREEN; }
 
     // Routines
     bool update(const sf::Time& dt) override;

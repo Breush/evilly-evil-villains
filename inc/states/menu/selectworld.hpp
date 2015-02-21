@@ -16,8 +16,8 @@ class MenuSelectWorldState : public State
 
 public:
     MenuSelectWorldState(StateStack& stack);
-    virtual ~MenuSelectWorldState() {}
-    StateID id() const override { return StateID::MENU_SELECTWORLD; }
+    virtual ~MenuSelectWorldState() = default;
+    StateID id() const noexcept override { return StateID::MENU_SELECTWORLD; }
 
     // Routines
     bool handleEvent(const sf::Event& event) override;

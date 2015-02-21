@@ -57,7 +57,7 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     m_decorumFront.setTexture(TextureID::DUNGEON_SCENE_GRASSYHILLS_FRONT);
 }
 
-void GameDungeonDesignState::onQuit()
+void GameDungeonDesignState::onQuit() noexcept
 {
     // TODO Remove suffix (used to not compromise svn archive)
     m_dungeonData.save("worlds/" + world::context.info->folder + "dungeon_saved.xml");

@@ -14,8 +14,8 @@ class MenuMainState : public State
 
 public:
     MenuMainState(StateStack& stack);
-    virtual ~MenuMainState() {}
-    StateID id() const override { return StateID::MENU_MAIN; }
+    virtual ~MenuMainState() = default;
+    StateID id() const noexcept override { return StateID::MENU_MAIN; }
 
     // Routines
     bool update(const sf::Time& dt) override;

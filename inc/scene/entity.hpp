@@ -37,14 +37,14 @@ namespace scene
         virtual ~Entity() {}
 
         // Components
-        sfe::Lerpable* lerpable() { return m_lerpable.get(); }
+        sfe::Lerpable* lerpable() noexcept { return m_lerpable.get(); }
 
         // Routine
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
         void update(const sf::Time& dt);
 
         // Children management
-        std::list<Entity*>& children() { return m_children; }
+        std::list<Entity*>& children() noexcept { return m_children; }
         void attachChild(Entity& child);
         void detachChild(Entity& child);
         Entity* firstOver(const sf::Vector2f& position);
@@ -57,6 +57,7 @@ namespace scene
     protected:
         // Virtual
         virtual void update() {} //< Called whenever size or a child changed if callParentOnXXXChanges is on
+        virtual void updateRoutine(const sf::Time& dt) {}
 
         // Events - mouse-related are called if entity is detectable
         virtual void handleKeyboardEvent(const sf::Event& event) {}
@@ -69,7 +70,6 @@ namespace scene
 
         // Routine
         void drawParts(sf::RenderTarget& target, sf::RenderStates states) const;
-        virtual void updateRoutine(const sf::Time& dt) {}
         void updateLerpable(const sf::Time& dt);
         void updateChanges();
 

@@ -16,8 +16,8 @@ class State
 {
 public:
     State(StateStack& stack);
-    virtual	~State() {}
-    virtual StateID id() const = 0;
+    virtual	~State() = default;
+    virtual StateID id() const noexcept = 0;
 
     virtual void draw();
     virtual bool update(const sf::Time& dt);
@@ -27,9 +27,9 @@ public:
     scene::Entity& sceneLayer(LayerID::type layerID) { return m_sceneGraph[layerID]; }
 
     // Called whenever display changes
-    virtual void onShow() { m_sceneGraph.updateFocusSprite(); }
-    virtual void onHide() {}
-    virtual void onQuit() {}
+    virtual void onShow() noexcept { m_sceneGraph.updateFocusSprite(); }
+    virtual void onHide() noexcept {}
+    virtual void onQuit() noexcept {}
 
 protected:
     void stackPopPush(StateID stateID);

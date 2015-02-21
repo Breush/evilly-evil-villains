@@ -12,8 +12,8 @@ class GamePauseState : public State
 
 public:
     GamePauseState(StateStack& stack);
-    virtual ~GamePauseState() {}
-    StateID id() const override { return StateID::GAME_PAUSE; }
+    virtual ~GamePauseState() = default;
+    StateID id() const noexcept override { return StateID::GAME_PAUSE; }
 
     // Routines
     bool handleEvent(const sf::Event& event) override;

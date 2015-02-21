@@ -12,14 +12,14 @@ class GameDungeonDesignState : public State
 {
 public:
     GameDungeonDesignState(StateStack& stack);
-    virtual ~GameDungeonDesignState() {}
-    StateID id() const override { return StateID::GAME_DUNGEON_DESIGN; }
+    virtual ~GameDungeonDesignState() = default;
+    StateID id() const noexcept override { return StateID::GAME_DUNGEON_DESIGN; }
 
     // Routines
     bool handleEvent(const sf::Event& event) override;
 
     // Virtual
-    void onQuit() override;
+    void onQuit() noexcept override;
 
 private:
     // Dungeon
