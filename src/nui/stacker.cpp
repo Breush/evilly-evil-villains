@@ -18,7 +18,7 @@ Stacker::Stacker()
 void Stacker::add(scene::Entity* child, Align inAlign)
 {
     attachChild(*child);
-    m_children.push_back({child, inAlign});
+    m_children.emplace_back(ChildInfo{child, inAlign});
     update();
 }
 

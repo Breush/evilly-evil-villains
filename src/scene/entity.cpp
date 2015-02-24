@@ -167,7 +167,7 @@ void Entity::attachChild(Entity& child)
 {
     child.setGraph(m_graph);
     child.setParent(this);
-    m_children.push_back(&child);
+    m_children.emplace_back(&child);
     refreshChildrenOrder();
 }
 
@@ -298,7 +298,7 @@ void Entity::addPart(sf::Drawable* drawable)
     for (auto& part : m_parts)
         returnif (part.drawable == drawable);
 
-    m_parts.push_back({drawable, nullptr, false});
+    m_parts.emplace_back(Part{drawable, nullptr, false});
 }
 
 void Entity::removePart(sf::Drawable* drawable)

@@ -64,9 +64,9 @@ void AnimatedSprite::load(AnimationID id, int number)
 
     // Loading animation
     for (const auto& entityInfo : data.entities) {
-        auto entity = std::unique_ptr<scml::Entity>(new scml::Entity(&data, entityInfo.first));
+        auto entity = std::unique_ptr<scml::Entity>(new scml::Entity(&data, entityInfo.first)); // TODO make_unique()
         entity->setFileSystem(&fs);
-        m_entities.push_back(std::move(entity));
+        m_entities.emplace_back(std::move(entity));
     }
 
     // Refresh all entities

@@ -41,7 +41,7 @@ scml::FileSystem& AnimationHolder::getFileSystem(AnimationID id)
 
 void AnimationHolder::push(sfe::AnimatedSprite* animatedSprite)
 {
-    m_animatedSprites.push_back(animatedSprite);
+    m_animatedSprites.emplace_back(animatedSprite);
 }
 
 void AnimationHolder::pop(sfe::AnimatedSprite* animatedSprite)

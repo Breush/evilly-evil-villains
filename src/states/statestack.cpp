@@ -39,17 +39,17 @@ void StateStack::handleEvent(const sf::Event& event)
 
 void StateStack::pushState(StateID stateID)
 {
-    m_pendingList.push_back(PendingChange(Action::PUSH, stateID));
+    m_pendingList.emplace_back(PendingChange(Action::PUSH, stateID));
 }
 
 void StateStack::popState()
 {
-    m_pendingList.push_back(PendingChange(Action::POP, StateID::NONE));
+    m_pendingList.emplace_back(PendingChange(Action::POP, StateID::NONE));
 }
 
 void StateStack::clearStates()
 {
-    m_pendingList.push_back(PendingChange(Action::CLEAR, StateID::NONE));
+    m_pendingList.emplace_back(PendingChange(Action::CLEAR, StateID::NONE));
 }
 
 bool StateStack::isEmpty() const
@@ -82,7 +82,7 @@ void StateStack::applyPendingChanges()
         case Action::PUSH:
             if (!m_stack.empty())
                 m_stack.back()->onHide();
-            m_stack.push_back(createState(change.stateID));
+            m_stack.emplace_back(createState(change.stateID));
             break;
 
         case Action::POP:

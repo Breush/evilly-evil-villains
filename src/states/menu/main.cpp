@@ -10,6 +10,7 @@
 
 MenuMainState::MenuMainState(StateStack& stack)
     : baseClass(stack)
+    , m_choices{L"V", L"I", L"L", L"Y", L"S"}
 {
     const sf::Vector2f& resolution = Application::context().resolution;
     float maxSide = std::max(resolution.x, resolution.y);
@@ -23,13 +24,6 @@ MenuMainState::MenuMainState(StateStack& stack)
     m_background.setShader(ShaderID::MENU_BACKGROUND);
     m_background.setLocalScale({maxSide / textureSize.x, maxSide / textureSize.y});
     m_background.setLocalPosition(sf::vsub(resolution, maxSide) / 2.f);
-
-    // Choices
-    m_choices.push_back(L"V");
-    m_choices.push_back(L"I");
-    m_choices.push_back(L"L");
-    m_choices.push_back(L"Y");
-    m_choices.push_back(L"S");
 
     // Fonctors
     auto singlePlayer = [this]() { stackPush(StateID::MENU_SELECTWORLD); };
