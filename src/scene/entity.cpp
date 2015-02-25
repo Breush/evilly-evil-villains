@@ -298,7 +298,7 @@ void Entity::addPart(sf::Drawable* drawable)
     for (auto& part : m_parts)
         returnif (part.drawable == drawable);
 
-    m_parts.emplace_back(Part{drawable, nullptr, false});
+    m_parts.push_back({drawable, nullptr, false});
 }
 
 void Entity::removePart(sf::Drawable* drawable)

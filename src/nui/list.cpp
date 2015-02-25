@@ -107,7 +107,7 @@ void List::setColumns(const std::initializer_list<std::wstring>& columns)
     for (auto& column : columns) {
         text.setString(column);
         text.setStyle(sf::Text::Bold);
-        m_columns.emplace_back(ColumnInfo{text, 0, 0, true, true});
+        m_columns.push_back({text, 0, 0, true, true});
     }
 
     m_vBorders.resize(m_columns.size() + 1);
@@ -173,7 +173,7 @@ void List::addLine(const std::initializer_list<std::wstring>& values)
         auto bounds = text.getLocalBounds();
         uint width = bounds.left + bounds.width;
         uint height = bounds.top + bounds.height;
-        line.emplace_back(LineInfo{text, width, height, {0.f, 0.f, float(width), float(height)}});
+        line.push_back({text, width, height, {0.f, 0.f, float(width), float(height)}});
     }
     m_lines.emplace_back(std::move(line));
 

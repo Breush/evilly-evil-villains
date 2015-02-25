@@ -35,7 +35,7 @@ void Data::load(const std::string& file)
     for (auto& floor : dungeon.children(L"floor")) {
         auto floorPos = floor.attribute(L"pos").as_uint();
 
-        m_floors.emplace_back(Floor{floorPos});
+        m_floors.push_back({floorPos});
         mdebug_dungeon_2("Found floor " << floorPos);
 
         // Rooms
@@ -50,7 +50,7 @@ void Data::load(const std::string& file)
             if (roomStateString == L"void") room.state = RoomState::VOID;
             else if (roomStateString == L"constructed") room.state = RoomState::CONSTRUCTED;
 
-            m_floors[floorPos].rooms.emplace_back(room);
+            m_floors[floorPos].rooms.emplace_back(std::move(room));
             wdebug_dungeon_3(L"Found room " << room.pos << L" of state " << roomStateString);
         }
     }

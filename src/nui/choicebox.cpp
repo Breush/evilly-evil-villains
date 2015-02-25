@@ -83,7 +83,7 @@ void ChoiceBox::update()
 
 void ChoiceBox::add(const std::wstring& text, const Callback callback)
 {
-    m_choices.emplace_back(ChoiceInfo{text, callback});
+    m_choices.push_back({text, callback});
 
     // Max size might have changed, need to recompute size
     updateSize();

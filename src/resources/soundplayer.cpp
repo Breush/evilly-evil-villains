@@ -41,7 +41,7 @@ void SoundPlayer::play(SoundID id)
 
 void SoundPlayer::play(SoundID id, sf::Vector2f position)
 {
-    m_sounds.emplace_back(sf::Sound());
+    m_sounds.emplace_back();
     sf::Sound& sound = m_sounds.back();
 
     sound.setBuffer(m_soundBuffers.get(id));

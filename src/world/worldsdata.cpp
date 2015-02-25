@@ -36,7 +36,7 @@ void WorldsData::load(const std::string& file)
         world.lastPlayed = time_t(worldInfo.attribute(L"lastPlayed").as_uint());
         world.folder = internationalization::wstring2string(worldInfo.attribute(L"folder").as_string());
 
-        m_worlds.emplace_back(world);
+        m_worlds.emplace_back(std::move(world));
     }
 }
 

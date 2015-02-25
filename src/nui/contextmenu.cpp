@@ -145,6 +145,6 @@ void ContextMenu::addChoice(const std::wstring& text, Callback callback)
     choiceInfo.text.setCharacterSize(16);
     choiceInfo.text.setColor(sf::Color::White);
 
-    m_choices.emplace_back(choiceInfo);
+    m_choices.emplace_back(std::move(choiceInfo));
     updateSize();
 }
