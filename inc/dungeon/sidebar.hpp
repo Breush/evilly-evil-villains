@@ -1,7 +1,7 @@
 #pragma once
 
 #include "nui/vstacker.hpp"
-#include "nui/imagebutton.hpp"
+#include "nui/grabbutton.hpp"
 #include "scene/entity.hpp"
 #include "tools/param.hpp"
 
@@ -15,7 +15,7 @@ namespace dungeon
 
     public:
         Sidebar();
-        virtual ~Sidebar() {}
+        virtual ~Sidebar() = default;
 
         // Reduced mode
         void setReduced(bool reduced);
@@ -49,7 +49,7 @@ namespace dungeon
         sf::RectangleShape m_switchReducedButton;
 
         // Tabs
-        std::vector<nui::ImageButton> m_tabs;
+        std::vector<std::unique_ptr<nui::GrabButton>> m_tabs;
         nui::VStacker m_tabsStacker;
     };
 }

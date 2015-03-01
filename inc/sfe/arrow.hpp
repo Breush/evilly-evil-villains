@@ -14,7 +14,7 @@ namespace sfe
     {
     public:
         Arrow();
-        virtual ~Arrow() {}
+        virtual ~Arrow() = default;
 
         // Virtual
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -35,8 +35,8 @@ namespace sfe
     class LArrow : public Arrow
     {
     public:
-        LArrow() {}
-        virtual ~LArrow() {}
+        LArrow() = default;
+        virtual ~LArrow() = default;
 
     protected:
         void update() override;
@@ -47,8 +47,8 @@ namespace sfe
     class RArrow : public Arrow
     {
     public:
-        RArrow() {}
-        virtual ~RArrow() {}
+        RArrow() = default;
+        virtual ~RArrow() = default;
 
     protected:
         void update() override;

@@ -16,8 +16,7 @@ namespace nui
 
     public:
         ImageButton();
-        virtual ~ImageButton() {}
-        ImageButton(const ImageButton& copy);
+        virtual ~ImageButton() = default;
 
         // Action
         void setImage(TextureID imageID);

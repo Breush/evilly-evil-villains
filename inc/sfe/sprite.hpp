@@ -21,7 +21,7 @@ namespace sfe
 
     public:
         Sprite();
-        virtual ~Sprite() {}
+        virtual ~Sprite() = default;
 
         void setTexture(TextureID textureID);
 

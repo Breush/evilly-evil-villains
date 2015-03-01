@@ -47,8 +47,7 @@ private:
     void applyPendingChanges();
 
     struct PendingChange {
-        explicit PendingChange(Action inAction, StateID inStateID)
-            : action(inAction), stateID(inStateID) {}
+        explicit PendingChange(Action inAction, StateID inStateID) : action(inAction), stateID(inStateID) {}
 
         Action action;
         StateID stateID;

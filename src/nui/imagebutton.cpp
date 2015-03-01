@@ -11,13 +11,6 @@ ImageButton::ImageButton()
     setShowLines(false);
 }
 
-ImageButton::ImageButton(const ImageButton& copy)
-     : m_image(copy.m_image)
-{
-    // Display style
-    setShowLines(false);
-}
-
 void ImageButton::update()
 {
     // From button

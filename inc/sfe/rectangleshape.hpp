@@ -16,7 +16,7 @@ namespace sfe
 
     public:
         RectangleShape() { addPart(&m_rectangleShape); }
-        virtual ~RectangleShape() {}
+        virtual ~RectangleShape() = default;
 
         inline void setFillColor(const sf::Color& color) {
             m_rectangleShape.setFillColor(color);

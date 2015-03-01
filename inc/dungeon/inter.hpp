@@ -13,7 +13,7 @@ namespace dungeon
 
     public:
         Inter(nui::ContextMenu& contextMenu);
-        virtual ~Inter() {}
+        virtual ~Inter() = default;
 
         // Events
         void handleGlobalEvent(const sf::Event& event);

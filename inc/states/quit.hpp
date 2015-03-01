@@ -10,7 +10,7 @@ class QuitState : public State
 {
 public:
     QuitState(StateStack& stack);
-    virtual ~QuitState() {}
+    virtual ~QuitState() = default;
     StateID id() const noexcept override { return StateID::QUIT; }
 
     // Routines

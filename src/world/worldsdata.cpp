@@ -32,8 +32,8 @@ void WorldsData::load(const std::string& file)
         world.villain = worldInfo.attribute(L"villain").as_string();
         world.dungeons = worldInfo.attribute(L"dungeons").as_uint();
         world.mainDungeon = worldInfo.attribute(L"mainDungeon").as_string();
-        world.created = time_t(worldInfo.attribute(L"created").as_uint());
-        world.lastPlayed = time_t(worldInfo.attribute(L"lastPlayed").as_uint());
+        world.created = static_cast<time_t>(worldInfo.attribute(L"created").as_uint());
+        world.lastPlayed = static_cast<time_t>(worldInfo.attribute(L"lastPlayed").as_uint());
         world.folder = internationalization::wstring2string(worldInfo.attribute(L"folder").as_string());
 
         m_worlds.emplace_back(std::move(world));

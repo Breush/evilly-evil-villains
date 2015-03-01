@@ -10,7 +10,7 @@ namespace nui
 
     public:
         Button();
-        virtual ~Button() {}
+        virtual ~Button() = default;
 
         // Action
         void setText(const std::wstring& text);

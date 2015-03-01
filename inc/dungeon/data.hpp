@@ -34,7 +34,7 @@ namespace dungeon
 
     public:
         Data();
-        virtual ~Data() {}
+        virtual ~Data() = default;
 
         // Import/Export
         void load(const std::string& file);

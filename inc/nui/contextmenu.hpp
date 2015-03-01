@@ -18,7 +18,7 @@ namespace nui
         using Callback = std::function<void()>;
 
         ContextMenu();
-        virtual ~ContextMenu() {}
+        virtual ~ContextMenu() = default;
 
         // Events
         void handleGlobalEvent(const sf::Event& event);

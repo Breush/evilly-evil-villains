@@ -14,7 +14,7 @@ namespace sfe
     {
     public:
         Line();
-        virtual ~Line() {}
+        virtual ~Line() = default;
 
         // Virtual
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -36,8 +36,8 @@ namespace sfe
     class HLine : public Line
     {
     public:
-        HLine() {}
-        virtual ~HLine() {}
+        HLine() = default;
+        virtual ~HLine() = default;
 
     protected:
         void update() override;
@@ -48,8 +48,8 @@ namespace sfe
     class VLine : public Line
     {
     public:
-        VLine() {}
-        virtual ~VLine() {}
+        VLine() = default;
+        virtual ~VLine() = default;
 
     protected:
         void update() override;

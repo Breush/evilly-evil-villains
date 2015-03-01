@@ -20,7 +20,7 @@ namespace nui
 
     public:
         Stacker();
-        virtual ~Stacker() {}
+        virtual ~Stacker() = default;
 
         // Children management
         void add(scene::Entity* child, Align align = Align::STANDARD);

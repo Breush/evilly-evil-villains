@@ -1,5 +1,6 @@
 #pragma once
 
+#include "scene/grabbable.hpp"
 #include "scene/entity.hpp"
 
 #include <SFML/Graphics/Drawable.hpp>
@@ -33,7 +34,7 @@ namespace scene
     {
     public:
         Graph();
-        virtual ~Graph() {}
+        virtual ~Graph() = default;
 
         // Routine
         void update(const sf::Time& dt);
@@ -51,6 +52,9 @@ namespace scene
         void detachedEntity(Entity* entity);
         void attachedEntity(Entity* entity);
 
+        // Grabbing object
+        void setGrabbable(std::unique_ptr<Grabbable> grabbable);
+
     protected:
         // Mouse detection
         void drawMouseDetector(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -61,6 +65,9 @@ namespace scene
         // Focusing system
         void setFocusedEntity(Entity* focusedEntity);
         void focusHandleEvent(const sf::Event& event);
+
+        // Grabbing object
+        void grabbableHandleMouseEvent(const sf::Event& event);
 
         // View manipulation
         void handleMouseWheelPressedEvent(const sf::Event& event);
@@ -76,7 +83,7 @@ namespace scene
             sf::Vector2f grabbingPosition;
         };
 
-        // Params
+        // Params - TODO Why are these params?
         PARAMG(sf::Shader*, m_focusShader, focusShader)
         PARAMG(sf::RectangleShape, m_focusShape, focusShape)
 
@@ -86,13 +93,14 @@ namespace scene
         std::array<Layer, static_cast<std::size_t>(LayerID::COUNT)> m_layers;
 
         // Mouse detection
-        Entity* m_hoveredEntity;
+        Entity* m_hoveredEntity = nullptr;
 
         // Grabbing
-        bool m_grabbing;
+        bool m_grabbing = false; //< For views
+        std::unique_ptr<Grabbable> m_grabbable = nullptr; //< For a specific grabbed object
 
         // Focusing system
-        Entity* m_focusedEntity;
-        float m_focusAnimation;
+        Entity* m_focusedEntity = nullptr;
+        float m_focusAnimation = 0.f;
     };
 }

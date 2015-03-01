@@ -12,7 +12,7 @@ class FileSystemPrototype
 {
 public:
 
-    virtual ~FileSystemPrototype() {}
+    virtual ~FileSystemPrototype() = default;
 
     /*! \brief Loads all images referenced by the given SCML data.
      * \param data SCML data object

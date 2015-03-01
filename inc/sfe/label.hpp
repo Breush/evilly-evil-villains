@@ -21,7 +21,7 @@ namespace sfe
 
     public:
         Label();
-        virtual ~Label() {}
+        virtual ~Label() = default;
 
         void setFont(FontID fontID);
         void setCharacterSize(uint characterSize);

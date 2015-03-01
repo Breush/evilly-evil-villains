@@ -12,10 +12,6 @@
 using namespace scene;
 
 Graph::Graph()
-    : m_hoveredEntity(nullptr)
-    , m_focusedEntity(nullptr)
-    , m_focusAnimation(0.f)
-    , m_grabbing(false)
 {
     // Focusing
     m_focusShader = &Application::context().shaders.get(ShaderID::NUI_FOCUS);
@@ -116,6 +112,11 @@ void Graph::draw(sf::RenderTarget& target, sf::RenderStates states) const
         target.setView(*layer.view);
         target.draw(layer.root, states);
     }
+
+    // Drawing grabbed object
+    // Note: Layer is now NUI
+    if (m_grabbable.get() != nullptr)
+        target.draw(*m_grabbable, states);
 
     // Hovered child on debug
     debug_nui_1(drawMouseDetector(target, states));
@@ -249,6 +250,44 @@ void Graph::handleMouseWheelMovedEvent(const sf::Event& event)
     }
 }
 
+//----------------------------//
+//----- Grabbing objects -----//
+
+void Graph::grabbableHandleMouseEvent(const sf::Event& event)
+{
+    sf::Vector2i mousePos(mousePosition(event));
+    sf::Vector2f viewPos;
+
+    const auto& window = Application::context().window;
+    sf::Vector2f nuiPos = window.mapPixelToCoords(mousePos, *m_layers[LayerID::NUI].view);
+
+    switch (event.type) {
+    case sf::Event::MouseMoved:
+        m_grabbable->setPosition(nuiPos);
+        break;
+    case sf::Event::MouseButtonReleased:
+        //Entity* entity = entityFromPosition(mousePos, viewPos);
+        // FIXME m_grabbable->spawner().grabbableReleased(entity, relPos, nuiPos);
+        m_grabbable = nullptr;
+        break;
+    default:
+        break;
+    }
+}
+
+void Graph::setGrabbable(std::unique_ptr<Grabbable> grabbable)
+{
+    returnif (grabbable.get() == nullptr);
+
+    m_grabbable = std::move(grabbable);
+
+    // TODO Remove this duplicated code from handleMouseEvent() && grabbableHandleMouseEvent() functions
+    const auto& window = Application::context().window;
+    auto mousePos = sf::Mouse::getPosition(window);
+    sf::Vector2f nuiPos = window.mapPixelToCoords(mousePos, *m_layers[LayerID::NUI].view);
+    m_grabbable->setPosition(nuiPos);
+}
+
 //---------------------------//
 //----- Mouse detection -----//
 
@@ -270,8 +309,14 @@ void Graph::drawMouseDetector(sf::RenderTarget& target, sf::RenderStates states)
 
 Entity* Graph::handleMouseEvent(const sf::Event& event)
 {
-    sf::Vector2f viewPos;
+    // Let grabbable manage if any
+    if (m_grabbable.get() != nullptr) {
+        grabbableHandleMouseEvent(event);
+        return nullptr;
+    }
+
     sf::Vector2i mousePos(mousePosition(event));
+    sf::Vector2f viewPos;
 
     // Getting entity touched if any
     Entity* entity = entityFromPosition(mousePos, viewPos);
@@ -284,14 +329,22 @@ Entity* Graph::handleMouseEvent(const sf::Event& event)
     sf::Vector2f relPos = entity->getInverseTransform().transformPoint(viewPos);
 
     // Calling child callback
-    if (event.type == sf::Event::MouseMoved)
+    switch (event.type) {
+    case sf::Event::MouseMoved:
         entity->handleMouseMoved(relPos, nuiPos);
-    else if (event.type == sf::Event::MouseButtonPressed)
+        break;
+    case sf::Event::MouseButtonPressed:
         entity->handleMouseButtonPressed(event.mouseButton.button, relPos, nuiPos);
-    else if (event.type == sf::Event::MouseButtonReleased)
+        break;
+    case sf::Event::MouseButtonReleased:
         entity->handleMouseButtonReleased(event.mouseButton.button, relPos, nuiPos);
-    else if (event.type == sf::Event::MouseWheelMoved)
+        break;
+    case sf::Event::MouseWheelMoved:
         entity->handleMouseWheelMoved(event.mouseWheel.delta, relPos, nuiPos);
+        break;
+    default:
+        break;
+    }
 
     return entity;
 }

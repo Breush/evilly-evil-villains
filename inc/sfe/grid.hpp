@@ -20,7 +20,7 @@ namespace sfe
     {
     public:
         Grid();
-        virtual ~Grid() {}
+        virtual ~Grid() = default;
 
         // Virtual
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

@@ -15,7 +15,7 @@ namespace nui
 
     public:
         List();
-        virtual ~List() {}
+        virtual ~List() = default;
 
         // Columns
         void setColumns(const std::initializer_list<std::wstring>& columns);

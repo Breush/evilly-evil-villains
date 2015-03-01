@@ -10,7 +10,7 @@ namespace nui
 
     public:
         HStacker();
-        virtual ~HStacker() {}
+        virtual ~HStacker() = default;
 
         // Virtual
         void update() override;

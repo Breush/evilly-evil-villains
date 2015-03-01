@@ -1,6 +1,7 @@
 #include "sfe/animatedsprite.hpp"
 
 #include "core/application.hpp"
+#include "tools/platform-fixes.hpp" // make_unique
 #include "tools/tools.hpp"
 
 using namespace sfe;
@@ -64,7 +65,7 @@ void AnimatedSprite::load(AnimationID id, int number)
 
     // Loading animation
     for (const auto& entityInfo : data.entities) {
-        auto entity = std::unique_ptr<scml::Entity>(new scml::Entity(&data, entityInfo.first)); // TODO make_unique()
+        auto entity = std::make_unique<scml::Entity>(&data, entityInfo.first);
         entity->setFileSystem(&fs);
         m_entities.emplace_back(std::move(entity));
     }

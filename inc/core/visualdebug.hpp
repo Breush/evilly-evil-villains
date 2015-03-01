@@ -9,7 +9,7 @@ class VisualDebug
 {
 public:
     VisualDebug();
-    virtual ~VisualDebug() {}
+    virtual ~VisualDebug() = default;
 
     // Routine
     void init();

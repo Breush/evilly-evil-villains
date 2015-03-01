@@ -34,7 +34,7 @@ namespace scene
 
     public:
         Entity(bool isLerpable = false);
-        virtual ~Entity() {}
+        virtual ~Entity() = default;
 
         // Components
         sfe::Lerpable* lerpable() noexcept { return m_lerpable.get(); }
@@ -139,25 +139,25 @@ namespace scene
         std::list<Entity*> m_children;
 
         // Drawing
-        sf::Shader* m_shader;
+        sf::Shader* m_shader = nullptr;
 
         // Focusing
-        bool m_focused;
+        bool m_focused = false;
 
         // Local manipulation
-        bool m_sizeChanges;
-        bool m_localChanges;
-        bool m_callParentOnSizeChanges;
-        bool m_callParentOnLocalChanges;
+        bool m_sizeChanges = true;
+        bool m_localChanges = true;
+        bool m_callParentOnSizeChanges = true;
+        bool m_callParentOnLocalChanges = false;
 
         // Parts management
         std::vector<Part> m_parts;
 
         // Delayed operations
-        bool m_markedForVisible;
+        bool m_markedForVisible = false;
         bool m_visibleMark;
 
         // Components
-        std::unique_ptr<sfe::Lerpable> m_lerpable;
+        std::unique_ptr<sfe::Lerpable> m_lerpable = nullptr;
     };
 }

@@ -23,7 +23,7 @@ namespace nui
 
     public:
         ReactImage();
-        virtual ~ReactImage() {}
+        virtual ~ReactImage() = default;
 
         // Routine
         void updateRoutine(const sf::Time& dt) override;

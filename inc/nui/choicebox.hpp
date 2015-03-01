@@ -22,7 +22,7 @@ namespace nui
 
     public:
         ChoiceBox();
-        virtual ~ChoiceBox() {}
+        virtual ~ChoiceBox() = default;
 
         // Routine
         void updateRoutine(const sf::Time& dt) override;

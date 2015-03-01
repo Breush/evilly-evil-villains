@@ -18,7 +18,7 @@ namespace dungeon
 
     public:
         Panel(dungeon::Sidebar& sidebar);
-        virtual ~Panel() {}
+        virtual ~Panel() = default;
 
         // Reduced mode
         void setReduced(bool reduced);

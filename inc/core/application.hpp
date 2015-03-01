@@ -14,8 +14,8 @@
 class Application
 {
     struct Context {
-        Context() {}
-        ~Context() {}
+        Context() = default;
+        ~Context() = default;
 
         void init(const sf::Vector2f& iResolution, const std::string& iTitle, const uint32_t& iStyle);
 
@@ -37,7 +37,7 @@ class Application
 
 public:
     Application();
-    virtual ~Application() {}
+    virtual ~Application() = default;
 
     void run();
 

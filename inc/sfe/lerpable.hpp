@@ -17,7 +17,7 @@ namespace sfe
     {
     public:
         Lerpable(scene::Entity* entity);
-        virtual ~Lerpable() {}
+        virtual ~Lerpable() = default;
 
         // Virtual
         void saveDefaults();

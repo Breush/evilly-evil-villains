@@ -30,7 +30,7 @@ namespace world
 
     public:
         WorldsData();
-        virtual ~WorldsData() {}
+        virtual ~WorldsData() = default;
 
         // Import/Export
         void load(const std::string& file);

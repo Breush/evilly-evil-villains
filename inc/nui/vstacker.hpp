@@ -10,7 +10,7 @@ namespace nui
 
     public:
         VStacker();
-        virtual ~VStacker() {}
+        virtual ~VStacker() = default;
 
         // Virtual
         void update() override;
