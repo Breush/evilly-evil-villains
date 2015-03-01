@@ -234,7 +234,7 @@ void Graph::handleMouseWheelMovedEvent(const sf::Event& event)
 
     // TODO Factor to be in config
     float zoomFactor = (delta < 0)? 1.05f : 0.95f;
-    zoomFactor *= std::abs(delta);
+    zoomFactor = std::pow(zoomFactor, std::abs(delta));
 
     // Zoom on all zoomable layers
     for (auto& layer : m_layers) {
