@@ -3,6 +3,7 @@
 #include "scene/grabbable.hpp"
 #include "scene/entity.hpp"
 
+#include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <array>
@@ -54,13 +55,13 @@ namespace scene
 
         // Grabbing object
         void setGrabbable(std::unique_ptr<Grabbable> grabbable);
+        Entity* entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos); //< viewPos will be set to the position in the entity view
 
     protected:
         // Mouse detection
         void drawMouseDetector(sf::RenderTarget& target, sf::RenderStates states) const;
         Entity* handleMouseEvent(const sf::Event& event);
         void setHoveredEntity(Entity* hoveredEntity);
-        Entity* entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos); //< viewPos will be set to the position in the entity view
 
         // Focusing system
         void setFocusedEntity(Entity* focusedEntity);

@@ -222,11 +222,21 @@ sf::Vector2u Inter::roomFromCoords(const sf::Vector2f& coords)
     return room;
 }
 
-
 void Inter::selectRoomFromCoords(const sf::Vector2f& coords)
 {
     m_selectedRoom = roomFromCoords(coords);
     setHasRoomSelected(true);
+}
+
+
+//-----------------------//
+//----- Interaction -----//
+
+void Inter::constructLadder(const sf::Vector2f& relPos)
+{
+    auto room = roomFromCoords(relPos);
+
+    std::cerr << "[TODO] Constructed ladder in room " << room.x << "/" << room.y << std::endl;
 }
 
 //-------------------//

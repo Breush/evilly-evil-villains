@@ -35,6 +35,9 @@ namespace dungeon
         void setFloorsCount(uint value);
         void setRoomsByFloor(uint value);
 
+        // Ladder
+        void constructLadder(const sf::Vector2f& relPos);
+
     protected:
         // Virtual
         void update() override;

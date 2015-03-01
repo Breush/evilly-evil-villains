@@ -20,6 +20,7 @@ namespace facilities
         LadderGrabButton();
         virtual ~LadderGrabButton() = default;
 
+        void grabbableReleased(Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
         std::unique_ptr<scene::Grabbable> spawnGrabbable() final;
 	};
 

@@ -15,7 +15,8 @@ namespace nui
         GrabButton();
         virtual ~GrabButton() = default;
 
-        virtual std::unique_ptr<scene::Grabbable> spawnGrabbable() override { return nullptr; } // FIXME Should be pure virtual
+        virtual void grabbableReleased(Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) override {} // FIXME Should be pure virtual
+        virtual std::unique_ptr<scene::Grabbable> spawnGrabbable() override { return nullptr; } // FIXME
 
     protected:
         // Mouse events

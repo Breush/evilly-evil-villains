@@ -257,6 +257,8 @@ void Graph::grabbableHandleMouseEvent(const sf::Event& event)
 {
     sf::Vector2i mousePos(mousePosition(event));
     sf::Vector2f viewPos;
+    sf::Vector2f relPos;
+    Entity* entity;
 
     const auto& window = Application::context().window;
     sf::Vector2f nuiPos = window.mapPixelToCoords(mousePos, *m_layers[LayerID::NUI].view);
@@ -266,8 +268,9 @@ void Graph::grabbableHandleMouseEvent(const sf::Event& event)
         m_grabbable->setPosition(nuiPos);
         break;
     case sf::Event::MouseButtonReleased:
-        //Entity* entity = entityFromPosition(mousePos, viewPos);
-        // FIXME m_grabbable->spawner().grabbableReleased(entity, relPos, nuiPos);
+        entity = entityFromPosition(mousePos, viewPos);
+        if (entity != nullptr) relPos = entity->getInverseTransform().transformPoint(viewPos);
+        m_grabbable->spawner().grabbableReleased(entity, relPos, nuiPos);
         m_grabbable = nullptr;
         break;
     default:
