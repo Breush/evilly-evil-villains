@@ -23,7 +23,11 @@ namespace dungeon
         struct Room {
             uint floorPos;
             uint pos;
-            RoomState state;
+            RoomState state = RoomState::UNKNOWN;
+
+            struct Facilities {
+                bool ladder = false;
+            } facilities;
         };
 
         // Floor info

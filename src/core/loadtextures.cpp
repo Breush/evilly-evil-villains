@@ -43,5 +43,9 @@ void Application::loadTextures()
     s_context.textures.load(TextureID::DUNGEON_PANEL_FACILITIES, "res/tex/dungeon/panel/facilities.png");
     s_context.textures.load(TextureID::DUNGEON_PANEL_TREASURES, "res/tex/dungeon/panel/treasures.png");
 
+    // FIXME Really not the better way - if we want to be able to move the ladder
+    s_context.textures.load(TextureID::DUNGEON_INTER_LADDER_ROOM, "res/tex/dungeon/inter/ladder_room.png");
     s_context.textures.load(TextureID::DUNGEON_INTER_ROOM, "res/tex/dungeon/inter/room.png");
+
+    s_context.textures.load(TextureID::DUNGEON_FACILITIES_LADDER, "res/tex/dungeon/facilities/ladder.png");
 }

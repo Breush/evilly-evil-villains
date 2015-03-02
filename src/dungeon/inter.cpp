@@ -85,12 +85,14 @@ void Inter::refreshRoomTiles()
         auto& tile = m_roomTiles[floor][room];
         tile.setSize({1.3f * cellSize.x, 1.1f * cellSize.y}); // FIXME Use separate images to get this effect
         tile.setPosition(m_grid.cellPosition(floorsCount - floor - 1, room));
-        setRoomTileState(floor, room, floors[floor].rooms[room].state);
+        setRoomTile(floor, room, floors[floor].rooms[room]);
     }
 }
 
-void Inter::setRoomTileState(const uint floor, const uint room, const Data::RoomState state)
+void Inter::setRoomTile(const uint floor, const uint room, const Data::Room& roomInfo)
 {
+    const auto state = roomInfo.state;
+    auto ladderRoomTexture = &Application::context().textures.get(TextureID::DUNGEON_INTER_LADDER_ROOM);
     auto contructedRoomTexture = &Application::context().textures.get(TextureID::DUNGEON_INTER_ROOM);
     auto& tile = m_roomTiles[floor][room];
 
@@ -99,13 +101,19 @@ void Inter::setRoomTileState(const uint floor, const uint room, const Data::Room
     tile.setFillColor(sf::Color::White);
 
     // Selecting
-    // TODO See if we can use some prototype design pattern
-    if (state == Data::RoomState::VOID)
-        tile.setFillColor(sf::Color::Transparent);
-    else if (state == Data::RoomState::CONSTRUCTED)
-        tile.setTexture(contructedRoomTexture);
-    else
-        tile.setFillColor(sf::Color::Red);
+    switch (state)
+    {
+        case Data::RoomState::VOID:
+            tile.setFillColor(sf::Color::Transparent);
+            break;
+        case Data::RoomState::CONSTRUCTED:
+            if (roomInfo.facilities.ladder) tile.setTexture(ladderRoomTexture);
+            else tile.setTexture(contructedRoomTexture);
+            break;
+        default:
+            tile.setFillColor(sf::Color::Red);
+            break;
+    }
 }
 
 //------------------------//
@@ -236,7 +244,13 @@ void Inter::constructLadder(const sf::Vector2f& relPos)
 {
     auto room = roomFromCoords(relPos);
 
-    std::cerr << "[TODO] Constructed ladder in room " << room.x << "/" << room.y << std::endl;
+    if (m_data->room(room).state == Data::RoomState::CONSTRUCTED) {
+        if (!m_data->room(room).facilities.ladder)
+            m_data->room(room).facilities.ladder = true;
+    }
+
+    // TODO Don't really need to refresh texture on all tiles
+    refreshRoomTiles();
 }
 
 //-------------------//

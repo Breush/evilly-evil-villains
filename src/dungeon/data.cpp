@@ -50,8 +50,18 @@ void Data::load(const std::string& file)
             if (roomStateString == L"void") room.state = RoomState::VOID;
             else if (roomStateString == L"constructed") room.state = RoomState::CONSTRUCTED;
 
-            m_floors[floorPos].rooms.emplace_back(std::move(room));
             wdebug_dungeon_3(L"Found room " << room.pos << L" of state " << roomStateString);
+
+            // Facilities
+            for (auto& roomFacilitiesInfo : roomInfo.children(L"facility")) {
+                std::wstring type = roomFacilitiesInfo.attribute(L"type").as_string();
+
+                if (type == L"ladder") room.facilities.ladder = true;
+
+                wdebug_dungeon_4(L"Found facility " + type);
+            }
+
+            m_floors[floorPos].rooms.emplace_back(std::move(room));
         }
     }
 }
@@ -77,15 +87,21 @@ void Data::save(const std::string& file)
 
         // Rooms
         for (uint roomPos = 0; roomPos < m_floors[floorPos].rooms.size(); ++roomPos) {
+            auto dataRoom = m_floors[floorPos].rooms[roomPos];
+
             mdebug_dungeon_3("Saving room " << roomPos);
             auto room = floor.append_child(L"room");
             room.append_attribute(L"pos") = roomPos;
 
-            RoomState roomState = m_floors[floorPos].rooms[roomPos].state;
+            RoomState roomState = dataRoom.state;
             std::wstring roomStateString = L"unknown";
             if (roomState == RoomState::VOID) roomStateString = L"void";
             else if (roomState == RoomState::CONSTRUCTED) roomStateString = L"constructed";
             room.append_attribute(L"state") = roomStateString.c_str();
+
+            // Facilities
+            if (dataRoom.facilities.ladder)
+                room.append_child(L"facility").append_attribute(L"type") = L"ladder";
         }
     }
 

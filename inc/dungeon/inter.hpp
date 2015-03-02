@@ -27,7 +27,7 @@ namespace dungeon
 
         // Room management
         void refreshRoomTiles();
-        void setRoomTileState(const uint floor, const uint room, const Data::RoomState state);
+        void setRoomTile(const uint floor, const uint room, const Data::Room& roomInfo);
 
         // Global data management
         void adaptFloorsCount(int relativeValue);

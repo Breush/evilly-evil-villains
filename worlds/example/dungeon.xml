@@ -5,11 +5,15 @@
 		<room pos="1" state="constructed" />
 		<room pos="2" state="constructed" />
 		<room pos="3" state="constructed" />
-		<room pos="4" state="constructed" />
+		<room pos="4" state="constructed">
+			<facility type="ladder" />
+		</room>
 	</floor>
 	<floor pos="1">
 		<room pos="0" state="void" />
-		<room pos="1" state="constructed" />
+		<room pos="1" state="constructed">
+			<facility type="ladder" />
+		</room>
 		<room pos="2" state="constructed" />
 		<room pos="3" state="constructed" />
 		<room pos="4" state="constructed" />
@@ -23,7 +27,9 @@
 	</floor>
 	<floor pos="3">
 		<room pos="0" state="constructed" />
-		<room pos="1" state="constructed" />
+		<room pos="1" state="constructed">
+			<facility type="ladder" />
+		</room>
 		<room pos="2" state="constructed" />
 		<room pos="3" state="constructed" />
 		<room pos="4" state="constructed" />
@@ -47,6 +53,8 @@
 		<room pos="1" state="constructed" />
 		<room pos="2" state="constructed" />
 		<room pos="3" state="constructed" />
-		<room pos="4" state="constructed" />
+		<room pos="4" state="constructed">
+			<ladder />
+		</room>
 	</floor>
 </dungeon>
