@@ -8,6 +8,7 @@ enum class StateID : uint8 {
     SPLASHSCREEN,
     MENU_MAIN,
     MENU_SELECTWORLD,
+    MENU_CREATEWORLD,
     GAME_DUNGEON_DESIGN,
     GAME_PAUSE
 };

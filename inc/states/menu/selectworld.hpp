@@ -6,7 +6,6 @@
 #include "nui/hstacker.hpp"
 #include "nui/button.hpp"
 #include "sfe/rectangleshape.hpp"
-#include "world/worldsdata.hpp"
 
 #include <array>
 

@@ -4,6 +4,7 @@
 #include "tools/time.hpp"
 #include "tools/tools.hpp"
 #include "world/context.hpp"
+#include "world/worldsdata.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
@@ -11,7 +12,7 @@
 MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     : baseClass(stack)
 {
-    auto& resolution = Application::context().resolution;
+    const auto& resolution = Application::context().resolution;
 
     // Background
     sceneLayer(LayerID::NUI).attachChild(m_background);
@@ -42,15 +43,15 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     for (auto& button : m_buttons)
         m_stacker.add(&button, nui::Stacker::Align::OPPOSITE);
 
-    m_buttons[2].setAction(_("Play"), [this]() {
+    m_buttons[2].setAction(_("Play"), [this] {
         auto selectedWorld = m_list.selectedLine();
         auto& worldInfo = world::context.worldsData.worlds()[selectedWorld];
         wdebug_application_1(L"Loading world " + worldInfo.name);
         world::context.info = &worldInfo;
         stackClear(StateID::GAME_DUNGEON_DESIGN);
     });
-    m_buttons[1].setAction(_("Back"), [this]() { stackPop(); });
-    m_buttons[0].setAction(_("Create new world"), nullptr);
+    m_buttons[1].setAction(_("Back"), [this] { stackPop(); });
+    m_buttons[0].setAction(_("Create new world"), [this] { stackPush(StateID::MENU_CREATEWORLD); });
 
     // Ambient feeling music
     Application::context().musics.setVolume(25);
