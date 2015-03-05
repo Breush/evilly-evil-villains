@@ -40,8 +40,8 @@ list(REMOVE_ITEM CODE_FILES ${CODE_MAIN_FILE})
 # Create library
 
 # We create a library so that binaries can be easily shared with tests
-set(EEV_LIBRARY eev-common)
-add_library(${EEV_LIBRARY} ${CODE_FILES})
+set(EEV_LIBRARIES eev-common)
+add_library(${EEV_LIBRARIES} ${CODE_FILES})
 
 #=====
 # Create game executable
@@ -50,7 +50,9 @@ include_directories(${CMAKE_SOURCE_DIR}/inc/)
 include_directories(${CMAKE_SOURCE_DIR}/ext/pugixml/)
 
 add_executable(${EXECUTABLE_NAME} ${CODE_MAIN_FILE})
-target_link_libraries(${EXECUTABLE_NAME} ${EEV_LIBRARY})
+target_link_libraries(${EXECUTABLE_NAME} ${EEV_LIBRARIES})
+
+include(${CMAKE_SOURCE_DIR}/cmake/LoadEEVDependencies.cmake)
 
 #=====
 # Tests
@@ -92,43 +94,3 @@ endforeach ()
 
 # New target
 add_custom_target(translation DEPENDS ${POT_FILE} ${MO_FILES})
-
-#=====
-# Find SFML 2.X
-
-eev_set_option(SFML_ROOT "" STRING "Where is SFML installed")
-find_package(SFML 2 REQUIRED system window graphics audio)
-if (SFML_FOUND)
-	include_directories(${SFML_INCLUDE_DIR})
-	target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
-endif ()
-
-#=====
-# Find OpenGL
-
-find_package(OpenGL REQUIRED)
-if (OPENGL_FOUND)
-	include_directories(${OPENGL_INCLUDE_DIR})
-	target_link_libraries(${EXECUTABLE_NAME} ${OPENGL_LIBRARIES})
-endif ()
-
-#=====
-# Find Gettext
-
-find_package(Gettext REQUIRED)
-if (GETTEXT_FOUND)
-	include_directories(${GETTEXT_INCLUDE_DIR})
-	target_link_libraries(${EXECUTABLE_NAME} ${GETTEXT_LIBRARIES})
-endif ()
-
-#=====
-# Find LibIntl (comes with gettext on Linux)
-
-if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-	find_package(LibIntl REQUIRED)
-	if (LibIntl_FOUND)
-		include_directories(${LibIntl_INCLUDE_DIR})
-		target_link_libraries(${EXECUTABLE_NAME} ${LibIntl_LIBRARIES})
-	endif ()
-endif ()
-
