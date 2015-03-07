@@ -33,3 +33,11 @@ void Label::setText(const std::wstring& text)
     m_text.setString(text);
     updateSize();
 }
+
+void Label::setText(const std::wstring& text, FontID fontID, uint characterSize)
+{
+    m_text.setString(text);
+    m_text.setFont(Application::context().fonts.get(fontID));
+    m_text.setCharacterSize(characterSize);
+    updateSize();
+}

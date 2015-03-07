@@ -12,6 +12,9 @@ MenuMainState::MenuMainState(StateStack& stack)
     : baseClass(stack)
     , m_choices{L"V", L"I", L"L", L"Y", L"S"}
 {
+    // During menus, enable key repeat
+    Application::context().window.setKeyRepeatEnabled(true);
+
     const sf::Vector2f& resolution = Application::context().resolution;
     float maxSide = std::max(resolution.x, resolution.y);
 

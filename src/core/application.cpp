@@ -35,7 +35,6 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
     if (!window.isOpen())
         throw std::runtime_error("Cannot initialize window.");
 
-    window.setKeyRepeatEnabled(false);
     window.setVerticalSyncEnabled(true);
 
     screenSize = sf::v2f(window.getSize());

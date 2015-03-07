@@ -3,6 +3,9 @@
 #include "states/state.hpp"
 #include "states/identifiers.hpp"
 #include "sfe/rectangleshape.hpp"
+#include "sfe/label.hpp"
+#include "nui/textentry.hpp"
+#include "nui/hstacker.hpp"
 
 class MenuCreateWorldState : public State
 {
@@ -17,8 +20,12 @@ public:
     bool handleEvent(const sf::Event& event) override;
 
 private:
-
     // Background
     sfe::RectangleShape m_background;
+
+    // NUI
+    nui::HStacker m_stacker;
+    sfe::Label m_worldNameLabel;
+    nui::TextEntry m_worldNameEntry;
 };
 

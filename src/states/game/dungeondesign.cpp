@@ -11,6 +11,9 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     , m_dungeonInter(m_contextMenu)
     , m_dungeonPanel(m_dungeonSidebar)
 {
+    // During game, disable key repeat
+    Application::context().window.setKeyRepeatEnabled(false);
+
     auto& resolution = Application::context().resolution;
 
     // Stop music if any
