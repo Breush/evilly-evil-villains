@@ -16,8 +16,11 @@ namespace sfe
         Line();
         virtual ~Line() = default;
 
-        // Virtual
+        // Routine
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+        // Aspect
+        void setColor(const sf::Color& color);
 
     protected:
         // Update vertices positions

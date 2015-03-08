@@ -5,7 +5,10 @@
 
 using namespace nui;
 
+// FIXME Add security to max string length
+
 TextEntry::TextEntry()
+    : m_textPadding(7.f)
 {
     setFocusable(true);
 
@@ -15,28 +18,128 @@ TextEntry::TextEntry()
     addPart(&m_text);
     m_text.setFont(Application::context().fonts.get(FontID::NUI));
     m_text.setColor(sf::Color::Black);
-    m_text.setCharacterSize(18);
+    m_text.setCharacterSize(16); // TODO Get from config
+
+    addPart(&m_cursor);
+    m_cursor.setShade(0.f);
+    m_cursor.setColor(sf::Color::Black);
+    m_cursorText = m_text;
 }
+
+//-------------------//
+//----- Routine -----//
 
 void TextEntry::update()
 {
     m_background.setSize(size());
-    setPartClippingRect(&m_text, {0.f, 0.f, size().x, size().y});
+    m_cursor.setLength(size().y - m_textPadding);
+
+    setPartClippingRect(&m_text, {m_textPadding, 0.f, size().x - 2.f * m_textPadding, size().y});
+    updateDynamicText();
 }
+
+void TextEntry::updateRoutine(const sf::Time& dt)
+{
+    // Blinking cursor
+    m_cursorBlinkTime += dt.asSeconds();
+    while (m_cursorBlinkTime >= 0.5f) {
+        m_cursorBlinkTime -= 0.5f;
+        if (m_cursorOn) removePart(&m_cursor);
+        else addPart(&m_cursor);
+        m_cursorOn = !m_cursorOn;
+    }
+}
+
+//------------------//
+//----- Events -----//
 
 void TextEntry::handleKeyboardEvent(const sf::Event& event)
 {
-    if (event.type == sf::Event::TextEntered) {
+    // Left/right to move inside the text entry
+    // Use Ctrl to skip a word
+    if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::Left) {
+            int toMove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? previousRelativeSpace() : -1;
+            moveCursor(toMove);
+        }
+        else if (event.key.code == sf::Keyboard::Right) {
+            int toMove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? nextRelativeSpace() : 1;
+            moveCursor(toMove);
+        }
+    }
+    // Edit the text entry
+    else if (event.type == sf::Event::TextEntered) {
         // Enter
         returnif (event.text.unicode == 13);
 
         // Backspace
         if (event.text.unicode == 8) {
-            returnif (m_string.isEmpty());
-            m_string.erase(m_string.getSize() - 1);
+            returnif (m_cursorString.isEmpty());
+            int toRemove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? previousRelativeSpace() : -1;
+            m_textString.erase(m_cursorString.getSize() + toRemove, -toRemove);
+            moveCursor(toRemove);
         }
-        else m_string += event.text.unicode;
+        // Delete
+        else if (event.text.unicode == 127) {
+            returnif (m_cursorString == m_textString);
+            int toRemove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? nextRelativeSpace() : 1;
+            m_textString.erase(m_cursorString.getSize(), toRemove);
+        }
+        else {
+            m_textString = m_cursorString + event.text.unicode + m_textString.substring(m_cursorString.getSize());
+            moveCursor(1);
+        }
 
-        m_text.setString(m_string);
+        m_text.setString(m_textString);
+        updateDynamicText();
     }
+}
+
+//----------------------//
+//----- Management -----//
+
+void TextEntry::moveCursor(int relativePos)
+{
+    returnif (relativePos == 0);
+    returnif (relativePos < 0 && m_cursorString.isEmpty());
+    returnif (relativePos > 0 && m_cursorString == m_textString);
+
+    auto cursorStringSize = m_cursorString.getSize() + relativePos;
+    m_cursorString = m_textString;
+
+    m_cursorString.erase(cursorStringSize, m_textString.getSize() - cursorStringSize);
+    m_cursorText.setString(m_cursorString);
+    updateDynamicText();
+}
+
+void TextEntry::updateDynamicText()
+{
+    // Text
+    m_text.setPosition(m_textPadding, m_textPadding);
+
+    // Cursor
+    const auto& bounds = m_cursorText.getLocalBounds();
+    m_cursor.setPosition({m_textPadding + bounds.left + bounds.width + 1.f, 0.5f * m_textPadding});
+}
+
+int TextEntry::previousRelativeSpace()
+{
+    int cursorStringSize = m_cursorString.getSize() - 1;
+    for (int i = 0; i < cursorStringSize; ++i)
+        returnif (m_cursorString[cursorStringSize - i] == L' ') -(i + 1);
+    return -(cursorStringSize + 1);
+}
+
+int TextEntry::nextRelativeSpace()
+{
+    int cursorStringSize = m_cursorString.getSize();
+    int textStringSize = m_textString.getSize() - 1;
+    for (int i = 0; i <= textStringSize - cursorStringSize; ++i)
+        returnif (m_textString[cursorStringSize + i] == L' ') i + 1;
+    return textStringSize - cursorStringSize + 1;
+}
+
+void TextEntry::setLength(float length)
+{
+    setSize({length + 2.f * m_textPadding, 16.f + 2.f * m_textPadding}); // 16.f = text_size
 }

@@ -8,12 +8,17 @@ using namespace sfe;
 
 Line::Line()
     : m_length(0.f)
-    , m_shade(0.15)
+    , m_shade(0.15f)
     , m_vertices(sf::LinesStrip, 4)
 {
+    setColor(sf::Color::White);
+}
+
+void Line::setColor(const sf::Color& color)
+{
     m_vertices[0].color = sf::Color::Transparent;
-    m_vertices[1].color = sf::Color::White;
-    m_vertices[2].color = sf::Color::White;
+    m_vertices[1].color = color;
+    m_vertices[2].color = color;
     m_vertices[3].color = sf::Color::Transparent;
 }
 

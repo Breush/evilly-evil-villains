@@ -25,7 +25,7 @@ MenuCreateWorldState::MenuCreateWorldState(StateStack& stack)
     m_worldNameLabel.setText(_("World name"), FontID::NUI, 16);
 
     m_stacker.add(&m_worldNameEntry, nui::Stacker::Align::CENTER);
-    m_worldNameEntry.setSize({resolution.x * 0.4f, 25.f});
+    m_worldNameEntry.setLength(resolution.x * 0.4f);
 }
 
 bool MenuCreateWorldState::handleEvent(const sf::Event& event)
