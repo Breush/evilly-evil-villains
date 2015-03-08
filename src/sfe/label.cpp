@@ -41,3 +41,17 @@ void Label::setText(const std::wstring& text, FontID fontID, uint characterSize)
     m_text.setCharacterSize(characterSize);
     updateSize();
 }
+
+void Label::setPrestyle(PrestyleID prestyle)
+{
+    switch (prestyle)
+    {
+        case PrestyleID::MENU_TITLE:
+            m_text.setFont(Application::context().fonts.get(FontID::HORROR));
+            m_text.setStyle(sf::Text::Style::Bold);
+            m_text.setColor(sf::Color::White);
+            m_text.setCharacterSize(25);
+            updateSize();
+            break;
+    }
+}

@@ -6,6 +6,7 @@
 #include "nui/hstacker.hpp"
 #include "nui/button.hpp"
 #include "sfe/rectangleshape.hpp"
+#include "sfe/label.hpp"
 
 #include <array>
 
@@ -21,13 +22,18 @@ public:
     // Routines
     bool handleEvent(const sf::Event& event) override;
 
+protected:
+    // Actions
+    void playOnSelectedWorld();
+
 private:
     // NUI
     nui::List m_list;
     nui::HStacker m_stacker;
     std::array<nui::Button, 3> m_buttons;
 
-    // Background
+    // Background and title
+    sfe::Label m_title;
     sfe::RectangleShape m_background;
 };
 

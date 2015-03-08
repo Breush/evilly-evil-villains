@@ -60,6 +60,7 @@ enum class FontID : uint8 {
     DEFAULT,
     MONO,
     NUI,
+    HORROR,
 };
 
 enum class SoundID : uint8 {

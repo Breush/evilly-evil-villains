@@ -23,6 +23,9 @@ namespace nui
         // Size override
         void setLength(float length);
 
+        // Getter
+        std::wstring text() const { return m_textString.toWideString(); };
+
     protected:
         // Events
         void handleKeyboardEvent(const sf::Event& event) override;

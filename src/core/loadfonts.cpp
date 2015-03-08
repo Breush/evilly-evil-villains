@@ -6,5 +6,6 @@ void Application::loadFonts()
 {
     s_context.fonts.load(FontID::NUI, "res/font/dream_orphans.ttf");
     s_context.fonts.load(FontID::MONO, "res/font/monofur.ttf");
+    s_context.fonts.load(FontID::HORROR, "res/font/haunt.ttf");
 }
 

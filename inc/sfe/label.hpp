@@ -20,6 +20,11 @@ namespace sfe
         using baseClass = scene::Entity;
 
     public:
+        enum class PrestyleID {
+            MENU_TITLE,
+        };
+
+    public:
         Label();
         virtual ~Label() = default;
 
@@ -27,6 +32,7 @@ namespace sfe
         void setCharacterSize(uint characterSize);
         void setText(const std::wstring& text);
         void setText(const std::wstring& text, FontID fontID, uint characterSize);
+        void setPrestyle(PrestyleID prestyle);
 
     protected:
         void updateSize();

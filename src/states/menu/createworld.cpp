@@ -2,6 +2,8 @@
 
 #include "core/application.hpp"
 #include "core/gettext.hpp"
+#include "world/context.hpp"
+#include "tools/debug.hpp"
 #include "resources/identifiers.hpp"
 
 MenuCreateWorldState::MenuCreateWorldState(StateStack& stack)
@@ -15,10 +17,18 @@ MenuCreateWorldState::MenuCreateWorldState(StateStack& stack)
     m_background.setFillColor({0, 0, 0, 230});
     m_background.setSize(resolution);
 
+    // Title
+    sceneLayer(LayerID::NUI).attachChild(m_title);
+    m_title.setText(_("Create a new world"));
+    m_title.setCentered(true);
+    m_title.setLocalPosition({resolution.x / 2.f, 40.f});
+    m_title.setPrestyle(sfe::Label::PrestyleID::MENU_TITLE);
+
     // NUI
     sceneLayer(LayerID::NUI).attachChild(m_stacker);
     m_stacker.setAlign(nui::Stacker::Align::CENTER);
-    m_stacker.setSize({resolution.x, 100.f});
+    m_stacker.setLocalPosition({0.f, 0.125f * resolution.y});
+    m_stacker.setSize({resolution.x, 50.f});
 
     // Stacking
     m_stacker.add(&m_worldNameLabel, nui::Stacker::Align::CENTER);
@@ -26,6 +36,17 @@ MenuCreateWorldState::MenuCreateWorldState(StateStack& stack)
 
     m_stacker.add(&m_worldNameEntry, nui::Stacker::Align::CENTER);
     m_worldNameEntry.setLength(resolution.x * 0.4f);
+
+    // Buttons
+    sceneLayer(LayerID::NUI).attachChild(m_buttonsStacker);
+    m_buttonsStacker.setAlign(nui::Stacker::Align::CENTER);
+    m_buttonsStacker.setSize({resolution.x, 0.95f * resolution.y});
+
+    for (auto& button : m_buttons)
+        m_buttonsStacker.add(&button, nui::Stacker::Align::OPPOSITE);
+
+    m_buttons[0].setAction(_("Back"), [this] { stackPop(); });
+    m_buttons[1].setAction(_("Create and start playing"), [this] { createAndPlayWorld(); });
 }
 
 bool MenuCreateWorldState::handleEvent(const sf::Event& event)
@@ -38,4 +59,17 @@ bool MenuCreateWorldState::handleEvent(const sf::Event& event)
     }
 
     return State::handleEvent(event);
+}
+
+void MenuCreateWorldState::createAndPlayWorld()
+{
+    auto worldName = m_worldNameEntry.text();
+    returnif (worldName.empty());
+    wdebug_application_1(L"Creating world " + worldName);
+
+    auto& worldData = world::context.worldsData;
+
+    // TODO Do something clever
+    // stackClear(StateID::GAME_DUNGEON_DESIGN)
+    stackPop();
 }
