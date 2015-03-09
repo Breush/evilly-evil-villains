@@ -4,6 +4,7 @@
 #include "core/gettext.hpp"
 #include "world/context.hpp"
 #include "tools/debug.hpp"
+#include "tools/filesystem.hpp"
 #include "resources/identifiers.hpp"
 
 MenuCreateWorldState::MenuCreateWorldState(StateStack& stack)
@@ -65,9 +66,16 @@ void MenuCreateWorldState::createAndPlayWorld()
 {
     auto worldName = m_worldNameEntry.text();
     returnif (worldName.empty());
+
     wdebug_application_1(L"Creating world " + worldName);
 
-    auto& worldData = world::context.worldsData;
+    // auto& worldData = world::context.worldsData;
+
+    if (!createDirectory(L"worlds/" + worldName)) {
+        // TODO Manage user feedback (or automatically rename folder)
+        std::wcout << L"Cannot create directory worlds/" << worldName << std::endl;
+        return;
+    }
 
     // TODO Do something clever
     // stackClear(StateID::GAME_DUNGEON_DESIGN)
