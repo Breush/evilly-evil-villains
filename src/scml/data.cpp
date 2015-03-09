@@ -6,6 +6,7 @@
 
 #include <pugixml.hpp>
 #include <cstdarg> // va_start
+#include <stdexcept> // runtime_error
 
 using namespace scml;
 

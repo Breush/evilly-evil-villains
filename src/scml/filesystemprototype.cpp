@@ -4,6 +4,7 @@
 
 #include <climits> // PATH_MAX
 #include <algorithm> // find
+#include <stdexcept> // runtime_error
 
 using namespace scml;
 

@@ -18,7 +18,7 @@ class FileSystem : public FileSystemPrototype
 {
 public:
 
-    virtual ~FileSystem();
+    virtual ~FileSystem() noexcept;
     void clear() override;
 
     bool loadImageFile(int folderID, int fileID, const std::wstring& filename) override;

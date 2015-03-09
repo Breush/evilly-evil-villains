@@ -17,8 +17,8 @@ namespace nui
         virtual ~TextEntry() = default;
 
         // Routine
-        void update();
-        void updateRoutine(const sf::Time& dt);
+        void update() override;
+        void updateRoutine(const sf::Time& dt) override;
 
         // Size override
         void setLength(float length);

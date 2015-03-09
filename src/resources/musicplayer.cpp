@@ -3,6 +3,8 @@
 #include "resources/identifiers.hpp"
 #include "tools/debug.hpp"
 
+#include <stdexcept> // runtime_error
+
 MusicPlayer::MusicPlayer()
     : m_music()
     , m_volume(100)

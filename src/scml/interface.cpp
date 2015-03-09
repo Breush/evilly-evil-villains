@@ -12,7 +12,7 @@ using namespace scml;
 //-----------------------//
 //----- File system -----//
 
-FileSystem::~FileSystem()
+FileSystem::~FileSystem() noexcept
 {
     clear();
 }
