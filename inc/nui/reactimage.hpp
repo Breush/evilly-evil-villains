@@ -71,7 +71,7 @@ namespace nui
         sf::Sprite m_image;
         sf::Sprite m_sprite;
         sf::FloatRect m_imageRect;
-        sf::FloatRect* m_activeRect;
+        sf::FloatRect* m_activeRect = nullptr;
 
         // React
         std::map<std::wstring, ReactInfo> m_reacts;

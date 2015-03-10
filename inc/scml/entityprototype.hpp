@@ -26,10 +26,10 @@ public:
     /*! Integer index of the current animation's current mainline keyframe */
     int key;
 
-    int prevKey;
+    int prevKey = -1;
 
     /*! Time (in milliseconds) tracking the position of the animation from its beginning. */
-    int time;
+    int time = 0;
 
     class Bone_Transform_State
     {

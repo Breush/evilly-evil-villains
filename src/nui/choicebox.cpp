@@ -14,13 +14,12 @@ ChoiceBox::ChoiceBox()
     : baseClass()
     , m_showArrows(true)
     , m_showLines(true)
+    , m_choiceChanged(true)
+    , m_choice(0)
     , m_arrowOffset(8.f)
     , m_lineOffset(5.f)
     , m_arrowSize(10.f)
     , m_lineSize(1.f)
-    , m_nChoices(0)
-    , m_choice(0)
-    , m_choiceChanged(true)
 {
     setFocusable(true);
 
@@ -44,8 +43,8 @@ void ChoiceBox::update()
     clearParts();
     addPart(&m_text);
 
-    const float lineSpace = lineOffset() + lineSize();
-    const float arrowSpace = arrowOffset() + arrowSize();
+    const float lineSpace = m_lineOffset + m_lineSize;
+    const float arrowSpace = m_arrowOffset + m_arrowSize;
 
     // Text (using integer position to prevent text smoothing)
     sf::Vector2u textPos((m_maxTextSize - m_textSize)/2.f);
@@ -69,12 +68,12 @@ void ChoiceBox::update()
         addPart(&m_rArrow);
 
         m_text.setPosition(m_text.getPosition() + sf::Vector2f(arrowSpace, 0.f));
-        m_lArrow.setLength(arrowSize());
-        m_rArrow.setLength(arrowSize());
+        m_lArrow.setLength(m_arrowSize);
+        m_rArrow.setLength(m_arrowSize);
         m_lArrow.setPosition(0.f, 0.5f * m_buttonSize.y);
-        m_rArrow.setPosition(m_buttonSize.x - arrowSize(), 0.5f * m_buttonSize.y);
-        m_lArrow.setOrigin(0.f, 0.5f * arrowSize());
-        m_rArrow.setOrigin(0.f, 0.5f * arrowSize());
+        m_rArrow.setPosition(m_buttonSize.x - m_arrowSize, 0.5f * m_buttonSize.y);
+        m_lArrow.setOrigin(0.f, 0.5f * m_arrowSize);
+        m_rArrow.setOrigin(0.f, 0.5f * m_arrowSize);
     }
 }
 
@@ -225,14 +224,14 @@ void ChoiceBox::handleMouseLeft()
 bool ChoiceBox::isLeftArrowSelected(const float& x)
 {
     returnif (!showArrows()) false;
-    float arrowRange = arrowSize() + arrowOffset() / 2.f;
+    float arrowRange = m_arrowSize + m_arrowOffset / 2.f;
     return (x < arrowRange);
 }
 
 bool ChoiceBox::isRightArrowSelected(const float& x)
 {
     returnif (!showArrows()) false;
-    float arrowRange = arrowSize() + arrowOffset() / 2.f;
+    float arrowRange = m_arrowSize + m_arrowOffset / 2.f;
     return (x > size().x - arrowRange);
 }
 
@@ -286,17 +285,17 @@ void ChoiceBox::updateButtonSize()
 
     // Lines
     if (showLines())
-        m_buttonSize.y += 2 * (lineOffset() + lineSize());
+        m_buttonSize.y += 2 * (m_lineOffset + m_lineSize);
 
     // Arrows
     if (showArrows())
-        m_buttonSize.x += 2 * (arrowOffset() + arrowSize());
+        m_buttonSize.x += 2 * (m_arrowOffset + m_arrowSize);
 }
 
 void ChoiceBox::updateSize()
 {
     updateButtonSize();
-    setSize(buttonSize());
+    setSize(m_buttonSize);
     update();
 }
 

@@ -23,9 +23,6 @@ namespace scene
 
         virtual void grabbableReleased(Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) = 0;
         virtual std::unique_ptr<Grabbable> spawnGrabbable() = 0;
-
-    protected:
-        // Params
     };
 
     /** scene::Grabbable

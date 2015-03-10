@@ -58,8 +58,8 @@ namespace dungeon
         std::vector<std::vector<sf::RectangleShape>> m_roomTiles;
 
         // Internal
-        bool m_hasRoomSelected;
+        bool m_hasRoomSelected = false;
         sf::Vector2u m_selectedRoom;
-        Data* m_data;
+        Data* m_data = nullptr;
     };
 }

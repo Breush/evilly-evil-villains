@@ -14,7 +14,6 @@ using namespace nui;
 ReactImage::ReactImage()
     : baseClass()
     , m_mouseLeftDeselect(true)
-    , m_activeRect(nullptr)
     , m_reactChanged(true)
 {
     // Sprite

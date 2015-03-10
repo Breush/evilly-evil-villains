@@ -10,7 +10,7 @@
 using namespace dungeon;
 
 Panel::Panel(Sidebar& sidebar)
-    : baseClass(true)
+    : baseClass(true) // Lerpable
     , m_reduced(false)
     , m_sidebar(sidebar)
 {
@@ -38,10 +38,10 @@ Panel::Panel(Sidebar& sidebar)
     m_facilitiesTab.setVisual(_("Facilities"), TextureID::DUNGEON_PANEL_FACILITIES, tabImageSize);
     m_treasuresTab.setVisual (_("Treasures"),  TextureID::DUNGEON_PANEL_TREASURES,  tabImageSize);
 
-    m_monstersTab.setCallback  ([&]() { sidebar.setMode(Sidebar::Mode::MONSTERS); });
-    m_trapsTab.setCallback     ([&]() { sidebar.setMode(Sidebar::Mode::TRAPS); });
-    m_facilitiesTab.setCallback([&]() { sidebar.setMode(Sidebar::Mode::FACILITIES); });
-    m_treasuresTab.setCallback ([&]() { sidebar.setMode(Sidebar::Mode::TREASURES); });
+    m_monstersTab.setCallback  ([&]() { m_sidebar.setMode(Sidebar::Mode::MONSTERS); });
+    m_trapsTab.setCallback     ([&]() { m_sidebar.setMode(Sidebar::Mode::TRAPS); });
+    m_facilitiesTab.setCallback([&]() { m_sidebar.setMode(Sidebar::Mode::FACILITIES); });
+    m_treasuresTab.setCallback ([&]() { m_sidebar.setMode(Sidebar::Mode::TREASURES); });
 
     update();
 }

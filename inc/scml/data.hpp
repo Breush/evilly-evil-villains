@@ -19,9 +19,9 @@ class Data
 public:
     std::string name;
     std::wstring scml_version;
-    std::wstring generator;
-    std::wstring generator_version;
-    bool pixel_art_mode;
+    std::wstring generator = L"Unkonwn";
+    std::wstring generator_version = L"Unkonwn";
+    bool pixel_art_mode = false;
 
     class Folder;
     class Atlas;
@@ -156,7 +156,7 @@ public:
         };
     };
 
-    Meta_Data* meta_data;
+    Meta_Data* meta_data = nullptr;
 
     class Folder
     {

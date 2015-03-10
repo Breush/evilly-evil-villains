@@ -11,26 +11,14 @@
 using namespace scml;
 
 Data::Data()
-    : pixel_art_mode(false)
-    , meta_data(nullptr)
-    , generator(L"Unknown")
-    , generator_version(L"Unkonwn")
 {}
 
 Data::Data(const std::string& file)
-    : pixel_art_mode(false)
-    , meta_data(nullptr)
-    , generator(L"Unknown")
-    , generator_version(L"Unkonwn")
 {
     load(file);
 }
 
 Data::Data(pugi::xml_node& elem)
-    : pixel_art_mode(false)
-    , meta_data(nullptr)
-    , generator(L"Unknown")
-    , generator_version(L"Unknown")
 {
     load(elem);
 }

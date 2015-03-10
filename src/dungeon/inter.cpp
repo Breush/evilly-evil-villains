@@ -13,9 +13,7 @@
 using namespace dungeon;
 
 Inter::Inter(nui::ContextMenu& contextMenu)
-    : m_data(nullptr)
-    , m_contextMenu(contextMenu)
-    , m_hasRoomSelected(false)
+    : m_contextMenu(contextMenu)
 {
     update();
 }

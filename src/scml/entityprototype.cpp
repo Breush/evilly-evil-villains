@@ -7,17 +7,17 @@
 using namespace scml;
 
 EntityPrototype::EntityPrototype()
-    : entity(-1), animation(-1), prevKey(-1), key(-1), time(0)
+    : entity(-1), animation(-1), key(-1)
 {}
 
 EntityPrototype::EntityPrototype(scml::Data* data, int entity, int animation, int key)
-    : entity(entity), animation(animation), prevKey(-1), key(key), time(0)
+    : entity(entity), animation(animation), key(key)
 {
     load(data);
 }
 
 EntityPrototype::EntityPrototype(scml::Data* data, const std::wstring& entityName, int animation, int key)
-    : entity(-1), animation(animation), prevKey(-1), key(key), time(0)
+    : entity(-1), animation(animation), key(key)
 {
     load(data);
     for (auto const& e : data->entities) {

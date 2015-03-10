@@ -14,18 +14,18 @@
 using namespace scene;
 
 Entity::Entity(bool isLerpable)
-    : m_parent(nullptr)
-    , m_graph(nullptr)
+    : m_graph(nullptr)
+    , m_parent(nullptr)
     , m_depth(50.f)
     , m_localPosition(0.f, 0.f)
     , m_localRotation(0.f)
     , m_localScale(1.f, 1.f)
     , m_size(0.f, 0.f)
+    , m_centered(false)
+    , m_visible(true)
     , m_detectable(true)
     , m_focusable(false)
-    , m_visible(true)
     , m_focusOwned(false)
-    , m_centered(false)
 {
     // Lerpable component
     if (isLerpable)

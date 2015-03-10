@@ -25,12 +25,26 @@ eev_set_option(CMAKE_BUILD_TYPE Debug STRING "Choose the type of build (Debug or
 project(EEV)
 set(EXECUTABLE_NAME eev)
 
+# Directories
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE})
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
+# Compiler options
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+if (CMAKE_BUILD_TYPE MATCHES "Debug")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+    if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+        execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
+        if (GCC_VERSION VERSION_GREATER 5 OR GCC_VERSION VERSION_EQUAL 5)
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wsuggest-override")
+            set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wsuggest-final-types -Wsuggest-final-methods" )
+        endif()
+    endif ()
+endif ()
+
+# Files for project
 set(CODE_MAIN_FILE src/core/main.cpp)
 file(GLOB_RECURSE SOURCES_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*)
 file(GLOB_RECURSE CODE_FILES RELATIVE ${CMAKE_BINARY_DIR} src/* inc/* res/shd/*)
@@ -53,6 +67,18 @@ add_executable(${EXECUTABLE_NAME} ${CODE_MAIN_FILE})
 target_link_libraries(${EXECUTABLE_NAME} ${EEV_LIBRARIES})
 
 include(${CMAKE_SOURCE_DIR}/cmake/LoadEEVDependencies.cmake)
+
+#=====
+# Documentation
+
+eev_set_option(EEV_ENABLE_DOCUMENTATION OFF BOOL "Choose whether to enable 'doc' target")
+if (EEV_ENABLE_DOCUMENTATION)
+    if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wdocumentation")
+    endif ()
+endif()
+
+# TODO Use doxygen and create "doc" target
 
 #=====
 # Tests
@@ -94,3 +120,4 @@ endforeach ()
 
 # New target
 add_custom_target(translation DEPENDS ${POT_FILE} ${MO_FILES})
+

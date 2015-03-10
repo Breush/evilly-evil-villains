@@ -56,13 +56,8 @@ namespace nui
         // Params
         PARAMGSU(bool, m_showArrows, showArrows, setShowArrows, updateSize)
         PARAMGSU(bool, m_showLines, showLines, setShowLines, updateSize)
-        PARAMG(sf::Vector2f, m_buttonSize, buttonSize)
-        PARAMG(float, m_arrowOffset, arrowOffset)
-        PARAMG(float, m_lineOffset, lineOffset)
-        PARAMG(float, m_arrowSize, arrowSize)
-        PARAMG(float, m_lineSize, lineSize)
-        PARAMG(uint, m_choice, choice)
         PARAMG(bool, m_choiceChanged, choiceChanged)
+        PARAMG(uint, m_choice, choice)
 
         // Keep infos
         struct ChoiceInfo {
@@ -75,11 +70,12 @@ namespace nui
         sfe::HLine& topLine() { return m_topLine; }
         sfe::HLine& botLine() { return m_botLine; }
         const sf::Vector2f& maxTextSize() const { return m_maxTextSize; }
+        const sf::Vector2f& buttonSize() const { return m_buttonSize; }
 
     private:
         // Choices
         std::vector<ChoiceInfo> m_choices;
-        uint m_nChoices;
+        uint m_nChoices = 0u;
 
         // Text
         sf::Text m_text;
@@ -93,5 +89,12 @@ namespace nui
         // Arrows
         sfe::LArrow m_lArrow;
         sfe::RArrow m_rArrow;
+        
+        // Properties
+        sf::Vector2f m_buttonSize;
+        float m_arrowOffset;
+        float m_lineOffset;
+        float m_arrowSize;
+        float m_lineSize;
     };
 }

@@ -34,8 +34,8 @@ namespace sfe
 
     protected:
         // Params
-        PARAMG(bool, m_started, started)
         PARAMGSU(bool, m_looping, looping, setLooping, refresh)
+        PARAMG(bool, m_started, started)
 
     private:
         std::list<std::unique_ptr<scml::Entity>> m_entities;

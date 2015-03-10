@@ -118,8 +118,8 @@ namespace scene
 
         // Params
         PARAMG(Graph*, m_graph, graph)
-        PARAMGSU(float, m_depth, depth, setDepth, refreshDepthOrder)
         PARAMGSU(Entity*, m_parent, parent, setParent, refreshFromLocal)
+        PARAMGSU(float, m_depth, depth, setDepth, refreshDepthOrder)
 
         PARAMGSU(sf::Vector2f, m_localPosition, localPosition, setLocalPosition, refreshFromLocalPosition)
         PARAMGSU(float, m_localRotation, localRotation, setLocalRotation, refreshFromLocalRotation)
