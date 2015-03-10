@@ -11,22 +11,24 @@
 // Forward declaration
 enum class MusicID : uint8;
 
-class MusicPlayer : private sf::NonCopyable
+namespace resources
 {
-public:
-    MusicPlayer();
+    class MusicPlayer : private sf::NonCopyable
+    {
+    public:
+        MusicPlayer();
 
-    void load(MusicID id, const std::string& filename);
+        void load(MusicID id, const std::string& filename);
 
-    void play(MusicID id);
-    void stop();
+        void play(MusicID id);
+        void stop();
 
-    void setPaused(bool paused);
-    void setVolume(uint volume);
+        void setPaused(bool paused);
+        void setVolume(uint volume);
 
-private:
-    sf::Music m_music;
-    std::map<MusicID, std::string> m_musics;
-    uint m_volume;
-};
-
+    private:
+        sf::Music m_music;
+        std::map<MusicID, std::string> m_musics;
+        uint m_volume;
+    };
+}

@@ -6,24 +6,27 @@
 #include "sfe/rectangleshape.hpp"
 #include "sfe/label.hpp"
 
-class GamePauseState : public State
+namespace states
 {
-    using baseClass = State;
+    class GamePause : public State
+    {
+        using baseClass = State;
 
-public:
-    GamePauseState(StateStack& stack);
-    virtual ~GamePauseState() = default;
-    StateID id() const noexcept override { return StateID::GAME_PAUSE; }
+    public:
+        GamePause(StateStack& stack);
+        virtual ~GamePause() = default;
+        StateID id() const noexcept override { return StateID::GAME_PAUSE; }
 
-    // Routines
-    bool handleEvent(const sf::Event& event) override;
+        // Routines
+        bool handleEvent(const sf::Event& event) override;
 
-private:
-    // Decorum
-    sfe::RectangleShape m_background;
-    sfe::Label m_pauseText;
+    private:
+        // Decorum
+        sfe::RectangleShape m_background;
+        sfe::Label m_pauseText;
 
-    // NUI
-    nui::Button m_continueButton;
-    nui::Button m_mainMenuButton;
-};
+        // NUI
+        nui::Button m_continueButton;
+        nui::Button m_mainMenuButton;
+    };
+}

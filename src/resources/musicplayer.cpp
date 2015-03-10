@@ -5,6 +5,8 @@
 
 #include <stdexcept> // runtime_error
 
+using namespace resources;
+
 MusicPlayer::MusicPlayer()
     : m_music()
     , m_volume(100)

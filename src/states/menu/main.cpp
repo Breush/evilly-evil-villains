@@ -8,7 +8,9 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
 
-MenuMainState::MenuMainState(StateStack& stack)
+using namespace states;
+
+MenuMain::MenuMain(StateStack& stack)
     : baseClass(stack)
     , m_choices{L"V", L"I", L"L", L"Y", L"S"}
 {
@@ -66,7 +68,7 @@ MenuMainState::MenuMainState(StateStack& stack)
     Application::context().musics.setVolume(75);
 }
 
-bool MenuMainState::update(const sf::Time& dt)
+bool MenuMain::update(const sf::Time& dt)
 {
     // Checking if choiceBox changed
     if (m_choiceBox.choiceChanged()) {
@@ -85,7 +87,7 @@ bool MenuMainState::update(const sf::Time& dt)
     return State::update(dt);
 }
 
-bool MenuMainState::handleEvent(const sf::Event& event)
+bool MenuMain::handleEvent(const sf::Event& event)
 {
     // Escape opens quit screen
     if (event.type == sf::Event::KeyPressed

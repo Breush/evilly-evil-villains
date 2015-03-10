@@ -8,27 +8,30 @@
 
 #include <SFML/Graphics/Text.hpp>
 
-class MenuMainState : public State
+namespace states
 {
-    using baseClass = State;
+    class MenuMain : public State
+    {
+        using baseClass = State;
 
-public:
-    MenuMainState(StateStack& stack);
-    virtual ~MenuMainState() = default;
-    StateID id() const noexcept override { return StateID::MENU_MAIN; }
+    public:
+        MenuMain(StateStack& stack);
+        virtual ~MenuMain() = default;
+        StateID id() const noexcept override { return StateID::MENU_MAIN; }
 
-    // Routines
-    bool update(const sf::Time& dt) override;
-    bool handleEvent(const sf::Event& event) override;
+        // Routines
+        bool update(const sf::Time& dt) override;
+        bool handleEvent(const sf::Event& event) override;
 
-private:
-    // NUI
-    nui::ChoiceBox m_choiceBox;
-    nui::ReactImage m_reactImage;
+    private:
+        // NUI
+        nui::ChoiceBox m_choiceBox;
+        nui::ReactImage m_reactImage;
 
-    // Choices possibilities
-    std::vector<std::wstring> m_choices;
+        // Choices possibilities
+        std::vector<std::wstring> m_choices;
 
-    // Decorum
-    sfe::Sprite m_background;
-};
+        // Decorum
+        sfe::Sprite m_background;
+    };
+}

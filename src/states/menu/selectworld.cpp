@@ -11,7 +11,9 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
 
-MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
+using namespace states;
+
+MenuSelectWorld::MenuSelectWorld(StateStack& stack)
     : baseClass(stack)
 {
     const auto& resolution = Application::context().resolution;
@@ -60,7 +62,7 @@ MenuSelectWorldState::MenuSelectWorldState(StateStack& stack)
     Application::context().musics.setVolume(25);
 }
 
-bool MenuSelectWorldState::handleEvent(const sf::Event& event)
+bool MenuSelectWorld::handleEvent(const sf::Event& event)
 {
     // Escape quits current state
     if (event.type == sf::Event::KeyPressed
@@ -72,7 +74,7 @@ bool MenuSelectWorldState::handleEvent(const sf::Event& event)
     return State::handleEvent(event);
 }
 
-void MenuSelectWorldState::playOnSelectedWorld()
+void MenuSelectWorld::playOnSelectedWorld()
 {
     auto selectedWorld = m_list.selectedLine();
     auto& worldInfo = world::context.worldsData.worlds()[selectedWorld];

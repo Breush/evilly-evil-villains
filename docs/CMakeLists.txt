@@ -15,7 +15,7 @@ set(DOXYGEN_GENERATE_HTMLHELP NO)
 set(DOXYGEN_HHC_PROGRAM)
 
 # Configure the source Doxyfile by copying it and replacing all @variables@
-file(GLOB_RECURSE DOXYGEN_INPUT ${PROJECT_SOURCE_DIR}/inc/*.hpp ${PROJECT_SOURCE_DIR}/inc/*.inl)
+file(GLOB_RECURSE DOXYGEN_INPUT ${PROJECT_SOURCE_DIR}/inc/*.hpp)
 string (REPLACE ";" " " DOXYGEN_INPUT "${DOXYGEN_INPUT}")
 set(DOXYGEN_CONFIGURED_INPUT ${DOXYGEN_OUTPUT_DIR}/doxyfile)
 configure_file(${DOXYGEN_INPUT_DIR}/docs/doxyfile.in ${DOXYGEN_CONFIGURED_INPUT} @ONLY)

@@ -6,7 +6,9 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
-GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
+using namespace states;
+
+GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     : State(stack)
     , m_dungeonInter(m_contextMenu)
     , m_dungeonPanel(m_dungeonSidebar)
@@ -60,14 +62,14 @@ GameDungeonDesignState::GameDungeonDesignState(StateStack& stack)
     m_decorumFront.setTexture(TextureID::DUNGEON_SCENE_GRASSYHILLS_FRONT);
 }
 
-void GameDungeonDesignState::onQuit() noexcept
+void GameDungeonDesign::onQuit() noexcept
 {
     // TODO Remove suffix (used to not compromise svn archive)
     m_dungeonData.save("worlds/" + world::context.info->folder + "dungeon_saved.xml");
     world::context.updateLastPlayed();
 }
 
-bool GameDungeonDesignState::handleEvent(const sf::Event& event)
+bool GameDungeonDesign::handleEvent(const sf::Event& event)
 {
     // Global events
     m_dungeonInter.handleGlobalEvent(event);

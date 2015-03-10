@@ -12,7 +12,7 @@
 #include <SFML/Graphics/Shader.hpp>
 
 //! The heart of the application.
-/*! 
+/*!
  *  Here is how things go:
  *  - Create the window context
  *  - Load every ressources
@@ -46,14 +46,14 @@ public:
         std::string title;              //!< The title of the window.
         uint32_t style;                 //!< The style of the window, as defined by SFML.
 
-        sf::RenderWindow window;        //!< The window, final destination of all draws.
-        ViewHolder views;               //!< The views, to separate user interface from scenary.
-        TextureHolder textures;         //!< The textures.
-        ShaderHolder shaders;           //!< The shaders.
-        FontHolder fonts;               //!< The fonts.
-        MusicPlayer musics;             //!< The musics.
-        SoundPlayer sounds;             //!< The sounds.
-        AnimationHolder animations;     //!< The animations, parsed SCML files.
+        sf::RenderWindow window;                //!< The window, final destination of all draws.
+        resources::ViewHolder views;            //!< The views, to separate user interface from scenary.
+        resources::TextureHolder textures;      //!< The textures.
+        resources::ShaderHolder shaders;        //!< The shaders.
+        resources::FontHolder fonts;            //!< The fonts.
+        resources::MusicPlayer musics;          //!< The musics.
+        resources::SoundPlayer sounds;          //!< The sounds.
+        resources::AnimationHolder animations;  //!< The animations, parsed SCML files.
     };
 
     //! Access the static context to get resources and window/screen information.
@@ -99,8 +99,8 @@ protected:
 private:
     //! The main global variable (and almost the only one).
     static Context s_context;
-    
-    StateStack m_stateStack;
+
+    states::StateStack m_stateStack;
     StateID m_initialState;
 
     sf::Time m_timePerFrame = sf::seconds(1.f/60.f);

@@ -8,7 +8,9 @@
 #include "tools/string.hpp"
 #include "resources/identifiers.hpp"
 
-MenuCreateWorldState::MenuCreateWorldState(StateStack& stack)
+using namespace states;
+
+MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     : baseClass(stack)
 {
     const auto& resolution = Application::context().resolution;
@@ -51,7 +53,7 @@ MenuCreateWorldState::MenuCreateWorldState(StateStack& stack)
     m_buttons[1].setAction(_("Create and start playing"), [this] { createAndPlayWorld(); });
 }
 
-bool MenuCreateWorldState::handleEvent(const sf::Event& event)
+bool MenuCreateWorld::handleEvent(const sf::Event& event)
 {
     // Escape quits current state
     if (event.type == sf::Event::KeyPressed
@@ -63,7 +65,7 @@ bool MenuCreateWorldState::handleEvent(const sf::Event& event)
     return State::handleEvent(event);
 }
 
-void MenuCreateWorldState::createAndPlayWorld()
+void MenuCreateWorld::createAndPlayWorld()
 {
     auto worldName = m_worldNameEntry.text();
     returnif (worldName.empty());

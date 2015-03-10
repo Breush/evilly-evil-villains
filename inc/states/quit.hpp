@@ -6,23 +6,26 @@
 #include "sfe/rectangleshape.hpp"
 #include "sfe/label.hpp"
 
-class QuitState : public State
+namespace states
 {
-public:
-    QuitState(StateStack& stack);
-    virtual ~QuitState() = default;
-    StateID id() const noexcept override { return StateID::QUIT; }
+    class Quit : public State
+    {
+    public:
+        Quit(StateStack& stack);
+        virtual ~Quit() = default;
+        StateID id() const noexcept override { return StateID::QUIT; }
 
-    // Routines
-    bool handleEvent(const sf::Event& event) override;
+        // Routines
+        bool handleEvent(const sf::Event& event) override;
 
-private:
-    // Decorum
-    sfe::RectangleShape m_background;
-    sfe::Label m_question;
+    private:
+        // Decorum
+        sfe::RectangleShape m_background;
+        sfe::Label m_question;
 
-    // NUI
-    nui::Button m_noButton;
-    nui::Button m_yesButton;
-};
+        // NUI
+        nui::Button m_noButton;
+        nui::Button m_yesButton;
+    };
+}
 

@@ -8,18 +8,21 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <list>
 
-class SplashScreenState : public State
+namespace states
 {
-public:
-    SplashScreenState(StateStack& stack);
-    virtual ~SplashScreenState() = default;
-    StateID id() const noexcept override { return StateID::SPLASHSCREEN; }
+    class SplashScreen : public State
+    {
+    public:
+        SplashScreen(StateStack& stack);
+        virtual ~SplashScreen() = default;
+        StateID id() const noexcept override { return StateID::SPLASHSCREEN; }
 
-    // Routines
-    bool update(const sf::Time& dt) override;
-    bool handleEvent(const sf::Event& event) override;
+        // Routines
+        bool update(const sf::Time& dt) override;
+        bool handleEvent(const sf::Event& event) override;
 
-private:
-    sfe::Sprite m_background;
-    sfe::AnimatedSprite m_logo;
-};
+    private:
+        sfe::Sprite m_background;
+        sfe::AnimatedSprite m_logo;
+    };
+}

@@ -10,30 +10,32 @@
 
 #include <array>
 
-class MenuSelectWorldState : public State
+namespace states
 {
-    using baseClass = State;
+    class MenuSelectWorld : public State
+    {
+        using baseClass = State;
 
-public:
-    MenuSelectWorldState(StateStack& stack);
-    virtual ~MenuSelectWorldState() = default;
-    StateID id() const noexcept override { return StateID::MENU_SELECTWORLD; }
+    public:
+        MenuSelectWorld(StateStack& stack);
+        virtual ~MenuSelectWorld() = default;
+        StateID id() const noexcept override { return StateID::MENU_SELECTWORLD; }
 
-    // Routines
-    bool handleEvent(const sf::Event& event) override;
+        // Routines
+        bool handleEvent(const sf::Event& event) override;
 
-protected:
-    // Actions
-    void playOnSelectedWorld();
+    protected:
+        // Actions
+        void playOnSelectedWorld();
 
-private:
-    // NUI
-    nui::List m_list;
-    nui::HStacker m_stacker;
-    std::array<nui::Button, 3> m_buttons;
+    private:
+        // NUI
+        nui::List m_list;
+        nui::HStacker m_stacker;
+        std::array<nui::Button, 3> m_buttons;
 
-    // Background and title
-    sfe::Label m_title;
-    sfe::RectangleShape m_background;
-};
-
+        // Background and title
+        sfe::Label m_title;
+        sfe::RectangleShape m_background;
+    };
+}

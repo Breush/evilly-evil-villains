@@ -7,7 +7,9 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Shader.hpp>
 
-SplashScreenState::SplashScreenState(StateStack& stack)
+using namespace states;
+
+SplashScreen::SplashScreen(StateStack& stack)
     : State(stack)
 {
     const sf::Vector2f& resolution = Application::context().resolution;
@@ -30,7 +32,7 @@ SplashScreenState::SplashScreenState(StateStack& stack)
     m_logo.restart();
 }
 
-bool SplashScreenState::update(const sf::Time& dt)
+bool SplashScreen::update(const sf::Time& dt)
 {
     // Check on animated entities
     if (!m_logo.started())
@@ -39,7 +41,7 @@ bool SplashScreenState::update(const sf::Time& dt)
     return State::update(dt);
 }
 
-bool SplashScreenState::handleEvent(const sf::Event& event)
+bool SplashScreen::handleEvent(const sf::Event& event)
 {
     // Back to previous state on Escape
     if (event.type == sf::Event::KeyPressed

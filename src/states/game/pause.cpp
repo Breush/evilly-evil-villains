@@ -13,7 +13,9 @@
 // At least, make it use the nui tools (buttons)
 // And make strings translatable
 
-GamePauseState::GamePauseState(StateStack& stack)
+using namespace states;
+
+GamePause::GamePause(StateStack& stack)
     : State(stack)
 {
     const auto& resolution = Application::context().resolution;
@@ -43,7 +45,7 @@ GamePauseState::GamePauseState(StateStack& stack)
     m_mainMenuButton.setCentered(true);
 }
 
-bool GamePauseState::handleEvent(const sf::Event& event)
+bool GamePause::handleEvent(const sf::Event& event)
 {
     // Back to previous state on Escape
     if (event.type == sf::Event::KeyPressed

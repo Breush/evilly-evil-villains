@@ -9,27 +9,30 @@
 
 #include <list>
 
-class SoundPlayer : private sf::NonCopyable
+namespace resources
 {
-public:
-    SoundPlayer();
+    class SoundPlayer : private sf::NonCopyable
+    {
+    public:
+        SoundPlayer();
 
-    void load(SoundID id, const std::string& filename, bool store = false);
+        void load(SoundID id, const std::string& filename, bool store = false);
 
-    void storeID(SoundID id, const std::wstring& filename);
-    SoundID getID(const std::wstring& filename);
+        void storeID(SoundID id, const std::wstring& filename);
+        SoundID getID(const std::wstring& filename);
 
-    void play(SoundID id);
-    void play(SoundID id, sf::Vector2f position);
+        void play(SoundID id);
+        void play(SoundID id, sf::Vector2f position);
 
-    void stopAll();
+        void stopAll();
 
-    void removeStoppedSounds();
-    void setListenerPosition(sf::Vector2f position);
-    sf::Vector2f getListenerPosition() const;
+        void removeStoppedSounds();
+        void setListenerPosition(sf::Vector2f position);
+        sf::Vector2f getListenerPosition() const;
 
-private:
-    SoundBufferHolder m_soundBuffers;
-    std::list<sf::Sound> m_sounds;
-};
+    private:
+        resources::SoundBufferHolder m_soundBuffers;
+        std::list<sf::Sound> m_sounds;
+    };
+}
 

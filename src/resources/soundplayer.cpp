@@ -6,6 +6,8 @@
 #include <SFML/Audio/Listener.hpp>
 #include <cmath>
 
+using namespace resources;
+
 namespace
 {
     // Sound coordinate system, point of view of a player in front of the screen:

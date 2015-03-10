@@ -4,6 +4,8 @@
 #include "scml/data.hpp"
 #include "sfe/animatedsprite.hpp"
 
+using namespace resources;
+
 AnimationHolder::AnimationHolder()
 {
 }

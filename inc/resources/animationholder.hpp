@@ -16,26 +16,28 @@ namespace scml {
     class Data;
 }
 
-class AnimationHolder : private sf::NonCopyable
+namespace resources
 {
-public:
-    AnimationHolder();
+    class AnimationHolder : private sf::NonCopyable
+    {
+    public:
+        AnimationHolder();
 
-    void load(AnimationID id, const std::string& filename);
-    void update(const sf::Time& dt);
+        void load(AnimationID id, const std::string& filename);
+        void update(const sf::Time& dt);
 
-    // Called by animated sprites
-    void push(sfe::AnimatedSprite* animatedSprite);
-    void pop(sfe::AnimatedSprite* animatedSprite);
+        // Called by animated sprites
+        void push(sfe::AnimatedSprite* animatedSprite);
+        void pop(sfe::AnimatedSprite* animatedSprite);
 
-    // Getters
-    scml::Data& getData(AnimationID id);
-    scml::FileSystem& getFileSystem(AnimationID id);
+        // Getters
+        scml::Data& getData(AnimationID id);
+        scml::FileSystem& getFileSystem(AnimationID id);
 
 
-private:
-    SCMLHolder m_scmlHolder;
-    std::map<AnimationID, std::unique_ptr<scml::FileSystem>> m_fsMap;
-    std::list<sfe::AnimatedSprite*> m_animatedSprites;
-};
-
+    private:
+        SCMLHolder m_scmlHolder;
+        std::map<AnimationID, std::unique_ptr<scml::FileSystem>> m_fsMap;
+        std::list<sfe::AnimatedSprite*> m_animatedSprites;
+    };
+}

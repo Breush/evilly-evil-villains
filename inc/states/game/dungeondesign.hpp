@@ -8,30 +8,33 @@
 #include "dungeon/sidebar.hpp"
 #include "sfe/sprite.hpp"
 
-class GameDungeonDesignState : public State
+namespace states
 {
-public:
-    GameDungeonDesignState(StateStack& stack);
-    virtual ~GameDungeonDesignState() = default;
-    StateID id() const noexcept override { return StateID::GAME_DUNGEON_DESIGN; }
+    class GameDungeonDesign : public State
+    {
+    public:
+        GameDungeonDesign(StateStack& stack);
+        virtual ~GameDungeonDesign() = default;
+        StateID id() const noexcept override { return StateID::GAME_DUNGEON_DESIGN; }
 
-    // Routines
-    bool handleEvent(const sf::Event& event) override;
+        // Routines
+        bool handleEvent(const sf::Event& event) override;
 
-    // Virtual
-    void onQuit() noexcept override;
+        // Virtual
+        void onQuit() noexcept override;
 
-private:
-    // Dungeon
-    dungeon::Data m_dungeonData;
-    dungeon::Inter m_dungeonInter;
-    dungeon::Panel m_dungeonPanel;
-    dungeon::Sidebar m_dungeonSidebar;
+    private:
+        // Dungeon
+        dungeon::Data m_dungeonData;
+        dungeon::Inter m_dungeonInter;
+        dungeon::Panel m_dungeonPanel;
+        dungeon::Sidebar m_dungeonSidebar;
 
-    // NUI
-    nui::ContextMenu m_contextMenu;
+        // NUI
+        nui::ContextMenu m_contextMenu;
 
-    // Decorum
-    sfe::Sprite m_decorumBack;
-    sfe::Sprite m_decorumFront;
-};
+        // Decorum
+        sfe::Sprite m_decorumBack;
+        sfe::Sprite m_decorumFront;
+    };
+}

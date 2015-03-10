@@ -3,6 +3,8 @@
 #include "states/identifiers.hpp"
 #include "tools/debug.hpp"
 
+using namespace states;
+
 StateStack::StateStack()
     : m_stack()
     , m_pendingList()

@@ -5,7 +5,9 @@
 #include "core/gettext.hpp"
 #include "tools/tools.hpp"
 
-QuitState::QuitState(StateStack& stack)
+using namespace states;
+
+Quit::Quit(StateStack& stack)
     : State(stack)
 {
     const auto& resolution = Application::context().resolution;
@@ -35,7 +37,7 @@ QuitState::QuitState(StateStack& stack)
     m_yesButton.setCentered(true);
 }
 
-bool QuitState::handleEvent(const sf::Event& event)
+bool Quit::handleEvent(const sf::Event& event)
 {
     // Back to previous state on Escape
     if (event.type == sf::Event::KeyPressed

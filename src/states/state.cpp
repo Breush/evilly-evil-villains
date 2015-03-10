@@ -3,6 +3,8 @@
 #include "core/application.hpp"
 #include "states/statestack.hpp"
 
+using namespace states;
+
 State::State(StateStack& stack)
     : m_stack(&stack)
 {

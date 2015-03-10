@@ -10,14 +10,14 @@
 
 void Application::loadStates()
 {
-    m_stateStack.registerState<QuitState>(StateID::QUIT);
-    m_stateStack.registerState<SplashScreenState>(StateID::SPLASHSCREEN);
+    m_stateStack.registerState<states::Quit>(StateID::QUIT);
+    m_stateStack.registerState<states::SplashScreen>(StateID::SPLASHSCREEN);
 
-    m_stateStack.registerState<MenuMainState>(StateID::MENU_MAIN);
-    m_stateStack.registerState<MenuSelectWorldState>(StateID::MENU_SELECTWORLD);
-    m_stateStack.registerState<MenuCreateWorldState>(StateID::MENU_CREATEWORLD);
+    m_stateStack.registerState<states::MenuMain>(StateID::MENU_MAIN);
+    m_stateStack.registerState<states::MenuSelectWorld>(StateID::MENU_SELECTWORLD);
+    m_stateStack.registerState<states::MenuCreateWorld>(StateID::MENU_CREATEWORLD);
 
-    m_stateStack.registerState<GameDungeonDesignState>(StateID::GAME_DUNGEON_DESIGN);
-    m_stateStack.registerState<GamePauseState>(StateID::GAME_PAUSE);
+    m_stateStack.registerState<states::GameDungeonDesign>(StateID::GAME_DUNGEON_DESIGN);
+    m_stateStack.registerState<states::GamePause>(StateID::GAME_PAUSE);
 }
 

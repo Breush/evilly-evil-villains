@@ -10,36 +10,41 @@
 
 // Forward declarations
 enum class StateID : uint8;
-class StateStack;
 
-class State
+namespace states
 {
-public:
-    State(StateStack& stack);
-    virtual	~State() = default;
-    virtual StateID id() const noexcept = 0;
+    // Forward declarations
+    class StateStack;
 
-    virtual void draw();
-    virtual bool update(const sf::Time& dt);
-    virtual bool handleEvent(const sf::Event& event);
+    class State
+    {
+    public:
+        State(StateStack& stack);
+        virtual	~State() = default;
+        virtual StateID id() const noexcept = 0;
 
-    // Getter
-    scene::Entity& sceneLayer(LayerID::type layerID) { return m_sceneGraph[layerID]; }
+        virtual void draw();
+        virtual bool update(const sf::Time& dt);
+        virtual bool handleEvent(const sf::Event& event);
 
-    // Called whenever display changes
-    virtual void onShow() noexcept { m_sceneGraph.updateFocusSprite(); }
-    virtual void onHide() noexcept {}
-    virtual void onQuit() noexcept {}
+        // Getter
+        scene::Entity& sceneLayer(LayerID::type layerID) { return m_sceneGraph[layerID]; }
 
-protected:
-    void stackPopPush(StateID stateID);
-    void stackPush(StateID stateID);
-    void stackPop();
-    void stackClear();
-    void stackClear(StateID stateID);
+        // Called whenever display changes
+        virtual void onShow() noexcept { m_sceneGraph.updateFocusSprite(); }
+        virtual void onHide() noexcept {}
+        virtual void onQuit() noexcept {}
 
-private:
-    StateStack*	m_stack;
+    protected:
+        void stackPopPush(StateID stateID);
+        void stackPush(StateID stateID);
+        void stackPop();
+        void stackClear();
+        void stackClear(StateID stateID);
 
-    scene::Graph m_sceneGraph;
-};
+    private:
+        StateStack*	m_stack;
+
+        scene::Graph m_sceneGraph;
+    };
+}
