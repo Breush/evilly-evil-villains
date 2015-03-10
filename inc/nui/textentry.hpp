@@ -33,8 +33,8 @@ namespace nui
         // Dynamics of text and cursor
         void moveCursor(int relativePos);
         void updateDynamicText();
-        int previousRelativeSpace();
-        int nextRelativeSpace();
+        int previousRelativeWord();
+        int nextRelativeWord();
 
     private:
         // Background

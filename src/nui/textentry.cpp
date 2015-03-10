@@ -59,11 +59,11 @@ void TextEntry::handleKeyboardEvent(const sf::Event& event)
     // Use Ctrl to skip a word
     if (event.type == sf::Event::KeyPressed) {
         if (event.key.code == sf::Keyboard::Left) {
-            int toMove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? previousRelativeSpace() : -1;
+            int toMove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? previousRelativeWord() : -1;
             moveCursor(toMove);
         }
         else if (event.key.code == sf::Keyboard::Right) {
-            int toMove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? nextRelativeSpace() : 1;
+            int toMove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? nextRelativeWord() : 1;
             moveCursor(toMove);
         }
     }
@@ -75,14 +75,14 @@ void TextEntry::handleKeyboardEvent(const sf::Event& event)
         // Backspace
         if (event.text.unicode == 8) {
             returnif (m_cursorString.isEmpty());
-            int toRemove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? previousRelativeSpace() : -1;
+            int toRemove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? previousRelativeWord() : -1;
             m_textString.erase(m_cursorString.getSize() + toRemove, -toRemove);
             moveCursor(toRemove);
         }
         // Delete
         else if (event.text.unicode == 127) {
             returnif (m_cursorString == m_textString);
-            int toRemove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? nextRelativeSpace() : 1;
+            int toRemove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? nextRelativeWord() : 1;
             m_textString.erase(m_cursorString.getSize(), toRemove);
         }
         else {
@@ -122,20 +122,20 @@ void TextEntry::updateDynamicText()
     m_cursor.setPosition({m_textPadding + bounds.left + bounds.width + 1.f, 0.5f * m_textPadding});
 }
 
-int TextEntry::previousRelativeSpace()
+int TextEntry::previousRelativeWord()
 {
     int cursorStringSize = m_cursorString.getSize() - 1;
     for (int i = 0; i < cursorStringSize; ++i)
-        returnif (m_cursorString[cursorStringSize - i] == L' ') -(i + 1);
+        returnif (!iswalnum(m_cursorString[cursorStringSize - i])) -(i + 1);
     return -(cursorStringSize + 1);
 }
 
-int TextEntry::nextRelativeSpace()
+int TextEntry::nextRelativeWord()
 {
     int cursorStringSize = m_cursorString.getSize();
     int textStringSize = m_textString.getSize() - 1;
     for (int i = 0; i <= textStringSize - cursorStringSize; ++i)
-        returnif (m_textString[cursorStringSize + i] == L' ') i + 1;
+        returnif (!iswalnum(m_textString[cursorStringSize + i])) i + 1;
     return textStringSize - cursorStringSize + 1;
 }
 
