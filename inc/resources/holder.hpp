@@ -19,8 +19,8 @@ public:
     template <typename Parameter>
     void load(Identifier id, const std::string& filename, const Parameter& param);
 
-    void load(Identifier id);       //< Will create a not loaded unique_ptr<Resource>
-    void loadVoid(Identifier id);   //< Will associate nullptr to the identifier
+    void load(Identifier id);       //!< Will create a not loaded unique_ptr<Resource>
+    void loadVoid(Identifier id);   //!< Will associate nullptr to the identifier
 
     // Returns resource from ID
     Resource& get(Identifier id);

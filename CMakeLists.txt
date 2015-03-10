@@ -46,8 +46,8 @@ endif ()
 
 # Files for project
 set(CODE_MAIN_FILE src/core/main.cpp)
-file(GLOB_RECURSE SOURCES_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*)
-file(GLOB_RECURSE CODE_FILES RELATIVE ${CMAKE_BINARY_DIR} src/* inc/* res/shd/*)
+file(GLOB_RECURSE SOURCES_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*.cpp)
+file(GLOB_RECURSE CODE_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*.cpp inc/*.hpp inc/*.inl res/shd/*.vert res/shd/*.frag)
 list(REMOVE_ITEM CODE_FILES ${CODE_MAIN_FILE})
 
 #=====
@@ -71,14 +71,13 @@ include(${CMAKE_SOURCE_DIR}/cmake/LoadEEVDependencies.cmake)
 #=====
 # Documentation
 
-eev_set_option(EEV_ENABLE_DOCUMENTATION OFF BOOL "Choose whether to enable 'doc' target")
+eev_set_option(EEV_ENABLE_DOCUMENTATION OFF BOOL "Choose whether to enable 'docs' target")
 if (EEV_ENABLE_DOCUMENTATION)
+    add_subdirectory(docs EXCLUDE_FROM_ALL)
     if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wdocumentation")
     endif ()
 endif()
-
-# TODO Use doxygen and create "doc" target
 
 #=====
 # Tests

@@ -56,7 +56,7 @@ namespace scene
 
     protected:
         // Virtual
-        virtual void update() {} //< Called whenever size or a child changed if callParentOnXXXChanges is on
+        virtual void update() {} //!< Called whenever size or a child changed if callParentOnXXXChanges is on
         virtual void updateRoutine(const sf::Time& dt) {}
 
         // Events - mouse-related are called if entity is detectable

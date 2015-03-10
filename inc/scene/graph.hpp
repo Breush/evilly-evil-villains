@@ -19,9 +19,9 @@ namespace sf
 
 namespace LayerID {
     enum type {
-        DUNGEON_DESIGN  = 0,
-        NUI             = 1, //< Keep it last, to be over everything
-        COUNT           = 2,
+        DUNGEON_DESIGN  = 0, //!< For dungeon design mode
+        NUI             = 1, //!< Keep it at the end, will be over everything
+        COUNT           = 2, //!< Numbers of layers, keep it last
     };
 }
 
@@ -55,7 +55,7 @@ namespace scene
 
         // Grabbing object
         void setGrabbable(std::unique_ptr<Grabbable> grabbable);
-        Entity* entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos); //< viewPos will be set to the position in the entity view
+        Entity* entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos); //!< viewPos will be set to the position in the entity view
 
     protected:
         // Mouse detection
@@ -89,7 +89,6 @@ namespace scene
         PARAMG(sf::RectangleShape, m_focusShape, focusShape)
 
     private:
-
         // Layers
         std::array<Layer, static_cast<std::size_t>(LayerID::COUNT)> m_layers;
 
@@ -97,8 +96,8 @@ namespace scene
         Entity* m_hoveredEntity = nullptr;
 
         // Grabbing
-        bool m_grabbing = false; //< For views
-        std::unique_ptr<Grabbable> m_grabbable = nullptr; //< For a specific grabbed object
+        bool m_grabbing = false; //!< For views
+        std::unique_ptr<Grabbable> m_grabbable = nullptr; //!< For a specific grabbed object
 
         // Focusing system
         Entity* m_focusedEntity = nullptr;
