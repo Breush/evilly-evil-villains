@@ -3,21 +3,35 @@
 #include <cwctype>
 #include <cctype>
 
+#include "tools/debug.hpp"
+
 //------------------------------//
 //----- wstring <-> string -----//
 
 inline std::wstring toWString(const std::string& s)
 {
-    std::wstring ws(s.size(), L' ');
-    ws.resize(mbstowcs(&ws[0], s.c_str(), s.size()));
-    return ws;
+    const char* cs = s.c_str();
+    const auto wn = std::mbsrtowcs(nullptr, &cs, 0, nullptr);
+    assert(wn != size_t(-1));
+
+    std::vector<wchar_t> vws(wn + 1);
+    std::mbsrtowcs(vws.data(), &cs, wn + 1, nullptr);
+    assert(cs == nullptr);
+
+    return std::wstring(vws.data(), wn);
 }
 
 inline std::string toString(const std::wstring& ws)
 {
-    std::string s(ws.size(), ' ');
-    s.resize(wcstombs(&s[0], ws.c_str(), ws.size()));
-    return s;
+    const wchar_t* cws = ws.c_str();
+    const auto wn = std::wcsrtombs(nullptr, &cws, 0, nullptr);
+    assert(wn != size_t(-1));
+
+    std::vector<char> vs(wn + 1);
+    std::wcsrtombs(vs.data(), &cws, wn + 1, nullptr);
+    assert(cws == nullptr);
+
+    return std::string(vs.data(), wn);
 }
 
 //-----------------------//

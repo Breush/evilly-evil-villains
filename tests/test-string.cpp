@@ -9,6 +9,25 @@ int main(void)
 
     // French, to check that characters like 'É' are considered alphanum
     internationalization::init("fr_FR");
+    
+    //-------------------------//
+    // String <-> WSide string //
+
+    // String
+    str = "FÜnNY S'TrîNG!";
+    if ((wstr = toWString(str)) != L"FÜnNY S'TrîNG!") {
+        std::wcout << L"String to Wide string differs from expected:" << std::endl;
+        std::wcout << wstr << L" != FÜnNY S'TrîNG!" << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    // Wide string
+    wstr = L"FÜnNY S'TrîNG!";
+    if ((str = toString(wstr)) != "FÜnNY S'TrîNG!") {
+        std::cerr << "Wide string to String differs from expected:" << std::endl;
+        std::cerr << str << " != FÜnNY S'TrîNG!" << std::endl;
+        return EXIT_FAILURE;
+    }
 
     //-------//
     // Lower //
