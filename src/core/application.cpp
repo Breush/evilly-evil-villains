@@ -14,7 +14,6 @@
 //----------------------------//
 //----- Static variables -----//
 
-const sf::Time Application::s_timePerFrame = sf::seconds(1.f/60.f);
 Application::Context Application::s_context;
 
 //-------------------//
@@ -46,8 +45,6 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
 Application::Application()
     //: m_initialState(StateID::MENU_SELECTWORLD)
     : m_initialState(StateID::SPLASHSCREEN)
-    , m_gameTime(0.f)
-    , m_running(false)
 {
     s_context.init({1360.f, 768.f}, "Evily Evil Villains", sf::Style::Default);
 
@@ -76,12 +73,12 @@ void Application::run()
         lag += dt;
 
         // Update until frame limit is hit
-        while (lag >= s_timePerFrame) {
-            lag -= s_timePerFrame;
+        while (lag >= m_timePerFrame) {
+            lag -= m_timePerFrame;
 
             // Game logic core
             processInput();
-            update(s_timePerFrame);
+            update(m_timePerFrame);
 
             // Quit if no more states
             if (m_stateStack.isEmpty())
@@ -89,7 +86,7 @@ void Application::run()
         }
 
         // Rendering
-        // TODO render(lag/s_timePerFrame);
+        // TODO render(lag/m_timePerFrame);
         // So that physics can interpolate the effective display
         // See http://gameprogrammingpatterns.com/game-loop.html
         render();
