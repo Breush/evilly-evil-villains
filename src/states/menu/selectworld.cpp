@@ -1,6 +1,7 @@
 #include "states/menu/selectworld.hpp"
 
 #include "core/application.hpp"
+#include "core/gettext.hpp"
 #include "tools/time.hpp"
 #include "tools/tools.hpp"
 #include "world/context.hpp"

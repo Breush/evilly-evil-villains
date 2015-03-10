@@ -5,6 +5,7 @@
 #include "world/context.hpp"
 #include "tools/debug.hpp"
 #include "tools/filesystem.hpp"
+#include "tools/string.hpp"
 #include "resources/identifiers.hpp"
 
 MenuCreateWorldState::MenuCreateWorldState(StateStack& stack)
@@ -71,7 +72,11 @@ void MenuCreateWorldState::createAndPlayWorld()
 
     // auto& worldData = world::context.worldsData;
 
-    if (!createDirectory(L"worlds/" + worldName)) {
+    // Creating folder
+    auto folder(worldName);
+    filterSpecial(folder);
+
+    if (!createDirectory(L"worlds/" + folder)) {
         // TODO Manage user feedback (or automatically rename folder)
         std::wcout << L"Cannot create directory worlds/" << worldName << std::endl;
         return;

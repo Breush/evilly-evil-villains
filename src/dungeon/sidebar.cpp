@@ -1,6 +1,7 @@
 #include "dungeon/sidebar.hpp"
 
 #include "core/application.hpp"
+#include "core/gettext.hpp"
 #include "resources/identifiers.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 

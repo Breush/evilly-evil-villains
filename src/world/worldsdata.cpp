@@ -1,5 +1,6 @@
 #include "world/worldsdata.hpp"
 
+#include "tools/string.hpp"
 #include "tools/debug.hpp"
 #include "tools/time.hpp"
 
@@ -34,7 +35,7 @@ void WorldsData::load(const std::string& file)
         world.mainDungeon = worldInfo.attribute(L"mainDungeon").as_string();
         world.created = static_cast<time_t>(worldInfo.attribute(L"created").as_uint());
         world.lastPlayed = static_cast<time_t>(worldInfo.attribute(L"lastPlayed").as_uint());
-        world.folder = internationalization::wstring2string(worldInfo.attribute(L"folder").as_string());
+        world.folder = toString(worldInfo.attribute(L"folder").as_string());
 
         m_worlds.emplace_back(std::move(world));
     }
@@ -56,7 +57,7 @@ void WorldsData::save(const std::string& file)
         worldsInfo.append_attribute(L"mainDungeon") = world.mainDungeon.c_str();
         worldsInfo.append_attribute(L"created") = uint(world.created);
         worldsInfo.append_attribute(L"lastPlayed") = uint(world.lastPlayed);
-        worldsInfo.append_attribute(L"folder") = internationalization::string2wstring(world.folder).c_str();
+        worldsInfo.append_attribute(L"folder") = toWString(world.folder).c_str();
     }
 
     doc.save_file(file.c_str());

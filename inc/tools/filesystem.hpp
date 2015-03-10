@@ -1,8 +1,6 @@
 #pragma once
 
-#include "core/gettext.hpp"
-
-#include <string>
+#include "tools/string.hpp" // toString
 
 #if defined(__WIN32__)
     // Windows
@@ -20,6 +18,6 @@ inline bool createDirectory(const std::wstring& dir)
     return CreateDirectoryW(dir.c_str(), 0) != 0;
 #else
     // POSIX
-    return mkdir(internationalization::wstring2string(dir).c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == 0;
+    return mkdir(toString(dir).c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == 0;
 #endif
 }

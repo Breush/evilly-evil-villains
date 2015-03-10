@@ -1,4 +1,6 @@
 
+#include "tools/string.hpp" // toWString
+
 template <typename Resource, typename Identifier>
 inline void ResourceHolder<Resource, Identifier>::load(Identifier id)
 {
@@ -15,7 +17,7 @@ inline void ResourceHolder<Resource, Identifier>::load(Identifier id, const std:
 
     // If loading successful, insert resource to map
     insertResource(id, std::move(resource));
-    if (store) storeID(id, internationalization::string2wstring(filename));
+    if (store) storeID(id, toWString(filename));
 }
 
 template <typename Resource, typename Identifier>

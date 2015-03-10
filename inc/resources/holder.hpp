@@ -2,7 +2,6 @@
 
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
-#include "core/gettext.hpp" // string2wstring
 
 #include <SFML/System/Time.hpp>
 

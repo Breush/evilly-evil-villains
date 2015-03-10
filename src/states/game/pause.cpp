@@ -1,6 +1,7 @@
 #include "states/game/pause.hpp"
 
 #include "core/application.hpp"
+#include "core/gettext.hpp"
 #include "resources/identifiers.hpp"
 #include "tools/tools.hpp"
 
