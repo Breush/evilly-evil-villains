@@ -1,6 +1,10 @@
 
 #include <algorithm> // transform
-#include <cctype> // isalnum
+#include <cwctype>
+#include <cctype>
+
+//------------------------------//
+//----- wstring <-> string -----//
 
 inline std::wstring toWString(const std::string& s)
 {
@@ -16,19 +20,50 @@ inline std::string toString(const std::wstring& ws)
     return s;
 }
 
-template<typename T>
-std::basic_string<T>& toLowercase(std::basic_string<T>& str)
+//-----------------------//
+//----- lower/upper -----//
+
+inline std::string& toLowercase(std::string& str)
 {
     std::transform(str.begin(), str.end(), str.begin(), tolower);
     return str;
 }
 
-template<typename T>
-std::basic_string<T>& filterSpecial(std::basic_string<T>& str)
+inline std::wstring& toLowercase(std::wstring& str)
+{
+    std::transform(str.begin(), str.end(), str.begin(), towlower);
+    return str;
+}
+
+inline std::string& toUppercase(std::string& str)
+{
+    std::transform(str.begin(), str.end(), str.begin(), toupper);
+    return str;
+}
+
+inline std::wstring& toUppercase(std::wstring& str)
+{
+    std::transform(str.begin(), str.end(), str.begin(), towupper);
+    return str;
+}
+
+//-----------------------------//
+//----- Special treatment -----//
+
+inline std::string& filterSpecial(std::string& str, bool lower)
 {
     for (auto& c : str)
         if (!isalnum(c))
-            c = '_';
+            c = L'_';
+      
+    return (lower)? toLowercase(str) : str;
+}
 
-    return toLowercase(str);
+inline std::wstring& filterSpecial(std::wstring& str, bool lower)
+{
+    for (auto& c : str)
+        if (!iswalnum(c))
+            c = L'_';
+      
+    return (lower)? toLowercase(str) : str;
 }
