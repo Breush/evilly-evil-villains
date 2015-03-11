@@ -22,7 +22,7 @@ namespace nui
 
         // Events
         void handleGlobalEvent(const sf::Event& event);
-        void handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
+        void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
         void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
         void handleMouseLeft() override;
 

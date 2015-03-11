@@ -14,15 +14,15 @@
 using namespace scene;
 
 Entity::Entity(bool isLerpable)
-    : m_graph(nullptr)
-    , m_parent(nullptr)
-    , m_depth(50.f)
+    : m_depth(50.f)
     , m_localPosition(0.f, 0.f)
     , m_localRotation(0.f)
     , m_localScale(1.f, 1.f)
     , m_size(0.f, 0.f)
     , m_centered(false)
     , m_visible(true)
+    , m_graph(nullptr)
+    , m_parent(nullptr)
     , m_detectable(true)
     , m_focusable(false)
     , m_focusOwned(false)
@@ -463,11 +463,10 @@ void Entity::markForVisible(bool visible)
     m_visibleMark = visible;
 }
 
-sf::Vector2i Entity::displayedPixel(const sf::Vector2f& position)
+void Entity::setParent(Entity* inParent)
 {
-    const auto& window = Application::context().window;
-    auto viewPos = getInverseTransform().transformPoint(position);
-    return window.mapCoordsToPixel(viewPos);
+    m_parent = inParent;
+    refreshFromLocal();
 }
 
 //-----------------//

@@ -66,7 +66,7 @@ void Panel::update()
 //------------------------//
 //----- Mouse events -----//
 
-void Panel::handleMouseButtonPressed(const sf::Mouse::Button&, const sf::Vector2f& mousePos, const sf::Vector2f&)
+void Panel::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
     if (m_switchReducedButton.getGlobalBounds().contains(mousePos))
         switchReduced();

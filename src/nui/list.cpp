@@ -186,7 +186,7 @@ void List::addLine(const std::initializer_list<std::wstring>& values)
 //------------------------//
 //----- Mouse events -----//
 
-void List::handleMouseButtonPressed(const sf::Mouse::Button&, const sf::Vector2f& mousePos, const sf::Vector2f&)
+void List::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
     // Do not take first line, they are the columns titles
     uint line = mousePos.y / lineHeight() - 1;

@@ -2,6 +2,8 @@
 
 #include "tools/tools.hpp"
 
+#include <SFML/Window/Event.hpp>
+
 using namespace nui;
 
 Button::Button()
@@ -34,7 +36,7 @@ void Button::setAction(const std::wstring& text, const Callback callback)
 //------------------//
 //----- Events -----//
 
-void Button::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f&, const sf::Vector2f&)
+void Button::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f&)
 {
     returnif (button != sf::Mouse::Left);
 

@@ -77,7 +77,7 @@ void ContextMenu::handleGlobalEvent(const sf::Event& event)
         markForVisible(false);
 }
 
-void ContextMenu::handleMouseButtonPressed(const sf::Mouse::Button&, const sf::Vector2f& mousePos, const sf::Vector2f&)
+void ContextMenu::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
     uint choice = choiceFromCoords(mousePos);
 

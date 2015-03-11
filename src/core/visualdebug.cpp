@@ -2,7 +2,6 @@
 
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
-#include "tools/tools.hpp"
 
 #include <sstream>
 

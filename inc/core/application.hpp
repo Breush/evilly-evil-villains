@@ -90,14 +90,14 @@ protected:
      *  And finally dispatch all other events to the state stack.
      */
     void processInput();
-    
+
     //! Update the game logic.
     /*!
      *  Dispatch the time (normally fixed) to main components:
      *  visual debug, shaders, animations and finally state stack.
      */
     void update(const sf::Time& dt);
-    
+
     //! Render the current scene.
     /*!
      *  - Clear the entire screen
@@ -109,10 +109,10 @@ protected:
 
     //-----------------------------//
     //----- Window management -----//
-    
+
     //! Poll out all events from the window.
     void clearWindowEvents();
-    
+
     //! Poll out all events and get the last one of a certain type.
     /*!
      *  @param event    Will be set to the last event in the queue of specified type.
@@ -120,10 +120,10 @@ protected:
      *  @param type     The specified type.
      */
     void clearWindowEvents(sf::Event& event, sf::Event::EventType type);
-    
-    //! Quick way switch to switch fullscreen mode, recreate a context and refresh. 
+
+    //! Quick way switch to switch fullscreen mode, recreate a context and refresh.
     void switchFullscreenMode();
-    
+
     //! Tells the components that need screen information to refresh.
     /*!
      *  Views and shaders will update there internal information.
@@ -132,7 +132,7 @@ protected:
 
     //-----------------------------------//
     //----- Pre-loading and refresh -----//
-    
+
     void loadViews();       //!< Load views into memory.
     void loadTextures();    //!< Load textures into memory.
     void loadShaders();     //!< Load shaders into memory.
@@ -149,16 +149,16 @@ protected:
     void updateAnimations(const sf::Time& dt);  //!< Animate the currently played animations.
 
 private:
-    
+
     //! The main global variable (and almost the only one).
     static Context s_context;
 
     //! Fixed timestep to update game logic.
     const sf::Time m_timePerFrame = sf::seconds(1.f/60.f);
-    
+
     //! The game time since game loop is running.
     float m_gameTime = 0.f;
-    
+
     //! Controls whether to continue game loop.
     bool m_running = false;
 
@@ -167,7 +167,7 @@ private:
 
     //! The stack of states.
     states::StateStack m_stateStack;
-    
+
     //! The debug information.
     VisualDebug m_visualDebug;
 };

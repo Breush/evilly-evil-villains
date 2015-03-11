@@ -53,7 +53,7 @@ void Sidebar::update()
 //------------------------//
 //----- Mouse events -----//
 
-void Sidebar::handleMouseButtonPressed(const sf::Mouse::Button&, const sf::Vector2f& mousePos, const sf::Vector2f&)
+void Sidebar::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
     if (m_switchReducedButton.getGlobalBounds().contains(mousePos))
         switchReduced();

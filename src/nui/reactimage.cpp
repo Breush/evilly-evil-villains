@@ -161,7 +161,7 @@ void ReactImage::selectActiveRect()
 //------------------------//
 //----- Mouse events -----//
 
-void ReactImage::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
+void ReactImage::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
     returnif (button != sf::Mouse::Left);
 

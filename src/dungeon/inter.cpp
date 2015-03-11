@@ -141,7 +141,7 @@ void Inter::handleGlobalEvent(const sf::Event& event)
 #endif
 }
 
-void Inter::handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
+void Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
     // Selected new room
     selectRoomFromCoords(mousePos);

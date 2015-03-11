@@ -50,10 +50,10 @@ namespace dungeon
 
         //-------------------------//
         //----- Import/Export -----//
-        
+
         //! Load dungeon data from a file.
         void load(const std::string& file);
-        
+
         //! Save dungeon data to a file.
         void save(const std::string& file);
 
@@ -70,16 +70,16 @@ namespace dungeon
 
         //-------------------//
         //----- Changes -----//
-        
+
         //! Callback on \ref floorCount property.
         void changedFloorsCount();
-        
+
         //! Callback on \ref roomsByFloor property.
         void changedRoomsByFloor();
 
         //-----------------------//
         //----- Corrections -----//
-        
+
         //! Correct the dungeon data.
         /*!
          *  Will resize the room/floor vectors to current values
@@ -90,21 +90,21 @@ namespace dungeon
 
         //------------------//
         //----- Params -----//
-        
+
         //! Name of the dungeon.
         //! @access name
         PARAMG(std::wstring, m_name, name)
-        
+
         //! Number of floors in the dungeon.
         //! @access floorsCount setFloorsCount changedFloorsCount
         PARAMGSU(uint, m_floorsCount, floorsCount, setFloorsCount, changedFloorsCount)
-        
+
         //! Number of rooms in each floor.
         //! @access roomsByFloor setRoomsByFloor changedRoomsByFloor
         PARAMGSU(uint, m_roomsByFloor, roomsByFloor, setRoomsByFloor, changedRoomsByFloor)
 
     private:
-        
+
         //! A dungeon consists in a vector of floors.
         std::vector<Floor> m_floors;
     };

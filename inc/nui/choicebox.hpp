@@ -42,7 +42,7 @@ namespace nui
 
         // Events
         void handleKeyboardEvent(const sf::Event& event) override;
-        virtual void handleMouseButtonPressed(const sf::Mouse::Button& button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
+        virtual void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
         virtual void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
         virtual void handleMouseLeft() override;
 
@@ -89,7 +89,7 @@ namespace nui
         // Arrows
         sfe::LArrow m_lArrow;
         sfe::RArrow m_rArrow;
-        
+
         // Properties
         sf::Vector2f m_buttonSize;
         float m_arrowOffset;
