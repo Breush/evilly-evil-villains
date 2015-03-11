@@ -97,6 +97,9 @@ void Application::run()
         s_context.window.close();
 }
 
+//-------------------------------//
+//----- Logic and rendering -----//
+
 void Application::processInput()
 {
     sf::Event event;
@@ -189,12 +192,6 @@ void Application::clearWindowEvents(sf::Event& event, sf::Event::EventType type)
             event = polledEvent;
 }
 
-void Application::refresh()
-{
-    refreshViews();
-    refreshShaders();
-}
-
 void Application::switchFullscreenMode()
 {
     // Switching fullscreen flag
@@ -202,3 +199,10 @@ void Application::switchFullscreenMode()
     s_context.init(s_context.resolution, s_context.title, s_context.style);
     refresh();
 }
+
+void Application::refresh()
+{
+    refreshViews();
+    refreshShaders();
+}
+

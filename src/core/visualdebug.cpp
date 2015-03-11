@@ -6,14 +6,6 @@
 
 #include <sstream>
 
-VisualDebug::VisualDebug()
-    : m_visible(false)
-    , m_renderedFrames(0)
-    , m_renderedUpdates(0)
-    , m_time(0.f)
-{
-}
-
 void VisualDebug::init()
 {
     // Getting font from holder
@@ -21,6 +13,9 @@ void VisualDebug::init()
     m_text.setCharacterSize(16);
     m_text.setFont(Application::context().fonts.get(FontID::MONO));
 }
+
+//-------------------//
+//----- Routine -----//
 
 void VisualDebug::update(const sf::Time& dt)
 {
