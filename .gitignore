@@ -3,6 +3,10 @@ Testing
 bin
 lib
 
+docs/html
+docs/latex
+docs/doxyfile
+
 Makefile
 CMakeCache.txt
 cmake_install.cmake

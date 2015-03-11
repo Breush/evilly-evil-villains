@@ -9,29 +9,29 @@ int main(void)
 
     // French, to check that characters like 'É' are considered alphanum
     internationalization::init("fr_FR");
-    
+
     //-------------------------//
     // String <-> WSide string //
 
     // String
-    str = "FÜnNY S'TrîNG!";
-    if ((wstr = toWString(str)) != L"FÜnNY S'TrîNG!") {
+    str = "FUnNY S'TriNG!";
+    if ((wstr = toWString(str)) != L"FUnNY S'TriNG!") {
         std::wcout << L"String to Wide string differs from expected:" << std::endl;
-        std::wcout << wstr << L" != FÜnNY S'TrîNG!" << std::endl;
+        std::wcout << wstr << L" != FUnNY S'TriNG!" << std::endl;
         return EXIT_FAILURE;
     }
 
     // Wide string
-    wstr = L"FÜnNY S'TrîNG!";
-    if ((str = toString(wstr)) != "FÜnNY S'TrîNG!") {
+    wstr = L"FUnNY S'TriNG!";
+    if ((str = toString(wstr)) != "FUnNY S'TriNG!") {
         std::cerr << "Wide string to String differs from expected:" << std::endl;
-        std::cerr << str << " != FÜnNY S'TrîNG!" << std::endl;
+        std::cerr << str << " != FUnNY S'TriNG!" << std::endl;
         return EXIT_FAILURE;
     }
 
     //-------//
     // Lower //
-    
+
     // String
     str = "FUnNY S'TriNG!";
     if (toLowercase(str) != "funny s'tring!") {
@@ -50,7 +50,7 @@ int main(void)
 
     //-------//
     // Upper //
-    
+
     // String
     str = "FUnNY S'TriNG!";
     if (toUppercase(str) != "FUNNY S'TRING!") {
@@ -69,7 +69,7 @@ int main(void)
 
     //---------//
     // Special //
-    
+
     // String
     str = "FUn-NY... S'TriNG!";
     if (filterSpecial(str, false) != "FUn_NY____S_TriNG_") {
@@ -77,7 +77,7 @@ int main(void)
         std::cerr << str << " != FUn_NY____S_TriNG_" << std::endl;
         return EXIT_FAILURE;
     }
-    
+
     // Wide string
     wstr = L"FÜn-NY... S'TrîNG!";
     if (filterSpecial(wstr, false) != L"FÜn_NY____S_TrîNG_") {

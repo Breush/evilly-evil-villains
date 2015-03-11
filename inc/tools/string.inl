@@ -11,7 +11,7 @@
 inline std::wstring toWString(const std::string& s)
 {
     const char* cs = s.c_str();
-    const auto wn = std::mbsrtowcs(nullptr, &cs, 0, nullptr);
+    const auto wn = std::mbstowcs(nullptr, cs, 0);
     assert(wn != size_t(-1));
 
     std::vector<wchar_t> vws(wn + 1);
@@ -24,7 +24,7 @@ inline std::wstring toWString(const std::string& s)
 inline std::string toString(const std::wstring& ws)
 {
     const wchar_t* cws = ws.c_str();
-    const auto wn = std::wcsrtombs(nullptr, &cws, 0, nullptr);
+    const auto wn = std::wcstombs(nullptr, cws, 0);
     assert(wn != size_t(-1));
 
     std::vector<char> vs(wn + 1);
@@ -69,7 +69,7 @@ inline std::string& filterSpecial(std::string& str, bool lower)
     for (auto& c : str)
         if (!isalnum(c))
             c = L'_';
-      
+
     return (lower)? toLowercase(str) : str;
 }
 
@@ -78,6 +78,6 @@ inline std::wstring& filterSpecial(std::wstring& str, bool lower)
     for (auto& c : str)
         if (!iswalnum(c))
             c = L'_';
-      
+
     return (lower)? toLowercase(str) : str;
 }
