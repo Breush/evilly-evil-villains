@@ -5,13 +5,6 @@
 
 using namespace states;
 
-StateStack::StateStack()
-    : m_stack()
-    , m_pendingList()
-    , m_factories()
-{
-}
-
 void StateStack::update(const sf::Time& dt)
 {
     // Iterate from top to bottom, stop as soon as update() returns false

@@ -28,7 +28,7 @@ namespace states
         };
 
     public:
-        explicit StateStack();
+        explicit StateStack() = default;
 
         template <typename T>
         void registerState(StateID stateID)

@@ -2,6 +2,14 @@
 
 #include "resources/identifiers.hpp"
 
+// We set view to keep the same ratio than resolution, keeping previous zoom and center
+void adaptViewToResolution(sf::View& view, const sf::Vector2f& resolution)
+{
+    const auto& viewSize = view.getSize();
+    float zoomFactor = (viewSize.x > viewSize.y)? viewSize.y / resolution.y : viewSize.x / resolution.x;
+    view.setSize(resolution * zoomFactor);
+}
+
 void Application::loadViews()
 {
     // TODO Currently, the views are stored using the ResourceHolder.
@@ -41,6 +49,7 @@ void Application::refreshViews()
     defaultView.setViewport(viewport);
 
     auto& dungeonDesignView = s_context.views.get(ViewID::DUNGEON_DESIGN);
+    adaptViewToResolution(dungeonDesignView, resolution);
     dungeonDesignView.setViewport(viewport);
 
     auto& nuiView = s_context.views.get(ViewID::NUI);
