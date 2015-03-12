@@ -34,8 +34,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     m_dungeonInter.setDepth(50.f);
     m_dungeonInter.useData(m_dungeonData);
     m_dungeonInter.setSize({350, 450});
-    m_dungeonInter.setCentered(true);
-    m_dungeonInter.setLocalPosition(resolution / 2.f);
+    m_dungeonInter.setLocalPosition({1024.f / 3.f, 768.f - 450.f - 100.f});
 
     // Dungeon panel
     sceneLayer(LayerID::NUI).attachChild(m_dungeonPanel);
@@ -54,12 +53,12 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 
     // Decorum
     sceneLayer(LayerID::DUNGEON_DESIGN).attachChild(m_decorumBack);
-    m_decorumBack.setDepth(100.f);
     m_decorumBack.setTexture(TextureID::DUNGEON_SCENE_GRASSYHILLS_BACK);
+    m_decorumBack.setDepth(100.f);
 
     sceneLayer(LayerID::DUNGEON_DESIGN).attachChild(m_decorumFront);
-    m_decorumFront.setDepth(10.f);
     m_decorumFront.setTexture(TextureID::DUNGEON_SCENE_GRASSYHILLS_FRONT);
+    m_decorumFront.setDepth(10.f);
 }
 
 void GameDungeonDesign::onQuit() noexcept

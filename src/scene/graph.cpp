@@ -18,27 +18,23 @@ Graph::Graph()
     m_focusShape.setTexture(&Application::context().textures.get(TextureID::NUI_FOCUS));
     m_focusShape.setFillColor({255, 255, 255, 100});
 
-    // Default parameters
-    for (auto& layer : m_layers) {
-        layer.root.setDetectable(false);
-        layer.root.setFocusable(false);
-        layer.root.setVisible(false);
-        layer.root.setGraph(this);
-    }
-
     // Initialisation of layers views
-    m_layers[LayerID::DUNGEON_DESIGN].view = &Application::context().views.get(ViewID::DUNGEON_DESIGN);
-    m_layers[LayerID::DUNGEON_DESIGN].manipulable = true;
+    m_layers[LayerID::DUNGEON_DESIGN].root().setGraph(this);
+    m_layers[LayerID::DUNGEON_DESIGN].setView(ViewID::DUNGEON_DESIGN);
+    m_layers[LayerID::DUNGEON_DESIGN].setManipulable(true);
+    m_layers[LayerID::DUNGEON_DESIGN].setDisplayRect({0.f, 0.f, 1024.f, 768.f});
+    // FIXME dislayRect should be set in a clever way, and much bigger.
 
-    m_layers[LayerID::NUI].view = &Application::context().views.get(ViewID::NUI);
-    m_layers[LayerID::NUI].manipulable = false;
+    m_layers[LayerID::NUI].root().setGraph(this);
+    m_layers[LayerID::NUI].setView(ViewID::NUI);
+    m_layers[LayerID::NUI].setManipulable(false);
 }
 
 const sf::View& Graph::viewFromLayerRoot(const Entity* root) const
 {
     for (const auto& layer : m_layers)
-        if (&layer.root == root)
-            return *layer.view;
+        if (&layer.root() == root)
+            return layer.view();
 
     // Not found: problem
     throw std::runtime_error("Scene graph is inconsistent.");
@@ -50,8 +46,8 @@ const sf::View& Graph::viewFromLayerRoot(const Entity* root) const
 void Graph::update(const sf::Time& dt)
 {
     // Update recursively all the entities
-    for (auto& layerRootEntity : m_layers)
-        layerRootEntity.root.update(dt);
+    for (auto& layer : m_layers)
+        layer.root().update(dt);
 
     // Focusing system - animation
     if (m_focusedEntity != nullptr) {
@@ -109,8 +105,8 @@ void Graph::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     // Draw all layers
     for (auto& layer : m_layers) {
-        target.setView(*layer.view);
-        target.draw(layer.root, states);
+        target.setView(layer.view());
+        target.draw(layer.root(), states);
     }
 
     // Drawing grabbed object
@@ -170,7 +166,7 @@ void Graph::focusHandleEvent(const sf::Event& event)
         // Simply get next or restart from the beginning
         Entity* nextFocused = m_focusedEntity->nextFocusable();
         if (nextFocused != nullptr) setFocusedEntity(nextFocused);
-        else setFocusedEntity(m_layers[LayerID::NUI].root.nextFocusable());
+        else setFocusedEntity(m_layers[LayerID::NUI].root().nextFocusable());
     }
 
     // Find previous entity
@@ -180,7 +176,7 @@ void Graph::focusHandleEvent(const sf::Event& event)
         Entity* previousFocused = m_focusedEntity->previousFocusable();
         if (previousFocused != nullptr) setFocusedEntity(previousFocused);
         else {
-            previousFocused = m_layers[LayerID::NUI].root.lastDescendant();
+            previousFocused = m_layers[LayerID::NUI].root().lastDescendant();
             if (previousFocused->focusable()) setFocusedEntity(previousFocused);
             else setFocusedEntity(previousFocused->previousFocusable());
         }
@@ -194,12 +190,12 @@ void Graph::handleMouseWheelPressedEvent(const sf::Event& event)
 {
     const auto& window = Application::context().window;
     auto mousePos = mousePosition(event);
-    m_grabbing = true;
 
     for (auto& layer : m_layers) {
-        if (layer.manipulable) {
-            auto position = window.mapPixelToCoords(mousePos, *layer.view);
-            layer.grabbingPosition = position;
+        if (layer.manipulable()) {
+            auto position = window.mapPixelToCoords(mousePos, layer.view());
+            layer.startGrabbing(position);
+            m_grabbing = true;
         }
     }
 }
@@ -217,9 +213,9 @@ bool Graph::handleMouseMovedEvent(const sf::Event& event)
     auto mousePos = mousePosition(event);
 
     for (auto& layer : m_layers) {
-        if (layer.manipulable) {
-            auto position = window.mapPixelToCoords(mousePos, *layer.view);
-            layer.view->move(layer.grabbingPosition - position);
+        if (layer.manipulable()) {
+            auto position = window.mapPixelToCoords(mousePos, layer.view());
+            layer.moveGrabbing(position);
         }
     }
 
@@ -238,14 +234,14 @@ void Graph::handleMouseWheelMovedEvent(const sf::Event& event)
 
     // Zoom on all zoomable layers
     for (auto& layer : m_layers) {
-        if (layer.manipulable) {
+        if (layer.manipulable()) {
             // Apply new zoom
-            auto initPos = window.mapPixelToCoords(mousePos, *layer.view);
-            layer.view->zoom(zoomFactor);
+            auto initPos = window.mapPixelToCoords(mousePos, layer.view());
+            layer.zoom(zoomFactor);
 
             // Move to adjust the point below the mouse
-            auto finalPos = window.mapPixelToCoords(mousePos, *layer.view);
-            layer.view->move(initPos - finalPos);
+            auto finalPos = window.mapPixelToCoords(mousePos, layer.view());
+            layer.move(initPos - finalPos);
         }
     }
 }
@@ -261,7 +257,7 @@ void Graph::grabbableHandleMouseEvent(const sf::Event& event)
     Entity* entity;
 
     const auto& window = Application::context().window;
-    sf::Vector2f nuiPos = window.mapPixelToCoords(mousePos, *m_layers[LayerID::NUI].view);
+    sf::Vector2f nuiPos = window.mapPixelToCoords(mousePos, m_layers[LayerID::NUI].view());
 
     switch (event.type) {
     case sf::Event::MouseMoved:
@@ -287,7 +283,7 @@ void Graph::setGrabbable(std::unique_ptr<Grabbable> grabbable)
     // TODO Remove this duplicated code from handleMouseEvent() && grabbableHandleMouseEvent() functions
     const auto& window = Application::context().window;
     auto mousePos = sf::Mouse::getPosition(window);
-    sf::Vector2f nuiPos = window.mapPixelToCoords(mousePos, *m_layers[LayerID::NUI].view);
+    sf::Vector2f nuiPos = window.mapPixelToCoords(mousePos, m_layers[LayerID::NUI].view());
     m_grabbable->setPosition(nuiPos);
 }
 
@@ -328,7 +324,7 @@ Entity* Graph::handleMouseEvent(const sf::Event& event)
 
     // Getting relative coordinates
     const auto& window = Application::context().window;
-    sf::Vector2f nuiPos = window.mapPixelToCoords(mousePos, *m_layers[LayerID::NUI].view);
+    sf::Vector2f nuiPos = window.mapPixelToCoords(mousePos, m_layers[LayerID::NUI].view());
     sf::Vector2f relPos = entity->getInverseTransform().transformPoint(viewPos);
 
     // Calling child callback
@@ -369,8 +365,8 @@ Entity* Graph::entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& vi
 
     rfor (layer, m_layers) {
         // Extrapolating position and getting entity if any
-        viewPos = window.mapPixelToCoords(mousePos, *layer->view);
-        Entity* entity = layer->root.firstOver(viewPos);
+        viewPos = window.mapPixelToCoords(mousePos, layer->view());
+        Entity* entity = layer->root().firstOver(viewPos);
         returnif (entity != nullptr) entity;
     }
 

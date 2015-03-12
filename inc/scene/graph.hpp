@@ -2,28 +2,12 @@
 
 #include "scene/grabbable.hpp"
 #include "scene/entity.hpp"
+#include "scene/layer.hpp"
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <array>
-
-// Forward declarations
-
-namespace sf
-{
-    class View;
-}
-
-// Enums
-
-namespace LayerID {
-    enum type {
-        DUNGEON_DESIGN  = 0, //!< For dungeon design mode
-        NUI             = 1, //!< Keep it at the end, will be over everything
-        COUNT           = 2, //!< Numbers of layers, keep it last
-    };
-}
 
 namespace scene
 {
@@ -43,7 +27,7 @@ namespace scene
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
         // Access layers
-        Entity& operator[](LayerID::type layerID) { return m_layers[static_cast<std::size_t>(layerID)].root; }
+        Entity& operator[](LayerID::type layerID) { return m_layers[static_cast<std::size_t>(layerID)].root(); }
         const sf::View& viewFromLayerRoot(const Entity* root) const;
 
         // Focusing system
@@ -75,14 +59,6 @@ namespace scene
         void handleMouseWheelReleasedEvent(const sf::Event& event);
         void handleMouseWheelMovedEvent(const sf::Event& event);
         bool handleMouseMovedEvent(const sf::Event& event);
-
-        // Layer
-        struct Layer {
-            Entity root;
-            sf::View* view;
-            bool manipulable;
-            sf::Vector2f grabbingPosition;
-        };
 
         // Params - TODO Why are these params?
         PARAMG(sf::Shader*, m_focusShader, focusShader)
