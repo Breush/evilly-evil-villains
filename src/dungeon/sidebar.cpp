@@ -79,58 +79,35 @@ void Sidebar::setMode(Mode mode)
 {
     m_tabsStacker.clear();
 
-    // TODO Get tabImageSize from somewhere or directly stored in imageButton?
-    sf::Vector2f tabImageSize(80.f, 80.f);
+    m_tabs.clear();
 
     // TODO Think about a better way to do this (and save it somewhere)
+    // TODO Use facilities ladder model for all.
     // TODO Get tabs from dungeon::Data?
     // TODO Set callbacks
-    if (mode == Mode::MONSTERS) {
-        m_tabs.resize(5);
-        // TODO Use facilities ladder model for all.
-        m_tabs[0] = std::make_unique<nui::GrabButton>();
-        m_tabs[1] = std::make_unique<nui::GrabButton>();
-        m_tabs[2] = std::make_unique<nui::GrabButton>();
-        m_tabs[3] = std::make_unique<nui::GrabButton>();
-        m_tabs[4] = std::make_unique<nui::GrabButton>();
 
-        m_tabs[0]->setVisual(_("Grasshopper"), TextureID::DUNGEON_MONSTERS_GRASSHOPPER, tabImageSize);
+    if (mode == Mode::MONSTERS) {
+        /*m_tabs[0]->setVisual(_("Grasshopper"), TextureID::DUNGEON_MONSTERS_GRASSHOPPER, tabImageSize);
         m_tabs[1]->setVisual(_("Creepim"),     TextureID::DUNGEON_MONSTERS_CREEPIM,     tabImageSize);
         m_tabs[2]->setVisual(_("Fly-man"),     TextureID::DUNGEON_MONSTERS_FLYMAN,      tabImageSize);
         m_tabs[3]->setVisual(_("Lezard-man"),  TextureID::DUNGEON_MONSTERS_LEZARDMAN,   tabImageSize);
-        m_tabs[4]->setVisual(_("Weremole"),    TextureID::DUNGEON_MONSTERS_WEREMOLE,    tabImageSize);
+        m_tabs[4]->setVisual(_("Weremole"),    TextureID::DUNGEON_MONSTERS_WEREMOLE,    tabImageSize);*/
     }
     else if (mode == Mode::TRAPS) {
-        m_tabs.resize(4);
-
-        m_tabs[0] = std::make_unique<nui::GrabButton>();
-        m_tabs[1] = std::make_unique<nui::GrabButton>();
-        m_tabs[2] = std::make_unique<nui::GrabButton>();
-        m_tabs[3] = std::make_unique<nui::GrabButton>();
-
-        m_tabs[0]->setVisual(_("Bells"),              TextureID::DUNGEON_TRAPS_BELLS,             tabImageSize);
+        /*m_tabs[0]->setVisual(_("Bells"),              TextureID::DUNGEON_TRAPS_BELLS,             tabImageSize);
         m_tabs[1]->setVisual(_("Wolf trap"),          TextureID::DUNGEON_TRAPS_WOLFTRAP,          tabImageSize);
         m_tabs[2]->setVisual(_("Trompe l'oeil"),       TextureID::DUNGEON_TRAPS_TROMPELOEIL,       tabImageSize);
-        m_tabs[3]->setVisual(_("Tranquilizer darts"), TextureID::DUNGEON_TRAPS_TRANQUILIZERDARTS, tabImageSize);
+        m_tabs[3]->setVisual(_("Tranquilizer darts"), TextureID::DUNGEON_TRAPS_TRANQUILIZERDARTS, tabImageSize);*/
     }
     else if (mode == Mode::FACILITIES) {
-        m_tabs.resize(2);
+        m_tabs.push_back(std::make_unique<dungeon::facilities::LadderGrabButton>());
 
-        m_tabs[0] = std::make_unique<dungeon::facilities::LadderGrabButton>();
-        m_tabs[1] = std::make_unique<nui::GrabButton>();
-
-        m_tabs[1]->setVisual(_("Signpost"), TextureID::DUNGEON_FACILITIES_SIGNPOST, tabImageSize);
+        /*m_tabs[1]->setVisual(_("Signpost"), TextureID::DUNGEON_FACILITIES_SIGNPOST, tabImageSize);*/
     }
     else if (mode == Mode::TREASURES) {
-        m_tabs.resize(3);
-
-        m_tabs[0] = std::make_unique<nui::GrabButton>();
-        m_tabs[1] = std::make_unique<nui::GrabButton>();
-        m_tabs[2] = std::make_unique<nui::GrabButton>();
-
-        m_tabs[0]->setVisual(_("Treasure room"), TextureID::DUNGEON_TREASURES_TREASUREROOM, tabImageSize);
+        /*m_tabs[0]->setVisual(_("Treasure room"), TextureID::DUNGEON_TREASURES_TREASUREROOM, tabImageSize);
         m_tabs[1]->setVisual(_("Small chest"),   TextureID::DUNGEON_TREASURES_SMALLCHEST,   tabImageSize);
-        m_tabs[2]->setVisual(_("Humble gift"),   TextureID::DUNGEON_TREASURES_HUMBLEGIFT,   tabImageSize);
+        m_tabs[2]->setVisual(_("Humble gift"),   TextureID::DUNGEON_TREASURES_HUMBLEGIFT,   tabImageSize);*/
     }
 
     // Add tabs to stacker
