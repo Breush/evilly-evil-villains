@@ -14,8 +14,6 @@ ChoiceBox::ChoiceBox()
     : baseClass()
     , m_showArrows(true)
     , m_showLines(true)
-    , m_choiceChanged(true)
-    , m_choice(0)
     , m_arrowOffset(8.f)
     , m_lineOffset(5.f)
     , m_arrowSize(10.f)
@@ -31,7 +29,10 @@ ChoiceBox::ChoiceBox()
     update();
 }
 
-void ChoiceBox::updateRoutine(const sf::Time& dt)
+//-------------------//
+//----- Routine -----//
+
+void ChoiceBox::updateRoutine(const sf::Time&)
 {
     m_choiceChanged = false;
 }
@@ -47,7 +48,9 @@ void ChoiceBox::update()
     const float arrowSpace = m_arrowOffset + m_arrowSize;
 
     // Text (using integer position to prevent text smoothing)
-    sf::Vector2u textPos((m_maxTextSize - m_textSize)/2.f);
+    auto bounds = m_text.getLocalBounds();
+    sf::Vector2f textSize(bounds.left + bounds.width, bounds.top + bounds.height);
+    sf::Vector2u textPos((m_maxTextSize - textSize) / 2.f);
     m_text.setPosition(sf::Vector2f(textPos));
 
     // Lines
@@ -88,45 +91,45 @@ void ChoiceBox::add(const std::wstring& text, const Callback callback)
     updateSize();
 
     // Select first choice when added
-    if (!m_nChoices++)
-        setChoice(0);
+    if (m_choices.size() == 1u)
+        selectChoice(0u);
 }
 
 void ChoiceBox::acceptChoice()
 {
     // Maybe callback is not set
-    if (m_choices[m_choice].callback == nullptr) {
+    if (m_choices[m_selectedChoice].callback == nullptr) {
         Application::context().sounds.play(SoundID::NUI_REFUSE);
         return;
     }
 
     Application::context().sounds.play(SoundID::NUI_ACCEPT);
-    m_choices[m_choice].callback();
+    m_choices[m_selectedChoice].callback();
 }
 
 void ChoiceBox::switchChoiceLeft()
 {
-    if (m_nChoices <= 1) return;
-    m_choice = ((m_choice == 0)? m_nChoices : m_choice) - 1;
+    if (m_choices.size() <= 1u) return;
+    m_selectedChoice = ((m_selectedChoice == 0)? m_choices.size() : m_selectedChoice) - 1u;
     Application::context().sounds.play(SoundID::NUI_SELECT);
-    setChoice(m_choice);
+    selectChoice(m_selectedChoice);
 }
 
 void ChoiceBox::switchChoiceRight()
 {
-    if (m_nChoices <= 1) return;
-    if (++m_choice == m_nChoices) m_choice = 0;
+    if (m_choices.size() <= 1u) return;
+    if (++m_selectedChoice == m_choices.size()) m_selectedChoice = 0u;
     Application::context().sounds.play(SoundID::NUI_SELECT);
-    setChoice(m_choice);
+    selectChoice(m_selectedChoice);
 }
 
-void ChoiceBox::setChoice(uint choice)
+void ChoiceBox::selectChoice(uint choice)
 {
     // Confirm valid choice
-    massert(choice < m_nChoices, "Choice " << choice << " out of range");
+    massert(choice < m_choices.size(), "Choice " << choice << " out of range.");
 
     // Setting new choice
-    m_choice = choice;
+    m_selectedChoice = choice;
     m_text.setString(m_choices[choice].text);
     m_choiceChanged = true;
 
@@ -136,36 +139,32 @@ void ChoiceBox::setChoice(uint choice)
     else
         m_text.setColor(sf::Color::White);
 
-    // New text might need to be recentered
-    auto bounds = m_text.getLocalBounds();
-    m_textSize = {bounds.left + bounds.width, bounds.top + bounds.height};
-
     update();
 }
 
 void ChoiceBox::setChoiceText(uint choice, const std::wstring& text)
 {
     // Confirm valid choice
-    massert(choice < m_nChoices, "Choice " << choice << " out of range");
+    massert(choice < m_choices.size(), "Choice " << choice << " out of range.");
 
     // Setting new choice
     m_choices[choice].text = text;
 
     // Max size or current text may have changed
     updateSize();
-    setChoice(m_choice);
+    selectChoice(m_selectedChoice);
 }
 
 void ChoiceBox::setChoiceCallback(uint choice, Callback callback)
 {
     // Confirm valid choice
-    massert(choice < m_nChoices, "Choice " << choice << " out of range");
+    massert(choice < m_choices.size(), "Choice " << choice << " out of range.");
 
     // Setting new choice
     m_choices[choice].callback = callback;
 
     // Activeness of choice might have changed
-    setChoice(m_choice);
+    selectChoice(m_selectedChoice);
 }
 
 //------------------------//
@@ -220,6 +219,9 @@ void ChoiceBox::handleMouseLeft()
     // Resetting hovering
     resetPartsShader();
 }
+
+//--------------------//
+//----- Hovering -----//
 
 bool ChoiceBox::isLeftArrowSelected(const float& x)
 {

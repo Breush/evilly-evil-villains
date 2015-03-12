@@ -699,13 +699,13 @@ int EntityPrototype::getNextKeyID(int animation, int lastKey) const
     } else if (animation_ptr->looping == L"ping_pong") {
         // TODO: Implement ping_pong animation
     }
-    
+
     // assume looping "false"
     // If we've haven't reached the end of the keys, return the next one.
     if (lastKey+1 < int(animation_ptr->mainline.keys.size())) {
         return lastKey+1;
     }
-    
+
     // if we have reached the end, stick to this key
     return lastKey;
 }

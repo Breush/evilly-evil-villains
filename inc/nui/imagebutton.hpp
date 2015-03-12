@@ -24,13 +24,13 @@ namespace nui
 
     protected:
         // Virtual
-        virtual void update() override;
+        void update() final;
 
         // Mouse events
-        virtual void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
+        void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
 
         // Updates
-        virtual void updateSize() override;
+        void updateSize() final;
 
         // Params
         PARAMGSU(sf::Vector2f, m_imageSize, imageSize, setImageSize, updateSize);

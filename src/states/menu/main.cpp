@@ -72,13 +72,13 @@ bool MenuMain::update(const sf::Time& dt)
 {
     // Checking if choiceBox changed
     if (m_choiceBox.choiceChanged()) {
-        m_reactImage.setActiveReact(m_choices[m_choiceBox.choice()]);
+        m_reactImage.setActiveReact(m_choices[m_choiceBox.selectedChoice()]);
     }
     // Checking if reactImage changed
     else if (m_reactImage.reactChanged()) {
         for (uint i = 0; i < m_choices.size(); ++i) {
             if (m_choices[i] == m_reactImage.getReact()) {
-                m_choiceBox.setChoice(i);
+                m_choiceBox.selectChoice(i);
                 break;
             }
         }
