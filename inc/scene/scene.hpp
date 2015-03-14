@@ -15,6 +15,7 @@ namespace scene
 {
     // Forward declarations
 
+    class Entity;
     class Graph;
     class Layer;
 
@@ -60,6 +61,9 @@ namespace scene
 
         //! Ask for a zoom to a specific point.
         void zoom(const sf::Vector2i& mousePos, float zoomFactor);
+
+        //! Recursively checks the first entity at specific position in all layers.
+        Entity* entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos);
 
         //! @}
 

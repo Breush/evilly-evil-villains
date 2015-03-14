@@ -47,7 +47,7 @@ void Graph::update(const sf::Time& dt)
 {
     // Update recursively all the entities
     m_scene.update(dt);
-    m_nuiLayer.root().update(dt);
+    m_nuiLayer.update(dt);
 
     // Focusing system - animation
     if (m_focusedEntity != nullptr) {
@@ -341,21 +341,12 @@ void Graph::setHoveredEntity(Entity* hoveredEntity)
 
 Entity* Graph::entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos)
 {
-    const auto& window = Application::context().window;
-
-    // Checking if there is a detectable entity at that position in NUI layer
-    viewPos = window.mapPixelToCoords(mousePos, m_nuiLayer.view());
-    Entity* entity = m_nuiLayer.root().firstOver(viewPos);
+    // Check whether a detectable entity is at that position in NUI layer
+    Entity* entity = m_nuiLayer.entityFromPosition(mousePos, viewPos);
     returnif (entity != nullptr) entity;
 
     // If not, check if there is one in scene layers
-    rfor (layer, m_scene.layers()) {
-        viewPos = window.mapPixelToCoords(mousePos, (*layer)->view());
-        entity = (*layer)->root().firstOver(viewPos);
-        returnif (entity != nullptr) entity;
-    }
-
-    return nullptr;
+    return m_scene.entityFromPosition(mousePos, viewPos);
 }
 
 //---------------------------//

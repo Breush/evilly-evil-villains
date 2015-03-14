@@ -55,3 +55,10 @@ void Layer::setViewSize(const sf::Vector2f& viewSize)
 {
     m_view.setSize(viewSize);
 }
+
+Entity* Layer::entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos)
+{
+    const auto& window = Application::context().window;
+    viewPos = window.mapPixelToCoords(mousePos, m_view);
+    return m_root.firstOver(viewPos);
+}

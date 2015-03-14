@@ -106,6 +106,16 @@ void Scene::moveGrabbing(const sf::Vector2i& mousePos)
     adaptViewPosition();
 }
 
+Entity* Scene::entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos)
+{
+    rfor (layer, m_layers) {
+        Entity* entity = (*layer)->entityFromPosition(mousePos, viewPos);
+        returnif (entity != nullptr) entity;
+    }
+
+    return nullptr;
+}
+
 //------------------//
 //----- Limits -----//
 

@@ -64,6 +64,10 @@ namespace scene
         //! 0.f <= relativeCenter.x <= 1.f and 0.f <= relativeCenter.y <= 1.f
         void setRelativeCenter(const sf::Vector2f& relativeCenter);
 
+        //! Returns the first entity at specific position, or nullptr if none.
+        //! Even if not found, viewPos is set to the position within the layer view.
+        Entity* entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos);
+
         //! @}
 
         //--------------------------//
