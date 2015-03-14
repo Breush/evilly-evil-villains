@@ -43,12 +43,13 @@ void Button::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::
     acceptChoice();
 }
 
-void Button::handleKeyboardEvent(const sf::Event& event)
+bool Button::handleKeyboardEvent(const sf::Event& event)
 {
     // Just manage pressed keys and Return
-    returnif (event.type != sf::Event::KeyPressed);
-    returnif (event.key.code != sf::Keyboard::Return);
+    returnif (event.type != sf::Event::KeyPressed) false;
+    returnif (event.key.code != sf::Keyboard::Return) false;
 
     acceptChoice();
+    return true;
 }
 

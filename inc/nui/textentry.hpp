@@ -28,7 +28,7 @@ namespace nui
 
     protected:
         // Events
-        void handleKeyboardEvent(const sf::Event& event) override;
+        bool handleKeyboardEvent(const sf::Event& event) override;
 
         // Dynamics of text and cursor
         void moveCursor(int relativePos);

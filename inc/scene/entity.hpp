@@ -191,10 +191,12 @@ namespace scene
         //! @{
 
         //! If entity is focused, this dispatches the keyboard events.
-        virtual void handleKeyboardEvent(const sf::Event& event) {}
+        //! Returns true if focus is kept by the entity.
+        virtual bool handleKeyboardEvent(const sf::Event& event) { return false; }
 
         //! If entity is focused, this dispatches the joystick events.
-        virtual void handleJoystickEvent(const sf::Event& event) {}
+        //! Returns true if focus is kept by the entity.
+        virtual bool handleJoystickEvent(const sf::Event& event) { return false; }
 
         //! If entity is detectable, this is called when mouse moves over the entity.
         /*!

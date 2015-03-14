@@ -53,7 +53,7 @@ void TextEntry::updateRoutine(const sf::Time& dt)
 //------------------//
 //----- Events -----//
 
-void TextEntry::handleKeyboardEvent(const sf::Event& event)
+bool TextEntry::handleKeyboardEvent(const sf::Event& event)
 {
     // Left/right to move inside the text entry
     // Use Ctrl to skip a word
@@ -61,27 +61,29 @@ void TextEntry::handleKeyboardEvent(const sf::Event& event)
         if (event.key.code == sf::Keyboard::Left) {
             int toMove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? previousRelativeWord() : -1;
             moveCursor(toMove);
+            return true;
         }
         else if (event.key.code == sf::Keyboard::Right) {
             int toMove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? nextRelativeWord() : 1;
             moveCursor(toMove);
+            return true;
         }
     }
     // Edit the text entry
     else if (event.type == sf::Event::TextEntered) {
         // Enter
-        returnif (event.text.unicode == 13);
+        returnif (event.text.unicode == 13) false;
 
         // Backspace
         if (event.text.unicode == 8) {
-            returnif (m_cursorString.isEmpty());
+            returnif (m_cursorString.isEmpty()) true;
             int toRemove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? previousRelativeWord() : -1;
             m_textString.erase(m_cursorString.getSize() + toRemove, -toRemove);
             moveCursor(toRemove);
         }
         // Delete
         else if (event.text.unicode == 127) {
-            returnif (m_cursorString == m_textString);
+            returnif (m_cursorString == m_textString) true;
             int toRemove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? nextRelativeWord() : 1;
             m_textString.erase(m_cursorString.getSize(), toRemove);
         }
@@ -92,7 +94,10 @@ void TextEntry::handleKeyboardEvent(const sf::Event& event)
 
         m_text.setString(m_textString);
         updateDynamicText();
+        return true;
     }
+
+    return false;
 }
 
 //----------------------//

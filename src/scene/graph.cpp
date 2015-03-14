@@ -94,8 +94,10 @@ void Graph::handleEvent(const sf::Event& event)
     // Keyboard or Joystick
     returnif (m_focusedEntity == nullptr);
 
-    if (isKeyboard(event)) m_focusedEntity->handleKeyboardEvent(event);
-    else m_focusedEntity->handleJoystickEvent(event);
+    bool focusKept = false;
+    if (isKeyboard(event)) focusKept = m_focusedEntity->handleKeyboardEvent(event);
+    else focusKept = m_focusedEntity->handleJoystickEvent(event);
+    returnif (focusKept);
 
     // TODO Have a grabbed focus feedback
     focusHandleEvent(event);

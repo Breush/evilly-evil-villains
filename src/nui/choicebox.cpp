@@ -240,32 +240,33 @@ bool ChoiceBox::isRightArrowSelected(const float& x)
 //---------------------------//
 //----- Keyboard events -----//
 
-void ChoiceBox::handleKeyboardEvent(const sf::Event& event)
+bool ChoiceBox::handleKeyboardEvent(const sf::Event& event)
 {
     // Just manage pressed keys
-    returnif (event.type != sf::Event::KeyPressed);
+    returnif (event.type != sf::Event::KeyPressed) false;
 
     // Left or right to select
     if (event.key.code == sf::Keyboard::Left) {
         switchChoiceLeft();
-        return;
+        return true;
     }
     else if (event.key.code == sf::Keyboard::Right) {
         switchChoiceRight();
-        return;
+        return true;
     }
 
     // Just pressing Return is interesting now
-    returnif (event.key.code != sf::Keyboard::Return);
+    returnif (event.key.code != sf::Keyboard::Return) false;
 
     // Without arrows: choices loop
     if (!showArrows()) {
         switchChoiceRight();
-        return;
+        return true;
     }
 
     // With arrows, check for callback
     acceptChoice();
+    return true;
 }
 
 //-------------------//
