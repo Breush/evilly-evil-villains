@@ -7,10 +7,6 @@
 
 using namespace dungeon;
 
-Data::Data()
-{
-}
-
 void Data::load(const std::string& file)
 {
     m_floors.clear();

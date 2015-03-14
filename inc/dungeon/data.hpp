@@ -45,7 +45,7 @@ namespace dungeon
 
     public:
 
-        Data();
+        Data() = default;
         virtual ~Data() = default;
 
         //-------------------------//

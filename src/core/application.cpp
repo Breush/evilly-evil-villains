@@ -1,12 +1,8 @@
 #include "core/application.hpp"
 
 #include "tools/debug.hpp"
-#include "states/quit.hpp"
-#include "states/splashscreen.hpp"
-#include "states/menu/main.hpp"
-#include "states/menu/selectworld.hpp"
-#include "states/game/dungeondesign.hpp"
-#include "states/game/pause.hpp"
+#include "config/config.hpp"
+#include "states/identifiers.hpp"
 
 #include <SFML/Window/Event.hpp>
 #include <string>
@@ -45,8 +41,11 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
 Application::Application()
     : m_initialState(StateID::SPLASHSCREEN)
 {
-    s_context.init({1360.f, 768.f}, "Evily Evil Villains", sf::Style::Default);
-    refresh();
+    // Load display config, switch config if on
+    auto displayConfig = config::display();
+    s_context.init(displayConfig->resolution, "Evily Evil Villains", sf::Style::Default);
+    if (displayConfig->fullscreen) switchFullscreenMode();
+    else refresh();
 
     loadTextures();
     loadShaders();
