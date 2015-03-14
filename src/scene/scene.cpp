@@ -166,8 +166,8 @@ void Scene::updateReferenceMinMax()
     // The view reference size is the maximum valid size that
     // does not show anything beyond what displayRect tells.
     sf::Vector2f viewRefSize;
-    if (viewRatio < layerRatio) viewRefSize = resolution * layerRatio;
-    else viewRefSize = resolution / layerRatio;
+    if (viewRatio < layerRatio) viewRefSize = resolution * m_size.y / resolution.y;
+    else viewRefSize = resolution * m_size.x / resolution.x;
 
     m_minSize = m_minZoom * viewRefSize / m_maxDepth;
     m_maxSize = m_maxZoom * viewRefSize / m_maxDepth;

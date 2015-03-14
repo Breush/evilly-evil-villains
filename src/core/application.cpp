@@ -2,6 +2,7 @@
 
 #include "tools/debug.hpp"
 #include "config/config.hpp"
+#include "config/display.hpp"
 #include "states/identifiers.hpp"
 
 #include <SFML/Window/Event.hpp>

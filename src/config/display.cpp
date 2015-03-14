@@ -34,7 +34,6 @@ Display::Display()
         else if (name == L"resolution") {
             resolution.x = param.attribute(L"width").as_float();
             resolution.y = param.attribute(L"height").as_float();
-            std::cerr << "h" << std::endl;
         }
     }
 }
