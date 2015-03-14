@@ -9,11 +9,13 @@
 #include <memory>
 
 // Forward declarations
+
 enum class StateID : uint8;
 
 namespace states
 {
     // Forward declarations
+
     class StateStack;
 
     class State
@@ -28,7 +30,11 @@ namespace states
         virtual bool handleEvent(const sf::Event& event);
 
         // Getter
-        scene::Entity& sceneLayer(LayerID::type layerID) { return m_sceneGraph[layerID]; }
+        inline scene::Scene& scene() { return m_sceneGraph.scene(); }
+        inline scene::Layer& nuiLayer() { return m_sceneGraph.nuiLayer(); }
+
+        //! Reset the graph's views to current screen status.
+        inline void refreshDisplay() { m_sceneGraph.refreshDisplay(); }
 
         // Called whenever display changes
         virtual void onShow() noexcept { m_sceneGraph.updateFocusSprite(); }

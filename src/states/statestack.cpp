@@ -32,6 +32,12 @@ void StateStack::handleEvent(const sf::Event& event)
     applyPendingChanges();
 }
 
+void StateStack::refreshDisplay()
+{
+    for (auto& state : m_stack)
+        state->refreshDisplay();
+}
+
 void StateStack::pushState(StateID stateID)
 {
     m_pendingList.emplace_back(Action::PUSH, stateID);

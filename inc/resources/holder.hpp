@@ -59,7 +59,6 @@ enum class ShaderID : uint8;
 enum class FontID : uint8;
 enum class SoundID : uint8;
 enum class AnimationID : uint8;
-enum class ViewID : uint8;
 
 namespace sf
 {
@@ -82,7 +81,6 @@ namespace resources
     using FontHolder =          ResourceHolder<sf::Font, FontID>;
     using SoundBufferHolder =   ResourceHolder<sf::SoundBuffer, SoundID>;
     using SCMLHolder =          ResourceHolder<scml::Data, AnimationID>;
-    using ViewHolder =          ResourceHolder<sf::View, ViewID>;
 }
 
 #include "holder.inl"

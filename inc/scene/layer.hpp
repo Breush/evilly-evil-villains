@@ -2,26 +2,7 @@
 
 #include "scene/entity.hpp"
 
-// Forward declarations
-
-enum class ViewID : uint8;
-
-namespace sf
-{
-    class View;
-}
-
-// Enums
-
-//! All layer identifiers.
-namespace LayerID
-{
-    enum type {
-        DUNGEON_DESIGN  = 0, //!< For dungeon design mode
-        NUI             = 1, //!< Keep it at the end, will be over everything
-        COUNT           = 2, //!< Numbers of layers, keep it last
-    };
-}
+#include <SFML/Graphics/View.hpp>
 
 namespace scene
 {
@@ -32,12 +13,30 @@ namespace scene
      *  It is also the container for the initial node in the Graph layer.
      */
 
-    class Layer final
+    class Layer final : public sf::Drawable
     {
     public:
 
-        //! Constructor.
-        Layer();
+        //! Deleted default constructor.
+        Layer() = delete;
+
+        //! Constructor with original graph.
+        Layer(Graph* graph);
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        //! Recursively update on all entities of the layer.
+        void update(const sf::Time& dt);
+
+        //! Set target to layer view and draw layer recursively.
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
+
+        //! Reset the view to current screen status.
+        void refreshDisplay();
+
+        //! @}
 
         //----------------//
         //! @name Getters
@@ -50,7 +49,7 @@ namespace scene
         inline const Entity& root() const { return m_root; }
 
         //! The view as previously set.
-        inline const sf::View& view() const { return *m_view; }
+        inline const sf::View& view() const { return m_view; }
 
         //! @}
 
@@ -58,26 +57,12 @@ namespace scene
         //! @name View manipulation
         //! @{
 
-        //! Set the view to be used.
-        void setView(ViewID viewID);
+        //! Set the size of the view.
+        void setViewSize(const sf::Vector2f& viewSize);
 
-        //! Relative zoom to current zoom.
-        void zoom(float zoomFactor);
-
-        //! Relative move to current position.
-        void move(const sf::Vector2f& offset);
-
-        //! @}
-
-        //-----------------//
-        //! @name Grabbing
-        //! @{
-
-        //! To be called when the grabbing of the layer starts.
-        void startGrabbing(const sf::Vector2f& position);
-
-        //! To be called when it's currently grabbing and need to move.
-        void moveGrabbing(const sf::Vector2f& position);
+        //! Fixes the view center relatively to current layer size.
+        //! 0.f <= relativeCenter.x <= 1.f and 0.f <= relativeCenter.y <= 1.f
+        void setRelativeCenter(const sf::Vector2f& relativeCenter);
 
         //! @}
 
@@ -86,39 +71,13 @@ namespace scene
         //! @{
 
         //! Whether the layer needs to control the view.
-        PARAMGS(bool, m_manipulable, manipulable, setManipulable)
+        PARAMGSU(bool, m_manipulable, manipulable, setManipulable, refreshDisplay)
 
-        //! The start and the size of the region that can be displayed.
-        PARAMGSU(sf::FloatRect, m_displayRect, displayRect, setDisplayRect, updateZoomInfo)
+        //! The size of the region that can be displayed.
+        PARAMGSU(sf::Vector2f, m_size, size, setSize, refreshDisplay)
 
-        //! The minimal zoom, relative to view reference size.
-        PARAMGS(float, m_minZoom, minZoom, setMinZoom)
-
-        //! The maximal zoom, relative to view reference size.
-        PARAMGS(float, m_maxZoom, maxZoom, setMaxZoom)
-
-        //! @}
-
-    protected:
-
-        //---------------//
-        //! @name Limits
-        //! @{
-
-        //! Move the view so that it is inside the displayRect.
-        void adaptViewPosition();
-
-        //! Zoom the view so that it is inside the minimum and maximum zoom.
-        void adaptViewZoom();
-
-        //! @}
-
-        //-------------------------------//
-        //! @name Internal state updates
-        //! @{
-
-        //! Updates minimum and maximum zoom and size and center the view.
-        void updateZoomInfo();
+        //! The depth of the layer, only used with Scene.
+        PARAMGS(float, m_depth, depth, setDepth)
 
         //! @}
 
@@ -128,14 +87,6 @@ namespace scene
         Entity m_root;
 
         //! The view, as the layer controls its the displayed region.
-        sf::View* m_view = nullptr;
-
-        //! The grabbing position reference.
-        sf::Vector2f m_grabbingPosition;
-
-        float m_relZoom = 1.f;  //!< The current zoom, relative to view reference size.
-
-        sf::Vector2f m_minSize; //!< The minimal size allowed.
-        sf::Vector2f m_maxSize; //!< The maximal size allowed.
+        sf::View m_view;
     };
 }

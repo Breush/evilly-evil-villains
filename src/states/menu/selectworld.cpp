@@ -16,23 +16,25 @@ using namespace states;
 MenuSelectWorld::MenuSelectWorld(StateStack& stack)
     : baseClass(stack)
 {
+    // Creating scene
+    auto& nuiRoot = nuiLayer().root();
     const auto& resolution = Application::context().resolution;
 
     // Background
-    sceneLayer(LayerID::NUI).attachChild(m_background);
+    nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
     m_background.setFillColor(sf::Color(0, 0, 0, 230));
     m_background.setSize(resolution);
 
     // Title
-    sceneLayer(LayerID::NUI).attachChild(m_title);
+    nuiRoot.attachChild(m_title);
     m_title.setText(_("Select a world"));
     m_title.setCentered(true);
     m_title.setLocalPosition({resolution.x / 2.f, 40.f});
     m_title.setPrestyle(sfe::Label::PrestyleID::MENU_TITLE);
 
     // List for existing worlds
-    sceneLayer(LayerID::NUI).attachChild(m_list);
+    nuiRoot.attachChild(m_list);
     m_list.setCentered(true);
     m_list.setSize(0.75f * resolution);
     m_list.setLocalPosition(resolution / 2.f);
@@ -46,7 +48,7 @@ MenuSelectWorld::MenuSelectWorld(StateStack& stack)
         m_list.addLine({world.villain, world.name, world.mainDungeon, time2wstring("%Y-%m-%d", world.lastPlayed)});
 
     // Stacker for buttons
-    sceneLayer(LayerID::NUI).attachChild(m_stacker);
+    nuiRoot.attachChild(m_stacker);
     m_stacker.setAlign(nui::Stacker::Align::CENTER);
     m_stacker.setSize({resolution.x, 0.95f * resolution.y});
 

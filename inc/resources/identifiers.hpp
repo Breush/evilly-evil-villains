@@ -17,6 +17,7 @@ enum class TextureID : uint8 {
     MENU_BACKGROUND,
     MENU_NAME,
     DUNGEON_SCENE_GRASSYHILLS_BACK,
+    DUNGEON_SCENE_GRASSYHILLS_MIDDLE,
     DUNGEON_SCENE_GRASSYHILLS_FRONT,
     DUNGEON_PANEL_BACKGROUND,
     DUNGEON_PANEL_SWITCH,
@@ -74,10 +75,4 @@ enum class SoundID : uint8 {
 enum class MusicID : uint8 {
     DEFAULT,
     MENU_THEME,
-};
-
-enum class ViewID : uint8 {
-    DEFAULT,
-    DUNGEON_DESIGN,
-    NUI,
 };

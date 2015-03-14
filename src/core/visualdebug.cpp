@@ -7,6 +7,8 @@
 
 void VisualDebug::init()
 {
+    refreshDisplay();
+
     // Getting font from holder
     m_text.setPosition(10.f, 10.f);
     m_text.setCharacterSize(16);
@@ -46,8 +48,19 @@ void VisualDebug::draw()
 
     // Draw
     auto& window = Application::context().window;
-    window.setView(Application::context().views.get(ViewID::DEFAULT));
+    window.setView(m_view);
     window.draw(m_text);
+}
+
+void VisualDebug::refreshDisplay()
+{
+    const auto& resolution = Application::context().resolution;
+    const auto& viewport = Application::context().viewport;
+
+    // The view
+    m_view.setViewport(viewport);
+    m_view.setSize(resolution);
+    m_view.setCenter(resolution / 2.f);
 }
 
 //----------------------//

@@ -49,6 +49,9 @@ namespace states
         bool isEmpty() const;
         bool isStateVisible(StateID stateID) const;
 
+        //! Reset the states' views to current screen status.
+        void refreshDisplay();
+
     private:
         std::unique_ptr<State> createState(StateID stateID);
         void applyPendingChanges();

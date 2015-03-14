@@ -43,12 +43,11 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
 //----- Application -----//
 
 Application::Application()
-    //: m_initialState(StateID::MENU_SELECTWORLD)
     : m_initialState(StateID::SPLASHSCREEN)
 {
     s_context.init({1360.f, 768.f}, "Evily Evil Villains", sf::Style::Default);
+    refresh();
 
-    loadViews();
     loadTextures();
     loadShaders();
     loadFonts();
@@ -178,6 +177,30 @@ void Application::render()
 //-----------------------------//
 //----- Window management -----//
 
+void Application::refreshDisplay()
+{
+    const auto& screenSize = s_context.screenSize;
+    const auto& resolution = s_context.resolution;
+
+    s_context.viewport = {0.f, 0.f, 1.f, 1.f};
+    const sf::Vector2f viewRatio = sf::vdiv(screenSize, resolution);
+
+    if (viewRatio.x > viewRatio.y) {
+        s_context.viewport.width = viewRatio.y / viewRatio.x;
+        s_context.viewport.left = (1.f - s_context.viewport.width) / 2.f;
+    }
+    else if (viewRatio.x < viewRatio.y) {
+        s_context.viewport.height = viewRatio.x / viewRatio.y;
+        s_context.viewport.top = (1.f - s_context.viewport.height) / 2.f;
+    }
+
+    s_context.effectiveDisplay = {screenSize.x * s_context.viewport.width, screenSize.y * s_context.viewport.height};
+
+    // Refresh all views
+    m_stateStack.refreshDisplay();
+    m_visualDebug.refreshDisplay();
+}
+
 void Application::clearWindowEvents()
 {
     sf::Event polledEvent;
@@ -202,7 +225,7 @@ void Application::switchFullscreenMode()
 
 void Application::refresh()
 {
-    refreshViews();
+    refreshDisplay();
     refreshShaders();
 }
 

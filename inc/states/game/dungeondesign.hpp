@@ -35,6 +35,7 @@ namespace states
 
         // Decorum
         sfe::Sprite m_decorumBack;
+        sfe::Sprite m_decorumMiddle;
         sfe::Sprite m_decorumFront;
     };
 }

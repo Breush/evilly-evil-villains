@@ -35,6 +35,7 @@ namespace scene
 
     class Entity : public sf::Drawable, public sf::Transformable
     {
+        friend class Layer;
         friend class Graph;
 
     public:

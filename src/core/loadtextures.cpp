@@ -34,6 +34,7 @@ void Application::loadTextures()
 
     // Dungeon
     s_context.textures.load(TextureID::DUNGEON_SCENE_GRASSYHILLS_BACK, "res/tex/dungeon/scene/grassyhills_back.png");
+    s_context.textures.load(TextureID::DUNGEON_SCENE_GRASSYHILLS_MIDDLE, "res/tex/dungeon/scene/grassyhills_middle.png");
     s_context.textures.load(TextureID::DUNGEON_SCENE_GRASSYHILLS_FRONT, "res/tex/dungeon/scene/grassyhills_front.png");
 
     s_context.textures.load(TextureID::DUNGEON_PANEL_BACKGROUND, "res/tex/dungeon/panel/background.png");

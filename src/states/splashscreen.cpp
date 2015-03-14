@@ -15,9 +15,12 @@ SplashScreen::SplashScreen(StateStack& stack)
     const sf::Vector2f& resolution = Application::context().resolution;
     float maxSide = std::max(resolution.x, resolution.y);
 
+    // Creating scene
+    auto& nuiRoot = nuiLayer().root();
+
     // Background
     const auto& textureSize = Application::context().textures.get(TextureID::JUMPINGTOASTS_BACKGROUND).getSize();
-    sceneLayer(LayerID::NUI).attachChild(m_background);
+    nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
     m_background.setTexture(TextureID::JUMPINGTOASTS_BACKGROUND);
     m_background.setShader(ShaderID::MENU_BACKGROUND);
@@ -25,7 +28,7 @@ SplashScreen::SplashScreen(StateStack& stack)
     m_background.setLocalPosition(sf::vsub(resolution, maxSide) / 2.f);
 
     // Animation
-    sceneLayer(LayerID::NUI).attachChild(m_logo);
+    nuiRoot.attachChild(m_logo);
     m_logo.load(AnimationID::JUMPINGTOASTS);
     m_logo.setLocalPosition(resolution / 2.f);
     m_logo.setLooping(false);

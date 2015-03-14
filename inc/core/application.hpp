@@ -40,6 +40,7 @@ public:
         void init(const sf::Vector2f& iResolution, const std::string& iTitle, const uint32_t& iStyle);
 
         sf::Vector2f resolution;        //!< The resolution asked.
+        sf::FloatRect viewport;         //!< The current viewport.
         sf::Vector2f screenSize;        //!< Represents the dimension of the drawable part of the window,
                                         //! it should be reset at each resize.
         sf::Vector2f effectiveDisplay;  //!< Represents the dimensions of the viewport centered
@@ -48,7 +49,6 @@ public:
         uint32_t style;                 //!< The style of the window, as defined by SFML.
 
         sf::RenderWindow window;                //!< The window, final destination of all draws.
-        resources::ViewHolder views;            //!< The views, to separate user interface from scenary.
         resources::TextureHolder textures;      //!< The textures.
         resources::ShaderHolder shaders;        //!< The shaders.
         resources::FontHolder fonts;            //!< The fonts.
@@ -133,7 +133,6 @@ protected:
     //-----------------------------------//
     //----- Pre-loading and refresh -----//
 
-    void loadViews();       //!< Load views into memory.
     void loadTextures();    //!< Load textures into memory.
     void loadShaders();     //!< Load shaders into memory.
     void loadFonts();       //!< Load fonts into memory.
@@ -142,7 +141,7 @@ protected:
     void loadAnimations();  //!< Load animations into memory.
     void loadStates();      //!< Register states.
 
-    void refreshViews();    //!< Adapt all views to current window settings.
+    void refreshDisplay();  //!< Adapt all views to current window settings.
     void refreshShaders();  //!< Adapt all shaders to current window settings.
 
     void updateShaders(const sf::Time& dt);     //!< Animate the shaders.

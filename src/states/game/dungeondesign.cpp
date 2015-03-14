@@ -21,44 +21,53 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     // Stop music if any
     Application::context().musics.stop();
 
+    // Creating scene
+    sf::Vector2f sceneSize(1024.f, 768.f);
+    scene().setSize(sceneSize);
+    auto& nuiRoot = nuiLayer().root();
+    auto& backgroundRoot =  scene().addLayer("BACKGROUND", 1.2f).root();
+    auto& dungeonRoot =     scene().addLayer("DUNGEON",    1.f).root();
+    auto& foregroundRoot =  scene().addLayer("FOREGROUND", 0.8f).root();
+
     // Dungeon data
     massert(!world::context.info->folder.empty(), "Selected world is in an empty folder.");
     m_dungeonData.load("worlds/" + world::context.info->folder + "dungeon.xml");
 
     // Context menu
-    sceneLayer(LayerID::NUI).attachChild(m_contextMenu);
+    nuiRoot.attachChild(m_contextMenu);
     m_contextMenu.setDepth(0.f);
 
-    // Dungeon inter
-    sceneLayer(LayerID::DUNGEON_DESIGN).attachChild(m_dungeonInter);
-    m_dungeonInter.setDepth(50.f);
-    m_dungeonInter.useData(m_dungeonData);
-    m_dungeonInter.setSize({350, 450});
-    m_dungeonInter.setLocalPosition({1024.f / 3.f, 768.f - 450.f - 100.f});
-
     // Dungeon panel
-    sceneLayer(LayerID::NUI).attachChild(m_dungeonPanel);
+    nuiRoot.attachChild(m_dungeonPanel);
     m_dungeonPanel.setCentered(true);
     m_dungeonPanel.setSize({4 * 100 + 25, 125 + 25});
     m_dungeonPanel.setLocalPosition({resolution.x / 2.f, resolution.y - m_dungeonPanel.size().y / 2.f});
     m_dungeonPanel.lerpable()->saveDefaults();
 
     // Dungeon sidebar
-    sceneLayer(LayerID::NUI).attachChild(m_dungeonSidebar);
+    nuiRoot.attachChild(m_dungeonSidebar);
     m_dungeonSidebar.setCentered(true);
     m_dungeonSidebar.setSize({2 * 100 + 25, 5 * 125 + 25});
     m_dungeonSidebar.setLocalPosition({resolution.x - m_dungeonSidebar.size().x / 2.f, resolution.y / 2.f});
     m_dungeonSidebar.lerpable()->saveDefaults();
     m_dungeonSidebar.immediateReduce();
 
-    // Decorum
-    sceneLayer(LayerID::DUNGEON_DESIGN).attachChild(m_decorumBack);
-    m_decorumBack.setTexture(TextureID::DUNGEON_SCENE_GRASSYHILLS_BACK);
-    m_decorumBack.setDepth(100.f);
+    // Dungeon inter
+    dungeonRoot.attachChild(m_dungeonInter);
+    m_dungeonInter.useData(m_dungeonData);
+    m_dungeonInter.setSize({350.f, 450.f});
+    m_dungeonInter.setLocalPosition({sceneSize.x / 3.f, sceneSize.y - 450.f - 100.f});
 
-    sceneLayer(LayerID::DUNGEON_DESIGN).attachChild(m_decorumFront);
+    // Decorum
+    backgroundRoot.attachChild(m_decorumBack);
+    m_decorumBack.setTexture(TextureID::DUNGEON_SCENE_GRASSYHILLS_BACK);
+
+    dungeonRoot.attachChild(m_decorumMiddle);
+    m_decorumMiddle.setTexture(TextureID::DUNGEON_SCENE_GRASSYHILLS_MIDDLE);
+    m_decorumMiddle.setDepth(100.f);
+
+    foregroundRoot.attachChild(m_decorumFront);
     m_decorumFront.setTexture(TextureID::DUNGEON_SCENE_GRASSYHILLS_FRONT);
-    m_decorumFront.setDepth(10.f);
 }
 
 void GameDungeonDesign::onQuit() noexcept

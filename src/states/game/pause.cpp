@@ -20,13 +20,16 @@ GamePause::GamePause(StateStack& stack)
 {
     const auto& resolution = Application::context().resolution;
 
+    // Creating scene
+    auto& nuiRoot = nuiLayer().root();
+
     // Background
-    sceneLayer(LayerID::NUI).attachChild(m_background);
+    nuiRoot.attachChild(m_background);
     m_background.setFillColor(sf::Color(0, 0, 0, 230));
     m_background.setSize(Application::context().resolution);
 
     // Pause text
-    sceneLayer(LayerID::NUI).attachChild(m_pauseText);
+    nuiRoot.attachChild(m_pauseText);
     m_pauseText.setFont(FontID::NUI);
     m_pauseText.setText(_("Game paused"));
     m_pauseText.setCharacterSize(50);
@@ -34,12 +37,12 @@ GamePause::GamePause(StateStack& stack)
     m_pauseText.setCentered(true);
 
     // Buttons
-    sceneLayer(LayerID::NUI).attachChild(m_continueButton);
+    nuiRoot.attachChild(m_continueButton);
     m_continueButton.setAction(_("Continue, continue, continue"), [this]() { stackPop(); });
     m_continueButton.setLocalPosition(0.5f * resolution);
     m_continueButton.setCentered(true);
 
-    sceneLayer(LayerID::NUI).attachChild(m_mainMenuButton);
+    nuiRoot.attachChild(m_mainMenuButton);
     m_mainMenuButton.setAction(_("Save and return to main menu"), [this]() { stackClear(StateID::MENU_MAIN); });
     m_mainMenuButton.setLocalPosition({0.5f * resolution.x, 0.6f * resolution.y});
     m_mainMenuButton.setCentered(true);

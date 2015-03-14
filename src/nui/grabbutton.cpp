@@ -1,6 +1,7 @@
 #include "nui/grabbutton.hpp"
 
 #include "scene/graph.hpp"
+#include "scene/layer.hpp"
 
 using namespace nui;
 

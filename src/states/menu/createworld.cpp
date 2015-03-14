@@ -13,23 +13,25 @@ using namespace states;
 MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     : baseClass(stack)
 {
+    // Creating scene
+    auto& nuiRoot = nuiLayer().root();
     const auto& resolution = Application::context().resolution;
 
     // Background
-    sceneLayer(LayerID::NUI).attachChild(m_background);
+    nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
     m_background.setFillColor({0, 0, 0, 230});
     m_background.setSize(resolution);
 
     // Title
-    sceneLayer(LayerID::NUI).attachChild(m_title);
+    nuiRoot.attachChild(m_title);
     m_title.setText(_("Create a new world"));
     m_title.setCentered(true);
     m_title.setLocalPosition({resolution.x / 2.f, 40.f});
     m_title.setPrestyle(sfe::Label::PrestyleID::MENU_TITLE);
 
     // NUI
-    sceneLayer(LayerID::NUI).attachChild(m_stacker);
+    nuiRoot.attachChild(m_stacker);
     m_stacker.setAlign(nui::Stacker::Align::CENTER);
     m_stacker.setLocalPosition({0.f, 0.125f * resolution.y});
     m_stacker.setSize({resolution.x, 50.f});
@@ -42,7 +44,7 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     m_worldNameEntry.setLength(resolution.x * 0.4f);
 
     // Buttons
-    sceneLayer(LayerID::NUI).attachChild(m_buttonsStacker);
+    nuiRoot.attachChild(m_buttonsStacker);
     m_buttonsStacker.setAlign(nui::Stacker::Align::CENTER);
     m_buttonsStacker.setSize({resolution.x, 0.95f * resolution.y});
 

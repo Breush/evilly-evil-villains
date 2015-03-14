@@ -3,6 +3,7 @@
 #include "tools/int.hpp"
 
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/View.hpp>
 #include <SFML/System/Time.hpp>
 #include <SFML/System/NonCopyable.hpp>
 
@@ -32,6 +33,9 @@ public:
     //! Basic drawing to the main window.
     void draw();
 
+    //! Reset the views to current screen status.
+    void refreshDisplay();
+
     //----------------------//
     //----- Visibility -----//
 
@@ -39,6 +43,9 @@ public:
     void switchVisible();
 
 private:
+
+    //! VisualDebug owns its own view
+    sf::View m_view;
 
     //! The rendered text.
     sf::Text m_text;

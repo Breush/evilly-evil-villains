@@ -14,6 +14,9 @@ MenuMain::MenuMain(StateStack& stack)
     : baseClass(stack)
     , m_choices{L"V", L"I", L"L", L"Y", L"S"}
 {
+    // Creating scene
+    auto& nuiRoot = nuiLayer().root();
+
     // During menus, enable key repeat
     Application::context().window.setKeyRepeatEnabled(true);
 
@@ -23,7 +26,7 @@ MenuMain::MenuMain(StateStack& stack)
     // Background
     // TODO Make a expandToView() function in sfe::Sprite to adapt to screenSize?
     const auto& textureSize = Application::context().textures.get(TextureID::MENU_BACKGROUND).getSize();
-    sceneLayer(LayerID::NUI).attachChild(m_background);
+    nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
     m_background.setTexture(TextureID::MENU_BACKGROUND);
     m_background.setShader(ShaderID::MENU_BACKGROUND);
@@ -38,7 +41,7 @@ MenuMain::MenuMain(StateStack& stack)
     auto quitGame = [this]() { stackClear(); };
 
     // Menu choice box (be sure not to mess with order)
-    sceneLayer(LayerID::NUI).attachChild(m_choiceBox);
+    nuiRoot.attachChild(m_choiceBox);
     m_choiceBox.setCentered(true);
     m_choiceBox.setLocalPosition({0.5f * resolution.x, 0.9f * resolution.y});
     m_choiceBox.add(_("Victim and alone"), singlePlayer);
@@ -48,7 +51,7 @@ MenuMain::MenuMain(StateStack& stack)
     m_choiceBox.add(_("Someone who runs away"), quitGame);
 
     // Menu react image
-    sceneLayer(LayerID::NUI).attachChild(m_reactImage);
+    nuiRoot.attachChild(m_reactImage);
     m_reactImage.setCentered(true);
     m_reactImage.setLocalPosition({0.5f * resolution.x, 0.2f * resolution.y});
     m_reactImage.setImageTexture(TextureID::MENU_NAME);

@@ -2,12 +2,13 @@
 
 #include "scene/grabbable.hpp"
 #include "scene/entity.hpp"
+#include "scene/scene.hpp"
 #include "scene/layer.hpp"
 
 #include <SFML/Window/Event.hpp>
+#include <SFML/Graphics/View.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
-#include <array>
 
 namespace scene
 {
@@ -26,8 +27,12 @@ namespace scene
         void handleEvent(const sf::Event& event);
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
+        //! Reset the scene's views to current screen status.
+        void refreshDisplay();
+
         // Access layers
-        Entity& operator[](LayerID::type layerID) { return m_layers[static_cast<std::size_t>(layerID)].root(); }
+        Layer& nuiLayer() { return m_nuiLayer; }
+        Scene& scene() { return m_scene; }
         const sf::View& viewFromLayerRoot(const Entity* root) const;
 
         // Focusing system
@@ -66,7 +71,8 @@ namespace scene
 
     private:
         // Layers
-        std::array<Layer, static_cast<std::size_t>(LayerID::COUNT)> m_layers;
+        Scene m_scene;
+        Layer m_nuiLayer;
 
         // Mouse detection
         Entity* m_hoveredEntity = nullptr;

@@ -12,13 +12,16 @@ Quit::Quit(StateStack& stack)
 {
     const auto& resolution = Application::context().resolution;
 
+    // Creating scene
+    auto& nuiRoot = nuiLayer().root();
+
     // Background
-    sceneLayer(LayerID::NUI).attachChild(m_background);
+    nuiRoot.attachChild(m_background);
     m_background.setFillColor(sf::Color(0, 0, 0, 230));
     m_background.setSize(Application::context().resolution);
 
     // Text
-    sceneLayer(LayerID::NUI).attachChild(m_question);
+    nuiRoot.attachChild(m_question);
     m_question.setFont(FontID::NUI);
     m_question.setText(_("Do you really want to quit?"));
     m_question.setCharacterSize(50);
@@ -26,12 +29,12 @@ Quit::Quit(StateStack& stack)
     m_question.setCentered(true);
 
     // Buttons
-    sceneLayer(LayerID::NUI).attachChild(m_noButton);
+    nuiRoot.attachChild(m_noButton);
     m_noButton.setAction(_("No, sorry, it is a mistake."), [this]() { stackPop(); });
     m_noButton.setLocalPosition(0.5f * resolution);
     m_noButton.setCentered(true);
 
-    sceneLayer(LayerID::NUI).attachChild(m_yesButton);
+    nuiRoot.attachChild(m_yesButton);
     m_yesButton.setAction(_("Yes, I will lose everything not saved."), [this]() { stackClear(); });
     m_yesButton.setLocalPosition({0.5f * resolution.x, 0.6f * resolution.y});
     m_yesButton.setCentered(true);
