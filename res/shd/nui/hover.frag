@@ -8,7 +8,7 @@ void main()
 
     // Having range bigger to get a better effect
     // can slow the computer down
-    const float step = 0.005;
+    const float step = 0.005f;
     const int range = 3;
 
     // Blur
@@ -18,5 +18,6 @@ void main()
 
     // Adding original gives a bloom effect
     // by reinforcing the original colors
-    gl_FragColor = original + pixel / (4.f * float(range) * float(range));
+    float additions = float(2 * range + 1) * float(2 * range + 1);
+    gl_FragColor = gl_Color * (original + pixel / additions);
 }
