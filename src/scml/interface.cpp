@@ -3,6 +3,7 @@
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
 #include "tools/tools.hpp" // mapFind
+#include "tools/vector.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <iostream>

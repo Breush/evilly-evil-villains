@@ -3,6 +3,7 @@
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
 #include "tools/tools.hpp"
+#include "tools/vector.hpp"
 
 #include <SFML/Graphics/View.hpp>
 
@@ -37,6 +38,10 @@ void Layer::refreshDisplay()
     const auto& viewport = Application::context().viewport;
     m_view.setViewport(viewport);
 
+    // Set the root entity to the size of the layer.
+    // This is used for relative positionning of entities.
+    m_root.setSize(m_size);
+
     if (!m_manipulable) {
         m_view.setSize(m_size);
         m_view.setCenter(m_size / 2.f);
@@ -48,7 +53,7 @@ void Layer::refreshDisplay()
 
 void Layer::setRelativeCenter(const sf::Vector2f& relativeCenter)
 {
-    m_view.setCenter(m_view.getSize() / 2.f + sf::vmul(relativeCenter, m_size - m_view.getSize()));
+    m_view.setCenter(m_view.getSize() / 2.f + relativeCenter * (m_size - m_view.getSize()));
 }
 
 void Layer::setViewSize(const sf::Vector2f& viewSize)

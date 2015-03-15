@@ -6,6 +6,7 @@
 #include "scene/graph.hpp"
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
+#include "tools/vector.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/OpenGL.hpp>
@@ -69,7 +70,7 @@ void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
     const auto& effectiveDisplay = Application::context().effectiveDisplay;
 
     auto halfGap = (screenSize - effectiveDisplay) / 2.f;
-    auto viewRatio = sf::vdiv(effectiveDisplay, resolution);
+    auto viewRatio = effectiveDisplay / resolution;
 
     const sf::Shader* initialShader = states.shader;
 
@@ -89,8 +90,8 @@ void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
 
             // Correct position and ratio SFML <-> GLSL
             r.top = resolution.y - r.height - r.top;
-            sf::rmulin(r, viewRatio);
-            sf::raddin(r, halfGap);
+            r *= viewRatio;
+            r += halfGap;
 
             glScissor(r.left, r.top, r.width, r.height);
         }
@@ -338,6 +339,13 @@ void Entity::resetPartsShader()
 //-------------------------//
 //----- Local actions -----//
 
+void Entity::setRelativePosition(const sf::Vector2f& inRelativePosition)
+{
+    m_relativePositionning = true;
+    m_relativePosition = inRelativePosition;
+    refreshRelativePosition();
+}
+
 void Entity::setSize(const sf::Vector2f& resize)
 {
     m_size = resize;
@@ -346,6 +354,7 @@ void Entity::setSize(const sf::Vector2f& resize)
     if (!m_focusOwned)
         setFocusRect({0.f, 0.f, m_size.x, m_size.y});
 
+    refreshChildrenRelativePosition();
     refreshCentering();
     update();
 }
@@ -358,6 +367,12 @@ void Entity::setShader(ShaderID shaderID)
 
 //------------------------------------//
 //----- Refresh on local changes -----//
+
+void Entity::refreshRelativePosition()
+{
+    returnif (!m_relativePositionning || m_parent == nullptr);
+    setLocalPosition(m_relativePosition * m_parent->size());
+}
 
 void Entity::refreshFromLocal()
 {
@@ -454,6 +469,12 @@ void Entity::refreshChildrenOrder()
     m_children.sort([](Entity* a, Entity* b) { return a->depth() > b->depth(); });
 }
 
+void Entity::refreshChildrenRelativePosition()
+{
+    for (auto& child : m_children)
+        child->refreshRelativePosition();
+}
+
 //---------------------//
 //----- Utilities -----//
 
@@ -467,6 +488,7 @@ void Entity::setParent(Entity* inParent)
 {
     m_parent = inParent;
     refreshFromLocal();
+    refreshRelativePosition();
 }
 
 //-----------------//

@@ -23,7 +23,7 @@ namespace states
     private:
         // Decorum
         sfe::RectangleShape m_background;
-        sfe::Label m_pauseText;
+        sfe::Label m_title;
 
         // NUI
         nui::Button m_continueButton;

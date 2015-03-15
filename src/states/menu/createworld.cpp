@@ -27,13 +27,13 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     nuiRoot.attachChild(m_title);
     m_title.setText(_("Create a new world"));
     m_title.setCentered(true);
-    m_title.setLocalPosition({resolution.x / 2.f, 40.f});
+    m_title.setRelativePosition({0.5f, 0.05f});
     m_title.setPrestyle(sfe::Label::PrestyleID::MENU_TITLE);
 
     // NUI
     nuiRoot.attachChild(m_stacker);
     m_stacker.setAlign(nui::Stacker::Align::CENTER);
-    m_stacker.setLocalPosition({0.f, 0.125f * resolution.y});
+    m_stacker.setRelativePosition({0.f, 0.125f});
     m_stacker.setSize({resolution.x, 50.f});
 
     // Stacking

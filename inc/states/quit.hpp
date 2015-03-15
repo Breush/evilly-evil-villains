@@ -21,7 +21,7 @@ namespace states
     private:
         // Decorum
         sfe::RectangleShape m_background;
-        sfe::Label m_question;
+        sfe::Label m_title;
 
         // NUI
         nui::Button m_noButton;

@@ -3,7 +3,7 @@
 #include "core/application.hpp"
 #include "core/gettext.hpp"
 #include "resources/identifiers.hpp"
-#include "tools/tools.hpp"
+#include "tools/vector.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
@@ -30,8 +30,8 @@ MenuMain::MenuMain(StateStack& stack)
     m_background.setDepth(100.f);
     m_background.setTexture(TextureID::MENU_BACKGROUND);
     m_background.setShader(ShaderID::MENU_BACKGROUND);
-    m_background.setLocalScale({maxSide / textureSize.x, maxSide / textureSize.y});
-    m_background.setLocalPosition(sf::vsub(resolution, maxSide) / 2.f);
+    m_background.setLocalScale(maxSide / sf::v2f(textureSize));
+    m_background.setLocalPosition((resolution - maxSide) / 2.f);
 
     // Fonctors
     auto singlePlayer = [this]() { stackPush(StateID::MENU_SELECTWORLD); };
@@ -43,7 +43,7 @@ MenuMain::MenuMain(StateStack& stack)
     // Menu choice box (be sure not to mess with order)
     nuiRoot.attachChild(m_choiceBox);
     m_choiceBox.setCentered(true);
-    m_choiceBox.setLocalPosition({0.5f * resolution.x, 0.9f * resolution.y});
+    m_choiceBox.setRelativePosition({0.5f, 0.9f});
     m_choiceBox.add(_("Victim and alone"), singlePlayer);
     m_choiceBox.add(_("I sometimes have friends"), multiPlayer);
     m_choiceBox.add(_("Looking at who I am"), personalization);
@@ -53,7 +53,7 @@ MenuMain::MenuMain(StateStack& stack)
     // Menu react image
     nuiRoot.attachChild(m_reactImage);
     m_reactImage.setCentered(true);
-    m_reactImage.setLocalPosition({0.5f * resolution.x, 0.2f * resolution.y});
+    m_reactImage.setRelativePosition({0.5f, 0.2f});
     m_reactImage.setImageTexture(TextureID::MENU_NAME);
     m_reactImage.setShader(ShaderID::MENU_NAME);
     m_reactImage.setMouseLeftDeselect(false);

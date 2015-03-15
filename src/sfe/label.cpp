@@ -53,5 +53,13 @@ void Label::setPrestyle(PrestyleID prestyle)
             m_text.setCharacterSize(25);
             updateSize();
             break;
+
+        case PrestyleID::MENU_POPUP_TITLE:
+            m_text.setFont(Application::context().fonts.get(FontID::HORROR));
+            m_text.setStyle(sf::Text::Style::Bold);
+            m_text.setColor(sf::Color::White);
+            m_text.setCharacterSize(50);
+            updateSize();
+            break;
     }
 }

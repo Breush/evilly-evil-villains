@@ -1,5 +1,5 @@
-
 #include "tools/string.hpp" // toWString
+#include "tools/tools.hpp" // returnif
 
 namespace resources
 {

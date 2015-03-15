@@ -26,25 +26,24 @@ GamePause::GamePause(StateStack& stack)
     // Background
     nuiRoot.attachChild(m_background);
     m_background.setFillColor(sf::Color(0, 0, 0, 230));
-    m_background.setSize(Application::context().resolution);
+    m_background.setSize(resolution);
 
-    // Pause text
-    nuiRoot.attachChild(m_pauseText);
-    m_pauseText.setFont(FontID::NUI);
-    m_pauseText.setText(_("Game paused"));
-    m_pauseText.setCharacterSize(50);
-    m_pauseText.setPosition(0.5f * resolution.x, 0.4f * resolution.y);
-    m_pauseText.setCentered(true);
+    // Title
+    nuiRoot.attachChild(m_title);
+    m_title.setText(_("Game paused"));
+    m_title.setCentered(true);
+    m_title.setRelativePosition({0.5f, 0.35f});
+    m_title.setPrestyle(sfe::Label::PrestyleID::MENU_POPUP_TITLE);
 
     // Buttons
     nuiRoot.attachChild(m_continueButton);
     m_continueButton.setAction(_("Continue, continue, continue"), [this]() { stackPop(); });
-    m_continueButton.setLocalPosition(0.5f * resolution);
+    m_continueButton.setRelativePosition({0.5f, 0.5f});
     m_continueButton.setCentered(true);
 
     nuiRoot.attachChild(m_mainMenuButton);
     m_mainMenuButton.setAction(_("Save and return to main menu"), [this]() { stackClear(StateID::MENU_MAIN); });
-    m_mainMenuButton.setLocalPosition({0.5f * resolution.x, 0.6f * resolution.y});
+    m_mainMenuButton.setRelativePosition({0.5f, 0.6f});
     m_mainMenuButton.setCentered(true);
 }
 

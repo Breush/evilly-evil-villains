@@ -1,14 +1,10 @@
 #pragma once
 
-#include "tools/debug.hpp"
-#include "tools/tools.hpp"
-
-#include <SFML/System/Time.hpp>
+#include "tools/int.hpp"
 
 #include <map>
 #include <string>
 #include <memory>
-#include <stdexcept>
 
 namespace resources
 {

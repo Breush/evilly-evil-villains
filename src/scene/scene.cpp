@@ -3,6 +3,7 @@
 #include "core/application.hpp"
 #include "scene/layer.hpp"
 #include "tools/tools.hpp"
+#include "tools/vector.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
@@ -190,7 +191,7 @@ void Scene::updateLayersZoom()
 
 void Scene::updateLayersPosition()
 {
-    auto relativeCenter = sf::vdiv(m_refView.getCenter() - m_refView.getSize() / 2.f, m_size - m_refView.getSize());
+    auto relativeCenter = (m_refView.getCenter() - m_refView.getSize() / 2.f) / (m_size - m_refView.getSize());
 
     for (auto& layer : m_layers)
         layer->setRelativeCenter(relativeCenter);

@@ -1,6 +1,7 @@
 #include "core/application.hpp"
 
 #include "tools/debug.hpp"
+#include "tools/vector.hpp"
 #include "config/config.hpp"
 #include "config/display.hpp"
 #include "states/identifiers.hpp"
@@ -183,7 +184,7 @@ void Application::refreshDisplay()
     const auto& resolution = s_context.resolution;
 
     s_context.viewport = {0.f, 0.f, 1.f, 1.f};
-    const sf::Vector2f viewRatio = sf::vdiv(screenSize, resolution);
+    const auto viewRatio = screenSize / resolution;
 
     if (viewRatio.x > viewRatio.y) {
         s_context.viewport.width = viewRatio.y / viewRatio.x;

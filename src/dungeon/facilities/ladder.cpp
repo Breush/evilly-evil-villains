@@ -4,6 +4,8 @@
 #include "core/gettext.hpp"
 #include "resources/identifiers.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
+#include "tools/vector.hpp"
+#include "tools/tools.hpp"
 #include "dungeon/inter.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -46,7 +48,7 @@ LadderGrabbable::LadderGrabbable(scene::GrabbableSpawner& spawner)
     const auto& texture = Application::context().textures.get(TextureID::DUNGEON_FACILITIES_LADDER);
     auto textureSize = sf::v2f(texture.getSize());
     m_sprite.setTexture(texture);
-    m_sprite.setScale(sf::vdiv(tabImageSize, textureSize));
+    m_sprite.setScale(tabImageSize / textureSize);
 
     setOrigin(tabImageSize / 2.f);
 }

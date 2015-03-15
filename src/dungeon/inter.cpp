@@ -6,6 +6,7 @@
 #include "dungeon/data.hpp"
 #include "tools/debug.hpp"
 #include "tools/event.hpp"
+#include "tools/tools.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <sstream>

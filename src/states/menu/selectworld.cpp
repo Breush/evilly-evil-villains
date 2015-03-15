@@ -30,14 +30,14 @@ MenuSelectWorld::MenuSelectWorld(StateStack& stack)
     nuiRoot.attachChild(m_title);
     m_title.setText(_("Select a world"));
     m_title.setCentered(true);
-    m_title.setLocalPosition({resolution.x / 2.f, 40.f});
+    m_title.setRelativePosition({0.5f, 0.05f});
     m_title.setPrestyle(sfe::Label::PrestyleID::MENU_TITLE);
 
     // List for existing worlds
     nuiRoot.attachChild(m_list);
     m_list.setCentered(true);
     m_list.setSize(0.75f * resolution);
-    m_list.setLocalPosition(resolution / 2.f);
+    m_list.setRelativePosition({0.5f, 0.5f});
     m_list.setColumns({_("Villain"), _("World name"), _("Main dungeon"), _("Last played")});
     m_list.setColumnFillClip(3, false, false);
 

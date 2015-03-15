@@ -22,6 +22,7 @@ namespace sfe
     public:
         enum class PrestyleID {
             MENU_TITLE,
+            MENU_POPUP_TITLE,
         };
 
     public:

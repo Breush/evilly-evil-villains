@@ -86,10 +86,12 @@ namespace scene
         void setSize(const sf::Vector2f& inSize);
 
         //! Set the shader applied to the whole entity.
-        /*!
-         *  Use ShaderID::NONE to remove current shader.
-         */
+        //! Use ShaderID::NONE to remove current shader.
         void setShader(ShaderID shaderID);
+
+        //! Set the position relative to the size of the parent.
+        //! Expects inRelativePosition coordinates to be between 0.f and 1.f.
+        void setRelativePosition(const sf::Vector2f& inRelativePosition);
 
         //! @}
 
@@ -104,6 +106,13 @@ namespace scene
          *  at the siblings level.
          */
         PARAMGSU(float, m_depth, depth, setDepth, refreshDepthOrder)
+
+        //! The position relative to the size of the parent.
+        /*!
+         *  The setRelativePosition() need to be called before using this property.
+         *  This overrides the localPosition property.
+         */
+        PARAMG(sf::Vector2f, m_relativePosition, relativePosition)
 
         //! The position of the entity relative to its parent's coordinates.
         PARAMGSU(sf::Vector2f, m_localPosition, localPosition, setLocalPosition, refreshFromLocalPosition)
@@ -181,7 +190,10 @@ namespace scene
         //! @name Children management
         //! @{
 
+        //! Quick access to the list of all children.
         std::list<Entity*>& children() noexcept { return m_children; }
+
+        //! Get the first entity with the graph at given position.
         Entity* firstOver(const sf::Vector2f& position);
 
         //! @}
@@ -298,6 +310,9 @@ namespace scene
         //! @name Refresh on changes
         //! @{
 
+        //! Refresh the position relative to the size of the parent.
+        void refreshRelativePosition();
+
         //! Refresh all absolute parameters.
         void refreshFromLocal();
 
@@ -321,6 +336,9 @@ namespace scene
 
         //! Sort own children according to their depth.
         void refreshChildrenOrder();
+
+        //! Refresh the relative position of children.
+        void refreshChildrenRelativePosition();
 
         //! @}
 
@@ -399,6 +417,9 @@ namespace scene
 
         //! Whether the local transformations has changed since last update.
         bool m_localChanges = true;
+
+        //! Whether the position of the entity should be computed relatively.
+        bool m_relativePositionning = false;
 
         //! Whether to call parent when size changes.
         bool m_callParentOnSizeChanges = true;

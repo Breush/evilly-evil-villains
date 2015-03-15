@@ -4,6 +4,7 @@
 #include "resources/holder.hpp"
 
 #include <SFML/System/NonCopyable.hpp>
+#include <SFML/System/Time.hpp>
 #include <list>
 #include <map>
 

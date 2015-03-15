@@ -2,7 +2,7 @@
 
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
-#include "tools/tools.hpp"
+#include "tools/vector.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Shader.hpp>
@@ -24,13 +24,13 @@ SplashScreen::SplashScreen(StateStack& stack)
     m_background.setDepth(100.f);
     m_background.setTexture(TextureID::JUMPINGTOASTS_BACKGROUND);
     m_background.setShader(ShaderID::MENU_BACKGROUND);
-    m_background.setLocalScale({maxSide / textureSize.x, maxSide / textureSize.y});
-    m_background.setLocalPosition(sf::vsub(resolution, maxSide) / 2.f);
+    m_background.setLocalScale(maxSide / sf::v2f(textureSize));
+    m_background.setLocalPosition((resolution - maxSide) / 2.f);
 
     // Animation
     nuiRoot.attachChild(m_logo);
     m_logo.load(AnimationID::JUMPINGTOASTS);
-    m_logo.setLocalPosition(resolution / 2.f);
+    m_logo.setRelativePosition({0.5f, 0.5f});
     m_logo.setLooping(false);
     m_logo.restart();
 }
