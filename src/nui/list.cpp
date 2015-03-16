@@ -1,6 +1,7 @@
 #include "nui/list.hpp"
 
 #include "core/application.hpp"
+#include "config/nui.hpp"
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
 #include "resources/identifiers.hpp"
@@ -8,18 +9,20 @@
 using namespace nui;
 
 List::List()
-    : m_hPadding(6)
-    , m_vPadding(6)
-    , m_borderThick(1)
-    , m_sbWidth(31)
+    : m_sbWidth(31) // ?
     , m_lineHeight(32)
-    , m_linesCount(0)
     , m_selectedLine(uint(-1))
 {
     setFocusable(true);
     setFocusOwned(true);
 
-    // TODO #3 - Use config parameter to determine size
+    // Use config parameter to determine size
+    // TODO To be in refreshDisplay()
+    config::NUI nuiConfig;
+    m_hPadding = nuiConfig.hPadding;
+    m_vPadding = nuiConfig.vPadding;
+    m_borderThick = nuiConfig.borderThick;
+
     update();
 }
 
@@ -28,12 +31,12 @@ void List::update()
     returnif (m_lines.size() == 0);
 
     m_linesCount = size().y / lineHeight() - 1;
-    m_hBorders.resize(linesCount() + 2);
+    m_hBorders.resize(m_linesCount + 2);
 
     clearParts();
 
     // Columns
-    uint borderColumnHeight = linesCount() * lineHeight();
+    uint borderColumnHeight = m_linesCount * lineHeight();
     for (uint i = 0; i < m_columns.size(); ++i) {
         auto& column = m_columns[i];
         uint y = vPadding() + borderThick();
@@ -79,14 +82,14 @@ void List::update()
         y += lineHeight();
     }
 
-    for (uint i = 2; i <= linesCount(); ++i) {
+    for (uint i = 2; i <= m_linesCount; ++i) {
         m_hBorders[i].setLength(size().x - 2 * sbWidth());
         m_hBorders[i].setPosition(sbWidth(), y);
         //addPart(&m_hBorders[i]);
         y += lineHeight();
     }
 
-    uint hBorderLast = linesCount() + 1;
+    uint hBorderLast = m_linesCount + 1;
     m_hBorders[hBorderLast].setLength(size().x);
     m_hBorders[hBorderLast].setPosition(0, y);
     addPart(&m_hBorders[hBorderLast]);

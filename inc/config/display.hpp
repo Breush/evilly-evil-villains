@@ -1,5 +1,7 @@
 #pragma once
 
+#include "tools/int.hpp"
+
 #include <SFML/System/Vector2.hpp>
 
 namespace config
@@ -17,5 +19,8 @@ namespace config
 
         //! The resolution used to play the game.
         sf::Vector2f resolution;
+
+        //! The size of the user interface.
+        uint nui;
     };
 }

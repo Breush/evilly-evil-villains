@@ -2,4 +2,5 @@
 <config type="display">
 	<param name="fullscreen" enabled="false" />
 	<param name="resolution" width="1360" height="768" />
+	<param name="nui" size="2" />
 </config>

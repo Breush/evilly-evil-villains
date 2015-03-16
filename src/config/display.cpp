@@ -10,6 +10,7 @@ using namespace config;
 Display::Display()
     : fullscreen(false)
     , resolution(1024.f, 576.f) // 16/9
+    , nui(2)
 {
     pugi::xml_document doc;
     doc.load_file("config/display.xml");
@@ -35,6 +36,11 @@ Display::Display()
             resolution.x = param.attribute(L"width").as_float();
             resolution.y = param.attribute(L"height").as_float();
         }
+
+        // NUI
+        else if (name == L"nui") {
+            nui = param.attribute(L"size").as_uint();
+        }
     }
 }
 
@@ -57,6 +63,11 @@ Display::~Display()
     param.append_attribute(L"name") = L"resolution";
     param.append_attribute(L"width") = resolution.x;
     param.append_attribute(L"height") = resolution.y;
+
+    // NUI
+    param = config.append_child(L"param");
+    param.append_attribute(L"name") = L"nui";
+    param.append_attribute(L"size") = nui;
 
     #if DEBUG_GLOBAL
         doc.save_file("config/display_saved.xml");

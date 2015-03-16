@@ -2,7 +2,6 @@
 
 #include "tools/debug.hpp"
 #include "tools/vector.hpp"
-#include "config/config.hpp"
 #include "config/display.hpp"
 #include "states/identifiers.hpp"
 
@@ -43,10 +42,10 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
 Application::Application()
     : m_initialState(StateID::SPLASHSCREEN)
 {
-    // Load display config, switch config if on
-    auto displayConfig = config::display();
-    s_context.init(displayConfig->resolution, "Evily Evil Villains", sf::Style::Default);
-    if (displayConfig->fullscreen) switchFullscreenMode();
+    // Load display config, switch fullscreen if config on
+    config::Display displayConfig;
+    s_context.init(displayConfig.resolution, "Evily Evil Villains", sf::Style::Default);
+    if (displayConfig.fullscreen) switchFullscreenMode();
     else refresh();
 
     loadTextures();

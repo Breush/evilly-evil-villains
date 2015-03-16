@@ -67,7 +67,6 @@ namespace nui
         PARAMG(uint, m_borderThick, borderThick)
         PARAMG(uint, m_sbWidth, sbWidth)
         PARAMG(uint, m_lineHeight, lineHeight)
-        PARAMG(uint, m_linesCount, linesCount)
         PARAMGSU(uint, m_selectedLine, selectedLine, setSelectedLine, changedSelectedLine);
 
     private:
@@ -76,6 +75,7 @@ namespace nui
 
         // Lines
         std::vector<std::vector<LineInfo>> m_lines;
+        uint m_linesCount = 0u;
 
         // Decorum
         std::vector<sfe::HLine> m_hBorders;
