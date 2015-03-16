@@ -2,6 +2,7 @@
 
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
+#include "config/nui.hpp"
 
 using namespace nui;
 
@@ -15,8 +16,16 @@ ContextMenu::ContextMenu()
     // Background
     m_background.setTexture(&Application::context().textures.get(TextureID::DUNGEON_PANEL_BACKGROUND));
 
-    update();
+    // Title
+    m_title.setFont(Application::context().fonts.get(FontID::NUI));
+    m_title.setStyle(sf::Text::Bold);
+    m_title.setColor(sf::Color::White);
+
+    refreshDisplay();
 }
+
+//-------------------//
+//----- Routine -----//
 
 void ContextMenu::update()
 {
@@ -65,6 +74,20 @@ void ContextMenu::updateSize()
     }
 
     setSize(border);
+}
+
+void ContextMenu::refreshDisplay()
+{
+    config::NUI cNUI;
+
+    m_fontSize = cNUI.fontSize;
+
+    // Update font size
+    m_title.setCharacterSize(m_fontSize);
+    for (auto& choiceInfo : m_choices)
+        choiceInfo.text.setCharacterSize(m_fontSize);
+
+    update();
 }
 
 //------------------------//
@@ -122,13 +145,7 @@ void ContextMenu::clearChoices()
 
 void ContextMenu::setTitle(const std::wstring& title)
 {
-    sf::Font& font = Application::context().fonts.get(FontID::NUI);
-    m_title.setFont(font);
-    m_title.setCharacterSize(16);
-    m_title.setStyle(sf::Text::Bold);
-    m_title.setColor(sf::Color::White);
     m_title.setString(title);
-
     updateSize();
 }
 
@@ -142,7 +159,7 @@ void ContextMenu::addChoice(const std::wstring& text, Callback callback)
     // Getting font from holder
     sf::Font& font = Application::context().fonts.get(FontID::NUI);
     choiceInfo.text.setFont(font);
-    choiceInfo.text.setCharacterSize(16);
+    choiceInfo.text.setCharacterSize(m_fontSize);
     choiceInfo.text.setColor(sf::Color::White);
 
     m_choices.emplace_back(std::move(choiceInfo));

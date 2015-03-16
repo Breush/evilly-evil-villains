@@ -15,5 +15,10 @@ namespace config
         float vPadding;     //!< Vertical padding.
 
         float borderThick;  //!< Thickness of borders.
+
+        float fontSize;     //!< Size of the font.
+        float fontVSpace;   //!< The space to reserve for a correct display of a font at fontSize.
+
+        float hintSize;     //!< An hint for a proportional dimension.
     };
 }

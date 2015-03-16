@@ -18,7 +18,8 @@ namespace nui
 
         // Routine
         void update() override;
-        void updateRoutine(const sf::Time& dt) override;
+        void updateRoutine(const sf::Time& dt) final;
+        void refreshDisplay() final;
 
         // Size override
         void setLength(float length);

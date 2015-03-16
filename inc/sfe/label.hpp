@@ -32,11 +32,12 @@ namespace sfe
         void setFont(FontID fontID);
         void setCharacterSize(uint characterSize);
         void setText(const std::wstring& text);
-        void setText(const std::wstring& text, FontID fontID, uint characterSize);
+        void setText(const std::wstring& text, FontID fontID);
         void setPrestyle(PrestyleID prestyle);
 
     protected:
         void updateSize();
+        void refreshDisplay() final;
 
     private:
         sf::Text m_text;

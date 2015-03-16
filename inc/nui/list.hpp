@@ -63,9 +63,6 @@ namespace nui
         void setFocusedLine(uint line);
 
         // Params
-        PARAMG(uint, m_hPadding, hPadding)
-        PARAMG(uint, m_vPadding, vPadding)
-        PARAMG(uint, m_borderThick, borderThick)
         PARAMG(uint, m_sbWidth, sbWidth)
         PARAMG(uint, m_lineHeight, lineHeight)
         PARAMGSU(uint, m_selectedLine, selectedLine, setSelectedLine, changedSelectedLine);

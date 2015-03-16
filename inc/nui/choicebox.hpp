@@ -100,6 +100,7 @@ namespace nui
 
         void update() override;
         void updateRoutine(const sf::Time& dt) final;
+        void refreshDisplay() final;
 
         //! @}
 

@@ -4,6 +4,7 @@
 #include "resources/identifiers.hpp"
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
+#include "config/nui.hpp"
 
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -14,19 +15,14 @@ ChoiceBox::ChoiceBox()
     : baseClass()
     , m_showArrows(true)
     , m_showLines(true)
-    , m_arrowOffset(8.f)
-    , m_lineOffset(5.f)
-    , m_arrowSize(10.f)
-    , m_lineSize(1.f)
 {
     setFocusable(true);
 
     // Getting font from holder
     sf::Font& font = Application::context().fonts.get(FontID::NUI);
-    m_text.setCharacterSize(16);
     m_text.setFont(font);
 
-    update();
+    refreshDisplay();
 }
 
 //-------------------//
@@ -78,6 +74,21 @@ void ChoiceBox::update()
         m_lArrow.setOrigin(0.f, 0.5f * m_arrowSize);
         m_rArrow.setOrigin(0.f, 0.5f * m_arrowSize);
     }
+}
+
+void ChoiceBox::refreshDisplay()
+{
+    config::NUI cNUI;
+
+    m_arrowOffset = 2.f * cNUI.hPadding;
+    m_lineOffset = cNUI.hPadding;
+    m_arrowSize = cNUI.hintSize;
+    m_lineSize = cNUI.borderThick;
+
+    // Update text
+    m_text.setCharacterSize(cNUI.fontSize);
+
+    update();
 }
 
 //-----------------------------//

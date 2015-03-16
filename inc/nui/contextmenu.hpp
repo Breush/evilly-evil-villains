@@ -35,6 +35,7 @@ namespace nui
         // Updates
         void update() override;
         void updateSize();
+        void refreshDisplay() final;
 
         // Params
         PARAMG(uint, m_padding, padding)
@@ -56,6 +57,8 @@ namespace nui
         // Choices
         sf::Text m_title;
         std::vector<ChoiceInfo> m_choices;
+
+        float m_fontSize;   //!< The size of the font.
     };
 }
 

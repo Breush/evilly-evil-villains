@@ -2,6 +2,7 @@
 
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
+#include "config/nui.hpp"
 
 using namespace nui;
 
@@ -18,12 +19,13 @@ TextEntry::TextEntry()
     addPart(&m_text);
     m_text.setFont(Application::context().fonts.get(FontID::NUI));
     m_text.setColor(sf::Color::Black);
-    m_text.setCharacterSize(16); // TODO Get from config
 
     addPart(&m_cursor);
     m_cursor.setShade(0.f);
     m_cursor.setColor(sf::Color::Black);
     m_cursorText = m_text;
+
+    refreshDisplay();
 }
 
 //-------------------//
@@ -48,6 +50,16 @@ void TextEntry::updateRoutine(const sf::Time& dt)
         else addPart(&m_cursor);
         m_cursorOn = !m_cursorOn;
     }
+}
+
+void TextEntry::refreshDisplay()
+{
+    config::NUI cNUI;
+
+    m_text.setCharacterSize(cNUI.fontSize);
+    m_cursorText.setCharacterSize(cNUI.fontSize);
+
+    update();
 }
 
 //------------------//

@@ -38,7 +38,7 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
 
     // Stacking
     m_stacker.add(&m_worldNameLabel, nui::Stacker::Align::CENTER);
-    m_worldNameLabel.setText(_("World name"), FontID::NUI, 16);
+    m_worldNameLabel.setText(_("World name"), FontID::NUI);
 
     m_stacker.add(&m_worldNameEntry, nui::Stacker::Align::CENTER);
     m_worldNameEntry.setLength(nuiSize.x * 0.4f);

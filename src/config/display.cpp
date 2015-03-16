@@ -13,7 +13,12 @@ Display::Display()
     , nui(2)
 {
     pugi::xml_document doc;
-    doc.load_file("config/display.xml");
+
+    #if DEBUG_GLOBAL
+        doc.load_file("config/display_debug.xml");
+    #else
+        doc.load_file("config/display.xml");
+    #endif
 
     // Checks if we read the file OK
     const auto& config = doc.child(L"config");
