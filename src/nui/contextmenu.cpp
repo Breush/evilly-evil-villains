@@ -50,27 +50,27 @@ void ContextMenu::update()
 void ContextMenu::updateSize()
 {
     // Getting size and setting positions
-    auto xOffset = padding();
-    auto yOffset = padding();
+    auto xOffset = m_padding;
+    auto yOffset = m_padding;
 
-    sf::Vector2f border(2.f * padding(), 2.f * padding());
+    sf::Vector2f border(2.f * m_padding, 2.f * m_padding);
 
     // Title
     if (!m_title.getString().isEmpty()) {
         auto bounds = m_title.getLocalBounds();
         m_title.setPosition(xOffset, yOffset);
-        border.x = std::max(border.x, 2.f * padding() + bounds.left + bounds.width);
-        border.y += choiceHeight();
-        yOffset += choiceHeight();
+        border.x = std::max(border.x, 2.f * m_padding + bounds.left + bounds.width);
+        border.y += m_choiceHeight;
+        yOffset += m_choiceHeight;
     }
 
     // Choices
     for (auto& choice : m_choices) {
         auto bounds = choice.text.getLocalBounds();
         choice.text.setPosition(xOffset, yOffset);
-        border.x = std::max(border.x, 2.f * padding() + bounds.left + bounds.width);
-        border.y += choiceHeight();
-        yOffset += choiceHeight();
+        border.x = std::max(border.x, 2.f * m_padding + bounds.left + bounds.width);
+        border.y += m_choiceHeight;
+        yOffset += m_choiceHeight;
     }
 
     setSize(border);
@@ -133,9 +133,9 @@ void ContextMenu::handleMouseLeft()
 uint ContextMenu::choiceFromCoords(const sf::Vector2f& coords) const
 {
     if (m_title.getString().isEmpty())
-        return (coords.y - padding()) / choiceHeight();
+        return (coords.y - m_padding) / m_choiceHeight;
     else
-        return (coords.y - padding()) / choiceHeight() - 1;
+        return (coords.y - m_padding) / m_choiceHeight - 1;
 }
 
 void ContextMenu::clearChoices()

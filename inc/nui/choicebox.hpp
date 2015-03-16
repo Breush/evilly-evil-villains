@@ -48,7 +48,7 @@ namespace nui
         //! @name Choices
         //! @{
 
-        //! Push_back a choice in the list, optionnally give it a callback.
+        //! Push back a choice in the list, optionnally give it a callback.
         void add(const std::wstring& text, const Callback callback = nullptr);
 
         //! Configure previously added choice's text.

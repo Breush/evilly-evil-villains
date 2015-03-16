@@ -56,7 +56,7 @@ public:
         resources::MusicPlayer musics;          //!< The musics.
         resources::SoundPlayer sounds;          //!< The sounds.
         resources::AnimationHolder animations;  //!< The animations, parsed SCML files.
-        
+
         config::Display display;    //!< The display configuration.
     };
 

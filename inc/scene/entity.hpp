@@ -183,7 +183,7 @@ namespace scene
 
         //! Check and call parent on changes if options enabled.
         void updateChanges();
-        
+
         //! Called whenever the screen config changed.
         virtual void refreshDisplay() {}
 

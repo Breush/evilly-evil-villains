@@ -10,55 +10,112 @@
 
 namespace nui
 {
-    class ContextMenu : public scene::Entity
+    //! A simple menu with its own background.
+    /*!
+     *  Usually called when a right click occured
+     *  and the user is given some choices.
+     */
+
+    class ContextMenu final : public scene::Entity
     {
         using baseClass = scene::Entity;
 
-    public:
+    protected:
+
+        //! Type for function callback when a choice is clicked.
         using Callback = std::function<void()>;
 
-        ContextMenu();
-        virtual ~ContextMenu() = default;
-
-        // Events
-        void handleGlobalEvent(const sf::Event& event);
-        void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
-        void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
-        void handleMouseLeft() override;
-
-        // Choices
-        void clearChoices();
-        void setTitle(const std::wstring& title);
-        void addChoice(const std::wstring& text, Callback callback = nullptr);
-
-    protected:
-        // Updates
-        void update() override;
-        void updateSize();
-        void refreshDisplay() final;
-
-        // Params
-        PARAMG(uint, m_padding, padding)
-        PARAMG(uint, m_choiceHeight, choiceHeight)
-
-        // Choices
-        uint choiceFromCoords(const sf::Vector2f& coords) const;
-
-        // Keep infos
-        struct ChoiceInfo {
-            sf::Text text;
-            Callback callback;
+        //! A choice is a sf::Text and a function callback.
+        struct ChoiceInfo
+        {
+            sf::Text text;      //!< The text to display when choice is selected.
+            Callback callback;  //!< The callback function to call when choice accepted.
         };
 
+    public:
+
+        //! Constructor.
+        ContextMenu();
+
+        //! Default destructor.
+        ~ContextMenu() = default;
+
+        //----------------//
+        //! @name Choices
+        //! @{
+
+        //! The displayed title if string is not empty.
+        void setTitle(const std::wstring& title);
+
+        //! Push back a choice in the list, optionnally give it a callback.
+        void addChoice(const std::wstring& text, Callback callback = nullptr);
+
+        //! Remove all choices from the list.
+        void clearChoices();
+
+        //! The choice hovered at specific coordinates.
+        uint choiceFromCoords(const sf::Vector2f& coords) const;
+
+        //! @}
+
+        //---------------//
+        //! @name Events
+        //! @{
+
+        //! Reacts to a global event, supposed to be directly passed at the state level.
+        void handleGlobalEvent(const sf::Event& event);
+
+        //! @}
+
+    protected:
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        void update() final;
+        void refreshDisplay() final;
+
+        //! @}
+
+        //---------------//
+        //! @name Events
+        //! @{
+
+        void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseLeft() final;
+
+        //! @}
+
+        //-------------------------------//
+        //! @name Internal state updates
+        //! @{
+
+        //! Update the absolute size.
+        void updateSize();
+
+        //! @}
+
     private:
-        // Decorum
+
+        //! The background used, can have a texture.
         sf::RectangleShape m_background;
 
-        // Choices
+        //! The title displayed.
         sf::Text m_title;
+
+        //! The list of all choices.
         std::vector<ChoiceInfo> m_choices;
 
-        float m_fontSize;   //!< The size of the font.
+        //! The size of the font.
+        float m_fontSize;
+
+        //! The global padding.
+        float m_padding;
+
+        //! The height of a choice.
+        float m_choiceHeight;
     };
 }
 
