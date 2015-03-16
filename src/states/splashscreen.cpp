@@ -12,11 +12,10 @@ using namespace states;
 SplashScreen::SplashScreen(StateStack& stack)
     : State(stack)
 {
-    const sf::Vector2f& resolution = Application::context().resolution;
-    float maxSide = std::max(resolution.x, resolution.y);
-
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
+    const auto& nuiSize = nuiLayer().size();
+    float maxSide = std::max(nuiSize.x, nuiSize.y);
 
     // Background
     const auto& textureSize = Application::context().textures.get(TextureID::JUMPINGTOASTS_BACKGROUND).getSize();
@@ -25,7 +24,7 @@ SplashScreen::SplashScreen(StateStack& stack)
     m_background.setTexture(TextureID::JUMPINGTOASTS_BACKGROUND);
     m_background.setShader(ShaderID::MENU_BACKGROUND);
     m_background.setLocalScale(maxSide / sf::v2f(textureSize));
-    m_background.setLocalPosition((resolution - maxSide) / 2.f);
+    m_background.setLocalPosition((nuiSize - maxSide) / 2.f);
 
     // Animation
     nuiRoot.attachChild(m_logo);

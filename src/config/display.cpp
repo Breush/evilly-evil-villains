@@ -44,7 +44,7 @@ Display::Display()
     }
 }
 
-Display::~Display()
+void Display::save()
 {
     pugi::xml_node param;
 

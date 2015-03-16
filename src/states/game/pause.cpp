@@ -1,6 +1,5 @@
 #include "states/game/pause.hpp"
 
-#include "core/application.hpp"
 #include "core/gettext.hpp"
 #include "resources/identifiers.hpp"
 #include "tools/tools.hpp"
@@ -18,15 +17,14 @@ using namespace states;
 GamePause::GamePause(StateStack& stack)
     : State(stack)
 {
-    const auto& resolution = Application::context().resolution;
-
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
+    const auto& nuiSize = nuiLayer().size();
 
     // Background
     nuiRoot.attachChild(m_background);
     m_background.setFillColor(sf::Color(0, 0, 0, 230));
-    m_background.setSize(resolution);
+    m_background.setSize(nuiSize);
 
     // Title
     nuiRoot.attachChild(m_title);

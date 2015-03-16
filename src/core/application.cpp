@@ -21,7 +21,7 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
     title = iTitle;
     style = iStyle;
     resolution = iResolution;
-    effectiveDisplay = iResolution;
+    effectiveDisplay = resolution;
 
     if (window.isOpen())
         window.close();
@@ -32,7 +32,6 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
         throw std::runtime_error("Cannot initialize window.");
 
     window.setVerticalSyncEnabled(true);
-
     screenSize = sf::v2f(window.getSize());
 }
 
@@ -42,10 +41,8 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
 Application::Application()
     : m_initialState(StateID::SPLASHSCREEN)
 {
-    // Load display config, switch fullscreen if config on
-    config::Display displayConfig;
-    s_context.init(displayConfig.resolution, "Evily Evil Villains", sf::Style::Default);
-    if (displayConfig.fullscreen) switchFullscreenMode();
+    s_context.init(s_context.display.resolution, "Evily Evil Villains", sf::Style::Default);
+    if (s_context.display.fullscreen) switchFullscreenMode();
     else refresh();
 
     loadTextures();

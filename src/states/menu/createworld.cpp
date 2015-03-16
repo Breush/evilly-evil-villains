@@ -1,8 +1,8 @@
 #include "states/menu/createworld.hpp"
 
-#include "core/application.hpp"
 #include "core/gettext.hpp"
 #include "world/context.hpp"
+#include "tools/tools.hpp"
 #include "tools/debug.hpp"
 #include "tools/filesystem.hpp"
 #include "tools/string.hpp"
@@ -15,13 +15,13 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
 {
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
-    const auto& resolution = Application::context().resolution;
+    const auto& nuiSize = nuiLayer().size();
 
     // Background
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
     m_background.setFillColor({0, 0, 0, 230});
-    m_background.setSize(resolution);
+    m_background.setSize(nuiSize);
 
     // Title
     nuiRoot.attachChild(m_title);
@@ -34,19 +34,19 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     nuiRoot.attachChild(m_stacker);
     m_stacker.setAlign(nui::Stacker::Align::CENTER);
     m_stacker.setRelativePosition({0.f, 0.125f});
-    m_stacker.setSize({resolution.x, 50.f});
+    m_stacker.setSize({nuiSize.x, 50.f});
 
     // Stacking
     m_stacker.add(&m_worldNameLabel, nui::Stacker::Align::CENTER);
     m_worldNameLabel.setText(_("World name"), FontID::NUI, 16);
 
     m_stacker.add(&m_worldNameEntry, nui::Stacker::Align::CENTER);
-    m_worldNameEntry.setLength(resolution.x * 0.4f);
+    m_worldNameEntry.setLength(nuiSize.x * 0.4f);
 
     // Buttons
     nuiRoot.attachChild(m_buttonsStacker);
     m_buttonsStacker.setAlign(nui::Stacker::Align::CENTER);
-    m_buttonsStacker.setSize({resolution.x, 0.95f * resolution.y});
+    m_buttonsStacker.setSize({nuiSize.x, 0.95f * nuiSize.y});
 
     for (auto& button : m_buttons)
         m_buttonsStacker.add(&button, nui::Stacker::Align::OPPOSITE);

@@ -9,7 +9,7 @@
 
 namespace nui
 {
-    class List : public scene::Entity
+    class List final : public scene::Entity
     {
         using baseClass = scene::Entity;
 
@@ -29,6 +29,7 @@ namespace nui
     protected:
         // Virtual
         void update() override;
+        void refreshDisplay() final;
 
         // Events
         void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;

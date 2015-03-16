@@ -16,8 +16,6 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     // During game, disable key repeat
     Application::context().window.setKeyRepeatEnabled(false);
 
-    auto& resolution = Application::context().resolution;
-
     // Stop music if any
     Application::context().musics.stop();
 
@@ -28,6 +26,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     auto& backgroundRoot =  scene().addLayer("BACKGROUND", 1.2f).root();
     auto& dungeonRoot =     scene().addLayer("DUNGEON",    1.f).root();
     auto& foregroundRoot =  scene().addLayer("FOREGROUND", 0.8f).root();
+    const auto& nuiSize = nuiLayer().size();
 
     // Dungeon data
     massert(!world::context.info->folder.empty(), "Selected world is in an empty folder.");
@@ -41,14 +40,14 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     nuiRoot.attachChild(m_dungeonPanel);
     m_dungeonPanel.setCentered(true);
     m_dungeonPanel.setSize({4 * 100 + 25, 125 + 25});
-    m_dungeonPanel.setLocalPosition({resolution.x / 2.f, resolution.y - m_dungeonPanel.size().y / 2.f});
+    m_dungeonPanel.setLocalPosition({nuiSize.x / 2.f, nuiSize.y - m_dungeonPanel.size().y / 2.f});
     m_dungeonPanel.lerpable()->saveDefaults();
 
     // Dungeon sidebar
     nuiRoot.attachChild(m_dungeonSidebar);
     m_dungeonSidebar.setCentered(true);
     m_dungeonSidebar.setSize({2 * 100 + 25, 5 * 125 + 25});
-    m_dungeonSidebar.setLocalPosition({resolution.x - m_dungeonSidebar.size().x / 2.f, resolution.y / 2.f});
+    m_dungeonSidebar.setLocalPosition({nuiSize.x - m_dungeonSidebar.size().x / 2.f, nuiSize.y / 2.f});
     m_dungeonSidebar.lerpable()->saveDefaults();
     m_dungeonSidebar.immediateReduce();
 

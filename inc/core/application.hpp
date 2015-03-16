@@ -6,6 +6,7 @@
 #include "resources/soundplayer.hpp"
 #include "resources/animationholder.hpp"
 #include "states/statestack.hpp"
+#include "config/display.hpp"
 
 #include <SFML/System/Time.hpp>
 #include <SFML/System/NonCopyable.hpp>
@@ -33,13 +34,13 @@ public:
     {
         //! Initialize window and screen context.
         /*!
-         *  @param iResolution  The requested resolution.
+         *  @parma iResolution  The resolution to be used.
          *  @param iTitle       The title of the window.
          *  @param iStyle       The SFML flags to set the style of the window.
          */
         void init(const sf::Vector2f& iResolution, const std::string& iTitle, const uint32_t& iStyle);
 
-        sf::Vector2f resolution;        //!< The resolution asked.
+        sf::Vector2f resolution;        //!< The current resolution.
         sf::FloatRect viewport;         //!< The current viewport.
         sf::Vector2f screenSize;        //!< Represents the dimension of the drawable part of the window,
                                         //! it should be reset at each resize.
@@ -55,6 +56,8 @@ public:
         resources::MusicPlayer musics;          //!< The musics.
         resources::SoundPlayer sounds;          //!< The sounds.
         resources::AnimationHolder animations;  //!< The animations, parsed SCML files.
+        
+        config::Display display;    //!< The display configuration.
     };
 
     //! Access the static context to get resources and window/screen information.

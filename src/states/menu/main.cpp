@@ -14,24 +14,26 @@ MenuMain::MenuMain(StateStack& stack)
     : baseClass(stack)
     , m_choices{L"V", L"I", L"L", L"Y", L"S"}
 {
-    // Creating scene
-    auto& nuiRoot = nuiLayer().root();
-
     // During menus, enable key repeat
     Application::context().window.setKeyRepeatEnabled(true);
 
-    const sf::Vector2f& resolution = Application::context().resolution;
-    float maxSide = std::max(resolution.x, resolution.y);
+    // Menu theme
+    Application::context().musics.play(MusicID::MENU_THEME);
+    Application::context().musics.setVolume(75);
+    
+    // Creating scene
+    auto& nuiRoot = nuiLayer().root();
+    const auto& nuiSize = nuiLayer().size();
+    float maxSide = std::max(nuiSize.x, nuiSize.y);
 
     // Background
-    // TODO Make a expandToView() function in sfe::Sprite to adapt to screenSize?
     const auto& textureSize = Application::context().textures.get(TextureID::MENU_BACKGROUND).getSize();
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
     m_background.setTexture(TextureID::MENU_BACKGROUND);
     m_background.setShader(ShaderID::MENU_BACKGROUND);
     m_background.setLocalScale(maxSide / sf::v2f(textureSize));
-    m_background.setLocalPosition((resolution - maxSide) / 2.f);
+    m_background.setLocalPosition((nuiSize - maxSide) / 2.f);
 
     // Fonctors
     auto singlePlayer = [this]() { stackPush(StateID::MENU_SELECTWORLD); };
@@ -65,10 +67,6 @@ MenuMain::MenuMain(StateStack& stack)
     m_reactImage.setReactCallback(m_choices[2], personalization);
     m_reactImage.setReactCallback(m_choices[3], configuration);
     m_reactImage.setReactCallback(m_choices[4], quitGame);
-
-    // Menu theme
-    Application::context().musics.play(MusicID::MENU_THEME);
-    Application::context().musics.setVolume(75);
 }
 
 bool MenuMain::update(const sf::Time& dt)

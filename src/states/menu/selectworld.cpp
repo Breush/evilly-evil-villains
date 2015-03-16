@@ -18,13 +18,13 @@ MenuSelectWorld::MenuSelectWorld(StateStack& stack)
 {
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
-    const auto& resolution = Application::context().resolution;
+    const auto& nuiSize = nuiLayer().size();
 
     // Background
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
     m_background.setFillColor(sf::Color(0, 0, 0, 230));
-    m_background.setSize(resolution);
+    m_background.setSize(nuiSize);
 
     // Title
     nuiRoot.attachChild(m_title);
@@ -36,7 +36,7 @@ MenuSelectWorld::MenuSelectWorld(StateStack& stack)
     // List for existing worlds
     nuiRoot.attachChild(m_list);
     m_list.setCentered(true);
-    m_list.setSize(0.75f * resolution);
+    m_list.setSize(0.75f * nuiSize);
     m_list.setRelativePosition({0.5f, 0.5f});
     m_list.setColumns({_("Villain"), _("World name"), _("Main dungeon"), _("Last played")});
     m_list.setColumnFillClip(3, false, false);
@@ -50,7 +50,7 @@ MenuSelectWorld::MenuSelectWorld(StateStack& stack)
     // Stacker for buttons
     nuiRoot.attachChild(m_stacker);
     m_stacker.setAlign(nui::Stacker::Align::CENTER);
-    m_stacker.setSize({resolution.x, 0.95f * resolution.y});
+    m_stacker.setSize({nuiSize.x, 0.95f * nuiSize.y});
 
     // Buttons
     for (auto& button : m_buttons)

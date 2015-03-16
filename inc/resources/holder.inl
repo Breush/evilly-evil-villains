@@ -1,6 +1,8 @@
 #include "tools/string.hpp" // toWString
 #include "tools/tools.hpp" // returnif
 
+#include <stdexcept> // runtime_error
+
 namespace resources
 {
     template <typename Resource, typename Identifier>

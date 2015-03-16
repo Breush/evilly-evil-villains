@@ -15,16 +15,12 @@ List::List()
 {
     setFocusable(true);
     setFocusOwned(true);
-
-    // Use config parameter to determine size
-    // TODO To be in refreshDisplay()
-    config::NUI nuiConfig;
-    m_hPadding = nuiConfig.hPadding;
-    m_vPadding = nuiConfig.vPadding;
-    m_borderThick = nuiConfig.borderThick;
-
-    update();
+    
+    refreshDisplay();
 }
+
+//-------------------//
+//----- Routine -----//
 
 void List::update()
 {
@@ -93,6 +89,19 @@ void List::update()
     m_hBorders[hBorderLast].setLength(size().x);
     m_hBorders[hBorderLast].setPosition(0, y);
     addPart(&m_hBorders[hBorderLast]);
+}
+
+void List::refreshDisplay()
+{
+    config::NUI nuiConfig;
+
+    m_hPadding = nuiConfig.hPadding;
+    m_vPadding = nuiConfig.vPadding;
+    m_borderThick = nuiConfig.borderThick;
+
+    // TODO Update text style
+
+    update();
 }
 
 //-------------------//

@@ -1,6 +1,5 @@
 #include "states/quit.hpp"
 
-#include "core/application.hpp"
 #include "resources/identifiers.hpp"
 #include "core/gettext.hpp"
 #include "tools/tools.hpp"
@@ -10,15 +9,14 @@ using namespace states;
 Quit::Quit(StateStack& stack)
     : State(stack)
 {
-    const auto& resolution = Application::context().resolution;
-
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
+    const auto& nuiSize = nuiLayer().size();
 
     // Background
     nuiRoot.attachChild(m_background);
     m_background.setFillColor(sf::Color(0, 0, 0, 230));
-    m_background.setSize(resolution); // TODO Set relative size
+    m_background.setSize(nuiSize); // TODO Set relative size
 
     // Title
     nuiRoot.attachChild(m_title);

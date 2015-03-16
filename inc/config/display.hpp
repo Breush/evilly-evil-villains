@@ -8,19 +8,15 @@ namespace config
 {
     struct Display
     {
-        //! Will load the corresponding config file.
+        //! Load the corresponding config file.
         Display();
 
-        //! Will save the data to the corresponding config file.
-        ~Display();
+        //! Save the data to the corresponding config file.
+        void save();
 
-        //! Whether the fullscreen is enabled.
-        bool fullscreen;
-
-        //! The resolution used to play the game.
-        sf::Vector2f resolution;
-
-        //! The size of the user interface.
-        uint nui;
+        bool fullscreen;            //!< Whether the fullscreen is enabled.
+        sf::Vector2f resolution;    //!< The resolution used to play the game.
+        uint nui;                   //!< The size of the user interface.
     };
 }
+
