@@ -4,6 +4,7 @@
 #include "scene/layer.hpp"
 #include "tools/tools.hpp"
 #include "tools/vector.hpp"
+#include "tools/platform-fixes.hpp" // reverse
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
@@ -109,8 +110,8 @@ void Scene::moveGrabbing(const sf::Vector2i& mousePos)
 
 Entity* Scene::entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos)
 {
-    rfor (layer, m_layers) {
-        Entity* entity = (*layer)->entityFromPosition(mousePos, viewPos);
+    for (const auto& layer : std::reverse(m_layers)) {
+        Entity* entity = layer->entityFromPosition(mousePos, viewPos);
         returnif (entity != nullptr) entity;
     }
 

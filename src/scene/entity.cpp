@@ -7,6 +7,7 @@
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
 #include "tools/vector.hpp"
+#include "tools/platform-fixes.hpp" // reverse
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/OpenGL.hpp>
@@ -176,8 +177,8 @@ void Entity::detachChild(Entity& child)
 Entity* Entity::firstOver(const sf::Vector2f& position)
 {
     // Reversed-DFS search for first children over position
-    rfor (child, m_children) {
-        Entity* entity = (*child)->firstOver(position);
+    for (const auto& child : std::reverse(m_children)) {
+        Entity* entity = child->firstOver(position);
         returnif (entity != nullptr) entity;
     }
 
@@ -254,11 +255,11 @@ Entity* Entity::closestPreviousSibling()
     returnif (m_parent == nullptr) nullptr;
 
     bool foundSelf = false;
-    rfor (sibling, m_parent->children()) {
+    for (const auto& sibling : std::reverse(m_parent->children())) {
         // Skip next
-        if (!foundSelf && *sibling != this) continue;
-        if (*sibling == this) foundSelf = true;
-        else return (*sibling)->lastDescendant();
+        if (!foundSelf && sibling != this) continue;
+        if (sibling == this) foundSelf = true;
+        else return sibling->lastDescendant();
     }
 
     // No previous sibling

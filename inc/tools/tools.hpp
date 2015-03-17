@@ -1,8 +1,5 @@
 #pragma once
 
-// Reverse for
-#define rfor(variable, container) for (auto variable = container.rbegin(); variable != container.rend(); ++variable)
-
 // Return if inline statement
 #define returnif(...) if (__VA_ARGS__) return
 
