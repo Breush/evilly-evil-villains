@@ -2,8 +2,6 @@
 
 #include "tools/int.hpp"
 
-#include <SFML/System/Vector2.hpp>
-
 namespace config
 {
     struct NUI
@@ -19,6 +17,7 @@ namespace config
         float fontSize;     //!< Size of the font.
         float fontVSpace;   //!< The space to reserve for a correct display of a font at fontSize.
 
-        float hintSize;     //!< An hint for a proportional dimension.
+        float hintSize;         //!< An hint for a proportional dimension.
+        float hintImageSide;    //!< An hint for a proportional image side.
     };
 }

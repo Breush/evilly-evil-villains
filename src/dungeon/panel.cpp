@@ -31,12 +31,10 @@ Panel::Panel(Sidebar& sidebar)
     m_tabsStacker.add(&m_treasuresTab,  nui::Stacker::Align::CENTER);
 
     // Tabs
-    // TODO Get tabImageSize from somewhere
-    sf::Vector2f tabImageSize(80.f, 80.f);
-    m_monstersTab.setVisual  (_("Monsters"),   TextureID::DUNGEON_PANEL_MONSTERS,   tabImageSize);
-    m_trapsTab.setVisual     (_("Traps"),      TextureID::DUNGEON_PANEL_TRAPS,      tabImageSize);
-    m_facilitiesTab.setVisual(_("Facilities"), TextureID::DUNGEON_PANEL_FACILITIES, tabImageSize);
-    m_treasuresTab.setVisual (_("Treasures"),  TextureID::DUNGEON_PANEL_TREASURES,  tabImageSize);
+    m_monstersTab.setVisual  (_("Monsters"),   TextureID::DUNGEON_PANEL_MONSTERS);
+    m_trapsTab.setVisual     (_("Traps"),      TextureID::DUNGEON_PANEL_TRAPS);
+    m_facilitiesTab.setVisual(_("Facilities"), TextureID::DUNGEON_PANEL_FACILITIES);
+    m_treasuresTab.setVisual (_("Treasures"),  TextureID::DUNGEON_PANEL_TREASURES);
 
     m_monstersTab.setCallback  ([&]() { m_sidebar.setMode(Sidebar::Mode::MONSTERS); });
     m_trapsTab.setCallback     ([&]() { m_sidebar.setMode(Sidebar::Mode::TRAPS); });

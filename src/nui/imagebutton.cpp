@@ -2,6 +2,7 @@
 
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
+#include "config/nui.hpp"
 
 using namespace nui;
 
@@ -9,6 +10,8 @@ ImageButton::ImageButton()
 {
     // Display style
     setShowLines(false);
+
+    refreshDisplay();
 }
 
 //-------------------//
@@ -30,12 +33,22 @@ void ImageButton::update()
     }
 
     // Re-positioning
-    const sf::Vector2f offset((size().x - maxTextSize().x) / 2.f, m_imageSize.y);
+    const sf::Vector2f offset((size().x - maxTextSize().x) / 2.f, m_imageSize.y + m_vPadding);
     text().move(offset);
     if (showLines()) {
         topLine().move(offset);
         botLine().move(offset);
     }
+}
+
+void ImageButton::refreshDisplay()
+{
+    config::NUI cNUI;
+
+    m_imageSize = {cNUI.hintImageSide, cNUI.hintImageSide};
+    m_vPadding = cNUI.vPadding;
+
+    updateSize();
 }
 
 //-------------------//
@@ -44,9 +57,12 @@ void ImageButton::update()
 void ImageButton::updateSize()
 {
     updateButtonSize();
+
     const auto& buttonDimensions = buttonSize();
     auto width = std::max(buttonDimensions.x, m_imageSize.x);
-    setSize({width, buttonDimensions.y + m_imageSize.y});
+    setSize({width, buttonDimensions.y + m_imageSize.y + m_vPadding});
+
+    update();
 }
 
 //------------------------//
@@ -68,9 +84,9 @@ void ImageButton::setImage(TextureID imageID)
     m_image.setTexture(Application::context().textures.get(imageID));
 }
 
-void ImageButton::setVisual(const std::wstring& text, TextureID imageID, const sf::Vector2f& inImageSize)
+void ImageButton::setVisual(const std::wstring& text, TextureID imageID)
 {
     setText(text);
     setImage(imageID);
-    setImageSize(inImageSize);
+    updateSize();
 }

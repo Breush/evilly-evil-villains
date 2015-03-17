@@ -66,6 +66,8 @@ namespace facilities
         //! @}
 
     private:
+
+        //! Holding the image of the grabbable.
         sf::Sprite m_sprite;
 	};
 }

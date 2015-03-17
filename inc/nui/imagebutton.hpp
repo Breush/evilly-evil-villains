@@ -35,16 +35,7 @@ namespace nui
         void setImage(TextureID imageID);
 
         //! Set all the visual information.
-        void setVisual(const std::wstring& text, TextureID imageID, const sf::Vector2f& inImageSize);
-
-        //! @}
-
-        //--------------------------//
-        //! @name Public properties
-        //! @{
-
-        //! The size of the image.
-        PARAMGSU(sf::Vector2f, m_imageSize, imageSize, setImageSize, updateSize);
+        void setVisual(const std::wstring& text, TextureID imageID);
 
         //! @}
 
@@ -55,6 +46,7 @@ namespace nui
         //! @{
 
         void update() final;
+        void refreshDisplay() final;
 
         //! @}
 
@@ -78,5 +70,8 @@ namespace nui
 
         //! The image to be displayed.
         sf::Sprite m_image;
+
+        sf::Vector2f m_imageSize;   //!< The reference size of the image.
+        float m_vPadding;           //!< The space between the image and the text.
     };
 }

@@ -17,5 +17,6 @@ NUI::NUI()
     fontVSpace = 1.2f * fontSize;
 
     hintSize = 9.f + nuiSize * 2.f;
+    hintImageSide =30.f + 2.f * hintSize;
 }
 

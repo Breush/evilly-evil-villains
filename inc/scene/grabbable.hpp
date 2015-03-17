@@ -1,5 +1,7 @@
 #pragma once
 
+#include "config/nui.hpp"
+
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 #include <memory>
@@ -71,10 +73,26 @@ namespace scene
         Grabbable() = delete;
 
         //! Constructor given the original spawner.
-        Grabbable(GrabbableSpawner& spawner) : m_spawner(spawner) {}
+        Grabbable(GrabbableSpawner& spawner) : m_spawner(spawner)
+        {
+            refreshDisplay();
+        }
 
         //! Default destructor.
         virtual ~Grabbable() = default;
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        //! To be called whenever the config NUI changed (managed by scene::Graph).
+        inline void refreshDisplay()
+        {
+            config::NUI cNUI;
+            m_sizeHint = {cNUI.hintImageSide, cNUI.hintImageSide};
+        }
+
+        //! @}
 
         //-----------------//
         //! @name Callback
@@ -85,9 +103,21 @@ namespace scene
 
         //! @}
 
+        //--------------//
+        //! @name Hints
+        //! @{
+
+        //! An indicator to set the size of the derived grabbable.
+        inline const sf::Vector2f& sizeHint() const { return m_sizeHint; }
+
+        //! @}
+
     private:
 
         //! The spawner from which the grabbable was created.
         GrabbableSpawner& m_spawner;
+
+        //! An indicator to set the size of the derived grabbable.
+        sf::Vector2f m_sizeHint;
     };
 }
