@@ -84,7 +84,6 @@ void Sidebar::setMode(Mode mode)
     // TODO Think about a better way to do this (and save it somewhere)
     // TODO Use facilities ladder model for all.
     // TODO Get tabs from dungeon::Data?
-    // TODO Set callbacks
 
     if (mode == Mode::MONSTERS) {
         /*m_tabs[0]->setVisual(_("Grasshopper"), TextureID::DUNGEON_MONSTERS_GRASSHOPPER, tabImageSize);

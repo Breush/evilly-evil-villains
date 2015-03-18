@@ -23,23 +23,19 @@ Panel::Panel(Sidebar& sidebar)
 
     // Tabs stacker
     attachChild(m_tabsStacker);
-
-    // TODO Make a std::array to store tabs
-    m_tabsStacker.add(&m_monstersTab,   nui::Stacker::Align::CENTER);
-    m_tabsStacker.add(&m_trapsTab,      nui::Stacker::Align::CENTER);
-    m_tabsStacker.add(&m_facilitiesTab, nui::Stacker::Align::CENTER);
-    m_tabsStacker.add(&m_treasuresTab,  nui::Stacker::Align::CENTER);
+    for (auto& tab : m_tabs)
+        m_tabsStacker.add(&tab, nui::Stacker::Align::CENTER);
 
     // Tabs
-    m_monstersTab.setVisual  (_("Monsters"),   TextureID::DUNGEON_PANEL_MONSTERS);
-    m_trapsTab.setVisual     (_("Traps"),      TextureID::DUNGEON_PANEL_TRAPS);
-    m_facilitiesTab.setVisual(_("Facilities"), TextureID::DUNGEON_PANEL_FACILITIES);
-    m_treasuresTab.setVisual (_("Treasures"),  TextureID::DUNGEON_PANEL_TREASURES);
+    m_tabs[0].setVisual(_("Monsters"),   TextureID::DUNGEON_PANEL_MONSTERS);
+    m_tabs[1].setVisual(_("Traps"),      TextureID::DUNGEON_PANEL_TRAPS);
+    m_tabs[2].setVisual(_("Facilities"), TextureID::DUNGEON_PANEL_FACILITIES);
+    m_tabs[3].setVisual(_("Treasures"),  TextureID::DUNGEON_PANEL_TREASURES);
 
-    m_monstersTab.setCallback  ([&]() { m_sidebar.setMode(Sidebar::Mode::MONSTERS); });
-    m_trapsTab.setCallback     ([&]() { m_sidebar.setMode(Sidebar::Mode::TRAPS); });
-    m_facilitiesTab.setCallback([&]() { m_sidebar.setMode(Sidebar::Mode::FACILITIES); });
-    m_treasuresTab.setCallback ([&]() { m_sidebar.setMode(Sidebar::Mode::TREASURES); });
+    m_tabs[0].setCallback([&]() { m_sidebar.setMode(Sidebar::Mode::MONSTERS); });
+    m_tabs[1].setCallback([&]() { m_sidebar.setMode(Sidebar::Mode::TRAPS); });
+    m_tabs[2].setCallback([&]() { m_sidebar.setMode(Sidebar::Mode::FACILITIES); });
+    m_tabs[3].setCallback([&]() { m_sidebar.setMode(Sidebar::Mode::TREASURES); });
 
     update();
 }

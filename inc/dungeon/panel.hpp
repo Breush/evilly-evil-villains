@@ -6,6 +6,7 @@
 #include "tools/param.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <array>
 
 namespace dungeon
 {
@@ -42,10 +43,7 @@ namespace dungeon
 
         // Tabs
         nui::HStacker m_tabsStacker;
-        nui::ImageButton m_monstersTab;
-        nui::ImageButton m_trapsTab;
-        nui::ImageButton m_facilitiesTab;
-        nui::ImageButton m_treasuresTab;
+        std::array<nui::ImageButton, 4> m_tabs;
 
         // Sidebar
         Sidebar& m_sidebar;

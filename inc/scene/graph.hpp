@@ -65,6 +65,8 @@ namespace scene
         void handleMouseWheelMovedEvent(const sf::Event& event);
         bool handleMouseMovedEvent(const sf::Event& event);
 
+        sf::Vector2f nuiPosition(sf::Vector2i mousePosition = {-1, -1});
+
         // Params - TODO Why are these params?
         PARAMG(sf::Shader*, m_focusShader, focusShader)
         PARAMG(sf::RectangleShape, m_focusShape, focusShape)

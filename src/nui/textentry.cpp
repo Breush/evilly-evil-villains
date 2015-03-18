@@ -7,6 +7,7 @@
 using namespace nui;
 
 // FIXME Add security to max string length
+// TODO Add mouse selection of text
 
 TextEntry::TextEntry()
     : m_textPadding(7.f)

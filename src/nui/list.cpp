@@ -98,7 +98,16 @@ void List::refreshDisplay()
 
     m_lineHeight = cNUI.borderThick + cNUI.fontVSpace + 2.f * cNUI.vPadding;
 
-    // TODO Update text style
+    // Update text style
+    auto fontSize = cNUI.fontSize;
+    for (auto& columnInfo : m_columns)
+        columnInfo.text.setCharacterSize(fontSize);
+
+    for (auto& lineVector : m_lines)
+    for (auto& lineInfo : lineVector)
+        lineInfo.text.setCharacterSize(fontSize);
+
+    // FIXME textWidth to update?
 
     update();
 }

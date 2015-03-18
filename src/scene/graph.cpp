@@ -99,7 +99,7 @@ void Graph::handleEvent(const sf::Event& event)
     else focusKept = m_focusedEntity->handleJoystickEvent(event);
     returnif (focusKept);
 
-    // TODO Have a grabbed focus feedback
+    // TODO Have a grabbed focus feedback (on mouse)
     focusHandleEvent(event);
 }
 
@@ -238,8 +238,7 @@ void Graph::grabbableHandleMouseEvent(const sf::Event& event)
     sf::Vector2f relPos;
     Entity* entity;
 
-    const auto& window = Application::context().window;
-    sf::Vector2f nuiPos = window.mapPixelToCoords(mousePos, m_nuiLayer.view());
+    sf::Vector2f nuiPos(nuiPosition(mousePos));
 
     switch (event.type) {
     case sf::Event::MouseMoved:
@@ -261,16 +260,22 @@ void Graph::setGrabbable(std::unique_ptr<Grabbable> grabbable)
     returnif (grabbable.get() == nullptr);
 
     m_grabbable = std::move(grabbable);
-
-    // TODO Remove this duplicated code from handleMouseEvent() && grabbableHandleMouseEvent() functions
-    const auto& window = Application::context().window;
-    auto mousePos = sf::Mouse::getPosition(window);
-    sf::Vector2f nuiPos = window.mapPixelToCoords(mousePos, m_nuiLayer.view());
-    m_grabbable->setPosition(nuiPos);
+    m_grabbable->setPosition(nuiPosition());
 }
 
 //---------------------------//
 //----- Mouse detection -----//
+
+sf::Vector2f Graph::nuiPosition(sf::Vector2i mousePosition)
+{
+    const auto& window = Application::context().window;
+
+    // Get current mouse position, if passed with no argument
+    if (mousePosition.x < 0.f)
+        mousePosition = sf::Mouse::getPosition(window);
+
+    return window.mapPixelToCoords(mousePosition, m_nuiLayer.view());
+}
 
 void Graph::drawMouseDetector(sf::RenderTarget& target, sf::RenderStates states) const
 {
@@ -305,9 +310,8 @@ Entity* Graph::handleMouseEvent(const sf::Event& event)
     returnif (entity == nullptr) nullptr;
 
     // Getting relative coordinates
-    const auto& window = Application::context().window;
-    sf::Vector2f nuiPos = window.mapPixelToCoords(mousePos, m_nuiLayer.view());
-    sf::Vector2f relPos = entity->getInverseTransform().transformPoint(viewPos);
+    sf::Vector2f nuiPos(nuiPosition(mousePos));
+    sf::Vector2f relPos(entity->getInverseTransform().transformPoint(viewPos));
 
     // Calling child callback
     switch (event.type) {
