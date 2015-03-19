@@ -7,6 +7,7 @@
 
 #include <pugixml.hpp>
 #include <stdexcept>
+#include <sstream>
 
 using namespace world;
 
@@ -20,13 +21,8 @@ Context world::context;
 
 void Context::load()
 {
+    std::wstring file(L"worlds/worlds.xml");
     m_worlds.clear();
-
-    #if DEBUG_GLOBAL > 0
-        std::wstring file(L"worlds/worlds_saved.xml");
-    #else
-        std::wstring file(L"worlds/worlds.xml");
-    #endif
 
     // Parsing XML
     pugi::xml_document doc;
@@ -100,12 +96,21 @@ uint Context::createWorld(const std::wstring& worldName)
     // Creating folder
     world.folder = world.name;
     filterSpecial(world.folder);
-    world.folder += L"/";
 
-    if (!createDirectory(L"worlds/" + world.folder)) {
-        // TODO Manage user feedback (or automatically rename folder)
-        throw std::runtime_error("Cannot create directory worlds/" + toString(world.folder));
+    // Automatically increase folder postfix if we cannot create directory.
+    std::wstring folderPostfix(L"/");
+    uint iFolderPostfix = 0;
+    while (!createDirectory(L"worlds/" + world.folder + folderPostfix)) {
+        std::wstringstream str;
+        str << L"_" << ++iFolderPostfix;
+        folderPostfix = str.str() + L"/";
+
+        // If it seems like we cannot create directories, just throw...
+        if (iFolderPostfix > 42)
+            throw std::runtime_error("Cannot create directories inside worlds/.");
     }
+
+    world.folder += folderPostfix;
 
     m_worlds.emplace_back(std::move(world));
     return m_worlds.size() - 1u;

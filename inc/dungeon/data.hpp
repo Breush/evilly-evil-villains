@@ -9,7 +9,7 @@
 
 namespace dungeon
 {
-    class Data
+    class Data final
     {
     public:
 
@@ -46,7 +46,7 @@ namespace dungeon
     public:
 
         Data();
-        virtual ~Data() = default;
+        ~Data() = default;
 
         //-------------------------//
         //----- Import/Export -----//
