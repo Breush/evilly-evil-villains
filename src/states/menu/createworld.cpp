@@ -76,10 +76,8 @@ void MenuCreateWorld::createAndPlayWorld()
     wdebug_application_1(L"Creating and playing on world " + worldName);
 
     // World data
-    auto& worldData = world::context.worldsData;
-    auto selectedWorld = worldData.createWorld(worldName);
-    auto& worldInfo = world::context.worldsData.worlds()[selectedWorld];
-    world::context.info = &worldInfo;
+    auto newWorld = world::context.createWorld(worldName);
+    auto& worldInfo = world::context.selectWorld(newWorld);
 
     // TODO Remove this empty dungeon, one should be able to play with no dungeon
     // So do not start the game in DungeonDesign state

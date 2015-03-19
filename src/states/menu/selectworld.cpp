@@ -5,7 +5,6 @@
 #include "tools/time.hpp"
 #include "tools/tools.hpp"
 #include "world/context.hpp"
-#include "world/worldsdata.hpp"
 #include "resources/identifiers.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -43,8 +42,8 @@ MenuSelectWorld::MenuSelectWorld(StateStack& stack)
 
     // Load list of worlds
     // TODO Have time format within gettext so that each country can choose its own representation
-    world::context.worldsData.load();
-    for (const auto& world : world::context.worldsData.worlds())
+    world::context.load();
+    for (const auto& world : world::context.worlds())
         m_list.addLine({world.villain, world.name, world.mainDungeon, time2wstring("%Y-%m-%d", world.lastPlayed)});
 
     // Stacker for buttons
@@ -79,11 +78,10 @@ bool MenuSelectWorld::handleEvent(const sf::Event& event)
 void MenuSelectWorld::playOnSelectedWorld()
 {
     auto selectedWorld = m_list.selectedLine();
-    auto& worldInfo = world::context.worldsData.worlds()[selectedWorld];
+    auto& worldInfo = world::context.selectWorld(selectedWorld);
 
     wdebug_application_1(L"Loading world " + worldInfo.name);
 
-    world::context.info = &worldInfo;
     stackClear(StateID::GAME_DUNGEON_DESIGN);
 }
 
