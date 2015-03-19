@@ -1,23 +1,30 @@
 #include "dungeon/data.hpp"
 
 #include "tools/debug.hpp"
+#include "tools/string.hpp"
 
 #include <pugixml.hpp>
 #include <stdexcept>
 
 using namespace dungeon;
 
-void Data::load(const std::string& file)
+Data::Data()
+    : m_floorsCount(0)
+    , m_roomsByFloor(0)
+{
+}
+
+void Data::load(const std::wstring& file)
 {
     m_floors.clear();
 
     // Parsing XML
     pugi::xml_document doc;
     doc.load_file(file.c_str());
-    mdebug_dungeon_1("Loading file " << file);
+    wdebug_dungeon_1(L"Loading file " << file);
 
     const auto& dungeon = doc.child(L"dungeon");
-    if (!dungeon) throw std::runtime_error("File " + file + " is not a valid dungeon file.");
+    if (!dungeon) throw std::runtime_error("File " + toString(file) + " is not a valid dungeon file.");
 
     // Dungeon
     m_name = dungeon.attribute(L"name").as_string();
@@ -62,7 +69,7 @@ void Data::load(const std::string& file)
     }
 }
 
-void Data::save(const std::string& file)
+void Data::save(const std::wstring& file)
 {
     wdebug_dungeon_1(L"Saving dungeon " << m_name);
 
@@ -102,7 +109,7 @@ void Data::save(const std::string& file)
     }
 
     doc.save_file(file.c_str());
-    mdebug_dungeon_1("Saved to file " << file);
+    wdebug_dungeon_1(L"Saved to file " << file);
 }
 
 //---------------------------//

@@ -30,7 +30,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 
     // Dungeon data
     massert(!world::context.info->folder.empty(), "Selected world is in an empty folder.");
-    m_dungeonData.load("worlds/" + world::context.info->folder + "dungeon.xml");
+    m_dungeonData.load(L"worlds/" + world::context.info->folder + L"dungeon.xml");
 
     // Context menu
     nuiRoot.attachChild(m_contextMenu);
@@ -71,8 +71,12 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 
 void GameDungeonDesign::onQuit() noexcept
 {
-    // TODO Remove suffix (used to not compromise svn archive)
-    m_dungeonData.save("worlds/" + world::context.info->folder + "dungeon_saved.xml");
+    #if DEBUG_GLOBAL > 0
+        m_dungeonData.save(L"worlds/" + world::context.info->folder + L"dungeon_saved.xml");
+    #else
+        m_dungeonData.save(L"worlds/" + world::context.info->folder + L"dungeon.xml");
+    #endif
+
     world::context.updateLastPlayed();
 }
 

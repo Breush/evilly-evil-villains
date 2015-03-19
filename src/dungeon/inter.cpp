@@ -124,7 +124,7 @@ void Inter::handleGlobalEvent(const sf::Event& event)
     if (event.type == sf::Event::MouseButtonPressed)
         setHasRoomSelected(false);
 
-#if DEBUG_GLOBAL >= 1
+#if DEBUG_GLOBAL > 0
     // Keyboard event
     if (event.type == sf::Event::KeyPressed) {
         // Add rows

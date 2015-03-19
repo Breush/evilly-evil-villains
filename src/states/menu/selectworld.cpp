@@ -43,7 +43,7 @@ MenuSelectWorld::MenuSelectWorld(StateStack& stack)
 
     // Load list of worlds
     // TODO Have time format within gettext so that each country can choose its own representation
-    world::context.worldsData.load("worlds/worlds.xml");
+    world::context.worldsData.load();
     for (const auto& world : world::context.worldsData.worlds())
         m_list.addLine({world.villain, world.name, world.mainDungeon, time2wstring("%Y-%m-%d", world.lastPlayed)});
 

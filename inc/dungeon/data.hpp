@@ -45,17 +45,17 @@ namespace dungeon
 
     public:
 
-        Data() = default;
+        Data();
         virtual ~Data() = default;
 
         //-------------------------//
         //----- Import/Export -----//
 
         //! Load dungeon data from a file.
-        void load(const std::string& file);
+        void load(const std::wstring& file);
 
         //! Save dungeon data to a file.
-        void save(const std::string& file);
+        void save(const std::wstring& file);
 
         //-------------------//
         //----- Getters -----//
@@ -92,8 +92,8 @@ namespace dungeon
         //----- Params -----//
 
         //! Name of the dungeon.
-        //! @access name
-        PARAMG(std::wstring, m_name, name)
+        //! @access name setName
+        PARAMGS(std::wstring, m_name, name, setName)
 
         //! Number of floors in the dungeon.
         //! @access floorsCount setFloorsCount changedFloorsCount

@@ -14,7 +14,7 @@ Display::Display()
 {
     pugi::xml_document doc;
 
-    #if DEBUG_GLOBAL
+    #if DEBUG_GLOBAL > 0
         doc.load_file("config/display_debug.xml");
     #else
         doc.load_file("config/display.xml");
@@ -74,7 +74,7 @@ void Display::save()
     param.append_attribute(L"name") = L"nui";
     param.append_attribute(L"size") = nui;
 
-    #if DEBUG_GLOBAL
+    #if DEBUG_GLOBAL > 0
         doc.save_file("config/display_saved.xml");
     #else
         doc.save_file("config/display.xml");

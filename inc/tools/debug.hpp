@@ -4,7 +4,9 @@
 //---- Change defines here ----//
 
 // Asserts and masserts - should be on until release
-#define DEBUG_GLOBAL        1
+#if not defined(DEBUG_GLOBAL)
+    #define DEBUG_GLOBAL        1
+#endif
 
 // Note: For the following, max level is 5
 // Basic application interactions

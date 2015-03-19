@@ -4,9 +4,10 @@
 #include "world/context.hpp"
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
-#include "tools/filesystem.hpp"
 #include "tools/string.hpp"
 #include "resources/identifiers.hpp"
+
+#include "dungeon/data.hpp" // TODO Can be safely removed once we don't need at least one dungeon anymore
 
 using namespace states;
 
@@ -72,21 +73,21 @@ void MenuCreateWorld::createAndPlayWorld()
     auto worldName = m_worldNameEntry.text();
     returnif (worldName.empty());
 
-    wdebug_application_1(L"Creating world " + worldName);
+    wdebug_application_1(L"Creating and playing on world " + worldName);
 
-    // auto& worldData = world::context.worldsData;
+    // World data
+    auto& worldData = world::context.worldsData;
+    auto selectedWorld = worldData.createWorld(worldName);
+    auto& worldInfo = world::context.worldsData.worlds()[selectedWorld];
+    world::context.info = &worldInfo;
 
-    // Creating folder
-    auto folder(worldName);
-    filterSpecial(folder);
+    // TODO Remove this empty dungeon, one should be able to play with no dungeon
+    // So do not start the game in DungeonDesign state
+    dungeon::Data dungeonData;
+    dungeonData.setName(worldInfo.name);
+    dungeonData.setFloorsCount(7u);
+    dungeonData.setRoomsByFloor(5u);
+    dungeonData.save(L"worlds/" + worldInfo.folder + L"dungeon.xml");
 
-    if (!createDirectory(L"worlds/" + folder)) {
-        // TODO Manage user feedback (or automatically rename folder)
-        std::wcout << L"Cannot create directory worlds/" << worldName << std::endl;
-        return;
-    }
-
-    // TODO Do something clever
-    // stackClear(StateID::GAME_DUNGEON_DESIGN)
-    stackPop();
+    stackClear(StateID::GAME_DUNGEON_DESIGN);
 }
