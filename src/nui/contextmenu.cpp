@@ -8,8 +8,6 @@ using namespace nui;
 
 ContextMenu::ContextMenu()
     : baseClass()
-    , m_padding(15)
-    , m_choiceHeight(22)
 {
     setVisible(false);
 
@@ -73,7 +71,7 @@ void ContextMenu::updateSize()
         yOffset += m_choiceHeight;
     }
 
-    setSize(border);
+    setSize(border); // Calls update()
 }
 
 void ContextMenu::refreshDisplay()
@@ -81,13 +79,16 @@ void ContextMenu::refreshDisplay()
     config::NUI cNUI;
 
     m_fontSize = cNUI.fontSize;
+    m_padding = (cNUI.hPadding + cNUI.vPadding);
+    m_choiceHeight = m_padding + cNUI.fontVSpace;
 
     // Update font size
     m_title.setCharacterSize(m_fontSize);
     for (auto& choiceInfo : m_choices)
         choiceInfo.text.setCharacterSize(m_fontSize);
 
-    update();
+    updateSize();
+    baseClass::refreshDisplay();
 }
 
 //------------------------//

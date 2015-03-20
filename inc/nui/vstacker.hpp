@@ -14,6 +14,7 @@ namespace nui
 
         // Virtual
         void update() override;
+        void refreshDisplay() final;
 
     protected:
         float getX(float childWidth, Align align);

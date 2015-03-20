@@ -8,7 +8,7 @@
 
 namespace nui
 {
-    class TextEntry : public scene::Entity
+    class TextEntry final : public scene::Entity
     {
         using baseClass = scene::Entity;
 
@@ -17,15 +17,16 @@ namespace nui
         virtual ~TextEntry() = default;
 
         // Routine
-        void update() override;
+        void update() final;
+        void updateSize();
         void updateRoutine(const sf::Time& dt) final;
         void refreshDisplay() final;
 
-        // Size override
-        void setLength(float length);
-
         // Getter
         std::wstring text() const { return m_textString.toWideString(); };
+
+        // Size override, length is an estimated number of characters to draw.
+        PARAMGSU(uint, m_length, length, setLength, updateSize)
 
     protected:
         // Events
@@ -54,5 +55,7 @@ namespace nui
 
         // Decorum
         float m_textPadding;
+        float m_fontVSpace;
+        float m_fontHSpace;
     };
 }

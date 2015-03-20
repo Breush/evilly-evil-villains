@@ -107,7 +107,7 @@ void Application::processInput()
             // Switch visual debug mode
             if (event.key.code == sf::Keyboard::F3) {
                 m_visualDebug.switchVisible();
-                break;
+                continue;
             }
 
             // Switch fullscreen mode
@@ -122,7 +122,22 @@ void Application::processInput()
             if (event.key.code == sf::Keyboard::BackSlash) {
                 m_stateStack.clearStates();
                 m_stateStack.pushState(StateID::SPLASHSCREEN);
-                break;
+                continue;
+            }
+
+            // TODO Remove when config exists : NUI quick size change
+            if (event.key.code == sf::Keyboard::Numpad8) {
+                s_context.display.nui += 1;
+                std::cerr << "NUI size: " << s_context.display.nui << std::endl;
+                refreshDisplay();
+                continue;
+            }
+
+            if (event.key.code == sf::Keyboard::Numpad2) {
+                s_context.display.nui -= 1;
+                std::cerr << "NUI size: " << s_context.display.nui << std::endl;
+                refreshDisplay();
+                continue;
             }
 #endif
         }
@@ -131,6 +146,7 @@ void Application::processInput()
         if (event.type == sf::Event::Closed) {
             if (!m_stateStack.isStateVisible(StateID::QUIT))
                 m_stateStack.pushState(StateID::QUIT);
+            clearWindowEvents();
             break;
         }
 

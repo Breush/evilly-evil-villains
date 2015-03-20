@@ -10,7 +10,6 @@ using namespace nui;
 // TODO Add mouse selection of text
 
 TextEntry::TextEntry()
-    : m_textPadding(7.f)
 {
     setFocusable(true);
 
@@ -41,6 +40,11 @@ void TextEntry::update()
     updateDynamicText();
 }
 
+void TextEntry::updateSize()
+{
+    setSize({m_length * m_fontHSpace + 2.f * m_textPadding, m_fontVSpace + 2.f * m_textPadding});
+}
+
 void TextEntry::updateRoutine(const sf::Time& dt)
 {
     // Blinking cursor
@@ -60,7 +64,12 @@ void TextEntry::refreshDisplay()
     m_text.setCharacterSize(cNUI.fontSize);
     m_cursorText.setCharacterSize(cNUI.fontSize);
 
-    update();
+    m_textPadding = (cNUI.hPadding + cNUI.vPadding) / 2.f;
+    m_fontVSpace = cNUI.fontVSpace;
+    m_fontHSpace = cNUI.fontHSpace;
+
+    updateSize();
+    baseClass::refreshDisplay();
 }
 
 //------------------//
@@ -155,9 +164,4 @@ int TextEntry::nextRelativeWord()
     for (int i = 0; i <= textStringSize - cursorStringSize; ++i)
         returnif (!iswalnum(m_textString[cursorStringSize + i])) i + 1;
     return textStringSize - cursorStringSize + 1;
-}
-
-void TextEntry::setLength(float length)
-{
-    setSize({length + 2.f * m_textPadding, 16.f + 2.f * m_textPadding}); // 16.f = text_size
 }

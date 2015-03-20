@@ -2,11 +2,26 @@
 
 #include "tools/debug.hpp"
 #include "tools/int.hpp"
+#include "config/nui.hpp"
 
 using namespace nui;
 
 HStacker::HStacker()
 {
+    refreshDisplay();
+}
+
+//-------------------//
+//----- Routine -----//
+
+void HStacker::refreshDisplay()
+{
+    config::NUI cNUI;
+
+    m_padding = cNUI.hPadding;
+
+    update();
+    baseClass::refreshDisplay();
 }
 
 //------------------//
@@ -49,17 +64,17 @@ inline float HStacker::getY(float childHeight, Align inAlign)
 
     // Opposite : bottom
     else if (inAlign == Stacker::Align::OPPOSITE)
-        return (size().y - margin()) - (height + childHeight) / 2.f;
+        return (size().y - m_padding) - (height + childHeight) / 2.f;
 
     // Standard : top
-    return margin() + (height - childHeight) / 2.f;
+    return m_padding + (height - childHeight) / 2.f;
 }
 
 inline float HStacker::getInitX()
 {
     // Center
     if (align() == Stacker::Align::CENTER) {
-        float width = (m_children.size() - 1) * margin();
+        float width = (m_children.size() - 1) * m_padding;
         for (auto& childInfo : m_children)
             width += childInfo.entity->size().x;
         return (size().x - width) / 2.f;
@@ -67,10 +82,10 @@ inline float HStacker::getInitX()
 
     // Opposite : right
     else if (align() == Stacker::Align::OPPOSITE)
-        return size().x - margin();
+        return size().x - m_padding;
 
     // Standard : left
-    return margin();
+    return m_padding;
 }
 
 inline float HStacker::getPreX(float childWidth)
@@ -87,8 +102,8 @@ inline float HStacker::getPostX(float childWidth)
 {
     // Opposite
     if (align() == Stacker::Align::OPPOSITE)
-        return -margin();
+        return -m_padding;
 
     // Center or Standard
-    return childWidth + margin();
+    return childWidth + m_padding;
 }

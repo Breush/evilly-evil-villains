@@ -185,7 +185,7 @@ namespace scene
         void updateChanges();
 
         //! Called whenever the screen config changed.
-        virtual void refreshDisplay() {}
+        virtual void refreshDisplay();
 
         //! @}
 

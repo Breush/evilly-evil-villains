@@ -15,8 +15,9 @@ NUI::NUI()
 
     fontSize = 10.f + nuiSize * 3.f;
     fontVSpace = 1.2f * fontSize;
+    fontHSpace = 0.6f * fontSize;
 
     hintSize = 9.f + nuiSize * 2.f;
-    hintImageSide =30.f + 2.f * hintSize;
+    hintImageSide = 30.f + 2.f * hintSize;
 }
 

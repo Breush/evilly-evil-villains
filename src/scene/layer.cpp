@@ -46,6 +46,9 @@ void Layer::refreshDisplay()
         m_view.setSize(m_size);
         m_view.setCenter(m_size / 2.f);
     }
+
+    // Recursively update the whole layer.
+    m_root.refreshDisplay();
 }
 
 //-----------------------------//

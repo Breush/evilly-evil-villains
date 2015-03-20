@@ -88,7 +88,8 @@ void ChoiceBox::refreshDisplay()
     // Update text
     m_text.setCharacterSize(cNUI.fontSize);
 
-    update();
+    updateSize();
+    baseClass::refreshDisplay();
 }
 
 //-----------------------------//
@@ -309,7 +310,6 @@ void ChoiceBox::updateButtonSize()
 void ChoiceBox::updateSize()
 {
     updateButtonSize();
-    setSize(m_buttonSize);
-    update();
+    setSize(m_buttonSize); // Calls update()
 }
 

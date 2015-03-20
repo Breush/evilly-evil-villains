@@ -49,6 +49,7 @@ void ImageButton::refreshDisplay()
     m_vPadding = cNUI.vPadding;
 
     updateSize();
+    baseClass::refreshDisplay();
 }
 
 //-------------------//

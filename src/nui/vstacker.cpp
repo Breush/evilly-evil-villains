@@ -2,11 +2,26 @@
 
 #include "tools/debug.hpp"
 #include "tools/int.hpp"
+#include "config/nui.hpp"
 
 using namespace nui;
 
 VStacker::VStacker()
 {
+    refreshDisplay();
+}
+
+//-------------------//
+//----- Routine -----//
+
+void VStacker::refreshDisplay()
+{
+    config::NUI cNUI;
+
+    m_padding = cNUI.vPadding;
+
+    update();
+    baseClass::refreshDisplay();
 }
 
 //------------------//
@@ -49,17 +64,17 @@ inline float VStacker::getX(float childWidth, Align inAlign)
 
     // Opposite : right
     else if (inAlign == Stacker::Align::OPPOSITE)
-        return (size().x - margin()) - (width + childWidth) / 2.f;
+        return (size().x - m_padding) - (width + childWidth) / 2.f;
 
     // Standard : left
-    return margin() + (width - childWidth) / 2;
+    return m_padding + (width - childWidth) / 2;
 }
 
 inline float VStacker::getInitY()
 {
     // Center
     if (align() == Stacker::Align::CENTER) {
-        float height = (m_children.size() - 1) * margin();
+        float height = (m_children.size() - 1) * m_padding;
         for (auto& childInfo : m_children)
             height += childInfo.entity->size().y;
         return (size().y - height) / 2;
@@ -67,10 +82,10 @@ inline float VStacker::getInitY()
 
     // Opposite : bottom
     else if (align() == Stacker::Align::OPPOSITE)
-        return size().y - margin();
+        return size().y - m_padding;
 
     // Standard : top
-    return margin();
+    return m_padding;
 }
 
 inline float VStacker::getPreY(float childHeight)
@@ -87,8 +102,8 @@ inline float VStacker::getPostY(float childHeight)
 {
     // Opposite
     if (align() == Stacker::Align::OPPOSITE)
-        return -margin();
+        return -m_padding;
 
     // Center or Standard
-    return childHeight + margin();
+    return childHeight + m_padding;
 }

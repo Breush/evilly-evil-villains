@@ -153,6 +153,12 @@ void Entity::updateChanges()
     }
 }
 
+void Entity::refreshDisplay()
+{
+    for (auto& child : m_children)
+        child->refreshDisplay();
+}
+
 //-------------------------------//
 //----- Children management -----//
 

@@ -42,7 +42,7 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     m_worldNameLabel.setText(_("World name"), FontID::NUI);
 
     m_stacker.add(&m_worldNameEntry, nui::Stacker::Align::CENTER);
-    m_worldNameEntry.setLength(nuiSize.x * 0.4f);
+    m_worldNameEntry.setLength(20u);
 
     // Buttons
     nuiRoot.attachChild(m_buttonsStacker);

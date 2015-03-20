@@ -31,7 +31,6 @@ namespace nui
         virtual void update() override = 0;
 
         // Params
-        PARAMGSU(float, m_margin, margin, setMargin, update)
         PARAMGSU(Align, m_align, align, setAlign, update)
 
         struct ChildInfo {
@@ -42,6 +41,9 @@ namespace nui
     protected:
         // Children
         std::list<ChildInfo> m_children;
+
+        // Decorum
+        float m_padding;
     };
 }
 

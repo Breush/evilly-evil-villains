@@ -107,9 +107,10 @@ void List::refreshDisplay()
     for (auto& lineInfo : lineVector)
         lineInfo.text.setCharacterSize(fontSize);
 
-    // FIXME textWidth to update?
+    // FIXME textWidth to update! (No culling otherwise)
 
     update();
+    baseClass::refreshDisplay();
 }
 
 //-------------------//

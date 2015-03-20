@@ -6,7 +6,6 @@ using namespace nui;
 
 Stacker::Stacker()
     : baseClass()
-    , m_margin(10)
     , m_align(Stacker::Align::STANDARD)
 {
     setDetectable(false);

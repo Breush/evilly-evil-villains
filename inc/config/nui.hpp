@@ -16,6 +16,7 @@ namespace config
 
         float fontSize;     //!< Size of the font.
         float fontVSpace;   //!< The space to reserve for a correct display of a font at fontSize.
+        float fontHSpace;   //!< The estimated space to reserve for a correct display of a font at fontSize.
 
         float hintSize;         //!< An hint for a proportional dimension.
         float hintImageSide;    //!< An hint for a proportional image side.
