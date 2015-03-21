@@ -51,6 +51,10 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     m_dungeonSidebar.lerpable()->saveDefaults();
     m_dungeonSidebar.immediateReduce();
 
+    // Dungeon summary
+    nuiRoot.attachChild(m_dungeonSummary);
+    m_dungeonSummary.useData(m_dungeonData);
+
     // Dungeon inter
     dungeonRoot.attachChild(m_dungeonInter);
     m_dungeonInter.useData(m_dungeonData);

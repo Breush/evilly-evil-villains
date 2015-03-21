@@ -43,7 +43,7 @@ void Inter::update()
 //------------------------//
 //----- Dungeon data -----//
 
-void Inter::useData(dungeon::Data& data)
+void Inter::useData(Data& data)
 {
     m_data = &data;
     refreshFromData();

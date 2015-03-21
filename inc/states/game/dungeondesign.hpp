@@ -5,6 +5,7 @@
 #include "dungeon/data.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/panel.hpp"
+#include "dungeon/summary.hpp"
 #include "dungeon/sidebar.hpp"
 #include "sfe/sprite.hpp"
 
@@ -29,6 +30,7 @@ namespace states
         dungeon::Inter m_dungeonInter;
         dungeon::Panel m_dungeonPanel;
         dungeon::Sidebar m_dungeonSidebar;
+        dungeon::Summary m_dungeonSummary;
 
         // NUI
         nui::ContextMenu m_contextMenu;
