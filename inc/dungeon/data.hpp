@@ -51,22 +51,40 @@ namespace dungeon
         //-------------------------//
         //----- Import/Export -----//
 
-        //! Load dungeon data from a file.
-        void load(const std::wstring& file);
+        //! Load data from a specified folder (must exists).
+        void load(const std::wstring& folder);
 
-        //! Save dungeon data to a file.
-        void save(const std::wstring& file);
+        //! Save data to a specified folder (must exists).
+        void save(const std::wstring& folder);
+
+        //! Save data to a specified folder (must exists).
+        void createFiles(const std::wstring& folder);
 
         //-------------------//
         //----- Getters -----//
 
         //! Easy getter to access floors.
-        std::vector<Floor>& floors() { return m_floors; }
+        inline std::vector<Floor>& floors() { return m_floors; }
 
         //! Easy getter to access a room.
-        Room& room(const sf::Vector2u& floorRoom) { return m_floors[floorRoom.x].rooms[floorRoom.y]; }
+        inline Room& room(const sf::Vector2u& floorRoom) { return m_floors[floorRoom.x].rooms[floorRoom.y]; }
+
+        inline uint dosh() const { return m_dosh; }
+        inline uint fame() const { return m_fame; }
 
     protected:
+
+        //---------------------//
+        //! @name Dungeon data
+        //! @{
+
+        //! Load dungeon data from a specified file (must exists).
+        void loadDungeon(const std::wstring& file);
+
+        //! Save dungeon data to a specified file (must exists).
+        void saveDungeon(const std::wstring& file);
+
+        //! @}
 
         //-------------------//
         //----- Changes -----//
@@ -107,5 +125,8 @@ namespace dungeon
 
         //! A dungeon consists in a vector of floors.
         std::vector<Floor> m_floors;
+
+        uint m_dosh = 0u;   //!< The resource dosh value.
+        uint m_fame = 0u;   //!< The resource fame value.
     };
 }

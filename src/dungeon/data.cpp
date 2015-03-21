@@ -14,19 +14,55 @@ Data::Data()
 {
 }
 
-void Data::load(const std::wstring& file)
+void Data::load(const std::wstring& folder)
+{
+    wdebug_dungeon_1(L"Loading data from folder " << folder);
+
+    loadDungeon(folder + L"dungeon.xml");
+}
+
+void Data::save(const std::wstring& folder)
+{
+    #if DEBUG_GLOBAL > 0
+        saveDungeon(folder + L"dungeon_saved.xml");
+    #else
+        saveDungeon(folder + L"dungeon.xml");
+    #endif
+
+    wdebug_dungeon_1(L"Saved data to folder " << folder);
+}
+
+void Data::createFiles(const std::wstring& folder)
+{
+    saveDungeon(folder + L"dungeon.xml");
+
+    wdebug_dungeon_1(L"Created data files to folder " << folder);
+}
+
+//-------------------//
+//----- Dungeon -----//
+
+void Data::loadDungeon(const std::wstring& file)
 {
     m_floors.clear();
 
     // Parsing XML
     pugi::xml_document doc;
     doc.load_file(file.c_str());
-    wdebug_dungeon_1(L"Loading file " << file);
 
+    const auto& resources = doc.child(L"resources");
     const auto& dungeon = doc.child(L"dungeon");
-    if (!dungeon) throw std::runtime_error("File " + toString(file) + " is not a valid dungeon file.");
 
-    // Dungeon
+    if (!resources || !dungeon)
+        throw std::runtime_error("File " + toString(file) + " is not a valid dungeon file.");
+
+    //---- Resources
+
+    m_dosh = resources.attribute(L"dosh").as_uint();
+    m_fame = resources.attribute(L"fame").as_uint();
+
+    //---- Dungeon
+
     m_name = dungeon.attribute(L"name").as_string();
     m_floorsCount = dungeon.attribute(L"floorsCount").as_uint();
     m_roomsByFloor = dungeon.attribute(L"roomsByFloor").as_uint();
@@ -69,15 +105,20 @@ void Data::load(const std::wstring& file)
     }
 }
 
-void Data::save(const std::wstring& file)
+void Data::saveDungeon(const std::wstring& file)
 {
-    wdebug_dungeon_1(L"Saving dungeon " << m_name);
-
     // Creating XML
     pugi::xml_document doc;
+    auto resources = doc.append_child(L"resources");
     auto dungeon = doc.append_child(L"dungeon");
 
-    // Dungeon
+    //---- Resources
+
+    resources.append_attribute(L"dosh") = m_dosh;
+    resources.append_attribute(L"fame") = m_fame;
+
+    //---- Dungeon
+
     dungeon.append_attribute(L"name") = m_name.c_str();
     dungeon.append_attribute(L"floorsCount") = m_floorsCount;
     dungeon.append_attribute(L"roomsByFloor") = m_roomsByFloor;
@@ -109,7 +150,6 @@ void Data::save(const std::wstring& file)
     }
 
     doc.save_file(file.c_str());
-    wdebug_dungeon_1(L"Saved to file " << file);
 }
 
 //---------------------------//

@@ -3,8 +3,9 @@
 #include <string>
 
 // Convert string <-> wstring (format used by SFML and pugixml)
-inline std::wstring toWString(const std::string& s);
 inline std::string toString(const std::wstring& ws);
+template<typename T> inline std::wstring toWString(const T& t);
+template<> inline std::wstring toWString(const std::string& s);
 
 // To lowercase/uppercase
 inline std::string& toLowercase(std::string& str);

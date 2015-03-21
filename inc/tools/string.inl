@@ -2,24 +2,12 @@
 #include <algorithm> // transform
 #include <cwctype>
 #include <cctype>
+#include <sstream>
 
 #include "tools/debug.hpp"
 
 //------------------------------//
 //----- wstring <-> string -----//
-
-inline std::wstring toWString(const std::string& s)
-{
-    const char* cs = s.c_str();
-    const auto wn = std::mbstowcs(nullptr, cs, 0);
-    assert(wn != size_t(-1));
-
-    std::vector<wchar_t> vws(wn + 1);
-    std::mbsrtowcs(vws.data(), &cs, wn + 1, nullptr);
-    assert(cs == nullptr);
-
-    return std::wstring(vws.data(), wn);
-}
 
 inline std::string toString(const std::wstring& ws)
 {
@@ -32,6 +20,28 @@ inline std::string toString(const std::wstring& ws)
     assert(cws == nullptr);
 
     return std::string(vs.data(), wn);
+}
+
+template<typename T>
+inline std::wstring toWString(const T& t)
+{
+    std::wstringstream ws;
+    ws << t;
+    return ws.str();
+}
+
+template<>
+inline std::wstring toWString(const std::string& s)
+{
+    const char* cs = s.c_str();
+    const auto wn = std::mbstowcs(nullptr, cs, 0);
+    assert(wn != size_t(-1));
+
+    std::vector<wchar_t> vws(wn + 1);
+    std::mbsrtowcs(vws.data(), &cs, wn + 1, nullptr);
+    assert(cs == nullptr);
+
+    return std::wstring(vws.data(), wn);
 }
 
 //-----------------------//

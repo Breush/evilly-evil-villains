@@ -106,9 +106,8 @@ void Summary::refreshFromData()
 {
     m_dungeonName.setString(m_data->name());
 
-    // TODO Get from data
-    m_bars[BAR_DOSH].text.setString(L"866286");
-    m_bars[BAR_FAME].text.setString(L"135");
+    m_bars[BAR_DOSH].text.setString(toWString(m_data->dosh()));
+    m_bars[BAR_FAME].text.setString(toWString(m_data->fame()));
 
     updateSize();
 }
