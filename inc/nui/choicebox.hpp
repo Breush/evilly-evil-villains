@@ -188,5 +188,6 @@ namespace nui
         float m_lineOffset;     //!< The gap between lines and text.
         float m_arrowSize;      //!< The width of the arrows.
         float m_lineSize;       //!< The thickness of the lines.
+        float m_fontVSpace;     //!< The vertical space reserved for the text.
     };
 }

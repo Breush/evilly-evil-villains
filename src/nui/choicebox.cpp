@@ -80,6 +80,7 @@ void ChoiceBox::refreshDisplay()
 {
     config::NUI cNUI;
 
+    m_fontVSpace = cNUI.fontVSpace;
     m_arrowOffset = 2.f * cNUI.hPadding;
     m_lineOffset = cNUI.hPadding;
     m_arrowSize = cNUI.hintSize;
@@ -286,7 +287,7 @@ bool ChoiceBox::handleKeyboardEvent(const sf::Event& event)
 
 void ChoiceBox::updateButtonSize()
 {
-    m_buttonSize = {0.f, 0.f};
+    m_buttonSize = {0.f, m_fontVSpace};
 
     // Getting max size of all choices
     for (auto& choice : m_choices) {
@@ -294,7 +295,6 @@ void ChoiceBox::updateButtonSize()
         text.setString(choice.text);
         const auto& bounds = text.getLocalBounds();
         m_buttonSize.x = std::max(m_buttonSize.x, (bounds.left + bounds.width));
-        m_buttonSize.y = std::max(m_buttonSize.y, (bounds.top + bounds.height));
     }
     m_maxTextSize = m_buttonSize;
 

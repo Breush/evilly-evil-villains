@@ -9,7 +9,7 @@ using namespace dungeon;
 
 Summary::Summary()
 {
-    const auto& font = Application::context().fonts.get(FontID::MONO);
+    const auto& font = Application::context().fonts.get(FontID::NUI);
 
     // Background
     m_background.setFillColor({0, 0, 0, 120});

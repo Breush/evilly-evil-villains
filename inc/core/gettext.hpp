@@ -11,4 +11,4 @@ namespace internationalization
     void init(const std::string& language);
 }
 
-#define _(STRING) toWString(gettext(STRING))
+#define _(STRING) toWString(std::string(gettext(STRING)))
