@@ -93,10 +93,21 @@ void Summary::refreshDisplay()
 //------------------------//
 //----- Dungeon data -----//
 
-void Summary::useData(const Data& data)
+void Summary::useData(Data& data)
 {
     m_data = &data;
+    setEmitter(&data);
     refreshFromData();
+}
+
+//--------------------------//
+//----- Dungeon events -----//
+
+void Summary::receive(const Event& event)
+{
+    if (event.type == EventType::DOSH_CHANGED
+        || event.type == EventType::FAME_CHANGED)
+        refreshFromData();
 }
 
 //-----------------------------------//

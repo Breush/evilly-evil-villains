@@ -3,7 +3,6 @@
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
 #include "core/gettext.hpp"
-#include "dungeon/data.hpp"
 #include "tools/debug.hpp"
 #include "tools/event.hpp"
 #include "tools/tools.hpp"
@@ -18,6 +17,9 @@ Inter::Inter(nui::ContextMenu& contextMenu)
 {
     update();
 }
+
+//-------------------//
+//----- Routine -----//
 
 void Inter::update()
 {
@@ -40,12 +42,23 @@ void Inter::update()
         setPartShader(&m_roomTiles[m_selectedRoom.x][m_selectedRoom.y], ShaderID::NUI_HOVER);
 }
 
+//--------------------------//
+//----- Dungeon events -----//
+
+void Inter::receive(const Event& event)
+{
+    if (event.type == EventType::ROOM_DESTROYED
+        || event.type == EventType::ROOM_CONSTRUCTED)
+        refreshRoomTiles();
+}
+
 //------------------------//
 //----- Dungeon data -----//
 
 void Inter::useData(Data& data)
 {
     m_data = &data;
+    setEmitter(&data);
     refreshFromData();
 }
 
@@ -77,14 +90,13 @@ void Inter::refreshRoomTiles()
     const auto& roomsByFloor = m_data->roomsByFloor();
     const auto& floorsCount = m_data->floorsCount();
     const auto& cellSize = m_grid.cellSize();
-    const auto& floors = m_data->floors();
 
     for (uint floor = 0; floor < floorsCount; ++floor)
     for (uint room = 0; room < roomsByFloor; ++room) {
         auto& tile = m_roomTiles[floor][room];
         tile.setSize({1.3f * cellSize.x, 1.1f * cellSize.y}); // FIXME Use separate images to get this effect
         tile.setPosition(m_grid.cellPosition(floorsCount - floor - 1, room));
-        setRoomTile(floor, room, floors[floor].rooms[room]);
+        setRoomTile(floor, room, m_data->room({floor, room}));
     }
 }
 
@@ -148,27 +160,8 @@ void Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::V
     selectRoomFromCoords(mousePos);
 
     // Pop the context menu up
-    if (button == sf::Mouse::Right) {
-        // Context title
-        std::wstringstream roomName;
-        roomName << _("Room") << " " << m_selectedRoom.x << "/" << m_selectedRoom.y;
-
-        // Context construct or destroy room
-        std::wstring constructRoomString;
-        if (m_data->room(m_selectedRoom).state == Data::RoomState::VOID) constructRoomString = L"Construct";
-        else constructRoomString = L"Destroy";
-        std::function<void()> constructRoom = [this]() { switchSelectedRoomState(); };
-
-        // Context choices
-        m_contextMenu.clearChoices();
-        m_contextMenu.setTitle(roomName.str());
-        m_contextMenu.addChoice(constructRoomString, constructRoom);
-
-        // Context positions
-        m_contextMenu.setLocalPosition(nuiPos);
-        m_contextMenu.setOrigin({m_contextMenu.size().x / 2.f, 10.f});
-        m_contextMenu.markForVisible(true);
-    }
+    if (button == sf::Mouse::Right)
+        showRoomContextMenu(m_selectedRoom, nuiPos);
 }
 
 void Inter::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
@@ -182,6 +175,41 @@ void Inter::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 void Inter::handleMouseLeft()
 {
     refreshRoomSelectedShader();
+}
+
+//------------------------//
+//----- Context menu -----//
+
+void Inter::showRoomContextMenu(const sf::Vector2u& room, const sf::Vector2f& nuiPos)
+{
+    m_contextMenu.clearChoices();
+
+    // Context title
+    std::wstringstream roomName;
+    roomName << _("Room") << " " << room.x << "/" << room.y;
+    m_contextMenu.setTitle(roomName.str());
+
+    // Room does not exists yet
+    if (m_data->room(m_selectedRoom).state == Data::RoomState::VOID) {
+
+        m_contextMenu.addChoice(L"Construct room (-100d)", [this]() {
+            constructRoom(m_selectedRoom);
+        });
+
+    }
+    // Room does exists
+    else {
+
+        m_contextMenu.addChoice(L"Destroy room (+85d)", [this]() {
+            destroyRoom(m_selectedRoom);
+        });
+
+    }
+
+    // Context positions
+    m_contextMenu.setLocalPosition(nuiPos);
+    m_contextMenu.setOrigin({m_contextMenu.size().x / 2.f, 10.f});
+    m_contextMenu.markForVisible(true);
 }
 
 //----------------------------------//
@@ -212,14 +240,16 @@ void Inter::setRoomsByFloor(uint value)
 //-----------------------//
 //----- Interaction -----//
 
-void Inter::switchSelectedRoomState()
+void Inter::constructRoom(const sf::Vector2u& room)
 {
-    if (m_data->room(m_selectedRoom).state == Data::RoomState::VOID)
-        m_data->room(m_selectedRoom).state = Data::RoomState::CONSTRUCTED;
-    else if (m_data->room(m_selectedRoom).state == Data::RoomState::CONSTRUCTED)
-        m_data->room(m_selectedRoom).state = Data::RoomState::VOID;
+    assert(!m_data->isRoomConstructed(room));
+    m_data->constructRoom(room);
+}
 
-    refreshRoomTiles();
+void Inter::destroyRoom(const sf::Vector2u& room)
+{
+    assert(m_data->isRoomConstructed(room));
+    m_data->destroyRoom(room);
 }
 
 sf::Vector2u Inter::roomFromCoords(const sf::Vector2f& coords)

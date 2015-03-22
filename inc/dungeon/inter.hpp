@@ -1,13 +1,14 @@
 #pragma once
 
 #include "scene/entity.hpp"
+#include "dungeon/event.hpp"
+#include "dungeon/data.hpp"
 #include "nui/contextmenu.hpp"
 #include "sfe/grid.hpp"
-#include "dungeon/data.hpp"
 
 namespace dungeon
 {
-    class Inter : public scene::Entity
+    class Inter : public scene::Entity, private EventReceiver
     {
         using baseClass = scene::Entity;
 
@@ -38,16 +39,25 @@ namespace dungeon
         // Ladder
         void constructLadder(const sf::Vector2f& relPos);
 
+        // Rooms
+        void constructRoom(const sf::Vector2u& room);
+        void destroyRoom(const sf::Vector2u& room);
+
     protected:
         // Virtual
-        void update() override;
+        void update() final;
+
+        // Data events
+        void receive(const Event& event) final;
+
+        // Context menu
+        void showRoomContextMenu(const sf::Vector2u& room, const sf::Vector2f& nuiPos);
 
         // Display
         void refreshRoomSelectedShader();
         void setHasRoomSelected(bool hasRoomSelected);
 
         // Room management
-        void switchSelectedRoomState();
         sf::Vector2u roomFromCoords(const sf::Vector2f& coords);
         void selectRoomFromCoords(const sf::Vector2f& coords);
 

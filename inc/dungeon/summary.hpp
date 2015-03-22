@@ -1,6 +1,7 @@
 #pragma once
 
 #include "scene/entity.hpp"
+#include "dungeon/event.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -23,7 +24,7 @@ namespace dungeon
 
     //! A small window with main dungeon information.
 
-    class Summary final : public scene::Entity
+    class Summary final : public scene::Entity, private EventReceiver
     {
         using baseClass = scene::Entity;
 
@@ -47,20 +48,11 @@ namespace dungeon
         //! @{
 
         //! The data of the dungeon to be read from.
-        void useData(const Data& data);
+        void useData(Data& data);
 
         //! @}
 
     protected:
-
-        //--------------------------------//
-        //! @name Internal change updates
-        //! @{
-
-        //! To be called whenever the dungeon data changed.
-        void refreshFromData();
-
-        //! @}
 
         //----------------//
         //! @name Routine
@@ -74,10 +66,27 @@ namespace dungeon
 
         //! @}
 
+        //-----------------------//
+        //! @name Dungeon events
+        //! @{
+
+        void receive(const Event& event) final;
+
+        //! @}
+
+        //--------------------------------//
+        //! @name Internal change updates
+        //! @{
+
+        //! To be called whenever the dungeon data changed.
+        void refreshFromData();
+
+        //! @}
+
     private:
 
         //! The data of the dungeon to be read from.
-        const Data* m_data;
+        Data* m_data;
 
         //! A basic background.
         sf::RectangleShape m_background;

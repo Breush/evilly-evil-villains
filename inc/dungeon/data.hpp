@@ -2,6 +2,7 @@
 
 #include "tools/param.hpp"
 #include "tools/int.hpp"
+#include "dungeon/event.hpp"
 
 #include <SFML/System/Vector2.hpp>
 #include <string>
@@ -9,12 +10,36 @@
 
 namespace dungeon
 {
-    class Data final
+    //! All the possible dungeon events.
+
+    enum class EventType
+    {
+        ROOM_DESTROYED,     //!< A room was destroyed.
+        ROOM_CONSTRUCTED,   //!< A rom was constructed.
+        DOSH_CHANGED,       //!< Dosh value changed, delta is set.
+        FAME_CHANGED,       //!< Fame value changed, delta is set.
+    };
+
+    //! A dungeon event.
+
+    struct Event
+    {
+        EventType type; //!< The type of event which is sent.
+
+        union
+        {
+            int delta;  //!< The difference between previous and current value of resources.
+        };
+    };
+
+    //! The data of a dungeon.
+    /*!
+     *  Can import and export dungeon and resources data to file.
+     */
+
+    class Data final : public EventEmitter
     {
     public:
-
-        //-----------------//
-        //----- Enums -----//
 
         //! Defines rooms state.
         enum class RoomState {
@@ -22,9 +47,6 @@ namespace dungeon
             VOID,
             CONSTRUCTED,
         };
-
-        //-----------------//
-        //----- Types -----//
 
         //! A room as in the xml specification.
         struct Room {
@@ -45,11 +67,15 @@ namespace dungeon
 
     public:
 
+        //! Constructor.
         Data();
+
+        //! Default destructor.
         ~Data() = default;
 
-        //-------------------------//
-        //----- Import/Export -----//
+        //------------------------//
+        //! @name File management
+        //! @{
 
         //! Load data from a specified folder (must exists).
         void load(const std::wstring& folder);
@@ -60,19 +86,69 @@ namespace dungeon
         //! Save data to a specified folder (must exists).
         void createFiles(const std::wstring& folder);
 
-        //-------------------//
-        //----- Getters -----//
+        //! @}
 
-        //! Easy getter to access floors.
-        inline std::vector<Floor>& floors() { return m_floors; }
+        //--------------//
+        //! @name Rooms
+        //! @{
 
         //! Easy getter to access a room.
         inline Room& room(const sf::Vector2u& floorRoom) { return m_floors[floorRoom.x].rooms[floorRoom.y]; }
 
-        inline uint dosh() const { return m_dosh; }
-        inline uint fame() const { return m_fame; }
+        //! Whether a specific is in constructed state.
+        bool isRoomConstructed(const sf::Vector2u& roomCoord);
+
+        //! Construct a room.
+        void constructRoom(const sf::Vector2u& roomCoord);
+
+        //! Destroy a room.
+        void destroyRoom(const sf::Vector2u& roomCoord);
+
+        //! @}
+
+        //------------------//
+        //! @name Resources
+        //! @{
+
+        inline uint dosh() const { return m_dosh; } //!< Get dosh value;
+        inline uint fame() const { return m_fame; } //!< Get fame value;
+
+        //! Add dosh to current value.
+        void addDosh(uint dosh);
+
+        //! Remove dosh from current value.
+        void subDosh(uint dosh);
+
+        //! @}
+
+        //--------------------------//
+        //! @name Public properties
+        //! @{
+
+        //! Name of the dungeon.
+        //! @access name setName
+        PARAMGS(std::wstring, m_name, name, setName)
+
+        //! Number of floors in the dungeon.
+        //! @access floorsCount setFloorsCount changedFloorsCount
+        PARAMGSU(uint, m_floorsCount, floorsCount, setFloorsCount, changedFloorsCount)
+
+        //! Number of rooms in each floor.
+        //! @access roomsByFloor setRoomsByFloor changedRoomsByFloor
+        PARAMGSU(uint, m_roomsByFloor, roomsByFloor, setRoomsByFloor, changedRoomsByFloor)
+
+        //! @}
 
     protected:
+
+        //----------------------//
+        //! @name Event emitter
+        //! @{
+
+        //! Emits a default event type through all receivers.
+        void emit(EventType eventType) final;
+
+        //! @}
 
         //---------------------//
         //! @name Dungeon data
@@ -86,17 +162,15 @@ namespace dungeon
 
         //! @}
 
-        //-------------------//
-        //----- Changes -----//
+        //--------------------------------//
+        //! @name Internal change updates
+        //! @{
 
-        //! Callback on \ref floorCount property.
+        //! Callback on floorCount property.
         void changedFloorsCount();
 
-        //! Callback on \ref roomsByFloor property.
+        //! Callback on roomsByFloor property.
         void changedRoomsByFloor();
-
-        //-----------------------//
-        //----- Corrections -----//
 
         //! Correct the dungeon data.
         /*!
@@ -106,20 +180,7 @@ namespace dungeon
          */
         void correctFloorsRooms();
 
-        //------------------//
-        //----- Params -----//
-
-        //! Name of the dungeon.
-        //! @access name setName
-        PARAMGS(std::wstring, m_name, name, setName)
-
-        //! Number of floors in the dungeon.
-        //! @access floorsCount setFloorsCount changedFloorsCount
-        PARAMGSU(uint, m_floorsCount, floorsCount, setFloorsCount, changedFloorsCount)
-
-        //! Number of rooms in each floor.
-        //! @access roomsByFloor setRoomsByFloor changedRoomsByFloor
-        PARAMGSU(uint, m_roomsByFloor, roomsByFloor, setRoomsByFloor, changedRoomsByFloor)
+        //! @}
 
     private:
 

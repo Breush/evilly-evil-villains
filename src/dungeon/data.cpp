@@ -175,6 +175,50 @@ void Data::correctFloorsRooms()
     }
 }
 
+//-----------------------//
+//----- Interaction -----//
+
+bool Data::isRoomConstructed(const sf::Vector2u& roomCoord)
+{
+    return room(roomCoord).state != RoomState::VOID;
+}
+
+void Data::constructRoom(const sf::Vector2u& roomCoord)
+{
+    room(roomCoord).state = RoomState::CONSTRUCTED;
+    emit(EventType::ROOM_CONSTRUCTED);
+    subDosh(100u);
+}
+
+void Data::destroyRoom(const sf::Vector2u& roomCoord)
+{
+    room(roomCoord).state = RoomState::VOID;
+    emit(EventType::ROOM_DESTROYED);
+    addDosh(85u); // TODO Get value from somewhere.
+}
+
+void Data::addDosh(uint dosh)
+{
+    m_dosh += dosh;
+    emit(EventType::DOSH_CHANGED);
+}
+
+void Data::subDosh(uint dosh)
+{
+    m_dosh -= dosh;
+    emit(EventType::DOSH_CHANGED);
+}
+
+//-------------------------//
+//----- Event emitter -----//
+
+void Data::emit(EventType eventType)
+{
+    Event event;
+    event.type = eventType;
+    EventEmitter::emit(event);
+}
+
 //-------------------//
 //----- Changes -----//
 
