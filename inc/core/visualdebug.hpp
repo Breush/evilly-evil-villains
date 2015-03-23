@@ -4,6 +4,7 @@
 
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/View.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/System/Time.hpp>
 #include <SFML/System/NonCopyable.hpp>
 
@@ -24,8 +25,9 @@ public:
     //! Once every resource is loaded, call this.
     void init();
 
-    //-------------------//
-    //----- Routine -----//
+    //----------------//
+    //! @name Routine
+    //! @{
 
     //! Used to recompute time-dependent information, such as FPS.
     void update(const sf::Time& dt);
@@ -36,11 +38,24 @@ public:
     //! Reset the views to current screen status.
     void refreshDisplay();
 
-    //----------------------//
-    //----- Visibility -----//
+    //! @}
+
+    //-------------------//
+    //! @name Visibility
+    //! @{
 
     //! Switch debug information on and off.
     void switchVisible();
+
+    //! @}
+
+    //--------------------------------//
+    //! @name Internal change updates
+    //! @{
+
+    void updateBackgroundSize();
+
+    //! @}
 
 private:
 
@@ -49,6 +64,9 @@ private:
 
     //! The rendered text.
     sf::Text m_text;
+
+    //! The background.
+    sf::RectangleShape m_background;
 
     bool m_visible = false;         //!< Is text visible?
     uint m_renderedFrames = 0u;     //!< Number of calls to draw()

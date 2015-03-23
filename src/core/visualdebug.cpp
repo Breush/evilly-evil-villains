@@ -12,7 +12,12 @@ void VisualDebug::init()
     // Getting font from holder
     m_text.setPosition(10.f, 10.f);
     m_text.setCharacterSize(16);
+    m_text.setColor(sf::Color::White);
     m_text.setFont(Application::context().fonts.get(FontID::MONO));
+
+    // Setting background
+    m_background.setPosition(0.f, 0.f);
+    m_background.setFillColor({0, 0, 0, 220});
 }
 
 //-------------------//
@@ -29,8 +34,9 @@ void VisualDebug::update(const sf::Time& dt)
         // Update text each second
         std::wstringstream str;
         str << L"FPS: " << m_renderedFrames
-            << L" [" << m_renderedUpdates << L"]" << std::endl;
+            << L" [" << m_renderedUpdates << L"]";
         m_text.setString(str.str());
+        updateBackgroundSize();
 
         // And reset counters
         m_time -= 1.f;
@@ -49,6 +55,7 @@ void VisualDebug::draw()
     // Draw
     auto& window = Application::context().window;
     window.setView(m_view);
+    window.draw(m_background);
     window.draw(m_text);
 }
 
@@ -63,6 +70,16 @@ void VisualDebug::refreshDisplay()
     m_view.setCenter(resolution / 2.f);
 }
 
+//-----------------------------------//
+//----- Internal change updates -----//
+
+void VisualDebug::updateBackgroundSize()
+{
+    // Making background to text size
+    const auto& bounds = m_text.getLocalBounds();
+    m_background.setSize({20.f + bounds.left + bounds.width, 20.f + bounds.top + bounds.height});
+}
+
 //----------------------//
 //----- Visibility -----//
 
@@ -72,6 +89,8 @@ void VisualDebug::switchVisible()
 
     if (m_visible) {
         m_text.setString(L"FPS: ...");
+        updateBackgroundSize();
+
         m_time = 0.f;
         m_renderedFrames = 0;
         m_renderedUpdates = 0;
