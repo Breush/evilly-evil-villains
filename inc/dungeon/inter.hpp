@@ -29,6 +29,8 @@ namespace dungeon
         // Room management
         void refreshRoomTiles();
         void setRoomTile(const uint floor, const uint room, const Data::Room& roomInfo);
+        sf::Vector2f roomLocalPosition(const sf::Vector2u& room) const;
+        sf::Vector2f roomSize() const;
 
         // Global data management
         void adaptFloorsCount(int relativeValue);

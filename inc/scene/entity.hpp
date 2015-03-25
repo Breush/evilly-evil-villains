@@ -178,6 +178,9 @@ namespace scene
          */
         virtual void updateRoutine(const sf::Time& dt) {}
 
+        //! Updates the state of the artificial intelligence.
+        virtual void updateAI(const sf::Time& dt) {}
+
         //! If lerpable component enabled, update it.
         void updateLerpable(const sf::Time& dt);
 

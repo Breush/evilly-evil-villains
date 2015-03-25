@@ -95,7 +95,7 @@ void Inter::refreshRoomTiles()
     for (uint room = 0; room < roomsByFloor; ++room) {
         auto& tile = m_roomTiles[floor][room];
         tile.setSize({1.3f * cellSize.x, 1.1f * cellSize.y}); // FIXME Use separate images to get this effect
-        tile.setPosition(m_grid.cellPosition(floorsCount - floor - 1, room));
+        tile.setPosition(roomLocalPosition({floor, room}));
         setRoomTile(floor, room, m_data->room({floor, room}));
     }
 }
@@ -125,6 +125,16 @@ void Inter::setRoomTile(const uint floor, const uint room, const Data::Room& roo
             tile.setFillColor(sf::Color::Red);
             break;
     }
+}
+
+sf::Vector2f Inter::roomSize() const
+{
+    return m_grid.cellSize();
+}
+
+sf::Vector2f Inter::roomLocalPosition(const sf::Vector2u& room) const
+{
+    return m_grid.cellPosition(m_data->floorsCount() - 1u - room.x, room.y);
 }
 
 //------------------------//

@@ -2,6 +2,7 @@
 
 #include "tools/debug.hpp"
 #include "tools/string.hpp"
+#include "tools/tools.hpp"
 
 #include <pugixml.hpp>
 #include <stdexcept>
@@ -180,6 +181,8 @@ void Data::correctFloorsRooms()
 
 bool Data::isRoomConstructed(const sf::Vector2u& roomCoord)
 {
+    returnif (roomCoord.x >= m_floorsCount) false;
+    returnif (roomCoord.y >= m_roomsByFloor) false;
     return room(roomCoord).state != RoomState::VOID;
 }
 

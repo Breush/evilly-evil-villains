@@ -12,6 +12,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     : State(stack)
     , m_dungeonInter(m_contextMenu)
     , m_dungeonPanel(m_dungeonSidebar)
+    , m_dungeonHero(&m_dungeonInter)
 {
     // During game, disable key repeat
     Application::context().window.setKeyRepeatEnabled(false);
@@ -89,12 +90,20 @@ bool GameDungeonDesign::handleEvent(const sf::Event& event)
     m_dungeonInter.handleGlobalEvent(event);
     m_contextMenu.handleGlobalEvent(event);
 
-    // Escape pressed, trigger the pause screen
     if (event.type == sf::Event::KeyPressed) {
+        // Escape pressed, trigger the pause screen
         if (event.key.code == sf::Keyboard::Escape) {
             stackPush(StateID::GAME_PAUSE);
         }
+#if DEBUG_GLOBAL > 0
+        // Spawn attacking hero in debug mode
+        else if (event.key.code == sf::Keyboard::Equal) {
+            m_dungeonInter.attachChild(m_dungeonHero);
+            m_dungeonHero.useData(m_dungeonData);
+        }
+#endif
     }
+
 
     return State::handleEvent(event);
 }

@@ -110,6 +110,7 @@ void Entity::update(const sf::Time& dt)
 {
     updateRoutine(dt);
     updateLerpable(dt);
+    updateAI(dt);
     updateChanges();
 
     // Update children - DFS

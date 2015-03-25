@@ -9,7 +9,7 @@
 
 namespace dungeon
 {
-    class Sidebar : public scene::Entity
+    class Sidebar final : public scene::Entity
     {
         using baseClass = scene::Entity;
 
