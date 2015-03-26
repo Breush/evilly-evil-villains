@@ -11,6 +11,15 @@ if (SFML_FOUND)
 endif ()
 
 #=====
+# Find Lua
+
+find_package(Lua REQUIRED)
+if (LUA_FOUND)
+	include_directories(${LUA_INCLUDE_DIR})
+	target_link_libraries(${EXECUTABLE_NAME} ${LUA_LIBRARIES})
+endif ()
+
+#=====
 # Find OpenGL
 
 find_package(OpenGL REQUIRED)
