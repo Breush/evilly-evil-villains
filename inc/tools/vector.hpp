@@ -1,5 +1,7 @@
 #pragma once
 
+#include "tools/int.hpp"
+
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Rect.hpp>
 
@@ -26,6 +28,12 @@ namespace sf
     // Operators rect-vector
     template<typename T> Rect<T>& operator+=(Rect<T>& r, const Vector2<T>& v);
     template<typename T> Rect<T>& operator*=(Rect<T>& r, const Vector2<T>& v);
+}
+
+namespace std
+{
+    // Using Cantor hash for vectors
+    template <> struct hash<sf::Vector2u>;
 }
 
 #include "tools/vector.inl"

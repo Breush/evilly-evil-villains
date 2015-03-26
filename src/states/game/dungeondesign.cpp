@@ -32,6 +32,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     // Dungeon data
     massert(!world::context.selectedWorld().folder.empty(), "Selected world is in an empty folder.");
     m_dungeonData.load(L"worlds/" + world::context.selectedWorld().folder);
+    m_dungeonGraph.useData(m_dungeonData);
 
     // Context menu
     nuiRoot.attachChild(m_contextMenu);
@@ -98,8 +99,9 @@ bool GameDungeonDesign::handleEvent(const sf::Event& event)
 #if DEBUG_GLOBAL > 0
         // Spawn attacking hero in debug mode
         else if (event.key.code == sf::Keyboard::Equal) {
+            m_dungeonGraph.reconstructFromData();
             m_dungeonInter.attachChild(m_dungeonHero);
-            m_dungeonHero.useData(m_dungeonData);
+            m_dungeonHero.useGraph(m_dungeonGraph);
         }
 #endif
     }

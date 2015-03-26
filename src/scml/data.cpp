@@ -4,7 +4,7 @@
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
 
-#include <pugixml.hpp>
+#include <pugixml/pugixml.hpp>
 #include <cstdarg> // va_start
 #include <stdexcept> // runtime_error
 

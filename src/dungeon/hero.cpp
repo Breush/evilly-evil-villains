@@ -1,8 +1,10 @@
 #include "dungeon/hero.hpp"
 
-#include "dungeon/data.hpp"
 #include "dungeon/inter.hpp"
+#include "tools/random.hpp"
 #include "tools/debug.hpp"
+
+#include <selene/selene.hpp>
 
 using namespace dungeon;
 
@@ -22,41 +24,44 @@ void Hero::updateAI(const sf::Time& dt)
 {
     m_inRoomSince += dt.asSeconds();
 
-    // TODO Currently it's using raw data, we should create an abstract graph of the dungeon
     // TODO Interface with physics engine
+    // TODO Export to Lua
 
     // Look for next room each two seconds
     if (m_inRoomSince >= 2.f) {
         m_inRoomSince -= 2.f;
 
-        // TODO Not managing presence of ladder...
+        // This algorithm just wants to get the higher possible
+        const Graph::Node* bestNode = m_currentNode;
+        for (const auto& neighbour : m_currentNode->neighbours)
+            if (neighbour->altitude > bestNode->altitude)
+                bestNode = neighbour;
 
-        sf::Vector2u offset(1u, 0u);
-        while (!m_data->isRoomConstructed(m_currentRoom + offset)) {
-            offset.x = rand() % 3u - 1u;
-            offset.y = 0u;
+        // If there is none higher, pick one randomly
+        if (m_currentNode == bestNode)
+            bestNode = alea::rand(m_currentNode->neighbours);
 
-            if (rand() % 2u == 0u)
-                std::swap(offset.x, offset.y);
-        }
-        m_currentRoom += offset;
-
-        refreshPositionFromRoom();
+        m_currentNode = bestNode;
+        refreshPositionFromNode();
     }
 }
 
-//------------------------//
-//----- Dungeon data -----//
+//-------------------------//
+//----- Dungeon graph -----//
 
-void Hero::useData(Data& data)
+void Hero::useGraph(const Graph& graph)
 {
-    m_data = &data;
+    m_graph = &graph;
+    m_currentNode = &m_graph->node({0u, 0u});
+    // FIXME Be sure it exists, otherwise an exception is thrown...
+    // Get the door from the graph.
+    refreshPositionFromNode();
 }
 
 //-----------------------------------//
 //----- Internal change updates -----//
 
-void Hero::refreshPositionFromRoom()
+void Hero::refreshPositionFromNode()
 {
-    setLocalPosition(m_inter->roomLocalPosition(m_currentRoom) + m_inter->roomSize() / 2.f);
+    setLocalPosition(m_inter->roomLocalPosition(m_currentNode->room) + m_inter->roomSize() / 2.f);
 }

@@ -4,7 +4,7 @@
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
 
-#include <pugixml.hpp>
+#include <pugixml/pugixml.hpp>
 #include <stdexcept>
 
 using namespace dungeon;
@@ -176,8 +176,8 @@ void Data::correctFloorsRooms()
     }
 }
 
-//-----------------------//
-//----- Interaction -----//
+//-----------------//
+//----- Rooms -----//
 
 bool Data::isRoomConstructed(const sf::Vector2u& roomCoord)
 {
@@ -199,6 +199,36 @@ void Data::destroyRoom(const sf::Vector2u& roomCoord)
     emit(EventType::ROOM_DESTROYED);
     addDosh(85u); // TODO Get value from somewhere.
 }
+
+bool Data::roomNeighbourAccessible(const sf::Vector2u& roomCoord, Direction direction)
+{
+    auto neighbourCoord = roomNeighbourCoords(roomCoord, direction);
+    returnif (neighbourCoord.x >= m_floorsCount) false;
+    returnif (neighbourCoord.y >= m_roomsByFloor) false;
+
+    auto& neighbourRoom = room(neighbourCoord);
+    returnif (neighbourRoom.state != RoomState::CONSTRUCTED) false;
+
+    return true;
+}
+
+sf::Vector2u Data::roomNeighbourCoords(const sf::Vector2u& roomCoord, Direction direction)
+{
+    return roomCoord + roomDirectionVector(direction);
+}
+
+Data::Room& Data::roomNeighbour(const sf::Vector2u& roomCoord, Direction direction)
+{
+    return room(roomNeighbourCoords(roomCoord, direction));
+}
+
+sf::Vector2u Data::roomDirectionVector(Direction direction)
+{
+    return sf::Vector2u((direction & 0xf) - 1u, (direction >> 0x4) - 1u);
+}
+
+//---------------------//
+//----- Resources -----//
 
 void Data::addDosh(uint dosh)
 {

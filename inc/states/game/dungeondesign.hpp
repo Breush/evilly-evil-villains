@@ -3,6 +3,7 @@
 #include "states/state.hpp"
 #include "states/identifiers.hpp"
 #include "dungeon/data.hpp"
+#include "dungeon/graph.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/panel.hpp"
 #include "dungeon/summary.hpp"
@@ -28,6 +29,7 @@ namespace states
     private:
         // Dungeon
         dungeon::Data m_dungeonData;
+        dungeon::Graph m_dungeonGraph;
         dungeon::Inter m_dungeonInter;
         dungeon::Panel m_dungeonPanel;
         dungeon::Sidebar m_dungeonSidebar;

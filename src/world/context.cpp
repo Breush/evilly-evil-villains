@@ -5,7 +5,7 @@
 #include "tools/time.hpp"
 #include "tools/filesystem.hpp"
 
-#include <pugixml.hpp>
+#include <pugixml/pugixml.hpp>
 #include <stdexcept>
 #include <sstream>
 

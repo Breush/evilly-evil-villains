@@ -41,15 +41,31 @@ namespace dungeon
     {
     public:
 
+        //! Defines the possibly accessible relative directions from a room.
+        /*!
+         *  They are defined this way to be quickly masked.
+         *  So that (direction & 0xf - 1u) gives WEST -1 and EAST +1 (x axis)
+         *  And (direction >> 0x4 - 1u) gives SOUTH -1 and NORTH +1 (y axis)
+         */
+        enum Direction : uint8
+        {
+            EAST =  0x12,
+            WEST =  0x10,
+            NORTH = 0x21,
+            SOUTH = 0x01,
+        };
+
         //! Defines rooms state.
-        enum class RoomState {
+        enum class RoomState
+        {
             UNKNOWN,
             VOID,
             CONSTRUCTED,
         };
 
         //! A room as in the xml specification.
-        struct Room {
+        struct Room
+        {
             uint floorPos;
             uint pos;
             RoomState state = RoomState::UNKNOWN;
@@ -60,7 +76,8 @@ namespace dungeon
         };
 
         //! A floor is a vector of rooms.
-        struct Floor {
+        struct Floor
+        {
             uint pos;
             std::vector<Room> rooms;
         };
@@ -103,6 +120,17 @@ namespace dungeon
 
         //! Destroy a room.
         void destroyRoom(const sf::Vector2u& roomCoord);
+
+        //! Return true if you can access the next room from the specified one.
+        //! In the case of unexisting room, it returns false.
+        bool roomNeighbourAccessible(const sf::Vector2u& roomCoord, Direction direction);
+
+        //! Return the coordinates of the next room from the specified one.
+        /*!
+         *  Note: this function does not check accessibility.
+         *  The results might be beyond dungeon boundaries.
+         */
+        sf::Vector2u roomNeighbourCoords(const sf::Vector2u& roomCoord, Direction direction);
 
         //! @}
 
@@ -159,6 +187,22 @@ namespace dungeon
 
         //! Save dungeon data to a specified file (must exists).
         void saveDungeon(const std::wstring& file);
+
+        //! @}
+
+        //--------------//
+        //! @name Rooms
+        //! @{
+
+        //! Return the next room from the specified one.
+        /*!
+         *  Note: this function does not check accessibility.
+         *  The next room should not be out of the limits of the dungeon.
+         */
+        Room& roomNeighbour(const sf::Vector2u& roomCoord, Direction direction);
+
+        //! Returns a unit vector symbolizing the direction.
+        sf::Vector2u roomDirectionVector(Direction direction);
 
         //! @}
 

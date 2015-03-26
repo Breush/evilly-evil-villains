@@ -3,7 +3,7 @@
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
 
-#include <pugixml.hpp>
+#include <pugixml/pugixml.hpp>
 
 using namespace config;
 

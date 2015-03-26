@@ -60,3 +60,14 @@ namespace sf
         return r;
     }
 }
+
+namespace std
+{
+    template <> struct hash<sf::Vector2u>
+    {
+        uint32 operator()(const sf::Vector2u& key) const
+        {
+            return (key.x + key.y) * (key.x + key.y + 1u) / 2u + key.y;
+        }
+    };
+}
