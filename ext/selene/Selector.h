@@ -1,5 +1,7 @@
 #pragma once
 
+#include "tools/string.hpp"
+
 #include "exotics.h"
 #include <functional>
 #include "Registry.h"
@@ -365,7 +367,7 @@ public:
         return std::move(*this);
     }
     Selector&& operator[](const int index) && {
-        _name += std::string(".") + std::to_string(index);
+        _name += std::string(".") + toString(index);
         _check_create_table();
         _traversal.push_back(_get);
         _get = [this, index]() {
@@ -396,7 +398,7 @@ public:
         return Selector{_state, _registry, n, traversal, get, put};
     }
     Selector operator[](const int index) const & {
-        auto name = _name + "." + std::to_string(index);
+        auto name = _name + "." + toString(index);
         _check_create_table();
         auto traversal = _traversal;
         traversal.push_back(_get);

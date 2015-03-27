@@ -3,7 +3,8 @@
 #include <string>
 
 // Convert string <-> wstring (format used by SFML and pugixml)
-inline std::string toString(const std::wstring& ws);
+template<typename T> inline std::string toString(const T& t);
+template<> inline std::string toString(const std::wstring& ws);
 template<typename T> inline std::wstring toWString(const T& t);
 template<> inline std::wstring toWString(const std::string& s);
 

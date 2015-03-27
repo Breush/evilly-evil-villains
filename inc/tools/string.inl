@@ -9,6 +9,15 @@
 //------------------------------//
 //----- wstring <-> string -----//
 
+template<typename T>
+inline std::string toString(const T& t)
+{
+    std::stringstream s;
+    s << t;
+    return s.str();
+}
+
+template<>
 inline std::string toString(const std::wstring& ws)
 {
     const wchar_t* cws = ws.c_str();
