@@ -62,6 +62,9 @@ add_library(${EEV_LIBRARIES} ${CODE_FILES})
 #=====
 # Create game executable
 
+eev_set_option(EEV_EXTRA_INCLUDE_PATH "" STRING "Add extra include path if needed")
+include_directories(${EEV_EXTRA_INCLUDE_PATH})
+
 include_directories(${CMAKE_SOURCE_DIR}/inc/)
 include_directories(${CMAKE_SOURCE_DIR}/ext/)
 
