@@ -31,6 +31,11 @@ void Hero::updateAI(const sf::Time& dt)
     if (m_inRoomSince >= 2.f) {
         m_inRoomSince -= 2.f;
 
+        if (m_currentNode->neighbours.size() == 0u) {
+            std::cerr << "No neighbours" << std::endl;
+            return;
+        }
+
         // This algorithm just wants to get the higher possible
         const Graph::Node* bestNode = m_currentNode;
         for (const auto& neighbour : m_currentNode->neighbours)

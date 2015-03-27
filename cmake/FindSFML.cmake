@@ -353,7 +353,3 @@ if (NOT SFML_FOUND)
     endif()
 endif()
 
-# handle success
-if(SFML_FOUND)
-    message(STATUS "Found SFML ${SFML_VERSION_MAJOR}.${SFML_VERSION_MINOR}.${SFML_VERSION_PATCH} in ${SFML_INCLUDE_DIR}")
-endif()

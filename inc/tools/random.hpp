@@ -1,19 +1,21 @@
 #pragma once
 
-#include  <random>
-#include  <iterator>
+#include <random>
+#include <iterator>
 
 namespace alea
 {
-    static std::random_device s_device;
-    static std::mt19937 s_generator(s_device());
+    static std::mt19937 s_generator;
 
     //! Returns a random element from within standard iterators.
     template<typename Iter>
-    inline Iter rand(Iter start, Iter end) {
-        std::uniform_int_distribution<> dis(0, std::distance(start, end) - 1);
-        std::advance(start, dis(s_generator));
-        return start;
+    inline Iter rand(Iter start, Iter end)
+    {
+        using difference_type = typename std::iterator_traits<Iter>::difference_type;
+        std::uniform_int_distribution<difference_type>
+            distribution(static_cast<difference_type>(0),
+            std::distance(start, end) - static_cast<difference_type>(1));
+        return start + distribution(s_generator);
     }
 
     //! Returns a random element from a standard container.

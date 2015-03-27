@@ -209,10 +209,10 @@ bool Data::roomNeighbourAccessible(const sf::Vector2u& roomCoord, Direction dire
     auto& currentRoom = room(roomCoord);
     auto& neighbourRoom = room(neighbourCoord);
     returnif (neighbourRoom.state != RoomState::CONSTRUCTED) false;
-    
+
     // When north or south, be sure there is a ladder
     returnif (direction == NORTH && !currentRoom.facilities.ladder) false;
-    returnif (direction == SOUTH && !neighbourRoom.facilities.ladder) false;  
+    returnif (direction == SOUTH && !neighbourRoom.facilities.ladder) false;
 
     return true;
 }
@@ -229,7 +229,7 @@ Data::Room& Data::roomNeighbour(const sf::Vector2u& roomCoord, Direction directi
 
 sf::Vector2u Data::roomDirectionVector(Direction direction)
 {
-    return sf::Vector2u((direction & 0xf) - 1u, (direction >> 0x4) - 1u);
+    return sf::Vector2u((direction >> 0x4) - 1u, (direction & 0xf) - 1u);
 }
 
 //---------------------//

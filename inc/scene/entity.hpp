@@ -67,6 +67,9 @@ namespace scene
         //! @name Children management
         //! @{
 
+        //! Returns true if the given entity is already a child of this one.
+        bool hasChild(const Entity& entity) const;
+
         //! Add an entity as a child.
         void attachChild(Entity& child);
 

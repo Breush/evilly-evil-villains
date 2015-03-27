@@ -100,8 +100,10 @@ bool GameDungeonDesign::handleEvent(const sf::Event& event)
         // Spawn attacking hero in debug mode
         else if (event.key.code == sf::Keyboard::Equal) {
             m_dungeonGraph.reconstructFromData();
-            m_dungeonInter.attachChild(m_dungeonHero);
-            m_dungeonHero.useGraph(m_dungeonGraph);
+            if (!m_dungeonInter.hasChild(m_dungeonHero)) {
+                m_dungeonInter.attachChild(m_dungeonHero);
+                m_dungeonHero.useGraph(m_dungeonGraph);
+            }
         }
 #endif
     }

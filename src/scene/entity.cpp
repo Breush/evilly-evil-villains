@@ -163,8 +163,16 @@ void Entity::refreshDisplay()
 //-------------------------------//
 //----- Children management -----//
 
+bool Entity::hasChild(const Entity& entity) const
+{
+    auto found = std::find_if(std::begin(m_children), std::end(m_children), [&](Entity* node) { return node == &entity; });
+    return found != std::end(m_children);
+}
+
 void Entity::attachChild(Entity& child)
 {
+    massert(!hasChild(child), "Trying to attach an already attached entity.");
+
     child.setGraph(m_graph);
     child.setParent(this);
     m_children.emplace_back(&child);
@@ -173,8 +181,8 @@ void Entity::attachChild(Entity& child)
 
 void Entity::detachChild(Entity& child)
 {
-    auto found = std::find_if(m_children.begin(), m_children.end(), [&](Entity* node) { return node == &child; });
-    massert(found != m_children.end(), "Could not detach child.");
+    auto found = std::find_if(std::begin(m_children), std::end(m_children), [&](Entity* node) { return node == &child; });
+    massert(found != std::end(m_children), "Could not detach child.");
 
     child.setParent(nullptr);
     child.setGraph(nullptr);
