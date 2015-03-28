@@ -28,7 +28,7 @@ namespace dungeon
             std::vector<Node*> neighbours;      //!< The neighbourhood of the node.
             sf::Vector2u room;                  //!< The original room coordinates from data.
 
-            float altitude = 0.f;               //!< How high is the node.
+            uint altitude = 0u;                 //!< How high is the node.
         };
 
     public:

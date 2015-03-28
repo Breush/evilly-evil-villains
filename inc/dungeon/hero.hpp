@@ -4,6 +4,7 @@
 #include "dungeon/graph.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <selene/selene.hpp>
 
 namespace dungeon
 {
@@ -58,6 +59,9 @@ namespace dungeon
 
         //! The graph of the dungeon to be read from.
         const Graph* m_graph = nullptr;
+
+        //! The lua state.
+        sel::State m_lua;
 
         //! The dungeon inter, to get cellsize.
         //! @todo Should not be needed, only the abstract graph.

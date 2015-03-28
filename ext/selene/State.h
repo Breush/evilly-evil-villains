@@ -55,6 +55,8 @@ public:
         return lua_gettop(_l);
     }
 
+    inline bool load(const std::string &file) { return Load(file); }
+
     bool Load(const std::string &file) {
         int status = luaL_loadfile(_l, file.c_str());
 #if LUA_VERSION_NUM >= 502
