@@ -36,6 +36,15 @@ namespace dungeon
         //! @}
 
         //--------------------------------//
+        //! @name Artificial intelligence
+        //! @{
+
+        //! Returns the evaluation of a Lua function given a node weight.
+        uint call(const char* function, Graph::Node::Weight weight);
+
+        //! @}
+
+        //--------------------------------//
         //! @name Internal change updates
         //! @{
 

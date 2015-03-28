@@ -37,15 +37,12 @@ void Hero::updateAI(const sf::Time& dt)
         m_inRoomSince -= 2.f;
         returnif (m_currentNode->neighbours.size() == 0u);
 
-        // TODO Find a way to pass better arguments to lua
-        // Like directly the node
-
-        // This algorithm just wants to get the higher possible
         auto bestNode = m_currentNode;
-        uint maxEvaluation = m_lua["evaluate"](m_currentNode->altitude);
+        uint maxEvaluation = call("evaluate_reference", m_currentNode->weight);
+
+        // Get the evaluation from lua
         for (const auto& neighbour : m_currentNode->neighbours) {
-            // Get the evaluation from lua
-            uint evaluation = m_lua["evaluate"](neighbour->altitude);
+            uint evaluation = call("evaluate", neighbour->weight);
             if (evaluation > maxEvaluation) {
                 bestNode = neighbour;
                 maxEvaluation = evaluation;
@@ -53,6 +50,8 @@ void Hero::updateAI(const sf::Time& dt)
         }
 
         // If there is none higher, pick one randomly
+        // TODO Leave post decision to Lua
+        // Or decide to select randomly from identical best values
         if (m_currentNode == bestNode)
             bestNode = alea::rand(m_currentNode->neighbours);
 
@@ -60,6 +59,15 @@ void Hero::updateAI(const sf::Time& dt)
         m_currentNode = bestNode;
         refreshPositionFromNode();
     }
+}
+
+//-----------------------------------//
+//----- Artificial intelligence -----//
+
+uint Hero::call(const char* function, Graph::Node::Weight weight)
+{
+    m_lua["node"].SetObj(weight, "altitude", &Graph::Node::Weight::altitude);
+    return m_lua[function]();
 }
 
 //-------------------------//
