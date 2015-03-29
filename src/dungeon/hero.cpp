@@ -37,26 +37,30 @@ void Hero::updateAI(const sf::Time& dt)
         m_inRoomSince -= 2.f;
         returnif (m_currentNode->neighbours.size() == 0u);
 
-        auto bestNode = m_currentNode;
-        uint maxEvaluation = call("evaluate_reference", m_currentNode->weight);
+        // Consider that the current room might be the best node
+        std::vector<const Graph::Node*> bestNodes;
+        bestNodes.push_back(m_currentNode);
+        int maxEvaluation = call("evaluate_reference", m_currentNode);
 
         // Get the evaluation from lua
         for (const auto& neighbour : m_currentNode->neighbours) {
-            uint evaluation = call("evaluate", neighbour->weight);
+            int evaluation = call("evaluate", neighbour);
+
+            // Found a new limit for the best nodes
             if (evaluation > maxEvaluation) {
-                bestNode = neighbour;
                 maxEvaluation = evaluation;
+                bestNodes.clear();
             }
+
+            // This node is among the best ones
+            if (evaluation == maxEvaluation)
+                bestNodes.push_back(neighbour);
         }
 
-        // If there is none higher, pick one randomly
-        // TODO Leave post decision to Lua
-        // Or decide to select randomly from identical best values
-        if (m_currentNode == bestNode)
-            bestNode = alea::rand(m_currentNode->neighbours);
+        // Switch to a new node randomly from the best ones
+        m_currentNode = alea::rand(bestNodes);
+        m_visitedNodes[m_currentNode->room] += 1u;
 
-        // Switch to new node
-        m_currentNode = bestNode;
         refreshPositionFromNode();
     }
 }
@@ -64,9 +68,14 @@ void Hero::updateAI(const sf::Time& dt)
 //-----------------------------------//
 //----- Artificial intelligence -----//
 
-uint Hero::call(const char* function, Graph::Node::Weight weight)
+uint Hero::call(const char* function, const Graph::Node* node)
 {
-    m_lua["node"].SetObj(weight, "altitude", &Graph::Node::Weight::altitude);
+    Weight weight;
+    weight.altitude = node->altitude;
+    weight.visited = m_visitedNodes[node->room];
+    m_lua["weight"].SetObj(weight,
+                           "altitude", &Weight::altitude,
+                           "visited", &Weight::visited);
     return m_lua[function]();
 }
 
@@ -76,9 +85,14 @@ uint Hero::call(const char* function, Graph::Node::Weight weight)
 void Hero::useGraph(const Graph& graph)
 {
     m_graph = &graph;
-    m_currentNode = &m_graph->node({0u, 0u});
+    m_visitedNodes.clear();
+
     // FIXME Be sure it exists, otherwise an exception is thrown...
     // Get the door from the graph.
+    sf::Vector2u firstRoom(0u, 0u);
+    m_currentNode = &m_graph->node(firstRoom);
+    m_visitedNodes[firstRoom] += 1u;
+
     refreshPositionFromNode();
 }
 

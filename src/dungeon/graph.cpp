@@ -30,7 +30,7 @@ bool Graph::reconstructFromData()
         if (m_data->isRoomConstructed(roomCoords)) {
             // Initialize this particular room
             auto& node = m_nodes[roomCoords];
-            node.weight.altitude = floor + 1u;
+            node.altitude = floor + 1u;
             node.room = roomCoords;
 
             // Check neighbourhood

@@ -20,6 +20,18 @@ namespace dungeon
 
     public:
 
+        //! All the weights used by Lua algorithms.
+        struct Weight
+        {
+            // The following are coming from the graph information.
+            uint altitude = 0u; //!< How high is the node.
+
+            // The following are specific to the current IA.
+            uint visited = 0u;  //!< How often the node has been visited.
+        };
+
+    public:
+
         //! Constructor.
         Hero(const Inter* inter);
 
@@ -39,8 +51,8 @@ namespace dungeon
         //! @name Artificial intelligence
         //! @{
 
-        //! Returns the evaluation of a Lua function given a node weight.
-        uint call(const char* function, Graph::Node::Weight weight);
+        //! Returns the evaluation of a Lua function given a node.
+        uint call(const char* function, const Graph::Node* node);
 
         //! @}
 
@@ -78,6 +90,9 @@ namespace dungeon
 
         //! The current room where is our hero.
         const Graph::Node* m_currentNode = nullptr;
+
+        //! How often a specific node has been visited.
+        std::unordered_map<sf::Vector2u, uint> m_visitedNodes;
 
         //! How many seconds the hero is in the current room.
         float m_inRoomSince = 0.f;

@@ -28,12 +28,7 @@ namespace dungeon
             std::vector<Node*> neighbours;      //!< The neighbourhood of the node.
             sf::Vector2u room;                  //!< The original room coordinates from data.
 
-            //! All the weights used for algorithms.
-            //! Note: this is a separate structure to be compatible with Lua.
-            struct Weight
-            {
-                uint altitude = 0u;                 //!< How high is the node.
-            } weight;
+            uint altitude = 0u;                 //!< How high is the node.
         };
 
     public:
