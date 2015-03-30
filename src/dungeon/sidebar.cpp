@@ -6,6 +6,7 @@
 #include "tools/platform-fixes.hpp" // make_unique
 
 #include "dungeon/facilities/ladder.hpp"
+#include "dungeon/facilities/door.hpp"
 
 using namespace dungeon;
 
@@ -99,6 +100,7 @@ void Sidebar::setMode(Mode mode)
         m_tabs[3]->setVisual(_("Tranquilizer darts"), TextureID::DUNGEON_TRAPS_TRANQUILIZERDARTS, tabImageSize);*/
     }
     else if (mode == Mode::FACILITIES) {
+        m_tabs.push_back(std::make_unique<dungeon::facilities::DoorGrabButton>());
         m_tabs.push_back(std::make_unique<dungeon::facilities::LadderGrabButton>());
 
         /*m_tabs[1]->setVisual(_("Signpost"), TextureID::DUNGEON_FACILITIES_SIGNPOST, tabImageSize);*/

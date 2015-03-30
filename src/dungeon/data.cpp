@@ -96,7 +96,8 @@ void Data::loadDungeon(const std::wstring& file)
             for (auto& roomFacilitiesInfo : roomInfo.children(L"facility")) {
                 std::wstring type = roomFacilitiesInfo.attribute(L"type").as_string();
 
-                if (type == L"ladder") room.facilities.ladder = true;
+                if (type == L"ladder")  room.facilities.ladder = true;
+                if (type == L"door")    room.facilities.door = true;
 
                 wdebug_dungeon_4(L"Found facility " + type);
             }
@@ -145,6 +146,9 @@ void Data::saveDungeon(const std::wstring& file)
             room.append_attribute(L"state") = roomStateString.c_str();
 
             // Facilities
+            if (dataRoom.facilities.door)
+                room.append_child(L"facility").append_attribute(L"type") = L"door";
+
             if (dataRoom.facilities.ladder)
                 room.append_child(L"facility").append_attribute(L"type") = L"ladder";
         }

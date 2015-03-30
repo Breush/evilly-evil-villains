@@ -25,7 +25,7 @@ void LadderGrabButton::grabbableReleased(Entity* entity, const sf::Vector2f& rel
     // Forward to dungeon::Inter
     auto dungeonInter = dynamic_cast<dungeon::Inter*>(entity);
     returnif (dungeonInter == nullptr);
-    dungeonInter->constructLadder(relPos);
+    dungeonInter->constructDoor(relPos);
 }
 
 std::unique_ptr<scene::Grabbable> LadderGrabButton::spawnGrabbable()
@@ -39,10 +39,8 @@ std::unique_ptr<scene::Grabbable> LadderGrabButton::spawnGrabbable()
 LadderGrabbable::LadderGrabbable(scene::GrabbableSpawner& spawner)
     : baseClass(spawner)
 {
-    const auto& texture = Application::context().textures.get(TextureID::DUNGEON_FACILITIES_LADDER);
-
-    m_sprite.setTexture(texture);
-    m_sprite.setScale(sizeHint() / sf::v2f(texture.getSize()));
+    m_sprite.setTexture(&Application::context().textures.get(TextureID::DUNGEON_FACILITIES_LADDER));
+    m_sprite.setSize(sizeHint());
 
     setOrigin(sizeHint() / 2.f);
 }

@@ -38,8 +38,9 @@ namespace dungeon
         void setFloorsCount(uint value);
         void setRoomsByFloor(uint value);
 
-        // Ladder
+        // Facilities
         void constructLadder(const sf::Vector2f& relPos);
+        void constructDoor(const sf::Vector2f& relPos);
 
         // Rooms
         void constructRoom(const sf::Vector2u& room);

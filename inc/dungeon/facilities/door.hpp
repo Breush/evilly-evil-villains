@@ -9,22 +9,22 @@ namespace dungeon
 {
 namespace facilities
 {
-    //! A LadderGrabbable spawner.
+    //! A DoorGrabbable spawner.
     /*!
-     *  Implements the scene::GrabbableSpawner for the dungeon facility ladder.
+     *  Implements the scene::GrabbableSpawner for the dungeon facility door.
      */
 
-	class LadderGrabButton final : public nui::GrabButton
+	class DoorGrabButton final : public nui::GrabButton
 	{
         using baseClass = nui::GrabButton;
 
 	public:
 
         //! Constructor, affecting texture and look.
-        LadderGrabButton();
+        DoorGrabButton();
 
         //! Default destructor.
-        virtual ~LadderGrabButton() = default;
+        virtual ~DoorGrabButton() = default;
 
     protected:
 
@@ -38,22 +38,22 @@ namespace facilities
         //! @}
 	};
 
-    //! A ladder temporary object.
+    //! A door temporary object.
     /*!
-     *  Implements the scene::Grabbable for the dungeon facility ladder.
+     *  Implements the scene::Grabbable for the dungeon facility door.
      */
 
-	class LadderGrabbable final : public scene::Grabbable
+	class DoorGrabbable final : public scene::Grabbable
 	{
         using baseClass = scene::Grabbable;
 
 	public:
 
         //! Constructor, affecting texture and look.
-        LadderGrabbable(scene::GrabbableSpawner& spawner);
+        DoorGrabbable(scene::GrabbableSpawner& spawner);
 
         //! Default destructor.
-        virtual ~LadderGrabbable() = default;
+        virtual ~DoorGrabbable() = default;
 
     protected:
 

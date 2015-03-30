@@ -71,7 +71,8 @@ namespace dungeon
             RoomState state = RoomState::UNKNOWN;
 
             struct Facilities {
-                bool ladder = false;
+                bool door = false;      //!< Whether the room is the entry of the dungeon.
+                bool ladder = false;    //!< Whether the room give access to upper level.
             } facilities;
         };
 

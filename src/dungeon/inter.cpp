@@ -103,8 +103,9 @@ void Inter::refreshRoomTiles()
 void Inter::setRoomTile(const uint floor, const uint room, const Data::Room& roomInfo)
 {
     const auto state = roomInfo.state;
-    auto ladderRoomTexture = &Application::context().textures.get(TextureID::DUNGEON_INTER_LADDER_ROOM);
-    auto contructedRoomTexture = &Application::context().textures.get(TextureID::DUNGEON_INTER_ROOM);
+    auto ladderRoomTexture =    &Application::context().textures.get(TextureID::DUNGEON_INTER_LADDER_ROOM);
+    auto doorRoomTexture =      &Application::context().textures.get(TextureID::DUNGEON_INTER_DOOR_ROOM);
+    auto roomTexture =          &Application::context().textures.get(TextureID::DUNGEON_INTER_ROOM);
     auto& tile = m_roomTiles[floor][room];
 
     // Reset
@@ -118,8 +119,9 @@ void Inter::setRoomTile(const uint floor, const uint room, const Data::Room& roo
             tile.setFillColor(sf::Color::Transparent);
             break;
         case Data::RoomState::CONSTRUCTED:
-            if (roomInfo.facilities.ladder) tile.setTexture(ladderRoomTexture);
-            else tile.setTexture(contructedRoomTexture);
+            if (roomInfo.facilities.ladder)     tile.setTexture(ladderRoomTexture);
+            else if (roomInfo.facilities.door)  tile.setTexture(doorRoomTexture);
+            else                                tile.setTexture(roomTexture);
             break;
         default:
             tile.setFillColor(sf::Color::Red);
@@ -275,9 +277,23 @@ void Inter::selectRoomFromCoords(const sf::Vector2f& coords)
     setHasRoomSelected(true);
 }
 
+//----------------------//
+//----- Facilities -----//
 
-//-----------------------//
-//----- Interaction -----//
+void Inter::constructDoor(const sf::Vector2f& relPos)
+{
+    auto room = roomFromCoords(relPos);
+
+    if (m_data->room(room).state == Data::RoomState::CONSTRUCTED) {
+        if (!m_data->room(room).facilities.door)
+            m_data->room(room).facilities.door = true;
+    }
+
+    // FIXME Limit to only one door in the dungeon
+
+    // TODO Don't really need to refresh texture on all tiles
+    refreshRoomTiles();
+}
 
 void Inter::constructLadder(const sf::Vector2f& relPos)
 {
