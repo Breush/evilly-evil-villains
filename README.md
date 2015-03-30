@@ -6,6 +6,8 @@ All documents within this repository are written in English for an unknown reaso
 
 ## External librairies used
 
-- SFML 2.2 > OpenGL
+- SFML 2.2+ > OpenGL
+- Lua 5.2+
 - gettext
-- pugixml (integrated)
+- [pugixml](https://github.com/zeux/pugixml) (integrated)
+- [Selene](https://github.com/jeremyong/Selene) (integrated)

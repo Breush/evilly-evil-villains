@@ -290,6 +290,7 @@ void Inter::constructDoor(const sf::Vector2f& relPos)
     }
 
     // FIXME Limit to only one door in the dungeon
+    // FIXME Forward to dungeon data
 
     // TODO Don't really need to refresh texture on all tiles
     refreshRoomTiles();

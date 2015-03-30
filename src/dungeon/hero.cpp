@@ -30,7 +30,6 @@ void Hero::updateAI(const sf::Time& dt)
     m_inRoomSince += dt.asSeconds();
 
     // TODO Interface with physics engine
-    // TODO Export to Lua
 
     // Look for next room each two seconds
     if (m_inRoomSince >= 2.f) {
