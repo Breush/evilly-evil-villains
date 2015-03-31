@@ -86,12 +86,9 @@ void Hero::useGraph(const Graph& graph)
     m_graph = &graph;
     m_visitedNodes.clear();
 
-    // FIXME Be sure it exists, otherwise an exception is thrown...
     // Get the door from the graph.
-    sf::Vector2u firstRoom(0u, 0u);
-    m_currentNode = &m_graph->node(firstRoom);
-    m_visitedNodes[firstRoom] += 1u;
-
+    m_currentNode = &m_graph->startingNode();
+    m_visitedNodes[m_currentNode->room] += 1u;
     refreshPositionFromNode();
 }
 

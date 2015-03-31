@@ -59,6 +59,20 @@ namespace dungeon
         //! Simple getter to access nodes.
         inline const Node& node(const sf::Vector2u& roomCoords) const { return m_nodes.at(roomCoords); }
 
+        //! Simple getter to access the starting node.
+        inline const Node& startingNode() const { return *m_startingNode; }
+
+        //! @}
+
+    protected:
+
+        //--------------//
+        //! @name Graph
+        //! @{
+
+        //! Erase all information about the graph (still keeping the data).
+        void reset();
+
         //! @}
 
     private:
@@ -68,5 +82,8 @@ namespace dungeon
 
         //! All the nodes within the graph.
         std::unordered_map<sf::Vector2u, Node> m_nodes;
+
+        //! The node with the dungeon door.
+        Node* m_startingNode = nullptr;
     };
 }

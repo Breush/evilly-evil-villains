@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<resources dosh="124" fame="41" />
+<resources dosh="79" fame="41" />
 <dungeon name="The Mighty Example" floorsCount="7" roomsByFloor="5">
 	<floor pos="0">
 		<room pos="0" state="constructed" />
@@ -14,18 +14,24 @@
 	</floor>
 	<floor pos="1">
 		<room pos="0" state="void" />
-		<room pos="1" state="constructed">
+		<room pos="1" state="void">
 			<facility type="ladder" />
 		</room>
-		<room pos="2" state="constructed" />
-		<room pos="3" state="constructed" />
+		<room pos="2" state="constructed">
+			<facility type="ladder" />
+		</room>
+		<room pos="3" state="constructed">
+			<facility type="ladder" />
+		</room>
 		<room pos="4" state="constructed" />
 	</floor>
 	<floor pos="2">
 		<room pos="0" state="void" />
-		<room pos="1" state="void" />
+		<room pos="1" state="constructed">
+			<facility type="ladder" />
+		</room>
 		<room pos="2" state="constructed" />
-		<room pos="3" state="constructed" />
+		<room pos="3" state="void" />
 		<room pos="4" state="void" />
 	</floor>
 	<floor pos="3">
@@ -34,22 +40,30 @@
 			<facility type="ladder" />
 		</room>
 		<room pos="2" state="constructed" />
-		<room pos="3" state="constructed" />
+		<room pos="3" state="constructed">
+			<facility type="ladder" />
+		</room>
 		<room pos="4" state="constructed" />
 	</floor>
 	<floor pos="4">
 		<room pos="0" state="constructed" />
 		<room pos="1" state="constructed" />
-		<room pos="2" state="constructed" />
+		<room pos="2" state="constructed">
+			<facility type="ladder" />
+		</room>
 		<room pos="3" state="constructed" />
 		<room pos="4" state="constructed" />
 	</floor>
 	<floor pos="5">
 		<room pos="0" state="void" />
 		<room pos="1" state="void" />
-		<room pos="2" state="constructed" />
+		<room pos="2" state="constructed">
+			<facility type="ladder" />
+		</room>
 		<room pos="3" state="void" />
-		<room pos="4" state="void" />
+		<room pos="4" state="constructed">
+			<facility type="ladder" />
+		</room>
 	</floor>
 	<floor pos="6">
 		<room pos="0" state="constructed" />

@@ -111,7 +111,7 @@ namespace dungeon
         //! @{
 
         //! Easy getter to access a room.
-        inline Room& room(const sf::Vector2u& floorRoom) { return m_floors[floorRoom.x].rooms[floorRoom.y]; }
+        inline Room& room(const sf::Vector2u& roomCoord) { return m_floors[roomCoord.x].rooms[roomCoord.y]; }
 
         //! Whether a specific is in constructed state.
         bool isRoomConstructed(const sf::Vector2u& roomCoord);

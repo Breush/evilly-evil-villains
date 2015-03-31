@@ -1,7 +1,8 @@
 #include "dungeon/graph.hpp"
 
 #include "dungeon/data.hpp"
-#include "tools/debug.hpp"
+
+#include <stdexcept> // runtime_error
 
 using namespace dungeon;
 
@@ -15,23 +16,32 @@ void Graph::useData(Data& data)
 
 bool Graph::reconstructFromData()
 {
-    assert(m_data != nullptr);
-    m_nodes.clear();
+    if (m_data == nullptr)
+        throw std::runtime_error("Reconstructing graph with not set dungeon data.");
+
+    reset();
 
     const auto& floorsCount = m_data->floorsCount();
     const auto& roomsByFloor = m_data->roomsByFloor();
 
     // TODO Make a test of this functionality!
+    // TODO Manage graph construction errors (return a string, keep empty if ok):
+    //  - more than one door
+    //  - no door
+    //  - no treasure rooms
+    //  (No access to treasure room is not an error, just a bad strategy for the player.)
 
-    for (uint floor = 0u; floor < floorsCount; ++floor)
-    for (uint room = 0u; room < roomsByFloor; ++room) {
-        sf::Vector2u roomCoords({floor, room});
+    for (uint floorIndex = 0u; floorIndex < floorsCount; ++floorIndex)
+    for (uint roomIndex = 0u; roomIndex < roomsByFloor; ++roomIndex) {
+        sf::Vector2u roomCoords({floorIndex, roomIndex});
+        auto& room = m_data->room(roomCoords);
 
         if (m_data->isRoomConstructed(roomCoords)) {
             // Initialize this particular room
             auto& node = m_nodes[roomCoords];
-            node.altitude = floor + 1u;
+            node.altitude = floorIndex + 1u;
             node.room = roomCoords;
+            if (room.facilities.door) m_startingNode = &node;
 
             // Check neighbourhood
             for (auto direction : {Data::EAST, Data::WEST, Data::NORTH, Data::SOUTH})
@@ -41,4 +51,13 @@ bool Graph::reconstructFromData()
     }
 
     return true;
+}
+
+//-----------------//
+//----- Graph -----//
+
+void Graph::reset()
+{
+    m_nodes.clear();
+    m_startingNode = nullptr;
 }
