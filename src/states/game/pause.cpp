@@ -9,8 +9,6 @@
 #include <SFML/Graphics/View.hpp>
 
 // TODO What to do with this state? Open config menu?
-// At least, make it use the nui tools (buttons)
-// And make strings translatable
 
 using namespace states;
 

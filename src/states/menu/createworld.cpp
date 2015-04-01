@@ -31,18 +31,30 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     m_title.setRelativePosition({0.5f, 0.05f});
     m_title.setPrestyle(sfe::Label::PrestyleID::MENU_TITLE);
 
-    // NUI
-    nuiRoot.attachChild(m_stacker);
-    m_stacker.setAlign(nui::Stacker::Align::CENTER);
-    m_stacker.setRelativePosition({0.f, 0.125f});
-    m_stacker.setSize({nuiSize.x, 50.f});
+    // World name
+    nuiRoot.attachChild(m_worldNameStacker);
+    m_worldNameStacker.setAlign(nui::Stacker::Align::CENTER);
+    m_worldNameStacker.setLocalPosition({0.f, 135.f});
+    m_worldNameStacker.setSize({nuiSize.x, 50.f});
 
-    // Stacking
-    m_stacker.add(&m_worldNameLabel, nui::Stacker::Align::CENTER);
+    m_worldNameStacker.add(&m_worldNameLabel, nui::Stacker::Align::CENTER);
+    m_worldNameStacker.add(&m_worldNameEntry, nui::Stacker::Align::CENTER);
     m_worldNameLabel.setText(_("World name"), FontID::NUI);
-
-    m_stacker.add(&m_worldNameEntry, nui::Stacker::Align::CENTER);
     m_worldNameEntry.setLength(20u);
+
+    // Villain
+    nuiRoot.attachChild(m_villainStacker);
+    m_villainStacker.setAlign(nui::Stacker::Align::CENTER);
+    m_villainStacker.setLocalPosition({0.f, 185.f});
+    m_villainStacker.setSize({nuiSize.x, 50.f});
+
+    m_villainStacker.add(&m_villainLabel, nui::Stacker::Align::CENTER);
+    m_villainStacker.add(&m_villainBox, nui::Stacker::Align::CENTER);
+    m_villainLabel.setText(_("Villain"), FontID::NUI);
+    // TODO List all villains
+    m_villainBox.add(L"Breush", nullptr);
+    m_villainBox.add(L"The Revolted Waffle", nullptr);
+    m_villainBox.add(L"Le Précurseur", nullptr);
 
     // Buttons
     nuiRoot.attachChild(m_buttonsStacker);

@@ -374,6 +374,9 @@ namespace scene
         //! Returns nullptr if not found.
         Entity* nextFocusableChild();
 
+        //! Whether the entity is currently focused (state managed by the Graph).
+        inline bool focused() const { return m_focused; }
+
         //! @}
 
         //-----------------------------//

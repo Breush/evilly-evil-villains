@@ -47,7 +47,9 @@ void TextEntry::updateSize()
 
 void TextEntry::updateRoutine(const sf::Time& dt)
 {
-    // Blinking cursor
+    returnif (!focused());
+
+    // Blinking cursor if focus is on
     m_cursorBlinkTime += dt.asSeconds();
     while (m_cursorBlinkTime >= 0.5f) {
         m_cursorBlinkTime -= 0.5f;
