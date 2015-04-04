@@ -26,7 +26,9 @@ namespace nui
         std::wstring text() const { return m_textString.toWideString(); };
 
         // Size override, length is an estimated number of characters to draw.
+        // To limit the max number of characters, use setMaxCharacters().
         PARAMGSU(uint, m_length, length, setLength, updateSize)
+        PARAMGS(uint, m_maxCharacters, maxCharacters, setMaxCharacters)
 
     protected:
         // Events

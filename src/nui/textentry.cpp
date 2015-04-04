@@ -6,10 +6,11 @@
 
 using namespace nui;
 
-// FIXME Add security to max string length
 // TODO Add mouse selection of text
 
 TextEntry::TextEntry()
+    : m_length(0u)
+    , m_maxCharacters(40u)
 {
     setFocusable(true);
 
@@ -111,7 +112,9 @@ bool TextEntry::handleKeyboardEvent(const sf::Event& event)
             int toRemove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? nextRelativeWord() : 1;
             m_textString.erase(m_cursorString.getSize(), toRemove);
         }
+        // Correct character
         else {
+            returnif (m_textString.getSize() == m_maxCharacters) true;
             m_textString = m_cursorString + event.text.unicode + m_textString.substring(m_cursorString.getSize());
             moveCursor(1);
         }
@@ -144,6 +147,7 @@ void TextEntry::moveCursor(int relativePos)
 void TextEntry::updateDynamicText()
 {
     // Text
+    // TODO Follow the cursor
     m_text.setPosition(m_textPadding, m_textPadding);
 
     // Cursor
