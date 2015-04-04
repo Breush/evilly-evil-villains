@@ -100,3 +100,12 @@ inline std::wstring& filterSpecial(std::wstring& str, bool lower)
 
     return (lower)? toLowercase(str) : str;
 }
+
+//-----------------------//
+//----- SFML addons -----//
+
+inline sf::Vector2f boundsSize(const sf::Text& text)
+{
+    const auto& bounds = text.getLocalBounds();
+    return {bounds.left + bounds.width, bounds.top + bounds.height};
+}

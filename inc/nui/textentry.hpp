@@ -47,6 +47,8 @@ namespace nui
         // Text
         sf::String m_textString;
         sf::Text m_text;
+        float m_textShift = 0.f;        //!< Applied to follow the cursor when needed.
+        float m_textWidthLimit = 0.f;   //!< The max visible width for the text.
 
         // Cursor
         bool m_cursorOn = true;

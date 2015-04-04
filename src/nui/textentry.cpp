@@ -37,7 +37,9 @@ void TextEntry::update()
     m_background.setSize(size());
     m_cursor.setLength(size().y - m_textPadding);
 
-    setPartClippingRect(&m_text, {m_textPadding, 0.f, size().x - 2.f * m_textPadding, size().y});
+    m_textWidthLimit = size().x - 2.f * m_textPadding;
+
+    setPartClippingRect(&m_text, {m_textPadding, 0.f, m_textWidthLimit, size().y});
     updateDynamicText();
 }
 
@@ -146,13 +148,31 @@ void TextEntry::moveCursor(int relativePos)
 
 void TextEntry::updateDynamicText()
 {
+    const auto& textSize = boundsSize(m_text);
+    const auto& cursorTextSize = boundsSize(m_cursorText);
+
+    // Following the cursor if needed, e.g. text is bigger than allowed text size
+    if (textSize.x >= m_textWidthLimit) {
+        // Special case, stick to the right when cursor is at the end of text
+        if (m_textString == m_cursorString)
+            m_textShift = textSize.x - m_textWidthLimit;
+        // Cursor is now too much to the right
+        else if (cursorTextSize.x - m_textShift > m_textWidthLimit)
+            m_textShift = cursorTextSize.x - m_textWidthLimit;
+        // Cursor is now too much to the left
+        else if (cursorTextSize.x - m_textShift < 0.f)
+            m_textShift = cursorTextSize.x;
+    }
+    // Fits OK
+    else {
+        m_textShift = 0.f;
+    }
+
     // Text
-    // TODO Follow the cursor
-    m_text.setPosition(m_textPadding, m_textPadding);
+    m_text.setPosition(m_textPadding - m_textShift, m_textPadding);
 
     // Cursor
-    const auto& bounds = m_cursorText.getLocalBounds();
-    m_cursor.setPosition({m_textPadding + bounds.left + bounds.width + 1.f, 0.5f * m_textPadding});
+    m_cursor.setPosition({m_textPadding - m_textShift + cursorTextSize.x + 0.1f * m_textPadding, 0.5f * m_textPadding});
 }
 
 int TextEntry::previousRelativeWord()
