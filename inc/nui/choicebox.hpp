@@ -69,8 +69,11 @@ namespace nui
         //! The first choice added has ID 0, then ID is increased by one.
         void selectChoice(uint choice);
 
-        //! Get selected choice ID.
+        //! Get the selected choice ID.
         inline uint selectedChoice() const { return m_selectedChoice; }
+
+        //! Get the selected choice string.
+        inline std::wstring selectedChoiceText() const { return m_text.getString().toWideString(); }
 
         //! Select previous choice in the list.
         void switchChoiceLeft();

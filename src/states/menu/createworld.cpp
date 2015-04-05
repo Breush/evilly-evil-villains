@@ -83,12 +83,13 @@ bool MenuCreateWorld::handleEvent(const sf::Event& event)
 void MenuCreateWorld::createAndPlayWorld()
 {
     auto worldName = m_worldNameEntry.text();
+    auto villain = m_villainBox.selectedChoiceText();
     returnif (worldName.empty());
 
-    wdebug_application_1(L"Creating and playing on world " + worldName);
+    wdebug_application_1(L"Creating and playing on world " + worldName + L" with villain " + villain);
 
     // World data
-    auto newWorldID = world::context.createWorld(worldName);
+    auto newWorldID = world::context.createWorld(worldName, villain);
     auto& worldInfo = world::context.selectWorld(newWorldID);
 
     // TODO Remove this empty dungeon, one should be able to play with no dungeon

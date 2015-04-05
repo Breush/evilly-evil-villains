@@ -59,7 +59,7 @@ namespace world
 
         //! Add a world in memory (nothing saved) and create empty folder.
         //! @return The index of the new world.
-        uint createWorld(const std::wstring& worldName);
+        uint createWorld(std::wstring worldName, std::wstring villain);
 
         //! Refresh the lastPlayer attribute to current time of the selected world.
         void refreshLastPlayed();

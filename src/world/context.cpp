@@ -80,14 +80,13 @@ void Context::save()
 //----------------------//
 //----- Management -----//
 
-uint Context::createWorld(const std::wstring& worldName)
+uint Context::createWorld(std::wstring worldName, std::wstring villain)
 {
     World world;
 
-    // TODO Complete information
     world.index = m_worlds.size();
-    world.name = worldName;
-    world.villain = L"Unknown";
+    world.name = std::move(worldName);
+    world.villain = std::move(villain);
     world.dungeons = 0u;
     world.mainDungeon = L"Unknown";
     world.created = time(nullptr);
