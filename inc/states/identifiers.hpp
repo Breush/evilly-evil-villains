@@ -9,6 +9,7 @@ enum class StateID : uint8 {
     MENU_MAIN,
     MENU_SELECTWORLD,
     MENU_CREATEWORLD,
+    GAME_DCB,
     GAME_DUNGEON_DESIGN,
     GAME_PAUSE
 };

@@ -7,8 +7,6 @@
 #include "tools/string.hpp"
 #include "resources/identifiers.hpp"
 
-#include "dungeon/data.hpp" // TODO Can be safely removed once we don't need at least one dungeon anymore
-
 using namespace states;
 
 MenuCreateWorld::MenuCreateWorld(StateStack& stack)
@@ -51,7 +49,8 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     m_villainStacker.add(&m_villainLabel, nui::Stacker::Align::CENTER);
     m_villainStacker.add(&m_villainBox, nui::Stacker::Align::CENTER);
     m_villainLabel.setText(_("Villain"), FontID::NUI);
-    // TODO List all villains
+
+    // FIXME List all villains from somewhere
     m_villainBox.add(L"Breush", nullptr);
     m_villainBox.add(L"The Revolted Waffle", nullptr);
     m_villainBox.add(L"Le Précurseur", nullptr);
@@ -90,15 +89,7 @@ void MenuCreateWorld::createAndPlayWorld()
 
     // World data
     auto newWorldID = world::context.createWorld(worldName, villain);
-    auto& worldInfo = world::context.selectWorld(newWorldID);
+    world::context.selectWorld(newWorldID);
 
-    // TODO Remove this empty dungeon, one should be able to play with no dungeon
-    // So do not start the game in DungeonDesign state
-    dungeon::Data dungeonData;
-    dungeonData.setName(worldInfo.name);
-    dungeonData.setFloorsCount(7u);
-    dungeonData.setRoomsByFloor(5u);
-    dungeonData.createFiles(L"worlds/" + worldInfo.folder);
-
-    stackClear(StateID::GAME_DUNGEON_DESIGN);
+    stackClear(StateID::GAME_DCB);
 }
