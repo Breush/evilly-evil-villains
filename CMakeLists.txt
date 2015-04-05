@@ -48,9 +48,10 @@ endif ()
 
 # Files for project
 set(CODE_MAIN_FILE src/core/main.cpp)
+set(VERSION_OUTPUT_FILE inc/core/version.hpp)
 file(GLOB_RECURSE SOURCES_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*.cpp)
-file(GLOB_RECURSE CODE_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*.cpp inc/*.hpp inc/*.inl res/shd/*.vert res/shd/*.frag)
-list(REMOVE_ITEM CODE_FILES ${CODE_MAIN_FILE})
+file(GLOB_RECURSE CODE_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*.cpp inc/*.hpp inc/*.hpp.in inc/*.inl res/shd/*.vert res/shd/*.frag)
+list(REMOVE_ITEM CODE_FILES ${CODE_MAIN_FILE} ${VERSION_OUTPUT_FILE})
 
 #=====
 # Create library
@@ -72,6 +73,13 @@ add_executable(${EXECUTABLE_NAME} ${CODE_MAIN_FILE})
 target_link_libraries(${EXECUTABLE_NAME} ${EEV_LIBRARIES})
 
 include(${CMAKE_SOURCE_DIR}/cmake/LoadEEVDependencies.cmake)
+
+#=====
+# Configure
+
+add_custom_target(configure COMMAND ${CMAKE_COMMAND} -P cmake/Configure.cmake
+                  COMMENT "Updating configuration")
+add_dependencies(${EEV_LIBRARIES} configure)
 
 #=====
 # Documentation

@@ -2,6 +2,7 @@
 
 #include "core/application.hpp"
 #include "core/gettext.hpp"
+#include "core/version.hpp"
 #include "resources/identifiers.hpp"
 #include "tools/vector.hpp"
 
@@ -35,7 +36,16 @@ MenuMain::MenuMain(StateStack& stack)
     m_background.setLocalScale(maxSide / sf::v2f(textureSize));
     m_background.setLocalPosition((nuiSize - maxSide) / 2.f);
 
-    // Fonctors
+    // Version label
+    nuiRoot.attachChild(m_versionLabel);
+    std::wstringstream versionString;
+    versionString << EEV_VERSION_SWEET_NAME_WS << L" ";
+    versionString << EEV_VERSION_MAJ << L"." << EEV_VERSION_MIN << L"-" << EEV_VERSION_REV_WS;
+    m_versionLabel.setText(versionString.str());
+    m_versionLabel.setPrestyle(sfe::Label::PrestyleID::MENU_SOBER);
+    m_versionLabel.setLocalPosition(nuiSize - m_versionLabel.size());
+
+    // Functors
     auto singlePlayer = [this]() { stackPush(StateID::MENU_SELECTWORLD); };
     auto multiPlayer = nullptr;
     auto personalization = nullptr;

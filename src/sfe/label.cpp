@@ -74,5 +74,12 @@ void Label::setPrestyle(PrestyleID prestyle)
             m_text.setCharacterSize(3.2f * cNUI.fontSize);
             updateSize();
             break;
+
+        case PrestyleID::MENU_SOBER:
+            m_text.setFont(Application::context().fonts.get(FontID::MONO));
+            m_text.setColor(sf::Color::White);
+            m_text.setCharacterSize(1.1f * cNUI.fontSize);
+            updateSize();
+            break;
     }
 }

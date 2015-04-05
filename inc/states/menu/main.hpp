@@ -4,6 +4,7 @@
 #include "states/identifiers.hpp"
 #include "nui/choicebox.hpp"
 #include "nui/reactimage.hpp"
+#include "sfe/label.hpp"
 #include "sfe/sprite.hpp"
 
 #include <SFML/Graphics/Text.hpp>
@@ -33,5 +34,6 @@ namespace states
 
         // Decorum
         sfe::Sprite m_background;
+        sfe::Label m_versionLabel;
     };
 }
