@@ -49,7 +49,7 @@ void Inter::receive(const Event& event)
 {
     if (event.type == EventType::ROOM_DESTROYED
         || event.type == EventType::ROOM_CONSTRUCTED)
-        refreshRoomTiles();
+        refreshRoomTileTexture({event.room.x, event.room.y});
 }
 
 //------------------------//
@@ -85,28 +85,35 @@ void Inter::refreshFromData()
 //---------------------------//
 //----- Room management -----//
 
+void Inter::refreshRoomTile(const sf::Vector2u& roomCoords)
+{
+    const auto& cellSize = m_grid.cellSize();
+    auto& tile = m_roomTiles[roomCoords.x][roomCoords.y];
+
+    tile.setSize({1.3f * cellSize.x, 1.1f * cellSize.y}); // FIXME Use separate images to get this effect
+    tile.setPosition(roomLocalPosition(roomCoords));
+    refreshRoomTileTexture(roomCoords);
+}
+
 void Inter::refreshRoomTiles()
 {
     const auto& roomsByFloor = m_data->roomsByFloor();
     const auto& floorsCount = m_data->floorsCount();
-    const auto& cellSize = m_grid.cellSize();
 
     for (uint floor = 0; floor < floorsCount; ++floor)
-    for (uint room = 0; room < roomsByFloor; ++room) {
-        auto& tile = m_roomTiles[floor][room];
-        tile.setSize({1.3f * cellSize.x, 1.1f * cellSize.y}); // FIXME Use separate images to get this effect
-        tile.setPosition(roomLocalPosition({floor, room}));
-        setRoomTile(floor, room, m_data->room({floor, room}));
-    }
+    for (uint room = 0; room < roomsByFloor; ++room)
+        refreshRoomTile({floor, room});
 }
 
-void Inter::setRoomTile(const uint floor, const uint room, const Data::Room& roomInfo)
+void Inter::refreshRoomTileTexture(const sf::Vector2u& roomCoords)
 {
+    const auto& roomInfo = m_data->room(roomCoords);
     const auto state = roomInfo.state;
+
     auto ladderRoomTexture =    &Application::context().textures.get(TextureID::DUNGEON_INTER_LADDER_ROOM);
     auto doorRoomTexture =      &Application::context().textures.get(TextureID::DUNGEON_INTER_DOOR_ROOM);
     auto roomTexture =          &Application::context().textures.get(TextureID::DUNGEON_INTER_ROOM);
-    auto& tile = m_roomTiles[floor][room];
+    auto& tile = m_roomTiles[roomCoords.x][roomCoords.y];
 
     // Reset
     tile.setTexture(nullptr);
@@ -118,11 +125,13 @@ void Inter::setRoomTile(const uint floor, const uint room, const Data::Room& roo
         case Data::RoomState::VOID:
             tile.setFillColor(sf::Color::Transparent);
             break;
+
         case Data::RoomState::CONSTRUCTED:
             if (roomInfo.facilities.ladder)     tile.setTexture(ladderRoomTexture);
             else if (roomInfo.facilities.door)  tile.setTexture(doorRoomTexture);
             else                                tile.setTexture(roomTexture);
             break;
+
         default:
             tile.setFillColor(sf::Color::Red);
             break;
@@ -292,8 +301,7 @@ void Inter::constructDoor(const sf::Vector2f& relPos)
     // FIXME Limit to only one door in the dungeon
     // FIXME Forward to dungeon data
 
-    // TODO Don't really need to refresh texture on all tiles
-    refreshRoomTiles();
+    refreshRoomTileTexture(room);
 }
 
 void Inter::constructLadder(const sf::Vector2f& relPos)
@@ -305,8 +313,7 @@ void Inter::constructLadder(const sf::Vector2f& relPos)
             m_data->room(room).facilities.ladder = true;
     }
 
-    // TODO Don't really need to refresh texture on all tiles
-    refreshRoomTiles();
+    refreshRoomTileTexture(room);
 }
 
 //-------------------//

@@ -28,7 +28,13 @@ namespace dungeon
 
         union
         {
-            int delta;  //!< The difference between previous and current value of resources.
+            int delta;                      //!< The difference between previous and current value of resources.
+
+            struct
+            {
+                uint x;
+                uint y;
+            } room;
         };
     };
 

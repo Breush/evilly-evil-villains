@@ -20,7 +20,8 @@ namespace sfe
         using baseClass = scene::Entity;
 
     public:
-        enum class PrestyleID {
+        enum class PrestyleID
+        {
             MENU_TITLE,
             MENU_POPUP_TITLE,
             MENU_SOBER,

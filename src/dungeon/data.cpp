@@ -193,14 +193,24 @@ bool Data::isRoomConstructed(const sf::Vector2u& roomCoord)
 void Data::constructRoom(const sf::Vector2u& roomCoord)
 {
     room(roomCoord).state = RoomState::CONSTRUCTED;
-    emit(EventType::ROOM_CONSTRUCTED);
-    subDosh(100u);
+
+    Event event;
+    event.type = EventType::ROOM_CONSTRUCTED;
+    event.room = {roomCoord.x, roomCoord.y};
+    EventEmitter::emit(event);
+
+    subDosh(100u); // TODO Get value from somewhere.
 }
 
 void Data::destroyRoom(const sf::Vector2u& roomCoord)
 {
     room(roomCoord).state = RoomState::VOID;
-    emit(EventType::ROOM_DESTROYED);
+
+    Event event;
+    event.type = EventType::ROOM_CONSTRUCTED;
+    event.room = {roomCoord.x, roomCoord.y};
+    EventEmitter::emit(event);
+
     addDosh(85u); // TODO Get value from somewhere.
 }
 
