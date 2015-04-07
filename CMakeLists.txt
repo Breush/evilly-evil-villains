@@ -32,7 +32,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE}"
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 # Compiler options
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
     
@@ -41,9 +41,15 @@ if (CMAKE_BUILD_TYPE MATCHES "Debug")
         execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
         if (GCC_VERSION VERSION_GREATER 5 OR GCC_VERSION VERSION_EQUAL 5)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wsuggest-override")
-            set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wsuggest-final-types -Wsuggest-final-methods" )
+            set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wsuggest-final-types -Wsuggest-final-methods")
         endif()
     endif ()
+elseif (CMAKE_BUILD_TYPE MATCHES "Release")
+    # Optimisation flags
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+else ()
+    # Configuration error
+    message(FATAL_ERROR "Wrong CMAKE_BUILD_TYPE, should be Debug or Release")
 endif ()
 
 # Files for project
@@ -56,7 +62,7 @@ list(REMOVE_ITEM CODE_FILES ${CODE_MAIN_FILE} ${VERSION_OUTPUT_FILE})
 #=====
 # Create library
 
-# We create a library so that binaries can be easily shared with tests
+# We create a library so that binaries can be easily shared with other programs
 set(EEV_LIBRARIES eev-common)
 add_library(${EEV_LIBRARIES} ${CODE_FILES})
 
@@ -90,7 +96,25 @@ if (EEV_ENABLE_DOCUMENTATION)
     if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wdocumentation")
     endif ()
-endif()
+endif ()
+
+#=====
+# Code coverage
+
+find_program(LCOV_EXECUTABLE lcov)
+find_program(GENHTML_EXECUTABLE genhtml)
+
+if (LCOV_EXECUTABLE AND GENHTML_EXECUTABLE)
+    set(EEV_COVERAGE_ENABLED ON)
+else ()
+    set(EEV_COVERAGE_ENABLED OFF)
+endif ()
+
+if (EEV_COVERAGE_ENABLED)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 --coverage")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
+    add_subdirectory(cover EXCLUDE_FROM_ALL)
+endif ()
 
 #=====
 # Tests
@@ -98,6 +122,11 @@ endif()
 enable_testing()
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
 add_subdirectory(tests EXCLUDE_FROM_ALL)
+
+# Code coverage to tests
+if (EEV_COVERAGE_ENABLED)
+    eev_add_cover_program(check)
+endif ()
 
 #=====
 # Translation target
