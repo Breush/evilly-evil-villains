@@ -18,12 +18,15 @@ namespace sfe
         RectangleShape() { addPart(&m_rectangleShape); }
         virtual ~RectangleShape() = default;
 
-        inline void setFillColor(const sf::Color& color) {
+        inline void setFillColor(const sf::Color& color)
+        {
             m_rectangleShape.setFillColor(color);
         }
 
     protected:
-        void update() override {
+
+        void update() override
+        {
             m_rectangleShape.setSize(size());
         }
 
