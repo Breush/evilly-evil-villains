@@ -24,7 +24,6 @@ bool Graph::reconstructFromData()
     const auto& floorsCount = m_data->floorsCount();
     const auto& roomsByFloor = m_data->roomsByFloor();
 
-    // TODO Make a test of this functionality!
     // TODO Manage graph construction errors (return a string, keep empty if ok):
     //  - more than one door
     //  - no door

@@ -123,11 +123,6 @@ enable_testing()
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
 add_subdirectory(tests EXCLUDE_FROM_ALL)
 
-# Code coverage to tests
-if (EEV_COVERAGE_ENABLED)
-    eev_add_cover_program(check)
-endif ()
-
 #=====
 # Translation target
 

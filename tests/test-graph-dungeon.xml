@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<resources dosh="0" fame="0" />
+<dungeon name="Dungeon" floorsCount="3" roomsByFloor="4">
+	<floor pos="0">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed">
+			<facility type="door" />
+		</room>
+		<room pos="3" state="constructed">
+			<facility type="ladder" />
+		</room>
+	</floor>
+	<floor pos="1">
+		<room pos="0" state="constructed">
+			<facility type="ladder" />
+		</room>
+		<room pos="1" state="constructed" />
+		<room pos="2" state="void" />
+		<room pos="3" state="constructed">
+			<facility type="ladder" />
+		</room>
+	</floor>
+	<floor pos="2">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="void" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="void" />
+	</floor>
+</dungeon>

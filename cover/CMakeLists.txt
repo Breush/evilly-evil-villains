@@ -23,14 +23,14 @@ add_custom_target(cover-initial
                   COMMENT "Generating initial coverage files"
                   DEPENDS cover-clear)
 
-# Run programs
+# Run programs (should be added to this target with the macro)
 add_custom_target(cover-programs
                   COMMENT "Running tests for coverage"
                   DEPENDS cover-initial)
 
 # Generate the real coverage information
 add_custom_target(cover-info
-                  COMMAND ${LCOV_EXECUTABLE} -q -c --no-checksum -d ${CMAKE_SOURCE_DIR} -o ${EEV_COVER_FILE}
+                  COMMAND ${LCOV_EXECUTABLE} -q -c --no-checksum --no-external -d ${CMAKE_SOURCE_DIR} -o ${EEV_COVER_FILE}
                   COMMENT "Combining coverage information"
                   DEPENDS cover-programs)
 

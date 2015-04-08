@@ -55,7 +55,7 @@ void Data::loadDungeon(const std::wstring& file)
     const auto& dungeon = doc.child(L"dungeon");
 
     if (!resources || !dungeon)
-        throw std::runtime_error("File " + toString(file) + " is not a valid dungeon file.");
+        throw std::runtime_error("File " + toString(file) + " is not a valid dungeon file: resources or dungeon node not found.");
 
     //---- Resources
 
