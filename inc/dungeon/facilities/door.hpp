@@ -14,11 +14,11 @@ namespace facilities
      *  Implements the scene::GrabbableSpawner for the dungeon facility door.
      */
 
-	class DoorGrabButton final : public nui::GrabButton
-	{
+    class DoorGrabButton final : public nui::GrabButton
+    {
         using baseClass = nui::GrabButton;
 
-	public:
+    public:
 
         //! Constructor, affecting texture and look.
         DoorGrabButton();
@@ -36,18 +36,18 @@ namespace facilities
         std::unique_ptr<scene::Grabbable> spawnGrabbable() final;
 
         //! @}
-	};
+    };
 
     //! A door temporary object.
     /*!
      *  Implements the scene::Grabbable for the dungeon facility door.
      */
 
-	class DoorGrabbable final : public scene::Grabbable
-	{
+    class DoorGrabbable final : public scene::Grabbable
+    {
         using baseClass = scene::Grabbable;
 
-	public:
+    public:
 
         //! Constructor, affecting texture and look.
         DoorGrabbable(scene::GrabbableSpawner& spawner);
@@ -69,6 +69,6 @@ namespace facilities
 
         //! Holding the image of the grabbable.
         sf::RectangleShape m_sprite;
-	};
+    };
 }
 }

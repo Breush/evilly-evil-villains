@@ -8,7 +8,7 @@ void main()
     vertex.y += sin(gl_Vertex.x * 0.02f + time * 2.4f) * 15.f
               + cos(gl_Vertex.x * 0.02f + time * 5.2f) * 15.f * 0.3f;
 
-	gl_Position = gl_ModelViewProjectionMatrix * vertex;
-	gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;
-	gl_FrontColor = gl_Color;
+    gl_Position = gl_ModelViewProjectionMatrix * vertex;
+    gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;
+    gl_FrontColor = gl_Color;
 }

@@ -14,11 +14,11 @@ namespace facilities
      *  Implements the scene::GrabbableSpawner for the dungeon facility ladder.
      */
 
-	class LadderGrabButton final : public nui::GrabButton
-	{
+    class LadderGrabButton final : public nui::GrabButton
+    {
         using baseClass = nui::GrabButton;
 
-	public:
+    public:
 
         //! Constructor, affecting texture and look.
         LadderGrabButton();
@@ -36,18 +36,18 @@ namespace facilities
         std::unique_ptr<scene::Grabbable> spawnGrabbable() final;
 
         //! @}
-	};
+    };
 
     //! A ladder temporary object.
     /*!
      *  Implements the scene::Grabbable for the dungeon facility ladder.
      */
 
-	class LadderGrabbable final : public scene::Grabbable
-	{
+    class LadderGrabbable final : public scene::Grabbable
+    {
         using baseClass = scene::Grabbable;
 
-	public:
+    public:
 
         //! Constructor, affecting texture and look.
         LadderGrabbable(scene::GrabbableSpawner& spawner);
@@ -69,6 +69,6 @@ namespace facilities
 
         //! Holding the image of the grabbable.
         sf::RectangleShape m_sprite;
-	};
+    };
 }
 }

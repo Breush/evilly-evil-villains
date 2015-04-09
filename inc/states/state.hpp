@@ -22,7 +22,7 @@ namespace states
     {
     public:
         State(StateStack& stack);
-        virtual	~State() = default;
+        virtual ~State() = default;
         virtual StateID id() const noexcept = 0;
 
         virtual void draw();
@@ -49,7 +49,7 @@ namespace states
         void stackClear(StateID stateID);
 
     private:
-        StateStack*	m_stack;
+        StateStack* m_stack;
 
         scene::Graph m_sceneGraph;
     };

@@ -41,7 +41,7 @@ namespace resources
         void insertFilename(Identifier id, const std::wstring& filename);
 
     private:
-        std::map<Identifier, std::unique_ptr<Resource>>	m_resourcesMap;
+        std::map<Identifier, std::unique_ptr<Resource>> m_resourcesMap;
         std::map<std::wstring, Identifier> m_filenameMap;
     };
 }
