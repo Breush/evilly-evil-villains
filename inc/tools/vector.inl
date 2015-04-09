@@ -59,6 +59,19 @@ namespace sf
         r.top  *= v.y; r.height *= v.y;
         return r;
     }
+
+    //---------------------------//
+    //----- Stream operator -----//
+
+    template<typename T> std::ostream& operator<<(std::ostream& os, const Vector2<T>& v)
+    {
+        return os << '(' << v.x << ',' << v.y << ')';
+    }
+
+    template<typename T> std::wostream& operator<<(std::wostream& os, const Vector2<T>& v)
+    {
+        return os << L'(' << v.x << L',' << v.y << L')';
+    }
 }
 
 namespace std

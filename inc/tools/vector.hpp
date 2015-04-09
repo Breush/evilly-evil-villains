@@ -5,6 +5,8 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Rect.hpp>
 
+#include <ostream>
+
 namespace sf
 {
     // Typedef
@@ -28,6 +30,10 @@ namespace sf
     // Operators rect-vector
     template<typename T> Rect<T>& operator+=(Rect<T>& r, const Vector2<T>& v);
     template<typename T> Rect<T>& operator*=(Rect<T>& r, const Vector2<T>& v);
+
+    // Stream operator
+    template<typename T> std::ostream& operator<<(std::ostream& os, const Vector2<T>& v);
+    template<typename T> std::wostream& operator<<(std::wostream& os, const Vector2<T>& v);
 }
 
 namespace std

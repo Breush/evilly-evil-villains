@@ -2,6 +2,7 @@
 
 #define EEV_VERSION_SWEET_NAME      Pαpayo
 #define EEV_VERSION_SWEET_NAME_WS   L"Pαpayo"
+#define EEV_VERSION_DATE            __DATE__
 
 #define EEV_VERSION_MAJ 0
 #define EEV_VERSION_MIN 1
