@@ -1,11 +1,13 @@
 #include "sfe/gauge.hpp"
 
 #include "tools/debug.hpp"
+#include "config/nui.hpp"
 
 using namespace sfe;
 
 Gauge::Gauge()
-    : m_verticalOrientation(true)
+    : m_length(100.f)
+    , m_verticalOrientation(true)
     , m_invertedAppearance(false)
 {
     addPart(&m_background);
@@ -17,7 +19,7 @@ Gauge::Gauge()
     m_background.setFillColor(sf::Color::Black);
     m_filler.setFillColor(sf::Color::White);
 
-    update();
+    refreshDisplay();
 }
 
 //-------------------//
@@ -29,8 +31,27 @@ void Gauge::update()
     refreshFiller();
 }
 
+void Gauge::refreshDisplay()
+{
+    config::NUI cNUI;
+
+    m_minHintSize = cNUI.hintSize * 4.f;
+    m_maxHintSize = cNUI.hintSize / 8.f;
+
+    updateSize();
+}
+
 //-------------------//
 //----- Changes -----//
+
+void Gauge::updateSize()
+{
+    auto minSideSize = m_minHintSize;
+    auto maxSideSize = m_length * m_maxHintSize;
+
+    if (m_verticalOrientation) setSize({minSideSize, maxSideSize});
+    else setSize({maxSideSize, minSideSize});
+}
 
 void Gauge::refreshFiller()
 {

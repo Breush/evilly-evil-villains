@@ -8,7 +8,7 @@ namespace sfe
 {
     //! A variable gauge entity to show a percentage.
 
-    class Gauge : public scene::Entity
+    class Gauge final : public scene::Entity
     {
         using baseClass = scene::Entity;
 
@@ -48,6 +48,9 @@ namespace sfe
         //! @name Public properties
         //! @{
 
+        //! An hint for the length of the bar (default 100).
+        PARAMGSU(float, m_length, length, setLength, updateSize)
+
         //! Whether the gauge is filled vertically or horizontally.
         PARAMGSU(bool, m_verticalOrientation, verticalOrientation, setVerticalOrientation, refreshFiller)
 
@@ -63,12 +66,16 @@ namespace sfe
         //! @{
 
         void update() final;
+        void refreshDisplay() final;
 
         //! @}
 
         //--------------------------------//
         //! @name Internal change updates
         //! @{
+        
+        //! Set the size of the bar, given the length and nui configuration.
+        void updateSize();
 
         //! Updates the visual part of the filler.
         void refreshFiller();
@@ -83,5 +90,8 @@ namespace sfe
         float m_percent = 0.42f;            //!< How much of the gauge should be filled. Always between 0 and 1.
         float m_minLimit = 0.f;             //!< The low limit so that percent equals 0.
         float m_maxLimit = 100.f;           //!< The high limit so that percent equals 1.
+        
+        float m_minHintSize;    //!< NUI proportional minimum side size.
+        float m_maxHintSize;    //!< NUI proportional maximum side size.
     };
 }

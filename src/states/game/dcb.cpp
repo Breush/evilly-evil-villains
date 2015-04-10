@@ -22,7 +22,6 @@ GameDCB::GameDCB(StateStack& stack)
 
     // Gauges
     nuiRoot.attachChild(m_appreciationGauge);
-    m_appreciationGauge.setSize({50, 200});
     m_appreciationGauge.setLocalPosition({50, 50});
     m_appreciationGauge.setLimits(0.f, 534.f);
     m_appreciationGauge.setValue(42.f);
