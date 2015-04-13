@@ -7,6 +7,9 @@ docs/html
 docs/latex
 docs/doxyfile
 
+cover/*.info
+cover/html
+
 inc/core/version.hpp
 
 Makefile
