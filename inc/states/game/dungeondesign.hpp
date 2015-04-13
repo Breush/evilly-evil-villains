@@ -18,7 +18,7 @@ namespace states
     public:
         GameDungeonDesign(StateStack& stack);
         virtual ~GameDungeonDesign() = default;
-        StateID id() const noexcept override { return StateID::GAME_DUNGEON_DESIGN; }
+        StateID id() const noexcept final { return StateID::GAME_DUNGEON_DESIGN; }
 
         // Routines
         bool handleEvent(const sf::Event& event) final;
@@ -38,6 +38,8 @@ namespace states
 
         // NUI
         nui::ContextMenu m_contextMenu;
+        nui::ImageButton m_lockButton;  //!< Switch design/invasion modes.
+        // TODO Make lock an entity (to control both states and feedback on emitter)
 
         // Decorum
         sfe::Sprite m_decorumBack;

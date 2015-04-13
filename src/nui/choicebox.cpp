@@ -287,15 +287,24 @@ bool ChoiceBox::handleKeyboardEvent(const sf::Event& event)
 
 void ChoiceBox::updateButtonSize()
 {
-    m_buttonSize = {0.f, m_fontVSpace};
+    bool emptyText = true;
 
     // Getting max size of all choices
+    m_buttonSize = {0.f, m_fontVSpace};
+
     for (auto& choice : m_choices) {
         sf::Text text(m_text);
         text.setString(choice.text);
         const auto& bounds = text.getLocalBounds();
         m_buttonSize.x = std::max(m_buttonSize.x, (bounds.left + bounds.width));
+        emptyText &= choice.text.empty();
     }
+
+    // No text
+    if (emptyText)
+        m_buttonSize = {0.f, 0.f};
+
+    // Max text size is the current button size, i.e. without decoration
     m_maxTextSize = m_buttonSize;
 
     // Lines

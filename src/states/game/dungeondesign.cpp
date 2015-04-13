@@ -38,6 +38,12 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     nuiRoot.attachChild(m_contextMenu);
     m_contextMenu.setDepth(0.f);
 
+    // Dungeon lock
+    nuiRoot.attachChild(m_lockButton);
+    m_lockButton.setImage(TextureID::DUNGEON_LOCK);
+    m_lockButton.setLocalPosition(nuiSize);
+    m_lockButton.setOrigin(m_lockButton.size()); // TODO Make a relative origin (Entity::BOTTOM_RIGHT)
+
     // Dungeon panel
     nuiRoot.attachChild(m_dungeonPanel);
     m_dungeonPanel.setCentered(true);

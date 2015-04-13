@@ -83,6 +83,7 @@ void ImageButton::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vecto
 void ImageButton::setImage(TextureID imageID)
 {
     m_image.setTexture(Application::context().textures.get(imageID));
+    updateSize();
 }
 
 void ImageButton::setVisual(const std::wstring& text, TextureID imageID)

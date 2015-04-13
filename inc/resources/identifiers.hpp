@@ -43,6 +43,7 @@ enum class TextureID : uint8 {
     DUNGEON_INTER_DOOR_ROOM,
     DUNGEON_INTER_LADDER_ROOM,
     DUNGEON_INTER_ROOM,
+    DUNGEON_LOCK,
 };
 
 enum class AnimationID : uint8 {
