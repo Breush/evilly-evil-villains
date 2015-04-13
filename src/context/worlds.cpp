@@ -1,4 +1,4 @@
-#include "world/context.hpp"
+#include "context/worlds.hpp"
 
 #include "tools/string.hpp"
 #include "tools/debug.hpp"
@@ -9,17 +9,17 @@
 #include <stdexcept>
 #include <sstream>
 
-using namespace world;
+using namespace context;
 
 //----------------------------//
 //----- Static variables -----//
 
-Context world::context;
+Worlds context::worlds;
 
 //---------------------------//
 //----- File management -----//
 
-void Context::load()
+void Worlds::load()
 {
     std::wstring file(L"saves/worlds.xml");
     m_worlds.clear();
@@ -48,7 +48,7 @@ void Context::load()
     }
 }
 
-void Context::save()
+void Worlds::save()
 {
     #if DEBUG_GLOBAL > 0
         std::wstring file(L"saves/worlds_saved.xml");
@@ -80,7 +80,7 @@ void Context::save()
 //----------------------//
 //----- Management -----//
 
-uint Context::createWorld(std::wstring worldName, std::wstring villain)
+uint Worlds::createWorld(std::wstring worldName, std::wstring villain)
 {
     World world;
 
@@ -115,7 +115,7 @@ uint Context::createWorld(std::wstring worldName, std::wstring villain)
     return m_worlds.size() - 1u;
 }
 
-void Context::refreshLastPlayed()
+void Worlds::refreshLastPlayed()
 {
     m_worlds[m_selectedWorld->index].lastPlayed = time(nullptr);
 }

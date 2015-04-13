@@ -2,7 +2,7 @@
 
 #include "core/gettext.hpp"
 #include "dungeon/data.hpp"
-#include "world/context.hpp"
+#include "context/worlds.hpp"
 
 using namespace states;
 
@@ -36,7 +36,7 @@ GameDCB::GameDCB(StateStack& stack)
 void GameDCB::createDungeon()
 {
     dungeon::Data dungeonData;
-    const auto& worldInfo = world::context.selectedWorld();
+    const auto& worldInfo = context::worlds.selectedWorld();
 
     dungeonData.setName(worldInfo.name);
     dungeonData.setFloorsCount(7u);

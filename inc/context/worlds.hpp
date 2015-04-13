@@ -8,7 +8,7 @@
 
 #include <SFML/System/NonCopyable.hpp>
 
-namespace world
+namespace context
 {
     //! A XML loading class to get the worlds data.
     /*!
@@ -16,7 +16,7 @@ namespace world
      *  the list coming from the default file saves/worlds.xml.
      */
 
-    class Context final : sf::NonCopyable
+    class Worlds final : sf::NonCopyable
     {
     public:
 
@@ -36,10 +36,10 @@ namespace world
     public:
 
         //! Default constructor.
-        Context() = default;
+        Worlds() = default;
 
         //! Default destructor.
-        ~Context() = default;
+        ~Worlds() = default;
 
         //------------------------//
         //! @name File management
@@ -100,6 +100,6 @@ namespace world
     };
 
     //! The static member from worlds context.
-    extern Context context;
+    extern Worlds worlds;
 }
 

@@ -2,7 +2,7 @@
 
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
-#include "world/context.hpp"
+#include "context/worlds.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
@@ -30,8 +30,8 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     const auto& nuiSize = nuiLayer().size();
 
     // Dungeon data
-    massert(!world::context.selectedWorld().folder.empty(), "Selected world is in an empty folder.");
-    m_dungeonData.load(world::context.selectedWorld().folder);
+    massert(!context::worlds.selectedWorld().folder.empty(), "Selected world is in an empty folder.");
+    m_dungeonData.load(context::worlds.selectedWorld().folder);
     m_dungeonGraph.useData(m_dungeonData);
 
     // Context menu
@@ -78,11 +78,11 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 void GameDungeonDesign::onQuit() noexcept
 {
     // Saving dungeon
-    m_dungeonData.save(world::context.selectedWorld().folder);
+    m_dungeonData.save(context::worlds.selectedWorld().folder);
 
     // Saving worlds info
-    world::context.refreshLastPlayed();
-    world::context.save();
+    context::worlds.refreshLastPlayed();
+    context::worlds.save();
 }
 
 bool GameDungeonDesign::handleEvent(const sf::Event& event)

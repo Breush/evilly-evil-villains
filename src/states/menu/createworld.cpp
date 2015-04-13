@@ -1,7 +1,7 @@
 #include "states/menu/createworld.hpp"
 
 #include "core/gettext.hpp"
-#include "world/context.hpp"
+#include "context/worlds.hpp"
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
 #include "tools/string.hpp"
@@ -88,8 +88,8 @@ void MenuCreateWorld::createAndPlayWorld()
     wdebug_application_1(L"Creating and playing on world " + worldName + L" with villain " + villain);
 
     // World data
-    auto newWorldID = world::context.createWorld(worldName, villain);
-    world::context.selectWorld(newWorldID);
+    auto newWorldID = context::worlds.createWorld(worldName, villain);
+    context::worlds.selectWorld(newWorldID);
 
     stackClear(StateID::GAME_DCB);
 }
