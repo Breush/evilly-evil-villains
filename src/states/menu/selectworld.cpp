@@ -43,7 +43,7 @@ MenuSelectWorld::MenuSelectWorld(StateStack& stack)
     // Load list of worlds
     // TODO Have time format within gettext so that each country can choose its own representation
     context::worlds.load();
-    for (const auto& world : context::worlds.worlds())
+    for (const auto& world : context::worlds.get())
         m_list.addLine({world.villain, world.name, world.mainDungeon, time2wstring("%Y-%m-%d", world.lastPlayed)});
 
     // Stacker for buttons
@@ -78,7 +78,7 @@ bool MenuSelectWorld::handleEvent(const sf::Event& event)
 void MenuSelectWorld::playOnSelectedWorld()
 {
     auto selectedWorld = m_list.selectedLine();
-    auto& worldInfo = context::worlds.selectWorld(selectedWorld);
+    auto& worldInfo = context::worlds.select(selectedWorld);
 
     wdebug_application_1(L"Loading world " + worldInfo.name);
 

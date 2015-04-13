@@ -36,7 +36,7 @@ GameDCB::GameDCB(StateStack& stack)
 void GameDCB::createDungeon()
 {
     dungeon::Data dungeonData;
-    const auto& worldInfo = context::worlds.selectedWorld();
+    const auto& worldInfo = context::worlds.selected();
 
     dungeonData.setName(worldInfo.name);
     dungeonData.setFloorsCount(7u);

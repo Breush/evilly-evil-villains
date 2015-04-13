@@ -80,12 +80,12 @@ void Worlds::save()
 //----------------------//
 //----- Management -----//
 
-uint Worlds::createWorld(std::wstring worldName, std::wstring villain)
+uint Worlds::add(std::wstring name, std::wstring villain)
 {
     World world;
 
     world.index = m_worlds.size();
-    world.name = std::move(worldName);
+    world.name = std::move(name);
     world.villain = std::move(villain);
     world.dungeons = 0u;
     world.mainDungeon = L"Unknown";
@@ -117,6 +117,6 @@ uint Worlds::createWorld(std::wstring worldName, std::wstring villain)
 
 void Worlds::refreshLastPlayed()
 {
-    m_worlds[m_selectedWorld->index].lastPlayed = time(nullptr);
+    m_worlds[m_selected->index].lastPlayed = time(nullptr);
 }
 

@@ -1,6 +1,7 @@
 #include "states/menu/createworld.hpp"
 
 #include "core/gettext.hpp"
+#include "context/villains.hpp"
 #include "context/worlds.hpp"
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
@@ -50,10 +51,10 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     m_villainStacker.add(&m_villainBox, nui::Stacker::Align::CENTER);
     m_villainLabel.setText(_("Villain"), FontID::NUI);
 
-    // FIXME List all villains from somewhere
-    m_villainBox.add(L"Breush", nullptr);
-    m_villainBox.add(L"The Revolted Waffle", nullptr);
-    m_villainBox.add(L"Le Précurseur", nullptr);
+    // List all villains
+    context::villains.load();
+    for (const auto& villain : context::villains.get())
+        m_villainBox.add(villain.name, nullptr);
 
     // Buttons
     nuiRoot.attachChild(m_buttonsStacker);
@@ -88,8 +89,8 @@ void MenuCreateWorld::createAndPlayWorld()
     wdebug_application_1(L"Creating and playing on world " + worldName + L" with villain " + villain);
 
     // World data
-    auto newWorldID = context::worlds.createWorld(worldName, villain);
-    context::worlds.selectWorld(newWorldID);
+    auto newWorldID = context::worlds.add(worldName, villain);
+    context::worlds.select(newWorldID);
 
     stackClear(StateID::GAME_DCB);
 }

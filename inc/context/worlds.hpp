@@ -57,9 +57,9 @@ namespace context
         //! @name Interaction
         //! @{
 
-        //! Add a world in memory (nothing saved) and create empty folder.
+        //! Add a world in memory (nothing saved yet) and create empty folder.
         //! @return The index of the new world.
-        uint createWorld(std::wstring worldName, std::wstring villain);
+        uint add(std::wstring name, std::wstring villain);
 
         //! Refresh the lastPlayer attribute to current time of the selected world.
         void refreshLastPlayed();
@@ -71,7 +71,7 @@ namespace context
         //! @{
 
         //! Get the vector of all worlds for read.
-        inline const World& selectWorld(uint worldIndex) { return *(m_selectedWorld = &world(worldIndex)); }
+        inline const World& select(uint index) { return *(m_selected = &get(index)); }
 
         //! @}
 
@@ -80,23 +80,20 @@ namespace context
         //! @{
 
         //! Get the current world information.
-        inline const World& selectedWorld() const { return *m_selectedWorld; }
+        inline const World& selected() const { return *m_selected; }
 
         //! Get the vector of all worlds for read.
-        inline const std::vector<World>& worlds() const { return m_worlds; }
+        inline const std::vector<World>& get() const { return m_worlds; }
 
         //! Get a specific world for read.
-        inline const World& world(uint worldIndex) const { return m_worlds[worldIndex]; }
+        inline const World& get(uint index) const { return m_worlds[index]; }
 
         //! @}
 
     private:
 
-        //! The vector of all worlds.
-        std::vector<World> m_worlds;
-
-        //!< The current selected world.
-        const World* m_selectedWorld = nullptr;
+        std::vector<World> m_worlds;        //!< The vector of all worlds.
+        const World* m_selected = nullptr;  //!< The currently selected world.
     };
 
     //! The static member from worlds context.
