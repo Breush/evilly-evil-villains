@@ -19,15 +19,15 @@ void Data::load(const std::wstring& folder)
 {
     wdebug_dungeon_1(L"Loading data from folder " << folder);
 
-    loadDungeon(folder + L"dungeon.xml");
+    loadDungeon(L"saves/" + folder + L"dungeon.xml");
 }
 
 void Data::save(const std::wstring& folder)
 {
     #if DEBUG_GLOBAL > 0
-        saveDungeon(folder + L"dungeon_saved.xml");
+        saveDungeon(L"saves/" + folder + L"dungeon_saved.xml");
     #else
-        saveDungeon(folder + L"dungeon.xml");
+        saveDungeon(L"saves/" + folder + L"dungeon.xml");
     #endif
 
     wdebug_dungeon_1(L"Saved data to folder " << folder);
@@ -35,7 +35,7 @@ void Data::save(const std::wstring& folder)
 
 void Data::createFiles(const std::wstring& folder)
 {
-    saveDungeon(folder + L"dungeon.xml");
+    saveDungeon(L"saves/" + folder + L"dungeon.xml");
 
     wdebug_dungeon_1(L"Created data files to folder " << folder);
 }

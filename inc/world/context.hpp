@@ -13,7 +13,7 @@ namespace world
     //! A XML loading class to get the worlds data.
     /*!
      *  This class allow you to select a world within
-     *  the list coming from the default file worlds/worlds.xml.
+     *  the list coming from the default file saves/worlds.xml.
      */
 
     class Context final : sf::NonCopyable

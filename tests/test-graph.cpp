@@ -9,7 +9,7 @@ int main(void)
     dungeon::Graph graph;
 
     // Loading and initializing
-    data.load(L"tests/test-graph-");
+    data.load(L"../tests/data/test-graph/");
     graph.useData(data);
     graph.reconstructFromData();
 

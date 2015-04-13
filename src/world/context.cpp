@@ -21,7 +21,7 @@ Context world::context;
 
 void Context::load()
 {
-    std::wstring file(L"worlds/worlds.xml");
+    std::wstring file(L"saves/worlds.xml");
     m_worlds.clear();
 
     // Parsing XML
@@ -51,9 +51,9 @@ void Context::load()
 void Context::save()
 {
     #if DEBUG_GLOBAL > 0
-        std::wstring file(L"worlds/worlds_saved.xml");
+        std::wstring file(L"saves/worlds_saved.xml");
     #else
-        std::wstring file(L"worlds/worlds.xml");
+        std::wstring file(L"saves/worlds.xml");
     #endif
 
     // Creating XML
@@ -99,14 +99,14 @@ uint Context::createWorld(std::wstring worldName, std::wstring villain)
     // Automatically increase folder postfix if we cannot create directory.
     std::wstring folderPostfix(L"/");
     uint iFolderPostfix = 0;
-    while (!createDirectory(L"worlds/" + world.folder + folderPostfix)) {
+    while (!createDirectory(L"saves/" + world.folder + folderPostfix)) {
         std::wstringstream str;
         str << L"_" << ++iFolderPostfix;
         folderPostfix = str.str() + L"/";
 
         // If it seems like we cannot create directories, just throw...
         if (iFolderPostfix > 42)
-            throw std::runtime_error("Cannot create directories inside worlds/.");
+            throw std::runtime_error("Cannot create directories inside saves/.");
     }
 
     world.folder += folderPostfix;

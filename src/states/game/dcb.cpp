@@ -41,7 +41,7 @@ void GameDCB::createDungeon()
     dungeonData.setName(worldInfo.name);
     dungeonData.setFloorsCount(7u);
     dungeonData.setRoomsByFloor(5u);
-    dungeonData.createFiles(L"worlds/" + worldInfo.folder);
+    dungeonData.createFiles(worldInfo.folder);
 
     stackClear(StateID::GAME_DUNGEON_DESIGN);
 }
