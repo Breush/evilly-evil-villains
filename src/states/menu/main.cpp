@@ -36,6 +36,12 @@ MenuMain::MenuMain(StateStack& stack)
     m_background.setLocalScale(maxSide / sf::v2f(textureSize));
     m_background.setLocalPosition((nuiSize - maxSide) / 2.f);
 
+    // Copyright label
+    nuiRoot.attachChild(m_copyrightLabel);
+    m_copyrightLabel.setText(EEV_COPYRIGHT_SHORT_WS);
+    m_copyrightLabel.setPrestyle(sfe::Label::PrestyleID::MENU_SOBER_LIGHT);
+    m_copyrightLabel.setLocalPosition({0.f, nuiSize.y - m_copyrightLabel.size().y});
+
     // Version label
     nuiRoot.attachChild(m_versionLabel);
     std::wstringstream versionString;

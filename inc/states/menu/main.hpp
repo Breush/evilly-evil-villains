@@ -35,5 +35,6 @@ namespace states
         // Decorum
         sfe::Sprite m_background;
         sfe::Label m_versionLabel;
+        sfe::Label m_copyrightLabel;
     };
 }

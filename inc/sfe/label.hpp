@@ -25,6 +25,7 @@ namespace sfe
             MENU_TITLE,
             MENU_POPUP_TITLE,
             MENU_SOBER,
+            MENU_SOBER_LIGHT,
         };
 
     public:

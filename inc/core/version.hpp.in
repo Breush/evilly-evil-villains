@@ -1,5 +1,10 @@
 #pragma once
 
+// TODO Rename this file, since it is no longer just version.
+
+//-------------------//
+//----- Version -----//
+
 #define EEV_VERSION_SWEET_NAME      Pαpaya
 #define EEV_VERSION_SWEET_NAME_WS   L"Pαpaya"
 #define EEV_VERSION_DATE            __DATE__
@@ -10,3 +15,8 @@
 // Generated with CMake
 #define EEV_VERSION_REV     @EEV_VERSION_REVISION@
 #define EEV_VERSION_REV_WS  L"@EEV_VERSION_REVISION@"
+
+//---------------------//
+//----- Copyright -----//
+
+#define EEV_COPYRIGHT_SHORT_WS  L"© 2015 Jumping Toasts. ALL RIGHTS RESERVED."
