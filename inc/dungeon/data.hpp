@@ -18,6 +18,7 @@ namespace dungeon
         ROOM_CONSTRUCTED,   //!< A rom was constructed.
         DOSH_CHANGED,       //!< Dosh value changed, delta is set.
         FAME_CHANGED,       //!< Fame value changed, delta is set.
+        MODE_CHANGED,       //!< Mode (design/invasion) changed.
     };
 
     //! A dungeon event.
@@ -28,13 +29,13 @@ namespace dungeon
 
         union
         {
-            int delta;                      //!< The difference between previous and current value of resources.
+            int delta;   //!< The difference between previous and current value of resources.
 
             struct
             {
                 uint x;
                 uint y;
-            } room;
+            } room;     //!< The coordinates of a room whenever it is modified.
         };
     };
 
@@ -64,9 +65,16 @@ namespace dungeon
         //! Defines rooms state.
         enum class RoomState
         {
-            UNKNOWN,
-            VOID,
-            CONSTRUCTED,
+            UNKNOWN,        //!< Error state.
+            VOID,           //!< Empty.
+            CONSTRUCTED,    //!< Constructed.
+        };
+
+        //! The possible modes.
+        enum class Mode
+        {
+            DESIGN,     //!< Design.
+            INVASION,   //!< Invasion.
         };
 
         //! A room as in the xml specification.
@@ -156,6 +164,17 @@ namespace dungeon
 
         //! @}
 
+        //-------------//
+        //! @name Mode
+        //! @{
+
+        inline Mode mode() const { return m_mode; } //!< Get the current mode.
+
+        //! Set the current mode.
+        void setMode(Mode mode);
+
+        //! @}
+
         //--------------------------//
         //! @name Public properties
         //! @{
@@ -237,6 +256,8 @@ namespace dungeon
 
         //! A dungeon consists in a vector of floors.
         std::vector<Floor> m_floors;
+
+        Mode m_mode = Mode::DESIGN; //!< The current mode.
 
         uint m_dosh = 0u;   //!< The resource dosh value.
         uint m_fame = 0u;   //!< The resource fame value.

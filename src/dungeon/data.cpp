@@ -261,6 +261,16 @@ void Data::subDosh(uint dosh)
     emit(EventType::DOSH_CHANGED);
 }
 
+//----------------//
+//----- Mode -----//
+
+void Data::setMode(Mode mode)
+{
+    // TODO Check here if dungeon is OK.
+    m_mode = mode;
+    emit(EventType::MODE_CHANGED);
+}
+
 //-------------------------//
 //----- Event emitter -----//
 
