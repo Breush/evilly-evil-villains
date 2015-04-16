@@ -66,14 +66,20 @@ namespace dungeon
         //! Destructor.
         virtual ~EventReceiver();
 
-    protected:
-
         //---------------//
         //! @name Events
         //! @{
 
         //! Set the event emitter.
         void setEmitter(EventEmitter* emitter);
+
+        //! @}
+
+    protected:
+
+        //---------------//
+        //! @name Events
+        //! @{
 
         //! Called whenever an event is sent.
         virtual void receive(const Event& event) = 0;

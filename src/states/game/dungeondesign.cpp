@@ -69,6 +69,12 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     m_dungeonInter.setSize({350.f, 450.f});
     m_dungeonInter.setLocalPosition({sceneSize.x / 3.f, sceneSize.y - 450.f - 100.f});
 
+    // Dungeon hero
+    // TODO Have a Hero manager or so (Hero then, should not be a receiver?)
+    m_dungeonInter.attachChild(m_dungeonHero);
+    m_dungeonHero.useGraph(m_dungeonGraph);
+    m_dungeonHero.setEmitter(&m_dungeonData);
+
     // Decorum
     backgroundRoot.attachChild(m_decorumBack);
     m_decorumBack.setTexture(TextureID::DUNGEON_SCENE_GRASSYHILLS_BACK);
@@ -102,16 +108,6 @@ bool GameDungeonDesign::handleEvent(const sf::Event& event)
         if (event.key.code == sf::Keyboard::Escape) {
             stackPush(StateID::GAME_PAUSE);
         }
-#if DEBUG_GLOBAL > 0
-        // Spawn attacking hero in debug mode
-        else if (event.key.code == sf::Keyboard::Equal) {
-            m_dungeonGraph.reconstructFromData();
-            if (!m_dungeonInter.hasChild(m_dungeonHero)) {
-                m_dungeonInter.attachChild(m_dungeonHero);
-                m_dungeonHero.useGraph(m_dungeonGraph);
-            }
-        }
-#endif
     }
 
 

@@ -1,6 +1,7 @@
 #include "dungeon/hero.hpp"
 
 #include "dungeon/inter.hpp"
+#include "dungeon/data.hpp"
 #include "tools/random.hpp"
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
@@ -10,12 +11,12 @@
 using namespace dungeon;
 
 Hero::Hero(const Inter* inter)
-    : m_inter(inter)
+    : m_running(false)
+    , m_inter(inter)
 {
     // Sprite
     m_sprite.setSize({10.f, 10.f});
     m_sprite.setFillColor(sf::Color::White);
-    addPart(&m_sprite);
 
     // Lua
     if (!m_lua.load("res/ai/hero.lua"))
@@ -27,6 +28,8 @@ Hero::Hero(const Inter* inter)
 
 void Hero::updateAI(const sf::Time& dt)
 {
+    returnif (!m_running);
+
     m_inRoomSince += dt.asSeconds();
 
     // TODO Interface with physics engine
@@ -81,19 +84,41 @@ uint Hero::call(const char* function, const Graph::Node* node)
 //-------------------------//
 //----- Dungeon graph -----//
 
-void Hero::useGraph(const Graph& graph)
+void Hero::useGraph(Graph& graph)
 {
     m_graph = &graph;
-    m_visitedNodes.clear();
+}
 
-    // Get the door from the graph.
-    m_currentNode = &m_graph->startingNode();
-    m_visitedNodes[m_currentNode->room] += 1u;
-    refreshPositionFromNode();
+//------------------//
+//----- Events -----//
+
+void Hero::receive(const Event& event)
+{
+    returnif (event.type != EventType::MODE_CHANGED);
+    setRunning(event.mode == Mode::INVASION);
 }
 
 //-----------------------------------//
 //----- Internal change updates -----//
+
+void Hero::changedRunning()
+{
+    clearParts();
+
+    if (m_running) {
+        // Make it visible
+        addPart(&m_sprite);
+
+        // FIXME It's a bit strange to control the graph from here.
+        m_graph->reconstructFromData();
+
+        // Get the door from the graph.
+        m_visitedNodes.clear();
+        m_currentNode = &m_graph->startingNode();
+        m_visitedNodes[m_currentNode->room] += 1u;
+        refreshPositionFromNode();
+    }
+}
 
 void Hero::refreshPositionFromNode()
 {

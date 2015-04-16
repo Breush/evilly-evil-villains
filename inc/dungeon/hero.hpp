@@ -2,6 +2,7 @@
 
 #include "scene/entity.hpp"
 #include "dungeon/graph.hpp"
+#include "dungeon/event.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <selene/selene.hpp>
@@ -14,7 +15,7 @@ namespace dungeon
 
     //! A hero invading the dungeon.
 
-    class Hero final : public scene::Entity
+    class Hero final : public scene::Entity, public EventReceiver
     {
         using baseClass = scene::Entity;
 
@@ -43,7 +44,7 @@ namespace dungeon
         //! @{
 
         //! The graph of the dungeon to be read from.
-        void useGraph(const Graph& data);
+        void useGraph(Graph& data);
 
         //! @}
 
@@ -64,6 +65,18 @@ namespace dungeon
         //! @todo This function should not exists once it is managed by physics component.
         void refreshPositionFromNode();
 
+        //! Whenever the running mode changed.
+        void changedRunning();
+
+        //! @}
+
+        //--------------------------//
+        //! @name Public properties
+        //! @{
+
+        //! Whether the hero is visible and active.
+        PARAMGSU(bool, m_running, running, setRunning, changedRunning);
+
         //! @}
 
     protected:
@@ -76,10 +89,18 @@ namespace dungeon
 
         //! @}
 
+        //---------------//
+        //! @name Events
+        //! @{
+
+        void receive(const Event& event) final;
+
+        //! @}
+
     private:
 
         //! The graph of the dungeon to be read from.
-        const Graph* m_graph = nullptr;
+        Graph* m_graph = nullptr;
 
         //! The lua state.
         sel::State m_lua;

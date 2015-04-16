@@ -268,7 +268,11 @@ void Data::setMode(Mode mode)
 {
     // TODO Check here if dungeon is OK.
     m_mode = mode;
-    emit(EventType::MODE_CHANGED);
+
+    Event event;
+    event.type = EventType::MODE_CHANGED;
+    event.mode = mode;
+    EventEmitter::emit(event);
 }
 
 //-------------------------//

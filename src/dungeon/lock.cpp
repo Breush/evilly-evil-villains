@@ -75,11 +75,11 @@ void Lock::useData(Data& data)
 void Lock::updateMode()
 {
     switch (m_data->mode()) {
-    case Data::Mode::DESIGN:
+    case Mode::DESIGN:
         m_lock.setColor(sf::Color::White);
         break;
 
-    case Data::Mode::INVASION:
+    case Mode::INVASION:
         m_lock.setColor(sf::Color::Red);
         break;
     }
@@ -88,12 +88,12 @@ void Lock::updateMode()
 void Lock::switchMode()
 {
     switch (m_data->mode()) {
-    case Data::Mode::DESIGN:
-        m_data->setMode(dungeon::Data::Mode::INVASION);
+    case Mode::DESIGN:
+        m_data->setMode(Mode::INVASION);
         break;
 
-    case Data::Mode::INVASION:
-        m_data->setMode(dungeon::Data::Mode::DESIGN);
+    case Mode::INVASION:
+        m_data->setMode(Mode::DESIGN);
         break;
     }
 }

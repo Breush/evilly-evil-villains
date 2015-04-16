@@ -21,6 +21,14 @@ namespace dungeon
         MODE_CHANGED,       //!< Mode (design/invasion) changed.
     };
 
+    //! The possible modes.
+
+    enum class Mode
+    {
+        DESIGN,     //!< Design.
+        INVASION,   //!< Invasion.
+    };
+
     //! A dungeon event.
 
     struct Event
@@ -29,7 +37,9 @@ namespace dungeon
 
         union
         {
-            int delta;   //!< The difference between previous and current value of resources.
+            int delta;  //!< The difference between previous and current value of resources.
+
+            Mode mode;  //!< The new mode.
 
             struct
             {
@@ -68,13 +78,6 @@ namespace dungeon
             UNKNOWN,        //!< Error state.
             VOID,           //!< Empty.
             CONSTRUCTED,    //!< Constructed.
-        };
-
-        //! The possible modes.
-        enum class Mode
-        {
-            DESIGN,     //!< Design.
-            INVASION,   //!< Invasion.
         };
 
         //! A room as in the xml specification.
