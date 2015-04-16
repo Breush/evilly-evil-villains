@@ -61,9 +61,6 @@ namespace dungeon
         void update() final;
         void refreshDisplay() final;
 
-        //! Set the perfect size for a correct display.
-        void updateSize();
-
         //! @}
 
         //-----------------------//
@@ -77,6 +74,9 @@ namespace dungeon
         //--------------------------------//
         //! @name Internal change updates
         //! @{
+
+        //! Set the perfect size for a correct display.
+        void updateSize();
 
         //! To be called whenever the dungeon data changed.
         void refreshFromData();

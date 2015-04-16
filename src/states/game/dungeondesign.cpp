@@ -39,10 +39,9 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     m_contextMenu.setDepth(0.f);
 
     // Dungeon lock
-    nuiRoot.attachChild(m_lockButton);
-    m_lockButton.setImage(TextureID::DUNGEON_LOCK);
-    m_lockButton.setLocalPosition(nuiSize);
-    m_lockButton.setOrigin(m_lockButton.size()); // TODO Make a relative origin (Entity::BOTTOM_RIGHT)
+    nuiRoot.attachChild(m_dungeonLock);
+    m_dungeonLock.setLocalPosition(nuiSize);
+    m_dungeonLock.setOrigin(m_dungeonLock.size()); // TODO Make a relative origin (Entity::BOTTOM_RIGHT)
 
     // Dungeon panel
     nuiRoot.attachChild(m_dungeonPanel);

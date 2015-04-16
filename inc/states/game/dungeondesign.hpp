@@ -8,6 +8,7 @@
 #include "dungeon/panel.hpp"
 #include "dungeon/summary.hpp"
 #include "dungeon/sidebar.hpp"
+#include "dungeon/lock.hpp"
 #include "dungeon/hero.hpp"
 #include "sfe/sprite.hpp"
 
@@ -34,12 +35,11 @@ namespace states
         dungeon::Panel m_dungeonPanel;
         dungeon::Sidebar m_dungeonSidebar;
         dungeon::Summary m_dungeonSummary;
+        dungeon::Lock m_dungeonLock;
         dungeon::Hero m_dungeonHero;
 
         // NUI
         nui::ContextMenu m_contextMenu;
-        nui::ImageButton m_lockButton;  //!< Switch design/invasion modes.
-        // TODO Make lock an entity (to control both states and feedback on emitter)
 
         // Decorum
         sfe::Sprite m_decorumBack;

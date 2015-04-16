@@ -3,6 +3,7 @@
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
 #include "config/nui.hpp"
+#include "tools/vector.hpp"
 
 using namespace nui;
 
@@ -27,7 +28,7 @@ void ImageButton::update()
     // Image
     if (m_image.getTexture() != nullptr) {
         const auto& textureSize = m_image.getTexture()->getSize();
-        m_image.setScale({m_imageSize.x / textureSize.x, m_imageSize.y / textureSize.y});
+        m_image.setScale(m_imageSize / sf::v2f(textureSize));
         m_image.setPosition({(size().x - m_imageSize.x) / 2.f, 0.f});
         addPart(&m_image);
     }
