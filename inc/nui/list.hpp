@@ -6,6 +6,7 @@
 
 #include <initializer_list>
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 
 namespace nui
 {
@@ -61,10 +62,10 @@ namespace nui
 
         // Focus interactions
         void setFocusedLine(uint line);
+        void setSelectionRect(const sf::FloatRect& focusRect);
 
         // Params
-        PARAMG(uint, m_sbWidth, sbWidth)
-        PARAMG(uint, m_lineHeight, lineHeight)
+        PARAMG(float, m_lineHeight, lineHeight)
         PARAMGSU(uint, m_selectedLine, selectedLine, setSelectedLine, changedSelectedLine);
 
     private:
@@ -78,6 +79,7 @@ namespace nui
         // Decorum
         std::vector<sfe::HLine> m_hBorders;
         std::vector<sfe::VLine> m_vBorders;
+        sf::RectangleShape m_selectionHighlight;
     };
 }
 

@@ -9,11 +9,13 @@
 using namespace nui;
 
 List::List()
-    : m_sbWidth(31) // ?
-    , m_selectedLine(uint(-1))
+    : m_selectedLine(uint(-1))
 {
     setFocusable(true);
     setFocusOwned(true);
+
+    // Selection highlight
+    m_selectionHighlight.setFillColor({255u, 255u, 255u, 32u});
 
     refreshDisplay();
 }
@@ -32,6 +34,9 @@ void List::update()
 
     clearParts();
 
+    // Selection highlight
+    addPart(&m_selectionHighlight);
+
     // Columns
     uint borderColumnHeight = m_linesCount * lineHeight();
     for (uint i = 0; i < m_columns.size(); ++i) {
@@ -40,6 +45,7 @@ void List::update()
         uint x = column.x + cNUI.hPadding + cNUI.borderThick;
 
         // Border
+        m_vBorders[i].setShade(0.1f);
         m_vBorders[i].setLength(borderColumnHeight);
         m_vBorders[i].setPosition(column.x, lineHeight());
         addPart(&m_vBorders[i]);
@@ -65,28 +71,24 @@ void List::update()
     }
 
     uint vBorderLast = m_columns.size();
+    m_vBorders[vBorderLast].setShade(0.1f);
     m_vBorders[vBorderLast].setLength(borderColumnHeight);
-    m_vBorders[vBorderLast].setPosition(size().x - sbWidth(), lineHeight());
+    m_vBorders[vBorderLast].setPosition(size().x, lineHeight());
     addPart(&m_vBorders[vBorderLast]);
 
     // Horizontal borders
-    uint y = 0;
-
+    float y = 0.f;
     for (uint i = 0; i <= 1; ++i) {
+        m_hBorders[i].setShade(0.05f);
         m_hBorders[i].setLength(size().x);
-        m_hBorders[i].setPosition(0, y);
+        m_hBorders[i].setPosition(0.f, y);
         addPart(&m_hBorders[i]);
-        y += lineHeight();
+        y += m_lineHeight;
     }
 
-    for (uint i = 2; i <= m_linesCount; ++i) {
-        m_hBorders[i].setLength(size().x - 2 * sbWidth());
-        m_hBorders[i].setPosition(sbWidth(), y);
-        //addPart(&m_hBorders[i]);
-        y += lineHeight();
-    }
-
-    uint hBorderLast = m_linesCount + 1;
+    uint hBorderLast = m_linesCount + 1u;
+    y += (hBorderLast - 2u) * m_lineHeight;
+    m_hBorders[hBorderLast].setShade(0.01f);
     m_hBorders[hBorderLast].setLength(size().x);
     m_hBorders[hBorderLast].setPosition(0, y);
     addPart(&m_hBorders[hBorderLast]);
@@ -161,7 +163,7 @@ uint List::getColumnWidthMax(uint index)
 uint List::getColumnWidthHint()
 {
     config::NUI cNUI;
-    uint widthHint = size().x - cNUI.borderThick - 2 * sbWidth();
+    uint widthHint = size().x - cNUI.borderThick;
     uint nFillOrClip = 0;
 
     // No fill, no clip reduce space
@@ -247,8 +249,15 @@ void List::changedSelectedLine()
 
 void List::setFocusedLine(uint line)
 {
-    uint yLine = (line + 1) * lineHeight();
-    setFocusRect(sf::FloatRect(0, yLine, size().x, lineHeight()));
+    float yLine = (line + 1u) * m_lineHeight;
+    setSelectionRect({0.f, yLine, size().x, m_lineHeight});
+}
+
+void List::setSelectionRect(const sf::FloatRect& focusRect)
+{
+    setFocusRect(focusRect);
+    m_selectionHighlight.setPosition(focusRect.left, focusRect.top);
+    m_selectionHighlight.setSize({focusRect.width, focusRect.height});
 }
 
 //------------------//
@@ -256,7 +265,7 @@ void List::setFocusedLine(uint line)
 
 void List::updateColumnInfos()
 {
-    uint x = sbWidth();
+    uint x = 0.f;
     uint columnHint = getColumnWidthHint();
 
     // Setting correct size
