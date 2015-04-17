@@ -12,8 +12,7 @@ int main(int argc, char *argv[])
     // Disable synchronisation
     // Note: Remove the safety of using printf/scanf
     // This makes the streams faster
-    std::wcout.sync_with_stdio(false);
-    std::cerr.sync_with_stdio(false);
+    std::ios_base::sync_with_stdio(false);
 
     // Handle arguments
     for (int i = 1; i < argc; ++i)
