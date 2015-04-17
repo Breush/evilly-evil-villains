@@ -14,9 +14,12 @@ Hero::Hero(const Inter* inter)
     : m_running(false)
     , m_inter(inter)
 {
+    setVisible(false);
+
     // Sprite
     m_sprite.setSize({10.f, 10.f});
     m_sprite.setFillColor(sf::Color::White);
+    addPart(&m_sprite);
 
     // Lua
     if (!m_lua.load("res/ai/hero.lua"))
@@ -103,12 +106,9 @@ void Hero::receive(const Event& event)
 
 void Hero::changedRunning()
 {
-    clearParts();
+    setVisible(m_running);
 
     if (m_running) {
-        // Make it visible
-        addPart(&m_sprite);
-
         // FIXME It's a bit strange to control the graph from here.
         m_graph->reconstructFromData();
 
