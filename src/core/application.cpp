@@ -125,7 +125,7 @@ void Application::processInput()
                 continue;
             }
 
-            // TODO Remove when config exists : NUI quick size change
+            // TODO Remove when config interface exists: NUI quick size change
             if (event.key.code == sf::Keyboard::Numpad8) {
                 s_context.display.nui += 1;
                 std::cerr << "NUI size: " << s_context.display.nui << std::endl;
