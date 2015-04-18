@@ -7,6 +7,8 @@
 using namespace nui;
 
 TableLayout::TableLayout()
+    : m_hPaddingAuto(true)
+    , m_vPaddingAuto(true)
 {
     refreshDisplay();
 }
@@ -26,10 +28,11 @@ void TableLayout::refreshDisplay()
 {
     config::NUI cNUI;
 
-    m_hPadding = cNUI.hPadding;
-    m_vPadding = cNUI.vPadding;
+    if (m_hPaddingAuto) m_hPadding = cNUI.hPadding;
+    if (m_vPaddingAuto) m_vPadding = cNUI.vPadding;
 
     update();
+    baseClass::refreshDisplay();
 }
 
 //---------------------//
@@ -43,6 +46,61 @@ void TableLayout::setDimensions(uint rows, uint cols, float rowsStep, float cols
     m_colsStep = colsStep;
 
     refreshDimensions();
+}
+
+void TableLayout::setRowAdapt(uint row, Adapt adapt, float param)
+{
+    assert(row < m_rows.size());
+
+    m_rows[row].adapt = adapt;
+    if (adapt == Adapt::FIXED) m_rows[row].height = param;
+
+    refreshChildrenPosition();
+}
+
+void TableLayout::setColAdapt(uint col, Adapt adapt, float param)
+{
+    assert(col < m_cols.size());
+
+    m_cols[col].adapt = adapt;
+    if (adapt == Adapt::FIXED) m_cols[col].width = param;
+
+    refreshChildrenPosition();
+}
+
+void TableLayout::overridePadding(float hPadding, float vPadding)
+{
+    m_hPaddingAuto = hPadding < 0.f;
+    m_vPaddingAuto = vPadding < 0.f;
+
+    if (!m_hPaddingAuto) m_hPadding = hPadding;
+    if (!m_vPaddingAuto) m_vPadding = vPadding;
+
+    refreshDisplay();
+}
+
+float TableLayout::colOffset(uint col)
+{
+    if (col == -1u) col = m_cols.size();
+    assert(col < m_cols.size() + 1u);
+
+    float offset = 0.f;
+    for (uint c = 0u; c < col; ++c)
+        offset += m_cols[c].width;
+
+    return offset;
+}
+
+float TableLayout::rowOffset(uint row)
+{
+    if (row == -1u) row = m_rows.size();
+    assert(row < m_rows.size() + 1u);
+
+    float offset = 0.f;
+    for (uint r = 0u; r < row; ++r)
+        offset += m_rows[r].height;
+
+    return offset;
 }
 
 float TableLayout::maxChildHeightInRow(uint row)
@@ -117,6 +175,16 @@ void TableLayout::removeChild(uint row, uint col)
 
     detachChild(m_children.at({row, col}).entity);
     m_children.erase({row, col});
+
+    refreshChildrenPosition();
+}
+
+void TableLayout::setChildAlign(uint row, uint col, Align hAlign, Align vAlign)
+{
+    returnif (m_children.count({row, col}) == 0u);
+
+    m_children.at({row, col}).hAlign = hAlign;
+    m_children.at({row, col}).vAlign = vAlign;
 
     refreshChildrenPosition();
 }
@@ -230,5 +298,20 @@ void TableLayout::refreshDimensions()
     // Do the actual resize
     m_rows.resize(rows);
     m_cols.resize(cols);
+
+    // Auto-adapt if fixed
+    if (m_rowsDimension == 0u) {
+        for (auto& row : m_rows) {
+            row.adapt = Adapt::FIXED;
+            row.height = m_rowsStep;
+        }
+    }
+
+    if (m_colsDimension == 0u) {
+        for (auto& col : m_cols) {
+            col.adapt = Adapt::FIXED;
+            col.width = m_colsStep;
+        }
+    }
 }
 

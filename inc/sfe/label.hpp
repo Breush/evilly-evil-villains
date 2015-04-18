@@ -23,6 +23,7 @@ namespace sfe
         enum class Prestyle
         {
             NUI,
+            NUI_TITLE,
             MENU_TITLE,
             MENU_POPUP_TITLE,
             MENU_SOBER,

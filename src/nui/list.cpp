@@ -1,18 +1,23 @@
 #include "nui/list.hpp"
 
 #include "core/application.hpp"
+#include "resources/identifiers.hpp"
 #include "config/nui.hpp"
+#include "sfe/label.hpp"
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
-#include "resources/identifiers.hpp"
+#include "tools/platform-fixes.hpp" // make_unique
 
 using namespace nui;
 
 List::List()
-    : m_selectedLine(uint(-1))
 {
     setFocusable(true);
     setFocusOwned(true);
+
+    // Table
+    attachChild(m_table);
+    m_table.overridePadding(-1.f, 0.f);
 
     // Selection highlight
     m_selectionHighlight.setFillColor({255u, 255u, 255u, 32u});
@@ -25,73 +30,10 @@ List::List()
 
 void List::update()
 {
-    returnif (m_lines.size() == 0);
+    m_table.setSize(size());
+    returnif (m_columns.empty());
 
-    config::NUI cNUI;
-
-    m_linesCount = size().y / lineHeight() - 1;
-    m_hBorders.resize(m_linesCount + 2);
-
-    clearParts();
-
-    // Selection highlight
-    addPart(&m_selectionHighlight);
-
-    // Columns
-    uint borderColumnHeight = m_linesCount * lineHeight();
-    for (uint i = 0; i < m_columns.size(); ++i) {
-        auto& column = m_columns[i];
-        uint y = cNUI.vPadding + cNUI.borderThick;
-        uint x = column.x + cNUI.hPadding + cNUI.borderThick;
-
-        // Border
-        m_vBorders[i].setShade(0.1f);
-        m_vBorders[i].setLength(borderColumnHeight);
-        m_vBorders[i].setPosition(column.x, lineHeight());
-        addPart(&m_vBorders[i]);
-
-        // Column name position
-        column.text.setPosition(x, y);
-        addPart(&column.text);
-
-        // Lines
-        y += lineHeight();
-        for (auto& line : m_lines) {
-            line[i].text.setPosition(x, y);
-            addPart(&line[i].text);
-
-            // Clipping
-            if (column.clip && line[i].textWidth > column.width - cNUI.hPadding) {
-                line[i].clippingRect = sf::FloatRect(column.x, y - cNUI.vPadding, column.width - cNUI.hPadding, m_lineHeight);
-                setPartClippingRect(&line[i].text, line[i].clippingRect);
-            }
-
-            y += lineHeight();
-        }
-    }
-
-    uint vBorderLast = m_columns.size();
-    m_vBorders[vBorderLast].setShade(0.1f);
-    m_vBorders[vBorderLast].setLength(borderColumnHeight);
-    m_vBorders[vBorderLast].setPosition(size().x, lineHeight());
-    addPart(&m_vBorders[vBorderLast]);
-
-    // Horizontal borders
-    float y = 0.f;
-    for (uint i = 0; i <= 1; ++i) {
-        m_hBorders[i].setShade(0.05f);
-        m_hBorders[i].setLength(size().x);
-        m_hBorders[i].setPosition(0.f, y);
-        addPart(&m_hBorders[i]);
-        y += m_lineHeight;
-    }
-
-    uint hBorderLast = m_linesCount + 1u;
-    y += (hBorderLast - 2u) * m_lineHeight;
-    m_hBorders[hBorderLast].setShade(0.01f);
-    m_hBorders[hBorderLast].setLength(size().x);
-    m_hBorders[hBorderLast].setPosition(0, y);
-    addPart(&m_hBorders[hBorderLast]);
+    refreshBordersPosition();
 }
 
 void List::refreshDisplay()
@@ -99,85 +41,77 @@ void List::refreshDisplay()
     config::NUI cNUI;
 
     m_lineHeight = cNUI.borderThick + cNUI.fontVSpace + 2.f * cNUI.vPadding;
+    m_table.setDimensions(0u, m_columns.size(), m_lineHeight);
 
-    // Update text style
-    auto fontSize = cNUI.fontSize;
-    for (auto& columnInfo : m_columns)
-        columnInfo.text.setCharacterSize(fontSize);
-
-    for (auto& lineVector : m_lines)
-    for (auto& lineInfo : lineVector)
-        lineInfo.text.setCharacterSize(fontSize);
-
-    // FIXME textWidth to update! (No culling otherwise)
+    // Refresh selection highlight.
+    if (!m_lines.empty()) selectLine(m_selectedLine);
 
     update();
     baseClass::refreshDisplay();
 }
 
+//------------------//
+//----- Events -----//
+
+void List::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vector2f& mousePos, const sf::Vector2f&)
+{
+    // Do not take first line, they are the columns titles
+    uint line = mousePos.y / m_lineHeight - 1u;
+
+    if (line < m_lines.size())
+        selectLine(line);
+}
+
+void List::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
+{
+    uint line = mousePos.y / m_lineHeight - 1u;
+
+    resetPartsShader();
+    if (line < m_lines.size())
+        for (auto& cell : m_lines[line].cells)
+            setPartShader(cell.label.get(), ShaderID::NUI_HOVER);
+}
+
+void List::handleMouseLeft()
+{
+    resetPartsShader();
+}
+
 //-------------------//
 //----- Columns -----//
 
-void List::setColumns(const std::initializer_list<std::wstring>& columns)
+void List::setColumnsTitles(const std::initializer_list<std::wstring>& titles)
 {
-    m_columns.clear();
+    m_table.setDimensions(0u, titles.size(), m_lineHeight);
+    m_columns.resize(titles.size());
 
-    sf::Text text;
-    config::NUI cNUI;
-    text.setCharacterSize(cNUI.fontSize);
-    text.setFont(Application::context().fonts.get(FontID::NUI));
-
-    for (auto& column : columns) {
-        text.setString(column);
-        text.setStyle(sf::Text::Bold);
-        m_columns.push_back({text, 0, 0, true, true});
+    uint column = 0u;
+    for (auto& title : titles) {
+        // Create new label and add to table
+        m_columns[column].title = std::make_unique<sfe::Label>();
+        m_columns[column].title->setText(std::move(title));
+        m_columns[column].title->setPrestyle(sfe::Label::Prestyle::NUI_TITLE);
+        m_table.setChild(0u, column, *m_columns[column].title);
+        ++column;
     }
 
-    m_vBorders.resize(m_columns.size() + 1);
-    updateColumnInfos();
+    refreshBordersPosition();
 }
 
-void List::setColumnFillClip(uint index, bool fill, bool clip)
+void List::setColumnAdapt(uint index, Adapt adapt)
 {
-    m_columns[index].fill = fill;
-    m_columns[index].clip = clip;
+    m_table.setColAdapt(index, adapt);
 }
 
-uint List::getColumnWidthMax(uint index)
+void List::setColumnAlign(uint index, Align hAlign, Align vAlign)
 {
-    config::NUI cNUI;
-    auto bounds = m_columns[index].text.getLocalBounds();
-    uint columnSpace = 2 * cNUI.hPadding + cNUI.borderThick;
-    uint widthMax = bounds.left + bounds.width + columnSpace;
+    assert(index < m_columns.size());
 
-    // Lines
-    for (auto& line : m_lines) {
-        uint lineWidth = line[index].textWidth + columnSpace;
-        if (widthMax < lineWidth)
-            widthMax = lineWidth;
-    }
+    m_columns[index].hAlign = hAlign;
+    m_columns[index].vAlign = vAlign;
 
-    return widthMax;
-}
-
-uint List::getColumnWidthHint()
-{
-    config::NUI cNUI;
-    uint widthHint = size().x - cNUI.borderThick;
-    uint nFillOrClip = 0;
-
-    // No fill, no clip reduce space
-    for (uint i = 0; i < m_columns.size(); ++i) {
-        if (!m_columns[i].fill && !m_columns[i].clip)
-            widthHint -= getColumnWidthMax(i);
-        else
-            ++nFillOrClip;
-    }
-
-    // Nothing to fill or clip
-    returnif (nFillOrClip == 0) 0;
-
-    return widthHint / nFillOrClip;
+    for (uint row = 0u; row <= m_lines.size(); ++row)
+        m_table.setChildAlign(row, index, hAlign, vAlign);
 }
 
 //-----------------//
@@ -185,70 +119,36 @@ uint List::getColumnWidthHint()
 
 void List::addLine(const std::initializer_list<std::wstring>& values)
 {
-    massert(values.size() == m_columns.size(), "List - expected " << m_columns.size() << " values");
+    massert(values.size() == m_columns.size(), "Expected " << m_columns.size() << " values to match columns number.");
 
-    sf::Text text;
-    config::NUI cNUI;
-    text.setCharacterSize(cNUI.fontSize);
-    text.setFont(Application::context().fonts.get(FontID::NUI));
+    LineInfo line;
+    line.cells.resize(values.size());
 
-    std::vector<LineInfo> line;
+    uint row = m_lines.size() + 1u;
+    uint column = 0u;
     for (auto& value : values) {
-        text.setString(value);
-        auto bounds = text.getLocalBounds();
-        uint width = bounds.left + bounds.width;
-        uint height = bounds.top + bounds.height;
-        line.push_back({text, width, height, {0.f, 0.f, float(width), float(height)}});
+        line.cells[column].label = std::make_unique<sfe::Label>();
+        line.cells[column].label->setText(value);
+        line.cells[column].label->setPrestyle(sfe::Label::Prestyle::NUI);
+        line.cells[column].label->setDetectable(false);
+        m_table.setChild(row, column, *line.cells[column].label, m_columns[column].hAlign, m_columns[column].vAlign);
+        ++column;
     }
     m_lines.emplace_back(std::move(line));
 
-    if (m_lines.size() == 1)
-        setSelectedLine(0);
-
-    updateColumnInfos();
+    // Select the first line when added
+    if (m_lines.size() == 1u)
+        selectLine(0u);
 }
 
-//------------------------//
-//----- Mouse events -----//
+//-------------------------//
+//----- Selected line -----//
 
-void List::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vector2f& mousePos, const sf::Vector2f&)
+void List::selectLine(uint line)
 {
-    // Do not take first line, they are the columns titles
-    uint line = mousePos.y / lineHeight() - 1;
+    assert(line < m_lines.size());
+    m_selectedLine = line;
 
-    if (line < m_lines.size())
-        setSelectedLine(line);
-}
-
-void List::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
-{
-    uint line = mousePos.y / lineHeight() - 1;
-
-    resetPartsShader();
-    if (line < m_lines.size())
-        for (auto& cell : m_lines[line])
-            setPartShader(&cell.text, ShaderID::NUI_HOVER);
-}
-
-void List::handleMouseLeft()
-{
-    // Resetting hovering
-    resetPartsShader();
-}
-
-//-------------------//
-//----- Changes -----//
-
-void List::changedSelectedLine()
-{
-    setFocusedLine(m_selectedLine);
-}
-
-//-----------------------------//
-//----- Focus interaction -----//
-
-void List::setFocusedLine(uint line)
-{
     float yLine = (line + 1u) * m_lineHeight;
     setSelectionRect({0.f, yLine, size().x, m_lineHeight});
 }
@@ -260,27 +160,33 @@ void List::setSelectionRect(const sf::FloatRect& focusRect)
     m_selectionHighlight.setSize({focusRect.width, focusRect.height});
 }
 
-//------------------//
-//----- Visual -----//
+//-----------------------------------//
+//----- Internal change updates -----//
 
-void List::updateColumnInfos()
+void List::refreshBordersPosition()
 {
-    uint x = 0.f;
-    uint columnHint = getColumnWidthHint();
+    m_hBorders.resize(3u);
+    m_vBorders.resize(m_columns.size() + 1u);
 
-    // Setting correct size
-    for (uint i = 0; i < m_columns.size(); ++i) {
-        uint columnMax = getColumnWidthMax(i);
-        m_columns[i].x = x;
+    clearParts();
+    addPart(&m_selectionHighlight);
 
-        // Give fill or clip correct width
-        if (columnMax <= columnHint)
-            m_columns[i].width = (m_columns[i].fill)? columnHint : columnMax;
-        else
-            m_columns[i].width = (m_columns[i].clip)? columnHint : columnMax;
-
-        x += m_columns[i].width;
+    // Vertical
+    for (uint c = 0u; c <= m_columns.size(); ++c) {
+        m_vBorders[c].setShade(0.1f);
+        m_vBorders[c].setLength(size().y - m_lineHeight);
+        m_vBorders[c].setPosition(m_table.colOffset(c), m_lineHeight);
+        addPart(&m_vBorders[c]);
     }
 
-    update();
+    // Horizontal
+    for (uint r = 0u; r < 3u; ++r) {
+        m_hBorders[r].setShade(0.1f);
+        m_hBorders[r].setLength(size().x);
+        m_hBorders[r].setPosition(0.f, m_table.rowOffset(r));
+        addPart(&m_hBorders[r]);
+    }
+
+    // Correction for last horizontal
+    m_hBorders.back().setPosition(0.f, size().y);
 }

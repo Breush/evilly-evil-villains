@@ -35,10 +35,11 @@ MenuSelectWorld::MenuSelectWorld(StateStack& stack)
     // List for existing worlds
     nuiRoot.attachChild(m_list);
     m_list.setCentered(true);
-    m_list.setSize(0.75f * nuiSize);
+    m_list.setSize({0.75f * nuiSize.x, 0.65f * nuiSize.y});
     m_list.setRelativePosition({0.5f, 0.5f});
-    m_list.setColumns({_("Villain"), _("World name"), _("Main dungeon"), _("Last played")});
-    m_list.setColumnFillClip(3, false, false);
+    m_list.setColumnsTitles({_("Villain"), _("World name"), _("Main dungeon"), _("Last played")});
+    m_list.setColumnAlign(3, nui::Align::OPPOSITE, nui::Align::CENTER);
+    m_list.setColumnAdapt(3, nui::Adapt::FIT);
 
     // Load list of worlds
     // TODO Have time format within gettext so that each country can choose its own representation

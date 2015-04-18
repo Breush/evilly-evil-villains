@@ -33,6 +33,8 @@ namespace nui
 
     class TableLayout final : public scene::Entity
     {
+        using baseClass = scene::Entity;
+
     public:
 
         //! Constructor.
@@ -49,10 +51,30 @@ namespace nui
         /*!
          *  If a dimension is set to 0u, then it is automatically calculated
          *  using the provided step. It corresponds to the fixed space between
-         *  two rows/columns.
+         *  two rows/columns, the adapt of these rows/columns will be set to FIXED.
          */
         void setDimensions(uint rows, uint cols,
                            float rowsStep = -1.f, float colsStep = -1.f);
+
+        //! Set how a row adapts to its content.
+        //! If FIXED, a param should be given.
+        void setRowAdapt(uint row, Adapt adapt, float param = -1.f);
+
+        //! Set how a column adapts to its content.
+        //! If FIXED, a param should be given.
+        void setColAdapt(uint col, Adapt adapt, float param = -1.f);
+
+        //! Set auto-padding to false and set the padding to the given value.
+        //! Pass a negative value to reset auto-padding.
+        void overridePadding(float hPadding, float vPadding);
+
+        //! Returns the starting y coordinate (with no padding) for the specified row.
+        //! If row is set to the total of rows or -1, then it returns the end of the table.
+        float rowOffset(uint row);
+
+        //! Returns the starting x coordinate (with no padding) for the specified column.
+        //! If col is set to the total of columns or -1, then it returns the end of the table.
+        float colOffset(uint col);
 
         //! @}
 
@@ -70,7 +92,6 @@ namespace nui
                       Align hAlign = Align::STANDARD, Align vAlign = Align::CENTER);
 
         //! Set the child alignment in position (row, col).
-        //! Requires that a child has previously been added in same position.
         void setChildAlign(uint row, uint col, Align hAlign, Align vAlign);
 
         //! Remove all children and detached them.
@@ -122,6 +143,18 @@ namespace nui
 
         //! Refresh the height of all rows.
         void refreshRowsSize();
+
+        //! @}
+
+        //--------------------------//
+        //! @name Public properties
+        //! @{
+
+        //! Whether the horizontal padding should be computed automatically.
+        PARAMGSU(bool, m_hPaddingAuto, hPaddingAuto, setHPaddingAuto, refreshDisplay)
+
+        //! Whether the vertical padding should be computed automatically.
+        PARAMGSU(bool, m_vPaddingAuto, vPaddingAuto, setVPaddingAuto, refreshDisplay)
 
         //! @}
 

@@ -3,83 +3,145 @@
 #include "scene/entity.hpp"
 #include "tools/int.hpp"
 #include "sfe/line.hpp"
+#include "nui/tablelayout.hpp"
+
+#include <SFML/Graphics/RectangleShape.hpp>
 
 #include <initializer_list>
-#include <SFML/Graphics/Text.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
+#include <vector>
+
+// Forward declarations
+
+namespace sfe
+{
+    class Label;
+}
 
 namespace nui
 {
+    //! A table which displays information as a list.
+
     class List final : public scene::Entity
     {
         using baseClass = scene::Entity;
 
     public:
+
+        //! Constructor.
         List();
-        virtual ~List() = default;
 
-        // Columns
-        void setColumns(const std::initializer_list<std::wstring>& columns);
-        void setColumnFillClip(uint index, bool fill, bool clip);
-        uint getColumnWidthMax(uint index);
-        uint getColumnWidthHint();
+        //! Default destructor.
+        ~List() = default;
 
-        // Lines
+        //----------------//
+        //! @name Columns
+        //! @{
+
+        //! Set all the titles for the columns.
+        //! This will define the number of columns in the list.
+        void setColumnsTitles(const std::initializer_list<std::wstring>& titles);
+
+        //! Set how a column manage its content size.
+        void setColumnAdapt(uint index, Adapt adapt);
+
+        //! Set how a column all the lines of a column are position in their cell.
+        void setColumnAlign(uint index, Align hAlign, Align vAlign);
+
+        //! @}
+
+        //-------------//
+        //! @name Lines
+        //! @{
+
+        //! Add a line to the end of the list.
         void addLine(const std::initializer_list<std::wstring>& values);
 
+        //! @}
+
+        //----------------------//
+        //! @name Selected line
+        //! @{
+
+        //! Set the selected line.
+        void selectLine(uint line);
+
+        //! The currently selected line.
+        inline uint selectedLine() const { return m_selectedLine; }
+
+        //! @}
+
     protected:
-        // Virtual
-        void update() override;
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        void update() final;
         void refreshDisplay() final;
 
-        // Events
-        void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
-        void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
-        void handleMouseLeft() override;
+        //! @}
 
-        // Updates
-        void updateColumnInfos();
+        //---------------//
+        //! @name Events
+        //! @{
 
-        // Columns info
-        struct ColumnInfo {
-            sf::Text text;
-            uint x;
-            uint width;
-            bool fill;
-            bool clip;
-        };
+        void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseLeft() final;
 
-        // Lines info
-        struct LineInfo {
-            sf::Text text;
-            uint textWidth;
-            uint textHeight;
-            sf::FloatRect clippingRect;
-        };
+        //! @}
 
-        // Changes
-        void changedSelectedLine();
+        //----------------------//
+        //! @name Selected line
+        //! @{
 
-        // Focus interactions
-        void setFocusedLine(uint line);
+        //! Set the rect to highlight the selection.
         void setSelectionRect(const sf::FloatRect& focusRect);
 
-        // Params
-        PARAMG(float, m_lineHeight, lineHeight)
-        PARAMGSU(uint, m_selectedLine, selectedLine, setSelectedLine, changedSelectedLine);
+        //! @}
+
+        //--------------------------------//
+        //! @name Internal change updates
+        //! @{
+
+        //! Refresh all borders to fit the current state of the table layout.
+        void refreshBordersPosition();
+
+        //! @}
+
+        //! The information of a cell.
+        struct CellInfo
+        {
+            std::unique_ptr<sfe::Label> label;  //!< The label of the cell.
+        };
+
+        //! The information of a line.
+        struct LineInfo
+        {
+            std::vector<CellInfo> cells;    //!< The cells that make a line.
+        };
+
+        //! The information of a column.
+        struct ColumnInfo
+        {
+            std::unique_ptr<sfe::Label> title;  //!< The title of this column.
+            Align hAlign = Align::STANDARD;     //!< The horizontal alignment of children in this column.
+            Align vAlign = Align::CENTER;       //!< The vertical alignment of children in this column.
+        };
 
     private:
-        // Columns
-        std::vector<ColumnInfo> m_columns;
 
-        // Lines
-        std::vector<std::vector<LineInfo>> m_lines;
-        uint m_linesCount = 0u;
+        nui::TableLayout m_table;           //!< The layout.
+        std::vector<ColumnInfo> m_columns;  //!< The columns.
+        std::vector<LineInfo> m_lines;      //!< The lines.
 
-        // Decorum
-        std::vector<sfe::HLine> m_hBorders;
-        std::vector<sfe::VLine> m_vBorders;
-        sf::RectangleShape m_selectionHighlight;
+        std::vector<sfe::HLine> m_hBorders;         //!< The horizontal borders.
+        std::vector<sfe::VLine> m_vBorders;         //!< The vertical borders.
+        sf::RectangleShape m_selectionHighlight;    //!< The current selection is highlighted.
+
+        float m_lineHeight = 0.f;   //! The height of a line.
+        uint m_selectedLine = -1u;  //! The selected line.
+
     };
 }
 
