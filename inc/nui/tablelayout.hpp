@@ -35,8 +35,8 @@ namespace nui
     {
     public:
 
-        //! Default constructor.
-        TableLayout() = default;
+        //! Constructor.
+        TableLayout();
 
         //! Default destructor.
         ~TableLayout() = default;
@@ -88,6 +88,7 @@ namespace nui
         //! @{
 
         void update() final;
+        void refreshDisplay() final;
 
         //! @}
 
@@ -157,6 +158,9 @@ namespace nui
         std::map<std::pair<uint, uint>, ChildInfo> m_children;  //!< The table of all children.
         std::vector<RowInfo> m_rows;    //!< The rows' data.
         std::vector<ColInfo> m_cols;    //!< The columns' data.
+
+        float m_hPadding;   //!< The horizontal padding.
+        float m_vPadding;   //!< The vertical padding.
     };
 }
 

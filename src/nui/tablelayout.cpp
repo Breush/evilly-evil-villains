@@ -2,8 +2,14 @@
 
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
+#include "config/nui.hpp"
 
 using namespace nui;
+
+TableLayout::TableLayout()
+{
+    refreshDisplay();
+}
 
 //-------------------//
 //----- Routine -----//
@@ -14,6 +20,16 @@ void TableLayout::update()
 
     refreshDimensions();
     refreshChildrenPosition();
+}
+
+void TableLayout::refreshDisplay()
+{
+    config::NUI cNUI;
+
+    m_hPadding = cNUI.hPadding;
+    m_vPadding = cNUI.vPadding;
+
+    update();
 }
 
 //---------------------//
@@ -35,7 +51,7 @@ float TableLayout::maxChildHeightInRow(uint row)
 
     for (uint c = 0u; c < m_cols.size(); ++c)
         if (m_children.count({row, c}) != 0u)
-            maxHeight = std::max(maxHeight, m_children.at({row, c}).entity.size().y);
+            maxHeight = std::max(maxHeight, m_children.at({row, c}).entity.size().y + 2.f * m_vPadding);
 
     return maxHeight;
 }
@@ -46,7 +62,7 @@ float TableLayout::maxChildWidthInCol(uint col)
 
     for (uint r = 0u; r < m_rows.size(); ++r)
         if (m_children.count({r, col}) != 0u)
-            maxWidth = std::max(maxWidth, m_children.at({r, col}).entity.size().x);
+            maxWidth = std::max(maxWidth, m_children.at({r, col}).entity.size().x + 2.f * m_hPadding);
 
     return maxWidth;
 }
@@ -57,16 +73,20 @@ void TableLayout::positionChild(uint row, uint col, float x, float y)
     auto& child = m_children.at({row, col});
 
     // x coordinates
-    if (child.hAlign == Align::CENTER)
+    if (child.hAlign == Align::STANDARD)
+        x += m_hPadding;
+    else if (child.hAlign == Align::CENTER)
         x += (m_cols[col].width - child.entity.size().x) / 2.f;
     else if (child.hAlign == Align::OPPOSITE)
-        x += m_cols[col].width - child.entity.size().x;
+        x += m_cols[col].width - child.entity.size().x - m_hPadding;
 
     // y coordinates
-    if (child.vAlign == Align::CENTER)
+    if (child.vAlign == Align::STANDARD)
+        y += m_vPadding;
+    else if (child.vAlign == Align::CENTER)
         y += (m_rows[row].height - child.entity.size().y) / 2.f;
     else if (child.vAlign == Align::OPPOSITE)
-        y += m_rows[row].height - child.entity.size().y;
+        y += m_rows[row].height - child.entity.size().y - m_vPadding;
 
     child.entity.setLocalPosition({x, y});
 }
