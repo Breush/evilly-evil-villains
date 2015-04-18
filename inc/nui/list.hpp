@@ -89,6 +89,23 @@ namespace nui
         void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
         void handleMouseLeft() final;
 
+        bool handleKeyboardEvent(const sf::Event& event) final;
+
+        //! @}
+
+        //---------------------//
+        //! @name Hovered line
+        //! @{
+
+        //! Set the line being hovered.
+        void hoverLine(uint line);
+
+        //! Remove the hover highlight.
+        void clearHoveredLine();
+
+        //! Set the rect to highlight the hover.
+        void setHoverRect(const sf::FloatRect& rect);
+
         //! @}
 
         //----------------------//
@@ -96,7 +113,7 @@ namespace nui
         //! @{
 
         //! Set the rect to highlight the selection.
-        void setSelectionRect(const sf::FloatRect& focusRect);
+        void setSelectionRect(const sf::FloatRect& rect);
 
         //! @}
 
@@ -138,6 +155,7 @@ namespace nui
         std::vector<sfe::HLine> m_hBorders;         //!< The horizontal borders.
         std::vector<sfe::VLine> m_vBorders;         //!< The vertical borders.
         sf::RectangleShape m_selectionHighlight;    //!< The current selection is highlighted.
+        sf::RectangleShape m_hoverHighlight;        //!< When the mouse is over.
 
         float m_lineHeight = 0.f;   //! The height of a line.
         uint m_selectedLine = -1u;  //! The selected line.

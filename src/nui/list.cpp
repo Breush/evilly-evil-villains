@@ -19,8 +19,9 @@ List::List()
     attachChild(m_table);
     m_table.overridePadding(-1.f, 0.f);
 
-    // Selection highlight
+    // Highlight
     m_selectionHighlight.setFillColor({255u, 255u, 255u, 32u});
+    m_hoverHighlight.setFillColor({255u, 255u, 255u, 16u});
 
     refreshDisplay();
 }
@@ -58,25 +59,49 @@ void List::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vector2f&
     // Do not take first line, they are the columns titles
     uint line = mousePos.y / m_lineHeight - 1u;
 
-    if (line < m_lines.size())
+    if (line < m_lines.size()) {
+        Application::context().sounds.play(SoundID::NUI_SELECT);
         selectLine(line);
+    }
 }
 
 void List::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
     uint line = mousePos.y / m_lineHeight - 1u;
-
-    for (uint l = 0u; l < m_lines.size(); ++l)
-    for (auto& cell : m_lines[l].cells)
-        if (l == line) cell.label->setShader(ShaderID::NUI_HOVER);
-        else cell.label->setShader(ShaderID::NONE);
+    hoverLine(line);
 }
 
 void List::handleMouseLeft()
 {
-    for (uint l = 0u; l < m_lines.size(); ++l)
-    for (auto& cell : m_lines[l].cells)
-        cell.label->setShader(ShaderID::NONE);
+    clearHoveredLine();
+}
+
+bool List::handleKeyboardEvent(const sf::Event& event)
+{
+    returnif (event.type != sf::Event::KeyPressed) false;
+
+    if (event.key.code == sf::Keyboard::Up) {
+        if (m_selectedLine == 0u) {
+            Application::context().sounds.play(SoundID::NUI_REFUSE);
+        }
+        else {
+            Application::context().sounds.play(SoundID::NUI_SELECT);
+            selectLine(m_selectedLine - 1u);
+        }
+        return true;
+    }
+    else if (event.key.code == sf::Keyboard::Down) {
+        if (m_selectedLine == m_lines.size() - 1u) {
+            Application::context().sounds.play(SoundID::NUI_REFUSE);
+        }
+        else {
+            Application::context().sounds.play(SoundID::NUI_SELECT);
+            selectLine(m_selectedLine + 1u);
+        }
+        return true;
+    }
+
+    return false;
 }
 
 //-------------------//
@@ -143,6 +168,39 @@ void List::addLine(const std::initializer_list<std::wstring>& values)
         selectLine(0u);
 }
 
+//------------------------//
+//----- Hovered line -----//
+
+void List::hoverLine(uint line)
+{
+    clearHoveredLine();
+
+    if (line < m_lines.size()) {
+        addPart(&m_hoverHighlight);
+
+        for (auto& cell : m_lines[line].cells)
+            cell.label->setShader(ShaderID::NUI_HOVER);
+
+        float yLine = (line + 1u) * m_lineHeight;
+        setHoverRect({0.f, yLine, size().x, m_lineHeight});
+    }
+}
+
+void List::clearHoveredLine()
+{
+    removePart(&m_hoverHighlight);
+
+    for (uint l = 0u; l < m_lines.size(); ++l)
+    for (auto& cell : m_lines[l].cells)
+        cell.label->setShader(ShaderID::NONE);
+}
+
+void List::setHoverRect(const sf::FloatRect& rect)
+{
+    m_hoverHighlight.setPosition(rect.left, rect.top);
+    m_hoverHighlight.setSize({rect.width, rect.height});
+}
+
 //-------------------------//
 //----- Selected line -----//
 
@@ -155,11 +213,11 @@ void List::selectLine(uint line)
     setSelectionRect({0.f, yLine, size().x, m_lineHeight});
 }
 
-void List::setSelectionRect(const sf::FloatRect& focusRect)
+void List::setSelectionRect(const sf::FloatRect& rect)
 {
-    setFocusRect(focusRect);
-    m_selectionHighlight.setPosition(focusRect.left, focusRect.top);
-    m_selectionHighlight.setSize({focusRect.width, focusRect.height});
+    setFocusRect(rect);
+    m_selectionHighlight.setPosition(rect.left, rect.top);
+    m_selectionHighlight.setSize({rect.width, rect.height});
 }
 
 //-----------------------------------//
