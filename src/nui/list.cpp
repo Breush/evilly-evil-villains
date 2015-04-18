@@ -66,15 +66,17 @@ void List::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
     uint line = mousePos.y / m_lineHeight - 1u;
 
-    resetPartsShader();
-    if (line < m_lines.size())
-        for (auto& cell : m_lines[line].cells)
-            setPartShader(cell.label.get(), ShaderID::NUI_HOVER);
+    for (uint l = 0u; l < m_lines.size(); ++l)
+    for (auto& cell : m_lines[l].cells)
+        if (l == line) cell.label->setShader(ShaderID::NUI_HOVER);
+        else cell.label->setShader(ShaderID::NONE);
 }
 
 void List::handleMouseLeft()
 {
-    resetPartsShader();
+    for (uint l = 0u; l < m_lines.size(); ++l)
+    for (auto& cell : m_lines[l].cells)
+        cell.label->setShader(ShaderID::NONE);
 }
 
 //-------------------//
@@ -181,7 +183,7 @@ void List::refreshBordersPosition()
 
     // Horizontal
     for (uint r = 0u; r < 3u; ++r) {
-        m_hBorders[r].setShade(0.1f);
+        m_hBorders[r].setShade(0.05f);
         m_hBorders[r].setLength(size().x);
         m_hBorders[r].setPosition(0.f, m_table.rowOffset(r));
         addPart(&m_hBorders[r]);
