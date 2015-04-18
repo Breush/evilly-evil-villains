@@ -18,6 +18,8 @@ namespace nui
 
     class Form final : public scene::Entity
     {
+        using baseClass = scene::Entity;
+
     public:
 
         //! Constructor.

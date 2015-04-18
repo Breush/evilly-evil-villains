@@ -32,6 +32,7 @@ void Lock::refreshDisplay()
     sf::Vector2f targetSize{cNUI.hintImageSide, cNUI.hintImageSide};
 
     setSize(targetSize);
+    baseClass::refreshDisplay();
 }
 
 //------------------------//

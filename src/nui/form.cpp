@@ -23,7 +23,10 @@ void Form::update()
 void Form::refreshDisplay()
 {
     config::NUI cNUI;
+
     m_table.setDimensions(0u, 2u, 2.2f * cNUI.fontVSpace);
+
+    baseClass::refreshDisplay();
 }
 
 //--------------------//

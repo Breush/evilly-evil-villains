@@ -39,6 +39,7 @@ void Gauge::refreshDisplay()
     m_maxHintSize = cNUI.hintSize / 8.f;
 
     updateSize();
+    baseClass::refreshDisplay();
 }
 
 //-------------------//
