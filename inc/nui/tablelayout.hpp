@@ -1,0 +1,162 @@
+#pragma once
+
+#include "scene/entity.hpp"
+#include "tools/int.hpp"
+
+#include <initializer_list>
+#include <map>
+
+// TODO Add clipping Area https://github.com/LaurentGomila/SFML/pull/846
+// To be managed in scene::Entity and auto-enable it here.
+
+namespace nui
+{
+    // TODO Move this to its own file (value shared with Stacker)
+
+    //! Define relative position.
+    enum class Align
+    {
+        STANDARD,   //!< Left or Top.
+        CENTER,     //!< Center.
+        OPPOSITE,   //!< RIght or Bottom.
+    };
+
+    //! Define how a column/row adapt to content.
+    enum class Adapt
+    {
+        FILL,   //!< Share the left space with other fill.
+        FIT,    //!< Fit the size to the max of children.
+        FIXED,  //!< The size is fixed.
+    };
+
+    //! A layout to display other entities in a table way.
+
+    class TableLayout final : public scene::Entity
+    {
+    public:
+
+        //! Default constructor.
+        TableLayout() = default;
+
+        //! Default destructor.
+        ~TableLayout() = default;
+
+        //------------------//
+        //! @name Structure
+        //! @{
+
+        //! Set the dimensions of the table.
+        /*!
+         *  If a dimension is set to 0u, then it is automatically calculated
+         *  using the provided step. It corresponds to the fixed space between
+         *  two rows/columns.
+         */
+        void setDimensions(uint rows, uint cols,
+                           float rowsStep = -1.f, float colsStep = -1.f);
+
+        //! @}
+
+        //-----------------//
+        //! @name Children
+        //! @{
+
+        //! Set the child in position (row, col).
+        /*!
+         *  The child will be attached.
+         *  If a previous child was set in same position,
+         *  it is replaced and detached.
+         */
+        void setChild(uint row, uint col, scene::Entity& child,
+                      Align hAlign = Align::STANDARD, Align vAlign = Align::CENTER);
+
+        //! Set the child alignment in position (row, col).
+        //! Requires that a child has previously been added in same position.
+        void setChildAlign(uint row, uint col, Align hAlign, Align vAlign);
+
+        //! Remove all children and detached them.
+        void removeChildren();
+
+        //! Remove the child in position (row, col).
+        void removeChild(uint row, uint col);
+
+        //! @}
+
+    protected:
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        void update() final;
+
+        //! @}
+
+        //------------------//
+        //! @name Structure
+        //! @{
+
+        //! Returns the max child height in the given row.
+        float maxChildHeightInRow(uint row);
+
+        //! Returns the max child width in the given column.
+        float maxChildWidthInCol(uint col);
+
+        //! Set the child position (if exists) given its current align state.
+        void positionChild(uint row, uint col, float x, float y);
+
+        //! @}
+
+        //--------------------------------//
+        //! @name Internal change updates
+        //! @{
+
+        //! Refresh the dimensions given the current size.
+        void refreshDimensions();
+
+        //! Refresh the positions of all children.
+        void refreshChildrenPosition();
+
+        //! Refresh the width of all columns.
+        void refreshColsSize();
+
+        //! Refresh the height of all rows.
+        void refreshRowsSize();
+
+        //! @}
+
+        //! The children information.
+        struct ChildInfo
+        {
+            scene::Entity& entity;
+            Align hAlign;
+            Align vAlign;
+        };
+
+        //! How a row acts.
+        struct RowInfo
+        {
+            Adapt adapt = Adapt::FILL;  //!< How the row computes it size.
+            float height;               //!< The size of the row.
+        };
+
+        //! How a column acts.
+        struct ColInfo
+        {
+            Adapt adapt = Adapt::FILL;  //!< How the column computes it size.
+            float width;                //!< The size of the column.
+        };
+
+    private:
+
+        uint m_colsDimension = 0u;  //!< The number of rows.
+        uint m_rowsDimension = 0u;  //!< The number of columns.
+
+        float m_colsStep = -1.f;    //!< The fixed step between two columns (if enabled).
+        float m_rowsStep = -1.f;    //!< The fixed step between two rows (if enabled).
+
+        std::map<std::pair<uint, uint>, ChildInfo> m_children;  //!< The table of all children.
+        std::vector<RowInfo> m_rows;    //!< The rows' data.
+        std::vector<ColInfo> m_cols;    //!< The columns' data.
+    };
+}
+

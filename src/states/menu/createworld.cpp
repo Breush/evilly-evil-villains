@@ -28,30 +28,20 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     m_title.setText(_("Create a new world"));
     m_title.setCentered(true);
     m_title.setRelativePosition({0.5f, 0.05f});
-    m_title.setPrestyle(sfe::Label::PrestyleID::MENU_TITLE);
+    m_title.setPrestyle(sfe::Label::Prestyle::MENU_TITLE);
+
+    // Form
+    nuiRoot.attachChild(m_form);
+    m_form.setSize({500.f, 500.f});
+    m_form.setCentered(true);
+    m_form.setLocalPosition(nuiSize / 2.f);
 
     // World name
-    nuiRoot.attachChild(m_worldNameStacker);
-    m_worldNameStacker.setAlign(nui::Stacker::Align::CENTER);
-    m_worldNameStacker.setLocalPosition({0.f, 135.f});
-    m_worldNameStacker.setSize({nuiSize.x, 50.f});
-
-    m_worldNameStacker.add(&m_worldNameLabel, nui::Stacker::Align::CENTER);
-    m_worldNameStacker.add(&m_worldNameEntry, nui::Stacker::Align::CENTER);
-    m_worldNameLabel.setText(_("World name"), FontID::NUI);
+    m_form.add(_("World name"), m_worldNameEntry);
     m_worldNameEntry.setLength(20u);
 
     // Villain
-    nuiRoot.attachChild(m_villainStacker);
-    m_villainStacker.setAlign(nui::Stacker::Align::CENTER);
-    m_villainStacker.setLocalPosition({0.f, 185.f});
-    m_villainStacker.setSize({nuiSize.x, 50.f});
-
-    m_villainStacker.add(&m_villainLabel, nui::Stacker::Align::CENTER);
-    m_villainStacker.add(&m_villainBox, nui::Stacker::Align::CENTER);
-    m_villainLabel.setText(_("Villain"), FontID::NUI);
-
-    // List all villains
+    m_form.add(_("Villain"), m_villainBox);
     context::villains.load();
     for (const auto& villain : context::villains.get())
         m_villainBox.add(villain.name, nullptr);

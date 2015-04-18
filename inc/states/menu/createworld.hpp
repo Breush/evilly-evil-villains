@@ -4,6 +4,7 @@
 #include "states/identifiers.hpp"
 #include "sfe/rectangleshape.hpp"
 #include "sfe/label.hpp"
+#include "nui/form.hpp"
 #include "nui/textentry.hpp"
 #include "nui/choicebox.hpp"
 #include "nui/hstacker.hpp"
@@ -33,16 +34,10 @@ namespace states
         // Background and title
         sfe::Label m_title;
         sfe::RectangleShape m_background;
-
-        // TODO Make a form NUI class
-        // World name
-        nui::HStacker m_worldNameStacker;
-        sfe::Label m_worldNameLabel;
+        
+        // NUI
+        nui::Form m_form;
         nui::TextEntry m_worldNameEntry;
-
-        // Villain
-        nui::HStacker m_villainStacker;
-        sfe::Label m_villainLabel;
         nui::ChoiceBox m_villainBox;
 
         // Buttons
