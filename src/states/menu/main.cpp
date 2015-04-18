@@ -39,7 +39,7 @@ MenuMain::MenuMain(StateStack& stack)
     // Copyright label
     nuiRoot.attachChild(m_copyrightLabel);
     m_copyrightLabel.setText(EEV_COPYRIGHT_SHORT_WS);
-    m_copyrightLabel.setPrestyle(sfe::Label::PrestyleID::MENU_SOBER_LIGHT);
+    m_copyrightLabel.setPrestyle(sfe::Label::Prestyle::MENU_SOBER_LIGHT);
     m_copyrightLabel.setLocalPosition({0.f, nuiSize.y - m_copyrightLabel.size().y});
 
     // Version label
@@ -48,7 +48,7 @@ MenuMain::MenuMain(StateStack& stack)
     versionString << EEV_VERSION_SWEET_NAME_WS << L" ";
     versionString << EEV_VERSION_MAJ << L"." << EEV_VERSION_MIN << L"-" << EEV_VERSION_REV_WS;
     m_versionLabel.setText(versionString.str());
-    m_versionLabel.setPrestyle(sfe::Label::PrestyleID::MENU_SOBER);
+    m_versionLabel.setPrestyle(sfe::Label::Prestyle::MENU_SOBER);
     m_versionLabel.setLocalPosition(nuiSize - m_versionLabel.size());
 
     // Functors

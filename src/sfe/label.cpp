@@ -53,13 +53,20 @@ void Label::setText(const std::wstring& text, FontID fontID)
     updateSize();
 }
 
-void Label::setPrestyle(PrestyleID prestyle)
+void Label::setPrestyle(Prestyle prestyle)
 {
     config::NUI cNUI;
 
     switch (prestyle)
     {
-        case PrestyleID::MENU_TITLE:
+        case Prestyle::NUI:
+            m_text.setFont(Application::context().fonts.get(FontID::NUI));
+            m_text.setColor(sf::Color::White);
+            m_text.setCharacterSize(cNUI.fontSize);
+            updateSize();
+            break;
+
+        case Prestyle::MENU_TITLE:
             m_text.setFont(Application::context().fonts.get(FontID::HORROR));
             m_text.setStyle(sf::Text::Style::Bold);
             m_text.setColor(sf::Color::White);
@@ -67,7 +74,7 @@ void Label::setPrestyle(PrestyleID prestyle)
             updateSize();
             break;
 
-        case PrestyleID::MENU_POPUP_TITLE:
+        case Prestyle::MENU_POPUP_TITLE:
             m_text.setFont(Application::context().fonts.get(FontID::HORROR));
             m_text.setStyle(sf::Text::Style::Bold);
             m_text.setColor(sf::Color::White);
@@ -75,14 +82,14 @@ void Label::setPrestyle(PrestyleID prestyle)
             updateSize();
             break;
 
-        case PrestyleID::MENU_SOBER:
+        case Prestyle::MENU_SOBER:
             m_text.setFont(Application::context().fonts.get(FontID::MONO));
             m_text.setColor(sf::Color::White);
             m_text.setCharacterSize(1.1f * cNUI.fontSize);
             updateSize();
             break;
 
-        case PrestyleID::MENU_SOBER_LIGHT:
+        case Prestyle::MENU_SOBER_LIGHT:
             m_text.setFont(Application::context().fonts.get(FontID::MONO));
             m_text.setColor({255u, 255u, 255u, 128u});
             m_text.setCharacterSize(1.f * cNUI.fontSize);

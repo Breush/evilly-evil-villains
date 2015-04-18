@@ -23,7 +23,7 @@ Quit::Quit(StateStack& stack)
     m_title.setText(_("Do you really want to quit?"));
     m_title.setCentered(true);
     m_title.setRelativePosition({0.5f, 0.35f});
-    m_title.setPrestyle(sfe::Label::PrestyleID::MENU_POPUP_TITLE);
+    m_title.setPrestyle(sfe::Label::Prestyle::MENU_POPUP_TITLE);
 
     // Buttons
     nuiRoot.attachChild(m_noButton);

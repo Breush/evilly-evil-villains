@@ -30,7 +30,7 @@ MenuSelectWorld::MenuSelectWorld(StateStack& stack)
     m_title.setText(_("Select a world"));
     m_title.setCentered(true);
     m_title.setRelativePosition({0.5f, 0.05f});
-    m_title.setPrestyle(sfe::Label::PrestyleID::MENU_TITLE);
+    m_title.setPrestyle(sfe::Label::Prestyle::MENU_TITLE);
 
     // List for existing worlds
     nuiRoot.attachChild(m_list);
