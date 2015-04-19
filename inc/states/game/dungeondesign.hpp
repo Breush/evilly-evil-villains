@@ -9,6 +9,7 @@
 #include "dungeon/summary.hpp"
 #include "dungeon/sidebar.hpp"
 #include "dungeon/lock.hpp"
+#include "dungeon/log.hpp"
 #include "dungeon/hero.hpp"
 #include "sfe/sprite.hpp"
 
@@ -36,6 +37,7 @@ namespace states
         dungeon::Sidebar m_dungeonSidebar;
         dungeon::Summary m_dungeonSummary;
         dungeon::Lock m_dungeonLock;
+        dungeon::Log m_dungeonLog;
         dungeon::Hero m_dungeonHero;
 
         // NUI

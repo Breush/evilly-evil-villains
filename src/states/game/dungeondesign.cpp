@@ -44,6 +44,12 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     m_dungeonLock.setOrigin(m_dungeonLock.size()); // TODO Make a relative origin (Entity::BOTTOM_RIGHT)
     m_dungeonLock.useData(m_dungeonData);
 
+    // Dungeon log
+    nuiRoot.attachChild(m_dungeonLog);
+    m_dungeonLog.setSize({nuiSize.x / 4.f, nuiSize.y / 2.f});
+    m_dungeonLog.setLocalPosition({nuiSize.x - m_dungeonLog.size().x, 0.f});
+    m_dungeonLog.setEmitter(&m_dungeonData);
+
     // Dungeon panel
     nuiRoot.attachChild(m_dungeonPanel);
     m_dungeonPanel.setCentered(true);
@@ -109,7 +115,6 @@ bool GameDungeonDesign::handleEvent(const sf::Event& event)
             stackPush(StateID::GAME_PAUSE);
         }
     }
-
 
     return State::handleEvent(event);
 }

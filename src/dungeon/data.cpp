@@ -207,7 +207,7 @@ void Data::destroyRoom(const sf::Vector2u& roomCoord)
     room(roomCoord).state = RoomState::VOID;
 
     Event event;
-    event.type = EventType::ROOM_CONSTRUCTED;
+    event.type = EventType::ROOM_DESTROYED;
     event.room = {roomCoord.x, roomCoord.y};
     EventEmitter::emit(event);
 
