@@ -109,10 +109,7 @@ void Hero::changedRunning()
     setVisible(m_running);
 
     if (m_running) {
-        // FIXME It's a bit strange to control the graph from here.
-        m_graph->reconstructFromData();
-
-        // Get the door from the graph.
+        // Get the door from the graph (requires that it is correctly constructed).
         m_visitedNodes.clear();
         m_currentNode = &m_graph->startingNode();
         m_visitedNodes[m_currentNode->room] += 1u;

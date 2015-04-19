@@ -1,5 +1,6 @@
 #include "dungeon/data.hpp"
 
+#include "dungeon/graph.hpp"
 #include "tools/debug.hpp"
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
@@ -266,12 +267,38 @@ void Data::subDosh(uint dosh)
 
 void Data::setMode(Mode mode)
 {
-    // TODO Check here if dungeon is OK.
-    m_mode = mode;
-
+    returnif (m_mode == mode);
+    massert(m_graph != nullptr, "Graph not set before switching mode with dungeon::Data.");
     Event event;
-    event.type = EventType::MODE_CHANGED;
-    event.mode = mode;
+
+    // Switch too design mode, no problem.
+    if (mode == Mode::DESIGN) {
+        m_mode = mode;
+        event.type = EventType::MODE_CHANGED;
+        event.mode = mode;
+    }
+
+    // For invasion, check dungeon validity.
+    else if (mode == Mode::INVASION) {
+        switch (m_graph->reconstructFromData()) {
+        case Graph::ConstructError::NONE:
+            m_mode = mode;
+            event.type = EventType::MODE_CHANGED;
+            event.mode = mode;
+            break;
+
+        case Graph::ConstructError::NO_DOOR:
+            event.type = EventType::ERROR;
+            event.message = L"No door in the dungeon. How are heroes supposed to enter?";
+            break;
+
+        case Graph::ConstructError::TOO_MANY_DOORS:
+            event.type = EventType::ERROR;
+            event.message = L"Too many doors. Only one door in the dungeon is supported.";
+            break;
+        };
+    }
+
     EventEmitter::emit(event);
 }
 

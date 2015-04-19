@@ -10,6 +10,10 @@
 
 namespace dungeon
 {
+    // Forward declarations
+
+    class Graph;
+
     //! All the possible dungeon events.
 
     enum class EventType
@@ -19,6 +23,7 @@ namespace dungeon
         DOSH_CHANGED,       //!< Dosh value changed, delta is set.
         FAME_CHANGED,       //!< Fame value changed, delta is set.
         MODE_CHANGED,       //!< Mode (design/invasion) changed.
+        ERROR,              //!< Whenever something cannot be done.
     };
 
     //! The possible modes.
@@ -46,6 +51,8 @@ namespace dungeon
                 uint x;
                 uint y;
             } room;     //!< The coordinates of a room whenever it is modified.
+
+            const wchar_t* message; //!< An additional information.
         };
     };
 
@@ -56,6 +63,8 @@ namespace dungeon
 
     class Data final : public EventEmitter
     {
+        friend class Graph;
+
     public:
 
         //! Defines the possibly accessible relative directions from a room.
@@ -235,6 +244,15 @@ namespace dungeon
 
         //! @}
 
+        //----------------------//
+        //! @name Graph linking
+        //! @{
+
+        //! Set the graph to be linked with these data.
+        void linkGraph(Graph* graph) { m_graph = graph; }
+
+        //! @}
+
         //--------------------------------//
         //! @name Internal change updates
         //! @{
@@ -259,6 +277,8 @@ namespace dungeon
 
         //! A dungeon consists in a vector of floors.
         std::vector<Floor> m_floors;
+
+        Graph* m_graph = nullptr;   //!< The graph linked to these data.
 
         Mode m_mode = Mode::DESIGN; //!< The current mode.
 

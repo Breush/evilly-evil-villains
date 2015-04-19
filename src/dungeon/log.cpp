@@ -55,6 +55,8 @@ void Log::receive(const Event& event)
         str << L"CONSTRUCTED Room " << event.room.x << L"/" << event.room.y;
     else if (event.type == EventType::ROOM_DESTROYED)
         str << L"DESTROYED Room " << event.room.x << L"/" << event.room.y;
+    else if (event.type == EventType::ERROR)
+        str << L"[!] " << event.message;
     else
         eventConsidered = false;
 
@@ -65,7 +67,9 @@ void Log::receive(const Event& event)
     message.text.setString(str.str());
     message.text.setFont(Application::context().fonts.get(FontID::MONO));
     message.text.setCharacterSize(16.f); // TODO From config
-    message.text.setColor(sf::Color::White);
+
+    if (event.type == EventType::ERROR) message.text.setColor(sf::Color::Red);
+    else message.text.setColor(sf::Color::White);
 
     // Add message
     m_messages.emplace_back(std::move(message));

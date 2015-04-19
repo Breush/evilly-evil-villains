@@ -40,8 +40,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 
     // Dungeon lock
     nuiRoot.attachChild(m_dungeonLock);
-    m_dungeonLock.setLocalPosition(nuiSize);
-    m_dungeonLock.setOrigin(m_dungeonLock.size()); // TODO Make a relative origin (Entity::BOTTOM_RIGHT)
+    m_dungeonLock.setLocalPosition(nuiSize- m_dungeonLock.size()); // TODO Make a relative origin (Entity::BOTTOM_RIGHT)
     m_dungeonLock.useData(m_dungeonData);
 
     // Dungeon log

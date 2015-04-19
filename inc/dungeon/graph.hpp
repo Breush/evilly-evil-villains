@@ -17,12 +17,19 @@ namespace dungeon
     {
     public:
 
+        //! The type of error when constructing from data.
+        enum ConstructError
+        {
+            NONE,           //! No error so far.
+            NO_DOOR,        //! No door was found.
+            TOO_MANY_DOORS, //! Too many doors were found.
+        };
+
         //! The abstraction of a room in a dungeon.
         /*!
          *  It only sees which rooms are accessible from a certain point.
          *  It also contains different weights for different elements of the room.
          */
-
         struct Node
         {
             std::vector<Node*> neighbours;      //!< The neighbourhood of the node.
@@ -47,8 +54,8 @@ namespace dungeon
         void useData(Data& data);
 
         //! Updates the graph to the current data.
-        //! Returns true if dungeon is well formatted.
-        bool reconstructFromData();
+        //! Returns the type of error if not well formatted.
+        ConstructError reconstructFromData();
 
         //! @}
 
