@@ -293,13 +293,11 @@ void Inter::constructDoor(const sf::Vector2f& relPos)
 {
     auto room = roomFromCoords(relPos);
 
+    // FIXME Forward to dungeon data
     if (m_data->room(room).state == Data::RoomState::CONSTRUCTED) {
         if (!m_data->room(room).facilities.door)
             m_data->room(room).facilities.door = true;
     }
-
-    // FIXME Limit to only one door in the dungeon
-    // FIXME Forward to dungeon data
 
     refreshRoomTileTexture(room);
 }

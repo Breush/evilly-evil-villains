@@ -4,6 +4,7 @@
 #include "dungeon/event.hpp"
 
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 
 #include <deque>
 
@@ -24,6 +25,15 @@ namespace dungeon
 
         //! Default destructor.
         ~Log() = default;
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        //! Add a message to the log.
+        void addMessage(std::wstring text, sf::Color color = sf::Color::White);
+
+        //! @}
 
     protected:
 
@@ -51,6 +61,9 @@ namespace dungeon
         //! Recomputes the position of all messages.
         void refreshMessages();
 
+        //! Refresh the size of the background to fit the height of the messages.
+        void refreshBackgroundSize();
+
         //! @}
 
         //! A displayed message.
@@ -64,6 +77,9 @@ namespace dungeon
 
         std::deque<Message> m_messages; //!< The currently alive messages.
 
-        float m_aliveTime = 5.f;    //!< How long to keep a message alive, in seconds.
+        float m_aliveTime = 5.f;        //!< How long to keep a message alive, in seconds.
+        float m_currentHeight = 0.f;    //!< The current height of the displayed messages.
+
+        sf::RectangleShape m_background;    //!< The soft background, fitting the current size.
     };
 }

@@ -10,6 +10,13 @@ using namespace dungeon;
 
 Log::Log()
 {
+    setDetectable(false);
+
+    // Background
+    m_background.setFillColor({255u, 255u, 255u, 192u});
+    addPart(&m_background);
+
+    update();
 }
 
 //-------------------//
@@ -17,6 +24,7 @@ Log::Log()
 
 void Log::update()
 {
+    refreshBackgroundSize();
 }
 
 void Log::updateRoutine(const sf::Time& dt)
@@ -62,16 +70,26 @@ void Log::receive(const Event& event)
 
     returnif (!eventConsidered);
 
-    // Create message
-    Message message;
-    message.text.setString(str.str());
-    message.text.setFont(Application::context().fonts.get(FontID::MONO));
-    message.text.setCharacterSize(16.f); // TODO From config
-
-    if (event.type == EventType::ERROR) message.text.setColor(sf::Color::Red);
-    else message.text.setColor(sf::Color::White);
-
     // Add message
+    sf::Color color = (event.type == EventType::ERROR)? sf::Color::Red : sf::Color::Black;
+    addMessage(std::move(str.str()), color);
+}
+
+//--------------------//
+//----- Messages -----//
+
+void Log::addMessage(std::wstring text, sf::Color color)
+{
+    Message message;
+
+    // TODO Add newline to keep within the size.
+    message.text.setString(std::move(text));
+    message.text.setFont(Application::context().fonts.get(FontID::MONO));
+    message.text.setCharacterSize(16.f); // TODO Get from config
+    message.text.setColor(std::move(color));
+
+    m_currentHeight += boundsSize(message.text).y;
+
     m_messages.emplace_back(std::move(message));
     addPart(&m_messages.back().text);
     refreshMessages();
@@ -82,9 +100,16 @@ void Log::receive(const Event& event)
 
 void Log::refreshMessages()
 {
-    float y = 0.f;
+    m_currentHeight = 0.f;
     for (auto& message : m_messages) {
-        message.text.setPosition({0.f, y});
-        y += boundsSize(message.text).y;
+        message.text.setPosition({0.f, m_currentHeight});
+        m_currentHeight += boundsSize(message.text).y;
     }
+
+    refreshBackgroundSize();
+}
+
+void Log::refreshBackgroundSize()
+{
+    m_background.setSize({size().x, m_currentHeight});
 }
