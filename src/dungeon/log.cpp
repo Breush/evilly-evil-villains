@@ -24,6 +24,7 @@ Log::Log()
 
 void Log::update()
 {
+    refreshTextsWarp();
     refreshBackgroundSize();
 }
 
@@ -82,11 +83,11 @@ void Log::addMessage(std::wstring text, sf::Color color)
 {
     Message message;
 
-    // TODO Add newline to keep within the size.
-    message.text.setString(std::move(text));
+    message.text.setWarpString(std::move(text));
     message.text.setFont(Application::context().fonts.get(FontID::MONO));
     message.text.setCharacterSize(16.f); // TODO Get from config
     message.text.setColor(std::move(color));
+    message.text.fitWidth(size().x);
 
     m_currentHeight += boundsSize(message.text).y;
 
@@ -107,6 +108,12 @@ void Log::refreshMessages()
     }
 
     refreshBackgroundSize();
+}
+
+void Log::refreshTextsWarp()
+{
+    for (auto& message : m_messages)
+        message.text.fitWidth(size().x);
 }
 
 void Log::refreshBackgroundSize()
