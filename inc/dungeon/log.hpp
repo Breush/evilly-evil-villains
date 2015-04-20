@@ -2,7 +2,7 @@
 
 #include "scene/entity.hpp"
 #include "dungeon/event.hpp"
-#include "sfe/warptext.hpp"
+#include "sfe/wraptext.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
@@ -62,7 +62,7 @@ namespace dungeon
         void refreshMessages();
 
         //! Refresh the fit width for all messages.
-        void refreshTextsWarp();
+        void refreshTextsWrap();
 
         //! Refresh the size of the background to fit the height of the messages.
         void refreshBackgroundSize();
@@ -72,7 +72,7 @@ namespace dungeon
         //! A displayed message.
         struct Message
         {
-            sfe::WarpText text;     //!< The visible part of the message, with return to line if needed.
+            sfe::WrapText text;     //!< The visible part of the message, with return to line if needed.
             float aliveSince = 0.f; //!< The time elapsed since the message was created, in seconds.
         };
 

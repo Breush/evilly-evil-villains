@@ -24,7 +24,7 @@ Log::Log()
 
 void Log::update()
 {
-    refreshTextsWarp();
+    refreshTextsWrap();
     refreshBackgroundSize();
 }
 
@@ -83,7 +83,7 @@ void Log::addMessage(std::wstring text, sf::Color color)
 {
     Message message;
 
-    message.text.setWarpString(std::move(text));
+    message.text.setWrapString(std::move(text));
     message.text.setFont(Application::context().fonts.get(FontID::MONO));
     message.text.setCharacterSize(16.f); // TODO Get from config
     message.text.setColor(std::move(color));
@@ -110,7 +110,7 @@ void Log::refreshMessages()
     refreshBackgroundSize();
 }
 
-void Log::refreshTextsWarp()
+void Log::refreshTextsWrap()
 {
     for (auto& message : m_messages)
         message.text.fitWidth(size().x);

@@ -1,4 +1,4 @@
-#include "sfe/warptext.hpp"
+#include "sfe/wraptext.hpp"
 
 #include "tools/tools.hpp"
 
@@ -9,25 +9,25 @@ using namespace sfe;
 //-------------------//
 //----- Fitting -----//
 
-void WarpText::setWarpString(std::wstring string)
+void WrapText::setWrapString(std::wstring string)
 {
     // Copy the original string
-    m_warpString = string;
-    rewarp();
+    m_wrapString = string;
+    rewrap();
 }
 
-void WarpText::fitWidth(float inFitWidth)
+void WrapText::fitWidth(float inFitWidth)
 {
     m_fitWidth = inFitWidth;
-    rewarp();
+    rewrap();
 }
 
-void WarpText::rewarp()
+void WrapText::rewrap()
 {
     returnif (m_fitWidth < 0.f);
 
-    // Word warp - greedy algorithm
-    std::wistringstream str(m_warpString);
+    // Word wrap - greedy algorithm
+    std::wistringstream str(m_wrapString);
     std::wstring prevString, string;
     std::wstring word;
 
