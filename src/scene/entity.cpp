@@ -303,30 +303,35 @@ void Entity::clearParts()
 void Entity::addPart(sf::Drawable* drawable)
 {
     // Do not re-add part
-    for (auto& part : m_parts)
-        returnif (part.drawable == drawable);
+    for (auto& part : m_parts) {
+        if (part.drawable == drawable) {
+            std::cerr << "/!\\ Trying to add a part that was already added." << std::endl;
+            return;
+        }
+    }
 
     m_parts.push_back({drawable, nullptr, false});
 }
 
 void Entity::removePart(sf::Drawable* drawable)
 {
-    for (uint i = 0; i < m_parts.size(); ++i) {
-        if (m_parts[i].drawable == drawable) {
-            m_parts.erase(m_parts.begin() + i);
+    for (auto it = m_parts.begin(); it != m_parts.end(); ) {
+        if (it->drawable == drawable) {
+            it = m_parts.erase(it);
             return;
         }
+        else ++it;
     }
+
+    std::cerr << "/!\\ Trying to remove a part that was not added." << std::endl;
 }
 
 void Entity::setPartShader(sf::Drawable* drawable, ShaderID shaderID)
 {
     returnif (!sf::Shader::isAvailable());
 
-    for (auto& part : m_parts)
-    {
-        if (part.drawable == drawable)
-        {
+    for (auto& part : m_parts) {
+        if (part.drawable == drawable) {
             part.shader = &Application::context().shaders.get(shaderID);
             return;
         }
@@ -335,15 +340,20 @@ void Entity::setPartShader(sf::Drawable* drawable, ShaderID shaderID)
 
 void Entity::setPartClippingRect(sf::Drawable* drawable, const sf::FloatRect& clippingRect)
 {
-    for (auto& part : m_parts)
-    {
-        if (part.drawable == drawable)
-        {
+    for (auto& part : m_parts) {
+        if (part.drawable == drawable) {
             part.clipping = true;
             part.clippingRect = clippingRect;
             return;
         }
     }
+}
+
+void Entity::resetPartShader(sf::Drawable* drawable)
+{
+    for (auto& part : m_parts)
+        if (part.drawable == drawable)
+            part.shader = nullptr;
 }
 
 void Entity::resetPartsShader()

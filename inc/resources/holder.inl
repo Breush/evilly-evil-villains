@@ -50,7 +50,8 @@ namespace resources
 
         if (found == m_resourcesMap.end()) {
             if (id != Identifier::DEFAULT) {
-                std::cerr << "/!\\ Resource not found. Using DEFAULT instead." << std::endl;
+                std::cerr << "/!\\ Resource id '" << static_cast<uint16>(id) << "' not found.";
+                std::cerr << " Using DEFAULT instead." << std::endl;
                 return get(Identifier::DEFAULT);
             } else {
                 throw std::runtime_error("DEFAULT resource not found. Ouch.");

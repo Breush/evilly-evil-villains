@@ -15,6 +15,9 @@ using namespace dungeon;
 Inter::Inter(nui::ContextMenu& contextMenu)
     : m_contextMenu(contextMenu)
 {
+    // Grid
+    addPart(&m_grid);
+
     update();
 }
 
@@ -23,23 +26,59 @@ Inter::Inter(nui::ContextMenu& contextMenu)
 
 void Inter::update()
 {
-    returnif (m_data == nullptr);
-
+    returnif (size() == m_grid.size());
     m_grid.setSize(size());
-    refreshRoomTiles();
 
-    clearParts();
+    returnif (m_data == nullptr);
+    refreshTiles();
+}
 
-    // Grid
-    addPart(&m_grid);
+//------------------//
+//----- Events -----//
 
-    // Room tiles
-    for (auto& roomTile : m_roomTiles)
-    for (auto& tile : roomTile)
-        addPart(&tile);
+void Inter::handleGlobalEvent(const sf::Event& event)
+{
+    // Remove selection if something is clicked anywhere
+    if (event.type == sf::Event::MouseButtonPressed)
+        deselectTile();
 
-    if (m_hasRoomSelected)
-        setPartShader(&m_roomTiles[m_selectedRoom.x][m_selectedRoom.y], ShaderID::NUI_HOVER);
+#if DEBUG_GLOBAL > 0
+    // Keyboard event
+    if (event.type == sf::Event::KeyPressed) {
+        // Control rows
+        if (event.key.code == sf::Keyboard::Add)
+            adaptFloorsCount(1);
+        else if (event.key.code == sf::Keyboard::Subtract)
+            adaptFloorsCount(-1);
+
+        // Control columns
+        else if (event.key.code == sf::Keyboard::Multiply)
+            adaptRoomsByFloor(1);
+        else if (event.key.code == sf::Keyboard::Divide)
+            adaptRoomsByFloor(-1);
+    }
+#endif
+}
+
+void Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
+{
+    // Selected the tile below
+    selectTile(mousePos);
+
+    // Pop the context menu up
+    if (button == sf::Mouse::Right)
+        showTileContextMenu(m_selectedTile->coords, nuiPos);
+}
+
+void Inter::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
+{
+    auto coords = tileFromLocalPosition(mousePos);
+    setHoveredTile(coords);
+}
+
+void Inter::handleMouseLeft()
+{
+    resetHoveredTile();
 }
 
 //--------------------------//
@@ -47,9 +86,10 @@ void Inter::update()
 
 void Inter::receive(const Event& event)
 {
+    // TODO Propagate category
     if (event.type == EventType::ROOM_DESTROYED
         || event.type == EventType::ROOM_CONSTRUCTED)
-        refreshRoomTileTexture({event.room.x, event.room.y});
+        refreshTileLayers({event.room.x, event.room.y});
 }
 
 //------------------------//
@@ -65,7 +105,6 @@ void Inter::useData(Data& data)
 void Inter::refreshFromData()
 {
     returnif (m_data == nullptr);
-    m_roomTiles.clear();
 
     const auto& roomsByFloor = m_data->roomsByFloor();
     const auto& floorsCount = m_data->floorsCount();
@@ -74,157 +113,153 @@ void Inter::refreshFromData()
     m_grid.setRowsColumns(floorsCount, roomsByFloor);
 
     // Room tiles
-    m_roomTiles.resize(floorsCount);
-    for (auto& roomTile : m_roomTiles)
-        roomTile.resize(roomsByFloor);
+    clearTiles();
 
-    m_hasRoomSelected = false;
-    update();
+    for (uint floor = 0u; floor < floorsCount; ++floor)
+    for (uint room = 0u; room < roomsByFloor; ++room) {
+        Tile tile;
+        tile.coords = {floor, room};
+        tile.room = &m_data->room({floor, room});
+        m_tiles[{floor, room}] = std::move(tile);
+    }
+
+    refreshTiles();
 }
 
 //---------------------------//
-//----- Room management -----//
+//----- Tile management -----//
 
-void Inter::refreshRoomTile(const sf::Vector2u& roomCoords)
+sf::Vector2f Inter::tileLocalPosition(const sf::Vector2u& coords) const
 {
-    const auto& cellSize = m_grid.cellSize();
-    auto& tile = m_roomTiles[roomCoords.x][roomCoords.y];
-
-    tile.setSize({1.3f * cellSize.x, 1.1f * cellSize.y}); // FIXME Use separate images to get this effect
-    tile.setPosition(roomLocalPosition(roomCoords));
-    refreshRoomTileTexture(roomCoords);
+    return m_grid.cellPosition(m_data->floorsCount() - coords.x - 1u, coords.y);
 }
 
-void Inter::refreshRoomTiles()
+sf::Vector2u Inter::tileFromLocalPosition(const sf::Vector2f& pos)
 {
-    const auto& roomsByFloor = m_data->roomsByFloor();
-    const auto& floorsCount = m_data->floorsCount();
-
-    for (uint floor = 0; floor < floorsCount; ++floor)
-    for (uint room = 0; room < roomsByFloor; ++room)
-        refreshRoomTile({floor, room});
+    auto coords = m_grid.rowColumnFromCoords(pos);
+    coords.x = m_data->floorsCount() - coords.x - 1u;
+    return coords;
 }
 
-void Inter::refreshRoomTileTexture(const sf::Vector2u& roomCoords)
+void Inter::addLayer(const sf::Vector2u& coords, TextureID textureID)
 {
-    const auto& roomInfo = m_data->room(roomCoords);
-    const auto state = roomInfo.state;
+    auto& tile = m_tiles.at(coords);
 
-    auto ladderRoomTexture =    &Application::context().textures.get(TextureID::DUNGEON_INTER_LADDER_ROOM);
-    auto doorRoomTexture =      &Application::context().textures.get(TextureID::DUNGEON_INTER_DOOR_ROOM);
-    auto roomTexture =          &Application::context().textures.get(TextureID::DUNGEON_INTER_ROOM);
-    auto& tile = m_roomTiles[roomCoords.x][roomCoords.y];
+    // We don't know how the std::vector will act
+    // when increasing its capacity, so it is better to remove
+    // all pending references and pointers before
+    for (auto& layer : tile.layers)
+        removePart(&layer);
 
-    // Reset
-    tile.setTexture(nullptr);
-    tile.setFillColor(sf::Color::White);
+    tile.layers.emplace_back();
 
-    // Selecting
-    switch (state)
-    {
-        case Data::RoomState::VOID:
-            tile.setFillColor(sf::Color::Transparent);
-            break;
+    auto& layer = tile.layers.back();
+    layer.setTexture(&Application::context().textures.get(textureID));
+    layer.setPosition(tileLocalPosition(coords));
+    layer.setSize(tileSize());
 
-        case Data::RoomState::CONSTRUCTED:
-            if (roomInfo.facilities.ladder)     tile.setTexture(ladderRoomTexture);
-            else if (roomInfo.facilities.door)  tile.setTexture(doorRoomTexture);
-            else                                tile.setTexture(roomTexture);
-            break;
-
-        default:
-            tile.setFillColor(sf::Color::Red);
-            break;
-    }
+    // And afterward, re-add all references/pointers
+    for (auto& layer : tile.layers)
+        addPart(&layer);
 }
 
-sf::Vector2f Inter::roomSize() const
+void Inter::clearLayers(const sf::Vector2u& coords)
 {
-    return m_grid.cellSize();
+    auto& tile = m_tiles.at(coords);
+
+    for (auto& layer : tile.layers)
+        removePart(&layer);
+
+    tile.layers.clear();
 }
 
-sf::Vector2f Inter::roomLocalPosition(const sf::Vector2u& room) const
+void Inter::clearTiles()
 {
-    return m_grid.cellPosition(m_data->floorsCount() - 1u - room.x, room.y);
+    for (auto& tile : m_tiles)
+        clearLayers(tile.second.coords);
+
+    m_tiles.clear();
+    m_selectedTile = nullptr;
+    m_hoveredTile = nullptr;
+}
+
+//-------------------------//
+//----- Selected tile -----//
+
+void Inter::selectTile(const sf::Vector2f& pos)
+{
+    selectTile(tileFromLocalPosition(pos));
+}
+
+void Inter::selectTile(const sf::Vector2u& coords)
+{
+    deselectTile();
+    m_selectedTile = &m_tiles.at(coords);
+
+    // TODO Have a NUI_SELECT shader
+    for (auto& layer : m_selectedTile->layers)
+        setPartShader(&layer, ShaderID::NUI_HOVER);
+}
+
+void Inter::deselectTile()
+{
+    returnif(m_selectedTile == nullptr);
+
+    for (auto& layer : m_selectedTile->layers)
+        resetPartShader(&layer);
+
+    m_selectedTile = nullptr;
 }
 
 //------------------------//
-//----- Mouse events -----//
+//----- Hovered tile -----//
 
-void Inter::handleGlobalEvent(const sf::Event& event)
+void Inter::setHoveredTile(const sf::Vector2u& coords)
 {
-    // Remove selection every time
-    if (event.type == sf::Event::MouseButtonPressed)
-        setHasRoomSelected(false);
+    resetHoveredTile();
+    m_hoveredTile = &m_tiles.at(coords);
 
-#if DEBUG_GLOBAL > 0
-    // Keyboard event
-    if (event.type == sf::Event::KeyPressed) {
-        // Add rows
-        if (event.key.code == sf::Keyboard::Add)
-            adaptFloorsCount(1);
-        else if (event.key.code == sf::Keyboard::Subtract)
-            adaptFloorsCount(-1);
+    returnif(m_hoveredTile == m_selectedTile);
 
-        // Add columns
-        else if (event.key.code == sf::Keyboard::Multiply)
-            adaptRoomsByFloor(1);
-        else if (event.key.code == sf::Keyboard::Divide)
-            adaptRoomsByFloor(-1);
-    }
-#endif
+    for (auto& layer : m_hoveredTile->layers)
+        setPartShader(&layer, ShaderID::NUI_HOVER);
 }
 
-void Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
+void Inter::resetHoveredTile()
 {
-    // Selected new room
-    selectRoomFromCoords(mousePos);
+    returnif(m_hoveredTile == nullptr);
+    returnif(m_hoveredTile == m_selectedTile);
 
-    // Pop the context menu up
-    if (button == sf::Mouse::Right)
-        showRoomContextMenu(m_selectedRoom, nuiPos);
-}
+    for (auto& layer : m_hoveredTile->layers)
+        resetPartShader(&layer);
 
-void Inter::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
-{
-    refreshRoomSelectedShader();
-
-    auto room = roomFromCoords(mousePos);
-    setPartShader(&m_roomTiles[room.x][room.y], ShaderID::NUI_HOVER);
-}
-
-void Inter::handleMouseLeft()
-{
-    refreshRoomSelectedShader();
+    m_hoveredTile = nullptr;
 }
 
 //------------------------//
 //----- Context menu -----//
 
-void Inter::showRoomContextMenu(const sf::Vector2u& room, const sf::Vector2f& nuiPos)
+void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& nuiPos)
 {
     m_contextMenu.clearChoices();
 
     // Context title
     std::wstringstream roomName;
-    roomName << _("Room") << " " << room.x << "/" << room.y;
+    roomName << _("Room") << " " << coords.x << "/" << coords.y;
     m_contextMenu.setTitle(roomName.str());
 
     // Room does not exists yet
-    if (m_data->room(m_selectedRoom).state == Data::RoomState::VOID) {
-
-        m_contextMenu.addChoice(L"Construct room (-100d)", [this]() {
-            constructRoom(m_selectedRoom);
+    if (m_data->room(coords).state == Data::RoomState::VOID) {
+        m_contextMenu.addChoice(L"Construct room (-100d)", [this, &coords]() {
+            constructRoom(coords);
         });
-
     }
+
     // Room does exists
     else {
-
-        m_contextMenu.addChoice(L"Destroy room (+85d)", [this]() {
-            destroyRoom(m_selectedRoom);
+        m_contextMenu.addChoice(L"Destroy room (+85d)", [this, &coords]() {
+            destroyRoom(coords);
         });
-
     }
 
     // Context positions
@@ -233,8 +268,8 @@ void Inter::showRoomContextMenu(const sf::Vector2u& room, const sf::Vector2f& nu
     m_contextMenu.markForVisible(true);
 }
 
-//----------------------------------//
-//----- Direct data management -----//
+//---------------------//
+//----- Structure -----//
 
 void Inter::adaptFloorsCount(int relativeValue)
 {
@@ -258,9 +293,6 @@ void Inter::setRoomsByFloor(uint value)
     refreshFromData();
 }
 
-//-----------------------//
-//----- Interaction -----//
-
 void Inter::constructRoom(const sf::Vector2u& room)
 {
     assert(!m_data->isRoomConstructed(room));
@@ -273,60 +305,67 @@ void Inter::destroyRoom(const sf::Vector2u& room)
     m_data->destroyRoom(room);
 }
 
-sf::Vector2u Inter::roomFromCoords(const sf::Vector2f& coords)
-{
-    auto room = m_grid.rowColumnFromCoords(coords);
-    room.x = m_data->floorsCount() - room.x - 1;
-    return room;
-}
-
-void Inter::selectRoomFromCoords(const sf::Vector2f& coords)
-{
-    m_selectedRoom = roomFromCoords(coords);
-    setHasRoomSelected(true);
-}
-
-//----------------------//
-//----- Facilities -----//
-
 void Inter::constructDoor(const sf::Vector2f& relPos)
 {
-    auto room = roomFromCoords(relPos);
+    auto coords = tileFromLocalPosition(relPos);
 
     // FIXME Forward to dungeon data
-    if (m_data->room(room).state == Data::RoomState::CONSTRUCTED) {
-        if (!m_data->room(room).facilities.door)
-            m_data->room(room).facilities.door = true;
+    if (m_data->room(coords).state == Data::RoomState::CONSTRUCTED) {
+        if (!m_data->room(coords).facilities.door)
+            m_data->room(coords).facilities.door = true;
     }
 
-    refreshRoomTileTexture(room);
+    refreshTileLayers(coords);
 }
 
 void Inter::constructLadder(const sf::Vector2f& relPos)
 {
-    auto room = roomFromCoords(relPos);
+    auto coords = tileFromLocalPosition(relPos);
 
-    if (m_data->room(room).state == Data::RoomState::CONSTRUCTED) {
-        if (!m_data->room(room).facilities.ladder)
-            m_data->room(room).facilities.ladder = true;
+    if (m_data->room(coords).state == Data::RoomState::CONSTRUCTED) {
+        if (!m_data->room(coords).facilities.ladder)
+            m_data->room(coords).facilities.ladder = true;
     }
 
-    refreshRoomTileTexture(room);
+    refreshTileLayers(coords);
 }
 
-//-------------------//
-//----- Display -----//
+//-----------------------------------//
+//----- Internal change updates -----//
 
-void Inter::setHasRoomSelected(bool hasRoomSelected)
+void Inter::refreshTiles()
 {
-    m_hasRoomSelected = hasRoomSelected;
-    refreshRoomSelectedShader();
+    for (auto& tile : m_tiles)
+        refreshTile(tile.second.coords);
 }
 
-void Inter::refreshRoomSelectedShader()
+void Inter::refreshTile(const sf::Vector2u& coords)
 {
-    resetPartsShader();
+    refreshTileLayers(coords);
+}
 
-    if (m_hasRoomSelected)
-        setPartShader(&m_roomTiles[m_selectedRoom.x][m_selectedRoom.y], ShaderID::NUI_HOVER);
+void Inter::refreshTileLayers(const sf::Vector2u& coords)
+{
+    const auto& roomInfo = m_data->room(coords);
+    const auto state = roomInfo.state;
+
+    // Reset
+    clearLayers(coords);
+
+    // Room is not constructed
+    returnif (state == Data::RoomState::VOID);
+
+    // Room is somehow bugged
+    if (state == Data::RoomState::UNKNOWN) {
+        // TODO Have an error texture
+        addLayer(coords, TextureID::DEFAULT);
+        return;
+    }
+
+    // Add room textures
+    addLayer(coords, TextureID::DUNGEON_INTER_ROOM);
+
+    // Facilities
+    if (roomInfo.facilities.ladder) addLayer(coords, TextureID::DUNGEON_INTER_LADDER_ROOM);
+    if (roomInfo.facilities.door)   addLayer(coords, TextureID::DUNGEON_INTER_DOOR_ROOM);
 }

@@ -297,7 +297,10 @@ namespace scene
         //! Set shader of the part.
         void setPartShader(sf::Drawable* drawable, ShaderID shader);
 
-        //! Reset all parts to ShaderID::NONE.
+        //! Reset this part shader to nullptr.
+        void resetPartShader(sf::Drawable* drawable);
+
+        //! Reset all parts shader to nullptr.
         void resetPartsShader();
 
         //! Set clippingRect of the part.

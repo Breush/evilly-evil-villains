@@ -119,5 +119,5 @@ void Hero::changedRunning()
 
 void Hero::refreshPositionFromNode()
 {
-    setLocalPosition(m_inter->roomLocalPosition(m_currentNode->room) + m_inter->roomSize() / 2.f);
+    setLocalPosition(m_inter->tileLocalPosition(m_currentNode->room) + m_inter->tileSize() / 2.f);
 }
