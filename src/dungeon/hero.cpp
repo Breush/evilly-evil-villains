@@ -37,9 +37,10 @@ void Hero::updateAI(const sf::Time& dt)
 
     // TODO Interface with physics engine
 
-    // Look for next room each two seconds
-    if (m_inRoomSince >= 2.f) {
-        m_inRoomSince -= 2.f;
+    // Look for next room
+    const float m_timeInEachRoom = 0.1f;
+    if (m_inRoomSince >= m_timeInEachRoom) {
+        m_inRoomSince -= m_timeInEachRoom;
         returnif (m_currentNode->neighbours.size() == 0u);
 
         // Consider that the current room might be the best node
