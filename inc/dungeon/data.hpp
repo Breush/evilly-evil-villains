@@ -3,58 +3,19 @@
 #include "tools/param.hpp"
 #include "tools/int.hpp"
 #include "dungeon/event.hpp"
+#include "dungeon/eventtype.hpp"
+#include "dungeon/facilities.hpp"
 
 #include <SFML/System/Vector2.hpp>
 #include <string>
 #include <vector>
+#include <array>
 
 namespace dungeon
 {
     // Forward declarations
 
     class Graph;
-
-    //! All the possible dungeon events.
-
-    enum class EventType
-    {
-        ROOM_DESTROYED,     //!< A room was destroyed.
-        ROOM_CONSTRUCTED,   //!< A rom was constructed.
-        DOSH_CHANGED,       //!< Dosh value changed, delta is set.
-        FAME_CHANGED,       //!< Fame value changed, delta is set.
-        MODE_CHANGED,       //!< Mode (design/invasion) changed.
-        ERROR,              //!< Whenever something cannot be done.
-    };
-
-    //! The possible modes.
-
-    enum class Mode
-    {
-        DESIGN,     //!< Design.
-        INVASION,   //!< Invasion.
-    };
-
-    //! A dungeon event.
-
-    struct Event
-    {
-        EventType type; //!< The type of event which is sent.
-
-        union
-        {
-            int delta;  //!< The difference between previous and current value of resources.
-
-            Mode mode;  //!< The new mode.
-
-            struct
-            {
-                uint x;
-                uint y;
-            } room;     //!< The coordinates of a room whenever it is modified.
-
-            const wchar_t* message; //!< An additional information.
-        };
-    };
 
     //! The data of a dungeon.
     /*!
@@ -92,14 +53,9 @@ namespace dungeon
         //! A room as in the xml specification.
         struct Room
         {
-            uint floorPos;
-            uint pos;
-            RoomState state = RoomState::UNKNOWN;
-
-            struct Facilities {
-                bool door = false;      //!< Whether the room is the entry of the dungeon.
-                bool ladder = false;    //!< Whether the room give access to upper level.
-            } facilities;
+            sf::Vector2u coords;                            //!< The floor/room coordinate of the room.
+            RoomState state = RoomState::UNKNOWN;           //!< The current state.
+            std::array<bool, FacilityID::COUNT> facilities; //!< All the facilities.
         };
 
         //! A floor is a vector of rooms.
@@ -137,16 +93,16 @@ namespace dungeon
         //! @{
 
         //! Easy getter to access a room.
-        inline Room& room(const sf::Vector2u& roomCoord) { return m_floors[roomCoord.x].rooms[roomCoord.y]; }
+        inline Room& room(const sf::Vector2u& coords) { return m_floors[coords.x].rooms[coords.y]; }
 
         //! Whether a specific is in constructed state.
-        bool isRoomConstructed(const sf::Vector2u& roomCoord);
+        bool isRoomConstructed(const sf::Vector2u& coords);
 
         //! Construct a room.
-        void constructRoom(const sf::Vector2u& roomCoord);
+        void constructRoom(const sf::Vector2u& coords);
 
         //! Destroy a room.
-        void destroyRoom(const sf::Vector2u& roomCoord);
+        void destroyRoom(const sf::Vector2u& coords);
 
         //! Return true if you can access the next room from the specified one.
         //! In the case of unexisting room, it returns false.
@@ -158,6 +114,16 @@ namespace dungeon
          *  The results might be beyond dungeon boundaries.
          */
         sf::Vector2u roomNeighbourCoords(const sf::Vector2u& roomCoord, Direction direction);
+
+        //! @}
+
+        //-------------------//
+        //! @name Facilities
+        //! @{
+
+        //! Set the set of the specified room's facility.
+        //! Will emit an event if a change occured.
+        void setRoomFacility(const sf::Vector2u& coords, FacilityID facilityID, bool state);
 
         //! @}
 

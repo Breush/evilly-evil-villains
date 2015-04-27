@@ -25,7 +25,7 @@ void DoorGrabButton::grabbableReleased(Entity* entity, const sf::Vector2f& relPo
     // Forward to dungeon::Inter
     auto dungeonInter = dynamic_cast<dungeon::Inter*>(entity);
     returnif (dungeonInter == nullptr);
-    dungeonInter->constructDoor(relPos);
+    dungeonInter->setRoomFacility(relPos, FacilityID::ENTRANCE, true);
 }
 
 std::unique_ptr<scene::Grabbable> DoorGrabButton::spawnGrabbable()

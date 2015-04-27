@@ -33,7 +33,7 @@ Graph::ConstructError Graph::reconstructFromData()
             node.altitude = floorIndex + 1u;
             node.room = roomCoords;
 
-            if (room.facilities.door) {
+            if (room.facilities[FacilityID::ENTRANCE]) {
                 if (m_startingNode == nullptr) m_startingNode = &node;
                 else return ConstructError::TOO_MANY_DOORS;
             }

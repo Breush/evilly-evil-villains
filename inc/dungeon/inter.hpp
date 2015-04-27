@@ -51,23 +51,20 @@ namespace dungeon
         //! @name Structure
         //! @{
 
-        // FIXME These functions should not be here...
-        // It's to dungeon::data to manage all that.
-        // And to send an event each time a modification occurs.
+        //! Find the room below the specified relative position and forward change to data.
+        void setRoomFacility(const sf::Vector2f& relPos, FacilityID facilityID, bool state);
 
-        // Global data management
+        //! Change the number of floors.
         void adaptFloorsCount(int relativeValue);
+
+        //! Change the number of rooms by floor.
         void adaptRoomsByFloor(int relativeValue);
+
+        //! Set the number of floors.
         void setFloorsCount(uint value);
+
+        //! Set the number of rooms by floor.
         void setRoomsByFloor(uint value);
-
-        // Facilities
-        void constructLadder(const sf::Vector2f& relPos);
-        void constructDoor(const sf::Vector2f& relPos);
-
-        // Rooms
-        void constructRoom(const sf::Vector2u& room);
-        void destroyRoom(const sf::Vector2u& room);
 
         //! @}
 
@@ -153,6 +150,9 @@ namespace dungeon
         //---------------------//
         //! @name Context menu
         //! @{
+
+        //! Add a choice to the context menu, given the state of a facility.
+        void addFacilityChoice(const sf::Vector2u& coords, FacilityID facilityID, const std::wstring& facilityName);
 
         //! Pop the context menu for the specified tile coordinates at the position.
         void showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& nuiPos);

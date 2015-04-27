@@ -16,6 +16,9 @@ Data::Data()
 {
 }
 
+//---------------------------//
+//----- File management -----//
+
 void Data::load(const std::wstring& folder)
 {
     wdebug_dungeon_1(L"Loading data from folder " << folder);
@@ -83,8 +86,8 @@ void Data::loadDungeon(const std::wstring& file)
         m_floors[floorPos].rooms.reserve(m_roomsByFloor);
         for (auto& roomInfo : floor.children(L"room")) {
             Room room;
-            room.floorPos = floorPos;
-            room.pos = roomInfo.attribute(L"pos").as_uint();
+            room.coords.x = floorPos;
+            room.coords.y = roomInfo.attribute(L"pos").as_uint();
             room.state = RoomState::UNKNOWN;
 
             std::wstring roomStateString = roomInfo.attribute(L"state").as_string();
@@ -94,15 +97,19 @@ void Data::loadDungeon(const std::wstring& file)
             wdebug_dungeon_3(L"Found room " << room.pos << L" of state " << roomStateString);
 
             // Facilities
+            for (auto& facility : room.facilities)
+                facility = false;
+
             for (auto& roomFacilitiesInfo : roomInfo.children(L"facility")) {
                 std::wstring type = roomFacilitiesInfo.attribute(L"type").as_string();
 
-                if (type == L"ladder")  room.facilities.ladder = true;
-                if (type == L"door")    room.facilities.door = true;
+                if (type == L"ladder")  room.facilities[FacilityID::LADDER] = true;
+                if (type == L"door")    room.facilities[FacilityID::ENTRANCE] = true;
 
                 wdebug_dungeon_4(L"Found facility " + type);
             }
 
+            // Add the room
             m_floors[floorPos].rooms.emplace_back(std::move(room));
         }
     }
@@ -147,11 +154,12 @@ void Data::saveDungeon(const std::wstring& file)
             room.append_attribute(L"state") = roomStateString.c_str();
 
             // Facilities
-            if (dataRoom.facilities.door)
-                room.append_child(L"facility").append_attribute(L"type") = L"door";
-
-            if (dataRoom.facilities.ladder)
+            // TODO Make a lookup table FacilityID -> wstring
+            if (dataRoom.facilities[FacilityID::LADDER])
                 room.append_child(L"facility").append_attribute(L"type") = L"ladder";
+
+            if (dataRoom.facilities[FacilityID::ENTRANCE])
+                room.append_child(L"facility").append_attribute(L"type") = L"door";
         }
     }
 
@@ -168,12 +176,14 @@ void Data::correctFloorsRooms()
     for (uint floorPos = 0; floorPos < m_floorsCount; ++floorPos) {
         auto& floor = m_floors[floorPos];
         floor.pos = floorPos;
+
         // Rooms by floor
         floor.rooms.resize(m_roomsByFloor);
         for (uint roomPos = 0; roomPos < m_roomsByFloor; ++roomPos) {
             auto& ownRoom = floor.rooms[roomPos];
-            ownRoom.floorPos = floorPos;
-            ownRoom.pos = roomPos;
+            ownRoom.coords.x = floorPos;
+            ownRoom.coords.y = roomPos;
+
             // Unknown rooms become empty
             if (ownRoom.state == RoomState::UNKNOWN)
                 ownRoom.state = RoomState::VOID;
@@ -200,7 +210,9 @@ void Data::constructRoom(const sf::Vector2u& roomCoord)
     event.room = {roomCoord.x, roomCoord.y};
     EventEmitter::emit(event);
 
-    subDosh(100u); // TODO Get value from somewhere.
+    // TODO Let Wallet manage resources
+    // Make a ASK_ROOM_CONSTRUCTED event?
+    subDosh(100u);
 }
 
 void Data::destroyRoom(const sf::Vector2u& roomCoord)
@@ -212,7 +224,8 @@ void Data::destroyRoom(const sf::Vector2u& roomCoord)
     event.room = {roomCoord.x, roomCoord.y};
     EventEmitter::emit(event);
 
-    addDosh(85u); // TODO Get value from somewhere.
+    // TODO Let Wallet manage resources
+    addDosh(85u);
 }
 
 bool Data::roomNeighbourAccessible(const sf::Vector2u& roomCoord, Direction direction)
@@ -226,25 +239,44 @@ bool Data::roomNeighbourAccessible(const sf::Vector2u& roomCoord, Direction dire
     returnif (neighbourRoom.state != RoomState::CONSTRUCTED) false;
 
     // When north or south, be sure there is a ladder
-    returnif (direction == NORTH && !currentRoom.facilities.ladder) false;
-    returnif (direction == SOUTH && !neighbourRoom.facilities.ladder) false;
+    returnif (direction == NORTH && !currentRoom.facilities[FacilityID::LADDER]) false;
+    returnif (direction == SOUTH && !neighbourRoom.facilities[FacilityID::LADDER]) false;
 
     return true;
 }
 
-sf::Vector2u Data::roomNeighbourCoords(const sf::Vector2u& roomCoord, Direction direction)
+sf::Vector2u Data::roomNeighbourCoords(const sf::Vector2u& coords, Direction direction)
 {
-    return roomCoord + roomDirectionVector(direction);
+    return coords + roomDirectionVector(direction);
 }
 
-Data::Room& Data::roomNeighbour(const sf::Vector2u& roomCoord, Direction direction)
+Data::Room& Data::roomNeighbour(const sf::Vector2u& coords, Direction direction)
 {
-    return room(roomNeighbourCoords(roomCoord, direction));
+    return room(roomNeighbourCoords(coords, direction));
 }
 
 sf::Vector2u Data::roomDirectionVector(Direction direction)
 {
     return sf::Vector2u((direction >> 0x4) - 1u, (direction & 0xf) - 1u);
+}
+
+//----------------------//
+//----- Facilities -----//
+
+void Data::setRoomFacility(const sf::Vector2u& coords, FacilityID facilityID, bool state)
+{
+    auto& roomInfo = room(coords);
+    returnif (roomInfo.facilities[facilityID] == state);
+
+    roomInfo.facilities[facilityID] = state;
+
+    Event event;
+    event.type = EventType::FACILITY_CHANGED;
+    event.facility.id = facilityID;
+    event.facility.room = {coords.x, coords.y};
+    EventEmitter::emit(event);
+
+    // TODO Make Wallet use this event
 }
 
 //---------------------//

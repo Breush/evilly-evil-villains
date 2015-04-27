@@ -25,7 +25,7 @@ void LadderGrabButton::grabbableReleased(Entity* entity, const sf::Vector2f& rel
     // Forward to dungeon::Inter
     auto dungeonInter = dynamic_cast<dungeon::Inter*>(entity);
     returnif (dungeonInter == nullptr);
-    dungeonInter->constructLadder(relPos);
+    dungeonInter->setRoomFacility(relPos, FacilityID::LADDER, true);
 }
 
 std::unique_ptr<scene::Grabbable> LadderGrabButton::spawnGrabbable()

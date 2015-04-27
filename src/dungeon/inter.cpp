@@ -86,10 +86,20 @@ void Inter::handleMouseLeft()
 
 void Inter::receive(const Event& event)
 {
-    // TODO Propagate category
-    if (event.type == EventType::ROOM_DESTROYED
-        || event.type == EventType::ROOM_CONSTRUCTED)
+    switch (event.type)
+    {
+    case EventType::ROOM_DESTROYED:
+    case EventType::ROOM_CONSTRUCTED:
         refreshTileLayers({event.room.x, event.room.y});
+        break;
+
+    case EventType::FACILITY_CHANGED:
+        refreshTileLayers({event.facility.room.x, event.facility.room.y});
+        break;
+
+    default:
+        break;
+    }
 }
 
 //------------------------//
@@ -239,27 +249,50 @@ void Inter::resetHoveredTile()
 //------------------------//
 //----- Context menu -----//
 
+void Inter::addFacilityChoice(const sf::Vector2u& coords, FacilityID facilityID, const std::wstring& facilityName)
+{
+    // The facility is already there
+    if (m_data->room(coords).facilities[facilityID]) {
+        m_contextMenu.addChoice(L"Remove " + facilityName, [this, facilityID, &coords]() {
+            m_data->setRoomFacility(coords, facilityID, false);
+        });
+    }
+
+    // The facility is not there
+    else {
+        m_contextMenu.addChoice(L"Create " + facilityName, [this, facilityID, &coords]() {
+            m_data->setRoomFacility(coords, facilityID, true);
+        });
+    }
+}
+
 void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& nuiPos)
 {
+    auto& room = m_data->room(coords);
     m_contextMenu.clearChoices();
 
     // Context title
     std::wstringstream roomName;
-    roomName << _("Room") << " " << coords.x << "/" << coords.y;
+    roomName << _("Room") << L' ' << coords.x << L'/' << coords.y;
     m_contextMenu.setTitle(roomName.str());
 
     // Room does not exists yet
-    if (m_data->room(coords).state == Data::RoomState::VOID) {
+    if (room.state == Data::RoomState::VOID) {
+        // TODO Get price from Wallet
         m_contextMenu.addChoice(L"Construct room (-100d)", [this, &coords]() {
-            constructRoom(coords);
+            m_data->constructRoom(coords);
         });
     }
 
     // Room does exists
     else {
         m_contextMenu.addChoice(L"Destroy room (+85d)", [this, &coords]() {
-            destroyRoom(coords);
+            m_data->destroyRoom(coords);
         });
+
+        // Facilities
+        addFacilityChoice(coords, FacilityID::LADDER, L"ladder");
+        addFacilityChoice(coords, FacilityID::ENTRANCE, L"entrance");
     }
 
     // Context positions
@@ -293,41 +326,9 @@ void Inter::setRoomsByFloor(uint value)
     refreshFromData();
 }
 
-void Inter::constructRoom(const sf::Vector2u& room)
+void Inter::setRoomFacility(const sf::Vector2f& relPos, FacilityID facilityID, bool state)
 {
-    assert(!m_data->isRoomConstructed(room));
-    m_data->constructRoom(room);
-}
-
-void Inter::destroyRoom(const sf::Vector2u& room)
-{
-    assert(m_data->isRoomConstructed(room));
-    m_data->destroyRoom(room);
-}
-
-void Inter::constructDoor(const sf::Vector2f& relPos)
-{
-    auto coords = tileFromLocalPosition(relPos);
-
-    // FIXME Forward to dungeon data
-    if (m_data->room(coords).state == Data::RoomState::CONSTRUCTED) {
-        if (!m_data->room(coords).facilities.door)
-            m_data->room(coords).facilities.door = true;
-    }
-
-    refreshTileLayers(coords);
-}
-
-void Inter::constructLadder(const sf::Vector2f& relPos)
-{
-    auto coords = tileFromLocalPosition(relPos);
-
-    if (m_data->room(coords).state == Data::RoomState::CONSTRUCTED) {
-        if (!m_data->room(coords).facilities.ladder)
-            m_data->room(coords).facilities.ladder = true;
-    }
-
-    refreshTileLayers(coords);
+    m_data->setRoomFacility(tileFromLocalPosition(relPos), facilityID, state);
 }
 
 //-----------------------------------//
@@ -366,6 +367,6 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
     addLayer(coords, TextureID::DUNGEON_INTER_ROOM);
 
     // Facilities
-    if (roomInfo.facilities.ladder) addLayer(coords, TextureID::DUNGEON_INTER_LADDER_ROOM);
-    if (roomInfo.facilities.door)   addLayer(coords, TextureID::DUNGEON_INTER_DOOR_ROOM);
+    if (roomInfo.facilities[FacilityID::LADDER])    addLayer(coords, TextureID::DUNGEON_INTER_LADDER_ROOM);
+    if (roomInfo.facilities[FacilityID::ENTRANCE])  addLayer(coords, TextureID::DUNGEON_INTER_DOOR_ROOM);
 }
