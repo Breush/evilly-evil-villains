@@ -30,12 +30,10 @@ Panel::Panel(Sidebar& sidebar)
     m_tabs[0].setVisual(_("Monsters"),   TextureID::DUNGEON_PANEL_MONSTERS);
     m_tabs[1].setVisual(_("Traps"),      TextureID::DUNGEON_PANEL_TRAPS);
     m_tabs[2].setVisual(_("Facilities"), TextureID::DUNGEON_PANEL_FACILITIES);
-    m_tabs[3].setVisual(_("Treasures"),  TextureID::DUNGEON_PANEL_TREASURES);
 
     m_tabs[0].setCallback([&]() { m_sidebar.setMode(Sidebar::Mode::MONSTERS); });
     m_tabs[1].setCallback([&]() { m_sidebar.setMode(Sidebar::Mode::TRAPS); });
     m_tabs[2].setCallback([&]() { m_sidebar.setMode(Sidebar::Mode::FACILITIES); });
-    m_tabs[3].setCallback([&]() { m_sidebar.setMode(Sidebar::Mode::TREASURES); });
 
     update();
 }

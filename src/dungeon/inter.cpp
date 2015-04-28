@@ -367,6 +367,7 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
     addLayer(coords, TextureID::DUNGEON_INTER_ROOM);
 
     // Facilities
-    if (roomInfo.facilities[FacilityID::LADDER])    addLayer(coords, TextureID::DUNGEON_INTER_LADDER_ROOM);
-    if (roomInfo.facilities[FacilityID::ENTRANCE])  addLayer(coords, TextureID::DUNGEON_INTER_DOOR_ROOM);
+    if (roomInfo.facilities[FacilityID::LADDER])    addLayer(coords, TextureID::DUNGEON_INTER_LADDER);
+    if (roomInfo.facilities[FacilityID::TREASURE])  addLayer(coords, TextureID::DUNGEON_INTER_TREASURE);
+    if (roomInfo.facilities[FacilityID::ENTRANCE])  addLayer(coords, TextureID::DUNGEON_INTER_ENTRANCE);
 }

@@ -42,16 +42,15 @@ void Application::loadTextures()
     s_context.textures.load(TextureID::DUNGEON_PANEL_MONSTERS, "res/tex/dungeon/panel/monsters.png");
     s_context.textures.load(TextureID::DUNGEON_PANEL_TRAPS, "res/tex/dungeon/panel/traps.png");
     s_context.textures.load(TextureID::DUNGEON_PANEL_FACILITIES, "res/tex/dungeon/panel/facilities.png");
-    s_context.textures.load(TextureID::DUNGEON_PANEL_TREASURES, "res/tex/dungeon/panel/treasures.png");
 
-    // FIXME Really not the best way - if we want to be able to move the ladder or to have multiple
-    // elements within one room.
-    s_context.textures.load(TextureID::DUNGEON_INTER_DOOR_ROOM, "res/tex/dungeon/inter/door_room.png");
-    s_context.textures.load(TextureID::DUNGEON_INTER_LADDER_ROOM, "res/tex/dungeon/inter/ladder_room.png");
     s_context.textures.load(TextureID::DUNGEON_INTER_ROOM, "res/tex/dungeon/inter/room.png");
+    s_context.textures.load(TextureID::DUNGEON_INTER_ENTRANCE, "res/tex/dungeon/inter/entrance.png");
+    s_context.textures.load(TextureID::DUNGEON_INTER_LADDER, "res/tex/dungeon/inter/ladder.png");
+    s_context.textures.load(TextureID::DUNGEON_INTER_TREASURE, "res/tex/dungeon/inter/treasure.png");
 
-    s_context.textures.load(TextureID::DUNGEON_FACILITIES_DOOR, "res/tex/dungeon/facilities/door.png");
+    s_context.textures.load(TextureID::DUNGEON_FACILITIES_ENTRANCE, "res/tex/dungeon/facilities/entrance.png");
     s_context.textures.load(TextureID::DUNGEON_FACILITIES_LADDER, "res/tex/dungeon/facilities/ladder.png");
+    s_context.textures.load(TextureID::DUNGEON_FACILITIES_TREASURE, "res/tex/dungeon/facilities/treasure.png");
 
     s_context.textures.load(TextureID::DUNGEON_LOCK, "res/tex/dungeon/panel/lock.png");
 }

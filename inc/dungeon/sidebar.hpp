@@ -27,7 +27,6 @@ namespace dungeon
             MONSTERS,
             TRAPS,
             FACILITIES,
-            TREASURES,
         };
 
         void setMode(Mode mode);

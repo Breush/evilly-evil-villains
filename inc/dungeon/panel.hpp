@@ -43,7 +43,7 @@ namespace dungeon
 
         // Tabs
         nui::HStacker m_tabsStacker;
-        std::array<nui::ImageButton, 4> m_tabs;
+        std::array<nui::ImageButton, 3> m_tabs;
 
         // Sidebar
         Sidebar& m_sidebar;
