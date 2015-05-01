@@ -33,9 +33,15 @@ Graph::ConstructError Graph::reconstructFromData()
             node.altitude = floorIndex + 1u;
             node.room = roomCoords;
 
+            // Entrance
             if (room.facilities[FacilityID::ENTRANCE]) {
+                node.entrance = true;
                 if (m_startingNode == nullptr) m_startingNode = &node;
                 else return ConstructError::TOO_MANY_DOORS;
+            }
+            // Treasure
+            if (room.facilities[FacilityID::TREASURE]) {
+                node.treasure += 10u; // FIXME This for debugging, the player should be able to set the value.
             }
 
             // Check neighbourhood

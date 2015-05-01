@@ -24,6 +24,9 @@ Hero::Hero(const Inter* inter)
     // Lua
     if (!m_lua.load("res/ai/hero.lua"))
         throw std::runtime_error("Failed to load hero AI.");
+
+    // Register
+    m_lua["getOut"] = [this] { getOut(); };
 }
 
 //-------------------//
@@ -65,9 +68,11 @@ void Hero::updateAI(const sf::Time& dt)
 
         // Switch to a new node randomly from the best ones
         m_currentNode = alea::rand(bestNodes);
-        m_visitedNodes[m_currentNode->room] += 1u;
+        m_nodeInfos[m_currentNode->room].visits += 1u;
+        m_nodeInfos[m_currentNode->room].lastVisit = m_tick;
 
         refreshPositionFromNode();
+        ++m_tick;
     }
 }
 
@@ -77,12 +82,25 @@ void Hero::updateAI(const sf::Time& dt)
 uint Hero::call(const char* function, const Graph::Node* node)
 {
     Weight weight;
-    weight.altitude = node->altitude;
-    weight.visited = m_visitedNodes[node->room];
+    weight.visited =    m_nodeInfos[node->room].visits;
+    weight.lastVisit =  m_nodeInfos[node->room].lastVisit;
+    weight.altitude =   node->altitude;
+    weight.treasure =   node->treasure;
+    weight.exit =       node->entrance;
+
     m_lua["weight"].SetObj(weight,
-                           "altitude", &Weight::altitude,
-                           "visited", &Weight::visited);
+                           "visited",   &Weight::visited,
+                           "lastVisit", &Weight::lastVisit,
+                           "altitude",  &Weight::altitude,
+                           "treasure",  &Weight::treasure,
+                           "exit",      &Weight::exit);
+
     return m_lua[function]();
+}
+
+void Hero::getOut()
+{
+    std::cerr << this << " wanna get out." << std::endl;
 }
 
 //-------------------------//
@@ -110,10 +128,14 @@ void Hero::changedRunning()
     setVisible(m_running);
 
     if (m_running) {
+        // Reinitialize AI
+        m_tick = 0u;
+        m_nodeInfos.clear();
+        m_lua["init"]();
+
         // Get the door from the graph (requires that it is correctly constructed).
-        m_visitedNodes.clear();
         m_currentNode = &m_graph->startingNode();
-        m_visitedNodes[m_currentNode->room] += 1u;
+        m_nodeInfos[m_currentNode->room].visits += 1u;
         refreshPositionFromNode();
     }
 }

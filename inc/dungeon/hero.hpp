@@ -24,11 +24,14 @@ namespace dungeon
         //! All the weights used by Lua algorithms.
         struct Weight
         {
-            // The following are coming from the graph information.
-            uint altitude = 0u; //!< How high is the node.
-
             // The following are specific to the current IA.
-            uint visited = 0u;  //!< How often the node has been visited.
+            uint visited = 0u;      //!< How often the node has been visited.
+            uint lastVisit = 0u;    //!< The tick of the last time the node has been visited.
+
+            // The following are coming from the graph information.
+            uint altitude = 0u;     //!< How high is the node.
+            uint treasure = 0u;     //!< How many money there is stored in this node.
+            bool exit = false;      //!< Whether the hero can exit the dungeon by this node or not.
         };
 
     public:
@@ -54,6 +57,10 @@ namespace dungeon
 
         //! Returns the evaluation of a Lua function given a node.
         uint call(const char* function, const Graph::Node* node);
+
+        //! Called by the AI when it want to get out.
+        //! Will be accepted only if there is a door.
+        void getOut();
 
         //! @}
 
@@ -97,6 +104,13 @@ namespace dungeon
 
         //! @}
 
+        //! A node extra information.
+        struct NodeInfo
+        {
+            uint visits = 0u;           //!< How many times the node has been visited.
+            uint16 lastVisit = 0x7FFF;  //!< The tick of the last time the node has been visited.
+        };
+
     private:
 
         //! The graph of the dungeon to be read from.
@@ -113,10 +127,10 @@ namespace dungeon
         const Graph::Node* m_currentNode = nullptr;
 
         //! How often a specific node has been visited.
-        std::unordered_map<sf::Vector2u, uint> m_visitedNodes;
+        std::unordered_map<sf::Vector2u, NodeInfo> m_nodeInfos;
 
-        //! How many seconds the hero is in the current room.
-        float m_inRoomSince = 0.f;
+        float m_inRoomSince = 0.f;  //!< How many seconds the hero is in the current node.
+        uint m_tick = 0u;           //!< The current tick (how many nodes has been visited so far).
 
         //! The sprite of the hero.
         sf::RectangleShape m_sprite;

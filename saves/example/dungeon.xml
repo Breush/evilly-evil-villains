@@ -4,7 +4,7 @@
 	<floor pos="0">
 		<room pos="0" state="constructed" />
 		<room pos="1" state="constructed">
-			<facility type="door" />
+			<facility type="entrance" />
 		</room>
 		<room pos="2" state="constructed" />
 		<room pos="3" state="constructed" />
@@ -67,7 +67,9 @@
 	</floor>
 	<floor pos="6">
 		<room pos="0" state="constructed" />
-		<room pos="1" state="constructed" />
+		<room pos="1" state="constructed">
+			<facility type="treasure" />
+		</room>
 		<room pos="2" state="constructed" />
 		<room pos="3" state="constructed" />
 		<room pos="4" state="constructed" />

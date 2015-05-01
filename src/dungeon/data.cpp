@@ -103,8 +103,9 @@ void Data::loadDungeon(const std::wstring& file)
             for (auto& roomFacilitiesInfo : roomInfo.children(L"facility")) {
                 std::wstring type = roomFacilitiesInfo.attribute(L"type").as_string();
 
-                if (type == L"ladder")  room.facilities[FacilityID::LADDER] = true;
-                if (type == L"door")    room.facilities[FacilityID::ENTRANCE] = true;
+                if (type == L"ladder")      room.facilities[FacilityID::LADDER] = true;
+                if (type == L"entrance")    room.facilities[FacilityID::ENTRANCE] = true;
+                if (type == L"treasure")    room.facilities[FacilityID::TREASURE] = true;
 
                 wdebug_dungeon_4(L"Found facility " + type);
             }
@@ -159,7 +160,11 @@ void Data::saveDungeon(const std::wstring& file)
                 room.append_child(L"facility").append_attribute(L"type") = L"ladder";
 
             if (dataRoom.facilities[FacilityID::ENTRANCE])
-                room.append_child(L"facility").append_attribute(L"type") = L"door";
+                room.append_child(L"facility").append_attribute(L"type") = L"entrance";
+
+            // Add how much money it contains
+            if (dataRoom.facilities[FacilityID::TREASURE])
+                room.append_child(L"facility").append_attribute(L"type") = L"treasure";
         }
     }
 
