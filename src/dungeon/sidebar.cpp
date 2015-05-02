@@ -2,6 +2,7 @@
 
 #include "core/application.hpp"
 #include "core/gettext.hpp"
+#include "dungeon/eventtype.hpp"
 #include "resources/identifiers.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 
@@ -72,6 +73,17 @@ void Sidebar::handleMouseLeft()
     resetPartsShader();
 }
 
+//--------------------------//
+//----- Dungeon events -----//
+
+void Sidebar::receive(const Event& event)
+{
+    returnif (event.type != EventType::MODE_CHANGED);
+
+    if (event.mode == dungeon::Mode::INVASION)
+        setReduced(true);
+}
+
 //----------------//
 //----- Mode -----//
 
@@ -113,6 +125,9 @@ void Sidebar::setMode(Mode mode)
     // Add tabs to stacker
     for (auto& tab : m_tabs)
         m_tabsStacker.add(tab.get(), nui::Stacker::Align::CENTER);
+
+    // Show the sidebar.
+    setReduced(false);
 }
 
 //------------------------//

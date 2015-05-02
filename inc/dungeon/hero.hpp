@@ -52,19 +52,6 @@ namespace dungeon
         //! @}
 
         //--------------------------------//
-        //! @name Artificial intelligence
-        //! @{
-
-        //! Returns the evaluation of a Lua function given a node.
-        uint call(const char* function, const Graph::Node* node);
-
-        //! Called by the AI when it want to get out.
-        //! Will be accepted only if there is a door.
-        void getOut();
-
-        //! @}
-
-        //--------------------------------//
         //! @name Internal change updates
         //! @{
 
@@ -104,6 +91,22 @@ namespace dungeon
 
         //! @}
 
+        //--------------------------------//
+        //! @name Artificial intelligence
+        //! @{
+
+        //! Returns the evaluation of a Lua function given a node.
+        uint call(const char* function, const Graph::Node* node);
+
+        //! Called by the AI when it wants to get out.
+        //! Will be accepted only if there is a door.
+        void AIGetOut();
+
+        //! Called by the AI when it wants to steal money from treasure.
+        void AIStealTreasure();
+
+        //! @}
+
         //! A node extra information.
         struct NodeInfo
         {
@@ -113,26 +116,22 @@ namespace dungeon
 
     private:
 
-        //! The graph of the dungeon to be read from.
-        Graph* m_graph = nullptr;
+        // The graph
+        Graph* m_graph = nullptr;                   //!< The graph of the dungeon to be read from.
+        const Graph::Node* m_currentNode = nullptr; //!< The current room where is our hero.
+        // TODO Should not be needed, only the abstract graph and Data.
+        const Inter* m_inter = nullptr;             //!< The dungeon inter, to get cellsize.
 
-        //! The lua state.
-        sel::State m_lua;
-
-        //! The dungeon inter, to get cellsize.
-        //! @todo Should not be needed, only the abstract graph.
-        const Inter* m_inter = nullptr;
-
-        //! The current room where is our hero.
-        const Graph::Node* m_currentNode = nullptr;
-
-        //! How often a specific node has been visited.
-        std::unordered_map<sf::Vector2u, NodeInfo> m_nodeInfos;
-
+        // Artificial intelligence
+        sel::State m_lua;           //!< The lua state.
         float m_inRoomSince = 0.f;  //!< How many seconds the hero is in the current node.
         uint m_tick = 0u;           //!< The current tick (how many nodes has been visited so far).
+        std::unordered_map<sf::Vector2u, NodeInfo> m_nodeInfos; //!< Remembers the visits of a certain node.
 
-        //! The sprite of the hero.
-        sf::RectangleShape m_sprite;
+        // Holded resources
+        uint m_dosh = 0u;   //!< How many dosh the hero holds currently.
+
+        // Decorum
+        sf::RectangleShape m_sprite;    //!< The sprite of the hero.
     };
 }

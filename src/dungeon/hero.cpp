@@ -26,7 +26,8 @@ Hero::Hero(const Inter* inter)
         throw std::runtime_error("Failed to load hero AI.");
 
     // Register
-    m_lua["getOut"] = [this] { getOut(); };
+    m_lua["AIGetOut"] = [this] { AIGetOut(); };
+    m_lua["AIStealTreasure"] = [this] { AIStealTreasure(); };
 }
 
 //-------------------//
@@ -98,9 +99,17 @@ uint Hero::call(const char* function, const Graph::Node* node)
     return m_lua[function]();
 }
 
-void Hero::getOut()
+void Hero::AIGetOut()
 {
-    std::cerr << this << " wanna get out." << std::endl;
+    returnif (!m_currentNode->entrance);
+
+    std::cerr << this << " gets out." << std::endl;
+    setRunning(false);
+}
+
+void Hero::AIStealTreasure()
+{
+    std::cerr << this << " steals treasure in room " << m_currentNode->room << "." << std::endl;
 }
 
 //-------------------------//

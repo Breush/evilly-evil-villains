@@ -3,6 +3,8 @@
 #include "nui/hstacker.hpp"
 #include "nui/imagebutton.hpp"
 #include "scene/entity.hpp"
+#include "dungeon/event.hpp"
+#include "dungeon/data.hpp"
 #include "tools/param.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -10,15 +12,22 @@
 
 namespace dungeon
 {
-    // Forward declaration
+    // Forward declarations
+
     class Sidebar;
 
-    class Panel : public scene::Entity
+    //! A simple panel to select objects to grab to the dungeon.
+
+    class Panel final : public scene::Entity, public EventReceiver
     {
         using baseClass = scene::Entity;
 
     public:
+
+        //! Constructor.
         Panel(dungeon::Sidebar& sidebar);
+
+        //! Default destructor.
         virtual ~Panel() = default;
 
         // Reduced mode
@@ -26,26 +35,47 @@ namespace dungeon
         void switchReduced();
 
     protected:
-        // Virtual
-        void update() override;
 
-        // Mouse events
-        void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
-        void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
-        void handleMouseLeft() override;
+        //----------------//
+        //! @name Routine
+        //! @{
 
-        // Params
+        void update() final;
+
+        //! @}
+
+        //---------------//
+        //! @name Events
+        //! @{
+
+        void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseLeft() final;
+
+        void receive(const Event& event) final;
+
+        //! @}
+
+        //---------------//
+        //! @name Events
+        //! @{
+
+        //! Whether the panel is currently reduced or not.
         PARAMG(bool, m_reduced, reduced)
 
+        //! @}
+
     private:
-        sf::RectangleShape m_background;
-        sf::RectangleShape m_switchReducedButton;
+
+        // Sidebar
+        Sidebar& m_sidebar;
 
         // Tabs
         nui::HStacker m_tabsStacker;
         std::array<nui::ImageButton, 3> m_tabs;
 
-        // Sidebar
-        Sidebar& m_sidebar;
+        // Decorum
+        sf::RectangleShape m_background;
+        sf::RectangleShape m_switchReducedButton;
     };
 }

@@ -56,7 +56,7 @@ endif ()
 set(CODE_MAIN_FILE src/core/main.cpp)
 set(VERSION_OUTPUT_FILE inc/core/version.hpp)
 file(GLOB_RECURSE SOURCES_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*.cpp)
-file(GLOB_RECURSE CODE_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*.cpp inc/*.hpp inc/*.hpp.in inc/*.inl res/shd/*.vert res/shd/*.frag)
+file(GLOB_RECURSE CODE_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*.cpp inc/*.hpp inc/*.hpp.in inc/*.inl res/shd/*.vert res/shd/*.frag res/ai/*.lua)
 list(REMOVE_ITEM CODE_FILES ${CODE_MAIN_FILE} ${VERSION_OUTPUT_FILE})
 
 #=====

@@ -3,13 +3,16 @@
 #include "nui/vstacker.hpp"
 #include "nui/grabbutton.hpp"
 #include "scene/entity.hpp"
+#include "dungeon/event.hpp"
 #include "tools/param.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
 namespace dungeon
 {
-    class Sidebar final : public scene::Entity
+    // FIXME So much duplicated code with dungeon::Panel
+
+    class Sidebar final : public scene::Entity, public EventReceiver
     {
         using baseClass = scene::Entity;
 
@@ -32,16 +35,35 @@ namespace dungeon
         void setMode(Mode mode);
 
     protected:
-        // Virtual
-        void update() override;
 
-        // Mouse events
-        void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
-        void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
-        void handleMouseLeft() override;
+        //----------------//
+        //! @name Routine
+        //! @{
 
-        // Params
+        void update() final;
+
+        //! @}
+
+        //---------------//
+        //! @name Events
+        //! @{
+
+        void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseLeft() final;
+
+        void receive(const Event& event) final;
+
+        //! @}
+
+        //---------------//
+        //! @name Events
+        //! @{
+
+        //! Whether the panel is currently reduced or not.
         PARAMG(bool, m_reduced, reduced)
+
+        //! @}
 
     private:
         sf::RectangleShape m_background;

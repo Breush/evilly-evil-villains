@@ -41,7 +41,7 @@ Graph::ConstructError Graph::reconstructFromData()
             }
             // Treasure
             if (room.facilities[FacilityID::TREASURE]) {
-                node.treasure += 10u; // FIXME This for debugging, the player should be able to set the value.
+                node.treasure += 10u; // FIXME This is for debugging, the player should be able to set the value.
             }
 
             // Check neighbourhood

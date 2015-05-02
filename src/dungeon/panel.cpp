@@ -38,6 +38,9 @@ Panel::Panel(Sidebar& sidebar)
     update();
 }
 
+//-------------------//
+//----- Routine -----//
+
 void Panel::update()
 {
     clearParts();
@@ -75,6 +78,17 @@ void Panel::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 void Panel::handleMouseLeft()
 {
     resetPartsShader();
+}
+
+//--------------------------//
+//----- Dungeon events -----//
+
+void Panel::receive(const Event& event)
+{
+    returnif (event.type != EventType::MODE_CHANGED);
+
+    if (event.mode == Mode::INVASION)
+        setReduced(true);
 }
 
 //------------------------//

@@ -55,6 +55,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     m_dungeonPanel.setSize({4 * 100 + 25, 125 + 25});
     m_dungeonPanel.setLocalPosition({nuiSize.x / 2.f, nuiSize.y - m_dungeonPanel.size().y / 2.f});
     m_dungeonPanel.lerpable()->saveDefaults();
+    m_dungeonPanel.setEmitter(&m_dungeonData);
 
     // Dungeon sidebar
     nuiRoot.attachChild(m_dungeonSidebar);
@@ -63,6 +64,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     m_dungeonSidebar.setLocalPosition({nuiSize.x - m_dungeonSidebar.size().x / 2.f, nuiSize.y / 2.f});
     m_dungeonSidebar.lerpable()->saveDefaults();
     m_dungeonSidebar.immediateReduce();
+    m_dungeonSidebar.setEmitter(&m_dungeonData);
 
     // Dungeon summary
     nuiRoot.attachChild(m_dungeonSummary);

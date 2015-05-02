@@ -15,6 +15,7 @@ end
 function evaluate_reference()
     -- If it is the first time we met a treasure, change state
     if (weight.treasure() > 0) then
+        AIStealTreasure()
         treasure_found = true
     end
 
@@ -22,12 +23,12 @@ function evaluate_reference()
     altitude_ref = weight.altitude()
     visited_ref = weight.visited()
     lastVisit_ref = weight.lastVisit()
-    
+
     -- Get out if treasure found and exit
     if (treasure_found and weight.exit()) then
-        getOut()
+        AIGetOut()
     end
-    
+
     -- Evaluate the current room
     -- Never stay in the same room
     return - 42 * weight.visited()
