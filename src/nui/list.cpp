@@ -21,7 +21,7 @@ List::List()
 
     // Highlight
     m_selectionHighlight.setFillColor({255u, 255u, 255u, 32u});
-    m_hoverHighlight.setFillColor({255u, 255u, 255u, 16u});
+    m_hoverHighlight.setFillColor(sf::Color::Transparent);
 
     refreshDisplay();
 }
@@ -173,14 +173,20 @@ void List::addLine(const std::initializer_list<std::wstring>& values)
 
 void List::hoverLine(uint line)
 {
+    returnif (m_hoveredLine == line);
+
+    // Remove previous hovering
     clearHoveredLine();
 
+    // Set newly hovered line
     if (line < m_lines.size()) {
-        addPart(&m_hoverHighlight);
+        m_hoveredLine = line;
 
+        // Set shader effect
         for (auto& cell : m_lines[line].cells)
             cell.label->setShader(ShaderID::NUI_HOVER);
 
+        // Set highlight
         float yLine = (line + 1u) * m_lineHeight;
         setHoverRect({0.f, yLine, size().x, m_lineHeight});
     }
@@ -188,15 +194,23 @@ void List::hoverLine(uint line)
 
 void List::clearHoveredLine()
 {
-    removePart(&m_hoverHighlight);
+    returnif (m_hoveredLine == -1u);
 
-    for (uint l = 0u; l < m_lines.size(); ++l)
-    for (auto& cell : m_lines[l].cells)
+    // Remove shader effect
+    for (auto& cell : m_lines[m_hoveredLine].cells)
         cell.label->setShader(ShaderID::NONE);
+
+    // Remove highlight
+    m_hoverHighlight.setFillColor(sf::Color::Transparent);
+
+    m_hoveredLine = -1u;
+
 }
 
 void List::setHoverRect(const sf::FloatRect& rect)
 {
+    m_hoverHighlight.setFillColor({255u, 255u, 255u, 16u});
+
     m_hoverHighlight.setPosition(rect.left, rect.top);
     m_hoverHighlight.setSize({rect.width, rect.height});
 }
@@ -230,6 +244,7 @@ void List::refreshBordersPosition()
 
     clearParts();
     addPart(&m_selectionHighlight);
+    addPart(&m_hoverHighlight);
 
     // Vertical
     for (uint c = 0u; c <= m_columns.size(); ++c) {

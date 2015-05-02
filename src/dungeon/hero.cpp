@@ -136,6 +136,7 @@ void Hero::changedRunning()
         // Get the door from the graph (requires that it is correctly constructed).
         m_currentNode = &m_graph->startingNode();
         m_nodeInfos[m_currentNode->room].visits += 1u;
+        m_nodeInfos[m_currentNode->room].lastVisit = 0u;
         refreshPositionFromNode();
     }
 }
