@@ -47,8 +47,9 @@ namespace scene
          */
         Entity(bool isLerpable = false);
 
-        //! Default destructor.
-        virtual ~Entity() = default;
+        //! Destructor.
+        //! The entity will detach itself if still attached to a parent.
+        virtual ~Entity();
 
         //-------------------//
         //! @name Components

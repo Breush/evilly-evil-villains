@@ -31,7 +31,13 @@ Entity::Entity(bool isLerpable)
 {
     // Lerpable component
     if (isLerpable)
-        m_lerpable = std::unique_ptr<sfe::Lerpable>(new sfe::Lerpable(this));
+        m_lerpable = std::make_unique<sfe::Lerpable>(this);
+}
+
+Entity::~Entity()
+{
+    if (m_parent != nullptr)
+        m_parent->detachChild(*this);
 }
 
 //-------------------//

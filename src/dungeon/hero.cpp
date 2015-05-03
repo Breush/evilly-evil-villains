@@ -12,9 +12,17 @@ using namespace dungeon;
 
 Hero::Hero(const Inter* inter)
     : m_running(false)
+    , m_dosh(0u)
     , m_inter(inter)
 {
     setVisible(false);
+
+    // Dosh label
+    // TODO Should be in NUI layer, somehow
+    m_doshLabel.setPrestyle(sfe::Label::Prestyle::NUI);
+    m_doshLabel.setLocalPosition({5.f, -25.f});
+    m_doshLabel.setCentered(true);
+    attachChild(m_doshLabel);
 
     // Sprite
     m_sprite.setSize({10.f, 10.f});
@@ -102,14 +110,17 @@ uint Hero::call(const char* function, const Graph::Node* node)
 void Hero::AIGetOut()
 {
     returnif (!m_currentNode->entrance);
-
-    std::cerr << this << " gets out." << std::endl;
     setRunning(false);
+
+    std::cerr << this << " gets out with " << m_dosh << " dosh." << std::endl;
+
+    // The dosh held is lost.
+    setDosh(0u);
 }
 
 void Hero::AIStealTreasure()
 {
-    auto maxStolenDosh = std::max(100u, m_currentNode->treasure);
+    auto maxStolenDosh = std::min(100u, m_currentNode->treasure);
     auto stolenDosh = 1u + rand() % maxStolenDosh;
     m_data->stealTreasure(m_currentNode->coords, *this, stolenDosh);
 
@@ -158,6 +169,20 @@ void Hero::changedRunning()
         m_nodeInfos[m_currentNode->coords].lastVisit = 0u;
         refreshPositionFromNode();
     }
+}
+
+void Hero::changedDosh()
+{
+    // Remove all text if no dosh held
+    if (m_dosh == 0u) {
+        m_doshLabel.setText(L"");
+        return;
+    }
+
+    // Otherwise, write the correct text
+    std::wstringstream str;
+    str << m_dosh << "d";
+    m_doshLabel.setText(str.str());
 }
 
 void Hero::refreshPositionFromNode()

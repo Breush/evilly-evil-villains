@@ -5,6 +5,7 @@
 #include "dungeon/data.hpp"
 #include "nui/contextmenu.hpp"
 #include "sfe/grid.hpp"
+#include "sfe/label.hpp"
 #include "tools/vector.hpp"
 
 #include <unordered_map>
@@ -175,6 +176,9 @@ namespace dungeon
         //! Refresh the layers (and their texture) of the specified tile.
         void refreshTileLayers(const sf::Vector2u& roomCoords);
 
+        //! Refresh the dosh label (value and position) of the specified tile.
+        void refreshTileDoshLabel(const sf::Vector2u& coords);
+
         //! @}
 
         //! A tile of the dungeon.
@@ -183,6 +187,7 @@ namespace dungeon
             sf::Vector2u coords;                    //!< The coordinates of the tile (floor/room).
             Data::Room* room = nullptr;             //!< The corresponding room within data.
             std::vector<sf::RectangleShape> layers; //!< All sprites to draw, from furthest to nearest.
+            std::unique_ptr<sfe::Label> doshLabel;  //!< The total dosh inside the room.
         };
 
     private:

@@ -6,6 +6,7 @@
 #include "tools/debug.hpp"
 #include "tools/event.hpp"
 #include "tools/tools.hpp"
+#include "tools/platform-fixes.hpp" // make_unique
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <sstream>
@@ -86,15 +87,21 @@ void Inter::handleMouseLeft()
 
 void Inter::receive(const Event& event)
 {
+    sf::Vector2u coords;
+
     switch (event.type)
     {
     case EventType::ROOM_DESTROYED:
     case EventType::ROOM_CONSTRUCTED:
-        refreshTileLayers({event.room.x, event.room.y});
+        coords = {event.room.x, event.room.y};
+        refreshTile(coords);
         break;
 
     case EventType::FACILITY_CHANGED:
-        refreshTileLayers({event.facility.room.x, event.facility.room.y});
+        coords = {event.facility.room.x, event.facility.room.y};
+        refreshTileLayers(coords);
+        if (event.facility.id == FacilityID::TREASURE)
+            refreshTileDoshLabel(coords);
         break;
 
     default:
@@ -342,7 +349,35 @@ void Inter::refreshTiles()
 
 void Inter::refreshTile(const sf::Vector2u& coords)
 {
+    refreshTileDoshLabel(coords);
     refreshTileLayers(coords);
+}
+
+void Inter::refreshTileDoshLabel(const sf::Vector2u& coords)
+{
+    const auto& roomInfo = m_data->room(coords);
+    auto& tile = m_tiles[coords];
+
+    // Remove label if stored dosh is null
+    if (roomInfo.treasureDosh == 0u || roomInfo.state == Data::RoomState::VOID) {
+        tile.doshLabel = nullptr;
+        return;
+    }
+
+    // Create label if does not exists
+    if (tile.doshLabel == nullptr) {
+        tile.doshLabel = std::make_unique<sfe::Label>();
+        tile.doshLabel->setPrestyle(sfe::Label::Prestyle::NUI);
+        attachChild(*tile.doshLabel);
+    }
+
+    // Re-format string
+    std::wstringstream str;
+    str << roomInfo.treasureDosh << L'd';
+    tile.doshLabel->setText(str.str());
+
+    // Re-position
+    tile.doshLabel->setLocalPosition(tileLocalPosition(coords));
 }
 
 void Inter::refreshTileLayers(const sf::Vector2u& coords)

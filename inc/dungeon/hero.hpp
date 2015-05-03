@@ -3,6 +3,7 @@
 #include "scene/entity.hpp"
 #include "dungeon/graph.hpp"
 #include "dungeon/event.hpp"
+#include "sfe/label.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <selene/selene.hpp>
@@ -66,7 +67,7 @@ namespace dungeon
         //! @{
 
         //! Add a certain amount of dosh to current resources.
-        inline void addDosh(uint amount) { m_dosh += amount; }
+        inline void addDosh(uint amount) { setDosh(m_dosh + amount); }
 
         //! @}
 
@@ -76,6 +77,9 @@ namespace dungeon
 
         //! Whether the hero is visible and active.
         PARAMGSU(bool, m_running, running, setRunning, changedRunning);
+
+        //!< How much dosh the hero holds currently.
+        PARAMGSU(uint, m_dosh, dosh, setDosh, changedDosh);
 
         //! @}
 
@@ -124,6 +128,9 @@ namespace dungeon
         //! Whenever the running mode changed.
         void changedRunning();
 
+        //! Whenever the dosh changed.
+        void changedDosh();
+
         //! @}
 
         //! A node extra information.
@@ -148,10 +155,8 @@ namespace dungeon
         uint m_tick = 0u;           //!< The current tick (how many nodes has been visited so far).
         std::unordered_map<sf::Vector2u, NodeInfo> m_nodeInfos; //!< Remembers the visits of a certain node.
 
-        // Holded resources
-        uint m_dosh = 0u;   //!< How many dosh the hero holds currently.
-
         // Decorum
+        sfe::Label m_doshLabel;         //!< How much dosh held by the hero.
         sf::RectangleShape m_sprite;    //!< The sprite of the hero.
     };
 }
