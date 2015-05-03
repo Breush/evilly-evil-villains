@@ -80,7 +80,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     // TODO Have a Hero manager or so (Hero then, should not be a receiver?)
     m_dungeonInter.attachChild(m_dungeonHero);
     m_dungeonHero.useGraph(m_dungeonGraph);
-    m_dungeonHero.setEmitter(&m_dungeonData);
+    m_dungeonHero.useData(m_dungeonData);
 
     // Decorum
     backgroundRoot.attachChild(m_decorumBack);

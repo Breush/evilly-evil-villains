@@ -11,6 +11,7 @@ namespace dungeon
 {
     // Forward declarations
 
+    class Data;
     class Inter;
 
     //! A hero invading the dungeon.
@@ -51,16 +52,21 @@ namespace dungeon
 
         //! @}
 
-        //--------------------------------//
-        //! @name Internal change updates
+        //--------------------//
+        //! @name Data events
         //! @{
 
-        //! Recompute the local position of the hero.
-        //! @todo This function should not exists once it is managed by physics component.
-        void refreshPositionFromNode();
+        //! Set the dungeon data source.
+        void useData(Data& data);
 
-        //! Whenever the running mode changed.
-        void changedRunning();
+        //! @}
+
+        //------------------//
+        //! @name Resources
+        //! @{
+
+        //! Add a certain amount of dosh to current resources.
+        inline void addDosh(uint amount) { m_dosh += amount; }
 
         //! @}
 
@@ -107,6 +113,19 @@ namespace dungeon
 
         //! @}
 
+        //--------------------------------//
+        //! @name Internal change updates
+        //! @{
+
+        //! Recompute the local position of the hero.
+        //! @todo This function should not exists once it is managed by physics component.
+        void refreshPositionFromNode();
+
+        //! Whenever the running mode changed.
+        void changedRunning();
+
+        //! @}
+
         //! A node extra information.
         struct NodeInfo
         {
@@ -116,11 +135,12 @@ namespace dungeon
 
     private:
 
+        Data* m_data = nullptr; //!< Dungeon data.
+
         // The graph
         Graph* m_graph = nullptr;                   //!< The graph of the dungeon to be read from.
         const Graph::Node* m_currentNode = nullptr; //!< The current room where is our hero.
-        // TODO Should not be needed, only the abstract graph and Data.
-        const Inter* m_inter = nullptr;             //!< The dungeon inter, to get cellsize.
+        const Inter* m_inter = nullptr;             //!< The dungeon inter, to get cellsize and position.
 
         // Artificial intelligence
         sel::State m_lua;           //!< The lua state.

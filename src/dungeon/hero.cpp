@@ -69,8 +69,8 @@ void Hero::updateAI(const sf::Time& dt)
 
         // Switch to a new node randomly from the best ones
         m_currentNode = alea::rand(bestNodes);
-        m_nodeInfos[m_currentNode->room].visits += 1u;
-        m_nodeInfos[m_currentNode->room].lastVisit = m_tick;
+        m_nodeInfos[m_currentNode->coords].visits += 1u;
+        m_nodeInfos[m_currentNode->coords].lastVisit = m_tick;
 
         refreshPositionFromNode();
         ++m_tick;
@@ -83,8 +83,8 @@ void Hero::updateAI(const sf::Time& dt)
 uint Hero::call(const char* function, const Graph::Node* node)
 {
     Weight weight;
-    weight.visited =    m_nodeInfos[node->room].visits;
-    weight.lastVisit =  m_nodeInfos[node->room].lastVisit;
+    weight.visited =    m_nodeInfos[node->coords].visits;
+    weight.lastVisit =  m_nodeInfos[node->coords].lastVisit;
     weight.altitude =   node->altitude;
     weight.treasure =   node->treasure;
     weight.exit =       node->entrance;
@@ -109,7 +109,11 @@ void Hero::AIGetOut()
 
 void Hero::AIStealTreasure()
 {
-    std::cerr << this << " steals treasure in room " << m_currentNode->room << "." << std::endl;
+    auto maxStolenDosh = std::max(100u, m_currentNode->treasure);
+    auto stolenDosh = 1u + rand() % maxStolenDosh;
+    m_data->stealTreasure(m_currentNode->coords, *this, stolenDosh);
+
+    std::cerr << this << " steals " << stolenDosh << " dosh from treasure in room " << m_currentNode->coords << "." << std::endl;
 }
 
 //-------------------------//
@@ -120,8 +124,14 @@ void Hero::useGraph(Graph& graph)
     m_graph = &graph;
 }
 
-//------------------//
-//----- Events -----//
+//--------------------------//
+//----- Dungeon events -----//
+
+void Hero::useData(Data& data)
+{
+    m_data = &data;
+    setEmitter(&data);
+}
 
 void Hero::receive(const Event& event)
 {
@@ -144,13 +154,13 @@ void Hero::changedRunning()
 
         // Get the door from the graph (requires that it is correctly constructed).
         m_currentNode = &m_graph->startingNode();
-        m_nodeInfos[m_currentNode->room].visits += 1u;
-        m_nodeInfos[m_currentNode->room].lastVisit = 0u;
+        m_nodeInfos[m_currentNode->coords].visits += 1u;
+        m_nodeInfos[m_currentNode->coords].lastVisit = 0u;
         refreshPositionFromNode();
     }
 }
 
 void Hero::refreshPositionFromNode()
 {
-    setLocalPosition(m_inter->tileLocalPosition(m_currentNode->room) + m_inter->tileSize() / 2.f);
+    setLocalPosition(m_inter->tileLocalPosition(m_currentNode->coords) + m_inter->tileSize() / 2.f);
 }

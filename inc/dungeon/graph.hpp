@@ -33,7 +33,7 @@ namespace dungeon
         struct Node
         {
             std::vector<Node*> neighbours;  //!< The neighbourhood of the node.
-            sf::Vector2u room;              //!< The original room coordinates from data.
+            sf::Vector2u coords;            //!< The original room coordinates from data.
 
             uint altitude = 0u;             //!< How high is the node.
             uint treasure = 0u;             //!< How many money there is stored in the node (total).

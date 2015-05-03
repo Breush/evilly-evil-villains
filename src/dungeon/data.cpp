@@ -1,6 +1,7 @@
 #include "dungeon/data.hpp"
 
 #include "dungeon/graph.hpp"
+#include "dungeon/hero.hpp"
 #include "tools/debug.hpp"
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
@@ -105,7 +106,10 @@ void Data::loadDungeon(const std::wstring& file)
 
                 if (type == L"ladder")      room.facilities[FacilityID::LADDER] = true;
                 if (type == L"entrance")    room.facilities[FacilityID::ENTRANCE] = true;
-                if (type == L"treasure")    room.facilities[FacilityID::TREASURE] = true;
+                if (type == L"treasure") {
+                    room.facilities[FacilityID::TREASURE] = true;
+                    room.treasureDosh = roomFacilitiesInfo.attribute(L"dosh").as_uint();
+                }
 
                 wdebug_dungeon_4(L"Found facility " + type);
             }
@@ -162,9 +166,11 @@ void Data::saveDungeon(const std::wstring& file)
             if (dataRoom.facilities[FacilityID::ENTRANCE])
                 room.append_child(L"facility").append_attribute(L"type") = L"entrance";
 
-            // Add how much money it contains
-            if (dataRoom.facilities[FacilityID::TREASURE])
-                room.append_child(L"facility").append_attribute(L"type") = L"treasure";
+            if (dataRoom.facilities[FacilityID::TREASURE]) {
+                auto facility = room.append_child(L"facility");
+                facility.append_attribute(L"type") = L"treasure";
+                facility.append_attribute(L"dosh") = dataRoom.treasureDosh;
+            }
         }
     }
 
@@ -265,6 +271,24 @@ sf::Vector2u Data::roomDirectionVector(Direction direction)
     return sf::Vector2u((direction >> 0x4) - 1u, (direction & 0xf) - 1u);
 }
 
+//---------------------//
+//----- Treasures -----//
+
+void Data::stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh)
+{
+    auto& roomInfo = room(coords);
+    assert(stolenDosh <= roomInfo.treasureDosh);
+
+    roomInfo.treasureDosh -= stolenDosh;
+    hero.addDosh(stolenDosh);
+
+    Event event;
+    event.type = EventType::FACILITY_CHANGED;
+    event.facility.id = FacilityID::TREASURE;
+    event.facility.room = {coords.x, coords.y};
+    EventEmitter::emit(event);
+}
+
 //----------------------//
 //----- Facilities -----//
 
@@ -282,6 +306,11 @@ void Data::setRoomFacility(const sf::Vector2u& coords, FacilityID facilityID, bo
     EventEmitter::emit(event);
 
     // TODO Make Wallet use this event
+    if (facilityID == FacilityID::TREASURE) {
+        // TODO Make the player able to chnge this.
+        subDosh(100u);
+        roomInfo.treasureDosh = 100u;
+    }
 }
 
 //---------------------//

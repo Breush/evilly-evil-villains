@@ -16,6 +16,7 @@ namespace dungeon
     // Forward declarations
 
     class Graph;
+    class Hero;
 
     //! The data of a dungeon.
     /*!
@@ -56,6 +57,7 @@ namespace dungeon
             sf::Vector2u coords;                            //!< The floor/room coordinate of the room.
             RoomState state = RoomState::UNKNOWN;           //!< The current state.
             std::array<bool, FacilityID::COUNT> facilities; //!< All the facilities.
+            uint treasureDosh = 0u;                         //!< If facility treasure, then the stored dosh.
         };
 
         //! A floor is a vector of rooms.
@@ -124,6 +126,15 @@ namespace dungeon
         //! Set the set of the specified room's facility.
         //! Will emit an event if a change occured.
         void setRoomFacility(const sf::Vector2u& coords, FacilityID facilityID, bool state);
+
+        //! @}
+
+        //-------------------------//
+        //! @name Hero interaction
+        //! @{
+
+        //! When a hero steals some dosh from the treasure room.
+        void stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh);
 
         //! @}
 

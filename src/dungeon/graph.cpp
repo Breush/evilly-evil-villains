@@ -31,7 +31,7 @@ Graph::ConstructError Graph::reconstructFromData()
             // Initialize this particular room
             auto& node = m_nodes[roomCoords];
             node.altitude = floorIndex + 1u;
-            node.room = roomCoords;
+            node.coords = roomCoords;
 
             // Entrance
             if (room.facilities[FacilityID::ENTRANCE]) {
@@ -41,7 +41,7 @@ Graph::ConstructError Graph::reconstructFromData()
             }
             // Treasure
             if (room.facilities[FacilityID::TREASURE]) {
-                node.treasure += 10u; // FIXME This is for debugging, the player should be able to set the value.
+                node.treasure = room.treasureDosh;
             }
 
             // Check neighbourhood
