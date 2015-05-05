@@ -14,7 +14,9 @@ Layer::Layer(Graph* graph)
     m_root.setGraph(graph);
     m_root.setDetectable(false);
     m_root.setFocusable(false);
-    m_root.setVisible(false);
+    m_root.setTransparent(true);
+
+    // Keep visible so that children will be drawn
 
     refreshDisplay();
 }

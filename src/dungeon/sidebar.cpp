@@ -17,12 +17,14 @@ Sidebar::Sidebar()
     // TODO Big cheating here on rotation, better have a vertical texture too
     m_background.setTexture(&Application::context().textures.get(TextureID::DUNGEON_PANEL_BACKGROUND));
     m_background.setRotation(90);
+    addPart(&m_background);
 
     // Reduced button
     m_switchReducedButton.setTexture(&Application::context().textures.get(TextureID::DUNGEON_PANEL_SWITCH));
     m_switchReducedButton.setPosition({45.f, 25.f});
     m_switchReducedButton.setSize({20.f, 20.f});
     m_switchReducedButton.setRotation(90);
+    addPart(&m_switchReducedButton);
 
     // Tabs
     attachChild(m_tabsStacker);
@@ -36,15 +38,9 @@ Sidebar::Sidebar()
 
 void Sidebar::update()
 {
-    clearParts();
-
     // Background
     m_background.setPosition({size().x, 0.f});
     m_background.setSize({size().y, size().x});
-    addPart(&m_background);
-
-    // Reduced button
-    addPart(&m_switchReducedButton);
 
     // Tabs
     m_tabsStacker.setSize(0.9f * size());
@@ -79,9 +75,7 @@ void Sidebar::handleMouseLeft()
 void Sidebar::receive(const Event& event)
 {
     returnif (event.type != EventType::MODE_CHANGED);
-
-    if (event.mode == dungeon::Mode::INVASION)
-        setReduced(true);
+    setVisible(event.mode != dungeon::Mode::INVASION);
 }
 
 //----------------//

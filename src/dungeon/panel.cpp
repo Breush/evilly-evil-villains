@@ -16,10 +16,12 @@ Panel::Panel(Sidebar& sidebar)
 {
     // Background
     m_background.setTexture(&Application::context().textures.get(TextureID::DUNGEON_PANEL_BACKGROUND));
+    addPart(&m_background);
 
     // Reduced button
     m_switchReducedButton.setTexture(&Application::context().textures.get(TextureID::DUNGEON_PANEL_SWITCH));
     m_switchReducedButton.setSize({20.f, 20.f});
+    addPart(&m_switchReducedButton);
 
     // Tabs stacker
     attachChild(m_tabsStacker);
@@ -43,15 +45,11 @@ Panel::Panel(Sidebar& sidebar)
 
 void Panel::update()
 {
-    clearParts();
-
     // Background
     m_background.setSize(size());
-    addPart(&m_background);
 
     // Reduced button
     m_switchReducedButton.setPosition({size().x - 40.f, 10.f});
-    addPart(&m_switchReducedButton);
 
     // Tabs stacker
     m_tabsStacker.setAlign(nui::Stacker::Align::CENTER);
@@ -86,9 +84,7 @@ void Panel::handleMouseLeft()
 void Panel::receive(const Event& event)
 {
     returnif (event.type != EventType::MODE_CHANGED);
-
-    if (event.mode == Mode::INVASION)
-        setReduced(true);
+    setVisible(event.mode != Mode::INVASION);
 }
 
 //------------------------//

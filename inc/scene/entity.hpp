@@ -140,8 +140,11 @@ namespace scene
         //! Whether the origin of the entity needs to be recentered everytime the size changes.
         PARAMGSU(bool, m_centered, centered, setCentered, refreshCentering)
 
-        //! Whether the entity will be drawn, and therefore detectable.
+        //! Whether the entity and its children will be drawn, and therefore detectable.
         PARAMGS(bool, m_visible, visible, setVisible)
+
+        //! Whether the entity will be drawn (does not affect detectability nor children).
+        PARAMGS(bool, m_transparent, transparent, setTransparent)
 
         //! @}
 
