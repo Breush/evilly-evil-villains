@@ -20,22 +20,28 @@ Data::Data()
 //---------------------------//
 //----- File management -----//
 
-void Data::load(const std::wstring& folder)
+std::wstring Data::load(const std::wstring& folder)
 {
     wdebug_dungeon_1(L"Loading data from folder " << folder);
 
-    loadDungeon(L"saves/" + folder + L"dungeon.xml");
+    std::wstring mainDungeonFilename = L"saves/" + folder + L"dungeon.xml";
+    loadDungeon(mainDungeonFilename);
+    return mainDungeonFilename;
 }
 
-void Data::save(const std::wstring& folder)
+std::wstring Data::save(const std::wstring& folder)
 {
     #if DEBUG_GLOBAL > 0
-        saveDungeon(L"saves/" + folder + L"dungeon_saved.xml");
+        std::wstring mainDungeonFilename = L"saves/" + folder + L"dungeon_saved.xml";
     #else
-        saveDungeon(L"saves/" + folder + L"dungeon.xml");
+        std::wstring mainDungeonFilename = L"saves/" + folder + L"dungeon.xml";
     #endif
 
+    saveDungeon(mainDungeonFilename);
+
     wdebug_dungeon_1(L"Saved data to folder " << folder);
+
+    return mainDungeonFilename;
 }
 
 void Data::createFiles(const std::wstring& folder)
@@ -45,8 +51,8 @@ void Data::createFiles(const std::wstring& folder)
     wdebug_dungeon_1(L"Created data files to folder " << folder);
 }
 
-//-------------------//
-//----- Dungeon -----//
+//--------------------------//
+//----- XML management -----//
 
 void Data::loadDungeon(const std::wstring& file)
 {
@@ -89,7 +95,6 @@ void Data::loadDungeon(const std::wstring& file)
             Room room;
             room.coords.x = floorPos;
             room.coords.y = roomInfo.attribute(L"pos").as_uint();
-            room.state = RoomState::UNKNOWN;
 
             std::wstring roomStateString = roomInfo.attribute(L"state").as_string();
             if (roomStateString == L"void") room.state = RoomState::VOID;
@@ -97,25 +102,51 @@ void Data::loadDungeon(const std::wstring& file)
 
             wdebug_dungeon_3(L"Found room " << room.pos << L" of state " << roomStateString);
 
-            // Facilities
-            for (auto& facility : room.facilities)
-                facility = false;
-
-            for (auto& roomFacilitiesInfo : roomInfo.children(L"facility")) {
-                std::wstring type = roomFacilitiesInfo.attribute(L"type").as_string();
-
-                if (type == L"ladder")      room.facilities[FacilityID::LADDER] = true;
-                if (type == L"entrance")    room.facilities[FacilityID::ENTRANCE] = true;
-                if (type == L"treasure") {
-                    room.facilities[FacilityID::TREASURE] = true;
-                    room.treasureDosh = roomFacilitiesInfo.attribute(L"dosh").as_uint();
-                }
-
-                wdebug_dungeon_4(L"Found facility " + type);
-            }
+            // Elements
+            loadDungeonRoomTrap(room, roomInfo);
+            loadDungeonRoomFacilities(room, roomInfo);
 
             // Add the room
             m_floors[floorPos].rooms.emplace_back(std::move(room));
+        }
+    }
+}
+
+void Data::loadDungeonRoomTrap(Room& room, const pugi::xml_node& node)
+{
+    // Reset
+    room.trap = TrapID::NONE;
+
+    // TODO Have some kind of register function which can add a trap easily.
+    // map["traptype"] -> TrapID + Metadata (as pointer to struct)
+    const auto& trap = node.child(L"trap");
+    returnif (!trap);
+
+    std::wstring type = trap.attribute(L"type").as_string();
+
+    if (type == L"pickpock") {
+        room.trap = TrapID::PICKPOCK;
+        room.pickpockDosh = trap.attribute(L"dosh").as_uint();
+    }
+}
+
+void Data::loadDungeonRoomFacilities(Room& room, const pugi::xml_node& node)
+{
+    // Reset
+    for (auto& facility : room.facilities)
+        facility = false;
+
+    // TODO Same as trap: have an easy adder for flexibility and modding API
+    for (const auto& facilities : node.children(L"facility")) {
+        std::wstring type = facilities.attribute(L"type").as_string();
+
+        if (type == L"ladder")
+            room.facilities[FacilityID::LADDER] = true;
+        else if (type == L"entrance")
+            room.facilities[FacilityID::ENTRANCE] = true;
+        else if (type == L"treasure") {
+            room.facilities[FacilityID::TREASURE] = true;
+            room.treasureDosh = facilities.attribute(L"dosh").as_uint();
         }
     }
 }
@@ -158,23 +189,40 @@ void Data::saveDungeon(const std::wstring& file)
             else if (roomState == RoomState::CONSTRUCTED) roomStateString = L"constructed";
             room.append_attribute(L"state") = roomStateString.c_str();
 
-            // Facilities
-            // TODO Make a lookup table FacilityID -> wstring
-            if (dataRoom.facilities[FacilityID::LADDER])
-                room.append_child(L"facility").append_attribute(L"type") = L"ladder";
-
-            if (dataRoom.facilities[FacilityID::ENTRANCE])
-                room.append_child(L"facility").append_attribute(L"type") = L"entrance";
-
-            if (dataRoom.facilities[FacilityID::TREASURE]) {
-                auto facility = room.append_child(L"facility");
-                facility.append_attribute(L"type") = L"treasure";
-                facility.append_attribute(L"dosh") = dataRoom.treasureDosh;
-            }
+            // Elements
+            saveDungeonRoomTrap(dataRoom, room);
+            saveDungeonRoomFacilities(dataRoom, room);
         }
     }
 
     doc.save_file(file.c_str());
+}
+
+void Data::saveDungeonRoomTrap(const Room& room, pugi::xml_node& node)
+{
+    returnif (room.trap == TrapID::NONE);
+
+    if (room.trap == TrapID::PICKPOCK) {
+        auto trap = node.append_child(L"trap");
+        trap.append_attribute(L"type") = L"pickpock";
+        trap.append_attribute(L"dosh") = room.pickpockDosh;
+    }
+}
+
+void Data::saveDungeonRoomFacilities(const Room& room, pugi::xml_node& node)
+{
+    // TODO Use structure discussed in loadDungeonRoomTrap
+    if (room.facilities[FacilityID::LADDER])
+        node.append_child(L"facility").append_attribute(L"type") = L"ladder";
+
+    if (room.facilities[FacilityID::ENTRANCE])
+        node.append_child(L"facility").append_attribute(L"type") = L"entrance";
+
+    if (room.facilities[FacilityID::TREASURE]) {
+        auto facility = node.append_child(L"facility");
+        facility.append_attribute(L"type") = L"treasure";
+        facility.append_attribute(L"dosh") = room.treasureDosh;
+    }
 }
 
 //---------------------------//

@@ -5,11 +5,19 @@
 #include "dungeon/event.hpp"
 #include "dungeon/eventtype.hpp"
 #include "dungeon/facilities.hpp"
+#include "dungeon/traps.hpp"
 
 #include <SFML/System/Vector2.hpp>
 #include <string>
 #include <vector>
 #include <array>
+
+// Forward declarations
+
+namespace pugi
+{
+    class xml_node;
+}
 
 namespace dungeon
 {
@@ -56,8 +64,13 @@ namespace dungeon
         {
             sf::Vector2u coords;                            //!< The floor/room coordinate of the room.
             RoomState state = RoomState::UNKNOWN;           //!< The current state.
+
             std::array<bool, FacilityID::COUNT> facilities; //!< All the facilities.
             uint treasureDosh = 0u;                         //!< If facility treasure, then the stored dosh.
+
+            // TODO Make a unique pointer to an holding structure of data for trap.
+            TrapID trap;                                    //!< The trap protecting the room.
+            uint pickpockDosh = 0u;                         //!< Accumulated dosh by pickpock trap.
         };
 
         //! A floor is a vector of rooms.
@@ -80,10 +93,12 @@ namespace dungeon
         //! @{
 
         //! Load data from a specified folder (must exists).
-        void load(const std::wstring& folder);
+        //! @return The filename of the main dungeon file.
+        std::wstring load(const std::wstring& folder);
 
         //! Save data to a specified folder (must exists).
-        void save(const std::wstring& folder);
+        //! @return The filename of the main dungeon file.
+        std::wstring save(const std::wstring& folder);
 
         //! Save data to a specified folder (must exists).
         void createFiles(const std::wstring& folder);
@@ -202,6 +217,14 @@ namespace dungeon
 
         //! Save dungeon data to a specified file (must exists).
         void saveDungeon(const std::wstring& file);
+
+        //! Helpers loading and saving traps.
+        void loadDungeonRoomTrap(Room& room, const pugi::xml_node& node);
+        void saveDungeonRoomTrap(const Room& room, pugi::xml_node& node);
+
+        //! Helpers loading and saving  facilities.
+        void loadDungeonRoomFacilities(Room& room, const pugi::xml_node& node);
+        void saveDungeonRoomFacilities(const Room& room, pugi::xml_node& node);
 
         //! @}
 

@@ -16,10 +16,10 @@ int main(void)
     const auto& node = graph.startingNode();
 
     // Starting node
-    sf::Vector2u expectedDoorRoom(0u, 2u);
-    if (node.room != expectedDoorRoom) {
+    sf::Vector2u expectedEntranceCoords(0u, 2u);
+    if (node.coords != expectedEntranceCoords) {
         std::cerr << "Starting room is not set correctly." << std::endl;
-        std::cerr << "Found: " << node.room << " | Expected: " << expectedDoorRoom << std::endl;
+        std::cerr << "Found: " << node.coords << " | Expected: " << expectedEntranceCoords << std::endl;
         return EXIT_FAILURE;
     }
 

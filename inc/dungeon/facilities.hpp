@@ -13,8 +13,8 @@ namespace dungeon
 {
     //! The facilities.
     /*!
-     *  A facility is an object/structure that helps an invader
-     *  There can be only one per dungeon room.
+     *  A facility is an object/structure that helps an invader.
+     *  There can be only one of each per dungeon room.
      */
     enum FacilityID : uint8
     {

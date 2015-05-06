@@ -15,14 +15,18 @@
 		<room pos="0" state="constructed">
 			<facility type="ladder" />
 		</room>
-		<room pos="1" state="constructed" />
+		<room pos="1" state="constructed">
+			<trap type="pickpock" dosh="42" />
+		</room>
 		<room pos="2" state="void" />
 		<room pos="3" state="constructed">
 			<facility type="ladder" />
 		</room>
 	</floor>
 	<floor pos="2">
-		<room pos="0" state="constructed" />
+		<room pos="0" state="constructed">
+			<facility type="treasure" dosh="42" />
+		</room>
 		<room pos="1" state="void" />
 		<room pos="2" state="constructed" />
 		<room pos="3" state="void" />

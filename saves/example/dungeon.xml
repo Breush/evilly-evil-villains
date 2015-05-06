@@ -35,7 +35,9 @@
 		<room pos="4" state="void" />
 	</floor>
 	<floor pos="3">
-		<room pos="0" state="constructed" />
+		<room pos="0" state="constructed">
+			<trap type="pickpock" dosh="0" />
+		</room>
 		<room pos="1" state="constructed">
 			<facility type="ladder" />
 		</room>
@@ -58,6 +60,7 @@
 		<room pos="0" state="void" />
 		<room pos="1" state="void" />
 		<room pos="2" state="constructed">
+			<trap type="pickpock" dosh="34" />
 			<facility type="ladder" />
 		</room>
 		<room pos="3" state="void" />
