@@ -26,7 +26,7 @@ EventReceiver::~EventReceiver()
 //-------------------------//
 //----- Event emitter -----//
 
-void EventEmitter::emit(const Event& event)
+void EventEmitter::emit(const Event& event) const
 {
     for (auto& receiver : m_receivers)
         receiver->receive(event);

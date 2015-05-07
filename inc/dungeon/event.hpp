@@ -21,14 +21,12 @@ namespace dungeon
         //! Default destructor.
         virtual ~EventEmitter() = default;
 
-    protected:
-
         //----------------------//
         //! @name Event emitter
         //! @{
 
         //! Emits an event through all receivers.
-        void emit(const Event& event);
+        void emit(const Event& event) const;
 
         //! Emits a default event type through all receivers.
         virtual void emit(EventType eventType) = 0;

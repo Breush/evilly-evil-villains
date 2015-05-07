@@ -4,6 +4,7 @@ namespace dungeon
 {
     // Forward declarations
 
+    class Hero;
     enum FacilityID : uint8;
 
     //! All the possible dungeon events.
@@ -15,6 +16,8 @@ namespace dungeon
         FAME_CHANGED,       //!< Fame value changed, delta is set.
         MODE_CHANGED,       //!< Mode (design/invasion) changed.
         FACILITY_CHANGED,   //!< Room facility changed.
+        HERO_ENTERED_ROOM,  //!< A hero entered a room.
+        HERO_LEFT_ROOM,     //!< A hero left a room.
         ERROR,              //!< Whenever something cannot be done.
     };
 
@@ -43,6 +46,13 @@ namespace dungeon
             Mode mode;  //!< The new mode.
             RoomCoords room;        //!< The coordinates of a room whenever it is constructed/destroyed.
             const wchar_t* message; //!< An additional information.
+
+            //! When a hero interacts with a room.
+            struct
+            {
+                Hero* hero;         //!< The hero concerned.
+                RoomCoords room;    //!< The coordinates of the room.
+            } action;
 
             //! When a facility changed.
             struct

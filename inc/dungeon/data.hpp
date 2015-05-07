@@ -5,7 +5,6 @@
 #include "dungeon/event.hpp"
 #include "dungeon/eventtype.hpp"
 #include "dungeon/facilities.hpp"
-#include "dungeon/traps.hpp"
 
 #include <SFML/System/Vector2.hpp>
 #include <string>
@@ -24,7 +23,8 @@ namespace dungeon
     // Forward declarations
 
     class Graph;
-    class Hero;
+    
+    enum TrapID : uint8;
 
     //! The data of a dungeon.
     /*!

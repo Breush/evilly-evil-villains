@@ -3,6 +3,7 @@
 #include "scene/entity.hpp"
 #include "dungeon/event.hpp"
 #include "dungeon/data.hpp"
+#include "dungeon/traps.hpp"
 #include "nui/contextmenu.hpp"
 #include "sfe/grid.hpp"
 #include "sfe/label.hpp"
@@ -176,6 +177,9 @@ namespace dungeon
         //! Refresh the layers (and their texture) of the specified tile.
         void refreshTileLayers(const sf::Vector2u& roomCoords);
 
+        //! Refresh the traps (as tile entities) of the specified tile.
+        void refreshTileTraps(const sf::Vector2u& roomCoords);
+
         //! Refresh the dosh label (value and position) of the specified tile.
         void refreshTileDoshLabel(const sf::Vector2u& coords);
 
@@ -184,10 +188,11 @@ namespace dungeon
         //! A tile of the dungeon.
         struct Tile
         {
-            sf::Vector2u coords;                    //!< The coordinates of the tile (floor/room).
-            Data::Room* room = nullptr;             //!< The corresponding room within data.
-            std::vector<sf::RectangleShape> layers; //!< All sprites to draw, from furthest to nearest.
-            std::unique_ptr<sfe::Label> doshLabel;  //!< The total dosh inside the room.
+            sf::Vector2u coords;                        //!< The coordinates of the tile (floor/room).
+            Data::Room* room = nullptr;                 //!< The corresponding room within data.
+            std::vector<sf::RectangleShape> layers;     //!< All sprites to draw, from furthest to nearest.
+            std::vector<std::unique_ptr<Trap>> traps;   //!< Tile entities, directly linked to a tile.
+            std::unique_ptr<sfe::Label> doshLabel;      //!< The total dosh inside the room.
         };
 
     private:

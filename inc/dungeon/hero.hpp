@@ -118,11 +118,20 @@ namespace dungeon
         //! @}
 
         //--------------------------------//
+        //! @name Artificial intelligence
+        //! @{
+
+        //! Select the node to move the hero to.
+        void setCurrentNode(const Graph::Node* node);
+
+        //! @}
+
+        //--------------------------------//
         //! @name Internal change updates
         //! @{
 
         //! Recompute the local position of the hero.
-        //! @todo This function should not exists once it is managed by physics component.
+        // TODO This function should not exists once it is managed by physics component.
         void refreshPositionFromNode();
 
         //! Whenever the running mode changed.

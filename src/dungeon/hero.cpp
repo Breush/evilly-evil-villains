@@ -47,41 +47,69 @@ void Hero::updateAI(const sf::Time& dt)
 
     m_inRoomSince += dt.asSeconds();
 
-    // TODO Interface with physics engine
-
     // Look for next room
-    const float m_timeInEachRoom = 0.1f;
-    if (m_inRoomSince >= m_timeInEachRoom) {
-        m_inRoomSince -= m_timeInEachRoom;
-        returnif (m_currentNode->neighbours.size() == 0u);
+    static const float m_timeInEachRoom = 0.1f;
+    returnif (m_inRoomSince < m_timeInEachRoom);
 
-        // Consider that the current room might be the best node
-        std::vector<const Graph::Node*> bestNodes;
-        bestNodes.push_back(m_currentNode);
-        int maxEvaluation = call("evaluate_reference", m_currentNode);
+    m_inRoomSince -= m_timeInEachRoom;
 
-        // Get the evaluation from lua
-        for (const auto& neighbour : m_currentNode->neighbours) {
-            int evaluation = call("evaluate", neighbour);
+    returnif (m_currentNode == nullptr);
+    returnif (m_currentNode->neighbours.size() == 0u);
 
-            // Found a new limit for the best nodes
-            if (evaluation > maxEvaluation) {
-                maxEvaluation = evaluation;
-                bestNodes.clear();
-            }
+    // Consider that the current room might be the best node
+    std::vector<const Graph::Node*> bestNodes;
+    bestNodes.push_back(m_currentNode);
+    int maxEvaluation = call("evaluate_reference", m_currentNode);
 
-            // This node is among the best ones
-            if (evaluation == maxEvaluation)
-                bestNodes.push_back(neighbour);
+    // If the hero escaped during evaluation, stop it here
+    returnif (m_currentNode == nullptr);
+
+    // Get the evaluation from lua
+    for (const auto& neighbour : m_currentNode->neighbours) {
+        int evaluation = call("evaluate", neighbour);
+
+        // Found a new limit for the best nodes
+        if (evaluation > maxEvaluation) {
+            maxEvaluation = evaluation;
+            bestNodes.clear();
         }
 
-        // Switch to a new node randomly from the best ones
-        m_currentNode = alea::rand(bestNodes);
+        // This node is among the best ones
+        if (evaluation == maxEvaluation)
+            bestNodes.push_back(neighbour);
+    }
+
+    // Switch to a new node randomly from the best ones
+    setCurrentNode(alea::rand(bestNodes));
+    ++m_tick;
+}
+
+void Hero::setCurrentNode(const Graph::Node* node)
+{
+    returnif (m_currentNode == node);
+
+    Event event;
+    event.action.hero = this;
+
+    // Emit signal when getting out
+    // FIXME Using Data interface seems strange here...
+    if (m_currentNode != nullptr) {
+        // FIXME Why a cast!?
+        event.type = EventType::HERO_LEFT_ROOM;
+        event.action.room = {m_currentNode->coords.x, m_currentNode->coords.y};
+        dynamic_cast<EventEmitter*>(m_data)->emit(event);
+    }
+
+    m_currentNode = node;
+
+    if (m_currentNode != nullptr) {
         m_nodeInfos[m_currentNode->coords].visits += 1u;
         m_nodeInfos[m_currentNode->coords].lastVisit = m_tick;
-
         refreshPositionFromNode();
-        ++m_tick;
+
+        event.type = EventType::HERO_ENTERED_ROOM;
+        event.action.room = {m_currentNode->coords.x, m_currentNode->coords.y};
+        dynamic_cast<EventEmitter*>(m_data)->emit(event);
     }
 }
 
@@ -164,10 +192,10 @@ void Hero::changedRunning()
         m_lua["init"]();
 
         // Get the door from the graph (requires that it is correctly constructed).
-        m_currentNode = &m_graph->startingNode();
-        m_nodeInfos[m_currentNode->coords].visits += 1u;
-        m_nodeInfos[m_currentNode->coords].lastVisit = 0u;
-        refreshPositionFromNode();
+        setCurrentNode(&m_graph->startingNode());
+    }
+    else {
+        setCurrentNode(nullptr);
     }
 }
 

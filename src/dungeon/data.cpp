@@ -2,6 +2,7 @@
 
 #include "dungeon/graph.hpp"
 #include "dungeon/hero.hpp"
+#include "dungeon/traps.hpp"
 #include "tools/debug.hpp"
 #include "tools/string.hpp"
 #include "tools/tools.hpp"

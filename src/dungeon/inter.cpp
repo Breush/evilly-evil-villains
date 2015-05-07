@@ -1,8 +1,9 @@
 #include "dungeon/inter.hpp"
 
+#include "core/gettext.hpp"
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
-#include "core/gettext.hpp"
+#include "dungeon/traps/pickpock.hpp"
 #include "tools/debug.hpp"
 #include "tools/event.hpp"
 #include "tools/tools.hpp"
@@ -351,15 +352,16 @@ void Inter::refreshTile(const sf::Vector2u& coords)
 {
     refreshTileDoshLabel(coords);
     refreshTileLayers(coords);
+    refreshTileTraps(coords);
 }
 
 void Inter::refreshTileDoshLabel(const sf::Vector2u& coords)
 {
-    const auto& roomInfo = m_data->room(coords);
+    const auto& room = m_data->room(coords);
     auto& tile = m_tiles[coords];
 
     // Remove label if stored dosh is null
-    if (roomInfo.treasureDosh == 0u || roomInfo.state == Data::RoomState::VOID) {
+    if (room.treasureDosh == 0u || room.state == Data::RoomState::VOID) {
         tile.doshLabel = nullptr;
         return;
     }
@@ -373,7 +375,7 @@ void Inter::refreshTileDoshLabel(const sf::Vector2u& coords)
 
     // Re-format string
     std::wstringstream str;
-    str << roomInfo.treasureDosh << L'd';
+    str << room.treasureDosh << L'd';
     tile.doshLabel->setText(str.str());
 
     // Re-position
@@ -382,8 +384,8 @@ void Inter::refreshTileDoshLabel(const sf::Vector2u& coords)
 
 void Inter::refreshTileLayers(const sf::Vector2u& coords)
 {
-    const auto& roomInfo = m_data->room(coords);
-    const auto state = roomInfo.state;
+    const auto& room = m_data->room(coords);
+    const auto state = room.state;
 
     // Reset
     clearLayers(coords);
@@ -402,7 +404,32 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
     addLayer(coords, TextureID::DUNGEON_INTER_ROOM);
 
     // Facilities
-    if (roomInfo.facilities[FacilityID::LADDER])    addLayer(coords, TextureID::DUNGEON_INTER_LADDER);
-    if (roomInfo.facilities[FacilityID::TREASURE])  addLayer(coords, TextureID::DUNGEON_INTER_TREASURE);
-    if (roomInfo.facilities[FacilityID::ENTRANCE])  addLayer(coords, TextureID::DUNGEON_INTER_ENTRANCE);
+    if (room.facilities[FacilityID::LADDER])    addLayer(coords, TextureID::DUNGEON_INTER_LADDER);
+    if (room.facilities[FacilityID::TREASURE])  addLayer(coords, TextureID::DUNGEON_INTER_TREASURE);
+    if (room.facilities[FacilityID::ENTRANCE])  addLayer(coords, TextureID::DUNGEON_INTER_ENTRANCE);
+}
+
+void Inter::refreshTileTraps(const sf::Vector2u& coords)
+{
+    const auto& room = m_data->room(coords);
+    auto& tile = m_tiles[coords];
+
+    // Reset
+    tile.traps.clear();
+
+    // Room is not constructed
+    returnif (room.state != Data::RoomState::CONSTRUCTED);
+
+    // Trap or no trap
+    returnif (room.trap == TrapID::NONE);
+
+    // Trap
+    if (room.trap == TrapID::PICKPOCK) {
+        auto pickpock(std::make_unique<traps::PickPock>(room));
+        pickpock->setLocalPosition(tileLocalPosition(coords) + tileSize() / 2.f);
+        pickpock->setCentered(true);
+        pickpock->setEmitter(m_data);
+        attachChild(*pickpock);
+        tile.traps.emplace_back(std::move(pickpock));
+    }
 }
