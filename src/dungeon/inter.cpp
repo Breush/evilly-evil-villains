@@ -105,6 +105,10 @@ void Inter::receive(const Event& event)
             refreshTileDoshLabel(coords);
         break;
 
+    case EventType::HARVESTABLE_DOSH_CHANGED:
+        coords = {event.room.x, event.room.y};
+        refreshTileDoshLabel(coords);
+
     default:
         break;
     }
@@ -339,6 +343,31 @@ void Inter::setRoomFacility(const sf::Vector2f& relPos, FacilityID facilityID, b
     m_data->setRoomFacility(tileFromLocalPosition(relPos), facilityID, state);
 }
 
+//----------------------//
+//----- Dosh label -----//
+
+void Inter::configureDoshLabel(std::unique_ptr<sfe::Label>& doshLabel, const uint dosh, const sf::Color& color)
+{
+    // Nothing if no dosh
+    if (dosh == 0u) {
+        doshLabel = nullptr;
+        return;
+    }
+
+    // Create label if does not exists
+    if (doshLabel == nullptr) {
+        doshLabel = std::make_unique<sfe::Label>();
+        doshLabel->setPrestyle(sfe::Label::Prestyle::NUI);
+        doshLabel->setColor(color);
+        attachChild(*doshLabel);
+    }
+
+    // Re-format string
+    std::wstringstream str;
+    str << dosh << L'd';
+    doshLabel->setText(str.str());
+}
+
 //-----------------------------------//
 //----- Internal change updates -----//
 
@@ -358,28 +387,34 @@ void Inter::refreshTile(const sf::Vector2u& coords)
 void Inter::refreshTileDoshLabel(const sf::Vector2u& coords)
 {
     const auto& room = m_data->room(coords);
+    const auto& localPosition = tileLocalPosition(coords);
     auto& tile = m_tiles[coords];
 
-    // Remove label if stored dosh is null
-    if (room.treasureDosh == 0u || room.state == Data::RoomState::VOID) {
-        tile.doshLabel = nullptr;
+    // Remove label if no room
+    if (room.state == Data::RoomState::VOID) {
+        tile.totalDoshLabel = nullptr;
+        tile.harvestableDoshLabel = nullptr;
         return;
     }
 
-    // Create label if does not exists
-    if (tile.doshLabel == nullptr) {
-        tile.doshLabel = std::make_unique<sfe::Label>();
-        tile.doshLabel->setPrestyle(sfe::Label::Prestyle::NUI);
-        attachChild(*tile.doshLabel);
-    }
+    // Harvestable dosh
+    uint harvestableDosh = 0u;
+    for (const auto& trap : tile.traps)
+        harvestableDosh += trap->harvestableDosh();
+    configureDoshLabel(tile.harvestableDoshLabel, harvestableDosh, sf::Color::Red);
 
-    // Re-format string
-    std::wstringstream str;
-    str << room.treasureDosh << L'd';
-    tile.doshLabel->setText(str.str());
+    // Total dosh
+    uint totalDosh = 0u;
+    totalDosh += harvestableDosh;
+    totalDosh += room.treasureDosh;
+    configureDoshLabel(tile.totalDoshLabel, totalDosh, sf::Color::White);
 
     // Re-position
-    tile.doshLabel->setLocalPosition(tileLocalPosition(coords));
+    // TODO Really use some relative positionning
+    if (tile.totalDoshLabel != nullptr)
+        tile.totalDoshLabel->setLocalPosition(localPosition);
+    if (tile.harvestableDoshLabel != nullptr)
+        tile.harvestableDoshLabel->setLocalPosition(localPosition + tileSize() - tile.harvestableDoshLabel->size());
 }
 
 void Inter::refreshTileLayers(const sf::Vector2u& coords)

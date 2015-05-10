@@ -69,6 +69,9 @@ namespace dungeon
         //! Add a certain amount of dosh to current resources.
         inline void addDosh(uint amount) { setDosh(m_dosh + amount); }
 
+        //! Substract a certain amount of dosh to current resources.
+        inline void subDosh(uint amount) { setDosh(m_dosh - amount); }
+
         //! @}
 
         //--------------------------//

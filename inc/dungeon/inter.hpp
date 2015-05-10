@@ -161,6 +161,13 @@ namespace dungeon
 
         //! @}
 
+        //----------------//
+        //! @name Decorum
+        //! @{
+
+        //! Set the dosh label to a specific value.
+        void configureDoshLabel(std::unique_ptr<sfe::Label>& doshLabel, const uint dosh, const sf::Color& color);
+
         //--------------------------------//
         //! @name Internal change updates
         //! @{
@@ -188,11 +195,12 @@ namespace dungeon
         //! A tile of the dungeon.
         struct Tile
         {
-            sf::Vector2u coords;                        //!< The coordinates of the tile (floor/room).
-            Data::Room* room = nullptr;                 //!< The corresponding room within data.
-            std::vector<sf::RectangleShape> layers;     //!< All sprites to draw, from furthest to nearest.
-            std::vector<std::unique_ptr<Trap>> traps;   //!< Tile entities, directly linked to a tile.
-            std::unique_ptr<sfe::Label> doshLabel;      //!< The total dosh inside the room.
+            sf::Vector2u coords;                                //!< The coordinates of the tile (floor/room).
+            Data::Room* room = nullptr;                         //!< The corresponding room within data.
+            std::vector<sf::RectangleShape> layers;             //!< All sprites to draw, from furthest to nearest.
+            std::vector<std::unique_ptr<Trap>> traps;           //!< Tile entities, directly linked to a tile.
+            std::unique_ptr<sfe::Label> totalDoshLabel;         //!< The total dosh inside the room.
+            std::unique_ptr<sfe::Label> harvestableDoshLabel;   //!< The harvestable dosh.
         };
 
     private:

@@ -94,10 +94,9 @@ void Hero::setCurrentNode(const Graph::Node* node)
     // Emit signal when getting out
     // FIXME Using Data interface seems strange here...
     if (m_currentNode != nullptr) {
-        // FIXME Why a cast!?
         event.type = EventType::HERO_LEFT_ROOM;
         event.action.room = {m_currentNode->coords.x, m_currentNode->coords.y};
-        dynamic_cast<EventEmitter*>(m_data)->emit(event);
+        emitter()->emit(event);
     }
 
     m_currentNode = node;
@@ -109,7 +108,7 @@ void Hero::setCurrentNode(const Graph::Node* node)
 
         event.type = EventType::HERO_ENTERED_ROOM;
         event.action.room = {m_currentNode->coords.x, m_currentNode->coords.y};
-        dynamic_cast<EventEmitter*>(m_data)->emit(event);
+        emitter()->emit(event);
     }
 }
 

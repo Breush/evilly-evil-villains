@@ -1,6 +1,7 @@
 #pragma once
 
 #include "dungeon/traps.hpp"
+#include "dungeon/event.hpp"
 
 namespace dungeon
 {
@@ -20,6 +21,14 @@ namespace traps
         //! Default destructor.
         ~PickPock() = default;
 
+        //------------------//
+        //! @name Resources
+        //! @{
+
+        inline uint harvestableDosh() const final { return dosh(); }
+
+        //! @}
+
     protected:
 
         //----------------//
@@ -38,7 +47,17 @@ namespace traps
 
         //! @}
 
+        //-----------------//
+        //! @name Stealing
+        //! @{
+
+        void stealFromHero(Hero* hero);
+
+        //! @}
+
     private:
+
+        uint m_maxDosh = 20u;           //!< The max amount of dosh this trap can hold.
 
         // Decorum
         sf::RectangleShape m_sprite;    //!< The sprite.

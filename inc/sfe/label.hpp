@@ -35,6 +35,7 @@ namespace sfe
         virtual ~Label() = default;
 
         void setFont(FontID fontID);
+        void setColor(const sf::Color& color);
         void setCharacterSize(uint characterSize);
         void setText(const std::wstring& text);
         void setText(const std::wstring& text, FontID fontID);

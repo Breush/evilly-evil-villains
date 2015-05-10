@@ -71,6 +71,9 @@ namespace dungeon
         //! Set the event emitter.
         void setEmitter(EventEmitter* emitter);
 
+        //! Get the event emitter.
+        inline EventEmitter* emitter() { return m_emitter; };
+
         //! @}
 
     protected:

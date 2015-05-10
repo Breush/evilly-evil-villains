@@ -10,15 +10,16 @@ namespace dungeon
     //! All the possible dungeon events.
     enum class EventType
     {
-        ROOM_DESTROYED,     //!< A room was destroyed.
-        ROOM_CONSTRUCTED,   //!< A rom was constructed.
-        DOSH_CHANGED,       //!< Dosh value changed, delta is set.
-        FAME_CHANGED,       //!< Fame value changed, delta is set.
-        MODE_CHANGED,       //!< Mode (design/invasion) changed.
-        FACILITY_CHANGED,   //!< Room facility changed.
-        HERO_ENTERED_ROOM,  //!< A hero entered a room.
-        HERO_LEFT_ROOM,     //!< A hero left a room.
-        ERROR,              //!< Whenever something cannot be done.
+        ROOM_DESTROYED,             //!< A room was destroyed.
+        ROOM_CONSTRUCTED,           //!< A rom was constructed.
+        DOSH_CHANGED,               //!< Dosh value changed, delta is set.
+        FAME_CHANGED,               //!< Fame value changed, delta is set.
+        MODE_CHANGED,               //!< Mode (design/invasion) changed.
+        FACILITY_CHANGED,           //!< Room facility changed.
+        HARVESTABLE_DOSH_CHANGED,   //!< The harvestable dosh in a room changed.
+        HERO_ENTERED_ROOM,          //!< A hero entered a room.
+        HERO_LEFT_ROOM,             //!< A hero left a room.
+        ERROR,                      //!< Whenever something cannot be done.
     };
 
     //! The possible modes.

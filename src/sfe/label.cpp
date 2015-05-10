@@ -35,6 +35,11 @@ void Label::setFont(FontID fontID)
     updateSize();
 }
 
+void Label::setColor(const sf::Color& color)
+{
+    m_text.setColor(color);
+}
+
 void Label::setCharacterSize(uint characterSize)
 {
     m_text.setCharacterSize(characterSize);
