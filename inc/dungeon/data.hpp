@@ -5,6 +5,7 @@
 #include "dungeon/event.hpp"
 #include "dungeon/eventtype.hpp"
 #include "dungeon/facilities.hpp"
+#include "dungeon/trapdata.hpp"
 
 #include <SFML/System/Vector2.hpp>
 #include <string>
@@ -23,8 +24,6 @@ namespace dungeon
     // Forward declarations
 
     class Graph;
-    
-    enum TrapID : uint8;
 
     //! The data of a dungeon.
     /*!
@@ -65,12 +64,11 @@ namespace dungeon
             sf::Vector2u coords;                            //!< The floor/room coordinate of the room.
             RoomState state = RoomState::UNKNOWN;           //!< The current state.
 
+            // TODO Use the same trick than for trap
             std::array<bool, FacilityID::COUNT> facilities; //!< All the facilities.
             uint treasureDosh = 0u;                         //!< If facility treasure, then the stored dosh.
 
-            // TODO Make a unique pointer to an holding structure of data for trap.
-            TrapID trap;                                    //!< The trap protecting the room.
-            uint pickpockDosh = 0u;                         //!< Accumulated dosh by pickpock trap.
+            TrapData trap;                                  //!< The trap protecting the room.
         };
 
         //! A floor is a vector of rooms.
@@ -134,13 +132,17 @@ namespace dungeon
 
         //! @}
 
-        //-------------------//
-        //! @name Facilities
+        //-----------------------------//
+        //! @name Facilities and traps
         //! @{
 
-        //! Set the set of the specified room's facility.
+        //! Set the value of the specified room's facility.
         //! Will emit an event if a change occured.
         void setRoomFacility(const sf::Vector2u& coords, FacilityID facilityID, bool state);
+
+        //! Set the trap of the specified room.
+        //! Will emit an event if a change occured.
+        void setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID);
 
         //! @}
 
@@ -218,10 +220,6 @@ namespace dungeon
         //! Save dungeon data to a specified file (must exists).
         void saveDungeon(const std::wstring& file);
 
-        //! Helpers loading and saving traps.
-        void loadDungeonRoomTrap(Room& room, const pugi::xml_node& node);
-        void saveDungeonRoomTrap(const Room& room, pugi::xml_node& node);
-
         //! Helpers loading and saving  facilities.
         void loadDungeonRoomFacilities(Room& room, const pugi::xml_node& node);
         void saveDungeonRoomFacilities(const Room& room, pugi::xml_node& node);
@@ -286,3 +284,4 @@ namespace dungeon
         uint m_fame = 0u;   //!< The resource fame value.
     };
 }
+

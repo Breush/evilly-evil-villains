@@ -3,10 +3,10 @@
 #include "core/application.hpp"
 #include "core/gettext.hpp"
 #include "dungeon/eventtype.hpp"
+#include "dungeon/facilities.hpp"
+#include "dungeon/traps.hpp"
 #include "resources/identifiers.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
-
-#include "dungeon/facilities.hpp"
 
 using namespace dungeon;
 
@@ -31,6 +31,12 @@ Sidebar::Sidebar()
     m_tabsStacker.setCentered(true);
 
     update();
+}
+
+Sidebar::~Sidebar()
+{
+    m_tabsStacker.clear();
+    m_tabs.clear();
 }
 
 //-------------------//
@@ -84,35 +90,20 @@ void Sidebar::receive(const Event& event)
 void Sidebar::setMode(Mode mode)
 {
     m_tabsStacker.clear();
-
     m_tabs.clear();
-
-    // TODO Use facilities ladder model for all.
 
     switch (mode) {
     case Mode::MONSTERS:
-        /*m_tabs[0]->setVisual(_("Grasshopper"), TextureID::DUNGEON_MONSTERS_GRASSHOPPER, tabImageSize);
-        m_tabs[1]->setVisual(_("Creepim"),     TextureID::DUNGEON_MONSTERS_CREEPIM,     tabImageSize);
-        m_tabs[2]->setVisual(_("Fly-man"),     TextureID::DUNGEON_MONSTERS_FLYMAN,      tabImageSize);
-        m_tabs[3]->setVisual(_("Lezard-man"),  TextureID::DUNGEON_MONSTERS_LEZARDMAN,   tabImageSize);
-        m_tabs[4]->setVisual(_("Weremole"),    TextureID::DUNGEON_MONSTERS_WEREMOLE,    tabImageSize);*/
         break;
 
     case Mode::TRAPS:
-        /*m_tabs[0]->setVisual(_("Bells"),              TextureID::DUNGEON_TRAPS_BELLS,             tabImageSize);
-        m_tabs[1]->setVisual(_("Wolf trap"),          TextureID::DUNGEON_TRAPS_WOLFTRAP,          tabImageSize);
-        m_tabs[2]->setVisual(_("Trompe l'oeil"),       TextureID::DUNGEON_TRAPS_TROMPELOEIL,       tabImageSize);
-        m_tabs[3]->setVisual(_("Tranquilizer darts"), TextureID::DUNGEON_TRAPS_TRANQUILIZERDARTS, tabImageSize);*/
+        m_tabs.emplace_back(std::make_unique<dungeon::TrapGrabButton>(_("Pick-pock"), TextureID::DUNGEON_TRAPS_PICKPOCK, L"pickpock"));
         break;
 
     case Mode::FACILITIES:
-        m_tabs.push_back(std::make_unique<dungeon::FacilityGrabButton>(_("Treasure"),   TextureID::DUNGEON_FACILITIES_TREASURE, FacilityID::TREASURE));
-        m_tabs.push_back(std::make_unique<dungeon::FacilityGrabButton>(_("Entrance"),   TextureID::DUNGEON_FACILITIES_ENTRANCE, FacilityID::ENTRANCE));
-        m_tabs.push_back(std::make_unique<dungeon::FacilityGrabButton>(_("Ladder"),     TextureID::DUNGEON_FACILITIES_LADDER,   FacilityID::LADDER));
-
-        /*m_tabs[1]->setVisual(_("Signpost"), TextureID::DUNGEON_FACILITIES_SIGNPOST, tabImageSize);
-        m_tabs[1]->setVisual(_("Small chest"),   TextureID::DUNGEON_TREASURES_SMALLCHEST,   tabImageSize);
-        m_tabs[2]->setVisual(_("Humble gift"),   TextureID::DUNGEON_TREASURES_HUMBLEGIFT,   tabImageSize);*/
+        m_tabs.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Treasure"),   TextureID::DUNGEON_FACILITIES_TREASURE, FacilityID::TREASURE));
+        m_tabs.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Entrance"),   TextureID::DUNGEON_FACILITIES_ENTRANCE, FacilityID::ENTRANCE));
+        m_tabs.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Ladder"),     TextureID::DUNGEON_FACILITIES_LADDER,   FacilityID::LADDER));
         break;
     }
 

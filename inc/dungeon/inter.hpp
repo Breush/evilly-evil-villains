@@ -49,12 +49,24 @@ namespace dungeon
 
         //! @}
 
+        //------------------------//
+        //! @name Dosh harvesting
+        //! @{
+
+        //! Harvest the harvetable dosh in the specified tile.
+        void harvestTileDosh(const sf::Vector2u& coords);
+
+        //! @}
+
         //------------------//
         //! @name Structure
         //! @{
 
         //! Find the room below the specified relative position and forward change to data.
         void setRoomFacility(const sf::Vector2f& relPos, FacilityID facilityID, bool state);
+
+        //! Find the room below the specified relative position and forward change to data.
+        void setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID);
 
         //! Change the number of floors.
         void adaptFloorsCount(int relativeValue);
@@ -198,7 +210,7 @@ namespace dungeon
             sf::Vector2u coords;                                //!< The coordinates of the tile (floor/room).
             Data::Room* room = nullptr;                         //!< The corresponding room within data.
             std::vector<sf::RectangleShape> layers;             //!< All sprites to draw, from furthest to nearest.
-            std::vector<std::unique_ptr<Trap>> traps;           //!< Tile entities, directly linked to a tile.
+            std::unique_ptr<Trap> trap = nullptr;               //!< The trap, protecting the tile.
             std::unique_ptr<sfe::Label> totalDoshLabel;         //!< The total dosh inside the room.
             std::unique_ptr<sfe::Label> harvestableDoshLabel;   //!< The harvestable dosh.
         };

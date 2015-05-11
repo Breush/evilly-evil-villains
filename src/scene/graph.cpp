@@ -111,7 +111,7 @@ void Graph::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
     // Drawing grabbed object
     // Note: Layer is now NUI
-    if (m_grabbable.get() != nullptr)
+    if (m_grabbable != nullptr)
         target.draw(*m_grabbable, states);
 
     // Hovered child on debug
@@ -244,12 +244,14 @@ void Graph::grabbableHandleMouseEvent(const sf::Event& event)
     case sf::Event::MouseMoved:
         m_grabbable->setPosition(nuiPos);
         break;
+
     case sf::Event::MouseButtonReleased:
         entity = entityFromPosition(mousePos, viewPos);
         if (entity != nullptr) relPos = entity->getInverseTransform().transformPoint(viewPos);
         m_grabbable->spawner().grabbableReleased(entity, relPos, nuiPos);
         m_grabbable = nullptr;
         break;
+
     default:
         break;
     }
@@ -296,7 +298,7 @@ void Graph::drawMouseDetector(sf::RenderTarget& target, sf::RenderStates states)
 Entity* Graph::handleMouseEvent(const sf::Event& event)
 {
     // Let grabbable manage if any
-    if (m_grabbable.get() != nullptr) {
+    if (m_grabbable != nullptr) {
         grabbableHandleMouseEvent(event);
         return nullptr;
     }

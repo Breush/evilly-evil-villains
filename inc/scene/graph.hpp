@@ -16,11 +16,11 @@ namespace scene
      *      Manage focus and hovering through different layers
      **/
 
-    class Graph : public sf::Drawable
+    class Graph final : public sf::Drawable
     {
     public:
         Graph();
-        virtual ~Graph() = default;
+        ~Graph() = default;
 
         // Routine
         void update(const sf::Time& dt);

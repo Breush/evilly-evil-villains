@@ -8,6 +8,8 @@ using namespace sfe;
 
 Label::Label()
 {
+    setDetectable(false);
+
     addPart(&m_text);
 
     refreshDisplay();

@@ -37,6 +37,8 @@ Entity::Entity(bool isLerpable)
 
 Entity::~Entity()
 {
+    m_children.clear();
+
     if (m_parent != nullptr)
         m_parent->detachChild(*this);
 }

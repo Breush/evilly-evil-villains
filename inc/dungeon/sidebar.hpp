@@ -18,7 +18,7 @@ namespace dungeon
 
     public:
         Sidebar();
-        virtual ~Sidebar() = default;
+        ~Sidebar();
 
         // Reduced mode
         void setReduced(bool reduced);

@@ -36,7 +36,9 @@
 	</floor>
 	<floor pos="3">
 		<room pos="0" state="constructed">
-			<trap type="pickpock" dosh="0" />
+			<trap type="pickpock">
+				<dosh type="uint32" value="0" />
+			</trap>
 		</room>
 		<room pos="1" state="constructed">
 			<facility type="ladder" />
@@ -60,7 +62,9 @@
 		<room pos="0" state="void" />
 		<room pos="1" state="void" />
 		<room pos="2" state="constructed">
-			<trap type="pickpock" dosh="34" />
+			<trap type="pickpock">
+				<dosh type="uint32" value="2" />
+			</trap>
 			<facility type="ladder" />
 		</room>
 		<room pos="3" state="void" />

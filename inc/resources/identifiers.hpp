@@ -2,7 +2,8 @@
 
 #include "tools/int.hpp"
 
-enum class TextureID : uint8 {
+enum class TextureID : uint8
+{
     DEFAULT,
     JUMPINGTOASTS_BACKGROUND,
     JUMPINGTOASTS_JUMPING,
@@ -24,21 +25,11 @@ enum class TextureID : uint8 {
     DUNGEON_PANEL_MONSTERS,
     DUNGEON_PANEL_TRAPS,
     DUNGEON_PANEL_FACILITIES,
-    DUNGEON_MONSTERS_GRASSHOPPER,
     DUNGEON_MONSTERS_CREEPIM,
-    DUNGEON_MONSTERS_FLYMAN,
-    DUNGEON_MONSTERS_LEZARDMAN,
-    DUNGEON_MONSTERS_WEREMOLE,
-    DUNGEON_TRAPS_BELLS,
-    DUNGEON_TRAPS_WOLFTRAP,
-    DUNGEON_TRAPS_TROMPELOEIL,
-    DUNGEON_TRAPS_TRANQUILIZERDARTS,
+    DUNGEON_TRAPS_PICKPOCK,
     DUNGEON_FACILITIES_ENTRANCE,
     DUNGEON_FACILITIES_LADDER,
-    DUNGEON_FACILITIES_SIGNPOST,
     DUNGEON_FACILITIES_TREASURE,
-    DUNGEON_FACILITIES_CHEST,
-    DUNGEON_FACILITIES_GIFT,
     DUNGEON_INTER_ROOM,
     DUNGEON_INTER_ENTRANCE,
     DUNGEON_INTER_LADDER,
@@ -46,12 +37,14 @@ enum class TextureID : uint8 {
     DUNGEON_LOCK,
 };
 
-enum class AnimationID : uint8 {
+enum class AnimationID : uint8
+{
     DEFAULT,
     JUMPINGTOASTS,
 };
 
-enum class ShaderID : uint8 {
+enum class ShaderID : uint8
+{
     DEFAULT,
     NONE,
     MENU_BACKGROUND,
@@ -60,14 +53,16 @@ enum class ShaderID : uint8 {
     NUI_FOCUS,
 };
 
-enum class FontID : uint8 {
+enum class FontID : uint8
+{
     DEFAULT,
     MONO,
     NUI,
     HORROR,
 };
 
-enum class SoundID : uint8 {
+enum class SoundID : uint8
+{
     DEFAULT,
     JUMPINGTOASTS,
     NUI_ACCEPT,
@@ -75,7 +70,8 @@ enum class SoundID : uint8 {
     NUI_SELECT,
 };
 
-enum class MusicID : uint8 {
+enum class MusicID : uint8
+{
     DEFAULT,
     MENU_THEME,
 };

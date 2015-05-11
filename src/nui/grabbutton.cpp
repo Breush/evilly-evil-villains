@@ -13,4 +13,3 @@ void GrabButton::handleMouseButtonPressed(const sf::Mouse::Button button, const 
     if (button == sf::Mouse::Left)
       graph()->setGrabbable(spawnGrabbable());
 }
-

@@ -92,42 +92,24 @@ void Data::loadDungeon(const std::wstring& file)
 
         // Rooms
         m_floors[floorPos].rooms.reserve(m_roomsByFloor);
-        for (auto& roomInfo : floor.children(L"room")) {
+        for (auto& roomNode : floor.children(L"room")) {
             Room room;
             room.coords.x = floorPos;
-            room.coords.y = roomInfo.attribute(L"pos").as_uint();
+            room.coords.y = roomNode.attribute(L"pos").as_uint();
 
-            std::wstring roomStateString = roomInfo.attribute(L"state").as_string();
+            std::wstring roomStateString = roomNode.attribute(L"state").as_string();
             if (roomStateString == L"void") room.state = RoomState::VOID;
             else if (roomStateString == L"constructed") room.state = RoomState::CONSTRUCTED;
 
             wdebug_dungeon_3(L"Found room " << room.pos << L" of state " << roomStateString);
 
             // Elements
-            loadDungeonRoomTrap(room, roomInfo);
-            loadDungeonRoomFacilities(room, roomInfo);
+            room.trap.loadXML(roomNode);
+            loadDungeonRoomFacilities(room, roomNode);
 
             // Add the room
             m_floors[floorPos].rooms.emplace_back(std::move(room));
         }
-    }
-}
-
-void Data::loadDungeonRoomTrap(Room& room, const pugi::xml_node& node)
-{
-    // Reset
-    room.trap = TrapID::NONE;
-
-    // TODO Have some kind of register function which can add a trap easily.
-    // map["traptype"] -> TrapID + Metadata (as pointer to struct)
-    const auto& trap = node.child(L"trap");
-    returnif (!trap);
-
-    std::wstring type = trap.attribute(L"type").as_string();
-
-    if (type == L"pickpock") {
-        room.trap = TrapID::PICKPOCK;
-        room.pickpockDosh = trap.attribute(L"dosh").as_uint();
     }
 }
 
@@ -191,7 +173,7 @@ void Data::saveDungeon(const std::wstring& file)
             room.append_attribute(L"state") = roomStateString.c_str();
 
             // Elements
-            saveDungeonRoomTrap(dataRoom, room);
+            dataRoom.trap.saveXML(room);
             saveDungeonRoomFacilities(dataRoom, room);
         }
     }
@@ -199,20 +181,9 @@ void Data::saveDungeon(const std::wstring& file)
     doc.save_file(file.c_str());
 }
 
-void Data::saveDungeonRoomTrap(const Room& room, pugi::xml_node& node)
-{
-    returnif (room.trap == TrapID::NONE);
-
-    if (room.trap == TrapID::PICKPOCK) {
-        auto trap = node.append_child(L"trap");
-        trap.append_attribute(L"type") = L"pickpock";
-        trap.append_attribute(L"dosh") = room.pickpockDosh;
-    }
-}
-
 void Data::saveDungeonRoomFacilities(const Room& room, pugi::xml_node& node)
 {
-    // TODO Use structure discussed in loadDungeonRoomTrap
+    // TODO Use same structure than TrapData
     if (room.facilities[FacilityID::LADDER])
         node.append_child(L"facility").append_attribute(L"type") = L"ladder";
 
@@ -338,8 +309,8 @@ void Data::stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh
     EventEmitter::emit(event);
 }
 
-//----------------------//
-//----- Facilities -----//
+//--------------------------------//
+//----- Facilities and traps -----//
 
 void Data::setRoomFacility(const sf::Vector2u& coords, FacilityID facilityID, bool state)
 {
@@ -360,6 +331,24 @@ void Data::setRoomFacility(const sf::Vector2u& coords, FacilityID facilityID, bo
         subDosh(100u);
         roomInfo.treasureDosh = 100u;
     }
+}
+
+void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
+{
+    auto& roomInfo = room(coords);
+
+    // TODO Destroy previous trap - Get some money back?
+    roomInfo.trap.clear();
+
+    // Set the trap to the new one.
+    roomInfo.trap.create(trapID);
+
+    Event event;
+    event.type = EventType::TRAP_CHANGED;
+    event.room = {coords.x, coords.y};
+    EventEmitter::emit(event);
+
+    // TODO Creating this trap should cost money
 }
 
 //---------------------//

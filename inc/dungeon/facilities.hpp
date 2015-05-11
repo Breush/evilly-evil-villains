@@ -40,7 +40,7 @@ namespace dungeon
         FacilityGrabButton(const std::wstring& text, TextureID textureID, FacilityID facilityID);
 
         //! Default destructor.
-        virtual ~FacilityGrabButton() = default;
+        ~FacilityGrabButton() = default;
 
     protected:
 
@@ -74,7 +74,7 @@ namespace dungeon
         FacilityGrabbable(scene::GrabbableSpawner& spawner, TextureID textureID);
 
         //! Default destructor.
-        virtual ~FacilityGrabbable() = default;
+        ~FacilityGrabbable() = default;
 
     protected:
 

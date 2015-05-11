@@ -139,9 +139,7 @@ void Hero::AIGetOut()
     returnif (!m_currentNode->entrance);
     setRunning(false);
 
-    std::cerr << this << " gets out with " << m_dosh << " dosh." << std::endl;
-
-    // The dosh held is lost.
+    // The dosh held is lost for the player.
     setDosh(0u);
 }
 
@@ -150,8 +148,6 @@ void Hero::AIStealTreasure()
     auto maxStolenDosh = std::min(100u, m_currentNode->treasure);
     auto stolenDosh = 1u + rand() % maxStolenDosh;
     m_data->stealTreasure(m_currentNode->coords, *this, stolenDosh);
-
-    std::cerr << this << " steals " << stolenDosh << " dosh from treasure in room " << m_currentNode->coords << "." << std::endl;
 }
 
 //-------------------------//

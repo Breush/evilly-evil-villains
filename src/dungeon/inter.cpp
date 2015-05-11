@@ -3,7 +3,7 @@
 #include "core/gettext.hpp"
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
-#include "dungeon/traps/pickpock.hpp"
+#include "dungeon/traps/maker.hpp"
 #include "tools/debug.hpp"
 #include "tools/event.hpp"
 #include "tools/tools.hpp"
@@ -67,8 +67,12 @@ void Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::V
     // Selected the tile below
     selectTile(mousePos);
 
+    // Harvest the money
+    if (button == sf::Mouse::Left)
+        harvestTileDosh(m_selectedTile->coords);
+
     // Pop the context menu up
-    if (button == sf::Mouse::Right)
+    else if (button == sf::Mouse::Right)
         showTileContextMenu(m_selectedTile->coords, nuiPos);
 }
 
@@ -103,6 +107,11 @@ void Inter::receive(const Event& event)
         refreshTileLayers(coords);
         if (event.facility.id == FacilityID::TREASURE)
             refreshTileDoshLabel(coords);
+        break;
+
+    case EventType::TRAP_CHANGED:
+        coords = {event.room.x, event.room.y};
+        refreshTileTraps(coords);
         break;
 
     case EventType::HARVESTABLE_DOSH_CHANGED:
@@ -316,6 +325,16 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
 //---------------------//
 //----- Structure -----//
 
+void Inter::setRoomFacility(const sf::Vector2f& relPos, FacilityID facilityID, bool state)
+{
+    m_data->setRoomFacility(tileFromLocalPosition(relPos), facilityID, state);
+}
+
+void Inter::setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID)
+{
+    m_data->setRoomTrap(tileFromLocalPosition(relPos), trapID);
+}
+
 void Inter::adaptFloorsCount(int relativeValue)
 {
     setFloorsCount(m_data->floorsCount() + relativeValue);
@@ -338,13 +357,20 @@ void Inter::setRoomsByFloor(uint value)
     refreshFromData();
 }
 
-void Inter::setRoomFacility(const sf::Vector2f& relPos, FacilityID facilityID, bool state)
-{
-    m_data->setRoomFacility(tileFromLocalPosition(relPos), facilityID, state);
-}
+//----------------//
+//----- Dosh -----//
 
-//----------------------//
-//----- Dosh label -----//
+void Inter::harvestTileDosh(const sf::Vector2u& coords)
+{
+    auto& trap = m_tiles[coords].trap;
+    returnif (trap == nullptr);
+
+    auto harvestableDosh = trap->harvestableDosh();
+    if (harvestableDosh > 0u)
+        m_data->addDosh(trap->harvestDosh());
+
+    refreshTileDoshLabel(coords);
+}
 
 void Inter::configureDoshLabel(std::unique_ptr<sfe::Label>& doshLabel, const uint dosh, const sf::Color& color)
 {
@@ -399,8 +425,8 @@ void Inter::refreshTileDoshLabel(const sf::Vector2u& coords)
 
     // Harvestable dosh
     uint harvestableDosh = 0u;
-    for (const auto& trap : tile.traps)
-        harvestableDosh += trap->harvestableDosh();
+    if (tile.trap != nullptr)
+        harvestableDosh += tile.trap->harvestableDosh();
     configureDoshLabel(tile.harvestableDoshLabel, harvestableDosh, sf::Color::Red);
 
     // Total dosh
@@ -446,25 +472,22 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
 
 void Inter::refreshTileTraps(const sf::Vector2u& coords)
 {
-    const auto& room = m_data->room(coords);
+    auto& room = m_data->room(coords);
     auto& tile = m_tiles[coords];
 
     // Reset
-    tile.traps.clear();
+    tile.trap = nullptr;
 
     // Room is not constructed
     returnif (room.state != Data::RoomState::CONSTRUCTED);
 
     // Trap or no trap
-    returnif (room.trap == TrapID::NONE);
+    returnif (!room.trap.exists());
 
     // Trap
-    if (room.trap == TrapID::PICKPOCK) {
-        auto pickpock(std::make_unique<traps::PickPock>(room));
-        pickpock->setLocalPosition(tileLocalPosition(coords) + tileSize() / 2.f);
-        pickpock->setCentered(true);
-        pickpock->setEmitter(m_data);
-        attachChild(*pickpock);
-        tile.traps.emplace_back(std::move(pickpock));
-    }
+    tile.trap = traps::make(room);
+    tile.trap->setLocalPosition(tileLocalPosition(coords) + tileSize() / 2.f);
+    tile.trap->setCentered(true);
+    tile.trap->setEmitter(m_data);
+    attachChild(*tile.trap);
 }

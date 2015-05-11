@@ -16,7 +16,9 @@
 			<facility type="ladder" />
 		</room>
 		<room pos="1" state="constructed">
-			<trap type="pickpock" dosh="42" />
+			<trap type="pickpock">
+				<dosh type="uint32" value="42" />
+			</trap>
 		</room>
 		<room pos="2" state="void" />
 		<room pos="3" state="constructed">
