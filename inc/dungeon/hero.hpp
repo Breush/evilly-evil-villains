@@ -162,9 +162,9 @@ namespace dungeon
         const Inter* m_inter = nullptr;             //!< The dungeon inter, to get cellsize and position.
 
         // Artificial intelligence
-        sel::State m_lua;           //!< The lua state.
-        float m_inRoomSince = 0.f;  //!< How many seconds the hero is in the current node.
-        uint m_tick = 0u;           //!< The current tick (how many nodes has been visited so far).
+        sel::State m_lua;               //!< The lua state.
+        float m_inRoomSince = 0.f;      //!< How many seconds the hero is in the current node.
+        uint m_tick = 0u;               //!< The current tick (how many nodes has been visited so far).
         std::unordered_map<sf::Vector2u, NodeInfo> m_nodeInfos; //!< Remembers the visits of a certain node.
 
         // Decorum

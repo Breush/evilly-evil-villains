@@ -102,6 +102,10 @@ void Hero::setCurrentNode(const Graph::Node* node)
     m_currentNode = node;
 
     if (m_currentNode != nullptr) {
+        // First visit to this node
+        if (m_nodeInfos[m_currentNode->coords].visits == 0u)
+            m_lua["nonVisitedNodes"] = static_cast<uint>(m_lua["nonVisitedNodes"]) - 1u;
+
         m_nodeInfos[m_currentNode->coords].visits += 1u;
         m_nodeInfos[m_currentNode->coords].lastVisit = m_tick;
         refreshPositionFromNode();
@@ -139,8 +143,16 @@ void Hero::AIGetOut()
     returnif (!m_currentNode->entrance);
     setRunning(false);
 
+    // If no dosh stolen -> hero is unhappy, fame decrease
+    if (dosh() == 0u) {
+        m_data->subFame(4u);
+    }
+
     // The dosh held is lost for the player.
-    setDosh(0u);
+    else {
+        setDosh(0u);
+        m_data->addFame(1u);
+    }
 }
 
 void Hero::AIStealTreasure()
@@ -187,6 +199,7 @@ void Hero::changedRunning()
         m_lua["init"]();
 
         // Get the door from the graph (requires that it is correctly constructed).
+        m_lua["nonVisitedNodes"] = m_graph->uniqueNodesCount();
         setCurrentNode(&m_graph->startingNode());
     }
     else {

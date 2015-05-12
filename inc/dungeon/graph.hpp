@@ -71,6 +71,9 @@ namespace dungeon
         //! Simple getter to access the starting node.
         inline const Node& startingNode() const { return *m_startingNode; }
 
+        //! How many different nodes compose the graph.
+        inline uint uniqueNodesCount() const { return m_nodes.size(); }
+
         //! @}
 
     protected:

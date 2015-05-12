@@ -1,5 +1,8 @@
 -- This file is a test to develop a reference for dynamic AI.
 
+-- Set by source code @bug does not work somehow
+local nonVisitedNodes
+
 -- The reference altitude
 local altitude_ref
 local visited_ref
@@ -24,8 +27,8 @@ function evaluate_reference()
     visited_ref = weight.visited()
     lastVisit_ref = weight.lastVisit()
 
-    -- Get out if treasure found and exit
-    if (treasure_found and weight.exit()) then
+    -- Try to get out if treasure found or if there is no other nodes to visit
+    if (weight.exit() and (treasure_found or weight.visited() >= 5)) then
         AIGetOut()
     end
 

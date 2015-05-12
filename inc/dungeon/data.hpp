@@ -162,11 +162,14 @@ namespace dungeon
         inline uint dosh() const { return m_dosh; } //!< Get dosh value;
         inline uint fame() const { return m_fame; } //!< Get fame value;
 
-        //! Add dosh to current value.
-        void addDosh(uint dosh);
+        void setDosh(uint value);   //!< Set the dosh to a specific value.
+        void setFame(uint value);   //!< Set the fame to a specific value.
 
-        //! Remove dosh from current value.
-        void subDosh(uint dosh);
+        inline void addDosh(uint amount) { setDosh(dosh() + amount); }  //! Add dosh to current value.
+        inline void subDosh(uint amount) { setDosh(dosh() - amount); }  //! Substract dosh from current value.
+
+        inline void addFame(uint amount) { setFame(fame() + amount); }  //! Add fame to current value.
+        inline void subFame(uint amount) { setFame(fame() - amount); }  //! Substract fame from current value.
 
         //! @}
 

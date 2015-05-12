@@ -354,16 +354,16 @@ void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
 //---------------------//
 //----- Resources -----//
 
-void Data::addDosh(uint dosh)
+void Data::setDosh(uint value)
 {
-    m_dosh += dosh;
+    m_dosh = value;
     emit(EventType::DOSH_CHANGED);
 }
 
-void Data::subDosh(uint dosh)
+void Data::setFame(uint value)
 {
-    m_dosh -= dosh;
-    emit(EventType::DOSH_CHANGED);
+    m_fame = value;
+    emit(EventType::FAME_CHANGED);
 }
 
 //----------------//
