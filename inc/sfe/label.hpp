@@ -22,6 +22,7 @@ namespace sfe
     public:
         enum class Prestyle
         {
+            NONE,
             NUI,
             NUI_TITLE,
             MENU_TITLE,
@@ -46,6 +47,8 @@ namespace sfe
         void refreshDisplay() final;
 
     private:
+
+        Prestyle m_prestyle = Prestyle::NONE;
         sf::Text m_text;
     };
 }

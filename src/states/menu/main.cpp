@@ -54,23 +54,23 @@ MenuMain::MenuMain(StateStack& stack)
     // Functors
     auto singlePlayer = [this]() { stackPush(StateID::MENU_SELECTWORLD); };
     auto multiPlayer = nullptr;
-    auto personalization = nullptr;
+    auto villains = [this]() { stackPush(StateID::MENU_VILLAINS); };
     auto configuration = nullptr;
     auto quitGame = [this]() { stackClear(); };
 
     // Menu choice box (be sure not to mess with order)
     nuiRoot.attachChild(m_choiceBox);
-    m_choiceBox.setCentered(true);
+    m_choiceBox.centerOrigin();
     m_choiceBox.setRelativePosition({0.5f, 0.9f});
     m_choiceBox.add(_("Victim and alone"), singlePlayer);
     m_choiceBox.add(_("I sometimes have friends"), multiPlayer);
-    m_choiceBox.add(_("Looking at who I am"), personalization);
+    m_choiceBox.add(_("Looking at who I am"), villains);
     m_choiceBox.add(_("Yet I want to choose"), configuration);
     m_choiceBox.add(_("Someone who runs away"), quitGame);
 
     // Menu react image
     nuiRoot.attachChild(m_reactImage);
-    m_reactImage.setCentered(true);
+    m_reactImage.centerOrigin();
     m_reactImage.setRelativePosition({0.5f, 0.2f});
     m_reactImage.setImageTexture(TextureID::MENU_NAME);
     m_reactImage.setShader(ShaderID::MENU_NAME);
@@ -80,7 +80,7 @@ MenuMain::MenuMain(StateStack& stack)
     m_reactImage.addReactFromFile("res/tex/menu/name.xml");
     m_reactImage.setReactCallback(m_choices[0], singlePlayer);
     m_reactImage.setReactCallback(m_choices[1], multiPlayer);
-    m_reactImage.setReactCallback(m_choices[2], personalization);
+    m_reactImage.setReactCallback(m_choices[2], villains);
     m_reactImage.setReactCallback(m_choices[3], configuration);
     m_reactImage.setReactCallback(m_choices[4], quitGame);
 }

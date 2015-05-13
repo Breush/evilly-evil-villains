@@ -8,8 +8,9 @@ using namespace nui;
 
 Form::Form()
 {
-    refreshDisplay();
     attachChild(m_table);
+
+    refreshDisplay();
 }
 
 //-------------------//

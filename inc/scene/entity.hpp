@@ -89,6 +89,10 @@ namespace scene
         //! Set the size property.
         void setSize(const sf::Vector2f& inSize);
 
+        //! Whether the entity is centered.
+        //! This function overwrites the relativeOrigin property.
+        void centerOrigin();
+
         //! Set the shader applied to the whole entity.
         //! Use ShaderID::NONE to remove current shader.
         void setShader(ShaderID shaderID);
@@ -118,6 +122,10 @@ namespace scene
          */
         PARAMG(sf::Vector2f, m_relativePosition, relativePosition)
 
+        //! The origin relative to the size of this object.
+        //! Normal behavior requires values to be between 0 and 1.
+        PARAMGSU(sf::Vector2f, m_relativeOrigin, relativeOrigin, setRelativeOrigin, refreshOrigin)
+
         //! The position of the entity relative to its parent's coordinates.
         PARAMGSU(sf::Vector2f, m_localPosition, localPosition, setLocalPosition, refreshFromLocalPosition)
 
@@ -136,9 +144,6 @@ namespace scene
 
         //! The absolute size of the entity.
         PARAMG(sf::Vector2f, m_size, size)
-
-        //! Whether the origin of the entity needs to be recentered everytime the size changes.
-        PARAMGSU(bool, m_centered, centered, setCentered, refreshCentering)
 
         //! Whether the entity and its children will be drawn, and therefore detectable.
         PARAMGS(bool, m_visible, visible, setVisible)
@@ -326,6 +331,9 @@ namespace scene
         //! @name Refresh on changes
         //! @{
 
+        //! Refresh the origin of the entity.
+        void refreshOrigin();
+
         //! Refresh the position relative to the size of the parent.
         void refreshRelativePosition();
 
@@ -343,9 +351,6 @@ namespace scene
 
         //! Refresh focusRect position, if focus is not owned.
         void refreshFocusRect();
-
-        //! Refresh origin if option centered is on.
-        void refreshCentering();
 
         //! Sort parent children according to depth.
         void refreshDepthOrder();

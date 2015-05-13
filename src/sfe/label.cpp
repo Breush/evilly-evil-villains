@@ -15,6 +15,9 @@ Label::Label()
     refreshDisplay();
 }
 
+//-------------------//
+//----- Routine -----//
+
 void Label::updateSize()
 {
     const auto& bounds = m_text.getLocalBounds();
@@ -25,11 +28,14 @@ void Label::refreshDisplay()
 {
     config::NUI cNUI;
 
-    m_text.setCharacterSize(cNUI.fontSize);
+    if (m_prestyle != Prestyle::NONE) setPrestyle(m_prestyle);
+    else setCharacterSize(cNUI.fontSize);
 
-    updateSize();
     baseClass::refreshDisplay();
 }
+
+//------------------//
+//----- Visual -----//
 
 void Label::setFont(FontID fontID)
 {
@@ -63,10 +69,15 @@ void Label::setText(const std::wstring& text, FontID fontID)
 
 void Label::setPrestyle(Prestyle prestyle)
 {
+    m_prestyle = prestyle;
+
     config::NUI cNUI;
 
-    switch (prestyle)
+    switch (m_prestyle)
     {
+        case Prestyle::NONE:
+            break;
+
         case Prestyle::NUI:
             m_text.setFont(Application::context().fonts.get(FontID::NUI));
             m_text.setColor(sf::Color::White);

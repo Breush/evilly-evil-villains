@@ -28,7 +28,7 @@ Sidebar::Sidebar()
 
     // Tabs
     attachChild(m_tabsStacker);
-    m_tabsStacker.setCentered(true);
+    m_tabsStacker.centerOrigin();
 
     update();
 }

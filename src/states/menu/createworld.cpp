@@ -26,15 +26,15 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     // Title
     nuiRoot.attachChild(m_title);
     m_title.setText(_("Create a new world"));
-    m_title.setCentered(true);
-    m_title.setRelativePosition({0.5f, 0.05f});
     m_title.setPrestyle(sfe::Label::Prestyle::MENU_TITLE);
+    m_title.setRelativePosition({0.5f, 0.05f});
+    m_title.centerOrigin();
 
     // Form
     nuiRoot.attachChild(m_form);
+    m_form.centerOrigin();
     m_form.setSize({500.f, 500.f});
-    m_form.setCentered(true);
-    m_form.setLocalPosition(nuiSize / 2.f);
+    m_form.setRelativePosition({0.5f, 0.5f});
 
     // World name
     m_form.add(_("World name"), m_worldNameEntry);

@@ -41,6 +41,7 @@ void List::refreshDisplay()
 {
     config::NUI cNUI;
 
+    m_headerOffset = 3.f * cNUI.fontHSpace;
     m_lineHeight = cNUI.borderThick + cNUI.fontVSpace + 2.f * cNUI.vPadding;
     m_table.setDimensions(0u, m_columns.size(), m_lineHeight);
 
@@ -261,6 +262,12 @@ void List::refreshBordersPosition()
         m_hBorders[r].setPosition(0.f, m_table.rowOffset(r));
         addPart(&m_hBorders[r]);
     }
+
+    // Header offset
+    m_hBorders[0].move(-m_headerOffset, 0.f);
+    m_hBorders[1].move(-m_headerOffset, 0.f);
+    m_hBorders[0].setLength(m_hBorders[0].length() + 2.f * m_headerOffset);
+    m_hBorders[1].setLength(m_hBorders[1].length() + 2.f * m_headerOffset);
 
     // Correction for last horizontal
     m_hBorders.back().setPosition(0.f, size().y);

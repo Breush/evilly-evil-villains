@@ -17,11 +17,12 @@ using namespace scene;
 
 Entity::Entity(bool isLerpable)
     : m_depth(50.f)
+    , m_relativePosition(0.f, 0.f)
+    , m_relativeOrigin(0.f, 0.f)
     , m_localPosition(0.f, 0.f)
     , m_localRotation(0.f)
     , m_localScale(1.f, 1.f)
     , m_size(0.f, 0.f)
-    , m_centered(false)
     , m_visible(true)
     , m_transparent(false)
     , m_graph(nullptr)
@@ -385,16 +386,21 @@ void Entity::setRelativePosition(const sf::Vector2f& inRelativePosition)
     refreshRelativePosition();
 }
 
-void Entity::setSize(const sf::Vector2f& resize)
+void Entity::centerOrigin()
 {
-    m_size = resize;
+    setRelativeOrigin({0.5f, 0.5f});
+}
+
+void Entity::setSize(const sf::Vector2f& inSize)
+{
+    m_size = inSize;
     m_sizeChanges = true;
 
     if (!m_focusOwned)
         setFocusRect({0.f, 0.f, m_size.x, m_size.y});
 
     refreshChildrenRelativePosition();
-    refreshCentering();
+    refreshOrigin();
     update();
 }
 
@@ -491,10 +497,9 @@ void Entity::refreshFromLocalScale()
         child->refreshFromLocalScale();
 }
 
-void Entity::refreshCentering()
+void Entity::refreshOrigin()
 {
-    if (m_centered) setOrigin(0.5f * size());
-    else setOrigin(0.f, 0.f);
+    setOrigin(m_relativeOrigin * m_size);
 }
 
 void Entity::refreshDepthOrder()

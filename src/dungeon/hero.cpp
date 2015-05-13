@@ -21,7 +21,7 @@ Hero::Hero(const Inter* inter)
     // TODO Should be in NUI layer, somehow
     m_doshLabel.setPrestyle(sfe::Label::Prestyle::NUI);
     m_doshLabel.setLocalPosition({5.f, -25.f});
-    m_doshLabel.setCentered(true);
+    m_doshLabel.centerOrigin();
     attachChild(m_doshLabel);
 
     // Sprite

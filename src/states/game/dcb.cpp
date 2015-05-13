@@ -30,7 +30,7 @@ GameDCB::GameDCB(StateStack& stack)
     nuiRoot.attachChild(m_button);
     m_button.setAction(_("Create dungeon"), [this] { createDungeon(); });
     m_button.setLocalPosition(nuiSize / 2.f);
-    m_button.setCentered(true);
+    m_button.centerOrigin();
 }
 
 void GameDCB::createDungeon()

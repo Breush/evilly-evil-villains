@@ -27,20 +27,20 @@ GamePause::GamePause(StateStack& stack)
     // Title
     nuiRoot.attachChild(m_title);
     m_title.setText(_("Game paused"));
-    m_title.setCentered(true);
-    m_title.setRelativePosition({0.5f, 0.35f});
     m_title.setPrestyle(sfe::Label::Prestyle::MENU_POPUP_TITLE);
+    m_title.setRelativePosition({0.5f, 0.35f});
+    m_title.centerOrigin();
 
     // Buttons
     nuiRoot.attachChild(m_continueButton);
     m_continueButton.setAction(_("Continue, continue, continue"), [this]() { stackPop(); });
     m_continueButton.setRelativePosition({0.5f, 0.5f});
-    m_continueButton.setCentered(true);
+    m_continueButton.centerOrigin();
 
     nuiRoot.attachChild(m_mainMenuButton);
     m_mainMenuButton.setAction(_("Save and return to main menu"), [this]() { stackClear(StateID::MENU_MAIN); });
     m_mainMenuButton.setRelativePosition({0.5f, 0.6f});
-    m_mainMenuButton.setCentered(true);
+    m_mainMenuButton.centerOrigin();
 }
 
 bool GamePause::handleEvent(const sf::Event& event)

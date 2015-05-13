@@ -40,7 +40,8 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 
     // Dungeon lock
     nuiRoot.attachChild(m_dungeonLock);
-    m_dungeonLock.setLocalPosition(nuiSize- m_dungeonLock.size()); // TODO Make a relative origin (Entity::BOTTOM_RIGHT)
+    m_dungeonLock.setLocalPosition(nuiSize);
+    m_dungeonLock.setRelativeOrigin({1.f, 1.f});
     m_dungeonLock.useData(m_dungeonData);
 
     // Dungeon log
@@ -51,7 +52,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 
     // Dungeon panel
     nuiRoot.attachChild(m_dungeonPanel);
-    m_dungeonPanel.setCentered(true);
+    m_dungeonPanel.centerOrigin();
     m_dungeonPanel.setSize({4 * 100 + 25, 125 + 25});
     m_dungeonPanel.setLocalPosition({nuiSize.x / 2.f, nuiSize.y - m_dungeonPanel.size().y / 2.f});
     m_dungeonPanel.lerpable()->saveDefaults();
@@ -59,7 +60,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 
     // Dungeon sidebar
     nuiRoot.attachChild(m_dungeonSidebar);
-    m_dungeonSidebar.setCentered(true);
+    m_dungeonSidebar.centerOrigin();
     m_dungeonSidebar.setSize({2 * 100 + 25, 5 * 125 + 25});
     m_dungeonSidebar.setLocalPosition({nuiSize.x - m_dungeonSidebar.size().x / 2.f, nuiSize.y / 2.f});
     m_dungeonSidebar.lerpable()->saveDefaults();

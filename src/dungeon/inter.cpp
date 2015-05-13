@@ -436,11 +436,13 @@ void Inter::refreshTileDoshLabel(const sf::Vector2u& coords)
     configureDoshLabel(tile.totalDoshLabel, totalDosh, sf::Color::White);
 
     // Re-position
-    // TODO Really use some relative positionning
     if (tile.totalDoshLabel != nullptr)
         tile.totalDoshLabel->setLocalPosition(localPosition);
-    if (tile.harvestableDoshLabel != nullptr)
-        tile.harvestableDoshLabel->setLocalPosition(localPosition + tileSize() - tile.harvestableDoshLabel->size());
+
+    if (tile.harvestableDoshLabel != nullptr) {
+        tile.harvestableDoshLabel->setLocalPosition(localPosition + tileSize());
+        tile.harvestableDoshLabel->setRelativeOrigin({1.f, 1.f});
+    }
 }
 
 void Inter::refreshTileLayers(const sf::Vector2u& coords)
@@ -487,7 +489,7 @@ void Inter::refreshTileTraps(const sf::Vector2u& coords)
     // Trap
     tile.trap = traps::make(room);
     tile.trap->setLocalPosition(tileLocalPosition(coords) + tileSize() / 2.f);
-    tile.trap->setCentered(true);
+    tile.trap->centerOrigin();
     tile.trap->setEmitter(m_data);
     attachChild(*tile.trap);
 }

@@ -16,25 +16,25 @@ Quit::Quit(StateStack& stack)
     // Background
     nuiRoot.attachChild(m_background);
     m_background.setFillColor(sf::Color(0, 0, 0, 230));
-    m_background.setSize(nuiSize); // TODO Set relative size
+    m_background.setSize(nuiSize);
 
     // Title
     nuiRoot.attachChild(m_title);
     m_title.setText(_("Do you really want to quit?"));
-    m_title.setCentered(true);
-    m_title.setRelativePosition({0.5f, 0.35f});
     m_title.setPrestyle(sfe::Label::Prestyle::MENU_POPUP_TITLE);
+    m_title.setRelativePosition({0.5f, 0.35f});
+    m_title.centerOrigin();
 
     // Buttons
     nuiRoot.attachChild(m_noButton);
     m_noButton.setAction(_("No, sorry, it is a mistake."), [this]() { stackPop(); });
     m_noButton.setRelativePosition({0.5f, 0.5f});
-    m_noButton.setCentered(true);
+    m_noButton.centerOrigin();
 
     nuiRoot.attachChild(m_yesButton);
     m_yesButton.setAction(_("Yes, I will lose everything not saved."), [this]() { stackClear(); });
     m_yesButton.setRelativePosition({0.5f, 0.6f});
-    m_yesButton.setCentered(true);
+    m_yesButton.centerOrigin();
 }
 
 bool Quit::handleEvent(const sf::Event& event)
