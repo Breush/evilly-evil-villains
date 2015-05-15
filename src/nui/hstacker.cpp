@@ -1,7 +1,7 @@
 #include "nui/hstacker.hpp"
 
-#include "tools/debug.hpp"
-#include "tools/int.hpp"
+#include "tools/tools.hpp"
+#include "tools/vector.hpp"
 #include "config/nui.hpp"
 
 using namespace nui;
@@ -18,92 +18,77 @@ void HStacker::refreshDisplay()
 {
     config::NUI cNUI;
 
-    m_padding = cNUI.hPadding;
+    m_padding = cNUI.vPadding;
 
-    update();
+    updateSize();
     baseClass::refreshDisplay();
 }
 
-//------------------//
-//----- Visual -----//
-
-void HStacker::update()
+void HStacker::onSizeChanges()
 {
-    if (m_children.empty())
-        return;
+    refreshChildrenPositions();
+}
 
+void HStacker::onChildSizeChanges()
+{
+    updateSize();
+}
+
+void HStacker::updateSize()
+{
+    // Base case: no child
+    if (m_children.empty()) {
+        setSize({0.f, 0.f});
+        return;
+    }
+
+    // Max width and sum height
+    float width = 0.f;
+    float height = 0.f;
+
+    for (auto& child : m_children) {
+        width += child.entity->size().x;
+        height = std::max(height, child.entity->size().y);
+    }
+
+    // Add padding to height
+    width += (m_children.size() - 1u) * m_padding;
+
+    setSize({width, height});
+}
+
+//-----------------------//
+//----- Positioning -----//
+
+void HStacker::refreshChildrenPositions()
+{
     // Children positions
-    float x = getInitX();
+    float x = 0.f;
 
     // Setting children positions
-    for (auto& childInfo : m_children) {
+    for (auto& child : m_children) {
         // Vertical alignment
-        float y = getY(childInfo.entity->size().y, childInfo.align);
-
-        // Horizontal pre-alignment
-        x += getPreX(childInfo.entity->size().x);
+        float y = getY(child.entity->size().y, child.align);
 
         // Setting position
-        childInfo.entity->setLocalPosition({x, y});
+        child.entity->setRelativeOrigin({0.f, 0.f});
+        child.entity->setLocalPosition({x, y});
 
         // Horizontal post-alignment
-        x += getPostX(childInfo.entity->size().x);
+        x += child.entity->size().x + m_padding;
     }
 }
 
-inline float HStacker::getY(float childHeight, Align inAlign)
+float HStacker::getY(float childHeight, Align inAlign)
 {
-    // Max height
-    float height = 0.f;
-    for (auto& childInfo : m_children)
-        height = std::max(height, childInfo.entity->size().y);
-
     // Center
     if (inAlign == Stacker::Align::CENTER)
         return (size().y - childHeight) / 2.f;
 
     // Opposite : bottom
     else if (inAlign == Stacker::Align::OPPOSITE)
-        return (size().y - m_padding) - (height + childHeight) / 2.f;
+        return size().y - childHeight;
 
     // Standard : top
-    return m_padding + (height - childHeight) / 2.f;
-}
-
-inline float HStacker::getInitX()
-{
-    // Center
-    if (align() == Stacker::Align::CENTER) {
-        float width = (m_children.size() - 1) * m_padding;
-        for (auto& childInfo : m_children)
-            width += childInfo.entity->size().x;
-        return (size().x - width) / 2.f;
-    }
-
-    // Opposite : right
-    else if (align() == Stacker::Align::OPPOSITE)
-        return size().x - m_padding;
-
-    // Standard : left
-    return m_padding;
-}
-
-inline float HStacker::getPreX(float childWidth)
-{
-    // Opposite
-    if (align() == Stacker::Align::OPPOSITE)
-        return -childWidth;
-
-    // Center or Standard
     return 0.f;
-}
-
-inline float HStacker::getPostX(float childWidth)
-{
-    // Opposite
-    if (align() == Stacker::Align::OPPOSITE)
-        return -m_padding;
-
-    // Center or Standard
-    return childWidth + m_padding;
 }

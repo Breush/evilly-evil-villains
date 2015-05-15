@@ -65,7 +65,7 @@ namespace sfe
         //! @name Routine
         //! @{
 
-        void update() final;
+        void onSizeChanges() final;
         void refreshDisplay() final;
 
         //! @}
@@ -73,7 +73,7 @@ namespace sfe
         //--------------------------------//
         //! @name Internal change updates
         //! @{
-        
+
         //! Set the size of the bar, given the length and nui configuration.
         void updateSize();
 
@@ -90,7 +90,7 @@ namespace sfe
         float m_percent = 0.42f;            //!< How much of the gauge should be filled. Always between 0 and 1.
         float m_minLimit = 0.f;             //!< The low limit so that percent equals 0.
         float m_maxLimit = 100.f;           //!< The high limit so that percent equals 1.
-        
+
         float m_minHintSize;    //!< NUI proportional minimum side size.
         float m_maxHintSize;    //!< NUI proportional maximum side size.
     };

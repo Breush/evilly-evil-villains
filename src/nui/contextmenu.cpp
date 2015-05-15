@@ -25,7 +25,7 @@ ContextMenu::ContextMenu()
 //-------------------//
 //----- Routine -----//
 
-void ContextMenu::update()
+void ContextMenu::onSizeChanges()
 {
     returnif (m_title.getString().isEmpty());
 
@@ -71,7 +71,7 @@ void ContextMenu::updateSize()
         yOffset += m_choiceHeight;
     }
 
-    setSize(border); // Calls update()
+    setSize(border);
 }
 
 void ContextMenu::refreshDisplay()

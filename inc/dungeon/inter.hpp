@@ -100,7 +100,7 @@ namespace dungeon
         //! @name Routine
         //! @{
 
-        void update() final;
+        void onSizeChanges() final;
 
         //! @}
 

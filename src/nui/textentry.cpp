@@ -32,7 +32,7 @@ TextEntry::TextEntry()
 //-------------------//
 //----- Routine -----//
 
-void TextEntry::update()
+void TextEntry::onSizeChanges()
 {
     m_background.setSize(size());
     m_cursor.setLength(size().y - m_textPadding);

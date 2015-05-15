@@ -28,29 +28,25 @@ Sidebar::Sidebar()
 
     // Tabs
     attachChild(m_tabsStacker);
-    m_tabsStacker.centerOrigin();
-
-    update();
+    m_tabsStacker.setRelativeOrigin({0.5f, 0.f});
 }
 
 Sidebar::~Sidebar()
 {
-    m_tabsStacker.clear();
+    m_tabsStacker.unstackAll();
     m_tabs.clear();
 }
 
 //-------------------//
 //----- Routine -----//
 
-void Sidebar::update()
+void Sidebar::onSizeChanges()
 {
     // Background
     m_background.setPosition({size().x, 0.f});
     m_background.setSize({size().y, size().x});
 
-    // Tabs
-    m_tabsStacker.setSize(0.9f * size());
-    m_tabsStacker.setLocalPosition(size() / 2.f);
+    m_tabsStacker.setLocalPosition({0.5f * size().x, 50.f});
 }
 
 //------------------------//
@@ -89,7 +85,7 @@ void Sidebar::receive(const Event& event)
 
 void Sidebar::setMode(Mode mode)
 {
-    m_tabsStacker.clear();
+    m_tabsStacker.unstackAll();
     m_tabs.clear();
 
     switch (mode) {
@@ -109,7 +105,7 @@ void Sidebar::setMode(Mode mode)
 
     // Add tabs to stacker
     for (auto& tab : m_tabs)
-        m_tabsStacker.add(tab.get(), nui::Stacker::Align::CENTER);
+        m_tabsStacker.stackBack(*tab.get(), nui::Stacker::Align::CENTER);
 
     // Show the sidebar.
     setReduced(false);

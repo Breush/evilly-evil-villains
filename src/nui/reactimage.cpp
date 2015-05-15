@@ -19,8 +19,6 @@ ReactImage::ReactImage()
     // Sprite
     m_sprite.setPosition(0.f, 0.f);
     m_sprite.setOrigin(0.f, 0.f);
-
-    update();
 }
 
 void ReactImage::updateRoutine(const sf::Time& dt)
@@ -28,8 +26,7 @@ void ReactImage::updateRoutine(const sf::Time& dt)
     m_reactChanged = false;
 }
 
-// When position changed, recompute position of sprite
-void ReactImage::update()
+void ReactImage::refreshImage()
 {
     returnif (m_image.getTexture() == nullptr);
 
@@ -118,7 +115,7 @@ void ReactImage::setActiveReact(const std::wstring& key)
     m_react = key;
     m_reactChanged = true;
 
-    update();
+    refreshImage();
 }
 
 void ReactImage::activateReact(const std::wstring& key)

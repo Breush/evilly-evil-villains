@@ -41,8 +41,8 @@ namespace nui
         void setActiveReact(const std::wstring& key);
 
     protected:
-        // Virtual
-        void update() override;
+
+        void refreshImage();
 
         // Events
         void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;

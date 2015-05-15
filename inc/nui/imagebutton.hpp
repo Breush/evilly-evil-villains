@@ -45,7 +45,7 @@ namespace nui
         //! @name Routine
         //! @{
 
-        void update() final;
+        void onSizeChanges() final;
         void refreshDisplay() final;
 
         //! @}
@@ -72,6 +72,6 @@ namespace nui
         sf::Sprite m_image;
 
         sf::Vector2f m_imageSize;   //!< The reference size of the image.
-        float m_vPadding;           //!< The space between the image and the text.
+        float m_vPadding = 0.f;     //!< The space between the image and the text.
     };
 }

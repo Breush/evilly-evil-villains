@@ -48,11 +48,11 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
 
     // Buttons
     nuiRoot.attachChild(m_buttonsStacker);
-    m_buttonsStacker.setAlign(nui::Stacker::Align::CENTER);
-    m_buttonsStacker.setSize({nuiSize.x, 0.95f * nuiSize.y});
+    m_buttonsStacker.setRelativeOrigin({0.5f, 1.f});
+    m_buttonsStacker.setRelativePosition({0.5f, 0.95f});
 
     for (auto& button : m_buttons)
-        m_buttonsStacker.add(&button, nui::Stacker::Align::OPPOSITE);
+        m_buttonsStacker.stackBack(button, nui::Stacker::Align::OPPOSITE);
 
     m_buttons[0].setAction(_("Back"), [this] { stackPop(); });
     m_buttons[1].setAction(_("Create and start playing"), [this] { createAndPlayWorld(); });

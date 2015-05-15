@@ -11,7 +11,7 @@ Button::Button()
 {
     // Adding unique choice
     add(L"", nullptr);
-    setShowArrows(false);
+    showArrows(false);
 }
 
 //-------------------//

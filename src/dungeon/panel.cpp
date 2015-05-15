@@ -25,8 +25,9 @@ Panel::Panel(Sidebar& sidebar)
 
     // Tabs stacker
     attachChild(m_tabsStacker);
+    m_tabsStacker.centerOrigin();
     for (auto& tab : m_tabs)
-        m_tabsStacker.add(&tab, nui::Stacker::Align::CENTER);
+        m_tabsStacker.stackBack(tab, nui::Stacker::Align::CENTER);
 
     // Tabs
     m_tabs[0].setVisual(_("Monsters"),   TextureID::DUNGEON_PANEL_MONSTERS);
@@ -36,14 +37,12 @@ Panel::Panel(Sidebar& sidebar)
     m_tabs[0].setCallback([&]() { m_sidebar.setMode(Sidebar::Mode::MONSTERS); });
     m_tabs[1].setCallback([&]() { m_sidebar.setMode(Sidebar::Mode::TRAPS); });
     m_tabs[2].setCallback([&]() { m_sidebar.setMode(Sidebar::Mode::FACILITIES); });
-
-    update();
 }
 
 //-------------------//
 //----- Routine -----//
 
-void Panel::update()
+void Panel::onSizeChanges()
 {
     // Background
     m_background.setSize(size());
@@ -52,8 +51,7 @@ void Panel::update()
     m_switchReducedButton.setPosition({size().x - 40.f, 10.f});
 
     // Tabs stacker
-    m_tabsStacker.setAlign(nui::Stacker::Align::CENTER);
-    m_tabsStacker.setSize(size());
+    m_tabsStacker.setLocalPosition(size() / 2.f);
 }
 
 //------------------------//

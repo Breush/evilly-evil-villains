@@ -42,7 +42,7 @@ Summary::Summary()
 //-------------------//
 //----- Routine -----//
 
-void Summary::update()
+void Summary::onSizeChanges()
 {
     m_background.setSize(size());
 

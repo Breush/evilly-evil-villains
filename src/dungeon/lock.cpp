@@ -19,7 +19,7 @@ Lock::Lock()
 //-------------------//
 //----- Routine -----//
 
-void Lock::update()
+void Lock::onSizeChanges()
 {
     const auto& textureSize = m_lock.getTexture()->getSize();
     m_lock.setScale(size() / sf::v2f(textureSize));

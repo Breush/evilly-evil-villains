@@ -169,12 +169,15 @@ namespace scene
         //! Draws all parts of the entity.
         void drawParts(sf::RenderTarget& target, sf::RenderStates states) const;
 
-        //! Called whenever size or a child changed if callParent is on.
+        //! Called whenever size changed.
         /*!
          *  Should be reimplemented in inherited classes to adapt
          *  display to the size.
          */
-        virtual void update() {}
+        virtual void onSizeChanges() {}
+
+        //! Called a child changed its size.
+        virtual void onChildSizeChanges() {}
 
         //! Update the entity given time-step and recursively update its children.
         /*!
@@ -443,13 +446,7 @@ namespace scene
         bool m_localChanges = true;
 
         //! Whether the position of the entity should be computed relatively.
-        bool m_relativePositionning = false;
-
-        //! Whether to call parent when size changes.
-        bool m_callParentOnSizeChanges = true;
-
-        //! Whether to call parent when local transformations changes.
-        bool m_callParentOnLocalChanges = false;
+        bool m_relativePositioning = false;
 
         //! Whether the entity is marked for a delayed setVisible() call.
         bool m_markedForVisible = false;

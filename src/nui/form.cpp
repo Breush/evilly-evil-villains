@@ -16,7 +16,7 @@ Form::Form()
 //-------------------//
 //----- Routine -----//
 
-void Form::update()
+void Form::onSizeChanges()
 {
     m_table.setSize(size());
 }

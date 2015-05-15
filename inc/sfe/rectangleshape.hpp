@@ -10,11 +10,12 @@ namespace sfe
      *      Just a wrapper of sf::RectangleShape to a scene::Entity
      **/
 
-    class RectangleShape : public scene::Entity
+    class RectangleShape final : public scene::Entity
     {
         using baseClass = scene::Entity;
 
     public:
+
         RectangleShape() { addPart(&m_rectangleShape); }
         virtual ~RectangleShape() = default;
 
@@ -25,7 +26,7 @@ namespace sfe
 
     protected:
 
-        void update() override
+        void onSizeChanges() final
         {
             m_rectangleShape.setSize(size());
         }

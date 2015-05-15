@@ -29,10 +29,9 @@ List::List()
 //-------------------//
 //----- Routine -----//
 
-void List::update()
+void List::onSizeChanges()
 {
     m_table.setSize(size());
-    returnif (m_columns.empty());
 
     refreshBordersPosition();
 }
@@ -48,7 +47,7 @@ void List::refreshDisplay()
     // Refresh selection highlight.
     if (!m_lines.empty()) selectLine(m_selectedLine);
 
-    update();
+    refreshBordersPosition();
     baseClass::refreshDisplay();
 }
 
@@ -129,6 +128,7 @@ void List::setColumnsTitles(const std::initializer_list<std::wstring>& titles)
 void List::setColumnAdapt(uint index, Adapt adapt)
 {
     m_table.setColAdapt(index, adapt);
+    refreshBordersPosition();
 }
 
 void List::setColumnAlign(uint index, Align hAlign, Align vAlign)
@@ -240,6 +240,8 @@ void List::setSelectionRect(const sf::FloatRect& rect)
 
 void List::refreshBordersPosition()
 {
+    returnif (!m_columns.size());
+
     m_hBorders.resize(3u);
     m_vBorders.resize(m_columns.size() + 1u);
 

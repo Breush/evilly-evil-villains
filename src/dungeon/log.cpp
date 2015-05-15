@@ -15,14 +15,12 @@ Log::Log()
     // Background
     m_background.setFillColor({255u, 255u, 255u, 192u});
     addPart(&m_background);
-
-    update();
 }
 
 //-------------------//
 //----- Routine -----//
 
-void Log::update()
+void Log::onSizeChanges()
 {
     refreshTextsWrap();
     refreshBackgroundSize();

@@ -83,15 +83,27 @@ namespace nui
 
         //! @}
 
+        //----------------//
+        //! @name Setters
+        //! @{
+
+        //! Whether the show arrows.
+        void showArrows(bool enabled);
+
+        //! Whether the show lines.
+        void showLines(bool enabled);
+
+        //! @}
+
         //--------------------------//
         //! @name Public properties
         //! @{
 
         //! Whether the show interactive arrows.
-        PARAMGSU(bool, m_showArrows, showArrows, setShowArrows, updateSize)
+        PARAMG(bool, m_arrowsShowed, arrowsShowed)
 
         //! Whether the show top and bottom lines.
-        PARAMGSU(bool, m_showLines, showLines, setShowLines, updateSize)
+        PARAMG(bool, m_linesShowed, linesShowed)
 
         //! @}
 
@@ -101,7 +113,7 @@ namespace nui
         //! @name Routine
         //! @{
 
-        void update() override;
+        void onSizeChanges() override;
         void updateRoutine(const sf::Time& dt) final;
         void refreshDisplay() override;
 
@@ -133,6 +145,18 @@ namespace nui
         //-------------------------------//
         //! @name Internal state updates
         //! @{
+
+        //! Refresh all text, lines and arrows positions.
+        void refresh();
+
+        //! Refresh text position.
+        void refreshText();
+
+        //! Refresh lines position.
+        void refreshLines();
+
+        //! Refresh arrows position.
+        void refreshArrows();
 
         //! Update the minimum size needed to fit the bigger choice text and decorum.
         void updateButtonSize();
@@ -170,7 +194,7 @@ namespace nui
         std::vector<ChoiceInfo> m_choices;
 
         //! Currently selected choice.
-        uint m_selectedChoice = 0u;
+        uint m_selectedChoice = -1u;
 
         //! Whether the choice has changed since last update.
         bool m_choiceChanged = true;

@@ -15,18 +15,20 @@ namespace sfe
      *      Just a wrapper of sf::Sprite to a scene::Entity
      **/
 
-    class Sprite : public scene::Entity
+    class Sprite final : public scene::Entity
     {
         using baseClass = scene::Entity;
 
     public:
+
         Sprite();
-        virtual ~Sprite() = default;
+        ~Sprite() = default;
 
         void setTexture(TextureID textureID);
 
     protected:
-        void update() override;
+
+        void onSizeChanges() final;
 
     private:
         sf::Sprite m_sprite;

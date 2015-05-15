@@ -25,7 +25,7 @@ Gauge::Gauge()
 //-------------------//
 //----- Routine -----//
 
-void Gauge::update()
+void Gauge::onSizeChanges()
 {
     m_background.setSize(size());
     refreshFiller();

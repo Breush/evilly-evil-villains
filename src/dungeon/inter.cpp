@@ -19,14 +19,12 @@ Inter::Inter(nui::ContextMenu& contextMenu)
 {
     // Grid
     addPart(&m_grid);
-
-    update();
 }
 
 //-------------------//
 //----- Routine -----//
 
-void Inter::update()
+void Inter::onSizeChanges()
 {
     returnif (size() == m_grid.size());
     m_grid.setSize(size());

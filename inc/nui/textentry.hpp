@@ -17,7 +17,7 @@ namespace nui
         virtual ~TextEntry() = default;
 
         // Routine
-        void update() final;
+        void onSizeChanges() final;
         void updateSize();
         void updateRoutine(const sf::Time& dt) final;
         void refreshDisplay() final;

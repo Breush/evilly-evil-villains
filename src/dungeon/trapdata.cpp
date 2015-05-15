@@ -1,5 +1,7 @@
 #include "dungeon/trapdata.hpp"
 
+#include <stdexcept>
+
 using namespace dungeon;
 
 void TrapData::clear()

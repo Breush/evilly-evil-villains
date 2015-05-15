@@ -73,7 +73,7 @@ namespace nui
         //! @name Routine
         //! @{
 
-        void update() final;
+        void onSizeChanges() final;
         void refreshDisplay() final;
 
         //! @}

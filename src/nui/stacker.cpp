@@ -5,8 +5,6 @@
 using namespace nui;
 
 Stacker::Stacker()
-    : baseClass()
-    , m_align(Stacker::Align::STANDARD)
 {
     setDetectable(false);
 }
@@ -14,16 +12,17 @@ Stacker::Stacker()
 //-------------------------------//
 //----- Children management -----//
 
-void Stacker::add(scene::Entity* child, Align inAlign)
+void Stacker::stackBack(scene::Entity& entity, Align inAlign)
 {
-    attachChild(*child);
-    m_children.push_back({child, inAlign});
-    update();
+    attachChild(entity);
+    m_children.push_back({&entity, inAlign});
+    updateSize();
 }
 
-void Stacker::clear()
+void Stacker::unstackAll()
 {
     for (auto& child : m_children)
         detachChild(*child.entity);
     m_children.clear();
+    updateSize();
 }

@@ -10,7 +10,10 @@ using namespace nui;
 ImageButton::ImageButton()
 {
     // Display style
-    setShowLines(false);
+    showLines(false);
+
+    // Image
+    addPart(&m_image);
 
     refreshDisplay();
 }
@@ -18,25 +21,22 @@ ImageButton::ImageButton()
 //-------------------//
 //----- Routine -----//
 
-void ImageButton::update()
+void ImageButton::onSizeChanges()
 {
-    // From button
-    baseClass::update();
-
-    returnif (m_image.getTexture() == nullptr);
+    // From button, will refresh all positions
+    baseClass::onSizeChanges();
 
     // Image
     if (m_image.getTexture() != nullptr) {
         const auto& textureSize = m_image.getTexture()->getSize();
         m_image.setScale(m_imageSize / sf::v2f(textureSize));
         m_image.setPosition({(size().x - m_imageSize.x) / 2.f, 0.f});
-        addPart(&m_image);
     }
 
     // Re-positioning
     const sf::Vector2f offset((size().x - maxTextSize().x) / 2.f, m_imageSize.y + m_vPadding);
     text().move(offset);
-    if (showLines()) {
+    if (linesShowed()) {
         topLine().move(offset);
         botLine().move(offset);
     }
@@ -49,7 +49,6 @@ void ImageButton::refreshDisplay()
     m_imageSize = {cNUI.hintImageSide, cNUI.hintImageSide};
     m_vPadding = cNUI.vPadding;
 
-    updateSize();
     baseClass::refreshDisplay();
 }
 
@@ -62,9 +61,8 @@ void ImageButton::updateSize()
 
     const auto& buttonDimensions = buttonSize();
     auto width = std::max(buttonDimensions.x, m_imageSize.x);
-    setSize({width, buttonDimensions.y + m_imageSize.y + m_vPadding});
-
-    update();
+    auto height = buttonDimensions.y + m_imageSize.y + m_vPadding;
+    setSize({width, height});
 }
 
 //------------------------//
@@ -91,5 +89,4 @@ void ImageButton::setVisual(const std::wstring& text, TextureID imageID)
 {
     setText(text);
     setImage(imageID);
-    updateSize();
 }

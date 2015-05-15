@@ -10,16 +10,16 @@ TableLayout::TableLayout()
     : m_hPaddingAuto(true)
     , m_vPaddingAuto(true)
 {
+    setDetectable(false);
+
     refreshDisplay();
 }
 
 //-------------------//
 //----- Routine -----//
 
-void TableLayout::update()
+void TableLayout::onSizeChanges()
 {
-    setDetectable(false);
-
     refreshDimensions();
     refreshChildrenPosition();
 }
@@ -31,7 +31,8 @@ void TableLayout::refreshDisplay()
     if (m_hPaddingAuto) m_hPadding = cNUI.hPadding;
     if (m_vPaddingAuto) m_vPadding = cNUI.vPadding;
 
-    update();
+    refreshDimensions();
+    refreshChildrenPosition();
     baseClass::refreshDisplay();
 }
 

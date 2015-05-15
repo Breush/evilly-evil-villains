@@ -4,22 +4,49 @@
 
 namespace nui
 {
-    class VStacker : public Stacker
+    //! A basic way for grouping entities vertically.
+    /*!
+     *  The final size of the stacker will be computed as:
+     *  - width  = \max_i stackedEntities[i].width
+     *  - height = \sum_i stackedEntities[i].height + paddings
+     */
+
+    class VStacker final : public Stacker
     {
         using baseClass = Stacker;
 
     public:
-        VStacker();
-        virtual ~VStacker() = default;
 
-        // Virtual
-        void update() override;
-        void refreshDisplay() final;
+        //! Constructor.
+        VStacker();
+
+        //! Default destructor.
+        ~VStacker() = default;
 
     protected:
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        void onSizeChanges() final;
+        void onChildSizeChanges() final;
+        void refreshDisplay() final;
+
+        void updateSize() final;
+
+        //! @}
+
+        //--------------------//
+        //! @name Positioning
+        //! @{
+
+        //! Recomputes the positions of all stacked entities.
+        void refreshChildrenPositions();
+
+        //! Returns the horizontal offset of a stackedEntity given its alignment.
         float getX(float childWidth, Align align);
-        float getInitY();
-        float getPreY(float childHeight);
-        float getPostY(float childHeight);
+
+        //! @}
     };
 }

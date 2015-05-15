@@ -3,6 +3,7 @@
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
 #include "tools/tools.hpp"
+#include "tools/vector.hpp"
 #include "tools/debug.hpp"
 #include "config/nui.hpp"
 
@@ -13,14 +14,27 @@ using namespace nui;
 
 ChoiceBox::ChoiceBox()
     : baseClass()
-    , m_showArrows(true)
-    , m_showLines(true)
+    , m_arrowsShowed(true)
+    , m_linesShowed(true)
 {
     setFocusable(true);
 
     // Getting font from holder
     sf::Font& font = Application::context().fonts.get(FontID::NUI);
     m_text.setFont(font);
+
+    // Add all parts
+    addPart(&m_text);
+
+    if (m_linesShowed) {
+        addPart(&m_topLine);
+        addPart(&m_botLine);
+    }
+
+    if (m_arrowsShowed) {
+        addPart(&m_lArrow);
+        addPart(&m_rArrow);
+    }
 
     refreshDisplay();
 }
@@ -33,47 +47,9 @@ void ChoiceBox::updateRoutine(const sf::Time&)
     m_choiceChanged = false;
 }
 
-void ChoiceBox::update()
+void ChoiceBox::onSizeChanges()
 {
-    returnif (m_text.getString().isEmpty());
-
-    clearParts();
-    addPart(&m_text);
-
-    const float lineSpace = m_lineOffset + m_lineSize;
-    const float arrowSpace = m_arrowOffset + m_arrowSize;
-
-    // Text (using integer position to prevent text smoothing)
-    auto bounds = m_text.getLocalBounds();
-    sf::Vector2f textSize(bounds.left + bounds.width, bounds.top + bounds.height);
-    sf::Vector2u textPos((m_maxTextSize - textSize) / 2.f);
-    m_text.setPosition(sf::Vector2f(textPos));
-
-    // Lines
-    if (showLines()) {
-        addPart(&m_topLine);
-        addPart(&m_botLine);
-
-        m_text.move(0.f, lineSpace);
-        m_topLine.setLength(m_buttonSize.x);
-        m_botLine.setLength(m_buttonSize.x);
-        m_topLine.setPosition(0.f, 0.f);
-        m_botLine.setPosition(0.f, m_buttonSize.y);
-    }
-
-    // Arrows
-    if (showArrows()) {
-        addPart(&m_lArrow);
-        addPart(&m_rArrow);
-
-        m_text.setPosition(m_text.getPosition() + sf::Vector2f(arrowSpace, 0.f));
-        m_lArrow.setLength(m_arrowSize);
-        m_rArrow.setLength(m_arrowSize);
-        m_lArrow.setPosition(0.f, 0.5f * m_buttonSize.y);
-        m_rArrow.setPosition(m_buttonSize.x - m_arrowSize, 0.5f * m_buttonSize.y);
-        m_lArrow.setOrigin(0.f, 0.5f * m_arrowSize);
-        m_rArrow.setOrigin(0.f, 0.5f * m_arrowSize);
-    }
+    refresh();
 }
 
 void ChoiceBox::refreshDisplay()
@@ -91,6 +67,45 @@ void ChoiceBox::refreshDisplay()
 
     updateSize();
     baseClass::refreshDisplay();
+}
+
+//-------------------//
+//----- Setters -----//
+
+void ChoiceBox::showArrows(bool enabled)
+{
+    returnif (m_arrowsShowed == enabled);
+    m_arrowsShowed = enabled;
+
+    // Newly enabled
+    if (m_arrowsShowed) {
+        addPart(&m_lArrow);
+        addPart(&m_rArrow);
+        refresh();
+    }
+    // Newly disabled
+    else {
+        removePart(&m_lArrow);
+        removePart(&m_rArrow);
+    }
+}
+
+void ChoiceBox::showLines(bool enabled)
+{
+    returnif (m_linesShowed == enabled);
+    m_linesShowed = enabled;
+
+    // Newly enabled
+    if (m_linesShowed) {
+        addPart(&m_topLine);
+        addPart(&m_botLine);
+        refresh();
+    }
+    // Newly disabled
+    else {
+        removePart(&m_topLine);
+        removePart(&m_botLine);
+    }
 }
 
 //-----------------------------//
@@ -123,36 +138,32 @@ void ChoiceBox::acceptChoice()
 void ChoiceBox::switchChoiceLeft()
 {
     if (m_choices.size() <= 1u) return;
-    m_selectedChoice = ((m_selectedChoice == 0)? m_choices.size() : m_selectedChoice) - 1u;
     Application::context().sounds.play(SoundID::NUI_SELECT);
-    selectChoice(m_selectedChoice);
+
+    if (m_selectedChoice == 0u) selectChoice(m_choices.size() - 1u);
+    else selectChoice(m_selectedChoice - 1u);
 }
 
 void ChoiceBox::switchChoiceRight()
 {
     if (m_choices.size() <= 1u) return;
-    if (++m_selectedChoice == m_choices.size()) m_selectedChoice = 0u;
     Application::context().sounds.play(SoundID::NUI_SELECT);
-    selectChoice(m_selectedChoice);
+
+    if (m_selectedChoice == m_choices.size() - 1u) selectChoice(0u);
+    else selectChoice(m_selectedChoice + 1u);
 }
 
 void ChoiceBox::selectChoice(uint choice)
 {
+    returnif (m_selectedChoice == choice);
+
     // Confirm valid choice
     massert(choice < m_choices.size(), "Choice " << choice << " out of range.");
 
     // Setting new choice
     m_selectedChoice = choice;
-    m_text.setString(m_choices[choice].text);
     m_choiceChanged = true;
-
-    // If new choice need a callback, color if inactive
-    if (showArrows() && m_choices[choice].callback == nullptr)
-        m_text.setColor(sf::Color(150, 150, 150));
-    else
-        m_text.setColor(sf::Color::White);
-
-    update();
+    refreshText();
 }
 
 void ChoiceBox::setChoiceText(uint choice, const std::wstring& text)
@@ -165,7 +176,6 @@ void ChoiceBox::setChoiceText(uint choice, const std::wstring& text)
 
     // Max size or current text may have changed
     updateSize();
-    selectChoice(m_selectedChoice);
 }
 
 void ChoiceBox::setChoiceCallback(uint choice, Callback callback)
@@ -177,7 +187,7 @@ void ChoiceBox::setChoiceCallback(uint choice, Callback callback)
     m_choices[choice].callback = callback;
 
     // Activeness of choice might have changed
-    selectChoice(m_selectedChoice);
+    refreshText();
 }
 
 //------------------------//
@@ -188,7 +198,7 @@ void ChoiceBox::handleMouseButtonPressed(const sf::Mouse::Button button, const s
     returnif (button != sf::Mouse::Left);
 
     // Without arrows: choices loop
-    if (!showArrows()) {
+    if (!m_arrowsShowed) {
         switchChoiceRight();
         return;
     }
@@ -238,14 +248,14 @@ void ChoiceBox::handleMouseLeft()
 
 bool ChoiceBox::isLeftArrowSelected(const float& x)
 {
-    returnif (!showArrows()) false;
+    returnif (!m_arrowsShowed) false;
     float arrowRange = m_arrowSize + m_arrowOffset / 2.f;
     return (x < arrowRange);
 }
 
 bool ChoiceBox::isRightArrowSelected(const float& x)
 {
-    returnif (!showArrows()) false;
+    returnif (!m_arrowsShowed) false;
     float arrowRange = m_arrowSize + m_arrowOffset / 2.f;
     return (x > size().x - arrowRange);
 }
@@ -272,7 +282,7 @@ bool ChoiceBox::handleKeyboardEvent(const sf::Event& event)
     returnif (event.key.code != sf::Keyboard::Return) false;
 
     // Without arrows: choices loop
-    if (!showArrows()) {
+    if (!m_arrowsShowed) {
         switchChoiceRight();
         return true;
     }
@@ -284,6 +294,51 @@ bool ChoiceBox::handleKeyboardEvent(const sf::Event& event)
 
 //-------------------//
 //----- Updates -----//
+
+void ChoiceBox::refresh()
+{
+    refreshText();
+    refreshLines();
+    refreshArrows();
+}
+
+void ChoiceBox::refreshText()
+{
+    returnif (m_selectedChoice >= m_choices.size());
+
+    m_text.setString(m_choices[m_selectedChoice].text);
+
+    // If new choice need a callback, color if inactive
+    if (m_choices[m_selectedChoice].callback == nullptr)
+        m_text.setColor(sf::Color(150, 150, 150));
+    else
+        m_text.setColor(sf::Color::White);
+
+    // Position
+    m_text.setOrigin(boundsSize(m_text) / 2.f);
+}
+
+void ChoiceBox::refreshLines()
+{
+    returnif (!m_linesShowed);
+
+    m_topLine.setLength(m_buttonSize.x);
+    m_botLine.setLength(m_buttonSize.x);
+    m_topLine.setPosition(0.f, 0.f);
+    m_botLine.setPosition(0.f, m_buttonSize.y);
+}
+
+void ChoiceBox::refreshArrows()
+{
+    returnif (!m_arrowsShowed);
+
+    m_lArrow.setLength(m_arrowSize);
+    m_rArrow.setLength(m_arrowSize);
+    m_lArrow.setPosition(0.f, 0.5f * m_buttonSize.y);
+    m_rArrow.setPosition(m_buttonSize.x - m_arrowSize, 0.5f * m_buttonSize.y);
+    m_lArrow.setOrigin(0.f, 0.5f * m_arrowSize);
+    m_rArrow.setOrigin(0.f, 0.5f * m_arrowSize);
+}
 
 void ChoiceBox::updateButtonSize()
 {
@@ -308,17 +363,20 @@ void ChoiceBox::updateButtonSize()
     m_maxTextSize = m_buttonSize;
 
     // Lines
-    if (showLines())
+    if (m_linesShowed)
         m_buttonSize.y += 2 * (m_lineOffset + m_lineSize);
 
     // Arrows
-    if (showArrows())
+    if (m_arrowsShowed)
         m_buttonSize.x += 2 * (m_arrowOffset + m_arrowSize);
+
+    // Reposition text
+    m_text.setPosition(m_buttonSize / 2.f);
 }
 
 void ChoiceBox::updateSize()
 {
     updateButtonSize();
-    setSize(m_buttonSize); // Calls update()
+    setSize(m_buttonSize);
 }
 

@@ -7,10 +7,12 @@ using namespace sfe;
 
 Sprite::Sprite()
 {
+    setDetectable(false);
+
     addPart(&m_sprite);
 }
 
-void Sprite::update()
+void Sprite::onSizeChanges()
 {
     m_sprite.setScale(localScale());
 }

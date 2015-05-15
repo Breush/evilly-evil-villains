@@ -46,7 +46,7 @@ namespace traps
         //! @name Routine
         //! @{
 
-        void update() final;
+        void onSizeChanges() final;
 
         //! @}
 

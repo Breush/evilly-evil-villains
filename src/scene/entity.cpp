@@ -143,23 +143,21 @@ void Entity::updateChanges()
         m_markedForVisible = false;
     }
 
-    // Propagate to children
+    // Update internal state if local changes
     if (m_localChanges) {
         if (m_focused)
             m_graph->updateFocusSprite();
 
-        if (m_parent != nullptr && m_callParentOnLocalChanges)
-            m_parent->update();
-
         m_localChanges = false;
     }
 
+    // Propagate to parent
     if (m_sizeChanges) {
         if (m_focused)
             m_graph->updateFocusSprite();
 
-        if (m_parent != nullptr && m_callParentOnSizeChanges)
-            m_parent->update();
+        if (m_parent != nullptr)
+            m_parent->onChildSizeChanges();
 
         m_sizeChanges = false;
     }
@@ -381,7 +379,7 @@ void Entity::resetPartsShader()
 
 void Entity::setRelativePosition(const sf::Vector2f& inRelativePosition)
 {
-    m_relativePositionning = true;
+    m_relativePositioning = true;
     m_relativePosition = inRelativePosition;
     refreshRelativePosition();
 }
@@ -401,7 +399,7 @@ void Entity::setSize(const sf::Vector2f& inSize)
 
     refreshChildrenRelativePosition();
     refreshOrigin();
-    update();
+    onSizeChanges();
 }
 
 void Entity::setShader(ShaderID shaderID)
@@ -415,7 +413,7 @@ void Entity::setShader(ShaderID shaderID)
 
 void Entity::refreshRelativePosition()
 {
-    returnif (!m_relativePositionning || m_parent == nullptr);
+    returnif (!m_relativePositioning || m_parent == nullptr);
     setLocalPosition(m_relativePosition * m_parent->size());
 }
 

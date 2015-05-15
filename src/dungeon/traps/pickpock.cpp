@@ -28,7 +28,7 @@ PickPock::PickPock(const sf::Vector2u& coords, TrapData& trapdata)
 //------------------//
 //---- Routine -----//
 
-void PickPock::update()
+void PickPock::onSizeChanges()
 {
     m_sprite.setSize(size());
 }
