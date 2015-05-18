@@ -41,7 +41,7 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
 Application::Application()
     : m_initialState(StateID::SPLASHSCREEN)
 {
-    s_context.init(s_context.display.resolution, "Evily Evil Villains", sf::Style::Default);
+    s_context.init(s_context.display.resolution, "Evilly Evil Villains", sf::Style::Default);
     if (s_context.display.fullscreen) switchFullscreenMode();
     else refresh();
 
