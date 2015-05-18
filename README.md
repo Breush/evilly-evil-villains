@@ -1,4 +1,4 @@
-# Evily Evil Villains
+# Evilly Evil Villains
 
 ## Notice
 
