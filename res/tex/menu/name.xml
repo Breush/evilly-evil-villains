@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <reactimage textureID="MENU_TITLE">
 	<react key="V" left="21"  top="60" width="35" height="-1" />
-	<react key="I" left="222" top="0"  width="10" height="56" />
+	<react key="I" left="230" top="0"  width="10" height="56" />
 	<react key="L" left="70"  top="60" width="38" height="-1" />
-	<react key="Y" left="112" top="0"  width="30" height="51" />
+	<react key="Y" left="127" top="0"  width="30" height="51" />
 	<react key="S" left="228" top="60" width="50" height="-1" />
 </reactimage>
 
