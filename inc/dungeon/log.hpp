@@ -43,6 +43,7 @@ namespace dungeon
 
         void onSizeChanges() final;
         void updateRoutine(const sf::Time& dt) final;
+        void refreshDisplay() final;
 
         //! @}
 
@@ -84,5 +85,7 @@ namespace dungeon
         float m_currentHeight = 0.f;    //!< The current height of the displayed messages.
 
         sf::RectangleShape m_background;    //!< The soft background, fitting the current size.
+        
+        float m_characterSize = 0.f;    //!< The font size.
     };
 }

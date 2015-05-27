@@ -3,6 +3,7 @@
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
 #include "dungeon/data.hpp"
+#include "config/nui.hpp"
 #include "tools/tools.hpp"
 #include "tools/platform-fixes.hpp" // reverse()
 
@@ -49,6 +50,15 @@ void Log::updateRoutine(const sf::Time& dt)
         refreshMessages();
 }
 
+void Log::refreshDisplay()
+{
+    config::NUI cNUI;
+
+    m_characterSize = cNUI.fontSize;
+
+    baseClass::refreshDisplay();
+}
+
 //------------------//
 //----- Events -----//
 
@@ -83,7 +93,7 @@ void Log::addMessage(std::wstring text, sf::Color color)
 
     message.text.setWrapString(std::move(text));
     message.text.setFont(Application::context().fonts.get(FontID::MONO));
-    message.text.setCharacterSize(16.f); // TODO Get from config
+    message.text.setCharacterSize(m_characterSize);
     message.text.setColor(std::move(color));
     message.text.fitWidth(size().x);
 
