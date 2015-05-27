@@ -4,8 +4,8 @@
 # Version
 
 # TODO This is dulicated with main cmake
-set(VERSION_INPUT_FILE inc/core/version.hpp.in)
-set(VERSION_OUTPUT_FILE inc/core/version.hpp)
+set(VERSION_INPUT_FILE inc/core/define.hpp.in)
+set(VERSION_OUTPUT_FILE inc/core/define.hpp)
 
 # Check if repository is a git one.
 if (EXISTS ${CMAKE_SOURCE_DIR}/.git)

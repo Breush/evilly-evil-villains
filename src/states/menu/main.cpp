@@ -2,7 +2,7 @@
 
 #include "core/application.hpp"
 #include "core/gettext.hpp"
-#include "core/version.hpp"
+#include "core/define.hpp"
 #include "resources/identifiers.hpp"
 #include "tools/vector.hpp"
 

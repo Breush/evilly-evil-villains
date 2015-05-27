@@ -10,7 +10,7 @@ docs/doxyfile
 cover/*.info
 cover/html
 
-inc/core/version.hpp
+inc/core/define.hpp
 
 Makefile
 CMakeCache.txt
