@@ -27,7 +27,7 @@ Panel::Panel(Sidebar& sidebar)
     attachChild(m_tabsStacker);
     m_tabsStacker.centerOrigin();
     for (auto& tab : m_tabs)
-        m_tabsStacker.stackBack(tab, nui::Stacker::Align::CENTER);
+        m_tabsStacker.stackBack(tab, nui::Align::CENTER);
 
     // Tabs
     m_tabs[0].setVisual(_("Monsters"),   TextureID::DUNGEON_PANEL_MONSTERS);

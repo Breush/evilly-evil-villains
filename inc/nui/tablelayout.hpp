@@ -2,6 +2,7 @@
 
 #include "scene/entity.hpp"
 #include "tools/int.hpp"
+#include "nui/enums.hpp"
 
 #include <initializer_list>
 #include <map>
@@ -11,24 +12,6 @@
 
 namespace nui
 {
-    // TODO Move this to its own file (value shared with Stacker)
-
-    //! Define relative position.
-    enum class Align
-    {
-        STANDARD,   //!< Left or Top.
-        CENTER,     //!< Center.
-        OPPOSITE,   //!< RIght or Bottom.
-    };
-
-    //! Define how a column/row adapt to content.
-    enum class Adapt
-    {
-        FILL,   //!< Share the left space with other fill.
-        FIT,    //!< Fit the size to the max of children.
-        FIXED,  //!< The size is fixed.
-    };
-
     //! A layout to display other entities in a table way.
 
     class TableLayout final : public scene::Entity

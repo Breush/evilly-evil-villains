@@ -1,6 +1,7 @@
 #pragma once
 
 #include "scene/entity.hpp"
+#include "nui/enums.hpp"
 
 #include <list>
 
@@ -15,16 +16,6 @@ namespace nui
     class Stacker : public scene::Entity
     {
         using baseClass = scene::Entity;
-
-    public:
-
-        //! How the entity is positioned if it is smaller than current size of stacker.
-        enum class Align
-        {
-            STANDARD,   //!< Left for vertical, Top for horizontal.
-            CENTER,     //!< Center.
-            OPPOSITE,   //!< Right for vertical, Bottom for horizontal.
-        };
 
     public:
 

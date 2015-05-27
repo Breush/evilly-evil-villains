@@ -82,11 +82,11 @@ void HStacker::refreshChildrenPositions()
 float HStacker::getY(float childHeight, Align inAlign)
 {
     // Center
-    if (inAlign == Stacker::Align::CENTER)
+    if (inAlign == Align::CENTER)
         return (size().y - childHeight) / 2.f;
 
     // Opposite : bottom
-    else if (inAlign == Stacker::Align::OPPOSITE)
+    else if (inAlign == Align::OPPOSITE)
         return size().y - childHeight;
 
     // Standard : top

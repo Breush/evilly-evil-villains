@@ -54,7 +54,7 @@ MenuSelectWorld::MenuSelectWorld(StateStack& stack)
 
     // Buttons
     for (auto& button : m_buttons)
-        m_stacker.stackBack(button, nui::Stacker::Align::OPPOSITE);
+        m_stacker.stackBack(button, nui::Align::OPPOSITE);
 
     m_buttons[2].setAction(_("Play"), [this] { playOnSelectedWorld(); });
     m_buttons[1].setAction(_("Back"), [this] { stackPop(); });

@@ -52,7 +52,7 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     m_buttonsStacker.setRelativePosition({0.5f, 0.95f});
 
     for (auto& button : m_buttons)
-        m_buttonsStacker.stackBack(button, nui::Stacker::Align::OPPOSITE);
+        m_buttonsStacker.stackBack(button, nui::Align::OPPOSITE);
 
     m_buttons[0].setAction(_("Back"), [this] { stackPop(); });
     m_buttons[1].setAction(_("Create and start playing"), [this] { createAndPlayWorld(); });

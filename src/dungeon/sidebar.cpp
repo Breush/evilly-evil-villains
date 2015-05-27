@@ -105,7 +105,7 @@ void Sidebar::setMode(Mode mode)
 
     // Add tabs to stacker
     for (auto& tab : m_tabs)
-        m_tabsStacker.stackBack(*tab.get(), nui::Stacker::Align::CENTER);
+        m_tabsStacker.stackBack(*tab.get(), nui::Align::CENTER);
 
     // Show the sidebar.
     setReduced(false);

@@ -82,11 +82,11 @@ void VStacker::refreshChildrenPositions()
 float VStacker::getX(float childWidth, Align inAlign)
 {
     // Center
-    if (inAlign == Stacker::Align::CENTER)
+    if (inAlign == Align::CENTER)
         return (size().x - childWidth) / 2.f;
 
     // Opposite : right
-    else if (inAlign == Stacker::Align::OPPOSITE)
+    else if (inAlign == Align::OPPOSITE)
         return size().x - childWidth;
 
     // Standard : left
