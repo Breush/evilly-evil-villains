@@ -17,7 +17,7 @@ void VStacker::refreshDisplay()
 {
     config::NUI cNUI;
 
-    m_padding = cNUI.vPadding;
+    m_padding = 2.f * cNUI.vPadding;
 
     updateSize();
     baseClass::refreshDisplay();

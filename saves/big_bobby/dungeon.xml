@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<resources dosh="456441" fame="559" />
-<dungeon name="No woman, no pancakes" floorsCount="17" roomsByFloor="12">
+<dungeon name="No woman, no pancakes" floorsCount="17" roomsByFloor="12" fame="559">
 	<floor pos="0">
 		<room pos="0" state="constructed" />
 		<room pos="1" state="constructed" />

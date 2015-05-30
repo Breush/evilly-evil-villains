@@ -77,6 +77,9 @@ namespace scene
         //! Remove an child entity.
         void detachChild(Entity& child);
 
+        //! Remove all children entities.
+        void detachChildren();
+
         //! @}
 
         //-----------------------------//
@@ -92,6 +95,9 @@ namespace scene
         //! Whether the entity is centered.
         //! This function overwrites the relativeOrigin property.
         void centerOrigin();
+
+        //! The local positions (origin taken in acount) and size.
+        sf::FloatRect localBounds();
 
         //! Set the shader applied to the whole entity.
         //! Use ShaderID::NONE to remove current shader.
@@ -176,8 +182,11 @@ namespace scene
          */
         virtual void onSizeChanges() {}
 
-        //! Called a child changed its size.
+        //! Called whenever a child changed its size.
         virtual void onChildSizeChanges() {}
+
+        //! Called whenever a child has been detached.
+        virtual void onChildDetached(scene::Entity& child) {}
 
         //! Update the entity given time-step and recursively update its children.
         /*!

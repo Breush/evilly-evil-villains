@@ -54,7 +54,7 @@ MenuMain::MenuMain(StateStack& stack)
     // Functors
     auto singlePlayer = [this]() { stackPush(StateID::MENU_SELECTWORLD); };
     auto multiPlayer = nullptr;
-    auto villains = [this]() { stackPush(StateID::MENU_VILLAINS); };
+    auto villains = [this]() { stackPush(StateID::MENU_MANAGEVILLAINS); };
     auto configuration = nullptr;
     auto quitGame = [this]() { stackClear(); };
 
@@ -91,6 +91,7 @@ bool MenuMain::update(const sf::Time& dt)
     if (m_choiceBox.choiceChanged()) {
         m_reactImage.setActiveReact(m_choices[m_choiceBox.selectedChoice()]);
     }
+
     // Checking if reactImage changed
     else if (m_reactImage.reactChanged()) {
         for (uint i = 0; i < m_choices.size(); ++i) {

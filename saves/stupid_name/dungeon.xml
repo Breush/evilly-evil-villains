@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<resources dosh="233" fame="23" />
-<dungeon name="Château d'eau" floorsCount="17" roomsByFloor="2">
+<dungeon name="Château d'eau" floorsCount="17" roomsByFloor="2" fame="23">
 	<floor pos="0">
 		<room pos="0" state="constructed" />
 		<room pos="1" state="constructed" />

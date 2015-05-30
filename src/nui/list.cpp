@@ -145,6 +145,18 @@ void List::setColumnAlign(uint index, Align hAlign, Align vAlign)
 //-----------------//
 //----- Lines -----//
 
+void List::clearLines()
+{
+    m_selectedLine = -1u;
+
+    // Do not remove the first line...
+    for (uint l = 1u; l <= m_lines.size(); ++l)
+    for (uint c = 0u; c < m_columns.size(); ++c)
+        m_table.removeChild(l, c);
+
+    m_lines.clear();
+}
+
 void List::addLine(const std::initializer_list<std::wstring>& values)
 {
     massert(values.size() == m_columns.size(), "Expected " << m_columns.size() << " values to match columns number.");

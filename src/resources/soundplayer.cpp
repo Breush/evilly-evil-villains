@@ -1,6 +1,7 @@
 #include "resources/soundplayer.hpp"
 
 #include "resources/identifiers.hpp"
+#include "tools/platform-fixes.hpp" // erase_if
 #include "core/gettext.hpp" // string2wstring
 
 #include <SFML/Audio/Listener.hpp>
@@ -62,9 +63,7 @@ void SoundPlayer::stopAll()
 
 void SoundPlayer::removeStoppedSounds()
 {
-    m_sounds.remove_if([](const sf::Sound& s) {
-        return s.getStatus() == sf::Sound::Stopped;
-    });
+    std::erase_if(m_sounds, [](const sf::Sound& s) { return s.getStatus() == sf::Sound::Stopped; });
 }
 
 void SoundPlayer::setListenerPosition(sf::Vector2f position)

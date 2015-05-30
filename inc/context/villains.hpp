@@ -10,6 +10,20 @@
 
 namespace context
 {
+    //! Defines villain attributes.
+
+    class Villain
+    {
+    public:
+
+        //! Find how many worlds are associated with the specified villain.
+        uint worldsCount() const;
+
+        uint index;                 //!< The index of the villain in the villains vector.
+        std::wstring name;          //!< The name of the villain.
+        uint dosh = 0u;             //!< The dosh possessed by the villain.
+    };
+
     //! A XML loading class to get the villains data.
     /*!
      *  This class allow you to list a villain
@@ -18,15 +32,6 @@ namespace context
 
     class Villains final : sf::NonCopyable
     {
-    public:
-
-        //! Defines villain attributes.
-        struct Villain
-        {
-            uint index;                 //!< The index of the villain in the villains vector.
-            std::wstring name;          //!< The name of the villain.
-        };
-
     public:
 
         //! Default constructor.
@@ -55,6 +60,12 @@ namespace context
         //! @return The index of the new villain.
         uint add(std::wstring name);
 
+        //! Find and delete the specified villain and all its associated worlds.
+        void remove(uint index);
+
+        //! Find and delete all worlds that are associated with the specified villain.
+        void removeWorlds(uint index);
+
         //! @}
 
         //----------------//
@@ -63,6 +74,14 @@ namespace context
 
         //! Get the vector of all villains for read.
         inline const std::vector<Villain>& get() const { return m_villains; }
+
+        //! Get the specific villain that matches the name.
+        //! Returns nullptr if not found.
+        Villain* getFromVillainName(const std::wstring& villainName);
+
+        //! Get the specific villain that owns the world in the specified folder.
+        //! Returns nullptr if not found.
+        Villain* getFromWorldFolder(const std::wstring& folder);
 
         //! Get a specific villain for read.
         inline const Villain& get(uint index) const { return m_villains[index]; }

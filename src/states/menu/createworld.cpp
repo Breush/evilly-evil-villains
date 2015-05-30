@@ -58,6 +58,9 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     m_buttons[1].setAction(_("Create and start playing"), [this] { createAndPlayWorld(); });
 }
 
+//------------------//
+//----- Events -----//
+
 bool MenuCreateWorld::handleEvent(const sf::Event& event)
 {
     // Escape quits current state
@@ -69,6 +72,9 @@ bool MenuCreateWorld::handleEvent(const sf::Event& event)
 
     return State::handleEvent(event);
 }
+
+//-------------------------------//
+//----- Villains management -----//
 
 void MenuCreateWorld::createAndPlayWorld()
 {

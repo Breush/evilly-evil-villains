@@ -1,5 +1,6 @@
 #include "context/villains.hpp"
 
+#include "context/worlds.hpp"
 #include "tools/string.hpp"
 #include "tools/debug.hpp"
 #include "tools/time.hpp"
@@ -15,6 +16,14 @@ using namespace context;
 //----- Static variables -----//
 
 Villains context::villains;
+
+//-------------------//
+//----- Villain -----//
+
+uint Villain::worldsCount() const
+{
+    return worlds.count(name);
+}
 
 //---------------------------//
 //----- File management -----//
@@ -37,9 +46,12 @@ void Villains::load()
 
         villain.index = m_villains.size();
         villain.name = info.attribute(L"name").as_string();
+        villain.dosh = info.attribute(L"dosh").as_uint();
 
         m_villains.emplace_back(std::move(villain));
     }
+
+    worlds.load();
 }
 
 void Villains::save()
@@ -59,10 +71,13 @@ void Villains::save()
         auto info = root.append_child(L"villain");
 
         info.append_attribute(L"name") = villain.name.c_str();
+        info.append_attribute(L"dosh") = villain.dosh;
     }
 
     doc.save_file(file.c_str());
     wdebug_application_1(L"Saving villains info to " << file);
+
+    worlds.save();
 }
 
 //----------------------//
@@ -70,11 +85,48 @@ void Villains::save()
 
 uint Villains::add(std::wstring name)
 {
+    wdebug_application_1(L"Created villain " << name << L".");
+
     Villain villain;
 
     villain.index = m_villains.size();
     villain.name = std::move(name);
+    villain.dosh = 0u;
 
     m_villains.emplace_back(std::move(villain));
     return m_villains.size() - 1u;
+}
+
+void Villains::remove(uint index)
+{
+    wdebug_application_1(L"Deleted villain " << m_villains[index].name << L" and all its worlds.");
+
+    removeWorlds(index);
+    m_villains.erase(m_villains.begin() + index);
+
+    for (auto i = index; i < m_villains.size(); ++i)
+        m_villains[i].index = i;
+}
+
+void Villains::removeWorlds(uint index)
+{
+    worlds.remove(m_villains[index].name);
+}
+
+Villain* Villains::getFromVillainName(const std::wstring& villainName)
+{
+    for (auto& villain : m_villains)
+        if (villain.name == villainName)
+            return &villain;
+
+    return nullptr;
+}
+
+Villain* Villains::getFromWorldFolder(const std::wstring& folder)
+{
+    for (auto& world : worlds.get())
+        if (world.folder == folder)
+            return getFromVillainName(world.villain);
+
+    return nullptr;
 }

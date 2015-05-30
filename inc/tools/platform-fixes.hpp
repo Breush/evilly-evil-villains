@@ -1,9 +1,19 @@
 #pragma once
 
 #include <memory>
+#include <algorithm>
 
 namespace std
 {
+    // std::erase_if is like a remove_if but really erase the container
+
+    template<typename T, typename F>
+    void erase_if(T& container, const F& func)
+    {
+        auto newEnd = std::remove_if(container.begin(), container.end(), func);
+        container.erase(newEnd, container.end());
+    }
+
     // std::make_unique does not exist in C++11 (but in C++14 it does)
 
     template<typename T, typename... Args>

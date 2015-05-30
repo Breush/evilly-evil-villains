@@ -3,6 +3,7 @@
 #include "dungeon/graph.hpp"
 #include "dungeon/hero.hpp"
 #include "dungeon/traps.hpp"
+#include "context/villains.hpp"
 #include "tools/debug.hpp"
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
@@ -25,6 +26,9 @@ std::wstring Data::load(const std::wstring& folder)
 {
     wdebug_dungeon_1(L"Loading data from folder " << folder);
 
+    context::villains.load();
+    m_dosh = &context::villains.getFromWorldFolder(folder)->dosh;
+
     std::wstring mainDungeonFilename = L"saves/" + folder + L"dungeon.xml";
     loadDungeon(mainDungeonFilename);
     return mainDungeonFilename;
@@ -41,6 +45,8 @@ std::wstring Data::save(const std::wstring& folder)
     saveDungeon(mainDungeonFilename);
 
     wdebug_dungeon_1(L"Saved data to folder " << folder);
+
+    context::villains.save();
 
     return mainDungeonFilename;
 }
@@ -63,22 +69,17 @@ void Data::loadDungeon(const std::wstring& file)
     pugi::xml_document doc;
     doc.load_file(file.c_str());
 
-    const auto& resources = doc.child(L"resources");
     const auto& dungeon = doc.child(L"dungeon");
 
-    if (!resources || !dungeon)
+    if (!dungeon)
         throw std::runtime_error("File " + toString(file) + " is not a valid dungeon file: resources or dungeon node not found.");
-
-    //---- Resources
-
-    m_dosh = resources.attribute(L"dosh").as_uint();
-    m_fame = resources.attribute(L"fame").as_uint();
 
     //---- Dungeon
 
     m_name = dungeon.attribute(L"name").as_string();
     m_floorsCount = dungeon.attribute(L"floorsCount").as_uint();
     m_roomsByFloor = dungeon.attribute(L"roomsByFloor").as_uint();
+    m_fame = dungeon.attribute(L"fame").as_uint();
 
     wdebug_dungeon_1(L"Dungeon is " << m_name << L" of size " << m_floorsCount << "x" << m_roomsByFloor);
 
@@ -138,19 +139,14 @@ void Data::saveDungeon(const std::wstring& file)
 {
     // Creating XML
     pugi::xml_document doc;
-    auto resources = doc.append_child(L"resources");
     auto dungeon = doc.append_child(L"dungeon");
-
-    //---- Resources
-
-    resources.append_attribute(L"dosh") = m_dosh;
-    resources.append_attribute(L"fame") = m_fame;
 
     //---- Dungeon
 
     dungeon.append_attribute(L"name") = m_name.c_str();
     dungeon.append_attribute(L"floorsCount") = m_floorsCount;
     dungeon.append_attribute(L"roomsByFloor") = m_roomsByFloor;
+    dungeon.append_attribute(L"fame") = m_fame;
 
     // Floors
     for (uint floorPos = 0; floorPos < m_floors.size(); ++floorPos) {
@@ -356,7 +352,7 @@ void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
 
 void Data::setDosh(uint value)
 {
-    m_dosh = value;
+    *m_dosh = value;
     emit(EventType::DOSH_CHANGED);
 }
 

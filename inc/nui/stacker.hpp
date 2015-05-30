@@ -43,6 +43,7 @@ namespace nui
         //! @name Routine
         //! @{
 
+        void onChildDetached(scene::Entity& child) final;
         virtual void onSizeChanges() override = 0;
         virtual void onChildSizeChanges() override = 0;
 

@@ -1,6 +1,6 @@
 #include "dungeon/event.hpp"
 
-#include <algorithm>
+#include "tools/platform-fixes.hpp" // erase_if
 
 using namespace dungeon;
 
@@ -42,6 +42,5 @@ void EventEmitter::addReceiver(EventReceiver* receiver)
 
 void EventEmitter::removeReceiver(EventReceiver* receiver)
 {
-    std::remove_if(m_receivers.begin(), m_receivers.end(),
-        [=](EventReceiver* inReceiver) { return receiver == inReceiver; });
+    std::erase_if(m_receivers, [=](EventReceiver* inReceiver) { return receiver == inReceiver; });
 }

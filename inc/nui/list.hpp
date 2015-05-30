@@ -53,6 +53,9 @@ namespace nui
         //! @name Lines
         //! @{
 
+        //! Clear all lines.
+        void clearLines();
+
         //! Add a line to the end of the list.
         void addLine(const std::initializer_list<std::wstring>& values);
 

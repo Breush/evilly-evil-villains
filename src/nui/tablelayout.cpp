@@ -170,22 +170,29 @@ void TableLayout::setChild(uint row, uint col, scene::Entity& child, Align hAlig
     refreshChildrenPosition();
 }
 
-void TableLayout::removeChild(uint row, uint col)
-{
-    returnif (m_children.count({row, col}) == 0u);
-
-    detachChild(m_children.at({row, col}).entity);
-    m_children.erase({row, col});
-
-    refreshChildrenPosition();
-}
-
 void TableLayout::setChildAlign(uint row, uint col, Align hAlign, Align vAlign)
 {
     returnif (m_children.count({row, col}) == 0u);
 
     m_children.at({row, col}).hAlign = hAlign;
     m_children.at({row, col}).vAlign = vAlign;
+
+    refreshChildrenPosition();
+}
+
+void TableLayout::removeChildren()
+{
+    for (uint r = 0u; r < m_rows.size(); ++r)
+    for (uint c = 0u; c < m_cols.size(); ++c)
+        removeChild(r, c);
+}
+
+void TableLayout::removeChild(uint row, uint col)
+{
+    returnif (m_children.count({row, col}) == 0u);
+
+    detachChild(m_children.at({row, col}).entity);
+    m_children.erase({row, col});
 
     refreshChildrenPosition();
 }

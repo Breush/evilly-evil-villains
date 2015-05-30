@@ -115,6 +115,25 @@ uint Worlds::add(std::wstring name, std::wstring villain)
     return m_worlds.size() - 1u;
 }
 
+void Worlds::remove(const std::wstring& villain)
+{
+    for (auto it = m_worlds.begin(); it != m_worlds.end();) {
+        if (it->villain == villain) it = m_worlds.erase(it);
+        else ++it;
+    }
+}
+
+uint Worlds::count(const std::wstring& villain)
+{
+    uint worldsCount = 0u;
+
+    for (auto& world : m_worlds)
+        if (world.villain == villain)
+            ++worldsCount;
+
+    return worldsCount;
+}
+
 void Worlds::refreshLastPlayed()
 {
     m_worlds[m_selected->index].lastPlayed = time(nullptr);

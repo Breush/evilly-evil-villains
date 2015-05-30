@@ -38,10 +38,10 @@ Entity::Entity(bool isLerpable)
 
 Entity::~Entity()
 {
-    m_children.clear();
+    detachChildren();
 
     if (m_parent != nullptr)
-        m_parent->detachChild(*this);
+         m_parent->detachChild(*this);
 }
 
 //-------------------//
@@ -193,9 +193,21 @@ void Entity::detachChild(Entity& child)
     auto found = std::find_if(std::begin(m_children), std::end(m_children), [&](Entity* node) { return node == &child; });
     massert(found != std::end(m_children), "Could not detach child.");
 
+    onChildDetached(child);
     child.setParent(nullptr);
     child.setGraph(nullptr);
     m_children.erase(found);
+}
+
+void Entity::detachChildren()
+{
+    for (auto& child : m_children) {
+        onChildDetached(*child);
+        child->setParent(nullptr);
+        child->setGraph(nullptr);
+    }
+
+    m_children.clear();
 }
 
 Entity* Entity::firstOver(const sf::Vector2f& position)
@@ -387,6 +399,11 @@ void Entity::setRelativePosition(const sf::Vector2f& inRelativePosition)
 void Entity::centerOrigin()
 {
     setRelativeOrigin({0.5f, 0.5f});
+}
+
+sf::FloatRect Entity::localBounds()
+{
+    return {m_localPosition.x - getOrigin().x, m_localPosition.y - getOrigin().y, m_size.x, m_size.y};
 }
 
 void Entity::setSize(const sf::Vector2f& inSize)

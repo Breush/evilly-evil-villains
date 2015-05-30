@@ -159,8 +159,8 @@ namespace dungeon
         //! @name Resources
         //! @{
 
-        inline uint dosh() const { return m_dosh; } //!< Get dosh value;
-        inline uint fame() const { return m_fame; } //!< Get fame value;
+        inline uint dosh() const { return *m_dosh; } //!< Get dosh value.
+        inline uint fame() const { return m_fame; } //!< Get fame value.
 
         void setDosh(uint value);   //!< Set the dosh to a specific value.
         void setFame(uint value);   //!< Set the fame to a specific value.
@@ -283,8 +283,8 @@ namespace dungeon
 
         Mode m_mode = Mode::DESIGN; //!< The current mode.
 
-        uint m_dosh = 0u;   //!< The resource dosh value.
-        uint m_fame = 0u;   //!< The resource fame value.
+        uint* m_dosh = nullptr; //!< The resource dosh value (comming from villain).
+        uint m_fame = 0u;       //!< The resource fame value.
     };
 }
 
