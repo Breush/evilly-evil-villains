@@ -520,11 +520,17 @@ public:
     bool getSimpleObjectTransform(Transform& result, Animation::Mainline::Key::Object* obj1);
     bool getTweenedObjectTransform(Transform& result, Animation::Mainline::Key::Object_Ref* ref);
 
+    const std::pair<float, float>& getImagePivots(int folderID, int fileID) const;
     int getNumBones() const;
     int getNumObjects() const;
 
     bool getBoneTransform(Transform& result, int boneID);
     bool getObjectTransform(Transform& result, int objectID);
+
+private:
+
+    // Map (folder/file) to (pivot_x, pivot_y)
+    std::map<std::pair<int, int>, std::pair<float, float>> m_pivots;
 };
 
 }

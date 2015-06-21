@@ -46,6 +46,11 @@ void EntityPrototype::load(scml::Data* data)
     for (auto const& animation : entity_ptr->animations) {
         animations.insert(std::make_pair(animation.second->id, new Animation(animation.second)));
     }
+
+    // Need to keep track of initial pivots
+    for (auto const& folder : data->folders)
+    for (auto const& file : folder.second->files)
+        m_pivots[{folder.second->id, file.second->id}] = {file.second->pivot_x, file.second->pivot_y};
 }
 
 void EntityPrototype::clear()
@@ -156,7 +161,6 @@ void EntityPrototype::draw(float x, float y, float angle, float scale_x, float s
     }
 }
 
-
 void EntityPrototype::draw_simple_object(Animation::Mainline::Key::Object* obj1)
 {
     // Get parent bone transform
@@ -176,7 +180,7 @@ void EntityPrototype::draw_simple_object(Animation::Mainline::Key::Object* obj1)
     float pivot_y_ratio = obj1->pivot_y;
 
     // No image tweening
-    std::pair<uint, uint> img_dims = getImageDimensions(obj1->folder, obj1->file);
+    auto img_dims = getImageDimensions(obj1->folder, obj1->file);
 
     // Rotate about the pivot point and draw from the center of the image
     float offset_x = (pivot_x_ratio - 0.5f)*img_dims.first;
@@ -191,6 +195,10 @@ void EntityPrototype::draw_simple_object(Animation::Mainline::Key::Object* obj1)
     draw_internal(obj1->folder, obj1->file, sprite_x, sprite_y, obj_transform.angle, obj_transform.scale_x, obj_transform.scale_y);
 }
 
+const std::pair<float, float>& EntityPrototype::getImagePivots(int folder, int file) const
+{
+    return m_pivots.at({folder, file});
+}
 
 void EntityPrototype::draw_tweened_object(Animation::Mainline::Key::Object_Ref* ref)
 {
@@ -235,13 +243,18 @@ void EntityPrototype::draw_tweened_object(Animation::Mainline::Key::Object_Ref* 
         float pivot_y_ratio = interpolate(obj1->pivot_y, obj2->pivot_y, t);
 
         // No image tweening
-        std::pair<unsigned int, unsigned int> img_dims = getImageDimensions(obj1->folder, obj1->file);
+        auto img_pivot = getImagePivots(obj1->folder, obj1->file);
+        auto img_dims = getImageDimensions(obj1->folder, obj1->file);
+
+        // The origin
+        float origin_x = (img_pivot.first) * img_dims.first;
+        float origin_y = (img_pivot.second - 1.f) * img_dims.second;
 
         // Rotate about the pivot point and draw from the center of the image
-        float offset_x = (pivot_x_ratio - 0.5f)*img_dims.first;
-        float offset_y = (pivot_y_ratio - 0.5f)*img_dims.second;
-        float sprite_x = -offset_x*obj_transform.scale_x;
-        float sprite_y = -offset_y*obj_transform.scale_y;
+        float offset_x = origin_x + (pivot_x_ratio - 0.5f) * img_dims.first;
+        float offset_y = origin_y + (pivot_y_ratio - 0.5f) * img_dims.second;
+        float sprite_x = -offset_x * obj_transform.scale_x;
+        float sprite_y = -offset_y * obj_transform.scale_y;
 
         bool flipped = ((obj_transform.scale_x < 0) != (obj_transform.scale_y < 0));
         rotate_point(sprite_x, sprite_y, obj_transform.angle, obj_transform.x, obj_transform.y, flipped);
@@ -261,7 +274,7 @@ bool EntityPrototype::Bone_Transform_State::should_rebuild(int entity, int anima
             animation != this->animation ||
             key != this->key ||
             time != this->time ||
-            this->base_transform != base_transform);
+            base_transform != this->base_transform);
 }
 
 void EntityPrototype::Bone_Transform_State::rebuild(int entity, int animation, int key, int time, EntityPrototype* entity_ptr, const Transform& base_transform)
@@ -505,7 +518,9 @@ void EntityPrototype::Animation::Mainline::Key::Object::clear()
 
 
 EntityPrototype::Animation::Mainline::Key::Object_Ref::Object_Ref(scml::Data::Entity::Animation::Mainline::Key::Object_Ref* object_ref)
-    : id(object_ref->id), parent(object_ref->parent), timeline(object_ref->timeline), key(object_ref->key), z_index(object_ref->z_index)
+    : id(object_ref->id), parent(object_ref->parent)
+    , timeline(object_ref->timeline), key(object_ref->key)
+    , z_index(object_ref->z_index)
 {}
 
 void EntityPrototype::Animation::Mainline::Key::Object_Ref::clear()
@@ -535,7 +550,14 @@ void EntityPrototype::Animation::Timeline::clear()
 
 
 EntityPrototype::Animation::Timeline::Key::Key(scml::Data::Entity::Animation::Timeline::Key* key)
-    : id(key->id), time(key->time), curve_type(key->curve_type), c1(key->c1), c2(key->c2), spin(key->spin), has_object(key->has_object), bone(&key->bone), object(&key->object)
+    : id(key->id)
+    , time(key->time)
+    , curve_type(key->curve_type)
+    , c1(key->c1), c2(key->c2)
+    , spin(key->spin)
+    , has_object(key->has_object)
+    , bone(&key->bone)
+    , object(&key->object)
 {
 
 }

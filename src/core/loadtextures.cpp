@@ -53,4 +53,24 @@ void Application::loadTextures()
     s_context.textures.load(TextureID::DUNGEON_FACILITIES_TREASURE, "res/tex/dungeon/facilities/treasure.png");
 
     s_context.textures.load(TextureID::DUNGEON_LOCK, "res/tex/dungeon/panel/lock.png");
+
+    // Heroes
+    s_context.textures.load(TextureID::HEROES_GROO_PROFILE_HEAD, "res/tex/heroes/groo/profile/head.png", true);
+    s_context.textures.load(TextureID::HEROES_GROO_PROFILE_TAIL, "res/tex/heroes/groo/profile/tail.png", true);
+    s_context.textures.load(TextureID::HEROES_GROO_PROFILE_TORSO, "res/tex/heroes/groo/profile/torso.png", true);
+    s_context.textures.load(TextureID::HEROES_GROO_PROFILE_PELVIS, "res/tex/heroes/groo/profile/pelvis.png", true);
+    s_context.textures.load(TextureID::HEROES_GROO_PROFILE_ARM1A, "res/tex/heroes/groo/profile/arm1a.png", true);
+    s_context.textures.load(TextureID::HEROES_GROO_PROFILE_ARM1B, "res/tex/heroes/groo/profile/arm1b.png", true);
+    s_context.textures.load(TextureID::HEROES_GROO_PROFILE_HAND1, "res/tex/heroes/groo/profile/hand1.png", true);
+    s_context.textures.load(TextureID::HEROES_GROO_PROFILE_ARM2A, "res/tex/heroes/groo/profile/arm2a.png", true);
+    s_context.textures.load(TextureID::HEROES_GROO_PROFILE_ARM2B, "res/tex/heroes/groo/profile/arm2b.png", true);
+    s_context.textures.load(TextureID::HEROES_GROO_PROFILE_HAND2, "res/tex/heroes/groo/profile/hand2.png", true);
+    s_context.textures.load(TextureID::HEROES_GROO_PROFILE_LEG1A, "res/tex/heroes/groo/profile/leg1a.png", true);
+    s_context.textures.load(TextureID::HEROES_GROO_PROFILE_LEG1B, "res/tex/heroes/groo/profile/leg1b.png", true);
+    s_context.textures.load(TextureID::HEROES_GROO_PROFILE_LEG1C, "res/tex/heroes/groo/profile/leg1c.png", true);
+    s_context.textures.load(TextureID::HEROES_GROO_PROFILE_FOOT1, "res/tex/heroes/groo/profile/foot1.png", true);
+    s_context.textures.load(TextureID::HEROES_GROO_PROFILE_LEG2A, "res/tex/heroes/groo/profile/leg2a.png", true);
+    s_context.textures.load(TextureID::HEROES_GROO_PROFILE_LEG2B, "res/tex/heroes/groo/profile/leg2b.png", true);
+    s_context.textures.load(TextureID::HEROES_GROO_PROFILE_LEG2C, "res/tex/heroes/groo/profile/leg2c.png", true);
+    s_context.textures.load(TextureID::HEROES_GROO_PROFILE_FOOT2, "res/tex/heroes/groo/profile/foot2.png", true);
 }
