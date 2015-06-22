@@ -1,5 +1,6 @@
 #include "dungeon/hero.hpp"
 
+#include "resources/identifiers.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/data.hpp"
 #include "tools/random.hpp"
@@ -11,11 +12,14 @@
 using namespace dungeon;
 
 Hero::Hero(const Inter* inter)
-    : m_running(false)
+    : baseClass(true)
+    , m_running(false)
     , m_dosh(0u)
     , m_inter(inter)
 {
     setVisible(false);
+
+    lerpable()->setPositionSpeed({50.f, 25.f});
 
     // Dosh label
     // TODO Should be in NUI layer, somehow
@@ -25,9 +29,8 @@ Hero::Hero(const Inter* inter)
     attachChild(m_doshLabel);
 
     // Sprite
-    m_sprite.setSize({10.f, 10.f});
-    m_sprite.setFillColor(sf::Color::White);
-    addPart(&m_sprite);
+    attachChild(m_sprite);
+    m_sprite.load(AnimationID::HEROES_GROO);
 
     // Lua
     if (!m_lua.load("res/ai/hero.lua"))
@@ -45,13 +48,8 @@ void Hero::updateAI(const sf::Time& dt)
 {
     returnif (!m_running);
 
-    m_inRoomSince += dt.asSeconds();
-
     // Look for next room
-    static const float m_timeInEachRoom = 0.1f;
-    returnif (m_inRoomSince < m_timeInEachRoom);
-
-    m_inRoomSince -= m_timeInEachRoom;
+    returnif (lerpable()->positionLerping());
 
     returnif (m_currentNode == nullptr);
     returnif (m_currentNode->neighbours.size() == 0u);
@@ -84,7 +82,7 @@ void Hero::updateAI(const sf::Time& dt)
     ++m_tick;
 }
 
-void Hero::setCurrentNode(const Graph::Node* node)
+void Hero::setCurrentNode(const Graph::Node* node, bool firstNode)
 {
     returnif (m_currentNode == node);
 
@@ -92,7 +90,6 @@ void Hero::setCurrentNode(const Graph::Node* node)
     event.action.hero = this;
 
     // Emit signal when getting out
-    // FIXME Using Data interface seems strange here...
     if (m_currentNode != nullptr) {
         event.type = EventType::HERO_LEFT_ROOM;
         event.action.room = {m_currentNode->coords.x, m_currentNode->coords.y};
@@ -108,7 +105,7 @@ void Hero::setCurrentNode(const Graph::Node* node)
 
         m_nodeInfos[m_currentNode->coords].visits += 1u;
         m_nodeInfos[m_currentNode->coords].lastVisit = m_tick;
-        refreshPositionFromNode();
+        refreshPositionFromNode(firstNode);
 
         event.type = EventType::HERO_ENTERED_ROOM;
         event.action.room = {m_currentNode->coords.x, m_currentNode->coords.y};
@@ -200,7 +197,7 @@ void Hero::changedRunning()
 
         // Get the door from the graph (requires that it is correctly constructed).
         m_lua["nonVisitedNodes"] = m_graph->uniqueNodesCount();
-        setCurrentNode(&m_graph->startingNode());
+        setCurrentNode(&m_graph->startingNode(), true);
     }
     else {
         setCurrentNode(nullptr);
@@ -221,7 +218,14 @@ void Hero::changedDosh()
     m_doshLabel.setText(str.str());
 }
 
-void Hero::refreshPositionFromNode()
+void Hero::refreshPositionFromNode(bool firstNode)
 {
-    setLocalPosition(m_inter->tileLocalPosition(m_currentNode->coords) + m_inter->tileSize() / 2.f);
+    lerpable()->setTargetPosition(m_inter->tileLocalPosition(m_currentNode->coords) + m_inter->tileSize() * 3.f / 4.f);
+    if (firstNode) setLocalPosition(lerpable()->targetPosition());
+
+    // TODO Change animation instead of just mirrored
+    if (lerpable()->targetPosition().x >= localPosition().x)
+        m_sprite.setLocalScale({0.15f, 0.15f});
+    else
+        m_sprite.setLocalScale({-0.15f, 0.15f});
 }

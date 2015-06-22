@@ -4,8 +4,8 @@
 #include "dungeon/graph.hpp"
 #include "dungeon/event.hpp"
 #include "sfe/label.hpp"
+#include "sfe/animatedsprite.hpp"
 
-#include <SFML/Graphics/RectangleShape.hpp>
 #include <selene/selene.hpp>
 
 namespace dungeon
@@ -125,7 +125,8 @@ namespace dungeon
         //! @{
 
         //! Select the node to move the hero to.
-        void setCurrentNode(const Graph::Node* node);
+        //! Set firstNode to true if the hero enters the dungeon via this node.
+        void setCurrentNode(const Graph::Node* node, bool firstNode = false);
 
         //! @}
 
@@ -134,8 +135,8 @@ namespace dungeon
         //! @{
 
         //! Recompute the local position of the hero.
-        // TODO This function should not exists once it is managed by physics component.
-        void refreshPositionFromNode();
+        //! Set firstNode to true if the hero enters the dungeon via this node.
+        void refreshPositionFromNode(bool firstNode = false);
 
         //! Whenever the running mode changed.
         void changedRunning();
@@ -163,12 +164,11 @@ namespace dungeon
 
         // Artificial intelligence
         sel::State m_lua;               //!< The lua state.
-        float m_inRoomSince = 0.f;      //!< How many seconds the hero is in the current node.
         uint m_tick = 0u;               //!< The current tick (how many nodes has been visited so far).
         std::unordered_map<sf::Vector2u, NodeInfo> m_nodeInfos; //!< Remembers the visits of a certain node.
 
         // Decorum
         sfe::Label m_doshLabel;         //!< How much dosh held by the hero.
-        sf::RectangleShape m_sprite;    //!< The sprite of the hero.
+        sfe::AnimatedSprite m_sprite;   //!< The sprite of the hero.
     };
 }

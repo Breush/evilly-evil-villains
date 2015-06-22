@@ -6,8 +6,9 @@
 
 using namespace sfe;
 
-AnimatedSprite::AnimatedSprite()
-    : m_looping(true)
+AnimatedSprite::AnimatedSprite(bool isLerpable)
+    : baseClass(isLerpable)
+    , m_looping(true)
     , m_started(true)
 {
     Application::context().animations.push(this);
@@ -51,8 +52,8 @@ void AnimatedSprite::refresh()
         entity->getAnimation(m_number)->looping = (m_looping)? L"true" : L"false";
 }
 
-//------------------------------//
-//----- Controls animation -----//
+//---------------------//
+//----- Animation -----//
 
 void AnimatedSprite::load(AnimationID id, int number)
 {

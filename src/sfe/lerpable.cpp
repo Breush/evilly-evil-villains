@@ -7,7 +7,8 @@
 using namespace sfe;
 
 Lerpable::Lerpable(scene::Entity* entity)
-    : m_positionSpeed(250.f, 250.f)
+    : m_positionLerping(false)
+    , m_positionSpeed(250.f, 250.f)
     , m_entity(entity)
 {
     massert(m_entity != nullptr, "Init lerpable with empty entity.");
@@ -18,21 +19,37 @@ Lerpable::Lerpable(scene::Entity* entity)
 
 void Lerpable::update(const sf::Time& dt)
 {
-    const auto& localPosition(m_entity->localPosition());
-
     // Updating position
-    if (localPosition != m_targetPosition)
+    if (m_positionLerping) {
+        const auto& localPosition(m_entity->localPosition());
         m_entity->setLocalPosition(nextPosition(localPosition, dt));
+        if (m_entity->localPosition() == m_targetPosition)
+            m_positionLerping = false;
+    }
 
-    // TODO Other interpolations
+    // TODO Other variables
 }
 
-//---------------------------//
-//----- Target relative -----//
+//--------------------------//
+//----- User interface -----//
+
+void Lerpable::saveDefaults()
+{
+    m_defaultPosition = m_entity->localPosition();
+}
+
+//----------------------------------//
+//----- Position interpolation -----//
+
+void Lerpable::setTargetPosition(const sf::Vector2f& targetPosition)
+{
+    m_targetPosition = targetPosition;
+    setPositionLerping(true);
+}
 
 void Lerpable::setTargetPositionOffset(const sf::Vector2f& positionOffset)
 {
-    setTargetPosition(defaultPosition() + positionOffset);
+    setTargetPosition(m_defaultPosition + positionOffset);
 }
 
 //--------------------------//
@@ -47,22 +64,6 @@ sf::Vector2f Lerpable::nextPosition(sf::Vector2f position, const sf::Time& dt)
 
     return position;
 }
-
-//-------------------//
-//----- Changes -----//
-
-void Lerpable::saveDefaults()
-{
-    m_defaultPosition = m_entity->localPosition();
-    m_targetPosition = m_entity->localPosition();
-}
-
-void Lerpable::changedTargetPosition()
-{
-}
-
-//---------------------//
-//----- Low level -----//
 
 void Lerpable::converge(float& source, const float target, const float offset)
 {
