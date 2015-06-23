@@ -9,20 +9,23 @@
 #include <map>
 
 // Forward declarations
-namespace sfe {
+
+namespace sfe
+{
     class AnimatedSprite;
 }
 
-namespace scml {
+namespace scml
+{
     class Data;
 }
 
 namespace resources
 {
-    class AnimationHolder : private sf::NonCopyable
+    class AnimationHolder final : private sf::NonCopyable
     {
     public:
-        AnimationHolder();
+        AnimationHolder() = default;
 
         void load(AnimationID id, const std::string& filename);
         void update(const sf::Time& dt);

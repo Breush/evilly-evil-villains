@@ -6,10 +6,6 @@
 
 using namespace resources;
 
-AnimationHolder::AnimationHolder()
-{
-}
-
 void AnimationHolder::update(const sf::Time& dt)
 {
     for (auto& animatedSprite : m_animatedSprites)

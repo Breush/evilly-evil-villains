@@ -715,7 +715,6 @@ bool Data::Entity::Animation::load(pugi::xml_node& elem)
     // Soundline
     auto soundline_elem = elem.child(L"soundline");
     if (!soundline_elem || !soundline.load(soundline_elem)) {
-        throw std::runtime_error("scml::Data::Entity::Animation failed to load the soundline.");
         soundline.clear();
     }
 

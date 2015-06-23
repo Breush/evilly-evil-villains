@@ -3,6 +3,7 @@
 #include "core/application.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 #include "tools/tools.hpp"
+#include "tools/debug.hpp"
 
 using namespace sfe;
 
@@ -55,16 +56,16 @@ void AnimatedSprite::refresh()
 //---------------------//
 //----- Animation -----//
 
-void AnimatedSprite::load(AnimationID id, int number)
+void AnimatedSprite::load(AnimationID id)
 {
     auto& data = Application::context().animations.getData(id);
     auto& fs = Application::context().animations.getFileSystem(id);
-    m_number = number;
+    m_number = 0;
 
     // Removing if previous animation
     m_entities.clear();
 
-    // Loading animation
+    // Loading entities
     for (const auto& entityInfo : data.entities) {
         auto entity = std::make_unique<scml::Entity>(&data, entityInfo.first);
         entity->setFileSystem(&fs);
@@ -73,6 +74,20 @@ void AnimatedSprite::load(AnimationID id, int number)
 
     // Refresh all entities
     refresh();
+}
+
+void AnimatedSprite::select(const std::wstring& animationName)
+{
+    const auto& firstEntity = *m_entities.front();
+    auto animation = firstEntity.getAnimation(animationName);
+    wassert(animation != nullptr, L"Requested animation '" << animationName
+                                  << "' not found in entity '" << firstEntity.name << L"'.");
+
+    if (animation->id != m_number) {
+        m_number = animation->id;
+        refresh();
+        restart();
+    }
 }
 
 void AnimatedSprite::restart()

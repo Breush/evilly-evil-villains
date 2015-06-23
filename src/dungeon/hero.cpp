@@ -31,6 +31,8 @@ Hero::Hero(const Inter* inter)
     // Sprite
     attachChild(m_sprite);
     m_sprite.load(AnimationID::HEROES_GROO);
+    // TODO Should not exists...
+    m_sprite.setLocalScale({0.15f, 0.15f});
 
     // Lua
     if (!m_lua.load("res/ai/hero.lua"))
@@ -220,12 +222,15 @@ void Hero::changedDosh()
 
 void Hero::refreshPositionFromNode(bool firstNode)
 {
-    lerpable()->setTargetPosition(m_inter->tileLocalPosition(m_currentNode->coords) + m_inter->tileSize() * 3.f / 4.f);
+    const auto heroTilePosition = sf::Vector2f{m_inter->tileSize().x / 2.f, m_inter->tileSize().y * 0.9f};
+    lerpable()->setTargetPosition(m_inter->tileLocalPosition(m_currentNode->coords) + heroTilePosition);
     if (firstNode) setLocalPosition(lerpable()->targetPosition());
 
-    // TODO Change animation instead of just mirrored
-    if (lerpable()->targetPosition().x >= localPosition().x)
-        m_sprite.setLocalScale({0.15f, 0.15f});
-    else
-        m_sprite.setLocalScale({-0.15f, 0.15f});
+    // Select correct animation (right/left)
+    // TODO Have a state machine and interface with physics module
+    // Maybe the state machine animated sprite makes its own class
+    if (lerpable()->targetPosition().x > localPosition().x)
+        m_sprite.select(L"rwalk");
+    else if (lerpable()->targetPosition().x < localPosition().x)
+        m_sprite.select(L"lwalk");
 }

@@ -119,7 +119,7 @@ void EntityPrototype::updateAnimation(int dt_ms)
 }
 
 // This is for rotating untranslated points and offsetting them to a new origin.
-static void rotate_point(float& x, float& y, float angle, float origin_x, float origin_y, bool flipped)
+static void rotate_point(float& x, float& y, float angle, float origin_x, float origin_y)
 {
     float s = sinf(angle*M_PI/180);
     float c = cosf(angle*M_PI/180);
@@ -180,16 +180,22 @@ void EntityPrototype::draw_simple_object(Animation::Mainline::Key::Object* obj1)
     float pivot_y_ratio = obj1->pivot_y;
 
     // No image tweening
+    auto img_pivot = getImagePivots(obj1->folder, obj1->file);
     auto img_dims = getImageDimensions(obj1->folder, obj1->file);
 
     // Rotate about the pivot point and draw from the center of the image
-    float offset_x = (pivot_x_ratio - 0.5f)*img_dims.first;
-    float offset_y = (pivot_y_ratio - 0.5f)*img_dims.second;
+    float offset_x = (img_pivot.first + pivot_x_ratio - 0.5f)*img_dims.first;
+    float offset_y = (img_pivot.second - 1.f + pivot_y_ratio - 0.5f)*img_dims.second;
     float sprite_x = -offset_x*obj_transform.scale_x;
     float sprite_y = -offset_y*obj_transform.scale_y;
 
     bool flipped = ((obj_transform.scale_x < 0) != (obj_transform.scale_y < 0));
-    rotate_point(sprite_x, sprite_y, obj_transform.angle, obj_transform.x, obj_transform.y, flipped);
+    rotate_point(sprite_x, sprite_y, obj_transform.angle, obj_transform.x, obj_transform.y);
+
+    // If flipped, add 180 rotation from (0, 0) plus move img_dims
+    if (flipped) {
+        rotate_point(sprite_x, sprite_y, 180, img_dims.first, img_dims.second);
+    }
 
     // Let the renderer draw it
     draw_internal(obj1->folder, obj1->file, sprite_x, sprite_y, obj_transform.angle, obj_transform.scale_x, obj_transform.scale_y);
@@ -199,6 +205,8 @@ const std::pair<float, float>& EntityPrototype::getImagePivots(int folder, int f
 {
     return m_pivots.at({folder, file});
 }
+
+#include <iostream> // FIXME
 
 void EntityPrototype::draw_tweened_object(Animation::Mainline::Key::Object_Ref* ref)
 {
@@ -235,6 +243,10 @@ void EntityPrototype::draw_tweened_object(Animation::Mainline::Key::Object_Ref* 
         // Tween with next key's object
         obj_transform.lerp(Transform(obj2->x, obj2->y, obj2->angle, obj2->scale_x, obj2->scale_y), t, t_key1->spin);
 
+        if (obj_transform.scale_x * obj_transform.scale_y < 0) {
+            obj_transform.angle = -obj_transform.angle;
+        }
+
         // Transform the sprite by the parent transform.
         obj_transform.apply_parent_transform(parent_transform);
 
@@ -246,18 +258,16 @@ void EntityPrototype::draw_tweened_object(Animation::Mainline::Key::Object_Ref* 
         auto img_pivot = getImagePivots(obj1->folder, obj1->file);
         auto img_dims = getImageDimensions(obj1->folder, obj1->file);
 
-        // The origin
-        float origin_x = (img_pivot.first) * img_dims.first;
+        float origin_x = img_pivot.first * img_dims.first;
         float origin_y = (img_pivot.second - 1.f) * img_dims.second;
 
         // Rotate about the pivot point and draw from the center of the image
         float offset_x = origin_x + (pivot_x_ratio - 0.5f) * img_dims.first;
         float offset_y = origin_y + (pivot_y_ratio - 0.5f) * img_dims.second;
-        float sprite_x = -offset_x * obj_transform.scale_x;
-        float sprite_y = -offset_y * obj_transform.scale_y;
+        float sprite_x = -offset_x * std::fabs(obj_transform.scale_x);
+        float sprite_y = -offset_y * std::fabs(obj_transform.scale_y);
 
-        bool flipped = ((obj_transform.scale_x < 0) != (obj_transform.scale_y < 0));
-        rotate_point(sprite_x, sprite_y, obj_transform.angle, obj_transform.x, obj_transform.y, flipped);
+        rotate_point(sprite_x, sprite_y, obj_transform.angle, obj_transform.x, obj_transform.y);
 
         // Let the renderer draw it
         draw_internal(obj1->folder, obj1->file, sprite_x, sprite_y, obj_transform.angle, obj_transform.scale_x, obj_transform.scale_y);
@@ -861,16 +871,17 @@ bool EntityPrototype::getSimpleObjectTransform(Transform& result, scml::EntityPr
     float pivot_y_ratio = obj1->pivot_y;
 
     // No image tweening
-    std::pair<unsigned int, unsigned int> img_dims = getImageDimensions(obj1->folder, obj1->file);
+    auto img_pivot = getImagePivots(obj1->folder, obj1->file);
+    auto img_dims = getImageDimensions(obj1->folder, obj1->file);
 
     // Rotate about the pivot point and draw from the center of the image
-    float offset_x = (pivot_x_ratio - 0.5f)*img_dims.first;
-    float offset_y = (pivot_y_ratio - 0.5f)*img_dims.second;
+    float offset_x = (img_pivot.first + pivot_x_ratio - 0.5f)*img_dims.first;
+    float offset_y = (img_pivot.second - 1.f + pivot_y_ratio - 0.5f)*img_dims.second;
     float sprite_x = -offset_x*obj_transform.scale_x;
     float sprite_y = -offset_y*obj_transform.scale_y;
 
     bool flipped = ((obj_transform.scale_x < 0) != (obj_transform.scale_y < 0));
-    rotate_point(sprite_x, sprite_y, obj_transform.angle, obj_transform.x, obj_transform.y, flipped);
+    rotate_point(sprite_x, sprite_y, obj_transform.angle, obj_transform.x, obj_transform.y);
 
     // Save the result
     result.x = sprite_x;
@@ -931,16 +942,17 @@ bool EntityPrototype::getTweenedObjectTransform(Transform& result, scml::EntityP
     float pivot_y_ratio = interpolate(obj1->pivot_y, obj2->pivot_y, t);
 
     // No image tweening
-    std::pair<unsigned int, unsigned int> img_dims = getImageDimensions(obj1->folder, obj1->file);
+    auto img_pivot = getImagePivots(obj1->folder, obj1->file);
+    auto img_dims = getImageDimensions(obj1->folder, obj1->file);
 
     // Rotate about the pivot point and draw from the center of the image
-    float offset_x = (pivot_x_ratio - 0.5f)*img_dims.first;
-    float offset_y = (pivot_y_ratio - 0.5f)*img_dims.second;
+    float offset_x = (img_pivot.first + pivot_x_ratio - 0.5f)*img_dims.first;
+    float offset_y = (img_pivot.second - 1.f + pivot_y_ratio - 0.5f)*img_dims.second;
     float sprite_x = -offset_x*obj_transform.scale_x;
     float sprite_y = -offset_y*obj_transform.scale_y;
 
     bool flipped = ((obj_transform.scale_x < 0) != (obj_transform.scale_y < 0));
-    rotate_point(sprite_x, sprite_y, obj_transform.angle, obj_transform.x, obj_transform.y, flipped);
+    rotate_point(sprite_x, sprite_y, obj_transform.angle, obj_transform.x, obj_transform.y);
 
     // Save the result
     result.x = sprite_x;

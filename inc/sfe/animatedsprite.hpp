@@ -13,6 +13,11 @@
 
 enum class AnimationID : uint8;
 
+namespace resources
+{
+    class AnimationHolder;
+}
+
 namespace sfe
 {
     /*! Animated sprite using a SCML file.
@@ -21,6 +26,7 @@ namespace sfe
 
     class AnimatedSprite : public scene::Entity
     {
+        friend class resources::AnimationHolder;
         using baseClass = scene::Entity;
 
     public:
@@ -31,21 +37,15 @@ namespace sfe
         //! Destructor, will unregister this animated sprite from the context.
         virtual ~AnimatedSprite();
 
-        //----------------//
-        //! @name Routine
-        //! @{
-
-        //! Internally called to update the animation state.
-        void updateAnimation(const sf::Time& dt);
-
-        //! @}
-
         //------------------//
         //! @name Animation
         //! @{
 
-        //! Load a specific animation.
-        void load(AnimationID id, int number = 0);
+        //! Load a specific SCML.
+        void load(AnimationID id);
+
+        //! Selects the animation to be played.
+        void select(const std::wstring& animationName);
 
         //! Restart the current animation.
         void restart();
@@ -69,6 +69,9 @@ namespace sfe
         //----------------//
         //! @name Routine
         //! @{
+
+        //! Internally called to update the animation state.
+        void updateAnimation(const sf::Time& dt);
 
         void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
         void refresh();
