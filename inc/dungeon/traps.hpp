@@ -55,8 +55,6 @@ namespace dungeon
         TrapData& m_trapdata;   //!< The data corresponding to the trap.
     };
 
-    // TODO Is it possible to factor the following code with the one in facilities.hpp?
-
     //! A TrapGrabbable spawner.
     /*!
      *  Implements the scene::GrabbableSpawner for a dungeon facility.

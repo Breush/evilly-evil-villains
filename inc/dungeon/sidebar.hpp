@@ -56,8 +56,8 @@ namespace dungeon
 
         //! @}
 
-        //---------------//
-        //! @name Events
+        //--------------------------//
+        //! @name Public properties
         //! @{
 
         //! Whether the panel is currently reduced or not.

@@ -456,7 +456,8 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
 
     // Room is somehow bugged
     if (state == Data::RoomState::UNKNOWN) {
-        // TODO Have an error texture
+        std::cerr << "/!\\ Found a room with unknown state at " << coords << "." << std::endl;
+        std::cerr << "If that is a reccurent issue, please report this bug." << std::endl;
         addLayer(coords, TextureID::DEFAULT);
         return;
     }

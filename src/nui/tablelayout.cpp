@@ -166,7 +166,8 @@ void TableLayout::setChild(uint row, uint col, scene::Entity& child, Align hAlig
     ChildInfo childInfo{child, hAlign, vAlign};
     m_children.insert({{row, col}, childInfo});
 
-    // TODO Delay refresh until next updateRoutine() so that multiple adds don't recompute uselessly?
+    // TODO OPTIM Delay refresh until next updateRoutine()
+    // so that multiple adds don't recompute uselessly
     refreshChildrenPosition();
 }
 

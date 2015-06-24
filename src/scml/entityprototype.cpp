@@ -206,8 +206,6 @@ const std::pair<float, float>& EntityPrototype::getImagePivots(int folder, int f
     return m_pivots.at({folder, file});
 }
 
-#include <iostream> // FIXME
-
 void EntityPrototype::draw_tweened_object(Animation::Mainline::Key::Object_Ref* ref)
 {
     returnif (ref == NULL);
@@ -729,7 +727,7 @@ int EntityPrototype::getNextKeyID(int animation, int lastKey) const
             return lastKey+1;
         }
     } else if (animation_ptr->looping == L"ping_pong") {
-        // TODO: Implement ping_pong animation
+        // Implement ping_pong animation
     }
 
     // assume looping "false"

@@ -81,8 +81,8 @@ void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
     const auto& resolution = Application::context().resolution;
     const auto& effectiveDisplay = Application::context().effectiveDisplay;
 
-    auto halfGap = (screenSize - effectiveDisplay) / 2.f;
-    auto viewRatio = effectiveDisplay / resolution;
+    const auto halfGap = (screenSize - effectiveDisplay) / 2.f;
+    const auto viewRatio = effectiveDisplay / resolution;
 
     const sf::Shader* initialShader = states.shader;
 

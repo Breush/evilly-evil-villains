@@ -323,7 +323,6 @@ void Data::setRoomFacility(const sf::Vector2u& coords, FacilityID facilityID, bo
 
     // TODO Make Wallet use this event
     if (facilityID == FacilityID::TREASURE) {
-        // TODO Make the player able to chnge this.
         subDosh(100u);
         roomInfo.treasureDosh = 100u;
     }

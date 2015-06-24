@@ -22,7 +22,6 @@ Hero::Hero(const Inter* inter)
     lerpable()->setPositionSpeed({50.f, 25.f});
 
     // Dosh label
-    // TODO Should be in NUI layer, somehow
     m_doshLabel.setPrestyle(sfe::Label::Prestyle::NUI);
     m_doshLabel.setLocalPosition({5.f, -25.f});
     m_doshLabel.centerOrigin();

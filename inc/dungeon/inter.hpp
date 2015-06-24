@@ -222,8 +222,7 @@ namespace dungeon
         sfe::Grid m_grid;                                   //!< The internal grid for overlay display.
         std::unordered_map<sf::Vector2u, Tile> m_tiles;     //!< All tiles constituing the dungeon.
 
-        // TODO Is it possible to move it inside completly? (No reference)
-        nui::ContextMenu& m_contextMenu;    //!< The context menu.
+        nui::ContextMenu& m_contextMenu;    //!< The context menu, got from global state.
 
         Tile* m_hoveredTile = nullptr;  //!< If a tile is hovered, this is it.
         Tile* m_selectedTile = nullptr; //!< If a tile is selected, this is it.
