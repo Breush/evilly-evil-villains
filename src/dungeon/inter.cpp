@@ -3,6 +3,7 @@
 #include "core/gettext.hpp"
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
+#include "context/villains.hpp"
 #include "dungeon/traps/maker.hpp"
 #include "tools/debug.hpp"
 #include "tools/event.hpp"
@@ -297,15 +298,14 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
 
     // Room does not exists yet
     if (room.state == Data::RoomState::VOID) {
-        // TODO Get price from Wallet
-        m_contextMenu.addChoice(L"Construct room (-100d)", [this, &coords]() {
+        m_contextMenu.addChoice(L"Construct room (-" + toWString(m_data->onCreateRoomCost) + L"d)", [this, &coords]() {
             m_data->constructRoom(coords);
         });
     }
 
     // Room does exists
     else {
-        m_contextMenu.addChoice(L"Destroy room (+85d)", [this, &coords]() {
+        m_contextMenu.addChoice(L"Destroy room (+" + toWString(m_data->onDestroyRoomGain) + L"d)", [this, &coords]() {
             m_data->destroyRoom(coords);
         });
 
@@ -365,7 +365,7 @@ void Inter::harvestTileDosh(const sf::Vector2u& coords)
 
     auto harvestableDosh = trap->harvestableDosh();
     if (harvestableDosh > 0u)
-        m_data->addDosh(trap->harvestDosh());
+        m_data->villain().doshWallet.add(trap->harvestDosh());
 
     refreshTileDoshLabel(coords);
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "tools/int.hpp"
+#include "context/wallet.hpp"
 
 #include <string>
 #include <vector>
@@ -16,12 +17,18 @@ namespace context
     {
     public:
 
+        //--------------------//
+        //! @name Interaction
+        //! @{
+
         //! Find how many worlds are associated with the specified villain.
         uint worldsCount() const;
 
-        uint index;                 //!< The index of the villain in the villains vector.
-        std::wstring name;          //!< The name of the villain.
-        uint dosh = 0u;             //!< The dosh possessed by the villain.
+        //! @}
+
+        uint index;         //!< The index of the villain in the villains vector.
+        std::wstring name;  //!< The name of the villain.
+        Wallet doshWallet;  //!< Manage the dosh possessed by the villain.
     };
 
     //! A XML loading class to get the villains data.

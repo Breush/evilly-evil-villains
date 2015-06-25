@@ -3,6 +3,7 @@
 #include "core/gettext.hpp"
 #include "context/villains.hpp"
 #include "tools/tools.hpp"
+#include "tools/string.hpp"
 
 using namespace states;
 
@@ -73,7 +74,7 @@ void MenuManageVillains::refreshVillainsList() noexcept
     // Reload list
     m_list.clearLines();
     for (const auto& villain : context::villains.get())
-        m_list.addLine({villain.name, toWString(villain.dosh), toWString(villain.worldsCount())});
+        m_list.addLine({villain.name, toWString(villain.doshWallet.value()), toWString(villain.worldsCount())});
 }
 
 //-------------------------------//

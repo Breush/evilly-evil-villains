@@ -46,7 +46,7 @@ void Villains::load()
 
         villain.index = m_villains.size();
         villain.name = info.attribute(L"name").as_string();
-        villain.dosh = info.attribute(L"dosh").as_uint();
+        villain.doshWallet.set(info.attribute(L"dosh").as_uint());
 
         m_villains.emplace_back(std::move(villain));
     }
@@ -71,7 +71,7 @@ void Villains::save()
         auto info = root.append_child(L"villain");
 
         info.append_attribute(L"name") = villain.name.c_str();
-        info.append_attribute(L"dosh") = villain.dosh;
+        info.append_attribute(L"dosh") = villain.doshWallet.value();
     }
 
     doc.save_file(file.c_str());
@@ -91,7 +91,6 @@ uint Villains::add(std::wstring name)
 
     villain.index = m_villains.size();
     villain.name = std::move(name);
-    villain.dosh = 0u;
 
     m_villains.emplace_back(std::move(villain));
     return m_villains.size() - 1u;

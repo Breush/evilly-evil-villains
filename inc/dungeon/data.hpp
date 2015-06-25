@@ -19,6 +19,11 @@ namespace pugi
     class xml_node;
 }
 
+namespace context
+{
+    class Villain;
+}
+
 namespace dungeon
 {
     // Forward declarations
@@ -35,6 +40,9 @@ namespace dungeon
         friend class Graph;
 
     public:
+
+        const uint onCreateRoomCost  = 1100u;   //!< The dosh cost for creating a room.
+        const uint onDestroyRoomGain = 745u;    //!< The dosh gain when destroying a room.
 
         //! Defines the possibly accessible relative directions from a room.
         /*!
@@ -64,7 +72,7 @@ namespace dungeon
             sf::Vector2u coords;                            //!< The floor/room coordinate of the room.
             RoomState state = RoomState::UNKNOWN;           //!< The current state.
 
-            // TODO Use the same trick than for trap
+            // TODO Use the same structure than TrapData
             std::array<bool, FacilityID::COUNT> facilities; //!< All the facilities.
             uint treasureDosh = 0u;                         //!< If facility treasure, then the stored dosh.
 
@@ -159,15 +167,9 @@ namespace dungeon
         //! @name Resources
         //! @{
 
-        inline uint dosh() const { return *m_dosh; } //!< Get dosh value.
+        // TODO Use a Wallet
+        void setFame(uint value);                   //!< Set the fame to a specific value.
         inline uint fame() const { return m_fame; } //!< Get fame value.
-
-        void setDosh(uint value);   //!< Set the dosh to a specific value.
-        void setFame(uint value);   //!< Set the fame to a specific value.
-
-        inline void addDosh(uint amount) { setDosh(dosh() + amount); }  //! Add dosh to current value.
-        inline void subDosh(uint amount) { setDosh(dosh() - amount); }  //! Substract dosh from current value.
-
         inline void addFame(uint amount) { setFame(fame() + amount); }  //! Add fame to current value.
         inline void subFame(uint amount) { setFame(fame() - amount); }  //! Substract fame from current value.
 
@@ -181,6 +183,15 @@ namespace dungeon
 
         //! Set the current mode.
         void setMode(Mode mode);
+
+        //! @}
+
+        //---------------//
+        //! @name Getter
+        //! @{
+
+        //! Access the associated villain.
+        context::Villain& villain() { return *m_villain; }
 
         //! @}
 
@@ -283,8 +294,8 @@ namespace dungeon
 
         Mode m_mode = Mode::DESIGN; //!< The current mode.
 
-        uint* m_dosh = nullptr; //!< The resource dosh value (comming from villain).
-        uint m_fame = 0u;       //!< The resource fame value.
+        context::Villain* m_villain = nullptr;  //!< The villain reference.
+        uint m_fame = 0u;                       //!< The resource fame value.
     };
 }
 

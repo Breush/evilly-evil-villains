@@ -1,5 +1,7 @@
 #pragma once
 
+#include "tools/int.hpp"
+
 namespace dungeon
 {
     // Forward declarations

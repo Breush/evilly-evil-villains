@@ -4,6 +4,9 @@
 
 using namespace dungeon;
 
+//------------------------//
+//----- Manipulation -----//
+
 void TrapData::clear()
 {
     m_exists = false;
@@ -16,6 +19,9 @@ void TrapData::create(std::wstring type)
     m_type = std::move(type);
     m_exists = true;
 }
+
+//---------------------------//
+//----- XML interaction -----//
 
 void TrapData::saveXML(pugi::xml_node& node)
 {
@@ -77,5 +83,28 @@ void TrapData::loadXML(const pugi::xml_node& node)
         else if (type == L"uint32") m_attributes[name] = static_cast<uint32>(child.attribute(L"value").as_uint());
         else if (type == L"uint64") m_attributes[name] = static_cast<uint64>(child.attribute(L"value").as_ullong());
     }
+}
+
+//----------------//
+//----- Cost -----//
+
+uint TrapData::onCreateCost() const
+{
+    returnif (!m_exists) 0u;
+
+    if (m_type == L"pickpock") return 220u;
+    else throw std::logic_error("Some trap has not been registered for onCreateDosh().");
+
+    return 0u;
+}
+
+uint TrapData::onDestroyGain() const
+{
+    returnif (!m_exists) 0u;
+
+    if (m_type == L"pickpock") return 30u + m_attributes.at(L"dosh").as_uint32();
+    else throw std::logic_error("Some trap has not been registered for onCreateDosh().");
+
+    return 0u;
 }
 

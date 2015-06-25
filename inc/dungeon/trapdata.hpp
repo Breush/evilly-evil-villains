@@ -10,18 +10,21 @@
 
 namespace dungeon
 {
-    //! A dynamic structure which can be exported and imported as XML.
+    /*!
+     *  A dynamic structure holding traps information
+     *  and which can be exported and imported as XML.
+     */
 
     class TrapData
     {
     public:
 
-        inline bool exists() const { return m_exists; }
-        inline const std::wstring& type() const { return m_type; }
+        //---------------------//
+        //! @name Manipulation
+        //! @{
 
+        //! Remove all attributes and trap no longer exists.
         void clear();
-        void saveXML(pugi::xml_node& node);
-        void loadXML(const pugi::xml_node& node);
 
         //! Initialize a empty TrapData of given type.
         void create(std::wstring type);
@@ -29,14 +32,52 @@ namespace dungeon
         //! Returns true if the trap has no attributes.
         inline bool empty() const { return m_attributes.empty(); }
 
+        //! @}
+
+        //------------------------//
+        //! @name XML interaction
+        //! @{
+
+        //! Save data to the node.
+        void saveXML(pugi::xml_node& node);
+
+        //! Load data from the node.
+        void loadXML(const pugi::xml_node& node);
+
+        //! @}
+
+        //-------------//
+        //! @name Cost
+        //! @{
+
+        //! How much the trap cost on creation.
+        uint onCreateCost() const;
+
+        //! How much the trap cost on destruction.
+        uint onDestroyGain() const;
+
+        //! @}
+
+        //----------------//
+        //! @name Getters
+        //! @{
+
         //! Access an attribute.
         inline MetaData& operator[](const std::wstring& name) { return m_attributes[name]; }
 
+        //! Whether the trap exists (false if cleared or just created).
+        inline bool exists() const { return m_exists; }
+
+        //! The type of trap.
+        inline const std::wstring& type() const { return m_type; }
+
+        //! @}
+
     private:
 
-        bool m_exists = false;
-        std::wstring m_type;
-        std::unordered_map<std::wstring, MetaData> m_attributes;
+        bool m_exists = false;  //!< Whether the trap exists or not.
+        std::wstring m_type;    //!< The type of trap.
+        std::unordered_map<std::wstring, MetaData> m_attributes; //!< The attributes.
     };
 }
 

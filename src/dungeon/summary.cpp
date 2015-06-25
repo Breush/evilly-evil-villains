@@ -3,6 +3,7 @@
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
 #include "config/nui.hpp"
+#include "context/villains.hpp"
 #include "dungeon/data.hpp"
 
 using namespace dungeon;
@@ -117,7 +118,7 @@ void Summary::refreshFromData()
 {
     m_dungeonName.setString(m_data->name());
 
-    m_bars[BAR_DOSH].text.setString(toWString(m_data->dosh()));
+    m_bars[BAR_DOSH].text.setString(toWString(m_data->villain().doshWallet.value()));
     m_bars[BAR_FAME].text.setString(toWString(m_data->fame()));
 
     updateSize();

@@ -27,7 +27,8 @@ std::wstring Data::load(const std::wstring& folder)
     wdebug_dungeon_1(L"Loading data from folder " << folder);
 
     context::villains.load();
-    m_dosh = &context::villains.getFromWorldFolder(folder)->dosh;
+    m_villain = context::villains.getFromWorldFolder(folder);
+    m_villain->doshWallet.setEvents(this, EventType::DOSH_CHANGED);
 
     std::wstring mainDungeonFilename = L"saves/" + folder + L"dungeon.xml";
     loadDungeon(mainDungeonFilename);
@@ -230,29 +231,26 @@ bool Data::isRoomConstructed(const sf::Vector2u& roomCoord)
 
 void Data::constructRoom(const sf::Vector2u& roomCoord)
 {
+    returnif (!m_villain->doshWallet.sub(onCreateRoomCost));
     room(roomCoord).state = RoomState::CONSTRUCTED;
 
     Event event;
     event.type = EventType::ROOM_CONSTRUCTED;
     event.room = {roomCoord.x, roomCoord.y};
     EventEmitter::emit(event);
-
-    // TODO Let Wallet manage resources
-    // Make a ASK_ROOM_CONSTRUCTED event?
-    subDosh(100u);
 }
 
 void Data::destroyRoom(const sf::Vector2u& roomCoord)
 {
+    m_villain->doshWallet.add(onDestroyRoomGain);
     room(roomCoord).state = RoomState::VOID;
+
+    // TODO Also destroyed all facilities inside.
 
     Event event;
     event.type = EventType::ROOM_DESTROYED;
     event.room = {roomCoord.x, roomCoord.y};
     EventEmitter::emit(event);
-
-    // TODO Let Wallet manage resources
-    addDosh(85u);
 }
 
 bool Data::roomNeighbourAccessible(const sf::Vector2u& roomCoord, Direction direction)
@@ -321,39 +319,37 @@ void Data::setRoomFacility(const sf::Vector2u& coords, FacilityID facilityID, bo
     event.facility.room = {coords.x, coords.y};
     EventEmitter::emit(event);
 
-    // TODO Make Wallet use this event
+    // TODO Dispatch this management to the facility itself
     if (facilityID == FacilityID::TREASURE) {
-        subDosh(100u);
-        roomInfo.treasureDosh = 100u;
+        // Takes 100 dosh, or 0u if impossible
+        if (m_villain->doshWallet.sub(100u))
+            roomInfo.treasureDosh = 100u;
     }
 }
 
 void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
 {
     auto& roomInfo = room(coords);
+    returnif (roomInfo.trap.exists() && roomInfo.trap.type() == trapID);
 
-    // TODO Destroy previous trap - Get some money back?
-    roomInfo.trap.clear();
+    // Continue if and only if wallet authorize us
+    if (m_villain->doshWallet.addsub(roomInfo.trap.onDestroyGain(), roomInfo.trap.onCreateCost())) {
+        // Destroy previous trap if any
+        roomInfo.trap.clear();
 
-    // Set the trap to the new one.
-    roomInfo.trap.create(trapID);
+        // Set the trap to the new one.
+        roomInfo.trap.create(trapID);
 
-    Event event;
-    event.type = EventType::TRAP_CHANGED;
-    event.room = {coords.x, coords.y};
-    EventEmitter::emit(event);
-
-    // TODO Creating this trap should cost money
+        // Emit event
+        Event event;
+        event.type = EventType::TRAP_CHANGED;
+        event.room = {coords.x, coords.y};
+        EventEmitter::emit(event);
+    }
 }
 
 //---------------------//
 //----- Resources -----//
-
-void Data::setDosh(uint value)
-{
-    *m_dosh = value;
-    emit(EventType::DOSH_CHANGED);
-}
 
 void Data::setFame(uint value)
 {

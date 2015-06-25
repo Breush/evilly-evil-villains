@@ -2,6 +2,8 @@
 
 #include <vector>
 
+// TODO Move that file to context.
+
 namespace dungeon
 {
     // Forward declarations
