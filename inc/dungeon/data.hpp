@@ -6,6 +6,7 @@
 #include "dungeon/eventtype.hpp"
 #include "dungeon/facilities.hpp"
 #include "dungeon/trapdata.hpp"
+#include "context/wallet.hpp"
 
 #include <SFML/System/Vector2.hpp>
 #include <string>
@@ -167,11 +168,10 @@ namespace dungeon
         //! @name Resources
         //! @{
 
-        // TODO Use a Wallet
-        void setFame(uint value);                   //!< Set the fame to a specific value.
-        inline uint fame() const { return m_fame; } //!< Get fame value.
-        inline void addFame(uint amount) { setFame(fame() + amount); }  //! Add fame to current value.
-        inline void subFame(uint amount) { setFame(fame() - amount); }  //! Substract fame from current value.
+        inline uint fame() const { return m_fameWallet.value(); }           //!< Get fame value.
+        inline void setFame(uint value) { m_fameWallet.set(value); }        //!< Set the fame to a specific value.
+        inline bool addFame(uint value) { return m_fameWallet.add(value); } //! Add fame to current value.
+        inline bool subFame(uint value) { return m_fameWallet.sub(value); } //! Substract fame from current value.
 
         //! @}
 
@@ -295,7 +295,7 @@ namespace dungeon
         Mode m_mode = Mode::DESIGN; //!< The current mode.
 
         context::Villain* m_villain = nullptr;  //!< The villain reference.
-        uint m_fame = 0u;                       //!< The resource fame value.
+        context::Wallet m_fameWallet;           //!< The resource fame value.
     };
 }
 

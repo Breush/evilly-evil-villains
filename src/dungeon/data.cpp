@@ -17,6 +17,7 @@ Data::Data()
     : m_floorsCount(0)
     , m_roomsByFloor(0)
 {
+    m_fameWallet.setEvents(this, EventType::FAME_CHANGED);
 }
 
 //---------------------------//
@@ -80,7 +81,7 @@ void Data::loadDungeon(const std::wstring& file)
     m_name = dungeon.attribute(L"name").as_string();
     m_floorsCount = dungeon.attribute(L"floorsCount").as_uint();
     m_roomsByFloor = dungeon.attribute(L"roomsByFloor").as_uint();
-    m_fame = dungeon.attribute(L"fame").as_uint();
+    setFame(dungeon.attribute(L"fame").as_uint());
 
     wdebug_dungeon_1(L"Dungeon is " << m_name << L" of size " << m_floorsCount << "x" << m_roomsByFloor);
 
@@ -147,7 +148,7 @@ void Data::saveDungeon(const std::wstring& file)
     dungeon.append_attribute(L"name") = m_name.c_str();
     dungeon.append_attribute(L"floorsCount") = m_floorsCount;
     dungeon.append_attribute(L"roomsByFloor") = m_roomsByFloor;
-    dungeon.append_attribute(L"fame") = m_fame;
+    dungeon.append_attribute(L"fame") = fame();
 
     // Floors
     for (uint floorPos = 0; floorPos < m_floors.size(); ++floorPos) {
@@ -346,15 +347,6 @@ void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
         event.room = {coords.x, coords.y};
         EventEmitter::emit(event);
     }
-}
-
-//---------------------//
-//----- Resources -----//
-
-void Data::setFame(uint value)
-{
-    m_fame = value;
-    emit(EventType::FAME_CHANGED);
 }
 
 //----------------//
