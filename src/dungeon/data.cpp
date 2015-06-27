@@ -107,32 +107,15 @@ void Data::loadDungeon(const std::wstring& file)
             wdebug_dungeon_3(L"Found room " << room.pos << L" of state " << roomStateString);
 
             // Elements
-            room.trap.loadXML(roomNode);
-            loadDungeonRoomFacilities(room, roomNode);
+            const auto& trapNode = roomNode.child(L"trap");
+            if (trapNode) room.trap.loadXML(trapNode);
+            for (const auto& facilityNode : roomNode.children(L"facility")) {
+                room.facilities.emplace_back();
+                room.facilities.back().loadXML(facilityNode);
+            }
 
             // Add the room
             m_floors[floorPos].rooms.emplace_back(std::move(room));
-        }
-    }
-}
-
-void Data::loadDungeonRoomFacilities(Room& room, const pugi::xml_node& node)
-{
-    // Reset
-    for (auto& facility : room.facilities)
-        facility = false;
-
-    // TODO Same as trap: have an easy adder for flexibility and modding API
-    for (const auto& facilities : node.children(L"facility")) {
-        std::wstring type = facilities.attribute(L"type").as_string();
-
-        if (type == L"ladder")
-            room.facilities[FacilityID::LADDER] = true;
-        else if (type == L"entrance")
-            room.facilities[FacilityID::ENTRANCE] = true;
-        else if (type == L"treasure") {
-            room.facilities[FacilityID::TREASURE] = true;
-            room.treasureDosh = facilities.attribute(L"dosh").as_uint();
         }
     }
 }
@@ -158,41 +141,33 @@ void Data::saveDungeon(const std::wstring& file)
 
         // Rooms
         for (uint roomPos = 0; roomPos < m_floors[floorPos].rooms.size(); ++roomPos) {
-            auto dataRoom = m_floors[floorPos].rooms[roomPos];
+            auto room = m_floors[floorPos].rooms[roomPos];
 
             mdebug_dungeon_3("Saving room " << roomPos);
-            auto room = floor.append_child(L"room");
-            room.append_attribute(L"pos") = roomPos;
+            auto roomNode = floor.append_child(L"room");
+            roomNode.append_attribute(L"pos") = roomPos;
 
-            RoomState roomState = dataRoom.state;
+            RoomState roomState = room.state;
             std::wstring roomStateString = L"unknown";
             if (roomState == RoomState::VOID) roomStateString = L"void";
             else if (roomState == RoomState::CONSTRUCTED) roomStateString = L"constructed";
-            room.append_attribute(L"state") = roomStateString.c_str();
+            roomNode.append_attribute(L"state") = roomStateString.c_str();
 
-            // Elements
-            dataRoom.trap.saveXML(room);
-            saveDungeonRoomFacilities(dataRoom, room);
+            // Trap
+            if (room.trap.exists()) {
+                auto trapNode = roomNode.append_child(L"trap");
+                room.trap.saveXML(trapNode);
+            }
+
+            // Facilities
+            for (const auto& facilityData : room.facilities) {
+                auto facilityNode = roomNode.append_child(L"facility");
+                room.trap.saveXML(facilityNode);
+            }
         }
     }
 
     doc.save_file(file.c_str());
-}
-
-void Data::saveDungeonRoomFacilities(const Room& room, pugi::xml_node& node)
-{
-    // TODO Use same structure than TrapData
-    if (room.facilities[FacilityID::LADDER])
-        node.append_child(L"facility").append_attribute(L"type") = L"ladder";
-
-    if (room.facilities[FacilityID::ENTRANCE])
-        node.append_child(L"facility").append_attribute(L"type") = L"entrance";
-
-    if (room.facilities[FacilityID::TREASURE]) {
-        auto facility = node.append_child(L"facility");
-        facility.append_attribute(L"type") = L"treasure";
-        facility.append_attribute(L"dosh") = room.treasureDosh;
-    }
 }
 
 //---------------------------//
@@ -241,32 +216,32 @@ void Data::constructRoom(const sf::Vector2u& roomCoord)
     EventEmitter::emit(event);
 }
 
-void Data::destroyRoom(const sf::Vector2u& roomCoord)
+void Data::destroyRoom(const sf::Vector2u& coords)
 {
     m_villain->doshWallet.add(onDestroyRoomGain);
-    room(roomCoord).state = RoomState::VOID;
+    room(coords).state = RoomState::VOID;
 
     // TODO Also destroyed all facilities inside.
 
     Event event;
     event.type = EventType::ROOM_DESTROYED;
-    event.room = {roomCoord.x, roomCoord.y};
+    event.room = {coords.x, coords.y};
     EventEmitter::emit(event);
 }
 
-bool Data::roomNeighbourAccessible(const sf::Vector2u& roomCoord, Direction direction)
+bool Data::roomNeighbourAccessible(const sf::Vector2u& coords, Direction direction)
 {
-    auto neighbourCoord = roomNeighbourCoords(roomCoord, direction);
+    auto neighbourCoord = roomNeighbourCoords(coords, direction);
     returnif (neighbourCoord.x >= m_floorsCount) false;
     returnif (neighbourCoord.y >= m_roomsByFloor) false;
 
-    auto& currentRoom = room(roomCoord);
+    auto& currentRoom = room(coords);
     auto& neighbourRoom = room(neighbourCoord);
     returnif (neighbourRoom.state != RoomState::CONSTRUCTED) false;
 
     // When north or south, be sure there is a ladder
-    returnif (direction == NORTH && !currentRoom.facilities[FacilityID::LADDER]) false;
-    returnif (direction == SOUTH && !neighbourRoom.facilities[FacilityID::LADDER]) false;
+    returnif (direction == NORTH && !hasOfType(currentRoom.facilities, L"ladder")) false;
+    returnif (direction == SOUTH && !hasOfType(neighbourRoom.facilities, L"ladder")) false;
 
     return true;
 }
@@ -286,20 +261,31 @@ sf::Vector2u Data::roomDirectionVector(Direction direction)
     return sf::Vector2u((direction >> 0x4) - 1u, (direction & 0xf) - 1u);
 }
 
+uint Data::roomTreasureDosh(const sf::Vector2u& coords)
+{
+    auto& roomInfo = room(coords);
+    auto treasureFacilityIt = findOfType(roomInfo.facilities, L"treasure");
+    returnif (treasureFacilityIt == std::end(roomInfo.facilities)) 0u;
+    return (*treasureFacilityIt)[L"dosh"].as_uint32();
+}
+
 //---------------------//
 //----- Treasures -----//
 
 void Data::stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh)
 {
     auto& roomInfo = room(coords);
-    assert(stolenDosh <= roomInfo.treasureDosh);
+    auto treasureFacilityIt = findOfType(roomInfo.facilities, L"treasure");
+    assert(treasureFacilityIt != std::end(roomInfo.facilities));
 
-    roomInfo.treasureDosh -= stolenDosh;
+    auto& treasureFacility = *treasureFacilityIt;
+    assert(stolenDosh <= treasureFacility[L"dosh"].as_uint32());
+
+    treasureFacility[L"dosh"].as_uint32() -= stolenDosh;
     hero.addDosh(stolenDosh);
 
     Event event;
     event.type = EventType::FACILITY_CHANGED;
-    event.facility.id = FacilityID::TREASURE;
     event.facility.room = {coords.x, coords.y};
     EventEmitter::emit(event);
 }
@@ -307,25 +293,38 @@ void Data::stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh
 //--------------------------------//
 //----- Facilities and traps -----//
 
-void Data::setRoomFacility(const sf::Vector2u& coords, FacilityID facilityID, bool state)
+void Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID)
 {
     auto& roomInfo = room(coords);
-    returnif (roomInfo.facilities[facilityID] == state);
+    returnif (hasOfType(roomInfo.facilities, facilityID));
 
-    roomInfo.facilities[facilityID] = state;
+    roomInfo.facilities.emplace_back();
+    roomInfo.facilities.back().create(facilityID);
+
+    // TODO Dispatch this management to the facility itself?
+    if (facilityID == L"treasure") {
+        // Takes 100 dosh, or 0u if impossible
+        if (m_villain->doshWallet.sub(100u))
+            roomInfo.facilities.back()[L"dosh"].as_uint32() = 100u;
+    }
 
     Event event;
     event.type = EventType::FACILITY_CHANGED;
-    event.facility.id = facilityID;
     event.facility.room = {coords.x, coords.y};
     EventEmitter::emit(event);
+}
 
-    // TODO Dispatch this management to the facility itself
-    if (facilityID == FacilityID::TREASURE) {
-        // Takes 100 dosh, or 0u if impossible
-        if (m_villain->doshWallet.sub(100u))
-            roomInfo.treasureDosh = 100u;
-    }
+void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID)
+{
+    auto& roomInfo = room(coords);
+
+    // TODO Get dosh from treasure, dispatched in facility itself?
+    std::erase_if(roomInfo.facilities, [&](const TrapData& data) { return data.type() == facilityID; });
+
+    Event event;
+    event.type = EventType::FACILITY_CHANGED;
+    event.facility.room = {coords.x, coords.y};
+    EventEmitter::emit(event);
 }
 
 void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)

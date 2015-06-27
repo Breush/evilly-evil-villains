@@ -3,6 +3,7 @@
 #include "tools/metadata.hpp"
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
+#include "tools/platform-fixes.hpp" // find_if
 
 #include <pugixml/pugixml.hpp>
 #include <unordered_map>
@@ -15,9 +16,15 @@ namespace dungeon
      *  and which can be exported and imported as XML.
      */
 
-    class TrapData
+    class TrapData final
     {
     public:
+
+        //! Default constructor.
+        TrapData() = default;
+
+        //! Default destructor.
+        ~TrapData() = default;
 
         //---------------------//
         //! @name Manipulation
@@ -79,5 +86,25 @@ namespace dungeon
         std::wstring m_type;    //!< The type of trap.
         std::unordered_map<std::wstring, MetaData> m_attributes; //!< The attributes.
     };
+
+    //------------------------------//
+    //----- External functions -----//
+
+    //! Returns true if we found an existing TrapData of specified type.
+    template<class Container>
+    inline bool hasOfType(const Container& container, const std::wstring& type)
+    {
+        for (const auto& data : container)
+            if (data.exists() && data.type() == type)
+                return true;
+        return false;
+    }
+
+    //! Returns if found an existing TrapData iterator of specified type, or std::end(container) else.
+    template<class Container>
+    inline auto findOfType(Container& container, const std::wstring& type) -> decltype(std::end(container))
+    {
+        return std::find_if(container, [&](const TrapData& data) { return data.exists() && data.type() == type; });
+    }
 }
 

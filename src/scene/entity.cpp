@@ -174,7 +174,7 @@ void Entity::refreshDisplay()
 
 bool Entity::hasChild(const Entity& entity) const
 {
-    auto found = std::find_if(std::begin(m_children), std::end(m_children), [&](Entity* node) { return node == &entity; });
+    auto found = std::find_if(m_children, [&](const Entity* node) { return node == &entity; });
     return found != std::end(m_children);
 }
 
@@ -190,7 +190,7 @@ void Entity::attachChild(Entity& child)
 
 void Entity::detachChild(Entity& child)
 {
-    auto found = std::find_if(std::begin(m_children), std::end(m_children), [&](Entity* node) { return node == &child; });
+    auto found = std::find_if(m_children, [&](const Entity* node) { return node == &child; });
     massert(found != std::end(m_children), "Could not detach child.");
 
     onChildDetached(child);

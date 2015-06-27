@@ -12,7 +12,7 @@ using namespace dungeon;
 //----------------------//
 //----- GrabButton -----//
 
-FacilityGrabButton::FacilityGrabButton(const std::wstring& text, TextureID textureID, FacilityID facilityID)
+FacilityGrabButton::FacilityGrabButton(const std::wstring& text, TextureID textureID, std::wstring facilityID)
     : m_textureID(textureID)
     , m_facilityID(facilityID)
 {
@@ -24,7 +24,7 @@ void FacilityGrabButton::grabbableReleased(Entity* entity, const sf::Vector2f& r
     // Forward to dungeon::Inter if it is below
     auto dungeonInter = dynamic_cast<dungeon::Inter*>(entity);
     returnif (dungeonInter == nullptr);
-    dungeonInter->setRoomFacility(relPos, m_facilityID, true);
+    dungeonInter->createRoomFacility(relPos, m_facilityID);
 }
 
 std::unique_ptr<scene::Grabbable> FacilityGrabButton::spawnGrabbable()

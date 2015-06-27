@@ -33,15 +33,17 @@ Graph::ConstructError Graph::reconstructFromData()
             node.altitude = floorIndex + 1u;
             node.coords = roomCoords;
 
-            // Entrance
-            if (room.facilities[FacilityID::ENTRANCE]) {
-                node.entrance = true;
-                if (m_startingNode == nullptr) m_startingNode = &node;
-                else return ConstructError::TOO_MANY_DOORS;
-            }
-            // Treasure
-            if (room.facilities[FacilityID::TREASURE]) {
-                node.treasure = room.treasureDosh;
+            for (auto facilityData : room.facilities) {
+                // Entrance
+                if (facilityData.type() == L"entrance") {
+                    node.entrance = true;
+                    if (m_startingNode == nullptr) m_startingNode = &node;
+                    else return ConstructError::TOO_MANY_DOORS;
+                }
+                // Treasure
+                else if (facilityData.type() == L"treasure") {
+                    node.treasure = facilityData[L"dosh"].as_uint32();
+                }
             }
 
             // Check neighbourhood

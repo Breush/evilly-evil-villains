@@ -5,13 +5,21 @@
 
 namespace std
 {
+    // std::find_if with container directly passed
+
+    template<typename T, typename F>
+    auto find_if(T& container, const F& func) -> decltype(std::end(container))
+    {
+        return std::find_if(std::begin(container), std::end(container), func);
+    }
+
     // std::erase_if is like a remove_if but really erase the container
 
     template<typename T, typename F>
     void erase_if(T& container, const F& func)
     {
-        auto newEnd = std::remove_if(container.begin(), container.end(), func);
-        container.erase(newEnd, container.end());
+        auto newEnd = std::remove_if(std::begin(container), std::end(container), func);
+        container.erase(newEnd, std::end(container));
     }
 
     // std::make_unique does not exist in C++11 (but in C++14 it does)

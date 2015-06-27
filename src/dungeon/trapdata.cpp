@@ -28,13 +28,14 @@ void TrapData::saveXML(pugi::xml_node& node)
     returnif (!m_exists);
 
     // Create the trap child.
-    auto trap = node.append_child(L"trap");
-    trap.append_attribute(L"type") = m_type.c_str();
+    node.append_attribute(L"type") = m_type.c_str();
+
+    std::wcout << L"Save " << m_type << std::endl;
 
     // Export all its attributes
     for (const auto& attribute : m_attributes) {
         const auto& type = attribute.second.type();
-        auto child = trap.append_child(attribute.first.c_str());
+        auto child = node.append_child(attribute.first.c_str());
 
         child.append_attribute(L"type") = type.c_str();
         auto value = child.append_attribute(L"value");
@@ -58,16 +59,12 @@ void TrapData::loadXML(const pugi::xml_node& node)
     // Reset state
     clear();
 
-    // Try loading the trap XML
-    const auto& trap = node.child(L"trap");
-    returnif (!trap);
-    m_exists = true;
-
     // Read trap type name
-    m_type = trap.attribute(L"type").as_string();
+    m_exists = true;
+    m_type = node.attribute(L"type").as_string();
 
     // And all its attributes
-    for (const auto& child : trap.children()) {
+    for (const auto& child : node.children()) {
         std::wstring name = child.name();
         std::wstring type = child.attribute(L"type").as_string();
 

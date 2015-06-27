@@ -63,7 +63,7 @@ namespace dungeon
         //! @{
 
         //! Find the room below the specified relative position and forward change to data.
-        void setRoomFacility(const sf::Vector2f& relPos, FacilityID facilityID, bool state);
+        void createRoomFacility(const sf::Vector2f& relPos, const std::wstring& facilityID);
 
         //! Find the room below the specified relative position and forward change to data.
         void setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID);
@@ -166,7 +166,7 @@ namespace dungeon
         //! @{
 
         //! Add a choice to the context menu, given the state of a facility.
-        void addFacilityChoice(const sf::Vector2u& coords, FacilityID facilityID, const std::wstring& facilityName);
+        void addFacilityChoice(const sf::Vector2u& coords, const std::wstring& facilityID, const std::wstring& facilityName);
 
         //! Pop the context menu for the specified tile coordinates at the position.
         void showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& nuiPos);

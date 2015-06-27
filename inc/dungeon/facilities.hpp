@@ -11,19 +11,6 @@ enum class TextureID : uint8;
 
 namespace dungeon
 {
-    //! The facilities.
-    /*!
-     *  A facility is an object/structure that helps an invader.
-     *  There can be only one of each per dungeon room.
-     */
-    enum FacilityID : uint8
-    {
-        ENTRANCE,   //!< The main entrance to the dungeon.
-        LADDER,     //!< A ladder to climb upstairs.
-        TREASURE,   //!< The main treasure.
-        COUNT,      //!< Number of facilities. KEEP LAST.
-    };
-
     //! A FacilityGrabbable spawner.
     /*!
      *  Implements the scene::GrabbableSpawner for a dungeon facility.
@@ -37,7 +24,7 @@ namespace dungeon
     public:
 
         //! Constructor, affecting texture and look.
-        FacilityGrabButton(const std::wstring& text, TextureID textureID, FacilityID facilityID);
+        FacilityGrabButton(const std::wstring& text, TextureID textureID, std::wstring facilityID);
 
         //! Default destructor.
         ~FacilityGrabButton() = default;
@@ -56,7 +43,7 @@ namespace dungeon
     private:
 
         TextureID m_textureID;      //!< The texture of the grabbable and button.
-        FacilityID m_facilityID;    //!< The facility to be constructed in the dungeon inter.
+        std::wstring m_facilityID;  //!< The facility to be constructed in the dungeon inter.
     };
 
     //! A facility temporary object.

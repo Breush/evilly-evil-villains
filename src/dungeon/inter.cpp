@@ -104,8 +104,8 @@ void Inter::receive(const Event& event)
     case EventType::FACILITY_CHANGED:
         coords = {event.facility.room.x, event.facility.room.y};
         refreshTileLayers(coords);
-        if (event.facility.id == FacilityID::TREASURE)
-            refreshTileDoshLabel(coords);
+        // TODO Just needed for treasure, how can we be sure?
+        refreshTileDoshLabel(coords);
         break;
 
     case EventType::TRAP_CHANGED:
@@ -269,19 +269,19 @@ void Inter::resetHoveredTile()
 //------------------------//
 //----- Context menu -----//
 
-void Inter::addFacilityChoice(const sf::Vector2u& coords, FacilityID facilityID, const std::wstring& facilityName)
+void Inter::addFacilityChoice(const sf::Vector2u& coords, const std::wstring& facilityID, const std::wstring& facilityName)
 {
     // The facility is already there
-    if (m_data->room(coords).facilities[facilityID]) {
+    if (hasOfType(m_data->room(coords).facilities, facilityID)) {
         m_contextMenu.addChoice(L"Remove " + facilityName, [this, facilityID, &coords]() {
-            m_data->setRoomFacility(coords, facilityID, false);
+            m_data->removeRoomFacility(coords, facilityID);
         });
     }
 
     // The facility is not there
     else {
         m_contextMenu.addChoice(L"Create " + facilityName, [this, facilityID, &coords]() {
-            m_data->setRoomFacility(coords, facilityID, true);
+            m_data->createRoomFacility(coords, facilityID);
         });
     }
 }
@@ -310,8 +310,8 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
         });
 
         // Facilities
-        addFacilityChoice(coords, FacilityID::LADDER, L"ladder");
-        addFacilityChoice(coords, FacilityID::ENTRANCE, L"entrance");
+        addFacilityChoice(coords, L"ladder", L"ladder");
+        addFacilityChoice(coords, L"entrance", L"entrance");
     }
 
     // Context positions
@@ -323,9 +323,9 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
 //---------------------//
 //----- Structure -----//
 
-void Inter::setRoomFacility(const sf::Vector2f& relPos, FacilityID facilityID, bool state)
+void Inter::createRoomFacility(const sf::Vector2f& relPos, const std::wstring& facilityID)
 {
-    m_data->setRoomFacility(tileFromLocalPosition(relPos), facilityID, state);
+    m_data->createRoomFacility(tileFromLocalPosition(relPos), facilityID);
 }
 
 void Inter::setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID)
@@ -430,7 +430,7 @@ void Inter::refreshTileDoshLabel(const sf::Vector2u& coords)
     // Total dosh
     uint totalDosh = 0u;
     totalDosh += harvestableDosh;
-    totalDosh += room.treasureDosh;
+    totalDosh += m_data->roomTreasureDosh(coords);
     configureDoshLabel(tile.totalDoshLabel, totalDosh, sf::Color::White);
 
     // Re-position
@@ -466,9 +466,13 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
     addLayer(coords, TextureID::DUNGEON_INTER_ROOM);
 
     // Facilities
-    if (room.facilities[FacilityID::LADDER])    addLayer(coords, TextureID::DUNGEON_INTER_LADDER);
-    if (room.facilities[FacilityID::TREASURE])  addLayer(coords, TextureID::DUNGEON_INTER_TREASURE);
-    if (room.facilities[FacilityID::ENTRANCE])  addLayer(coords, TextureID::DUNGEON_INTER_ENTRANCE);
+    // TODO Use same structure than Traps!! facilities::make()
+    for (const auto& facility : room.facilities) {
+        if (facility.type() == L"ladder")           addLayer(coords, TextureID::DUNGEON_INTER_LADDER);
+        else if (facility.type() == L"treasure")    addLayer(coords, TextureID::DUNGEON_INTER_TREASURE);
+        else if (facility.type() == L"entrance")    addLayer(coords, TextureID::DUNGEON_INTER_ENTRANCE);
+        else std::wcout << L"Unreferenced facility '" << facility.type() << "' texture, ignoring it." << std::endl;
+    }
 }
 
 void Inter::refreshTileTraps(const sf::Vector2u& coords)

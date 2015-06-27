@@ -7,7 +7,6 @@ namespace dungeon
     // Forward declarations
 
     class Hero;
-    enum FacilityID : uint8;
 
     //! All the possible dungeon events.
     enum class EventType
@@ -61,7 +60,6 @@ namespace dungeon
             //! When a facility changed.
             struct
             {
-                FacilityID id;      //!< The facility that was modified.
                 RoomCoords room;    //!< The coordinates of the room.
             } facility;
 

@@ -4,7 +4,6 @@
 #include "tools/int.hpp"
 #include "dungeon/event.hpp"
 #include "dungeon/eventtype.hpp"
-#include "dungeon/facilities.hpp"
 #include "dungeon/trapdata.hpp"
 #include "context/wallet.hpp"
 
@@ -73,11 +72,9 @@ namespace dungeon
             sf::Vector2u coords;                            //!< The floor/room coordinate of the room.
             RoomState state = RoomState::UNKNOWN;           //!< The current state.
 
-            // TODO Use the same structure than TrapData
-            std::array<bool, FacilityID::COUNT> facilities; //!< All the facilities.
-            uint treasureDosh = 0u;                         //!< If facility treasure, then the stored dosh.
-
-            TrapData trap;                                  //!< The trap protecting the room.
+            // TODO Rename TrapData to something general
+            std::vector<TrapData> facilities;   //!< All the facilities.
+            TrapData trap;                      //!< The trap protecting the room.
         };
 
         //! A floor is a vector of rooms.
@@ -130,14 +127,17 @@ namespace dungeon
 
         //! Return true if you can access the next room from the specified one.
         //! In the case of unexisting room, it returns false.
-        bool roomNeighbourAccessible(const sf::Vector2u& roomCoord, Direction direction);
+        bool roomNeighbourAccessible(const sf::Vector2u& coords, Direction direction);
 
         //! Return the coordinates of the next room from the specified one.
         /*!
          *  Note: this function does not check accessibility.
          *  The results might be beyond dungeon boundaries.
          */
-        sf::Vector2u roomNeighbourCoords(const sf::Vector2u& roomCoord, Direction direction);
+        sf::Vector2u roomNeighbourCoords(const sf::Vector2u& coords, Direction direction);
+
+        //! Gets the dosh contained in the treasure facility if any (returns 0u if no treasure facility).
+        uint roomTreasureDosh(const sf::Vector2u& coords);
 
         //! @}
 
@@ -145,9 +145,13 @@ namespace dungeon
         //! @name Facilities and traps
         //! @{
 
-        //! Set the value of the specified room's facility.
+        //! Add the specified facility to the dungeon if it does not exists yet.
         //! Will emit an event if a change occured.
-        void setRoomFacility(const sf::Vector2u& coords, FacilityID facilityID, bool state);
+        void createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID);
+
+        //! Remove the specified facility from the dungeon.
+        //! Will emit an event if a change occured.
+        void removeRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID);
 
         //! Set the trap of the specified room.
         //! Will emit an event if a change occured.
@@ -233,10 +237,6 @@ namespace dungeon
 
         //! Save dungeon data to a specified file (must exists).
         void saveDungeon(const std::wstring& file);
-
-        //! Helpers loading and saving  facilities.
-        void loadDungeonRoomFacilities(Room& room, const pugi::xml_node& node);
-        void saveDungeonRoomFacilities(const Room& room, pugi::xml_node& node);
 
         //! @}
 
