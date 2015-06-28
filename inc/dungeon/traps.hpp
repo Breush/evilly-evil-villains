@@ -1,7 +1,7 @@
 #pragma once
 
 #include "scene/entity.hpp"
-#include "dungeon/trapdata.hpp"
+#include "dungeon/elementdata.hpp"
 #include "dungeon/event.hpp"
 #include "nui/grabbutton.hpp"
 #include "tools/int.hpp"
@@ -17,15 +17,27 @@ namespace dungeon
 
         //! Constructor.
         //! Set the reference to the room in data.
-        Trap(const sf::Vector2u& coords, TrapData& trapdata)
+        Trap(const sf::Vector2u& coords, ElementData& elementdata)
             : m_coords(coords)
-            , m_trapdata(trapdata)
+            , m_elementdata(elementdata)
         {
             setDetectable(false);
         }
 
         //! Default destructor.
         virtual ~Trap() = default;
+
+        //-------------//
+        //! @name Cost
+        //! @{
+
+        //! How much the trap cost on creation.
+        virtual uint onCreateCost() const = 0;
+
+        //! How much the trap cost on destruction.
+        virtual uint onDestroyGain() const = 0;
+
+        //! @}
 
         //------------------//
         //! @name Resources
@@ -52,7 +64,7 @@ namespace dungeon
     protected:
 
         sf::Vector2u m_coords;  //!< The room in which the trap is set.
-        TrapData& m_trapdata;   //!< The data corresponding to the trap.
+        ElementData& m_elementdata;   //!< The data corresponding to the trap.
     };
 
     //! A TrapGrabbable spawner.

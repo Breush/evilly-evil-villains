@@ -1,5 +1,7 @@
 #pragma once
 
+#include "scene/entity.hpp"
+#include "dungeon/event.hpp"
 #include "nui/grabbutton.hpp"
 #include "tools/int.hpp"
 

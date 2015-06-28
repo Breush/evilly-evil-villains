@@ -3,6 +3,7 @@
 #include "dungeon/graph.hpp"
 #include "dungeon/hero.hpp"
 #include "dungeon/traps.hpp"
+#include "dungeon/traps/maker.hpp"
 #include "context/villains.hpp"
 #include "tools/debug.hpp"
 #include "tools/string.hpp"
@@ -319,7 +320,7 @@ void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     auto& roomInfo = room(coords);
 
     // TODO Get dosh from treasure, dispatched in facility itself?
-    std::erase_if(roomInfo.facilities, [&](const TrapData& data) { return data.type() == facilityID; });
+    std::erase_if(roomInfo.facilities, [&](const ElementData& data) { return data.type() == facilityID; });
 
     Event event;
     event.type = EventType::FACILITY_CHANGED;
@@ -329,11 +330,14 @@ void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
 
 void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
 {
+    // TODO Should the test be done in Inter and data just really sets the trap?
+    // -> Surely yes...
+
     auto& roomInfo = room(coords);
     returnif (roomInfo.trap.exists() && roomInfo.trap.type() == trapID);
 
     // Continue if and only if wallet authorize us
-    if (m_villain->doshWallet.addsub(roomInfo.trap.onDestroyGain(), roomInfo.trap.onCreateCost())) {
+    if (m_villain->doshWallet.addsub(traps::onDestroyGain(roomInfo.trap), traps::onCreateCost(trapID))) {
         // Destroy previous trap if any
         roomInfo.trap.clear();
 

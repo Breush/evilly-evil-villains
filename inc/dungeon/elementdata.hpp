@@ -12,19 +12,19 @@
 namespace dungeon
 {
     /*!
-     *  A dynamic structure holding traps information
+     *  A dynamic structure holding dungeon element information
      *  and which can be exported and imported as XML.
      */
 
-    class TrapData final
+    class ElementData final
     {
     public:
 
         //! Default constructor.
-        TrapData() = default;
+        ElementData() = default;
 
         //! Default destructor.
-        ~TrapData() = default;
+        ~ElementData() = default;
 
         //---------------------//
         //! @name Manipulation
@@ -33,7 +33,7 @@ namespace dungeon
         //! Remove all attributes and trap no longer exists.
         void clear();
 
-        //! Initialize a empty TrapData of given type.
+        //! Initialize a empty ElementData of given type.
         void create(std::wstring type);
 
         //! Returns true if the trap has no attributes.
@@ -53,21 +53,12 @@ namespace dungeon
 
         //! @}
 
-        //-------------//
-        //! @name Cost
-        //! @{
-
-        //! How much the trap cost on creation.
-        uint onCreateCost() const;
-
-        //! How much the trap cost on destruction.
-        uint onDestroyGain() const;
-
-        //! @}
-
         //----------------//
         //! @name Getters
         //! @{
+
+        //! Access an existing attribute (const).
+        inline const MetaData& at(const std::wstring& name) const { return m_attributes.at(name); }
 
         //! Access an attribute.
         inline MetaData& operator[](const std::wstring& name) { return m_attributes[name]; }
@@ -90,7 +81,7 @@ namespace dungeon
     //------------------------------//
     //----- External functions -----//
 
-    //! Returns true if we found an existing TrapData of specified type.
+    //! Returns true if we found an existing ElementData of specified type.
     template<class Container>
     inline bool hasOfType(const Container& container, const std::wstring& type)
     {
@@ -100,11 +91,11 @@ namespace dungeon
         return false;
     }
 
-    //! Returns if found an existing TrapData iterator of specified type, or std::end(container) else.
+    //! Returns if found an existing ElementData iterator of specified type, or std::end(container) else.
     template<class Container>
     inline auto findOfType(Container& container, const std::wstring& type) -> decltype(std::end(container))
     {
-        return std::find_if(container, [&](const TrapData& data) { return data.exists() && data.type() == type; });
+        return std::find_if(container, [&](const ElementData& data) { return data.exists() && data.type() == type; });
     }
 }
 

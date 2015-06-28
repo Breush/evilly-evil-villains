@@ -1,4 +1,4 @@
-#include "dungeon/trapdata.hpp"
+#include "dungeon/elementdata.hpp"
 
 #include <stdexcept>
 
@@ -7,13 +7,13 @@ using namespace dungeon;
 //------------------------//
 //----- Manipulation -----//
 
-void TrapData::clear()
+void ElementData::clear()
 {
     m_exists = false;
     m_attributes.clear();
 }
 
-void TrapData::create(std::wstring type)
+void ElementData::create(std::wstring type)
 {
     m_attributes.clear();
     m_type = std::move(type);
@@ -23,7 +23,7 @@ void TrapData::create(std::wstring type)
 //---------------------------//
 //----- XML interaction -----//
 
-void TrapData::saveXML(pugi::xml_node& node)
+void ElementData::saveXML(pugi::xml_node& node)
 {
     returnif (!m_exists);
 
@@ -54,7 +54,7 @@ void TrapData::saveXML(pugi::xml_node& node)
     }
 }
 
-void TrapData::loadXML(const pugi::xml_node& node)
+void ElementData::loadXML(const pugi::xml_node& node)
 {
     // Reset state
     clear();
@@ -81,27 +81,3 @@ void TrapData::loadXML(const pugi::xml_node& node)
         else if (type == L"uint64") m_attributes[name] = static_cast<uint64>(child.attribute(L"value").as_ullong());
     }
 }
-
-//----------------//
-//----- Cost -----//
-
-uint TrapData::onCreateCost() const
-{
-    returnif (!m_exists) 0u;
-
-    if (m_type == L"pickpock") return 220u;
-    else throw std::logic_error("Some trap has not been registered for onCreateDosh().");
-
-    return 0u;
-}
-
-uint TrapData::onDestroyGain() const
-{
-    returnif (!m_exists) 0u;
-
-    if (m_type == L"pickpock") return 30u + m_attributes.at(L"dosh").as_uint32();
-    else throw std::logic_error("Some trap has not been registered for onCreateDosh().");
-
-    return 0u;
-}
-

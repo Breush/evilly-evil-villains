@@ -4,7 +4,7 @@
 #include "tools/int.hpp"
 #include "dungeon/event.hpp"
 #include "dungeon/eventtype.hpp"
-#include "dungeon/trapdata.hpp"
+#include "dungeon/elementdata.hpp"
 #include "context/wallet.hpp"
 
 #include <SFML/System/Vector2.hpp>
@@ -72,9 +72,8 @@ namespace dungeon
             sf::Vector2u coords;                            //!< The floor/room coordinate of the room.
             RoomState state = RoomState::UNKNOWN;           //!< The current state.
 
-            // TODO Rename TrapData to something general
-            std::vector<TrapData> facilities;   //!< All the facilities.
-            TrapData trap;                      //!< The trap protecting the room.
+            std::vector<ElementData> facilities;   //!< All the facilities.
+            ElementData trap;                      //!< The trap protecting the room.
         };
 
         //! A floor is a vector of rooms.
