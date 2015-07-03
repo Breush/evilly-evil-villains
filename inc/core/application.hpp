@@ -158,6 +158,9 @@ private:
     //! Fixed timestep to update game logic.
     const sf::Time m_timePerFrame = sf::seconds(1.f/60.f);
 
+    //! Modifying the speed of the whole game.
+    float m_gameTimeFactor = 1.f;
+
     //! The game time since game loop is running.
     float m_gameTime = 0.f;
 

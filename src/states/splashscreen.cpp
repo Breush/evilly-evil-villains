@@ -22,7 +22,7 @@ SplashScreen::SplashScreen(StateStack& stack)
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
     m_background.setTexture(TextureID::JUMPINGTOASTS_BACKGROUND);
-    m_background.setShader(ShaderID::MENU_BACKGROUND);
+    m_background.setShader(ShaderID::JUMPINGTOASTS_BACKGROUND);
     m_background.setLocalScale(maxSide / sf::v2f(textureSize));
     m_background.setLocalPosition((nuiSize - maxSide) / 2.f);
 

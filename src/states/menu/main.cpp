@@ -28,13 +28,14 @@ MenuMain::MenuMain(StateStack& stack)
     float maxSide = std::max(nuiSize.x, nuiSize.y);
 
     // Background
-    const auto& textureSize = Application::context().textures.get(TextureID::MENU_BACKGROUND).getSize();
+    auto textureSize = sf::v2f(Application::context().textures.get(TextureID::MENU_MAIN_BACKGROUND).getSize());
+    auto scaleFactor = maxSide / textureSize.x;
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
-    m_background.setTexture(TextureID::MENU_BACKGROUND);
-    m_background.setShader(ShaderID::MENU_BACKGROUND);
-    m_background.setLocalScale(maxSide / sf::v2f(textureSize));
-    m_background.setLocalPosition((nuiSize - maxSide) / 2.f);
+    m_background.setTexture(TextureID::MENU_MAIN_BACKGROUND);
+    m_background.setShader(ShaderID::MENU_MAIN_BACKGROUND);
+    m_background.setLocalScale({scaleFactor, scaleFactor});
+    Application::context().shaders.setParameter(ShaderID::MENU_MAIN_BACKGROUND, "textureSize", scaleFactor * textureSize);
 
     // Copyright label
     nuiRoot.attachChild(m_copyrightLabel);

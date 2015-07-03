@@ -74,7 +74,8 @@ void Application::run()
 
             // Game logic core
             processInput();
-            update(m_timePerFrame);
+            m_visualDebug.update(m_timePerFrame);
+            update(m_gameTimeFactor * m_timePerFrame);
 
             // Quit if no more states
             if (m_stateStack.isEmpty())
@@ -110,6 +111,20 @@ void Application::processInput()
                 continue;
             }
 
+            // Decelerate time
+            if (event.key.code == sf::Keyboard::F8) {
+                m_gameTimeFactor /= 2.f;
+                m_visualDebug.setDisplayedTimeFactor(m_gameTimeFactor);
+                continue;
+            }
+
+            // Accelerate time
+            if (event.key.code == sf::Keyboard::F9) {
+                m_gameTimeFactor *= 2.f;
+                m_visualDebug.setDisplayedTimeFactor(m_gameTimeFactor);
+                continue;
+            }
+
             // Switch fullscreen mode
             if (event.key.code == sf::Keyboard::F11) {
                 switchFullscreenMode();
@@ -120,6 +135,8 @@ void Application::processInput()
 #if DEBUG_GLOBAL > 0
             // Hard reset on debug mode
             if (event.key.code == sf::Keyboard::BackSlash) {
+                m_gameTime = 0.f;
+                m_gameTimeFactor = 1.f;
                 m_stateStack.clearStates();
                 m_stateStack.pushState(StateID::SPLASHSCREEN);
                 continue;
@@ -167,9 +184,6 @@ void Application::update(const sf::Time& dt)
 {
     // Shaders can be animated
     m_gameTime += dt.asSeconds();
-
-    // Visual debug
-    m_visualDebug.update(dt);
 
     // Game logic
     updateShaders(dt);

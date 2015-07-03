@@ -40,14 +40,19 @@ public:
 
     //! @}
 
-    //-------------------//
-    //! @name Visibility
+    //--------------------//
+    //! @name Interaction
     //! @{
 
     //! Switch debug information on and off.
     void switchVisible();
 
+    //! Refresh the game time factor displayed.
+    void setDisplayedTimeFactor(float timeFactor) { m_timeFactor = timeFactor; }
+
     //! @}
+
+protected:
 
     //--------------------------------//
     //! @name Internal change updates
@@ -59,7 +64,7 @@ public:
 
 private:
 
-    //! VisualDebug owns its own view
+    //! VisualDebug owns its own view.
     sf::View m_view;
 
     //! The rendered text.
@@ -69,8 +74,13 @@ private:
     sf::RectangleShape m_background;
 
     bool m_visible = false;         //!< Is text visible?
-    uint m_renderedFrames = 0u;     //!< Number of calls to draw()
-    uint m_renderedUpdates = 0u;    //!< Number of calls to update()
-    float m_time = 0.f;             //!< Timer to refresh FPS information
+
+    // FPS
+    uint m_renderedFrames = 0u;     //!< Number of calls to draw().
+    uint m_renderedUpdates = 0u;    //!< Number of calls to update().
+    float m_time = 0.f;             //!< Timer to refresh FPS information.
+
+    // Time factor
+    float m_timeFactor = 1.f;       //!< The estimated time factor.
 };
 

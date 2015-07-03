@@ -33,8 +33,8 @@ void VisualDebug::update(const sf::Time& dt)
     if (m_time >= 1.f) {
         // Update text each second
         std::wstringstream str;
-        str << L"FPS: " << m_renderedFrames
-            << L" [" << m_renderedUpdates << L"]";
+        str << L"FPS: " << m_renderedFrames << L" [" << m_renderedUpdates << L"]" << std::endl;
+        str << L"Time factor: " << m_timeFactor;
         m_text.setString(str.str());
         updateBackgroundSize();
 

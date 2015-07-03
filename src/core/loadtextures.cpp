@@ -29,7 +29,7 @@ void Application::loadTextures()
     s_context.textures.setRepeated(TextureID::NUI_FOCUS, true);
 
     // Menu
-    s_context.textures.load(TextureID::MENU_BACKGROUND, "res/tex/menu/bg.png");
+    s_context.textures.load(TextureID::MENU_MAIN_BACKGROUND, "res/tex/menu/main/background.png");
     s_context.textures.load(TextureID::MENU_NAME, "res/tex/menu/name.png");
 
     // Dungeon

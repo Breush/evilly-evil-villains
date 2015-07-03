@@ -18,6 +18,6 @@ void main()
 
     // Adding original gives a bloom effect
     // by reinforcing the original colors
-    float additions = float(2 * range + 1) * float(2 * range + 1);
+    const float additions = float(2 * range + 1) * float(2 * range + 1);
     gl_FragColor = gl_Color * (original + pixel / additions);
 }
