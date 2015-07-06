@@ -1,5 +1,7 @@
 #include "sfe/grid.hpp"
+
 #include "sfe/line.hpp"
+#include "tools/tools.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
@@ -11,11 +13,14 @@ Grid::Grid()
     : m_rows(0)
     , m_columns(0)
     , m_size(0.f, 0.f)
+    , m_visible(true)
 {
 }
 
 void Grid::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+    returnif (!m_visible);
+
     // Transform from sf::Tranformable
     states.transform *= getTransform();
 

@@ -199,21 +199,21 @@ void Data::correctFloorsRooms()
 //-----------------//
 //----- Rooms -----//
 
-bool Data::isRoomConstructed(const sf::Vector2u& roomCoord)
+bool Data::isRoomConstructed(const sf::Vector2u& coords)
 {
-    returnif (roomCoord.x >= m_floorsCount) false;
-    returnif (roomCoord.y >= m_roomsByFloor) false;
-    return room(roomCoord).state != RoomState::VOID;
+    returnif (coords.x >= m_floorsCount) false;
+    returnif (coords.y >= m_roomsByFloor) false;
+    return room(coords).state != RoomState::VOID;
 }
 
-void Data::constructRoom(const sf::Vector2u& roomCoord)
+void Data::constructRoom(const sf::Vector2u& coords)
 {
     returnif (!m_villain->doshWallet.sub(onCreateRoomCost));
-    room(roomCoord).state = RoomState::CONSTRUCTED;
+    room(coords).state = RoomState::CONSTRUCTED;
 
     Event event;
     event.type = EventType::ROOM_CONSTRUCTED;
-    event.room = {roomCoord.x, roomCoord.y};
+    event.room = {coords.x, coords.y};
     EventEmitter::emit(event);
 }
 

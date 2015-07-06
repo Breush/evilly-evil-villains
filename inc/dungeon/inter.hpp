@@ -191,13 +191,16 @@ namespace dungeon
         void refreshTiles();
 
         //! Refresh the specified tile, updating state from data.
-        void refreshTile(const sf::Vector2u& roomCoords);
+        void refreshTile(const sf::Vector2u& coords);
+
+        //! Refresh the layers of the existing neighbours, updating state from data.
+        void refreshNeighboursLayers(const sf::Vector2u& coords);
 
         //! Refresh the layers (and their texture) of the specified tile.
-        void refreshTileLayers(const sf::Vector2u& roomCoords);
+        void refreshTileLayers(const sf::Vector2u& coords);
 
         //! Refresh the traps (as tile entities) of the specified tile.
-        void refreshTileTraps(const sf::Vector2u& roomCoords);
+        void refreshTileTraps(const sf::Vector2u& coords);
 
         //! Refresh the dosh label (value and position) of the specified tile.
         void refreshTileDoshLabel(const sf::Vector2u& coords);

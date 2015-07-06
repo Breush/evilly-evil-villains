@@ -19,6 +19,7 @@ Inter::Inter(nui::ContextMenu& contextMenu)
     : m_contextMenu(contextMenu)
 {
     // Grid
+    m_grid.setVisible(false);
     addPart(&m_grid);
 }
 
@@ -99,6 +100,7 @@ void Inter::receive(const Event& event)
     case EventType::ROOM_CONSTRUCTED:
         coords = {event.room.x, event.room.y};
         refreshTile(coords);
+        refreshNeighboursLayers(coords);
         break;
 
     case EventType::FACILITY_CHANGED:
@@ -189,6 +191,7 @@ void Inter::addLayer(const sf::Vector2u& coords, TextureID textureID)
     layer.setSize(tileSize());
 
     // And afterward, re-add all references/pointers
+    // TODO Layers should be children, for easy z-depth.
     for (auto& layer : tile.layers)
         addPart(&layer);
 }
@@ -403,13 +406,27 @@ void Inter::refreshTiles()
 
 void Inter::refreshTile(const sf::Vector2u& coords)
 {
+    returnif (coords.x >= m_data->floorsCount());
+    returnif (coords.y >= m_data->roomsByFloor());
+
     refreshTileDoshLabel(coords);
     refreshTileLayers(coords);
     refreshTileTraps(coords);
 }
 
+void Inter::refreshNeighboursLayers(const sf::Vector2u& coords)
+{
+    refreshTileLayers(m_data->roomNeighbourCoords(coords, Data::WEST));
+    refreshTileLayers(m_data->roomNeighbourCoords(coords, Data::SOUTH));
+    refreshTileLayers(m_data->roomNeighbourCoords(coords, Data::EAST));
+    refreshTileLayers(m_data->roomNeighbourCoords(coords, Data::NORTH));
+}
+
 void Inter::refreshTileDoshLabel(const sf::Vector2u& coords)
 {
+    returnif (coords.x >= m_data->floorsCount());
+    returnif (coords.y >= m_data->roomsByFloor());
+
     const auto& room = m_data->room(coords);
     const auto& localPosition = tileLocalPosition(coords);
     auto& tile = m_tiles[coords];
@@ -445,6 +462,9 @@ void Inter::refreshTileDoshLabel(const sf::Vector2u& coords)
 
 void Inter::refreshTileLayers(const sf::Vector2u& coords)
 {
+    returnif (coords.x >= m_data->floorsCount());
+    returnif (coords.y >= m_data->roomsByFloor());
+
     const auto& room = m_data->room(coords);
     const auto state = room.state;
 
@@ -452,7 +472,20 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
     clearLayers(coords);
 
     // Room is not constructed
-    returnif (state == Data::RoomState::VOID);
+    if (state == Data::RoomState::VOID)
+    {
+        addLayer(coords, TextureID::DUNGEON_INTER_VOID_INNER_WALL);
+        addLayer(coords, TextureID::DUNGEON_INTER_VOID_FLOOR);
+
+        if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, Data::WEST)))
+            addLayer(coords, TextureID::DUNGEON_INTER_VOID_WEST_TRANSITION);
+        if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, Data::SOUTH)))
+            addLayer(coords, TextureID::DUNGEON_INTER_VOID_SOUTH_TRANSITION);
+        if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, Data::EAST)))
+            addLayer(coords, TextureID::DUNGEON_INTER_VOID_EAST_TRANSITION);
+
+        return;
+    }
 
     // Room is somehow bugged
     if (state == Data::RoomState::UNKNOWN) {
@@ -463,7 +496,8 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
     }
 
     // Add room textures
-    addLayer(coords, TextureID::DUNGEON_INTER_ROOM);
+    addLayer(coords, TextureID::DUNGEON_INTER_INNER_WALL);
+    addLayer(coords, TextureID::DUNGEON_INTER_FLOOR);
 
     // Facilities
     // TODO Use same structure than Traps!! facilities::make()
@@ -477,6 +511,9 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
 
 void Inter::refreshTileTraps(const sf::Vector2u& coords)
 {
+    returnif (coords.x >= m_data->floorsCount());
+    returnif (coords.y >= m_data->roomsByFloor());
+
     auto& room = m_data->room(coords);
     auto& tile = m_tiles[coords];
 

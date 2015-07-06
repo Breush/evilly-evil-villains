@@ -116,6 +116,7 @@ namespace dungeon
         inline Room& room(const sf::Vector2u& coords) { return m_floors[coords.x].rooms[coords.y]; }
 
         //! Whether a specific is in constructed state.
+        //! If coords are outside of boundaries, returns false.
         bool isRoomConstructed(const sf::Vector2u& coords);
 
         //! Construct a room.

@@ -43,6 +43,9 @@ namespace sfe
         PARAMGSU(uint, m_columns, columns, setColumns, update)
         PARAMGSU(sf::Vector2f, m_size, size, setSize, update)
 
+        //! Whether or not to draw the grid.
+        PARAMGS(bool, m_visible, visible, setVisible)
+
     private:
         // Decorum
         std::vector<sfe::HLine> m_hBorders;
