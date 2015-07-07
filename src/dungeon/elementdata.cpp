@@ -30,8 +30,6 @@ void ElementData::saveXML(pugi::xml_node& node)
     // Create the trap child.
     node.append_attribute(L"type") = m_type.c_str();
 
-    std::wcout << L"Save " << m_type << std::endl;
-
     // Export all its attributes
     for (const auto& attribute : m_attributes) {
         const auto& type = attribute.second.type();

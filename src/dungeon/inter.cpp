@@ -53,8 +53,6 @@ void Inter::onSizeChanges()
     m_outerWalls[1].setPosition(size().x, 0.f);
     m_outerWalls[1].setTextureRect(outerWallsRect);
 
-    std::cout << size().x << " " << outerWallsRealSize.x << " " << m_grid.cellSize() << std::endl;
-
     returnif (m_data == nullptr);
     refreshTiles();
 }
