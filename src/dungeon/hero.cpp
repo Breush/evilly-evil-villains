@@ -221,7 +221,7 @@ void Hero::changedDosh()
 
 void Hero::refreshPositionFromNode(bool firstNode)
 {
-    const auto heroTilePosition = sf::Vector2f{m_inter->tileSize().x / 2.f, m_inter->tileSize().y * 0.9f};
+    const auto heroTilePosition = sf::Vector2f{m_inter->tileSize().x / 2.f, m_inter->tileSize().y * 0.8f};
     lerpable()->setTargetPosition(m_inter->tileLocalPosition(m_currentNode->coords) + heroTilePosition);
     if (firstNode) setLocalPosition(lerpable()->targetPosition());
 

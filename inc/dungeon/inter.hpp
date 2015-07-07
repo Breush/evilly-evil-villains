@@ -9,6 +9,7 @@
 #include "sfe/label.hpp"
 #include "tools/vector.hpp"
 
+#include <array>
 #include <unordered_map>
 
 // Forward declarations
@@ -224,6 +225,7 @@ namespace dungeon
 
         sfe::Grid m_grid;                                   //!< The internal grid for overlay display.
         std::unordered_map<sf::Vector2u, Tile> m_tiles;     //!< All tiles constituing the dungeon.
+        std::array<sf::RectangleShape, 2u> m_outerWalls;    //!< Sprites for left/right outer walls.
 
         nui::ContextMenu& m_contextMenu;    //!< The context menu, got from global state.
 

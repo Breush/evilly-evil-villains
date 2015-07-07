@@ -21,6 +21,13 @@ Inter::Inter(nui::ContextMenu& contextMenu)
     // Grid
     m_grid.setVisible(false);
     addPart(&m_grid);
+
+    // Outer walls
+    const auto& outerWallsTexture = Application::context().textures.get(TextureID::DUNGEON_INTER_OUTER_WALL);
+    m_outerWalls[0].setTexture(&outerWallsTexture);
+    m_outerWalls[1].setTexture(&outerWallsTexture);
+    addPart(&m_outerWalls[0]);
+    addPart(&m_outerWalls[1]);
 }
 
 //-------------------//
@@ -29,7 +36,24 @@ Inter::Inter(nui::ContextMenu& contextMenu)
 void Inter::onSizeChanges()
 {
     returnif (size() == m_grid.size());
+
     m_grid.setSize(size());
+
+    // Outer walls repositioning
+    const auto& outerWallsTextureSize = Application::context().textures.get(TextureID::DUNGEON_INTER_OUTER_WALL).getSize();
+    const auto& roomSize = Application::context().textures.get(TextureID::DUNGEON_INTER_INNER_WALL).getSize();
+    sf::Vector2f outerWallsRealSize(outerWallsTextureSize.x * m_grid.cellSize().x / roomSize.x, size().y);
+    sf::IntRect outerWallsRect(0, 0, outerWallsTextureSize.x, outerWallsTextureSize.y * m_grid.rows());
+
+    m_outerWalls[0].setSize(outerWallsRealSize);
+    m_outerWalls[0].setPosition(-outerWallsRealSize.x, 0.f);
+    m_outerWalls[0].setTextureRect(outerWallsRect);
+
+    m_outerWalls[1].setSize(outerWallsRealSize);
+    m_outerWalls[1].setPosition(size().x, 0.f);
+    m_outerWalls[1].setTextureRect(outerWallsRect);
+
+    std::cout << size().x << " " << outerWallsRealSize.x << " " << m_grid.cellSize() << std::endl;
 
     returnif (m_data == nullptr);
     refreshTiles();
