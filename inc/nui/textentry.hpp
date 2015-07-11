@@ -92,6 +92,9 @@ namespace nui
         //! The limits are not checked and should exists.
         void select(uint start, uint end);
 
+        //! Select the whole text.
+        void selectAll();
+
         //! Cancel selection.
         bool deselect();
 

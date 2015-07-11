@@ -122,7 +122,6 @@ bool TextEntry::handleKeyboardEvent(const sf::Event& event)
     // Left/right to move inside the text entry
     // Use Ctrl to skip a word
     if (event.type == sf::Event::KeyPressed) {
-        // TODO Add selection on shift + word selection on Ctrl
         if (event.key.code == sf::Keyboard::Left) {
             int toMove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? previousRelativeWord() : -1;
             moveCursor(toMove);
@@ -133,10 +132,15 @@ bool TextEntry::handleKeyboardEvent(const sf::Event& event)
             moveCursor(toMove);
             return true;
         }
+        // Select all with Ctrl-A
+        else if (event.key.code == sf::Keyboard::A && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+            selectAll();
+        }
     }
     // Edit the text entry
     else if (event.type == sf::Event::TextEntered) {
         // TODO Associate a callback to Enter?
+        returnif (event.text.unicode == 1) false;           // Error
         returnif (event.text.unicode == 13) false;          // Enter
         if (event.text.unicode == 8) deletePrevious();      // Backspace
         else if (event.text.unicode == 127) deleteNext();   // Delete
@@ -198,6 +202,12 @@ void TextEntry::deleteNext()
 
 //---------------------//
 //----- Selection -----//
+
+void TextEntry::selectAll()
+{
+    deselect();
+    select(0u, m_textString.getSize());
+}
 
 void TextEntry::select(uint start, uint end)
 {
@@ -261,6 +271,7 @@ void TextEntry::addCharacter(const uint32_t character)
     returnif (m_textString.getSize() == m_maxCharacters);
     m_textString = m_cursorString + character + m_textString.substring(m_cursorString.getSize());
     moveCursor(1);
+    deselect();
 
     m_text.setString(m_textString);
     updateDynamicText();
