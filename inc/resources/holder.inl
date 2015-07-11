@@ -2,6 +2,7 @@
 #include "tools/tools.hpp" // returnif
 
 #include <stdexcept> // runtime_error
+#include <iostream>
 
 namespace resources
 {

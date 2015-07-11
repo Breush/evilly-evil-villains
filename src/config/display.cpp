@@ -4,6 +4,7 @@
 #include "tools/debug.hpp"
 
 #include <pugixml/pugixml.hpp>
+#include <iostream>
 
 using namespace config;
 
