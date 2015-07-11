@@ -26,10 +26,12 @@
     // Generic
     #define debug_generic(PRINT, ...)  ((void) 0)
     #define mdebug_generic(PRINT, ...) ((void) 0)
+    #define wdebug_generic(PRINT, ...) ((void) 0)
 
     // Asserts
     #define assert(bool_expr)       ((void) 0)
     #define massert(bool_expr, ...) ((void) 0)
+    #define wassert(bool_expr, ...) ((void) 0)
 
 // If global on
 #else
