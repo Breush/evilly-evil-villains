@@ -87,6 +87,7 @@ void MenuCreateWorld::createAndPlayWorld()
     // World data
     auto newWorldID = context::worlds.add(worldName, villain);
     context::worlds.select(newWorldID);
+    context::worlds.save();
 
     stackClear(StateID::GAME_DCB);
 }

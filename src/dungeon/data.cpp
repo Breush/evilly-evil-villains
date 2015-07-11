@@ -30,6 +30,7 @@ std::wstring Data::load(const std::wstring& folder)
 
     context::villains.load();
     m_villain = context::villains.getFromWorldFolder(folder);
+    massert(m_villain != nullptr, "Could not find villain.");
     m_villain->doshWallet.setEvents(this, EventType::DOSH_CHANGED);
 
     std::wstring mainDungeonFilename = L"saves/" + folder + L"dungeon.xml";

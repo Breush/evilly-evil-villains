@@ -21,7 +21,14 @@ Worlds context::worlds;
 
 void Worlds::load()
 {
-    std::wstring file(L"saves/worlds.xml");
+    #if DEBUG_GLOBAL > 0
+        std::wstring file(L"saves/worlds_saved.xml");
+        if (!fileExists(file)) file = L"saves/worlds.xml";
+        std::wcout << L"|DEBUG| Loading worlds file '" << file << L"'." << std::endl;
+    #else
+        std::wstring file(L"saves/worlds.xml");
+    #endif
+
     m_worlds.clear();
 
     // Parsing XML

@@ -30,7 +30,14 @@ uint Villain::worldsCount() const
 
 void Villains::load()
 {
-    std::wstring file(L"saves/villains.xml");
+    #if DEBUG_GLOBAL > 0
+        std::wstring file(L"saves/villains_saved.xml");
+        if (!fileExists(file)) file = L"saves/villains.xml";
+        std::wcout << L"|DEBUG| Loading villains file '" << file << L"'." << std::endl;
+    #else
+        std::wstring file(L"saves/villains.xml");
+    #endif
+
     m_villains.clear();
 
     // Parsing XML
