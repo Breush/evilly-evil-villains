@@ -23,7 +23,7 @@ void ElementData::create(std::wstring type)
 //---------------------------//
 //----- XML interaction -----//
 
-void ElementData::saveXML(pugi::xml_node& node)
+void ElementData::saveXML(pugi::xml_node& node) const
 {
     returnif (!m_exists);
 

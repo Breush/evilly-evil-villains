@@ -35,12 +35,26 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
     screenSize = sf::v2f(window.getSize());
 }
 
+//-----------------//
+//----- Extra -----//
+
+//! Cleans files that are created and can interfere in debug mode.
+void cleanExtraFiles()
+{
+    std::remove("saves/villains_saved.xml");
+    std::remove("saves/worlds_saved.xml");
+}
+
 //-----------------------//
 //----- Application -----//
 
 Application::Application()
     : m_initialState(StateID::SPLASHSCREEN)
 {
+#if DEBUG_GLOBAL > 0
+    cleanExtraFiles();
+#endif
+
     s_context.init(s_context.display.resolution, "Evilly Evil Villains", sf::Style::Default);
     if (s_context.display.fullscreen) switchFullscreenMode();
     else refresh();

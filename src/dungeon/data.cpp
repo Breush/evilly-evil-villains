@@ -162,9 +162,9 @@ void Data::saveDungeon(const std::wstring& file)
             }
 
             // Facilities
-            for (const auto& facilityData : room.facilities) {
+            for (const auto& facility : room.facilities) {
                 auto facilityNode = roomNode.append_child(L"facility");
-                room.trap.saveXML(facilityNode);
+                facility.saveXML(facilityNode);
             }
         }
     }

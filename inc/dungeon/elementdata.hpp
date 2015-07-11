@@ -46,7 +46,7 @@ namespace dungeon
         //! @{
 
         //! Save data to the node.
-        void saveXML(pugi::xml_node& node);
+        void saveXML(pugi::xml_node& node) const;
 
         //! Load data from the node.
         void loadXML(const pugi::xml_node& node);
