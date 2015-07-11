@@ -80,6 +80,12 @@ void Inter::handleGlobalEvent(const sf::Event& event)
             adaptRoomsByFloor(1);
         else if (event.key.code == sf::Keyboard::Divide)
             adaptRoomsByFloor(-1);
+
+        // Dosh control
+        else if (event.key.code == sf::Keyboard::Numpad9)
+            m_data->villain().doshWallet.add(500);
+        else if (event.key.code == sf::Keyboard::Numpad3)
+            m_data->villain().doshWallet.sub(500);
     }
 #endif
 }
