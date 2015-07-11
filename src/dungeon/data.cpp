@@ -306,6 +306,7 @@ void Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     // TODO Dispatch this management to the facility itself?
     if (facilityID == L"treasure") {
         // Takes 100 dosh, or 0u if impossible
+        roomInfo.facilities.back()[L"dosh"].init_uint32(0u);
         if (m_villain->doshWallet.sub(100u))
             roomInfo.facilities.back()[L"dosh"].as_uint32() = 100u;
     }
