@@ -234,6 +234,7 @@ void ChoiceBox::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2
     }
 
     // Text is being hovered
+    returnif (m_selectedChoice == -1u || m_choices[m_selectedChoice].callback == nullptr);
     setPartShader(&m_text, ShaderID::NUI_HOVER);
 }
 

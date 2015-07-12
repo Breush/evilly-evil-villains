@@ -331,6 +331,7 @@ void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
 
     auto& facility = *found;
     m_villain->doshWallet.add(facilities::onDestroyGain(facility));
+    roomInfo.facilities.erase(found);
 
     Event event;
     event.type = EventType::FACILITY_CHANGED;

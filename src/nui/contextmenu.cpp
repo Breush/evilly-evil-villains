@@ -79,7 +79,7 @@ void ContextMenu::refreshDisplay()
     config::NUI cNUI;
 
     m_fontSize = cNUI.fontSize;
-    m_padding = (cNUI.hPadding + cNUI.vPadding);
+    m_padding = cNUI.hPadding;
     m_choiceHeight = m_padding + cNUI.fontVSpace;
 
     // Update font size
@@ -119,7 +119,7 @@ void ContextMenu::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vecto
     uint choice = choiceFromCoords(mousePos);
 
     resetPartsShader();
-    if (choice < m_choices.size())
+    if (choice < m_choices.size() && m_choices[choice].callback != nullptr)
         setPartShader(&m_choices[choice].text, ShaderID::NUI_HOVER);
 }
 
@@ -161,7 +161,9 @@ void ContextMenu::addChoice(const std::wstring& text, Callback callback)
     sf::Font& font = Application::context().fonts.get(FontID::NUI);
     choiceInfo.text.setFont(font);
     choiceInfo.text.setCharacterSize(m_fontSize);
-    choiceInfo.text.setColor(sf::Color::White);
+
+    if (callback == nullptr) choiceInfo.text.setColor(sf::Color(150, 150, 150));
+    else choiceInfo.text.setColor(sf::Color::White);
 
     m_choices.emplace_back(std::move(choiceInfo));
     updateSize();
