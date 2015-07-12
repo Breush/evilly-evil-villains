@@ -100,6 +100,8 @@ void Inter::handleGlobalEvent(const sf::Event& event)
 
 void Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
+    returnif (m_invasion);
+
     // Selected the tile below
     selectTile(mousePos);
 
@@ -114,12 +116,16 @@ void Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::V
 
 void Inter::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
+    returnif (m_invasion);
+
     auto coords = tileFromLocalPosition(mousePos);
     setHoveredTile(coords);
 }
 
 void Inter::handleMouseLeft()
 {
+    returnif (m_invasion);
+
     resetHoveredTile();
 }
 
@@ -154,6 +160,12 @@ void Inter::receive(const Event& event)
     case EventType::HARVESTABLE_DOSH_CHANGED:
         coords = {event.room.x, event.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTileDoshLabel(coords); });
+        break;
+
+    case EventType::MODE_CHANGED:
+        m_invasion = (event.mode == Mode::INVASION);
+        deselectTile();
+        break;
 
     default:
         break;

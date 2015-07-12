@@ -16,6 +16,8 @@ Log::Log()
     // Background
     m_background.setFillColor({255u, 255u, 255u, 192u});
     addPart(&m_background);
+
+    refreshDisplay();
 }
 
 //-------------------//

@@ -228,12 +228,13 @@ namespace dungeon
         std::unordered_map<sf::Vector2u, Tile> m_tiles;     //!< All tiles constituing the dungeon.
         std::array<sf::RectangleShape, 2u> m_outerWalls;    //!< Sprites for left/right outer walls.
 
-        //! Pending list of tile refreshTileXXX.
-        std::vector<std::function<void()>> m_tileRefreshPending;
+        std::vector<std::function<void()>> m_tileRefreshPending;    //! Pending list of tile refreshTileXXX.
 
         nui::ContextMenu& m_contextMenu;    //!< The context menu, got from global state.
 
         Tile* m_hoveredTile = nullptr;  //!< If a tile is hovered, this is it.
         Tile* m_selectedTile = nullptr; //!< If a tile is selected, this is it.
+
+        bool m_invasion = false;        //!< Whether or not we are in invasion mode.
     };
 }
