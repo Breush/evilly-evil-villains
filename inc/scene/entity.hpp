@@ -96,6 +96,9 @@ namespace scene
         //! This function overwrites the relativeOrigin property.
         void centerOrigin();
 
+        //! If needed, moves the entity local coordinates so that it stays inside the borders.
+        void keepInside(const sf::FloatRect& localRect);
+
         //! The local positions (origin taken in acount) and size.
         sf::FloatRect localBounds();
 

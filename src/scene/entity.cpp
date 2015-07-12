@@ -537,6 +537,31 @@ void Entity::refreshChildrenRelativePosition()
 //---------------------//
 //----- Utilities -----//
 
+void Entity::keepInside(const sf::FloatRect& localRect)
+{
+    // West
+    auto xw = m_localPosition.x - getOrigin().x;
+    if (xw < localRect.left)
+        m_localPosition.x += localRect.left - xw;
+
+    // East
+    auto xe = m_localPosition.x + m_size.x - getOrigin().x;
+    if (xe > localRect.left + localRect.width)
+        m_localPosition.x += localRect.left + localRect.width - xe;
+
+    // North
+    auto yn = m_localPosition.y - getOrigin().y;
+    if (yn < localRect.top)
+        m_localPosition.y += localRect.top - yn;
+
+    // South
+    auto ys = m_localPosition.y + m_size.y - getOrigin().y;
+    if (ys > localRect.top + localRect.height)
+        m_localPosition.y += localRect.top + localRect.height - ys;
+
+    refreshFromLocalPosition();
+}
+
 void Entity::markForVisible(bool visible)
 {
     m_markedForVisible = true;
