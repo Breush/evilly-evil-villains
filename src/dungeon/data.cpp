@@ -225,6 +225,9 @@ void Data::destroyRoom(const sf::Vector2u& coords)
 
     // TODO Also destroyed all facilities inside.
 
+    // Clear trap
+    removeRoomTrap(coords);
+
     Event event;
     event.type = EventType::ROOM_DESTROYED;
     event.room = {coords.x, coords.y};
@@ -352,6 +355,21 @@ void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
         event.room = {coords.x, coords.y};
         EventEmitter::emit(event);
     }
+}
+
+void Data::removeRoomTrap(const sf::Vector2u& coords)
+{
+    auto& roomInfo = room(coords);
+    returnif (!roomInfo.trap.exists());
+
+    m_villain->doshWallet.add(traps::onDestroyGain(roomInfo.trap));
+    roomInfo.trap.clear();
+
+    // Emit event
+    Event event;
+    event.type = EventType::TRAP_CHANGED;
+    event.room = {coords.x, coords.y};
+    EventEmitter::emit(event);
 }
 
 //----------------//

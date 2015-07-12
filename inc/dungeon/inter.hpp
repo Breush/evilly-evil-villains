@@ -101,6 +101,7 @@ namespace dungeon
         //! @name Routine
         //! @{
 
+        void updateRoutine(const sf::Time& dt) final;
         void onSizeChanges() final;
 
         //! @}
@@ -226,6 +227,9 @@ namespace dungeon
         sfe::Grid m_grid;                                   //!< The internal grid for overlay display.
         std::unordered_map<sf::Vector2u, Tile> m_tiles;     //!< All tiles constituing the dungeon.
         std::array<sf::RectangleShape, 2u> m_outerWalls;    //!< Sprites for left/right outer walls.
+
+        //! Pending list of tile refreshTileXXX.
+        std::vector<std::function<void()>> m_tileRefreshPending;
 
         nui::ContextMenu& m_contextMenu;    //!< The context menu, got from global state.
 

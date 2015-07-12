@@ -33,6 +33,14 @@ Inter::Inter(nui::ContextMenu& contextMenu)
 //-------------------//
 //----- Routine -----//
 
+void Inter::updateRoutine(const sf::Time&)
+{
+    // Update traps
+    for (const auto& tileRefresh : m_tileRefreshPending)
+        tileRefresh();
+    m_tileRefreshPending.clear();
+}
+
 void Inter::onSizeChanges()
 {
     returnif (size() == m_grid.size());
@@ -127,25 +135,25 @@ void Inter::receive(const Event& event)
     case EventType::ROOM_DESTROYED:
     case EventType::ROOM_CONSTRUCTED:
         coords = {event.room.x, event.room.y};
-        refreshTile(coords);
-        refreshNeighboursLayers(coords);
+        m_tileRefreshPending.emplace_back([=]() { return refreshTile(coords); });
+        m_tileRefreshPending.emplace_back([=]() { return refreshNeighboursLayers(coords); });
         break;
 
     case EventType::FACILITY_CHANGED:
+        // TODO DoshLabel refresh just needed for treasure, how can we be sure?
         coords = {event.facility.room.x, event.facility.room.y};
-        refreshTileLayers(coords);
-        // TODO Just needed for treasure, how can we be sure?
-        refreshTileDoshLabel(coords);
+        m_tileRefreshPending.emplace_back([=]() { return refreshTileLayers(coords); });
+        m_tileRefreshPending.emplace_back([=]() { return refreshTileDoshLabel(coords); });
         break;
 
     case EventType::TRAP_CHANGED:
         coords = {event.room.x, event.room.y};
-        refreshTileTraps(coords);
+        m_tileRefreshPending.emplace_back([=]() { return refreshTileTraps(coords); });
         break;
 
     case EventType::HARVESTABLE_DOSH_CHANGED:
         coords = {event.room.x, event.room.y};
-        refreshTileDoshLabel(coords);
+        m_tileRefreshPending.emplace_back([=]() { return refreshTileDoshLabel(coords); });
 
     default:
         break;

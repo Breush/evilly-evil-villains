@@ -2,10 +2,22 @@
 
 #include "tools/platform-fixes.hpp" // erase_if
 
+#include <stdexcept>
+
 using namespace dungeon;
 
 //--------------------------//
 //----- Event receiver -----//
+
+EventReceiver::~EventReceiver()
+{
+#if DEBUG_GLOBAL > 0
+    if (m_lock)
+        throw std::logic_error("Receiver is locked, you can not destroy it, please delay that somehow.");
+#endif
+
+    setEmitter(nullptr);
+}
 
 void EventReceiver::setEmitter(EventEmitter* emitter)
 {
@@ -18,18 +30,29 @@ void EventReceiver::setEmitter(EventEmitter* emitter)
         m_emitter->addReceiver(this);
 }
 
-EventReceiver::~EventReceiver()
-{
-    setEmitter(nullptr);
-}
-
 //-------------------------//
 //----- Event emitter -----//
 
+#include <iostream>
+
 void EventEmitter::emit(const Event& event) const
 {
-    for (auto& receiver : m_receivers)
+    // Make a copy of the current list
+    // so that it can be modify during the emit
+    auto receivers = m_receivers;
+
+#if DEBUG_GLOBAL > 0
+    for (auto& receiver : receivers)
+        receiver->m_lock = true;
+#endif
+
+    for (auto& receiver : receivers)
         receiver->receive(event);
+
+#if DEBUG_GLOBAL > 0
+    for (auto& receiver : receivers)
+        receiver->m_lock = false;
+#endif
 }
 
 //-------------------------------//

@@ -157,6 +157,10 @@ namespace dungeon
         //! Will emit an event if a change occured.
         void setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID);
 
+        //! Remove the trap of the specified room (if any).
+        //! Will emit an event if a change occured.
+        void removeRoomTrap(const sf::Vector2u& coords);
+
         //! @}
 
         //-------------------------//

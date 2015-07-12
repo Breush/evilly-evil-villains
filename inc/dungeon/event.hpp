@@ -1,5 +1,7 @@
 #pragma once
 
+#include "tools/debug.hpp"
+
 #include <vector>
 
 // TODO Move that file to context.
@@ -91,6 +93,12 @@ namespace dungeon
 
     private:
 
+        //! The emitter events are coming from.
         EventEmitter* m_emitter = nullptr;
+
+#if DEBUG_GLOBAL > 0
+        //! In debug mode, be sure that the receiver is not detroyed during emit.
+        bool m_lock = false;
+#endif
     };
 }
