@@ -20,7 +20,7 @@ namespace traps
         else throw std::runtime_error("Unknown ElementData type.");
     }
 
-    //! Returns the cost for createing a trap.
+    //! Returns the cost for creating a trap.
     inline uint onCreateCost(const std::wstring& type)
     {
         if (type == L"pickpock") return 220u;

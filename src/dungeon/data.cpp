@@ -3,6 +3,7 @@
 #include "dungeon/graph.hpp"
 #include "dungeon/hero.hpp"
 #include "dungeon/traps.hpp"
+#include "dungeon/facilities/maker.hpp"
 #include "dungeon/traps/maker.hpp"
 #include "context/villains.hpp"
 #include "tools/debug.hpp"
@@ -223,9 +224,8 @@ void Data::destroyRoom(const sf::Vector2u& coords)
     m_villain->doshWallet.add(onDestroyRoomGain);
     room(coords).state = RoomState::VOID;
 
-    // TODO Also destroyed all facilities inside.
-
-    // Clear trap
+    // Clear elements
+    removeRoomFacilities(coords);
     removeRoomTrap(coords);
 
     Event event;
@@ -304,14 +304,17 @@ void Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     returnif (hasOfType(roomInfo.facilities, facilityID));
 
     roomInfo.facilities.emplace_back();
-    roomInfo.facilities.back().create(facilityID);
+    auto& facility = roomInfo.facilities.back();
 
-    // TODO Dispatch this management to the facility itself?
+    if (m_villain->doshWallet.sub(facilities::onCreateCost(facilityID))) {
+        facility.create(facilityID);
+    }
+
+    // TODO Let treasure facility do it itself in its constructor?
     if (facilityID == L"treasure") {
-        // Takes 100 dosh, or 0u if impossible
-        roomInfo.facilities.back()[L"dosh"].init_uint32(0u);
+        facility[L"dosh"].init_uint32(100u);
         if (m_villain->doshWallet.sub(100u))
-            roomInfo.facilities.back()[L"dosh"].as_uint32() = 100u;
+            facility[L"dosh"].init_uint32(100u);
     }
 
     Event event;
@@ -323,9 +326,26 @@ void Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
 void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID)
 {
     auto& roomInfo = room(coords);
+    auto found = std::find_if(roomInfo.facilities, [&](const ElementData& data) { return data.type() == facilityID; });
+    wassert(found != std::end(roomInfo.facilities), L"Cannot find (and remove) facility '" << facilityID << L"' in room " << coords);
 
-    // TODO Get dosh from treasure, dispatched in facility itself?
-    std::erase_if(roomInfo.facilities, [&](const ElementData& data) { return data.type() == facilityID; });
+    auto& facility = *found;
+    m_villain->doshWallet.add(facilities::onDestroyGain(facility));
+
+    Event event;
+    event.type = EventType::FACILITY_CHANGED;
+    event.facility.room = {coords.x, coords.y};
+    EventEmitter::emit(event);
+}
+
+void Data::removeRoomFacilities(const sf::Vector2u& coords)
+{
+    auto& roomInfo = room(coords);
+    returnif (roomInfo.facilities.empty());
+
+    for (const auto& facility : roomInfo.facilities)
+        m_villain->doshWallet.add(facilities::onDestroyGain(facility));
+    roomInfo.facilities.clear();
 
     Event event;
     event.type = EventType::FACILITY_CHANGED;
