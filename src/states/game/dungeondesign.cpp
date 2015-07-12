@@ -97,12 +97,9 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 
 void GameDungeonDesign::onQuit() noexcept
 {
-    // Saving dungeon
-    m_dungeonData.save(context::worlds.selected().folder);
-
-    // Saving worlds info
+    // Saving dungeon + villain info
     context::worlds.refreshLastPlayed();
-    context::worlds.save();
+    m_dungeonData.save(context::worlds.selected().folder);
 }
 
 bool GameDungeonDesign::handleEvent(const sf::Event& event)
