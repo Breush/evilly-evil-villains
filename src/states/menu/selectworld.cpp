@@ -46,6 +46,7 @@ MenuSelectWorld::MenuSelectWorld(StateStack& stack)
     context::worlds.load();
     for (const auto& world : context::worlds.get())
         m_list.addLine({world.villain, world.name, world.mainDungeon, time2wstring("%Y-%m-%d", world.lastPlayed)});
+    m_list.setActionCallback([this] { playOnSelectedWorld(); });
 
     // Stacker for buttons
     nuiRoot.attachChild(m_stacker);

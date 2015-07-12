@@ -29,6 +29,14 @@ List::List()
 //-------------------//
 //----- Routine -----//
 
+void List::updateRoutine(const sf::Time& dt)
+{
+    // Refresh double-click
+    returnif (m_doubleClickDelay < 0.f);
+    if ((m_doubleClickDelay += dt.asSeconds()) > 0.25f)
+        m_doubleClickDelay = -1.f;
+}
+
 void List::onSizeChanges()
 {
     m_table.setSize(size());
@@ -54,12 +62,22 @@ void List::refreshDisplay()
 //------------------//
 //----- Events -----//
 
-void List::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vector2f& mousePos, const sf::Vector2f&)
+void List::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
+    returnif (button != sf::Mouse::Left);
+
     // Do not take first line, they are the columns titles
     uint line = mousePos.y / m_lineHeight - 1u;
+    returnif (line >= m_lines.size());
 
-    if (line < m_lines.size()) {
+    // Double-click?
+    if (m_doubleClickDelay >= 0.f) {
+        returnif (m_callback == nullptr);
+        Application::context().sounds.play(SoundID::NUI_SELECT);
+        m_callback();
+    }
+    else {
+        m_doubleClickDelay = 0.f;
         Application::context().sounds.play(SoundID::NUI_SELECT);
         selectLine(line);
     }
@@ -80,7 +98,14 @@ bool List::handleKeyboardEvent(const sf::Event& event)
 {
     returnif (event.type != sf::Event::KeyPressed) false;
 
-    if (event.key.code == sf::Keyboard::Up) {
+    // Confirm
+    if (event.key.code == sf::Keyboard::Return) {
+        returnif (m_lines.empty() || m_callback == nullptr) false;
+        Application::context().sounds.play(SoundID::NUI_SELECT);
+        m_callback();
+    }
+    // Up
+    else if (event.key.code == sf::Keyboard::Up) {
         if (m_selectedLine == 0u) {
             Application::context().sounds.play(SoundID::NUI_REFUSE);
         }
@@ -90,6 +115,7 @@ bool List::handleKeyboardEvent(const sf::Event& event)
         }
         return true;
     }
+    // Down
     else if (event.key.code == sf::Keyboard::Down) {
         if (m_selectedLine == m_lines.size() - 1u) {
             Application::context().sounds.play(SoundID::NUI_REFUSE);

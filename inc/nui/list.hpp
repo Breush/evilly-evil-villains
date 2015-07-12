@@ -25,6 +25,9 @@ namespace nui
     {
         using baseClass = scene::Entity;
 
+        //! The function signature to call on validation.
+        using Callback = std::function<void()>;
+
     public:
 
         //! Constructor.
@@ -32,6 +35,15 @@ namespace nui
 
         //! Default destructor.
         ~List() = default;
+
+        //----------------//
+        //! @name Columns
+        //! @{
+
+        //! Sets the callback to launch when return key is pressed or a line is double-clicked.
+        void setActionCallback(const Callback& callback) { m_callback = callback; }
+
+        //! @}
 
         //----------------//
         //! @name Columns
@@ -79,6 +91,7 @@ namespace nui
         //! @name Routine
         //! @{
 
+        void updateRoutine(const sf::Time& dt) final;
         void onSizeChanges() final;
         void refreshDisplay() final;
 
@@ -164,6 +177,9 @@ namespace nui
         float m_lineHeight = 0.f;   //!< The height of a line.
         uint m_selectedLine = -1u;  //!< The selected line.
         uint m_hoveredLine = -1u;   //!< The hovered line.
+
+        Callback m_callback = nullptr;      //!< The callback on validation.
+        float m_doubleClickDelay = -1.f;    //!< Double-click timer, keep negative for long-passed first click.
     };
 }
 
