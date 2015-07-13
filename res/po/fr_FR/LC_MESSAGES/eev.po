@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EEV\n"
 "Report-Msgid-Bugs-To: sherlock.breust@gmail.com\n"
-"POT-Creation-Date: 2015-02-18 09:49+0100\n"
-"PO-Revision-Date: 2015-02-18 10:54+0100\n"
+"POT-Creation-Date: 2015-07-13 10:19+0200\n"
+"PO-Revision-Date: 2015-07-13 10:21+0100\n"
 "Last-Translator: Alexis Breust <alexis.breust@gmail.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -18,47 +18,17 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 
-msgid "Grasshopper"
-msgstr "Sauterelle"
+msgid "Pick-pock"
+msgstr "Pick-pock"
 
-msgid "Creepim"
-msgstr "Creesper"
+msgid "Treasure"
+msgstr "Trésor"
 
-msgid "Fly-man"
-msgstr "Homme-mouche"
-
-msgid "Lezard-man"
-msgstr "Homme-lézard"
-
-msgid "Weremole"
-msgstr "Taupe-garou"
-
-msgid "Bells"
-msgstr "Clochettes"
-
-msgid "Wolf trap"
-msgstr "Piège à loup"
-
-msgid "Trompe l'oeil"
-msgstr "Trompe l'œil"
-
-msgid "Tranquilizer darts"
-msgstr "Fléchettes tranquillisantes"
+msgid "Entrance"
+msgstr "Entrée"
 
 msgid "Ladder"
 msgstr "Échelle"
-
-msgid "Signpost"
-msgstr "Panneau de direction"
-
-msgid "Treasure room"
-msgstr "Salle aux trésors"
-
-msgid "Small chest"
-msgstr "Petit coffre"
-
-msgid "Humble gift"
-msgstr "Cadeau banal"
 
 msgid "Monsters"
 msgstr "Monstres"
@@ -69,11 +39,26 @@ msgstr "Pièges"
 msgid "Facilities"
 msgstr "Outils"
 
-msgid "Treasures"
-msgstr "Trésors"
+msgid "Remove"
+msgstr "Retirer"
+
+msgid "Create"
+msgstr "Ajouter"
 
 msgid "Room"
 msgstr "Salle"
+
+msgid "Construct room"
+msgstr "Construire salle"
+
+msgid "Destroy room"
+msgstr "Détruire salle"
+
+msgid "ladder"
+msgstr "échelle"
+
+msgid "entrance"
+msgstr "entrée"
 
 msgid "Do you really want to quit?"
 msgstr "Vous souhaitez vraiment partir ?"
@@ -84,6 +69,9 @@ msgstr "Non, désolé, c'est une erreur."
 msgid "Yes, I will lose everything not saved."
 msgstr "Oui, je vais perdre tout ce qui n'est pas sauvegardé."
 
+msgid "Create dungeon"
+msgstr "Créer le Donjon"
+
 msgid "Game paused"
 msgstr "Pause"
 
@@ -92,6 +80,77 @@ msgstr "Je veux continuer"
 
 msgid "Save and return to main menu"
 msgstr "Sauvegarder et retourner au menu principal"
+
+msgid "Manage your villains"
+msgstr "Gérer vos Méchants"
+
+msgid "Villain"
+msgstr "Méchant"
+
+msgid "Dosh"
+msgstr "Fric"
+
+msgid "Worlds"
+msgstr "Mondes"
+
+msgid "Create new Villain"
+msgstr "Créer un nouveau Méchant"
+
+msgid "Delete selected Villain"
+msgstr "Supprimer le Méchant sélectionné"
+
+msgid "Back"
+msgstr "Retour"
+
+msgid "Villain deletion"
+msgstr "Supprimer le Méchant"
+
+msgid ""
+"Deleting a villain will DELETE all the WORLDS\n"
+"the villain is in!"
+msgstr ""
+"Supprimer un Méchant va SUPPRIMER tous les MONDES\n"
+"qui lui sont associés."
+
+msgid "Cancel"
+msgstr "Annuler"
+
+msgid "DELETE villain and his worlds"
+msgstr "SUPPRIMER ce Méchant et ses Mondes"
+
+msgid "How evil are you?"
+msgstr "À quel point êtes-vous méchant ?"
+
+msgid "Evil name"
+msgstr "Nom diabolique"
+
+msgid "Create!"
+msgstr "Créer !"
+
+msgid "Error"
+msgstr "Erreur"
+
+msgid ""
+"There is already a villain with this name,\n"
+"and he is surely eviller than you."
+msgstr ""
+"Un Méchant avec ce nom existe déjà,\n"
+"et il est certainement plus diabolique que vous."
+
+msgid "OK"
+msgstr "D'accord"
+
+msgid "Create a new world"
+msgstr "Créer un nouveau Monde"
+
+msgid "World name"
+msgstr "Nom du Monde"
+
+msgid "(Manage)"
+msgstr "(Gérer)"
+
+msgid "Create and start playing"
+msgstr "Créer et commencer à jouer"
 
 msgid "Victim and alone"
 msgstr "Victime solitaire"
@@ -108,11 +167,8 @@ msgstr "Y a pourtant qu'un choix"
 msgid "Someone who runs away"
 msgstr "Synonyme de fuite"
 
-msgid "Villain"
-msgstr "Méchant"
-
-msgid "World name"
-msgstr "Nom du monde"
+msgid "Select a world"
+msgstr "Sélectionner un Monde"
 
 msgid "Main dungeon"
 msgstr "Donjon principal"
@@ -122,9 +178,6 @@ msgstr "Dernière fois joué"
 
 msgid "Play"
 msgstr "Jouer"
-
-msgid "Back"
-msgstr "Retour"
 
 msgid "Create new world"
 msgstr "Créer un nouveau monde"

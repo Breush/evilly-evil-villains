@@ -326,13 +326,13 @@ void Inter::addFacilityChoice(const sf::Vector2u& coords, const std::wstring& fa
     // The facility is already there
     if (hasOfType(m_data->room(coords).facilities, facilityID)) {
         // TODO Add gain when facilities are in same model than traps
-        std::wstring text = L"Remove " + facilityName;
+        std::wstring text = _("Remove") + L" " + facilityName;
         m_contextMenu.addChoice(text, [=]() { m_data->removeRoomFacility(coords, facilityID); });
     }
 
     // The facility is not there
     else {
-        std::wstring text = L"Create " + facilityName + L" (-" + toWString(facilities::onCreateCost(facilityID)) + L"d)";
+        std::wstring text = _("Create") + L" " + facilityName + L" (-" + toWString(facilities::onCreateCost(facilityID)) + L"d)";
         m_contextMenu.addChoice(text, [=]() { m_data->createRoomFacility(coords, facilityID); });
     }
 }
@@ -349,7 +349,7 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
 
     // Room does not exists yet
     if (room.state == Data::RoomState::VOID) {
-        std::wstring text = L"Construct room (-" + toWString(m_data->onCreateRoomCost) + L"d)";
+        std::wstring text = _("Construct room") + L" (-" + toWString(m_data->onCreateRoomCost) + L"d)";
         if (m_data->onCreateRoomCost <= m_data->villain().doshWallet.value())
             m_contextMenu.addChoice(text, [=]() { m_data->constructRoom(coords); });
         else
@@ -359,13 +359,13 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
     // Room does exists
     else {
         // TODO Show really how much we get for destroying (adding all elements inside)
-        m_contextMenu.addChoice(L"Destroy room (+" + toWString(m_data->onDestroyRoomGain) + L"d)", [=]() {
+        m_contextMenu.addChoice(_("Destroy room") + L" (+" + toWString(m_data->onDestroyRoomGain) + L"d)", [=]() {
             m_data->destroyRoom(coords);
         });
 
         // Facilities
-        addFacilityChoice(coords, L"ladder", L"ladder");
-        addFacilityChoice(coords, L"entrance", L"entrance");
+        addFacilityChoice(coords, L"ladder", _("ladder"));
+        addFacilityChoice(coords, L"entrance", _("entrance"));
     }
 
     // Context positions

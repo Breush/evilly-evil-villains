@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EEV\n"
 "Report-Msgid-Bugs-To: sherlock.breust@gmail.com\n"
-"POT-Creation-Date: 2015-02-18 09:49+0100\n"
-"PO-Revision-Date: 2015-02-18 10:54+0100\n"
+"POT-Creation-Date: 2015-07-13 10:19+0200\n"
+"PO-Revision-Date: 2015-07-13 10:20+0100\n"
 "Last-Translator: Alexis Breust <alexis.breust@gmail.com>\n"
 "Language-Team: English\n"
 "Language: en_EN\n"
@@ -17,47 +17,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.5.4\n"
 
-msgid "Grasshopper"
-msgstr "Grasshopper"
+msgid "Pick-pock"
+msgstr "Pick-pock"
 
-msgid "Creepim"
-msgstr "Creepim"
+msgid "Treasure"
+msgstr "Treasure"
 
-msgid "Fly-man"
-msgstr "Fly-man"
-
-msgid "Lezard-man"
-msgstr "Lezard-man"
-
-msgid "Weremole"
-msgstr "Weremole"
-
-msgid "Bells"
-msgstr "Bells"
-
-msgid "Wolf trap"
-msgstr "Wolf trap"
-
-msgid "Trompe l'oeil"
-msgstr "Trompe l'œil"
-
-msgid "Tranquilizer darts"
-msgstr "Tranquilizer darts"
+msgid "Entrance"
+msgstr "Entrance"
 
 msgid "Ladder"
 msgstr "Ladder"
-
-msgid "Signpost"
-msgstr "Signpost"
-
-msgid "Treasure room"
-msgstr "Treasure room"
-
-msgid "Small chest"
-msgstr "Small chest"
-
-msgid "Humble gift"
-msgstr "Humble gift"
 
 msgid "Monsters"
 msgstr "Monsters"
@@ -68,11 +38,26 @@ msgstr "Traps"
 msgid "Facilities"
 msgstr "Facilities"
 
-msgid "Treasures"
-msgstr "Treasures"
+msgid "Remove"
+msgstr "Remove"
+
+msgid "Create"
+msgstr "Create"
 
 msgid "Room"
 msgstr "Room"
+
+msgid "Construct room"
+msgstr "Construct room"
+
+msgid "Destroy room"
+msgstr "Destroy room"
+
+msgid "ladder"
+msgstr "ladder"
+
+msgid "entrance"
+msgstr "entrance"
 
 msgid "Do you really want to quit?"
 msgstr "Do you really want to quit?"
@@ -83,6 +68,9 @@ msgstr "No, sorry, it is a mistake."
 msgid "Yes, I will lose everything not saved."
 msgstr "Yes, I will lose everything not saved."
 
+msgid "Create dungeon"
+msgstr "Create dungeon"
+
 msgid "Game paused"
 msgstr "Game paused"
 
@@ -91,6 +79,77 @@ msgstr "Continue, continue, continue"
 
 msgid "Save and return to main menu"
 msgstr "Save and return to main menu"
+
+msgid "Manage your villains"
+msgstr "Manage your villains"
+
+msgid "Villain"
+msgstr "Villain"
+
+msgid "Dosh"
+msgstr "Dosh"
+
+msgid "Worlds"
+msgstr "Worlds"
+
+msgid "Create new Villain"
+msgstr "Create new Villain"
+
+msgid "Delete selected Villain"
+msgstr "Delete selected Villain"
+
+msgid "Back"
+msgstr "Back"
+
+msgid "Villain deletion"
+msgstr "Villain deletion"
+
+msgid ""
+"Deleting a villain will DELETE all the WORLDS\n"
+"the villain is in!"
+msgstr ""
+"Deleting a villain will DELETE all the WORLDS\n"
+"the villain is in!"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "DELETE villain and his worlds"
+msgstr "DELETE villain and his worlds"
+
+msgid "How evil are you?"
+msgstr "How evil are you?"
+
+msgid "Evil name"
+msgstr "Evil name"
+
+msgid "Create!"
+msgstr "Create!"
+
+msgid "Error"
+msgstr "Error"
+
+msgid ""
+"There is already a villain with this name,\n"
+"and he is surely eviller than you."
+msgstr ""
+"There is already a villain with this name,\n"
+"and he is surely eviller than you."
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Create a new world"
+msgstr "Create a new world"
+
+msgid "World name"
+msgstr "World name"
+
+msgid "(Manage)"
+msgstr "(Manage)"
+
+msgid "Create and start playing"
+msgstr "Create and start playing"
 
 msgid "Victim and alone"
 msgstr "Victim and alone"
@@ -107,11 +166,8 @@ msgstr "Yet I want to choose"
 msgid "Someone who runs away"
 msgstr "Someone who runs away"
 
-msgid "Villain"
-msgstr "Villain"
-
-msgid "World name"
-msgstr "World name"
+msgid "Select a world"
+msgstr "Select a world"
 
 msgid "Main dungeon"
 msgstr "Main dungeon"
@@ -121,9 +177,6 @@ msgstr "Last played"
 
 msgid "Play"
 msgstr "Play"
-
-msgid "Back"
-msgstr "Back"
 
 msgid "Create new world"
 msgstr "Create new world"
