@@ -25,6 +25,8 @@ void Application::loadTextures()
 
     // NUI
     s_context.textures.load(TextureID::NUI_FOCUS, "res/tex/nui/focus.png");
+    s_context.textures.load(TextureID::NUI_PLUS, "res/tex/nui/plus.png");
+    s_context.textures.load(TextureID::NUI_MINUS, "res/tex/nui/minus.png");
 
     s_context.textures.setRepeated(TextureID::NUI_FOCUS, true);
 

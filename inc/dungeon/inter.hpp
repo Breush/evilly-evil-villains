@@ -5,6 +5,7 @@
 #include "dungeon/data.hpp"
 #include "dungeon/traps.hpp"
 #include "nui/contextmenu.hpp"
+#include "nui/spinbox.hpp"
 #include "sfe/grid.hpp"
 #include "sfe/label.hpp"
 #include "tools/vector.hpp"
@@ -173,6 +174,9 @@ namespace dungeon
         //! Pop the context menu for the specified tile coordinates at the position.
         void showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& nuiPos);
 
+        //! Edit the treasure dosh in the specified room coordinates.
+        void showEditTreasureDialog(const sf::Vector2u& coords);
+
         //! @}
 
         //----------------//
@@ -224,17 +228,21 @@ namespace dungeon
 
         Data* m_data = nullptr; //!< Dungeon data.
 
+        // Display
         sfe::Grid m_grid;                                   //!< The internal grid for overlay display.
         std::unordered_map<sf::Vector2u, Tile> m_tiles;     //!< All tiles constituing the dungeon.
         std::array<sf::RectangleShape, 2u> m_outerWalls;    //!< Sprites for left/right outer walls.
 
+        // Delay
         std::vector<std::function<void()>> m_tileRefreshPending;    //! Pending list of tile refreshTileXXX.
+        bool m_invasion = false;        //!< Whether or not we are in invasion mode.
 
-        nui::ContextMenu& m_contextMenu;    //!< The context menu, got from global state.
+        // NUI
+        nui::ContextMenu& m_contextMenu;            //!< The context menu, got from global state.
+        nui::SpinBox<uint32> m_treasureEditSpinBox; //!< The spinbox for treasure edition.
 
+        // Tiles
         Tile* m_hoveredTile = nullptr;  //!< If a tile is hovered, this is it.
         Tile* m_selectedTile = nullptr; //!< If a tile is selected, this is it.
-
-        bool m_invasion = false;        //!< Whether or not we are in invasion mode.
     };
 }

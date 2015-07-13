@@ -23,6 +23,13 @@ Inter::Inter(nui::ContextMenu& contextMenu)
     m_grid.setVisible(false);
     addPart(&m_grid);
 
+    // Spinbox
+    attachChild(m_treasureEditSpinBox);
+    m_treasureEditSpinBox.setDepth(-1.f);
+    m_treasureEditSpinBox.setVisible(false);
+    m_treasureEditSpinBox.setStep(10u);
+    m_treasureEditSpinBox.setPostfix(L"d ");
+
     // Outer walls
     const auto& outerWallsTexture = Application::context().textures.get(TextureID::DUNGEON_INTER_OUTER_WALL);
     m_outerWalls[0].setTexture(&outerWallsTexture);
@@ -102,6 +109,9 @@ void Inter::handleGlobalEvent(const sf::Event& event)
 void Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
     returnif (m_invasion);
+
+    // Remove spinbox interface if any
+    m_treasureEditSpinBox.markForVisible(false);
 
     // Selected the tile below
     selectTile(mousePos);
@@ -366,6 +376,10 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
         // Facilities
         addFacilityChoice(coords, L"ladder", _("ladder"));
         addFacilityChoice(coords, L"entrance", _("entrance"));
+
+        // If treasure, modifiy pop-up
+        if (hasOfType(m_data->room(coords).facilities, L"treasure"))
+            m_contextMenu.addChoice(_("Edit treasure dosh"), [=]() { showEditTreasureDialog(coords); });
     }
 
     // Context positions
@@ -376,6 +390,33 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
     // Re-adjust, so that it does not get out of screen
     const auto& resolution = Application::context().resolution;
     m_contextMenu.keepInside({0.f, 0.f, resolution.x, resolution.y});
+}
+
+void Inter::showEditTreasureDialog(const sf::Vector2u& coords)
+{
+    auto& room = m_data->room(coords);
+    auto& treasureData = *findOfType(m_data->room(coords).facilities, L"treasure");
+    auto& treasureDosh = treasureData[L"dosh"].as_uint32();
+
+    m_treasureEditSpinBox.setVisible(true);
+    m_treasureEditSpinBox.set(treasureDosh);
+    m_treasureEditSpinBox.setLocalPosition(tileLocalPosition(coords));
+/*    m_treasureEditSpinBox.setLimits(0u, treasureDosh + m_data->villains().doshWallet.value()); */
+    m_treasureEditSpinBox.setCallback([this, &coords, &treasureData] (uint32 oldValue, uint32 newValue) {
+        if (newValue >= oldValue) m_data->villain().doshWallet.sub(newValue - oldValue);
+        else m_data->villain().doshWallet.add(oldValue - newValue);
+
+        treasureData[L"dosh"].as_uint32() = newValue;
+
+        // Global dosh changed
+        emitter()->emit(EventType::DOSH_CHANGED);
+
+        // Treasure dosh changed
+        Event event;
+        event.type = EventType::FACILITY_CHANGED;
+        event.facility.room = {coords.x, coords.y};
+        emitter()->emit(event);
+    });
 }
 
 //---------------------//
