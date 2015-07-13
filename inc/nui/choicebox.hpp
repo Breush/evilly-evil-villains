@@ -59,6 +59,9 @@ namespace nui
         //! The first choice added has ID 0, then ID is increased by one.
         void setChoiceCallback(uint choice, const Callback callback);
 
+        //! Clear all choices, resets the box as default.
+        void clearChoices();
+
         //! Calls callback from currently selected choice.
         void acceptChoice();
 

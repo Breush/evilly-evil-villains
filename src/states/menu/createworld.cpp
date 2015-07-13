@@ -42,9 +42,12 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
 
     // Villain
     m_form.add(_("Villain"), m_villainBox);
-    context::villains.load();
-    for (const auto& villain : context::villains.get())
-        m_villainBox.add(villain.name, nullptr);
+    refreshVillainsList();
+
+    m_form.attachChild(m_createVillainButton);
+    m_createVillainButton.setLocalPosition(m_villainBox.localPosition() + sf::Vector2f{m_villainBox.size().x + 10.f, 0.f});
+    m_createVillainButton.setAction(_("(Manage)"), [this] { stackPush(StateID::MENU_MANAGEVILLAINS); });
+    m_createVillainButton.showLines(false);
 
     // Buttons
     nuiRoot.attachChild(m_buttonsStacker);
@@ -73,8 +76,17 @@ bool MenuCreateWorld::handleEvent(const sf::Event& event)
     return State::handleEvent(event);
 }
 
-//-------------------------------//
-//----- Villains management -----//
+//-----------------------------//
+//----- Worlds management -----//
+
+void MenuCreateWorld::refreshVillainsList()
+{
+    context::villains.load();
+    m_villainBox.clearChoices();
+
+    for (const auto& villain : context::villains.get())
+        m_villainBox.add(villain.name, nullptr);
+}
 
 void MenuCreateWorld::createAndPlayWorld()
 {

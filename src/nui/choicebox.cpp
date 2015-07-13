@@ -123,6 +123,14 @@ void ChoiceBox::add(const std::wstring& text, const Callback callback)
         selectChoice(0u);
 }
 
+void ChoiceBox::clearChoices()
+{
+    m_choices.clear();
+    m_selectedChoice = -1u;
+    m_choiceChanged = true;
+    refresh();
+}
+
 void ChoiceBox::acceptChoice()
 {
     // Maybe callback is not set
