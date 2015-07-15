@@ -97,11 +97,6 @@ void Inter::handleGlobalEvent(const sf::Event& event)
 
 void Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
-    returnif (m_invasion);
-
-    // Remove spinbox interface if any
-    m_treasureEditSpinBox.markForVisible(false);
-
     // Selected the tile below
     selectTile(mousePos);
 
@@ -109,8 +104,17 @@ void Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::V
     if (button == sf::Mouse::Left)
         harvestTileDosh(m_selectedTile->coords);
 
+    // Do nothing in invasion
+    if (m_invasion) {
+        deselectTile();
+        return;
+    }
+
+    // Remove spinbox interface if any
+    m_treasureEditSpinBox.markForVisible(false);
+
     // Pop the context menu up
-    else if (button == sf::Mouse::Right)
+    if (button == sf::Mouse::Right)
         showTileContextMenu(m_selectedTile->coords, nuiPos);
 }
 
@@ -163,6 +167,7 @@ void Inter::receive(const Event& event)
         break;
 
     case EventType::MODE_CHANGED:
+        m_treasureEditSpinBox.markForVisible(false);
         m_invasion = (event.mode == Mode::INVASION);
         deselectTile();
         break;
