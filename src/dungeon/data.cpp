@@ -312,7 +312,7 @@ void Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
 
     // TODO Let treasure facility do it itself in its constructor?
     if (facilityID == L"treasure") {
-        facility[L"dosh"].init_uint32(100u);
+        facility[L"dosh"].init_uint32(0u);
         if (m_villain->doshWallet.sub(100u))
             facility[L"dosh"].init_uint32(100u);
     }

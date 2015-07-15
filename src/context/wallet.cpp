@@ -45,8 +45,7 @@ bool Wallet::sub(const uint subValue)
 bool Wallet::addsub(const uint addValue, const uint subValue)
 {
     // Impossible to substract
-    // Note: the first case is also an overflow prevention
-    returnif (addValue >= subValue && m_value + addValue < subValue) false;
+    returnif (m_value + addValue < subValue) false;
 
     // Overflow
     if (m_value + addValue < m_value) {
