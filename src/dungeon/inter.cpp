@@ -383,7 +383,6 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
 
 void Inter::showEditTreasureDialog(const sf::Vector2u& coords)
 {
-    auto& room = m_data->room(coords);
     auto& treasureData = *findOfType(m_data->room(coords).facilities, L"treasure");
     auto& treasureDosh = treasureData[L"dosh"].as_uint32();
 
@@ -555,6 +554,14 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
     // Reset
     clearLayers(coords);
 
+    // Room is somehow bugged
+    if (state == Data::RoomState::UNKNOWN) {
+        std::cerr << "/!\\ Found a room with unknown state at " << coords << "." << std::endl;
+        std::cerr << "If that is a recurrent issue, please report this bug." << std::endl;
+        addLayer(coords, TextureID::DEFAULT);
+        return;
+    }
+
     // Room is not constructed
     if (state == Data::RoomState::VOID)
     {
@@ -568,20 +575,18 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
         if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, Data::EAST)))
             addLayer(coords, TextureID::DUNGEON_INTER_VOID_EAST_TRANSITION);
 
-        return;
-    }
+        if (coords.y == m_data->roomsByFloor() - 1u)
+            addLayer(coords, TextureID::DUNGEON_INTER_VOID_RIGHT_WALL);
 
-    // Room is somehow bugged
-    if (state == Data::RoomState::UNKNOWN) {
-        std::cerr << "/!\\ Found a room with unknown state at " << coords << "." << std::endl;
-        std::cerr << "If that is a reccurent issue, please report this bug." << std::endl;
-        addLayer(coords, TextureID::DEFAULT);
         return;
     }
 
     // Add room textures
     addLayer(coords, TextureID::DUNGEON_INTER_INNER_WALL);
     addLayer(coords, TextureID::DUNGEON_INTER_FLOOR);
+
+    if (!m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, Data::EAST)))
+        addLayer(coords, TextureID::DUNGEON_INTER_RIGHT_WALL);
 
     // Facilities
     // TODO Use same structure than Traps!! facilities::make()

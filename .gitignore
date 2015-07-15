@@ -30,3 +30,4 @@ libeev*
 *_saved.xml
 *.orig
 *.rej
+*_debug.xml
