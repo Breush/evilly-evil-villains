@@ -53,6 +53,34 @@ void Layer::refreshDisplay()
     m_root.refreshDisplay();
 }
 
+//-------------------//
+//----- Getters -----//
+
+sf::FloatRect Layer::visibleRect() const
+{
+    sf::FloatRect rect{0.f, 0.f, m_size.x, m_size.y};
+    const auto& viewSize = m_view.getSize();
+
+    if (m_size.x < viewSize.x) {
+        rect.left = m_size.x - viewSize.x;
+        rect.width = 2 * viewSize.x - m_size.x;
+    }
+
+    if (m_size.y < viewSize.y) {
+        rect.top = m_size.y - viewSize.y;
+        rect.height = 2 * viewSize.y - m_size.y;
+    }
+
+    return rect;
+}
+
+void Layer::fitToVisibleRect(scene::Entity& entity)
+{
+    auto rect = visibleRect();
+    entity.setSize({rect.width, rect.height});
+    entity.setLocalPosition({rect.left, rect.top});
+}
+
 //-----------------------------//
 //----- View manipulation -----//
 

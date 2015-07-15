@@ -211,6 +211,9 @@ namespace dungeon
         //! Refresh the dosh label (value and position) of the specified tile.
         void refreshTileDoshLabel(const sf::Vector2u& coords);
 
+        //! Refresh the outer walls size + position.
+        void refreshOuterWalls();
+
         //! @}
 
         //! A tile of the dungeon.

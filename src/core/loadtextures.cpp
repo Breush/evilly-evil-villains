@@ -35,9 +35,12 @@ void Application::loadTextures()
     s_context.textures.load(TextureID::MENU_NAME, "res/tex/menu/name.png");
 
     // Dungeon
-    s_context.textures.load(TextureID::DUNGEON_SCENE_GRASSYHILLS_BACK, "res/tex/dungeon/scene/grassyhills_back.png");
-    s_context.textures.load(TextureID::DUNGEON_SCENE_GRASSYHILLS_MIDDLE, "res/tex/dungeon/scene/grassyhills_middle.png");
-    s_context.textures.load(TextureID::DUNGEON_SCENE_GRASSYHILLS_FRONT, "res/tex/dungeon/scene/grassyhills_front.png");
+    s_context.textures.load(TextureID::DUNGEON_SCENE_FRONT,     "res/tex/dungeon/scene/front.png");
+    s_context.textures.load(TextureID::DUNGEON_SCENE_CLOSE,     "res/tex/dungeon/scene/close.png");
+    s_context.textures.load(TextureID::DUNGEON_SCENE_MIDDLE,    "res/tex/dungeon/scene/middle.png");
+    s_context.textures.load(TextureID::DUNGEON_SCENE_FAR,       "res/tex/dungeon/scene/far.png");
+    s_context.textures.load(TextureID::DUNGEON_SCENE_HORIZON,   "res/tex/dungeon/scene/horizon.png");
+    s_context.textures.load(TextureID::DUNGEON_SCENE_SKY,       "res/tex/dungeon/scene/sky.png");
 
     s_context.textures.load(TextureID::DUNGEON_PANEL_BACKGROUND, "res/tex/dungeon/panel/background.png");
     s_context.textures.load(TextureID::DUNGEON_PANEL_SWITCH, "res/tex/dungeon/panel/switch.png");

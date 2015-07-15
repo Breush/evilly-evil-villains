@@ -54,20 +54,7 @@ void Inter::onSizeChanges()
     returnif (size() == m_grid.size());
 
     m_grid.setSize(size());
-
-    // Outer walls repositioning
-    const auto& outerWallsTextureSize = Application::context().textures.get(TextureID::DUNGEON_INTER_OUTER_WALL).getSize();
-    const auto& roomSize = Application::context().textures.get(TextureID::DUNGEON_INTER_INNER_WALL).getSize();
-    sf::Vector2f outerWallsRealSize(outerWallsTextureSize.x * m_grid.cellSize().x / roomSize.x, size().y);
-    sf::IntRect outerWallsRect(0, 0, outerWallsTextureSize.x, outerWallsTextureSize.y * m_grid.rows());
-
-    m_outerWalls[0].setSize(outerWallsRealSize);
-    m_outerWalls[0].setPosition(-outerWallsRealSize.x, 0.f);
-    m_outerWalls[0].setTextureRect(outerWallsRect);
-
-    m_outerWalls[1].setSize(outerWallsRealSize);
-    m_outerWalls[1].setPosition(size().x, 0.f);
-    m_outerWalls[1].setTextureRect(outerWallsRect);
+    refreshOuterWalls();
 
     returnif (m_data == nullptr);
     refreshTiles();
@@ -103,6 +90,8 @@ void Inter::handleGlobalEvent(const sf::Event& event)
         else if (event.key.code == sf::Keyboard::Numpad3)
             m_data->villain().doshWallet.sub(500);
     }
+
+    refreshOuterWalls();
 #endif
 }
 
@@ -405,7 +394,6 @@ void Inter::showEditTreasureDialog(const sf::Vector2u& coords)
     m_treasureEditSpinBox.setCallback([this, &coords, &treasureData] (uint32 oldValue, uint32 newValue) {
         if (newValue >= oldValue) m_data->villain().doshWallet.sub(newValue - oldValue);
         else m_data->villain().doshWallet.add(oldValue - newValue);
-
         treasureData[L"dosh"].as_uint32() = newValue;
 
         // Global dosh changed
@@ -601,7 +589,7 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
         if (facility.type() == L"ladder")           addLayer(coords, TextureID::DUNGEON_INTER_LADDER);
         else if (facility.type() == L"treasure")    addLayer(coords, TextureID::DUNGEON_INTER_TREASURE);
         else if (facility.type() == L"entrance")    addLayer(coords, TextureID::DUNGEON_INTER_ENTRANCE);
-        else std::wcout << L"Unreferenced facility '" << facility.type() << "' texture, ignoring it." << std::endl;
+        else std::wcout << L"/!\\ Unreferenced facility '" << facility.type() << "' texture, ignoring it." << std::endl;
     }
 }
 
@@ -628,4 +616,20 @@ void Inter::refreshTileTraps(const sf::Vector2u& coords)
     tile.trap->centerOrigin();
     tile.trap->setEmitter(m_data);
     attachChild(*tile.trap);
+}
+
+void Inter::refreshOuterWalls()
+{
+    const auto& outerWallsTextureSize = Application::context().textures.get(TextureID::DUNGEON_INTER_OUTER_WALL).getSize();
+    const auto& roomSize = Application::context().textures.get(TextureID::DUNGEON_INTER_INNER_WALL).getSize();
+    sf::Vector2f outerWallsRealSize(outerWallsTextureSize.x * m_grid.cellSize().x / roomSize.x, size().y);
+    sf::IntRect outerWallsRect(0, 0, outerWallsTextureSize.x, outerWallsTextureSize.y * m_grid.rows());
+
+    m_outerWalls[0].setSize(outerWallsRealSize);
+    m_outerWalls[0].setPosition(-outerWallsRealSize.x, 0.f);
+    m_outerWalls[0].setTextureRect(outerWallsRect);
+
+    m_outerWalls[1].setSize(outerWallsRealSize);
+    m_outerWalls[1].setPosition(size().x, 0.f);
+    m_outerWalls[1].setTextureRect(outerWallsRect);
 }

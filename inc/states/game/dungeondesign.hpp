@@ -11,7 +11,7 @@
 #include "dungeon/lock.hpp"
 #include "dungeon/log.hpp"
 #include "dungeon/hero.hpp"
-#include "sfe/sprite.hpp"
+#include "sfe/rectangleshape.hpp"
 
 namespace states
 {
@@ -43,9 +43,19 @@ namespace states
         // NUI
         nui::ContextMenu m_contextMenu;
 
-        // Decorum
-        sfe::Sprite m_decorumBack;
-        sfe::Sprite m_decorumMiddle;
-        sfe::Sprite m_decorumFront;
+        // Scene
+        sfe::RectangleShape m_sceneFront;
+        sfe::RectangleShape m_sceneClose;
+        sfe::RectangleShape m_sceneMiddle;
+        sfe::RectangleShape m_sceneFar;
+        sfe::RectangleShape m_sceneHorizon;
+        sfe::RectangleShape m_sceneSky;
+
+        const float m_depthFront    = 0.95f;
+        const float m_depthClose    = 1.f;
+        const float m_depthMiddle   = 1.05f;
+        const float m_depthFar      = 1.1f;
+        const float m_depthHorizon  = 1.15f;
+        const float m_depthSky      = 1.3f;
     };
 }

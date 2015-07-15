@@ -153,5 +153,7 @@ namespace scene
 
         sf::Vector2f m_minSize; //!< The minimal size allowed.
         sf::Vector2f m_maxSize; //!< The maximal size allowed.
+
+        sf::Vector2f m_relativeCenter;  //!< The relative center.
     };
 }

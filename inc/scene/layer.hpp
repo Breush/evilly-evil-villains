@@ -70,6 +70,19 @@ namespace scene
 
         //! @}
 
+        //---------------------//
+        //! @name Visible rect
+        //! @{
+
+        //! The visible rectangle, so that if view size is bigger
+        //! than layer size, the visible rect is all that can be seen.
+        sf::FloatRect visibleRect() const;
+
+        //! Set size and position of an entity to visible rect coordinates.
+        void fitToVisibleRect(scene::Entity& entity);
+
+        //! @}
+
         //--------------------------//
         //! @name Public properties
         //! @{

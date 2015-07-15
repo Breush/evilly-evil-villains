@@ -11,9 +11,10 @@
 using namespace scene;
 
 Scene::Scene(Graph* graph)
-    : m_minZoom(0.2f)
+    : m_minZoom(0.4f)
     , m_maxZoom(1.f)
     , m_graph(graph)
+    , m_relativeCenter(0.5f, 0.5f)
 {
 }
 
@@ -143,11 +144,11 @@ void Scene::adaptViewPosition()
 
 void Scene::adaptViewZoom()
 {
-    if (m_relZoom < m_minZoom) {
+    if (m_relZoom <= m_minZoom) {
         m_relZoom = m_minZoom;
         m_refView.setSize(m_minSize);
     }
-    else if (m_relZoom > m_maxZoom) {
+    else if (m_relZoom >= m_maxZoom) {
         m_relZoom = m_maxZoom;
         m_refView.setSize(m_maxSize);
     }
@@ -171,8 +172,8 @@ void Scene::updateReferenceMinMax()
     if (viewRatio < layerRatio) viewRefSize = resolution * m_size.y / resolution.y;
     else viewRefSize = resolution * m_size.x / resolution.x;
 
-    m_minSize = m_minZoom * viewRefSize / m_maxDepth;
-    m_maxSize = m_maxZoom * viewRefSize / m_maxDepth;
+    m_minSize = m_minZoom * viewRefSize;
+    m_maxSize = m_maxZoom * viewRefSize;
 
     m_refView.setSize(m_maxSize);
     m_refView.setCenter(m_size / 2.f);
@@ -193,6 +194,13 @@ void Scene::updateLayersZoom()
 void Scene::updateLayersPosition()
 {
     auto relativeCenter = (m_refView.getCenter() - m_refView.getSize() / 2.f) / (m_size - m_refView.getSize());
+
+    // Avoid division by zero
+    // TODO Even with this previous value trick, there is still some shaking when zooming in from max.
+    if (m_size.x == m_refView.getSize().x) relativeCenter.x = m_relativeCenter.x;
+    if (m_size.y == m_refView.getSize().y) relativeCenter.y = m_relativeCenter.y;
+
+    m_relativeCenter = relativeCenter;
 
     for (auto& layer : m_layers)
         layer->setRelativeCenter(relativeCenter);

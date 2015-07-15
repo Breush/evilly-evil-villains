@@ -21,12 +21,16 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     Application::context().musics.stop();
 
     // Creating scene
-    sf::Vector2f sceneSize(1024.f, 768.f);
+    sf::Vector2f sceneSize(1200.f, 2700.f);
     scene().setSize(sceneSize);
     auto& nuiRoot = nuiLayer().root();
-    auto& backgroundRoot =  scene().addLayer("BACKGROUND", 1.2f).root();
-    auto& dungeonRoot =     scene().addLayer("DUNGEON",    1.f).root();
-    auto& foregroundRoot =  scene().addLayer("FOREGROUND", 0.8f).root();
+    auto& frontRoot =   scene().addLayer("FRONT",   m_depthFront).root();
+    auto& closeRoot =   scene().addLayer("CLOSE",   m_depthClose).root();
+    auto& dungeonRoot = scene().addLayer("DUNGEON", m_depthClose).root();
+    auto& middleRoot =  scene().addLayer("MIDDLE",  m_depthMiddle).root();
+    auto& farRoot =     scene().addLayer("FAR",     m_depthFar).root();
+    auto& horizonRoot = scene().addLayer("HORIZON", m_depthHorizon).root();
+    auto& skyRoot =     scene().addLayer("SKY",     m_depthSky).root();
     const auto& nuiSize = nuiLayer().size();
 
     // Dungeon data
@@ -74,8 +78,9 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     // Dungeon inter
     dungeonRoot.attachChild(m_dungeonInter);
     m_dungeonInter.useData(m_dungeonData);
-    m_dungeonInter.setSize({350.f, 450.f});
-    m_dungeonInter.setLocalPosition({sceneSize.x / 3.f, sceneSize.y - 450.f - 100.f});
+    // TODO No setSize here...
+    m_dungeonInter.setSize({700.f, 900.f});
+    m_dungeonInter.setLocalPosition({sceneSize.x / 2.f - 350.f, sceneSize.y - 950.f});
 
     // Dungeon hero
     // TODO Have a Hero manager or so (Hero then, should not be a receiver?)
@@ -84,15 +89,30 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     m_dungeonHero.useData(m_dungeonData);
 
     // Decorum
-    backgroundRoot.attachChild(m_decorumBack);
-    m_decorumBack.setTexture(TextureID::DUNGEON_SCENE_GRASSYHILLS_BACK);
+    frontRoot.attachChild(m_sceneFront);
+    closeRoot.attachChild(m_sceneClose);
+    middleRoot.attachChild(m_sceneMiddle);
+    farRoot.attachChild(m_sceneFar);
+    horizonRoot.attachChild(m_sceneHorizon);
+    skyRoot.attachChild(m_sceneSky);
 
-    dungeonRoot.attachChild(m_decorumMiddle);
-    m_decorumMiddle.setTexture(TextureID::DUNGEON_SCENE_GRASSYHILLS_MIDDLE);
-    m_decorumMiddle.setDepth(100.f);
+    m_sceneFront.setTexture(TextureID::DUNGEON_SCENE_FRONT);
+    m_sceneClose.setTexture(TextureID::DUNGEON_SCENE_CLOSE);
+    m_sceneMiddle.setTexture(TextureID::DUNGEON_SCENE_MIDDLE);
+    m_sceneFar.setTexture(TextureID::DUNGEON_SCENE_FAR);
+    m_sceneHorizon.setTexture(TextureID::DUNGEON_SCENE_HORIZON);
+    m_sceneSky.setTexture(TextureID::DUNGEON_SCENE_SKY);
 
-    foregroundRoot.attachChild(m_decorumFront);
-    m_decorumFront.setTexture(TextureID::DUNGEON_SCENE_GRASSYHILLS_FRONT);
+    // Adjust images to new maxZoom
+    // TODO Sky is streched, use a scale instead of setSize inside that function?
+    scene().layer("FRONT").fitToVisibleRect(m_sceneFront);
+    scene().layer("CLOSE").fitToVisibleRect(m_sceneClose);
+    scene().layer("MIDDLE").fitToVisibleRect(m_sceneMiddle);
+    scene().layer("FAR").fitToVisibleRect(m_sceneFar);
+    scene().layer("HORIZON").fitToVisibleRect(m_sceneHorizon);
+    scene().layer("SKY").fitToVisibleRect(m_sceneSky);
+
+    // Move to position
 }
 
 void GameDungeonDesign::onQuit() noexcept
