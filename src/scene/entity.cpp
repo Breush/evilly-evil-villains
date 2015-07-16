@@ -98,9 +98,17 @@ void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
             glEnable(GL_SCISSOR_TEST);
 
             sf::FloatRect r(part.clippingRect);
-            r = states.transform.transformRect(r);
+            r = states.transform.transformRect(r); // In view coordinates
 
-            // Correct position and ratio SFML <-> GLSL
+            // In viewport coordinates
+            auto topLeft = target.mapCoordsToPixel({r.left, r.top});
+            auto bottomRight = target.mapCoordsToPixel({r.left + r.width, r.top + r.height});
+            r.left = topLeft.x;
+            r.top = topLeft.y;
+            r.width = bottomRight.x - topLeft.x;
+            r.height = bottomRight.y - topLeft.y;
+
+            // Correct position and ratio SFML <-> GLSL - In window coordinates
             r.top = resolution.y - r.height - r.top;
             r *= viewRatio;
             r += halfGap;
