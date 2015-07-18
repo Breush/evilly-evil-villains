@@ -36,6 +36,7 @@ namespace scene
         const sf::View& viewFromLayerRoot(const Entity* root) const;
 
         // Focusing system
+        void setFocusedEntity(Entity* focusedEntity);
         void updateFocusSprite();
 
         // Entity callbacks
@@ -53,7 +54,6 @@ namespace scene
         void setHoveredEntity(Entity* hoveredEntity);
 
         // Focusing system
-        void setFocusedEntity(Entity* focusedEntity);
         void focusHandleEvent(const sf::Event& event);
 
         // Grabbing object

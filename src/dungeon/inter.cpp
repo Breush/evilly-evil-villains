@@ -28,7 +28,6 @@ Inter::Inter(nui::ContextMenu& contextMenu)
     m_treasureEditSpinBox.setDepth(-1.f);
     m_treasureEditSpinBox.setVisible(false);
     m_treasureEditSpinBox.setStep(10u);
-    m_treasureEditSpinBox.setPostfix(L"d ");
 
     // Outer walls
     const auto& outerWallsTexture = Application::context().textures.get(TextureID::DUNGEON_INTER_OUTER_WALL);
@@ -391,11 +390,13 @@ void Inter::showEditTreasureDialog(const sf::Vector2u& coords)
     auto& treasureData = *findOfType(m_data->room(coords).facilities, L"treasure");
     auto& treasureDosh = treasureData[L"dosh"].as_uint32();
 
+    m_treasureEditSpinBox.entry().giveFocus();
     m_treasureEditSpinBox.setVisible(true);
     m_treasureEditSpinBox.set(treasureDosh);
     m_treasureEditSpinBox.setLocalPosition(tileLocalPosition(coords));
-/*    m_treasureEditSpinBox.setLimits(0u, treasureDosh + m_data->villains().doshWallet.value()); */
+    m_treasureEditSpinBox.setMaxLimit(treasureDosh + m_data->villain().doshWallet.value());
     m_treasureEditSpinBox.setCallback([this, &coords, &treasureData] (uint32 oldValue, uint32 newValue) {
+        // Sub or add
         if (newValue >= oldValue) m_data->villain().doshWallet.sub(newValue - oldValue);
         else m_data->villain().doshWallet.add(oldValue - newValue);
         treasureData[L"dosh"].as_uint32() = newValue;

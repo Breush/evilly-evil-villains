@@ -1,7 +1,7 @@
 #pragma once
 
 #include "scene/entity.hpp"
-#include "sfe/label.hpp"
+#include "nui/numberentry.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
@@ -10,8 +10,6 @@
 namespace nui
 {
     //! A basic tool to let the user edit numbers.
-    // TODO Edit the number itself with a NumberEntry (~ TextEntry)
-    // TODO Add limits
     // TODO Enable long-click repeat
     // TODO Add padding
 
@@ -35,6 +33,9 @@ namespace nui
         //! @name Value management
         //! @{
 
+        //! Access to the entry.
+        nui::NumberEntry<Value_t>& entry() { return m_entry; }
+
         //! Sets the value to the specified one.
         //! This does not check against limits and does not send a callback.
         void set(Value_t value);
@@ -50,24 +51,24 @@ namespace nui
 
         //! @}
 
-        //----------------//
-        //! @name Display
-        //! @{
-
-        //! Sets the prefix shown before the value.
-        void setPrefix(std::wstring prefix) { m_prefix = std::move(prefix); }
-
-        //! Sets the postfix shown after the value.
-        void setPostfix(std::wstring postfix) { m_postfix = std::move(postfix); }
-
-        //! @}
-
         //-----------------//
         //! @name Callback
         //! @{
 
         //! Sets the callback to the specified one.
-        void setCallback(const Callback& callback) { m_callback = callback; }
+        void setCallback(const Callback& callback);
+
+        //! @}
+
+        //--------------------------//
+        //! @name Public properties
+        //! @{
+
+        //!< The min limit for the number.
+        PARAMGS(Value_t, m_minLimit, minLimit, setMinLimit);
+
+        //!< The max limit for the number.
+        PARAMGS(Value_t, m_maxLimit, maxLimit, setMaxLimit);
 
         //! @}
 
@@ -93,8 +94,8 @@ namespace nui
         //! @name Internal changes update
         //! @{
 
-        //! Called to refresh the value printed in the label.
-        void refreshLabel();
+        //! Called to refresh the value printed in the entry.
+        void refreshEntry();
 
         //! @}
 
@@ -102,13 +103,11 @@ namespace nui
 
         Value_t m_value;    //!< The current and displayed value.
         Value_t m_step;     //!< The value to add or substract when +/-.
-        std::wstring m_prefix;  //!< The prefix.
-        std::wstring m_postfix; //!< The postfix.
 
         Callback m_callback = nullptr;  //!< The callback function called on any change.
 
         // NUI
-        sfe::Label m_label;         //!< The label itself.
+        nui::NumberEntry<Value_t> m_entry;   //!< The entry itself.
         sf::RectangleShape m_plus;  //!< The + sign.
         sf::RectangleShape m_minus; //!< The - sign.
     };

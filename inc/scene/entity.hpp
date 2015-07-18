@@ -89,6 +89,9 @@ namespace scene
         //! Delays setVisible(bool visible) to the next frame.
         void markForVisible(bool visible);
 
+        //! Make this entity to have the keyboard focus if possible.
+        void giveFocus();
+
         //! Set the size property.
         void setSize(const sf::Vector2f& inSize);
 

@@ -10,9 +10,12 @@ namespace nui
 {
     //! An interactive entry allowing user to type text.
 
-    class TextEntry final : public scene::Entity
+    class TextEntry : public scene::Entity
     {
         using baseClass = scene::Entity;
+
+        //! Callback type used when a change occurs.
+        using TextChangeCallback = std::function<void(const std::wstring&, const std::wstring&)>;
 
     public:
 
@@ -20,7 +23,7 @@ namespace nui
         TextEntry();
 
         //! Default destructor.
-        ~TextEntry() = default;
+        virtual ~TextEntry() = default;
 
         //--------------------------//
         //! @name Getter and setter
@@ -29,16 +32,28 @@ namespace nui
         //! The current string.
         std::wstring text() const { return m_textString.toWideString(); };
 
+        //! Set the current string and update, if sendCallback is false a callback will not be sent.
+        void setText(const std::wstring& str, bool sendCallback = true);
+
+        //! @}
+
+        //-----------------//
+        //! @name Callback
+        //! @{
+
+        //! Sets the callback called whenever the text changes.
+        void setOnTextChangeCallback(const TextChangeCallback& callback);
+
         //! @}
 
         //--------------------------//
         //! @name Public properties
         //! @{
 
-        // Size override, length is an estimated number of characters visible.
+        //! Size override, length is an estimated number of characters visible.
         PARAMGSU(uint, m_length, length, setLength, updateSize)
 
-        // The max number of characters.
+        //! The max number of characters.
         PARAMGS(uint, m_maxCharacters, maxCharacters, setMaxCharacters)
 
         //! @}
@@ -65,7 +80,7 @@ namespace nui
         void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
         void handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
         void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
-        bool handleKeyboardEvent(const sf::Event& event) final;
+        bool handleKeyboardEvent(const sf::Event& event) override;
 
         //! @}
 
@@ -74,7 +89,7 @@ namespace nui
         //! @{
 
         //! Remove the current selection.
-        bool deleteSelection();
+        bool deleteSelection(bool startRefresh = true);
 
         //! Remove the previous word/character.
         void deletePrevious();
@@ -125,6 +140,9 @@ namespace nui
         //! @name Internal change updates
         //! @{
 
+        //! Update the visual text from the current string.
+        void refreshText(bool sendCallback);
+
         //! Refresh overlay of selection from m_selectString.
         void refreshSelection();
 
@@ -166,5 +184,7 @@ namespace nui
         float m_textPadding = 0.f;  //!< The extra space between text and border.
         float m_fontVSpace = 0.f;   //!< The estimated vertical space reserved for a character.
         float m_fontHSpace = 0.f;   //!< The estimated horizontal space reserved for a character.
+
+        TextChangeCallback m_onTextChangeCallback;  //!< Whenever the value changes.
     };
 }

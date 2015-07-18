@@ -139,9 +139,9 @@ bool TextEntry::handleKeyboardEvent(const sf::Event& event)
     }
     // Edit the text entry
     else if (event.type == sf::Event::TextEntered) {
-        // TODO Associate a callback to Enter?
+        // TODO Associate a callback to Return?
         returnif (event.text.unicode == 1) false;           // Error
-        returnif (event.text.unicode == 13) false;          // Enter
+        returnif (event.text.unicode == 13) false;          // Return
         if (event.text.unicode == 8) deletePrevious();      // Backspace
         else if (event.text.unicode == 127) deleteNext();   // Delete
         else addCharacter(event.text.unicode);              // Any correct character
@@ -151,10 +151,28 @@ bool TextEntry::handleKeyboardEvent(const sf::Event& event)
     return false;
 }
 
+//-------------------------//
+//----- Getter/setter -----//
+
+void TextEntry::setText(const std::wstring& str, bool sendCallback)
+{
+    returnif (m_textString == str);
+    m_cursorString = str;
+    m_textString = str;
+    m_cursorText.setString(m_cursorString);
+    refreshText(sendCallback);
+    deselect();
+}
+
+void TextEntry::setOnTextChangeCallback(const TextChangeCallback& callback)
+{
+    m_onTextChangeCallback = callback;
+}
+
 //------------------//
 //----- Delete -----//
 
-bool TextEntry::deleteSelection()
+bool TextEntry::deleteSelection(bool startRefresh)
 {
     returnif (m_selectString.isEmpty()) false;
 
@@ -168,10 +186,11 @@ bool TextEntry::deleteSelection()
     }
 
     m_cursorText.setString(m_cursorString);
-    m_text.setString(m_textString);
-
-    updateDynamicText();
     deselect();
+
+    if (startRefresh)
+        refreshText(true);
+
     return true;
 }
 
@@ -183,9 +202,7 @@ void TextEntry::deletePrevious()
     int toRemove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? previousRelativeWord() : -1;
     m_textString.erase(m_cursorString.getSize() + toRemove, -toRemove);
     moveCursor(toRemove);
-
-    m_text.setString(m_textString);
-    updateDynamicText();
+    refreshText(true);
 }
 
 void TextEntry::deleteNext()
@@ -195,9 +212,7 @@ void TextEntry::deleteNext()
 
     int toRemove = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)? nextRelativeWord() : 1;
     m_textString.erase(m_cursorString.getSize(), toRemove);
-
-    m_text.setString(m_textString);
-    updateDynamicText();
+    refreshText(true);
 }
 
 //---------------------//
@@ -219,6 +234,9 @@ void TextEntry::select(uint start, uint end)
 
 bool TextEntry::deselect()
 {
+    m_selectShiftStart = 0.f;
+    m_selectStart = 0.f;
+
     returnif (m_selectString.isEmpty()) false;
 
     m_selecting = false;
@@ -266,15 +284,13 @@ uint TextEntry::getCharacterPosition(const float relX, sf::Text& text)
 
 void TextEntry::addCharacter(const uint32_t character)
 {
-    deleteSelection();
+    deleteSelection(false);
 
     returnif (m_textString.getSize() == m_maxCharacters);
     m_textString = m_cursorString + character + m_textString.substring(m_cursorString.getSize());
     moveCursor(1);
     deselect();
-
-    m_text.setString(m_textString);
-    updateDynamicText();
+    refreshText(true);
 }
 
 void TextEntry::moveCursor(int relativePos)
@@ -334,6 +350,15 @@ int TextEntry::nextRelativeWord()
 
 //-----------------------------------//
 //----- Internal change updates -----//
+
+void TextEntry::refreshText(bool sendCallback)
+{
+    if (sendCallback && m_onTextChangeCallback != nullptr)
+        m_onTextChangeCallback(m_text.getString().toWideString(), m_textString.toWideString());
+
+    m_text.setString(m_textString);
+    updateDynamicText();
+}
 
 void TextEntry::refreshSelection()
 {

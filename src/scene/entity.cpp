@@ -576,6 +576,12 @@ void Entity::markForVisible(bool visible)
     m_visibleMark = visible;
 }
 
+void Entity::giveFocus()
+{
+    if (m_focusable && m_graph != nullptr)
+        m_graph->setFocusedEntity(this);
+}
+
 void Entity::setParent(Entity* inParent)
 {
     m_parent = inParent;

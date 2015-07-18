@@ -1,5 +1,4 @@
 #pragma once
-#include "nui/spinbox.hpp"
 
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
@@ -9,10 +8,12 @@ namespace nui
 
     template<typename Value_t>
     SpinBox<Value_t>::SpinBox()
+        : m_minLimit(0)
+        , m_maxLimit(-1)
     {
-        // Label
-        attachChild(m_label);
-        m_label.setPrestyle(sfe::Label::Prestyle::NUI);
+        // Entry
+        attachChild(m_entry);
+        m_entry.setLength(7u);
 
         // Plus/minus
         addPart(&m_plus);
@@ -29,6 +30,8 @@ namespace nui
     template<typename Value_t>
     void SpinBox<Value_t>::refreshDisplay()
     {
+        baseClass::refreshDisplay();
+        refreshEntry();
     }
 
     //------------------//
@@ -40,10 +43,31 @@ namespace nui
         returnif (button != sf::Mouse::Left);
 
         // Check if a +/- is clicked.
-        returnif (mousePos.x < m_label.size().x);
+        returnif (mousePos.x < m_entry.size().x);
 
-        if (mousePos.y < m_label.size().y / 2.f) addStep();
+        if (mousePos.y < m_entry.size().y / 2.f) addStep();
         else subStep();
+    }
+
+    //--------------------//
+    //----- Callback -----//
+
+    template<typename Value_t>
+    void SpinBox<Value_t>::setCallback(const Callback& callback)
+    {
+        m_callback = callback;
+
+        m_entry.setOnValueChangeCallback([this] (Value_t oldValue, Value_t value) {
+            // Readjust to limit
+            if (value < m_minLimit)      m_value = m_minLimit;
+            else if (value > m_maxLimit) m_value = m_maxLimit;
+            else m_value = value;
+
+            // Call callback if exists
+            m_entry.setValue(m_value, false); // Will not send a callback
+            if (m_callback != nullptr)
+                m_callback(oldValue, m_value);
+        });
     }
 
     //----------------------------//
@@ -53,50 +77,47 @@ namespace nui
     void SpinBox<Value_t>::set(Value_t value)
     {
         m_value = value;
-        refreshLabel();
+        refreshEntry();
     }
 
     template<typename Value_t>
     void SpinBox<Value_t>::addStep()
     {
-        auto oldValue = m_value;
         m_value += m_step;
+        if (m_value < m_minLimit || m_value > m_maxLimit)
+            m_value = m_maxLimit;
 
-        refreshLabel();
-        if (m_callback != nullptr)
-            m_callback(oldValue, m_value);
+        refreshEntry();
     }
     template<typename Value_t>
     void SpinBox<Value_t>::subStep()
     {
-        auto oldValue = m_value;
         m_value -= m_step;
+        if (m_value < m_minLimit || m_value > m_maxLimit)
+            m_value = m_minLimit;
 
-        refreshLabel();
-        if (m_callback != nullptr)
-            m_callback(oldValue, m_value);
+        refreshEntry();
     }
 
     //-----------------------------------//
     //----- Internal changes update -----//
 
     template<typename Value_t>
-    void SpinBox<Value_t>::refreshLabel()
+    void SpinBox<Value_t>::refreshEntry()
     {
-        std::wstringstream str;
-        str << m_prefix << m_value << m_postfix;
-        m_label.setText(str.str());
-        const auto& labelSize = m_label.size();
+        // Send a callback
+        m_entry.setValue(m_value, true);
+        const auto& entrySize = m_entry.size();
 
         // Re-position plus/minus
-        m_plus.setPosition({labelSize.x, 0.f});
-        m_minus.setPosition(labelSize);
+        m_plus.setPosition({entrySize.x, 0.f});
+        m_minus.setPosition(entrySize);
 
-        auto signSize = labelSize.y / 2.f;
+        auto signSize = entrySize.y / 2.f;
         m_plus.setSize({signSize, signSize});
         m_minus.setSize({signSize, signSize});
         m_minus.setOrigin({0.f, signSize});
 
-        setSize(labelSize + sf::Vector2f{m_plus.getSize().x, 0.f});
+        setSize(entrySize + sf::Vector2f{m_plus.getSize().x, 0.f});
     }
 }
