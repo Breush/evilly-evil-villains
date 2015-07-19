@@ -16,7 +16,7 @@ void Application::loadShaders()
     // Menu
     s_context.shaders.load(ShaderID::JUMPINGTOASTS_BACKGROUND, "res/shd/menu/splashscreen.vert", "res/shd/menu/splashscreen.frag");
     s_context.shaders.load(ShaderID::MENU_MAIN_BACKGROUND, "res/shd/menu/background.vert", "res/shd/menu/background.frag");
-    s_context.shaders.load(ShaderID::MENU_NAME, "res/shd/menu/name.vert", sf::Shader::Vertex);
+    s_context.shaders.load(ShaderID::MENU_MAIN_LOGO, "res/shd/menu/name.vert", sf::Shader::Vertex);
 
     refreshShaders();
 }
@@ -49,6 +49,6 @@ void Application::updateShaders(const sf::Time& dt)
 {
     s_context.shaders.setParameter(ShaderID::JUMPINGTOASTS_BACKGROUND, "time", m_gameTime / 5.f);
     s_context.shaders.setParameter(ShaderID::MENU_MAIN_BACKGROUND, "time", m_gameTime / 25.f);
-    s_context.shaders.setParameter(ShaderID::MENU_NAME, "time", m_gameTime / 5.f);
+    s_context.shaders.setParameter(ShaderID::MENU_MAIN_LOGO, "time", m_gameTime / 5.f);
 }
 

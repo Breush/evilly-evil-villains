@@ -1,5 +1,6 @@
 #include "dungeon/traps/pickpock.hpp"
 
+#include "resources/identifiers.hpp"
 #include "dungeon/hero.hpp"
 #include "dungeon/data.hpp"
 #include "tools/tools.hpp"
@@ -18,10 +19,8 @@ PickPock::PickPock(const sf::Vector2u& coords, ElementData& elementdata)
     }
 
     // Decorum
-    // TODO Have a animated sprite
-    m_sprite.setFillColor(sf::Color::Green);
-    addPart(&m_sprite);
-
+    attachChild(m_sprite);
+    m_sprite.load(AnimationID::DUNGEON_TRAPS_PICKPOCK);
     setSize({25.f, 25.f});
 }
 

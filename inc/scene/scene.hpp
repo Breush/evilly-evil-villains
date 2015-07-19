@@ -53,6 +53,9 @@ namespace scene
         //! @name View manipulation
         //! @{
 
+        //! Center the view to the specified relative coordinates.
+        void centerRelative(const sf::Vector2f& relCoords);
+
         //! To be called when the grabbing of the scene starts.
         void startGrabbing(const sf::Vector2i& mousePos);
 

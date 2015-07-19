@@ -32,9 +32,9 @@ void Application::loadTextures()
 
     // Menu
     s_context.textures.load(TextureID::MENU_MAIN_BACKGROUND, "res/tex/menu/main/background.png");
-    s_context.textures.load(TextureID::MENU_NAME, "res/tex/menu/name.png");
+    s_context.textures.load(TextureID::MENU_MAIN_LOGO, "res/tex/menu/main/logo.png", true);
 
-    // Dungeon
+    // Dungeon scene
     s_context.textures.load(TextureID::DUNGEON_SCENE_FRONT,     "res/tex/dungeon/scene/front.png");
     s_context.textures.load(TextureID::DUNGEON_SCENE_CLOSE,     "res/tex/dungeon/scene/close.png");
     s_context.textures.load(TextureID::DUNGEON_SCENE_MIDDLE,    "res/tex/dungeon/scene/middle.png");
@@ -42,12 +42,14 @@ void Application::loadTextures()
     s_context.textures.load(TextureID::DUNGEON_SCENE_HORIZON,   "res/tex/dungeon/scene/horizon.png");
     s_context.textures.load(TextureID::DUNGEON_SCENE_SKY,       "res/tex/dungeon/scene/sky.png");
 
+    // Dungeon panel
     s_context.textures.load(TextureID::DUNGEON_PANEL_BACKGROUND, "res/tex/dungeon/panel/background.png");
     s_context.textures.load(TextureID::DUNGEON_PANEL_SWITCH, "res/tex/dungeon/panel/switch.png");
     s_context.textures.load(TextureID::DUNGEON_PANEL_MONSTERS, "res/tex/dungeon/panel/monsters.png");
     s_context.textures.load(TextureID::DUNGEON_PANEL_TRAPS, "res/tex/dungeon/panel/traps.png");
     s_context.textures.load(TextureID::DUNGEON_PANEL_FACILITIES, "res/tex/dungeon/panel/facilities.png");
 
+    // Dungeon intee
     s_context.textures.load(TextureID::DUNGEON_INTER_VOID_INNER_WALL, "res/tex/dungeon/inter/void_inner_wall.png");
     s_context.textures.load(TextureID::DUNGEON_INTER_VOID_RIGHT_WALL, "res/tex/dungeon/inter/void_right_wall.png");
     s_context.textures.load(TextureID::DUNGEON_INTER_VOID_FLOOR, "res/tex/dungeon/inter/void_floor.png");
@@ -64,10 +66,20 @@ void Application::loadTextures()
 
     s_context.textures.setRepeated(TextureID::DUNGEON_INTER_OUTER_WALL, true);
 
+    // Dungeon faciilities
     s_context.textures.load(TextureID::DUNGEON_FACILITIES_ENTRANCE, "res/tex/dungeon/facilities/entrance.png");
     s_context.textures.load(TextureID::DUNGEON_FACILITIES_LADDER, "res/tex/dungeon/facilities/ladder.png");
     s_context.textures.load(TextureID::DUNGEON_FACILITIES_TREASURE, "res/tex/dungeon/facilities/treasure.png");
 
+    // Dungeon traps
+    s_context.textures.load(TextureID::DUNGEON_TRAPS_PICKPOCK_ICON, "res/tex/dungeon/traps/pickpock/icon.png");
+    s_context.textures.load(TextureID::DUNGEON_TRAPS_PICKPOCK_TRAPDOOR_FRAME, "res/tex/dungeon/traps/pickpock/trapdoor_frame.png", true);
+    s_context.textures.load(TextureID::DUNGEON_TRAPS_PICKPOCK_DOOR_OPEN, "res/tex/dungeon/traps/pickpock/door_close.png", true);
+    s_context.textures.load(TextureID::DUNGEON_TRAPS_PICKPOCK_DOOR_CLOSE, "res/tex/dungeon/traps/pickpock/door_open.png", true);
+    s_context.textures.load(TextureID::DUNGEON_TRAPS_PICKPOCK_ROPE_DOWN, "res/tex/dungeon/traps/pickpock/rope_down.png", true);
+    s_context.textures.load(TextureID::DUNGEON_TRAPS_PICKPOCK_ROPE_UP, "res/tex/dungeon/traps/pickpock/rope_up.png", true);
+
+    // Dungeon lock
     s_context.textures.load(TextureID::DUNGEON_LOCK, "res/tex/dungeon/panel/lock.png");
 
     // Heroes

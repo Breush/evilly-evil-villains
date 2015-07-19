@@ -151,6 +151,11 @@ bool TextEntry::handleKeyboardEvent(const sf::Event& event)
     return false;
 }
 
+void TextEntry::handleMouseLeft()
+{
+    m_selecting = false;
+}
+
 //-------------------------//
 //----- Getter/setter -----//
 

@@ -7,6 +7,9 @@ void Application::loadAnimations()
     // Splash-screen
     s_context.animations.load(AnimationID::JUMPINGTOASTS, "res/scml/jumping-toasts.scml");
 
+    // Dungeon traps
+    s_context.animations.load(AnimationID::DUNGEON_TRAPS_PICKPOCK, "res/scml/dungeon/traps/pickpock.scml");
+
     // Heroes
     s_context.animations.load(AnimationID::HEROES_GROO, "res/scml/heroes/groo.scml");
 }

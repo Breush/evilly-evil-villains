@@ -78,6 +78,12 @@ Layer& Scene::addLayer(const std::string& key, float depth)
 //-----------------------------//
 //----- View manipulation -----//
 
+void Scene::centerRelative(const sf::Vector2f& relCoords)
+{
+    m_refView.move(m_refView.getSize() / 2.f + relCoords * (m_size - m_refView.getSize()));
+    adaptViewPosition();
+}
+
 void Scene::zoom(const sf::Vector2i& mousePos, float zoomFactor)
 {
     const auto& window = Application::context().window;

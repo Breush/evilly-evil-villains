@@ -1,8 +1,7 @@
 #pragma once
 
 #include "dungeon/traps.hpp"
-
-#include <SFML/Graphics/RectangleShape.hpp>
+#include "sfe/animatedsprite.hpp"
 
 namespace dungeon
 {
@@ -90,8 +89,7 @@ namespace traps
 
         uint m_maxDosh = 20u;           //!< The max amount of dosh this trap can hold.
 
-        // Decorum
-        sf::RectangleShape m_sprite;    //!< The sprite.
+        sfe::AnimatedSprite m_sprite;   //!< The sprite.
     };
 }
 }

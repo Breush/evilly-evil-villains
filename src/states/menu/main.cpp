@@ -73,12 +73,11 @@ MenuMain::MenuMain(StateStack& stack)
     nuiRoot.attachChild(m_reactImage);
     m_reactImage.centerOrigin();
     m_reactImage.setRelativePosition({0.5f, 0.2f});
-    m_reactImage.setImageTexture(TextureID::MENU_NAME);
-    m_reactImage.setShader(ShaderID::MENU_NAME);
+    m_reactImage.setShader(ShaderID::MENU_MAIN_LOGO);
     m_reactImage.setMouseLeftDeselect(false);
 
     // Setting callbacks
-    m_reactImage.addReactFromFile("res/tex/menu/name.xml");
+    m_reactImage.addReactFromFile("res/tex/menu/main/logo.xml");
     m_reactImage.setReactCallback(m_choices[0], singlePlayer);
     m_reactImage.setReactCallback(m_choices[1], multiPlayer);
     m_reactImage.setReactCallback(m_choices[2], villains);

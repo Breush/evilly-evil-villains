@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r4.1">
+    <folder id="0" name="res/tex/dungeon/traps/pickpock">
+        <file id="0" name="res/tex/dungeon/traps/pickpock/trapdoor_frame.png" width="158" height="50" pivot_x="0.481013" pivot_y="0.6"/>
+        <file id="1" name="res/tex/dungeon/traps/pickpock/door_close.png" width="119" height="35" pivot_x="0.462185" pivot_y="0.914286"/>
+        <file id="2" name="res/tex/dungeon/traps/pickpock/door_open.png" width="106" height="28" pivot_x="0.5" pivot_y="0.892857"/>
+        <file id="3" name="res/tex/dungeon/traps/pickpock/rope_down.png" width="56" height="287" pivot_x="0.053571" pivot_y="0.979094"/>
+        <file id="4" name="res/tex/dungeon/traps/pickpock/rope_up.png" width="35" height="100" pivot_x="0.542857" pivot_y="0.98"/>
+    </folder>
+    <entity id="0" name="pickpock">
+        <animation id="0" name="idle" length="1000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="0" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="0" z_index="2"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="trapdoor_frame_000">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="-13.851065" y="-82.638738"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="door_close">
+                <key id="0" spin="0">
+                    <object folder="0" file="1" x="-16.175097" y="-72"/>
+                </key>
+            </timeline>
+            <timeline id="2" name="down_rope">
+                <key id="0" spin="0">
+                    <object folder="0" file="3" x="-34.912707" y="186.578293"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

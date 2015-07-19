@@ -104,15 +104,14 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     m_sceneSky.setTexture(TextureID::DUNGEON_SCENE_SKY);
 
     // Adjust images to new maxZoom
-    // TODO Sky is streched, use a scale instead of setSize inside that function?
+    // TODO Sky is streched, use a setScale instead of setSize inside that function?
     scene().layer("FRONT").fitToVisibleRect(m_sceneFront);
     scene().layer("CLOSE").fitToVisibleRect(m_sceneClose);
     scene().layer("MIDDLE").fitToVisibleRect(m_sceneMiddle);
     scene().layer("FAR").fitToVisibleRect(m_sceneFar);
     scene().layer("HORIZON").fitToVisibleRect(m_sceneHorizon);
     scene().layer("SKY").fitToVisibleRect(m_sceneSky);
-
-    // Move to position
+    scene().centerRelative({0.5f, 1.f});
 }
 
 void GameDungeonDesign::onQuit() noexcept

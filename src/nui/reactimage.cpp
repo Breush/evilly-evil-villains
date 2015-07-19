@@ -78,14 +78,21 @@ void ReactImage::addReactFromFile(const std::string& file)
     pugi::xml_document doc;
     doc.load_file(file.c_str());
 
+    const auto& reactImageNode = doc.child(L"reactimage");
+
+    // Get texture if any
+    std::wstring textureString = reactImageNode.attribute(L"texture").as_string();
+    if (!textureString.empty())
+        setImageTexture(Application::context().textures.getID(textureString));
+
     // Adding children
-    for (const auto& react : doc.child(L"reactimage").children()) {
-        std::wstring key = react.attribute(L"key").as_string();
-        auto left = react.attribute(L"left").as_float();
-        auto top = react.attribute(L"top").as_float();
-        auto width = react.attribute(L"width").as_float();
-        auto height = react.attribute(L"height").as_float();
-        addReact(key, {left, top, width, height});
+    for (const auto& reactNode : reactImageNode.children()) {
+        std::wstring key = reactNode.attribute(L"key").as_string();
+        auto left = reactNode.attribute(L"left").as_float();
+        auto top = reactNode.attribute(L"top").as_float();
+        auto width = reactNode.attribute(L"width").as_float();
+        auto height = reactNode.attribute(L"height").as_float();
+        addReact(std::move(key), {left, top, width, height});
     }
 }
 
@@ -94,11 +101,11 @@ void ReactImage::addReact(const std::wstring& key, sf::FloatRect rect, const Cal
     massert(!key.empty(), "Cannot add react with empty key");
 
     // Automatic length detection
-    if (rect.width < 0.f)  rect.width = m_imageRect.width - rect.left;
+    if (rect.width < 0.f)  rect.width  = m_imageRect.width  - rect.left;
     if (rect.height < 0.f) rect.height = m_imageRect.height - rect.top;
 
     // Finally add new react
-    m_reacts[key] = {rect, callback};
+    m_reacts[key] = {std::move(rect), callback};
 }
 
 void ReactImage::setReactCallback(const std::wstring& key, Callback callback)

@@ -93,7 +93,7 @@ void Sidebar::setMode(Mode mode)
         break;
 
     case Mode::TRAPS:
-        m_tabs.emplace_back(std::make_unique<dungeon::TrapGrabButton>(_("Pick-pock"), TextureID::DUNGEON_TRAPS_PICKPOCK, L"pickpock"));
+        m_tabs.emplace_back(std::make_unique<dungeon::TrapGrabButton>(_("Pick-pock"), TextureID::DUNGEON_TRAPS_PICKPOCK_ICON, L"pickpock"));
         break;
 
     case Mode::FACILITIES:
