@@ -23,14 +23,6 @@ PickPock::PickPock(const sf::Vector2u& coords, ElementData& elementdata)
     m_sprite.load(AnimationID::DUNGEON_TRAPS_PICKPOCK);
 }
 
-//------------------//
-//---- Routine -----//
-
-void PickPock::onScaleChanges()
-{
-    m_sprite.setScale(getScale());
-}
-
 //-------------------------//
 //---- Dungeon events -----//
 

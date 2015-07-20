@@ -82,6 +82,9 @@ namespace dungeon
         //! Set the number of rooms by floor.
         void setRoomsByFloor(uint value);
 
+        //! Get the room scale factors, relative to original image size.
+        inline const sf::Vector2f& roomScale() const { return m_roomScale; }
+
         //! @}
 
         //------------------------//
@@ -189,6 +192,9 @@ namespace dungeon
         //--------------------------------//
         //! @name Internal change updates
         //! @{
+
+        //! Refresh the stored value of room scale.
+        void refreshRoomScale();
 
         //! Refresh display from current data.
         void refreshFromData();

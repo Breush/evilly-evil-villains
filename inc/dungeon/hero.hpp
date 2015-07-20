@@ -120,8 +120,8 @@ namespace dungeon
 
         //! @}
 
-        //--------------------------------//
-        //! @name Artificial intelligence
+        //------------------------//
+        //! @name Node management
         //! @{
 
         //! Select the node to move the hero to.

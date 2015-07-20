@@ -30,8 +30,7 @@ Hero::Hero(const Inter* inter)
     // Sprite
     attachChild(m_sprite);
     m_sprite.load(AnimationID::HEROES_GROO);
-    // TODO Should not exists...
-    m_sprite.setLocalScale({0.15f, 0.15f});
+    setLocalScale(m_inter->roomScale());
 
     // Lua
     if (!m_lua.load("res/ai/hero.lua"))
@@ -82,6 +81,9 @@ void Hero::updateAI(const sf::Time& dt)
     setCurrentNode(alea::rand(bestNodes));
     ++m_tick;
 }
+
+//---------------------------//
+//----- Node management -----//
 
 void Hero::setCurrentNode(const Graph::Node* node, bool firstNode)
 {

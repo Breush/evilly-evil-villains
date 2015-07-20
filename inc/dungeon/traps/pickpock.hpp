@@ -60,14 +60,6 @@ namespace traps
 
     protected:
 
-        //----------------//
-        //! @name Routine
-        //! @{
-
-        void onScaleChanges() final;
-
-        //! @}
-
         //---------------//
         //! @name Events
         //! @{

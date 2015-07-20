@@ -53,10 +53,8 @@ void Inter::onSizeChanges()
     returnif (size() == m_grid.size());
 
     m_grid.setSize(size());
+    refreshRoomScale();
     refreshOuterWalls();
-
-    const auto& textureSize = Application::context().textures.get(TextureID::DUNGEON_INTER_INNER_WALL).getSize();
-    m_roomScale = m_grid.cellSize() / sf::v2f(textureSize);
 
     returnif (m_data == nullptr);
     refreshTiles();
@@ -210,6 +208,7 @@ void Inter::refreshFromData()
         m_tiles[{floor, room}] = std::move(tile);
     }
 
+    refreshRoomScale();
     refreshTiles();
 }
 
@@ -489,6 +488,12 @@ void Inter::configureDoshLabel(std::unique_ptr<sfe::Label>& doshLabel, const uin
 
 //-----------------------------------//
 //----- Internal change updates -----//
+
+void Inter::refreshRoomScale()
+{
+    const auto& textureSize = Application::context().textures.get(TextureID::DUNGEON_INTER_INNER_WALL).getSize();
+    m_roomScale = m_grid.cellSize() / sf::v2f(textureSize);
+}
 
 void Inter::refreshTiles()
 {
