@@ -76,14 +76,7 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    // TODO [OPTIM] Do not recompute each time...
     const auto& screenSize = Application::context().screenSize;
-    const auto& resolution = Application::context().resolution;
-    const auto& effectiveDisplay = Application::context().effectiveDisplay;
-
-    const auto halfGap = (screenSize - effectiveDisplay) / 2.f;
-    const auto viewRatio = effectiveDisplay / resolution;
-
     const sf::Shader* initialShader = states.shader;
 
     // Drawing parts
@@ -109,7 +102,7 @@ void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
             r.height = bottomRight.y - topLeft.y;
 
             // Correct position SFML <-> GLSL - In GL coordinates
-            r.top = resolution.y - r.height - r.top;
+            r.top = screenSize.y - r.height - r.top;
 
             glScissor(r.left, r.top, r.width, r.height);
         }
