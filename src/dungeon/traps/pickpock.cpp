@@ -32,10 +32,12 @@ void PickPock::receive(const Event& event)
 
     // Ensures that event occured in the same room than us
     sf::Vector2u coords(event.action.room.x, event.action.room.y);
-    returnif (coords != m_coords);
+    if (coords != m_coords) m_sprite.select(L"idle");
+    else stealFromHero(event.action.hero);
 
-    // If so, steal the hero
-    stealFromHero(event.action.hero);
+    // TODO That select "idle" is a bit heavy,
+    // just have a check that the hero has left.
+    // + that way, we will not steal 2 heroes at once.
 }
 
 //--------------------//
@@ -56,6 +58,7 @@ void PickPock::setDosh(uint32 value)
 
 void PickPock::stealFromHero(Hero* hero)
 {
+    m_sprite.select(L"grab");
     auto doshStolen = std::min(m_maxDosh - dosh(), hero->dosh());
     hero->subDosh(doshStolen);
     addDosh(doshStolen);

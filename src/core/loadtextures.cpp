@@ -78,6 +78,8 @@ void Application::loadTextures()
     s_context.textures.load(TextureID::DUNGEON_TRAPS_PICKPOCK_DOOR_CLOSE, "res/tex/dungeon/traps/pickpock/door_open.png", true);
     s_context.textures.load(TextureID::DUNGEON_TRAPS_PICKPOCK_ROPE_DOWN, "res/tex/dungeon/traps/pickpock/rope_down.png", true);
     s_context.textures.load(TextureID::DUNGEON_TRAPS_PICKPOCK_ROPE_UP, "res/tex/dungeon/traps/pickpock/rope_up.png", true);
+    s_context.textures.load(TextureID::DUNGEON_TRAPS_PICKPOCK_LOOP_DOWN, "res/tex/dungeon/traps/pickpock/loop_down.png", true);
+    s_context.textures.load(TextureID::DUNGEON_TRAPS_PICKPOCK_LOOP_UP, "res/tex/dungeon/traps/pickpock/loop_up.png", true);
 
     // Dungeon lock
     s_context.textures.load(TextureID::DUNGEON_LOCK, "res/tex/dungeon/panel/lock.png");

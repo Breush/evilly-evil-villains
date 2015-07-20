@@ -89,9 +89,8 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     m_dungeonHero.useData(m_dungeonData);
 
     // FIXME This should not be here.
-    // This scale is somehow.
+    // This scale is somehow const.
     m_dungeonHero.setLocalScale(m_dungeonInter.roomScale());
-    std::cerr << m_dungeonInter.roomScale() << std::endl;
 
     // Decorum
     frontRoot.attachChild(m_sceneFront);
