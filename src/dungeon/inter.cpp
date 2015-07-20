@@ -55,6 +55,9 @@ void Inter::onSizeChanges()
     m_grid.setSize(size());
     refreshOuterWalls();
 
+    const auto& textureSize = Application::context().textures.get(TextureID::DUNGEON_INTER_INNER_WALL).getSize();
+    m_roomScale = m_grid.cellSize() / sf::v2f(textureSize);
+
     returnif (m_data == nullptr);
     refreshTiles();
 }
@@ -624,8 +627,9 @@ void Inter::refreshTileTraps(const sf::Vector2u& coords)
     // Trap
     tile.trap = traps::make(room);
     tile.trap->setLocalPosition(tileLocalPosition(coords) + tileSize() / 2.f);
-    tile.trap->centerOrigin();
+    tile.trap->setLocalScale(m_roomScale);
     tile.trap->setEmitter(m_data);
+    tile.trap->centerOrigin();
     attachChild(*tile.trap);
 }
 

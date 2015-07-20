@@ -11,7 +11,7 @@ namespace dungeon
 
 namespace traps
 {
-    //!< A pick-pock steals money from passing by heroes.
+    //!< A pick-pock steals money from nearby heroes.
 
     class PickPock final : public Trap
     {
@@ -64,7 +64,7 @@ namespace traps
         //! @name Routine
         //! @{
 
-        void onSizeChanges() final;
+        void onScaleChanges() final;
 
         //! @}
 

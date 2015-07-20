@@ -181,6 +181,9 @@ namespace scene
         //! Draws all parts of the entity.
         void drawParts(sf::RenderTarget& target, sf::RenderStates states) const;
 
+        //! Called whenever scale changed.
+        virtual void onScaleChanges() {}
+
         //! Called whenever size changed.
         /*!
          *  Should be reimplemented in inherited classes to adapt

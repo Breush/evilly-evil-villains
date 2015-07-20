@@ -235,10 +235,11 @@ namespace dungeon
         sfe::Grid m_grid;                                   //!< The internal grid for overlay display.
         std::unordered_map<sf::Vector2u, Tile> m_tiles;     //!< All tiles constituing the dungeon.
         std::array<sf::RectangleShape, 2u> m_outerWalls;    //!< Sprites for left/right outer walls.
+        sf::Vector2f m_roomScale = {1.f, 1.f};              //!< The room scale.
 
         // Delay
         std::vector<std::function<void()>> m_tileRefreshPending;    //! Pending list of tile refreshTileXXX.
-        bool m_invasion = false;        //!< Whether or not we are in invasion mode.
+        bool m_invasion = false;    //!< Whether or not we are in invasion mode.
 
         // NUI
         nui::ContextMenu& m_contextMenu;            //!< The context menu, got from global state.

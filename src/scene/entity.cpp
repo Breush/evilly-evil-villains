@@ -509,6 +509,8 @@ void Entity::refreshFromLocalScale()
 
     for (auto& child : m_children)
         child->refreshFromLocalScale();
+
+    onScaleChanges();
 }
 
 void Entity::refreshOrigin()

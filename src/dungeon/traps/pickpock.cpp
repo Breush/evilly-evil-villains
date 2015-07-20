@@ -21,15 +21,14 @@ PickPock::PickPock(const sf::Vector2u& coords, ElementData& elementdata)
     // Decorum
     attachChild(m_sprite);
     m_sprite.load(AnimationID::DUNGEON_TRAPS_PICKPOCK);
-    setSize({25.f, 25.f});
 }
 
 //------------------//
 //---- Routine -----//
 
-void PickPock::onSizeChanges()
+void PickPock::onScaleChanges()
 {
-    m_sprite.setSize(size());
+    m_sprite.setScale(getScale());
 }
 
 //-------------------------//
