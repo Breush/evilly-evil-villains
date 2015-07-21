@@ -1,7 +1,6 @@
 #pragma once
 
-#include "dungeon/data.hpp"
-#include "dungeon/traps/pickpock.hpp"
+#include "dungeon/facilities/treasure.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
@@ -10,6 +9,16 @@ namespace dungeon
 {
 namespace facilities
 {
+    //! Create and initialize the corresponding Facility from a ElementData.
+    inline std::unique_ptr<Facility> make(const sf::Vector2u& coords, ElementData& eData)
+    {
+        const auto& type = eData.type();
+        if (type == L"treasure") return std::make_unique<Treasure>(coords, eData);
+        // TODO Remove this quiet error when all facilities are on the same model
+        // else throw std::runtime_error("Unknown ElementData type.");
+        return nullptr;
+    }
+
     //! Returns the cost for creating a facility.
     inline uint onCreateCost(const std::wstring& type)
     {

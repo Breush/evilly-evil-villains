@@ -4,6 +4,7 @@
 #include "dungeon/event.hpp"
 #include "dungeon/data.hpp"
 #include "dungeon/traps.hpp"
+#include "dungeon/facilities.hpp"
 #include "nui/contextmenu.hpp"
 #include "nui/spinbox.hpp"
 #include "sfe/grid.hpp"
@@ -211,6 +212,9 @@ namespace dungeon
         //! Refresh the layers (and their texture) of the specified tile.
         void refreshTileLayers(const sf::Vector2u& coords);
 
+        //! Refresh the facilities (as tile entities) of the specified tile.
+        void refreshTileFacilities(const sf::Vector2u& coords);
+
         //! Refresh the traps (as tile entities) of the specified tile.
         void refreshTileTraps(const sf::Vector2u& coords);
 
@@ -228,6 +232,7 @@ namespace dungeon
             sf::Vector2u coords;                                //!< The coordinates of the tile (floor/room).
             Data::Room* room = nullptr;                         //!< The corresponding room within data.
             std::vector<sf::RectangleShape> layers;             //!< All sprites to draw, from furthest to nearest.
+            std::vector<std::unique_ptr<Facility>> facilities;  //!< The facilities in the tile.
             std::unique_ptr<Trap> trap = nullptr;               //!< The trap, protecting the tile.
             std::unique_ptr<sfe::Label> totalDoshLabel;         //!< The total dosh inside the room.
             std::unique_ptr<sfe::Label> harvestableDoshLabel;   //!< The harvestable dosh.

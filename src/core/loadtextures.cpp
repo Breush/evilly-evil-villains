@@ -49,7 +49,7 @@ void Application::loadTextures()
     s_context.textures.load(TextureID::DUNGEON_PANEL_TRAPS, "res/tex/dungeon/panel/traps.png");
     s_context.textures.load(TextureID::DUNGEON_PANEL_FACILITIES, "res/tex/dungeon/panel/facilities.png");
 
-    // Dungeon intee
+    // Dungeon inter
     s_context.textures.load(TextureID::DUNGEON_INTER_VOID_INNER_WALL, "res/tex/dungeon/inter/void_inner_wall.png");
     s_context.textures.load(TextureID::DUNGEON_INTER_VOID_RIGHT_WALL, "res/tex/dungeon/inter/void_right_wall.png");
     s_context.textures.load(TextureID::DUNGEON_INTER_VOID_FLOOR, "res/tex/dungeon/inter/void_floor.png");
@@ -69,7 +69,14 @@ void Application::loadTextures()
     // Dungeon faciilities
     s_context.textures.load(TextureID::DUNGEON_FACILITIES_ENTRANCE, "res/tex/dungeon/facilities/entrance.png");
     s_context.textures.load(TextureID::DUNGEON_FACILITIES_LADDER, "res/tex/dungeon/facilities/ladder.png");
-    s_context.textures.load(TextureID::DUNGEON_FACILITIES_TREASURE, "res/tex/dungeon/facilities/treasure.png");
+
+    s_context.textures.load(TextureID::DUNGEON_FACILITIES_TREASURE_ICON, "res/tex/dungeon/facilities/treasure/icon.png");
+    // TODO Have a way to load all file from the directory, without having an associated TextureID (not used with SCML animation).
+    s_context.textures.load(TextureID::DUNGEON_FACILITIES_TREASURE_BASE, "res/tex/dungeon/facilities/treasure/base.png", true);
+    s_context.textures.load(TextureID::DUNGEON_FACILITIES_TREASURE_OPEN, "res/tex/dungeon/facilities/treasure/open.png", true);
+    s_context.textures.load(TextureID::DUNGEON_FACILITIES_TREASURE_CLOSE, "res/tex/dungeon/facilities/treasure/close.png", true);
+    s_context.textures.load(TextureID::DUNGEON_FACILITIES_TREASURE_HALF, "res/tex/dungeon/facilities/treasure/half.png", true);
+    s_context.textures.load(TextureID::DUNGEON_FACILITIES_TREASURE_FULL, "res/tex/dungeon/facilities/treasure/full.png", true);
 
     // Dungeon traps
     s_context.textures.load(TextureID::DUNGEON_TRAPS_PICKPOCK_ICON, "res/tex/dungeon/traps/pickpock/icon.png");

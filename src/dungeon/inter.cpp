@@ -150,9 +150,8 @@ void Inter::receive(const Event& event)
         break;
 
     case EventType::FACILITY_CHANGED:
-        // TODO DoshLabel refresh just needed for treasure, how can we be sure?
         coords = {event.facility.room.x, event.facility.room.y};
-        m_tileRefreshPending.emplace_back([=]() { return refreshTileLayers(coords); });
+        m_tileRefreshPending.emplace_back([=]() { return refreshTileFacilities(coords); });
         m_tileRefreshPending.emplace_back([=]() { return refreshTileDoshLabel(coords); });
         break;
 
@@ -509,6 +508,7 @@ void Inter::refreshTile(const sf::Vector2u& coords)
     refreshTileDoshLabel(coords);
     refreshTileLayers(coords);
     refreshTileTraps(coords);
+    refreshTileFacilities(coords);
 }
 
 void Inter::refreshNeighboursLayers(const sf::Vector2u& coords)
@@ -604,11 +604,41 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
 
     // Facilities
     // TODO Use same structure than Traps!! facilities::make()
+    // FIXE Move all left to refreshFacilities()
     for (const auto& facility : room.facilities) {
         if (facility.type() == L"ladder")           addLayer(coords, TextureID::DUNGEON_INTER_LADDER);
-        else if (facility.type() == L"treasure")    addLayer(coords, TextureID::DUNGEON_INTER_TREASURE);
         else if (facility.type() == L"entrance")    addLayer(coords, TextureID::DUNGEON_INTER_ENTRANCE);
         else std::wcout << L"/!\\ Unreferenced facility '" << facility.type() << "' texture, ignoring it." << std::endl;
+    }
+}
+
+void Inter::refreshTileFacilities(const sf::Vector2u& coords)
+{
+    returnif (coords.x >= m_data->floorsCount());
+    returnif (coords.y >= m_data->roomsByFloor());
+
+    auto& room = m_data->room(coords);
+    auto& tile = m_tiles[coords];
+
+    // Reset
+    tile.facilities.clear();
+
+    // Room is not constructed
+    returnif (room.state != Data::RoomState::CONSTRUCTED);
+
+    // Facilities
+    for (auto& facilityData : room.facilities) {
+        auto facility = facilities::make(coords, facilityData);
+
+        // TODO Remove this check once maker ensures not nullptr
+        returnif (facility == nullptr);
+
+        facility->setLocalPosition(tileLocalPosition(coords) + tileSize() / 2.f);
+        facility->setLocalScale(m_roomScale);
+        facility->setEmitter(m_data);
+        facility->centerOrigin();
+        tile.facilities.emplace_back(std::move(facility));
+        attachChild(*tile.facilities.back());
     }
 }
 

@@ -11,6 +11,7 @@ namespace dungeon
 namespace traps
 {
     //! Create and initialize the corresponding Trap from a ElementData.
+    // TODO Make that on the same signature that facilities maker.
     inline std::unique_ptr<Trap> make(Data::Room& room)
     {
         returnif (!room.trap.exists()) nullptr;
