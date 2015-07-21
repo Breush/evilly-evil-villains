@@ -34,7 +34,7 @@ namespace states
         inline scene::Layer& nuiLayer() { return m_sceneGraph.nuiLayer(); }
 
         //! Reset the graph's views to current screen status.
-        inline void refreshDisplay() { m_sceneGraph.refreshDisplay(); }
+        inline virtual void refreshDisplay() { m_sceneGraph.refreshDisplay(); }
 
         // Called whenever display changes
         virtual void onShow() noexcept { m_sceneGraph.updateFocusSprite(); }

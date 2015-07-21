@@ -17,12 +17,18 @@ namespace states
 {
     class GameDungeonDesign final : public State
     {
+        using baseClass = State;
+
     public:
         GameDungeonDesign(StateStack& stack);
         virtual ~GameDungeonDesign() = default;
         StateID id() const noexcept final { return StateID::GAME_DUNGEON_DESIGN; }
 
-        // Routines
+        // Routine
+        void draw() final;
+        void refreshDisplay() final;
+
+        // Events
         bool handleEvent(const sf::Event& event) final;
 
         // Virtual
@@ -57,5 +63,8 @@ namespace states
         const float m_depthFar      = 1.1f;
         const float m_depthHorizon  = 1.15f;
         const float m_depthSky      = 1.3f;
+
+        const scene::Entity* m_minimapRoot = nullptr;   //!< The layer to use for minimap drawing.
+        sf::View m_minimapView;                         //!< The minimap view.
     };
 }

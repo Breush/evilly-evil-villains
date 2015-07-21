@@ -116,6 +116,45 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     scene().layer("HORIZON").fitToVisibleRect(m_sceneHorizon);
     scene().layer("SKY").fitToVisibleRect(m_sceneSky);
     scene().centerRelative({0.5f, 1.f});
+
+    // Minimap
+    m_minimapRoot = &scene().layer("DUNGEON").root();
+    m_minimapView.setSize(m_dungeonInter.size());
+    m_minimapView.setCenter(m_dungeonInter.localPosition() + m_dungeonInter.size() / 2.f);
+
+    refreshDisplay();
+}
+
+//-------------------//
+//----- Routine -----//
+
+void GameDungeonDesign::draw()
+{
+    baseClass::draw();
+
+    // Minimap
+    auto& window = Application::context().window;
+    window.setView(m_minimapView);
+    window.draw(*m_minimapRoot);
+}
+
+void GameDungeonDesign::refreshDisplay()
+{
+    baseClass::refreshDisplay();
+
+    // Minimap viewport
+    // TODO Can this be an entity somehow?
+    sf::FloatRect minimapViewport;
+    const auto& window = Application::context().window;
+    const auto& screenSize = Application::context().screenSize;
+    const auto& resolution = Application::context().resolution;
+    auto topLeft = window.mapCoordsToPixel({resolution.x - 70.f, 0.f}, nuiLayer().view());
+    auto bottomRight = window.mapCoordsToPixel({resolution.x, 90.f}, nuiLayer().view());
+    minimapViewport.left = topLeft.x / screenSize.x;
+    minimapViewport.top = topLeft.y / screenSize.y;
+    minimapViewport.width = (bottomRight.x - topLeft.x) / screenSize.x;
+    minimapViewport.height = (bottomRight.y - topLeft.y) / screenSize.y;
+    m_minimapView.setViewport(minimapViewport);
 }
 
 void GameDungeonDesign::onQuit() noexcept
@@ -124,6 +163,9 @@ void GameDungeonDesign::onQuit() noexcept
     context::worlds.refreshLastPlayed();
     m_dungeonData.save(context::worlds.selected().folder);
 }
+
+//------------------//
+//----- Events -----//
 
 bool GameDungeonDesign::handleEvent(const sf::Event& event)
 {

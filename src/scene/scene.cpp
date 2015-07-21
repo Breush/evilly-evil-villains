@@ -29,14 +29,17 @@ void Scene::update(const sf::Time& dt)
 
 void Scene::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+    // Layers
     for (auto& layer : m_layers)
         target.draw(*layer, states);
 }
 void Scene::refreshDisplay()
 {
+    // Viewports
     const auto& viewport = Application::context().viewport;
     m_refView.setViewport(viewport);
 
+    // Layers
     for (auto& layer : m_layers)
         layer->refreshDisplay();
 }
