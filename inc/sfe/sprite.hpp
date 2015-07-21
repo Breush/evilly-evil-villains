@@ -26,10 +26,6 @@ namespace sfe
 
         void setTexture(TextureID textureID);
 
-    protected:
-
-        void onSizeChanges() final;
-
     private:
         sf::Sprite m_sprite;
     };

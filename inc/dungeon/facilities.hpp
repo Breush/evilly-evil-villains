@@ -31,18 +31,6 @@ namespace dungeon
         //! Default destructor.
         virtual ~Facility() = default;
 
-        //-------------//
-        //! @name Cost
-        //! @{
-
-        //! How much the trap cost on creation.
-        virtual uint onCreateCost() const = 0;
-
-        //! How much the trap cost on destruction.
-        virtual uint onDestroyGain() const = 0;
-
-        //! @}
-
     protected:
 
         //---------------//

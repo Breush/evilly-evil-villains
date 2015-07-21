@@ -21,15 +21,6 @@ namespace facilities
         //! Default destructor.
         ~Treasure() = default;
 
-        //-------------//
-        //! @name Cost
-        //! @{
-
-        inline uint onCreateCost() const final { return 10u; }
-        inline uint onDestroyGain() const final { return dosh(); }
-
-        //! @}
-
         //------------------//
         //! @name Resources
         //! @{

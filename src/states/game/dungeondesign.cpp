@@ -78,7 +78,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     // Dungeon inter
     dungeonRoot.attachChild(m_dungeonInter);
     m_dungeonInter.useData(m_dungeonData);
-    // TODO No setSize here...
+    // TODO No setSize here... but setRoomSize().
     m_dungeonInter.setSize({700.f, 900.f});
     m_dungeonInter.setLocalPosition({sceneSize.x / 2.f - 350.f, sceneSize.y - 950.f});
 

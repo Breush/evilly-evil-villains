@@ -601,15 +601,6 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
 
     if (!m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, Data::EAST)))
         addLayer(coords, TextureID::DUNGEON_INTER_RIGHT_WALL);
-
-    // Facilities
-    // TODO Use same structure than Traps!! facilities::make()
-    // FIXE Move all left to refreshFacilities()
-    for (const auto& facility : room.facilities) {
-        if (facility.type() == L"ladder")           addLayer(coords, TextureID::DUNGEON_INTER_LADDER);
-        else if (facility.type() == L"entrance")    addLayer(coords, TextureID::DUNGEON_INTER_ENTRANCE);
-        else std::wcout << L"/!\\ Unreferenced facility '" << facility.type() << "' texture, ignoring it." << std::endl;
-    }
 }
 
 void Inter::refreshTileFacilities(const sf::Vector2u& coords)
@@ -629,10 +620,6 @@ void Inter::refreshTileFacilities(const sf::Vector2u& coords)
     // Facilities
     for (auto& facilityData : room.facilities) {
         auto facility = facilities::make(coords, facilityData);
-
-        // TODO Remove this check once maker ensures not nullptr
-        returnif (facility == nullptr);
-
         facility->setLocalPosition(tileLocalPosition(coords) + tileSize() / 2.f);
         facility->setLocalScale(m_roomScale);
         facility->setEmitter(m_data);

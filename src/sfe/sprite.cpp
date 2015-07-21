@@ -2,6 +2,7 @@
 
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
+#include "tools/vector.hpp"
 
 using namespace sfe;
 
@@ -12,12 +13,9 @@ Sprite::Sprite()
     addPart(&m_sprite);
 }
 
-void Sprite::onSizeChanges()
-{
-    m_sprite.setScale(localScale());
-}
-
 void Sprite::setTexture(TextureID textureID)
 {
-    m_sprite.setTexture(Application::context().textures.get(textureID));
+    const auto& texture = Application::context().textures.get(textureID);
+    m_sprite.setTexture(texture);
+    setSize(sf::v2f(texture.getSize()));
 }

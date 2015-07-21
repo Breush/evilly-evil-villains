@@ -25,15 +25,6 @@ namespace traps
         //! Default destructor.
         ~PickPock() = default;
 
-        //-------------//
-        //! @name Cost
-        //! @{
-
-        inline uint onCreateCost() const final { return 220u; }
-        inline uint onDestroyGain() const final { return 40u + dosh(); }
-
-        //! @}
-
         //------------------//
         //! @name Resources
         //! @{
