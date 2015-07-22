@@ -3,6 +3,8 @@
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
 #include "context/worlds.hpp"
+#include "tools/tools.hpp"
+#include "tools/vector.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
@@ -142,19 +144,23 @@ void GameDungeonDesign::refreshDisplay()
 {
     baseClass::refreshDisplay();
 
-    // Minimap viewport
-    // TODO Can this be an entity somehow?
-    sf::FloatRect minimapViewport;
     const auto& window = Application::context().window;
     const auto& screenSize = Application::context().screenSize;
     const auto& resolution = Application::context().resolution;
-    auto topLeft = window.mapCoordsToPixel({resolution.x - 70.f, 0.f}, nuiLayer().view());
-    auto bottomRight = window.mapCoordsToPixel({resolution.x, 90.f}, nuiLayer().view());
-    minimapViewport.left = topLeft.x / screenSize.x;
-    minimapViewport.top = topLeft.y / screenSize.y;
-    minimapViewport.width = (bottomRight.x - topLeft.x) / screenSize.x;
-    minimapViewport.height = (bottomRight.y - topLeft.y) / screenSize.y;
-    m_minimapView.setViewport(minimapViewport);
+    const auto& nuiView = nuiLayer().view();
+
+    // Minimap viewport
+    // TODO Can this be an entity somehow?
+    const sf::Vector2f minimapSize{70.f, 90.f};
+    const sf::FloatRect minimapRect{resolution.x - minimapSize.x, 0.f, minimapSize.x, minimapSize.y};
+    auto minimapScreenRect = tools::mapRectCoordsToPixel(window, nuiView, minimapRect);
+    m_minimapView.setViewport(minimapScreenRect / screenSize);
+
+    // Scene viewport
+    const float sidebarWidth = 200.f;
+    const sf::FloatRect sceneRect{0.f, 0.f, resolution.x - sidebarWidth, resolution.y};
+    auto sceneScreenRect = tools::mapRectCoordsToPixel(window, nuiView, sceneRect);
+    scene().setViewport(sceneScreenRect / screenSize);
 }
 
 void GameDungeonDesign::onQuit() noexcept

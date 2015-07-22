@@ -57,6 +57,10 @@ namespace scene
         //! @name View manipulation
         //! @{
 
+        //! Sets the viewport.
+        //! If not used, the default is resolution-wide.
+        void setViewport(const sf::FloatRect& viewport);
+
         //! Set the size of the view.
         void setViewSize(const sf::Vector2f& viewSize);
 
@@ -105,5 +109,8 @@ namespace scene
 
         //! The view, as the layer controls its the displayed region.
         sf::View m_view;
+
+        // Viewports
+        bool m_ownViewport = false; //!< Whether or not we use a provided viewport.
     };
 }

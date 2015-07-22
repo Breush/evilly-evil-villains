@@ -35,9 +35,10 @@ void Scene::draw(sf::RenderTarget& target, sf::RenderStates states) const
 }
 void Scene::refreshDisplay()
 {
-    // Viewports
-    const auto& viewport = Application::context().viewport;
-    m_refView.setViewport(viewport);
+    if (!m_ownViewport) {
+        const auto& viewport = Application::context().viewport;
+        m_refView.setViewport(viewport);
+    }
 
     // Layers
     for (auto& layer : m_layers)
@@ -56,6 +57,7 @@ Layer& Scene::addLayer(const std::string& key, float depth)
     layer->setSize(m_size);
     layer->setDepth(depth);
     layer->setViewSize(m_refView.getSize() * depth);
+    if (m_ownViewport) layer->setViewport(m_viewport);
 
     // Add to containers keep track
     m_layers.emplace_back(layer);
@@ -80,6 +82,16 @@ Layer& Scene::addLayer(const std::string& key, float depth)
 
 //-----------------------------//
 //----- View manipulation -----//
+
+void Scene::setViewport(const sf::FloatRect& viewport)
+{
+    m_ownViewport = true;
+    m_viewport = viewport;
+    m_refView.setViewport(m_viewport);
+
+    for (auto& layer : m_layers)
+        layer->setViewport(m_viewport);
+}
 
 void Scene::centerRelative(const sf::Vector2f& relCoords)
 {
@@ -170,16 +182,18 @@ void Scene::adaptViewZoom()
 
 void Scene::updateReferenceMinMax()
 {
-    const auto& resolution = Application::context().resolution;
+    const auto& viewport = (m_ownViewport)? m_viewport : Application::context().viewport;
+    const auto& screenSize = Application::context().screenSize;
+    sf::Vector2f viewportSize{viewport.width * screenSize.x, viewport.height * screenSize.y};
 
-    auto viewRatio = resolution.x / resolution.y;
+    auto viewRatio = viewportSize.x / viewportSize.y;
     auto layerRatio = m_size.x / m_size.y;
 
     // The view reference size is the maximum valid size that
     // does not show anything beyond what displayRect tells.
     sf::Vector2f viewRefSize;
-    if (viewRatio < layerRatio) viewRefSize = resolution * m_size.y / resolution.y;
-    else viewRefSize = resolution * m_size.x / resolution.x;
+    if (viewRatio < layerRatio) viewRefSize = viewportSize * m_size.y / viewportSize.y;
+    else viewRefSize = viewportSize * m_size.x / viewportSize.x;
 
     m_minSize = m_minZoom * viewRefSize;
     m_maxSize = m_maxZoom * viewRefSize;

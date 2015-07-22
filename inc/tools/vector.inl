@@ -60,6 +60,19 @@ namespace sf
         return r;
     }
 
+    template<typename T> Rect<T>& operator/=(Rect<T>& r, const Vector2<T>& v)
+    {
+        r.left /= v.x; r.width  /= v.x;
+        r.top  /= v.y; r.height /= v.y;
+        return r;
+    }
+
+    template<typename T> Rect<T> operator/(Rect<T>& r, const Vector2<T>& v)
+    {
+        Rect<T> t(r);
+        return t /= v;
+    }
+
     //---------------------------//
     //----- Stream operator -----//
 

@@ -37,8 +37,10 @@ void Layer::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Layer::refreshDisplay()
 {
-    const auto& viewport = Application::context().viewport;
-    m_view.setViewport(viewport);
+    if (!m_ownViewport) {
+        const auto& viewport = Application::context().viewport;
+        m_view.setViewport(viewport);
+    }
 
     // Set the root entity to the size of the layer.
     // This is used for relative positionning of entities.
@@ -83,6 +85,12 @@ void Layer::fitToVisibleRect(scene::Entity& entity)
 
 //-----------------------------//
 //----- View manipulation -----//
+
+void Layer::setViewport(const sf::FloatRect& viewport)
+{
+    m_ownViewport = true;
+    m_view.setViewport(viewport);
+}
 
 void Layer::setRelativeCenter(const sf::Vector2f& relativeCenter)
 {

@@ -53,6 +53,10 @@ namespace scene
         //! @name View manipulation
         //! @{
 
+        //! Sets the viewport.
+        //! If not used, the default is resolution-wide.
+        void setViewport(const sf::FloatRect& viewport);
+
         //! Center the view to the specified relative coordinates.
         void centerRelative(const sf::Vector2f& relCoords);
 
@@ -158,5 +162,9 @@ namespace scene
         sf::Vector2f m_maxSize; //!< The maximal size allowed.
 
         sf::Vector2f m_relativeCenter;  //!< The relative center.
+
+        // Viewports
+        bool m_ownViewport = false; //!< Whether or not we use a provided viewport.
+        sf::FloatRect m_viewport;   //!< The provided viewport if any.
     };
 }
