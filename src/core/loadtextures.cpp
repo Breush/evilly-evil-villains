@@ -67,7 +67,6 @@ void Application::loadTextures()
     s_context.textures.setRepeated(TextureID::DUNGEON_INTER_OUTER_WALL, true);
 
     // Dungeon faciilities
-    s_context.textures.load(TextureID::DUNGEON_FACILITIES_ENTRANCE, "res/tex/dungeon/facilities/entrance.png");
     s_context.textures.load(TextureID::DUNGEON_FACILITIES_LADDER, "res/tex/dungeon/facilities/ladder.png");
 
     s_context.textures.load(TextureID::DUNGEON_FACILITIES_TREASURE_ICON, "res/tex/dungeon/facilities/treasure/icon.png");
@@ -77,6 +76,11 @@ void Application::loadTextures()
     s_context.textures.load(TextureID::DUNGEON_FACILITIES_TREASURE_CLOSE, "res/tex/dungeon/facilities/treasure/close.png", true);
     s_context.textures.load(TextureID::DUNGEON_FACILITIES_TREASURE_HALF, "res/tex/dungeon/facilities/treasure/half.png", true);
     s_context.textures.load(TextureID::DUNGEON_FACILITIES_TREASURE_FULL, "res/tex/dungeon/facilities/treasure/full.png", true);
+
+    s_context.textures.load(TextureID::DUNGEON_FACILITIES_ENTRANCE_ICON, "res/tex/dungeon/facilities/entrance/icon.png");
+    s_context.textures.load(TextureID::DUNGEON_FACILITIES_ENTRANCE_FRAME, "res/tex/dungeon/facilities/entrance/frame.png", true);
+    s_context.textures.load(TextureID::DUNGEON_FACILITIES_ENTRANCE_DOOR_OPEN, "res/tex/dungeon/facilities/entrance/door_open.png", true);
+    s_context.textures.load(TextureID::DUNGEON_FACILITIES_ENTRANCE_DOOR_CLOSE, "res/tex/dungeon/facilities/entrance/door_close.png", true);
 
     // Dungeon traps
     s_context.textures.load(TextureID::DUNGEON_TRAPS_PICKPOCK_ICON, "res/tex/dungeon/traps/pickpock/icon.png");

@@ -11,6 +11,7 @@ void Application::loadAnimations()
     s_context.animations.load(AnimationID::DUNGEON_TRAPS_PICKPOCK, "res/scml/dungeon/traps/pickpock.scml");
 
     // Dungeon facilities
+    s_context.animations.load(AnimationID::DUNGEON_FACILITIES_ENTRANCE, "res/scml/dungeon/facilities/entrance.scml");
     s_context.animations.load(AnimationID::DUNGEON_FACILITIES_TREASURE, "res/scml/dungeon/facilities/treasure.scml");
 
     // Heroes

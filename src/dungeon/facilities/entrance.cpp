@@ -10,6 +10,5 @@ Entrance::Entrance(const sf::Vector2u& coords, ElementData& elementdata)
 {
     // Decorum
     attachChild(m_sprite);
-    m_sprite.setTexture(TextureID::DUNGEON_FACILITIES_ENTRANCE);
-    m_sprite.centerOrigin();
+    m_sprite.load(AnimationID::DUNGEON_FACILITIES_ENTRANCE);
 }

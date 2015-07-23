@@ -1,7 +1,7 @@
 #pragma once
 
 #include "dungeon/facilities.hpp"
-#include "sfe/sprite.hpp"
+#include "sfe/animatedsprite.hpp"
 
 namespace dungeon
 {
@@ -33,7 +33,7 @@ namespace facilities
 
     private:
 
-        sfe::Sprite m_sprite;   //!< The sprite.
+        sfe::AnimatedSprite m_sprite;   //!< The sprite.
     };
 }
 }
