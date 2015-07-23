@@ -67,7 +67,10 @@ void Application::loadTextures()
     s_context.textures.setRepeated(TextureID::DUNGEON_INTER_OUTER_WALL, true);
 
     // Dungeon faciilities
-    s_context.textures.load(TextureID::DUNGEON_FACILITIES_LADDER, "res/tex/dungeon/facilities/ladder.png");
+    s_context.textures.load(TextureID::DUNGEON_FACILITIES_LADDER_ICON, "res/tex/dungeon/facilities/ladder/icon.png");
+    s_context.textures.load(TextureID::DUNGEON_FACILITIES_LADDER_MAIN, "res/tex/dungeon/facilities/ladder/main.png");
+    s_context.textures.load(TextureID::DUNGEON_FACILITIES_LADDER_EXIT_MAIN, "res/tex/dungeon/facilities/ladder/exit_main.png");
+    s_context.textures.load(TextureID::DUNGEON_FACILITIES_LADDER_EXIT_END, "res/tex/dungeon/facilities/ladder/exit_end.png");
 
     s_context.textures.load(TextureID::DUNGEON_FACILITIES_TREASURE_ICON, "res/tex/dungeon/facilities/treasure/icon.png");
     // TODO Have a way to load all file from the directory, without having an associated TextureID (not used with SCML animation).
