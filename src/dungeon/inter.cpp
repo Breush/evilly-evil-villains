@@ -35,6 +35,9 @@ Inter::Inter(nui::ContextMenu& contextMenu)
     m_outerWalls[1].setTexture(&outerWallsTexture);
     addPart(&m_outerWalls[0]);
     addPart(&m_outerWalls[1]);
+
+    // Ref size
+    m_refRoomSize = sf::v2f(Application::context().textures.get(TextureID::DUNGEON_INTER_INNER_WALL).getSize());
 }
 
 //-------------------//
@@ -50,10 +53,7 @@ void Inter::updateRoutine(const sf::Time&)
 
 void Inter::onSizeChanges()
 {
-    returnif (size() == m_grid.size());
-
     m_grid.setSize(size());
-    refreshRoomScale();
     refreshOuterWalls();
 
     returnif (m_data == nullptr);
@@ -207,7 +207,8 @@ void Inter::refreshFromData()
         m_tiles[{floor, room}] = std::move(tile);
     }
 
-    refreshRoomScale();
+    // Sets the new size
+    refreshSize();
     refreshTiles();
 }
 
@@ -416,6 +417,15 @@ void Inter::showEditTreasureDialog(const sf::Vector2u& coords)
 //---------------------//
 //----- Structure -----//
 
+void Inter::setRoomWidth(const float roomWidth)
+{
+    // Note: We want room to keep the same ratio as original image.
+    const auto& textureSize = Application::context().textures.get(TextureID::DUNGEON_INTER_INNER_WALL).getSize();
+    const float scaleFactor = roomWidth / textureSize.x;
+    m_roomScale = {scaleFactor, scaleFactor};
+    refreshSize();
+}
+
 void Inter::createRoomFacility(const sf::Vector2f& relPos, const std::wstring& facilityID)
 {
     m_data->createRoomFacility(tileFromLocalPosition(relPos), facilityID);
@@ -488,10 +498,14 @@ void Inter::configureDoshLabel(std::unique_ptr<sfe::Label>& doshLabel, const uin
 //-----------------------------------//
 //----- Internal change updates -----//
 
-void Inter::refreshRoomScale()
+void Inter::refreshSize()
 {
-    const auto& textureSize = Application::context().textures.get(TextureID::DUNGEON_INTER_INNER_WALL).getSize();
-    m_roomScale = m_grid.cellSize() / sf::v2f(textureSize);
+    returnif (m_data == nullptr);
+
+    const auto& roomsByFloor = m_data->roomsByFloor();
+    const auto& floorsCount = m_data->floorsCount();
+    const auto roomSize = m_roomScale * m_refRoomSize;
+    setSize({roomSize.x * roomsByFloor, roomSize.y * floorsCount});
 }
 
 void Inter::refreshTiles()

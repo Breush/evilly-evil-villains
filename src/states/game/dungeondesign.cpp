@@ -80,9 +80,9 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     // Dungeon inter
     dungeonRoot.attachChild(m_dungeonInter);
     m_dungeonInter.useData(m_dungeonData);
-    // TODO No setSize here... but setRoomSize().
-    m_dungeonInter.setSize({700.f, 900.f});
-    m_dungeonInter.setLocalPosition({sceneSize.x / 2.f - 350.f, sceneSize.y - 950.f});
+    m_dungeonInter.setRoomWidth(120.f);
+    m_dungeonInter.setLocalPosition({120.f, sceneSize.y - 50.f});
+    m_dungeonInter.setRelativeOrigin({0.f, 1.f});
 
     // Dungeon hero
     // TODO Have a Hero manager or so (Hero then, should not be a receiver?)
@@ -91,7 +91,6 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     m_dungeonHero.useData(m_dungeonData);
 
     // FIXME This should not be here.
-    // This scale is somehow const.
     m_dungeonHero.setLocalScale(m_dungeonInter.roomScale());
 
     // Decorum
@@ -122,7 +121,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     // Minimap
     m_minimapRoot = &scene().layer("DUNGEON").root();
     m_minimapView.setSize(m_dungeonInter.size());
-    m_minimapView.setCenter(m_dungeonInter.localPosition() + m_dungeonInter.size() / 2.f);
+    m_minimapView.setCenter(m_dungeonInter.getPosition() - m_dungeonInter.getOrigin() + m_dungeonInter.size() / 2.f);
 
     refreshDisplay();
 }

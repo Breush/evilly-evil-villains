@@ -516,6 +516,7 @@ void Entity::refreshFromLocalScale()
 void Entity::refreshOrigin()
 {
     setOrigin(m_relativeOrigin * m_size);
+    refreshFromLocalPosition();
 }
 
 void Entity::refreshDepthOrder()

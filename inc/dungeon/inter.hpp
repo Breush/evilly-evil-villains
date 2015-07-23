@@ -65,6 +65,9 @@ namespace dungeon
         //! @name Structure
         //! @{
 
+        //! Computes the correct roomScale from the expected width.
+        void setRoomWidth(const float roomWidth);
+
         //! Find the room below the specified relative position and forward change to data.
         void createRoomFacility(const sf::Vector2f& relPos, const std::wstring& facilityID);
 
@@ -194,8 +197,8 @@ namespace dungeon
         //! @name Internal change updates
         //! @{
 
-        //! Refresh the stored value of room scale.
-        void refreshRoomScale();
+        //! Refresh the size using current values for roomScale and room number.
+        void refreshSize();
 
         //! Refresh display from current data.
         void refreshFromData();
@@ -247,6 +250,7 @@ namespace dungeon
         std::unordered_map<sf::Vector2u, Tile> m_tiles;     //!< All tiles constituing the dungeon.
         std::array<sf::RectangleShape, 2u> m_outerWalls;    //!< Sprites for left/right outer walls.
         sf::Vector2f m_roomScale = {1.f, 1.f};              //!< The room scale.
+        sf::Vector2f m_refRoomSize;                         //!< The original room size.
 
         // Delay
         std::vector<std::function<void()>> m_tileRefreshPending;    //! Pending list of tile refreshTileXXX.
