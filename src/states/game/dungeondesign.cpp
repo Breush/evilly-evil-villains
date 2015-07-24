@@ -66,11 +66,10 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 
     // Dungeon sidebar
     nuiRoot.attachChild(m_dungeonSidebar);
-    m_dungeonSidebar.centerOrigin();
-    m_dungeonSidebar.setSize({2 * 100 + 25, 5 * 125 + 25});
-    m_dungeonSidebar.setLocalPosition({nuiSize.x - m_dungeonSidebar.size().x / 2.f, nuiSize.y / 2.f});
-    m_dungeonSidebar.lerpable()->saveDefaults();
-    m_dungeonSidebar.immediateReduce();
+    m_dungeonSidebar.setDepth(100.f); // TODO Debug thingy, as lng as everything is nt a child of sidebar
+    m_dungeonSidebar.setSize({200.f, nuiSize.y});
+    m_dungeonSidebar.setLocalPosition({nuiSize.x, 0.f});
+    m_dungeonSidebar.setRelativeOrigin({1.f, 0.f});
     m_dungeonSidebar.setEmitter(&m_dungeonData);
 
     // Dungeon summary
@@ -156,7 +155,7 @@ void GameDungeonDesign::refreshDisplay()
     m_minimapView.setViewport(minimapScreenRect / screenSize);
 
     // Scene viewport
-    const float sidebarWidth = 200.f;
+    const float sidebarWidth = m_dungeonSidebar.size().x;
     const sf::FloatRect sceneRect{0.f, 0.f, resolution.x - sidebarWidth, resolution.y};
     auto sceneScreenRect = tools::mapRectCoordsToPixel(window, nuiView, sceneRect);
     scene().setViewport(sceneScreenRect / screenSize);

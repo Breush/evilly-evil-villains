@@ -10,8 +10,6 @@
 
 namespace dungeon
 {
-    // FIXME So much duplicated code with dungeon::Panel
-
     class Sidebar final : public scene::Entity, public EventReceiver
     {
         using baseClass = scene::Entity;
@@ -19,11 +17,6 @@ namespace dungeon
     public:
         Sidebar();
         ~Sidebar();
-
-        // Reduced mode
-        void setReduced(bool reduced);
-        void switchReduced();
-        void immediateReduce();
 
         // Mode
         enum class Mode {
@@ -67,7 +60,6 @@ namespace dungeon
 
     private:
         sf::RectangleShape m_background;
-        sf::RectangleShape m_switchReducedButton;
 
         // Tabs
         std::vector<std::unique_ptr<nui::GrabButton>> m_tabs;
