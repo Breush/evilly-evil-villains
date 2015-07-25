@@ -156,7 +156,7 @@ void Entity::updateChanges()
             m_graph->updateFocusSprite();
 
         if (m_parent != nullptr)
-            m_parent->onChildSizeChanges();
+            m_parent->onChildSizeChanges(*this);
 
         m_sizeChanges = false;
     }

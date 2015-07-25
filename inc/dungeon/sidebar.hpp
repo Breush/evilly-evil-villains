@@ -4,6 +4,7 @@
 #include "nui/grabbutton.hpp"
 #include "scene/entity.hpp"
 #include "dungeon/event.hpp"
+#include "dungeon/panel.hpp"
 #include "tools/param.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -41,10 +42,6 @@ namespace dungeon
         //! @name Events
         //! @{
 
-        void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
-        void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
-        void handleMouseLeft() final;
-
         void receive(const Event& event) final;
 
         //! @}
@@ -59,10 +56,16 @@ namespace dungeon
         //! @}
 
     private:
-        sf::RectangleShape m_background;
+
+        // Decorum
+        sf::RectangleShape m_background;    //!< The background.
+
+        // Stacker
+        nui::VStacker m_globalStacker;  //!< Contains all elements.
 
         // Tabs
-        std::vector<std::unique_ptr<nui::GrabButton>> m_tabs;
-        nui::VStacker m_tabsStacker;
+        dungeon::Panel m_tabs;              //!< The tabs.
+        nui::VStacker m_tabContentStacker;  //!< The stacker containing the current tab content.
+        std::vector<std::unique_ptr<nui::GrabButton>> m_tabContent; //!< The dynamic content for the tabs.
     };
 }

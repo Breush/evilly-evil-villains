@@ -192,7 +192,7 @@ namespace scene
         virtual void onSizeChanges() {}
 
         //! Called whenever a child changed its size.
-        virtual void onChildSizeChanges() {}
+        virtual void onChildSizeChanges(scene::Entity& child) {}
 
         //! Called whenever a child has been detached.
         virtual void onChildDetached(scene::Entity& child) {}

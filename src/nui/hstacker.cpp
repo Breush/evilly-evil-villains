@@ -29,7 +29,7 @@ void HStacker::onSizeChanges()
     refreshChildrenPositions();
 }
 
-void HStacker::onChildSizeChanges()
+void HStacker::onChildSizeChanges(scene::Entity&)
 {
     updateSize();
 }

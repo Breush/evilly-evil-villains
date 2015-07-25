@@ -46,7 +46,7 @@ void PopDialog::onSizeChanges()
     m_background.setSize(size());
 }
 
-void PopDialog::onChildSizeChanges()
+void PopDialog::onChildSizeChanges(scene::Entity&)
 {
     refreshBoxBackground();
 }

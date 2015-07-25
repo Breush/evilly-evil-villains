@@ -30,7 +30,7 @@ void VStacker::onSizeChanges()
     refreshChildrenPositions();
 }
 
-void VStacker::onChildSizeChanges()
+void VStacker::onChildSizeChanges(scene::Entity&)
 {
     updateSize();
 }

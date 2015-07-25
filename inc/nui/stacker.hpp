@@ -45,7 +45,7 @@ namespace nui
 
         void onChildDetached(scene::Entity& child) final;
         virtual void onSizeChanges() override = 0;
-        virtual void onChildSizeChanges() override = 0;
+        virtual void onChildSizeChanges(scene::Entity& child) override = 0;
 
         //! Updates the total size of the stacker and reposition children.
         virtual void updateSize() = 0;

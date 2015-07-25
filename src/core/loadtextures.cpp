@@ -42,8 +42,9 @@ void Application::loadTextures()
     s_context.textures.load(TextureID::DUNGEON_SCENE_HORIZON,   "res/tex/dungeon/scene/horizon.png");
     s_context.textures.load(TextureID::DUNGEON_SCENE_SKY,       "res/tex/dungeon/scene/sky.png");
 
-    // Dungeon panel
-    s_context.textures.load(TextureID::DUNGEON_PANEL_BACKGROUND, "res/tex/dungeon/panel/background.png");
+    // Dungeon sidebar
+    s_context.textures.load(TextureID::DUNGEON_SIDEBAR_BACKGROUND, "res/tex/dungeon/sidebar/background.png");
+
     s_context.textures.load(TextureID::DUNGEON_PANEL_SWITCH, "res/tex/dungeon/panel/switch.png");
     s_context.textures.load(TextureID::DUNGEON_PANEL_MONSTERS, "res/tex/dungeon/panel/monsters.png");
     s_context.textures.load(TextureID::DUNGEON_PANEL_TRAPS, "res/tex/dungeon/panel/traps.png");

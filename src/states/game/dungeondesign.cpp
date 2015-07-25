@@ -13,7 +13,6 @@ using namespace states;
 GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     : State(stack)
     , m_dungeonInter(m_contextMenu)
-    , m_dungeonPanel(m_dungeonSidebar)
     , m_dungeonHero(&m_dungeonInter)
 {
     // During game, disable key repeat
@@ -56,19 +55,9 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     m_dungeonLog.setLocalPosition({nuiSize.x - m_dungeonLog.size().x, 0.f});
     m_dungeonLog.setEmitter(&m_dungeonData);
 
-    // Dungeon panel
-    nuiRoot.attachChild(m_dungeonPanel);
-    m_dungeonPanel.centerOrigin();
-    m_dungeonPanel.setSize({4 * 100 + 25, 125 + 25});
-    m_dungeonPanel.setLocalPosition({nuiSize.x / 2.f, nuiSize.y - m_dungeonPanel.size().y / 2.f});
-    m_dungeonPanel.lerpable()->saveDefaults();
-    m_dungeonPanel.setEmitter(&m_dungeonData);
-
     // Dungeon sidebar
     nuiRoot.attachChild(m_dungeonSidebar);
-    m_dungeonSidebar.setDepth(100.f); // TODO Debug thingy, as lng as everything is nt a child of sidebar
-    m_dungeonSidebar.setSize({200.f, nuiSize.y});
-    m_dungeonSidebar.setLocalPosition({nuiSize.x, 0.f});
+    m_dungeonSidebar.setDepth(100.f); // TODO Debug thingy, as long as everything is not a child of sidebar
     m_dungeonSidebar.setRelativeOrigin({1.f, 0.f});
     m_dungeonSidebar.setEmitter(&m_dungeonData);
 
@@ -79,7 +68,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     // Dungeon inter
     dungeonRoot.attachChild(m_dungeonInter);
     m_dungeonInter.useData(m_dungeonData);
-    m_dungeonInter.setRoomWidth(120.f);
+    m_dungeonInter.setRoomWidth(128.f);
     m_dungeonInter.setLocalPosition({120.f, sceneSize.y - 50.f});
     m_dungeonInter.setRelativeOrigin({0.f, 1.f});
 
@@ -147,15 +136,19 @@ void GameDungeonDesign::refreshDisplay()
     const auto& resolution = Application::context().resolution;
     const auto& nuiView = nuiLayer().view();
 
+    // Sidebar
+    const float sidebarWidth = 200.f;
+    m_dungeonSidebar.setSize({sidebarWidth, resolution.y});
+    m_dungeonSidebar.setLocalPosition({resolution.x, 0.f});
+
     // Minimap viewport
-    // TODO Can this be an entity somehow?
+    // TODO Can this be an entity somehow? -> Surely
     const sf::Vector2f minimapSize{70.f, 90.f};
-    const sf::FloatRect minimapRect{resolution.x - minimapSize.x, 0.f, minimapSize.x, minimapSize.y};
+    const sf::FloatRect minimapRect{resolution.x - sidebarWidth, resolution.y - minimapSize.y, minimapSize.x, minimapSize.y};
     auto minimapScreenRect = tools::mapRectCoordsToPixel(window, nuiView, minimapRect);
     m_minimapView.setViewport(minimapScreenRect / screenSize);
 
     // Scene viewport
-    const float sidebarWidth = m_dungeonSidebar.size().x;
     const sf::FloatRect sceneRect{0.f, 0.f, resolution.x - sidebarWidth, resolution.y};
     auto sceneScreenRect = tools::mapRectCoordsToPixel(window, nuiView, sceneRect);
     scene().setViewport(sceneScreenRect / screenSize);

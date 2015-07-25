@@ -11,28 +11,20 @@ using namespace dungeon;
 
 Panel::Panel(Sidebar& sidebar)
     : baseClass(true) // Lerpable
-    , m_reduced(false)
+    , m_width(0.f)
     , m_sidebar(sidebar)
 {
-    // Background
-    m_background.setTexture(&Application::context().textures.get(TextureID::DUNGEON_PANEL_BACKGROUND));
-    addPart(&m_background);
-
-    // Reduced button
-    m_switchReducedButton.setTexture(&Application::context().textures.get(TextureID::DUNGEON_PANEL_SWITCH));
-    m_switchReducedButton.setSize({20.f, 20.f});
-    addPart(&m_switchReducedButton);
-
     // Tabs stacker
     attachChild(m_tabsStacker);
     m_tabsStacker.centerOrigin();
+    m_tabsStacker.setRelativePosition({0.5f, 0.5f});
     for (auto& tab : m_tabs)
         m_tabsStacker.stackBack(tab, nui::Align::CENTER);
 
     // Tabs
-    m_tabs[0].setVisual(_("Monsters"),   TextureID::DUNGEON_PANEL_MONSTERS);
-    m_tabs[1].setVisual(_("Traps"),      TextureID::DUNGEON_PANEL_TRAPS);
-    m_tabs[2].setVisual(_("Facilities"), TextureID::DUNGEON_PANEL_FACILITIES);
+    m_tabs[0].setImage(TextureID::DUNGEON_PANEL_MONSTERS);
+    m_tabs[1].setImage(TextureID::DUNGEON_PANEL_TRAPS);
+    m_tabs[2].setImage(TextureID::DUNGEON_PANEL_FACILITIES);
 
     m_tabs[0].setCallback([&]() { m_sidebar.setMode(Sidebar::Mode::MONSTERS); });
     m_tabs[1].setCallback([&]() { m_sidebar.setMode(Sidebar::Mode::TRAPS); });
@@ -42,38 +34,10 @@ Panel::Panel(Sidebar& sidebar)
 //-------------------//
 //----- Routine -----//
 
-void Panel::onSizeChanges()
+void Panel::onChildSizeChanges(scene::Entity& child)
 {
-    // Background
-    m_background.setSize(size());
-
-    // Reduced button
-    m_switchReducedButton.setPosition({size().x - 40.f, 10.f});
-
-    // Tabs stacker
-    m_tabsStacker.setLocalPosition(size() / 2.f);
-}
-
-//------------------------//
-//----- Mouse events -----//
-
-void Panel::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vector2f& mousePos, const sf::Vector2f&)
-{
-    if (m_switchReducedButton.getGlobalBounds().contains(mousePos))
-        switchReduced();
-}
-
-void Panel::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
-{
-    resetPartsShader();
-
-    if (m_switchReducedButton.getGlobalBounds().contains(mousePos))
-        setPartShader(&m_switchReducedButton, ShaderID::NUI_HOVER);
-}
-
-void Panel::handleMouseLeft()
-{
-    resetPartsShader();
+    m_height = child.size().y;
+    refreshSize();
 }
 
 //--------------------------//
@@ -85,18 +49,10 @@ void Panel::receive(const Event& event)
     setVisible(event.mode != Mode::INVASION);
 }
 
-//------------------------//
-//----- Reduced mode -----//
+//-----------------------------------//
+//----- Internal change updates -----//
 
-void Panel::setReduced(bool reduced)
+void Panel::refreshSize()
 {
-    m_reduced = reduced;
-
-    if (m_reduced) lerpable()->setTargetPositionOffset({0.f, size().y - 30.f});
-    else lerpable()->setTargetPositionOffset({0.f, 0.f});
-}
-
-void Panel::switchReduced()
-{
-    setReduced(!reduced());
+    setSize({m_width, m_height});
 }

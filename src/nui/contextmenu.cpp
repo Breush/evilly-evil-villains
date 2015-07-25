@@ -12,7 +12,8 @@ ContextMenu::ContextMenu()
     setVisible(false);
 
     // Background
-    m_background.setTexture(&Application::context().textures.get(TextureID::DUNGEON_PANEL_BACKGROUND));
+    // TODO Have own background image
+    m_background.setTexture(&Application::context().textures.get(TextureID::DUNGEON_SIDEBAR_BACKGROUND));
 
     // Title
     m_title.setFont(Application::context().fonts.get(FontID::NUI));

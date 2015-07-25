@@ -5,7 +5,6 @@
 #include "dungeon/data.hpp"
 #include "dungeon/graph.hpp"
 #include "dungeon/inter.hpp"
-#include "dungeon/panel.hpp"
 #include "dungeon/summary.hpp"
 #include "dungeon/sidebar.hpp"
 #include "dungeon/lock.hpp"
@@ -39,7 +38,6 @@ namespace states
         dungeon::Data m_dungeonData;
         dungeon::Graph m_dungeonGraph;
         dungeon::Inter m_dungeonInter;
-        dungeon::Panel m_dungeonPanel;
         dungeon::Sidebar m_dungeonSidebar;
         dungeon::Summary m_dungeonSummary;
         dungeon::Lock m_dungeonLock;

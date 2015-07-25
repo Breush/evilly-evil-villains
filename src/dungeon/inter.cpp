@@ -420,8 +420,7 @@ void Inter::showEditTreasureDialog(const sf::Vector2u& coords)
 void Inter::setRoomWidth(const float roomWidth)
 {
     // Note: We want room to keep the same ratio as original image.
-    const auto& textureSize = Application::context().textures.get(TextureID::DUNGEON_INTER_INNER_WALL).getSize();
-    const float scaleFactor = roomWidth / textureSize.x;
+    const float scaleFactor = roomWidth / m_refRoomSize.x;
     m_roomScale = {scaleFactor, scaleFactor};
     refreshSize();
 }

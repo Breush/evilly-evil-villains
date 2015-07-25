@@ -11,22 +11,28 @@
 using namespace dungeon;
 
 Sidebar::Sidebar()
+    : m_tabs(*this)
 {
+    // Global stacker
+    attachChild(m_globalStacker);
+    m_globalStacker.setRelativePosition({0.5f, 0.f});
+    m_globalStacker.setRelativeOrigin({0.5f, 0.f});
+    m_globalStacker.stackBack(m_tabs, nui::Align::CENTER);
+    m_globalStacker.stackBack(m_tabContentStacker, nui::Align::CENTER);
+
     // Background
-    // TODO Big cheating here on rotation, better have a vertical texture too
-    m_background.setTexture(&Application::context().textures.get(TextureID::DUNGEON_PANEL_BACKGROUND));
-    m_background.setRotation(90);
+    // TODO Have a better image...
+    m_background.setTexture(&Application::context().textures.get(TextureID::DUNGEON_SIDEBAR_BACKGROUND));
     addPart(&m_background);
 
-    // Tabs
-    attachChild(m_tabsStacker);
-    m_tabsStacker.setRelativeOrigin({0.5f, 0.f});
+    // Tabs + tab content
+    m_tabContentStacker.setRelativeOrigin({0.5f, 0.f});
 }
 
 Sidebar::~Sidebar()
 {
-    m_tabsStacker.unstackAll();
-    m_tabs.clear();
+    m_tabContentStacker.unstackAll();
+    m_tabContent.clear();
 }
 
 //-------------------//
@@ -35,27 +41,10 @@ Sidebar::~Sidebar()
 void Sidebar::onSizeChanges()
 {
     // Background
-    m_background.setPosition({size().x, 0.f});
-    m_background.setSize({size().y, size().x});
+    m_background.setSize(size());
 
-    m_tabsStacker.setLocalPosition({0.5f * size().x, 50.f});
-}
-
-//------------------------//
-//----- Mouse events -----//
-
-void Sidebar::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vector2f& mousePos, const sf::Vector2f&)
-{
-}
-
-void Sidebar::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
-{
-    resetPartsShader();
-}
-
-void Sidebar::handleMouseLeft()
-{
-    resetPartsShader();
+    // Tabs + tab content
+    m_tabs.setWidth(size().x);
 }
 
 //--------------------------//
@@ -72,25 +61,25 @@ void Sidebar::receive(const Event& event)
 
 void Sidebar::setMode(Mode mode)
 {
-    m_tabsStacker.unstackAll();
-    m_tabs.clear();
+    m_tabContentStacker.unstackAll();
+    m_tabContent.clear();
 
     switch (mode) {
     case Mode::MONSTERS:
         break;
 
     case Mode::TRAPS:
-        m_tabs.emplace_back(std::make_unique<dungeon::TrapGrabButton>(_("Pick-pock"), TextureID::DUNGEON_TRAPS_PICKPOCK_ICON, L"pickpock"));
+        m_tabContent.emplace_back(std::make_unique<dungeon::TrapGrabButton>(_("Pick-pock"), TextureID::DUNGEON_TRAPS_PICKPOCK_ICON, L"pickpock"));
         break;
 
     case Mode::FACILITIES:
-        m_tabs.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Treasure"), TextureID::DUNGEON_FACILITIES_TREASURE_ICON, L"treasure"));
-        m_tabs.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Entrance"), TextureID::DUNGEON_FACILITIES_ENTRANCE_ICON, L"entrance"));
-        m_tabs.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Ladder"),   TextureID::DUNGEON_FACILITIES_LADDER_ICON,   L"ladder"));
+        m_tabContent.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Treasure"), TextureID::DUNGEON_FACILITIES_TREASURE_ICON, L"treasure"));
+        m_tabContent.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Entrance"), TextureID::DUNGEON_FACILITIES_ENTRANCE_ICON, L"entrance"));
+        m_tabContent.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Ladder"),   TextureID::DUNGEON_FACILITIES_LADDER_ICON,   L"ladder"));
         break;
     }
 
-    // Add tabs to stacker
-    for (auto& tab : m_tabs)
-        m_tabsStacker.stackBack(*tab.get(), nui::Align::CENTER);
+    // Add tab content to stacker
+    for (auto& tabContent : m_tabContent)
+        m_tabContentStacker.stackBack(*tabContent, nui::Align::CENTER);
 }

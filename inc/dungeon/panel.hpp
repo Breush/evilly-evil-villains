@@ -30,9 +30,14 @@ namespace dungeon
         //! Default destructor.
         virtual ~Panel() = default;
 
-        // Reduced mode
-        void setReduced(bool reduced);
-        void switchReduced();
+        //--------------------------//
+        //! @name Public properties
+        //! @{
+
+        //! Size override, as height is auto-controled.
+        PARAMGSU(float, m_width, width, setWidth, refreshSize);
+
+        //! @}
 
     protected:
 
@@ -40,42 +45,37 @@ namespace dungeon
         //! @name Routine
         //! @{
 
-        void onSizeChanges() final;
+        void onChildSizeChanges(scene::Entity& child) final;
 
         //! @}
 
         //---------------//
         //! @name Events
         //! @{
-
-        void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
-        void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
-        void handleMouseLeft() final;
 
         void receive(const Event& event) final;
 
         //! @}
 
-        //---------------//
-        //! @name Events
+        //--------------------------------//
+        //! @name Internal change updates
         //! @{
 
-        //! Whether the panel is currently reduced or not.
-        PARAMG(bool, m_reduced, reduced)
+        //! Called to recompute the size.
+        void refreshSize();
 
         //! @}
 
     private:
 
         // Sidebar
-        Sidebar& m_sidebar;
+        Sidebar& m_sidebar; //!< The sidebar, used as callback.
 
         // Tabs
-        nui::HStacker m_tabsStacker;
-        std::array<nui::ImageButton, 3> m_tabs;
+        nui::HStacker m_tabsStacker;            //!< The stacker containing the tabs.
+        std::array<nui::ImageButton, 3> m_tabs; //!< The tabs.
 
-        // Decorum
-        sf::RectangleShape m_background;
-        sf::RectangleShape m_switchReducedButton;
+        // Control over size.
+        float m_height; //!< Size override.
     };
 }
