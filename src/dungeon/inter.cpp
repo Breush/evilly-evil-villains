@@ -153,6 +153,8 @@ void Inter::receive(const Event& event)
         coords = {event.facility.room.x, event.facility.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTileFacilities(coords); });
         m_tileRefreshPending.emplace_back([=]() { return refreshTileDoshLabel(coords); });
+        // TODO That's only because of ladder...
+        m_tileRefreshPending.emplace_back([=]() { return refreshNeighboursFacilities(coords); });
         break;
 
     case EventType::TRAP_CHANGED:
@@ -532,6 +534,14 @@ void Inter::refreshNeighboursLayers(const sf::Vector2u& coords)
     refreshTileLayers(m_data->roomNeighbourCoords(coords, Data::NORTH));
 }
 
+void Inter::refreshNeighboursFacilities(const sf::Vector2u& coords)
+{
+    refreshTileFacilities(m_data->roomNeighbourCoords(coords, Data::WEST));
+    refreshTileFacilities(m_data->roomNeighbourCoords(coords, Data::SOUTH));
+    refreshTileFacilities(m_data->roomNeighbourCoords(coords, Data::EAST));
+    refreshTileFacilities(m_data->roomNeighbourCoords(coords, Data::NORTH));
+}
+
 void Inter::refreshTileDoshLabel(const sf::Vector2u& coords)
 {
     returnif (coords.x >= m_data->floorsCount());
@@ -630,6 +640,9 @@ void Inter::refreshTileFacilities(const sf::Vector2u& coords)
     // Room is not constructed
     returnif (room.state != Data::RoomState::CONSTRUCTED);
 
+    // If room below has a ladder, we need a way down
+    bool needWayDown = m_data->roomNeighbourAccessible(coords, Data::Direction::SOUTH);
+
     // Facilities
     for (auto& facilityData : room.facilities) {
         auto facility = facilities::make(coords, facilityData);
@@ -637,7 +650,27 @@ void Inter::refreshTileFacilities(const sf::Vector2u& coords)
         facility->setLocalScale(m_roomScale);
         facility->setEmitter(m_data);
         facility->centerOrigin();
+        if (needWayDown && facilityData.type() == L"ladder") {
+            auto ladder = dynamic_cast<facilities::Ladder*>(facility.get());
+            ladder->setDesign(facilities::Ladder::Design::EXIT_MAIN);
+            needWayDown = false;
+        }
         tile.facilities.emplace_back(std::move(facility));
+        attachChild(*tile.facilities.back());
+    }
+
+    // Add ladder if none yet
+    // TODO Duplication of code...
+    if (needWayDown) {
+        // TODO This creates a pending reference inside ladder (which is not used, but still...)
+        ElementData elementData;
+        auto ladder = std::make_unique<facilities::Ladder>(coords, elementData);
+        ladder->setDesign(facilities::Ladder::Design::EXIT_END);
+        ladder->setLocalPosition(tileLocalPosition(coords) + tileSize() / 2.f);
+        ladder->setLocalScale(m_roomScale);
+        ladder->setEmitter(m_data);
+        ladder->centerOrigin();
+        tile.facilities.emplace_back(std::move(ladder));
         attachChild(*tile.facilities.back());
     }
 }

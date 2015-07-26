@@ -215,6 +215,9 @@ namespace dungeon
         //! Refresh the layers (and their texture) of the specified tile.
         void refreshTileLayers(const sf::Vector2u& coords);
 
+        //! Refresh the facilities of the existing neighbours, updating state from data.
+        void refreshNeighboursFacilities(const sf::Vector2u& coords);
+
         //! Refresh the facilities (as tile entities) of the specified tile.
         void refreshTileFacilities(const sf::Vector2u& coords);
 

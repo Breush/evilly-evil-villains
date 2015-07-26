@@ -13,6 +13,26 @@ Ladder::Ladder(const sf::Vector2u& coords, ElementData& elementdata)
 
     // Decorum
     attachChild(m_sprite);
-    m_sprite.setTexture(TextureID::DUNGEON_FACILITIES_LADDER_MAIN);
     m_sprite.centerOrigin();
+    setDesign(Design::MAIN);
+}
+
+//------------------//
+//----- Design -----//
+
+void Ladder::setDesign(Design design)
+{
+    switch (design) {
+    case Design::MAIN:
+        m_sprite.setTexture(TextureID::DUNGEON_FACILITIES_LADDER_MAIN);
+        break;
+
+    case Design::EXIT_MAIN:
+        m_sprite.setTexture(TextureID::DUNGEON_FACILITIES_LADDER_EXIT_MAIN);
+        break;
+
+    case Design::EXIT_END:
+        m_sprite.setTexture(TextureID::DUNGEON_FACILITIES_LADDER_EXIT_END);
+        break;
+    }
 }

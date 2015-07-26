@@ -15,11 +15,30 @@ namespace facilities
 
     public:
 
+        //! Defines in what mode the ladder is drawn.
+        enum class Design
+        {
+            MAIN,
+            EXIT_END,
+            EXIT_MAIN,
+        };
+
+    public:
+
         //! Constructor.
         Ladder(const sf::Vector2u& coords, ElementData& elementdata);
 
         //! Default destructor.
         ~Ladder() = default;
+
+        //---------------//
+        //! @name Design
+        //! @{
+
+        //! Defines in what mode the ladder is drawn.
+        void setDesign(Design design);
+
+        //! @}
 
     protected:
 
