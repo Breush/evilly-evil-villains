@@ -12,12 +12,6 @@ Summary::Summary()
 {
     const auto& font = Application::context().fonts.get(FontID::NUI);
 
-    // Background
-    m_background.setFillColor({0, 0, 0, 120});
-    m_background.setOutlineColor({120, 120, 120, 120});
-    m_background.setOutlineThickness(1.f);
-    addPart(&m_background);
-
     // Dungeon name
     m_dungeonName.setFont(font);
     m_dungeonName.setColor(sf::Color::White);
@@ -45,8 +39,6 @@ Summary::Summary()
 
 void Summary::onSizeChanges()
 {
-    m_background.setSize(size());
-
     const auto& nameBounds = m_dungeonName.getLocalBounds();
     m_dungeonName.setPosition((size().x - (nameBounds.left + nameBounds.width)) / 2.f, m_vPadding);
 }

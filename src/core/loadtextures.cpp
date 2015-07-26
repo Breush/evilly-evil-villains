@@ -43,12 +43,10 @@ void Application::loadTextures()
     s_context.textures.load(TextureID::DUNGEON_SCENE_SKY,       "res/tex/dungeon/scene/sky.png");
 
     // Dungeon sidebar
-    s_context.textures.load(TextureID::DUNGEON_SIDEBAR_BACKGROUND, "res/tex/dungeon/sidebar/background.png");
-
-    s_context.textures.load(TextureID::DUNGEON_PANEL_SWITCH, "res/tex/dungeon/panel/switch.png");
-    s_context.textures.load(TextureID::DUNGEON_PANEL_MONSTERS, "res/tex/dungeon/panel/monsters.png");
-    s_context.textures.load(TextureID::DUNGEON_PANEL_TRAPS, "res/tex/dungeon/panel/traps.png");
-    s_context.textures.load(TextureID::DUNGEON_PANEL_FACILITIES, "res/tex/dungeon/panel/facilities.png");
+    s_context.textures.load(TextureID::DUNGEON_SIDEBAR_BACKGROUND,      "res/tex/dungeon/sidebar/background.png");
+    s_context.textures.load(TextureID::DUNGEON_SIDEBAR_TAB_MONSTERS,    "res/tex/dungeon/sidebar/tab/monsters.png");
+    s_context.textures.load(TextureID::DUNGEON_SIDEBAR_TAB_TRAPS,       "res/tex/dungeon/sidebar/tab/traps.png");
+    s_context.textures.load(TextureID::DUNGEON_SIDEBAR_TAB_FACILITIES,  "res/tex/dungeon/sidebar/tab/facilities.png");
 
     // Dungeon inter
     s_context.textures.load(TextureID::DUNGEON_INTER_VOID_INNER_WALL, "res/tex/dungeon/inter/void_inner_wall.png");

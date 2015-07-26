@@ -11,12 +11,12 @@
 using namespace dungeon;
 
 Sidebar::Sidebar()
-    : m_tabs(*this)
 {
     // Global stacker
     attachChild(m_globalStacker);
     m_globalStacker.setRelativePosition({0.5f, 0.f});
     m_globalStacker.setRelativeOrigin({0.5f, 0.f});
+    m_globalStacker.stackBack(m_summary, nui::Align::CENTER);
     m_globalStacker.stackBack(m_tabs, nui::Align::CENTER);
     m_globalStacker.stackBack(m_tabContentStacker, nui::Align::CENTER);
 
@@ -26,6 +26,9 @@ Sidebar::Sidebar()
     addPart(&m_background);
 
     // Tabs + tab content
+    m_tabs.stack_back(_("Monsters"),    TextureID::DUNGEON_SIDEBAR_TAB_MONSTERS,    [this] { setMode(Mode::MONSTERS); });
+    m_tabs.stack_back(_("Traps"),       TextureID::DUNGEON_SIDEBAR_TAB_TRAPS,       [this] { setMode(Mode::TRAPS); });
+    m_tabs.stack_back(_("Facilities"),  TextureID::DUNGEON_SIDEBAR_TAB_FACILITIES,  [this] { setMode(Mode::FACILITIES); });
     m_tabContentStacker.setRelativeOrigin({0.5f, 0.f});
 }
 
@@ -47,13 +50,12 @@ void Sidebar::onSizeChanges()
     m_tabs.setWidth(size().x);
 }
 
-//--------------------------//
-//----- Dungeon events -----//
+//------------------------//
+//----- Dungeon data -----//
 
-void Sidebar::receive(const Event& event)
+void Sidebar::useData(Data& data)
 {
-    returnif (event.type != EventType::MODE_CHANGED);
-    setVisible(event.mode != dungeon::Mode::INVASION);
+    m_summary.useData(data);
 }
 
 //----------------//

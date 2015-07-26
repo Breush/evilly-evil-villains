@@ -88,9 +88,6 @@ namespace dungeon
         //! The data of the dungeon to be read from.
         Data* m_data;
 
-        //! A basic background.
-        sf::RectangleShape m_background;
-
         //! Dungeon name.
         sf::Text m_dungeonName;
 

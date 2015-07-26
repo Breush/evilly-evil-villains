@@ -59,11 +59,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     nuiRoot.attachChild(m_dungeonSidebar);
     m_dungeonSidebar.setDepth(100.f); // TODO Debug thingy, as long as everything is not a child of sidebar
     m_dungeonSidebar.setRelativeOrigin({1.f, 0.f});
-    m_dungeonSidebar.setEmitter(&m_dungeonData);
-
-    // Dungeon summary
-    nuiRoot.attachChild(m_dungeonSummary);
-    m_dungeonSummary.useData(m_dungeonData);
+    m_dungeonSidebar.useData(m_dungeonData);
 
     // Dungeon inter
     dungeonRoot.attachChild(m_dungeonInter);
