@@ -100,7 +100,6 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     scene().layer("FAR").fitToVisibleRect(m_sceneFar);
     scene().layer("HORIZON").fitToVisibleRect(m_sceneHorizon);
     scene().layer("SKY").fitToVisibleRect(m_sceneSky);
-    scene().centerRelative({0.5f, 1.f});
 
     // Minimap
     m_minimapRoot = &scene().layer("DUNGEON").root();
@@ -108,6 +107,9 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     m_minimapView.setCenter(m_dungeonInter.getPosition() - m_dungeonInter.getOrigin() + m_dungeonInter.size() / 2.f);
 
     refreshDisplay();
+
+    // Center view
+    scene().centerRelative({0.5f, 1.f});
 }
 
 //-------------------//

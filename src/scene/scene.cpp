@@ -91,6 +91,8 @@ void Scene::setViewport(const sf::FloatRect& viewport)
 
     for (auto& layer : m_layers)
         layer->setViewport(m_viewport);
+
+    updateReferenceMinMax();
 }
 
 void Scene::centerRelative(const sf::Vector2f& relCoords)
