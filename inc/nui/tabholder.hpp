@@ -44,21 +44,13 @@ namespace nui
 
         //! @}
 
-        //--------------------------//
-        //! @name Public properties
-        //! @{
-
-        //! Size override, as height is auto-controled.
-        PARAMGSU(float, m_width, width, setWidth, refreshSize);
-
-        //! @}
-
     protected:
 
         //----------------//
         //! @name Routine
         //! @{
 
+        void onSizeChanges() final;
         void onChildSizeChanges(scene::Entity& child) final;
 
         //! @}
@@ -103,9 +95,13 @@ namespace nui
         Tab* m_selectedTab = nullptr;   //!< The currently selected tab.
 
         // Content
-        nui::VStacker m_globalStacker;
+        nui::VStacker m_globalStacker;  //!< Contains tab head + content.
 
         // Control over size.
         float m_height; //!< Size override.
+
+        // Decorum
+        sf::RectangleShape m_background;
+
     };
 }

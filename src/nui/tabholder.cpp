@@ -11,14 +11,15 @@
 using namespace nui;
 
 TabHolder::TabHolder()
-    : m_width(0.f)
 {
     // General
     attachChild(m_globalStacker);
 
-    // Tabs stacker
-    m_tabsStacker.centerOrigin();
-    m_tabsStacker.setRelativePosition({0.5f, 0.5f});
+    // Decorum
+    addPart(&m_background);
+    m_background.setOutlineThickness(1.f);
+    m_background.setOutlineColor(sf::Color::White);
+    m_background.setFillColor({255u, 255u, 255u, 100u});
 
     refreshContent();
 }
@@ -26,27 +27,33 @@ TabHolder::TabHolder()
 //-------------------//
 //----- Routine -----//
 
+void TabHolder::onSizeChanges()
+{
+    m_background.setSize(size());
+}
+
 void TabHolder::onChildSizeChanges(scene::Entity& child)
 {
-    refreshSize();
+    // Whenever the global stacker size changes, we update ours
+    setSize(child.size());
 }
 
 //------------------//
 //----- Events -----//
 
-void TabHolder::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f& nuiPos)
+void TabHolder::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
     returnif (button != sf::Mouse::Left);
 
     uint tabNumber = 0u;
     for (auto& tab : m_tabs) {
         // Find tab bounds
-        const auto& tabPosition = tab.image->getPosition();
+        const auto& tabPosition = m_tabsStacker.localPosition() + tab.image->localPosition();
         const auto& tabSize = tab.image->size();
         sf::FloatRect tabBounds{tabPosition.x, tabPosition.y, tabSize.x, tabSize.y};
 
         // If click happened over the tab, select it
-        if (tabBounds.contains(nuiPos)) {
+        if (tabBounds.contains(mousePos)) {
             select(tabNumber);
             break;
         }
@@ -55,7 +62,7 @@ void TabHolder::handleMouseButtonPressed(const sf::Mouse::Button button, const s
     }
 }
 
-void TabHolder::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
+void TabHolder::handleMouseMoved(const sf::Vector2f&, const sf::Vector2f&)
 {
 }
 
@@ -92,19 +99,11 @@ void TabHolder::select(uint tabNumber)
 //-----------------------------------//
 //----- Internal change updates -----//
 
-void TabHolder::refreshSize()
-{
-    m_height = m_globalStacker.size().y;
-    setSize({m_width, m_height});
-}
-
 void TabHolder::refreshContent()
 {
     m_globalStacker.unstackAll();
     m_globalStacker.stackBack(m_tabsStacker);
 
     if (m_selectedTab != nullptr)
-        m_globalStacker.stackBack(m_selectedTab->content);
-
-    refreshSize();
+        m_globalStacker.stackBack(m_selectedTab->content, nui::Align::CENTER);
 }

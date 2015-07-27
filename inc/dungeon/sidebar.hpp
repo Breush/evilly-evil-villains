@@ -80,7 +80,7 @@ namespace dungeon
         nui::VStacker m_globalStacker;  //!< Contains all elements.
 
         // Tabs
-        nui::TabHolder m_tabs;                                  //!< The tabs.
+        nui::TabHolder m_tabHolder;                             //!< The tabs.
         std::array<TabContent, TabsID::COUNT> m_tabContents;    //!< The contents for the tabs.
 
         // Ressources

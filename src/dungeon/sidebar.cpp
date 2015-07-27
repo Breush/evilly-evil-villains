@@ -17,7 +17,7 @@ Sidebar::Sidebar()
     m_globalStacker.setRelativePosition({0.5f, 0.f});
     m_globalStacker.setRelativeOrigin({0.5f, 0.f});
     m_globalStacker.stackBack(m_summary, nui::Align::CENTER);
-    m_globalStacker.stackBack(m_tabs, nui::Align::CENTER);
+    m_globalStacker.stackBack(m_tabHolder, nui::Align::CENTER);
 
     // Background
     // TODO Have a better image...
@@ -29,9 +29,9 @@ Sidebar::Sidebar()
     m_tabContents[TabsID::TRAPS].stacker = std::make_unique<nui::VStacker>();
     m_tabContents[TabsID::FACILITIES].stacker = std::make_unique<nui::VStacker>();
 
-    m_tabs.stackBack(_("Monsters"),    TextureID::DUNGEON_SIDEBAR_TAB_MONSTERS,    *m_tabContents[TabsID::MONSTERS].stacker);
-    m_tabs.stackBack(_("Traps"),       TextureID::DUNGEON_SIDEBAR_TAB_TRAPS,       *m_tabContents[TabsID::TRAPS].stacker);
-    m_tabs.stackBack(_("Facilities"),  TextureID::DUNGEON_SIDEBAR_TAB_FACILITIES,  *m_tabContents[TabsID::FACILITIES].stacker);
+    m_tabHolder.stackBack(_("Monsters"),    TextureID::DUNGEON_SIDEBAR_TAB_MONSTERS,    *m_tabContents[TabsID::MONSTERS].stacker);
+    m_tabHolder.stackBack(_("Traps"),       TextureID::DUNGEON_SIDEBAR_TAB_TRAPS,       *m_tabContents[TabsID::TRAPS].stacker);
+    m_tabHolder.stackBack(_("Facilities"),  TextureID::DUNGEON_SIDEBAR_TAB_FACILITIES,  *m_tabContents[TabsID::FACILITIES].stacker);
 }
 
 Sidebar::~Sidebar()
@@ -49,9 +49,6 @@ void Sidebar::onSizeChanges()
 {
     // Background
     m_background.setSize(size());
-
-    // Tabs + tab content
-    m_tabs.setWidth(size().x);
 }
 
 //------------------------//

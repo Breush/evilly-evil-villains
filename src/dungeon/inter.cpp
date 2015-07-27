@@ -30,9 +30,8 @@ Inter::Inter(nui::ContextMenu& contextMenu)
     m_treasureEditSpinBox.setStep(10u);
 
     // Outer walls
-    const auto& outerWallsTexture = Application::context().textures.get(TextureID::DUNGEON_INTER_OUTER_WALL);
-    m_outerWalls[0].setTexture(&outerWallsTexture);
-    m_outerWalls[1].setTexture(&outerWallsTexture);
+    m_outerWalls[0].setTexture(&Application::context().textures.get(TextureID::DUNGEON_INTER_OUTER_WALL_WEST));
+    m_outerWalls[1].setTexture(&Application::context().textures.get(TextureID::DUNGEON_INTER_OUTER_WALL_EAST));
     addPart(&m_outerWalls[0]);
     addPart(&m_outerWalls[1]);
 
@@ -703,7 +702,7 @@ void Inter::refreshTileTraps(const sf::Vector2u& coords)
 
 void Inter::refreshOuterWalls()
 {
-    const auto& outerWallsTextureSize = Application::context().textures.get(TextureID::DUNGEON_INTER_OUTER_WALL).getSize();
+    const auto& outerWallsTextureSize = Application::context().textures.get(TextureID::DUNGEON_INTER_OUTER_WALL_WEST).getSize();
     const auto& roomSize = Application::context().textures.get(TextureID::DUNGEON_INTER_INNER_WALL).getSize();
     sf::Vector2f outerWallsRealSize(outerWallsTextureSize.x * m_grid.cellSize().x / roomSize.x, size().y);
     sf::IntRect outerWallsRect(0, 0, outerWallsTextureSize.x, outerWallsTextureSize.y * m_grid.rows());
