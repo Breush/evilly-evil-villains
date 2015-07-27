@@ -5,6 +5,7 @@
 #include "nui/tabholder.hpp"
 #include "scene/entity.hpp"
 #include "dungeon/summary.hpp"
+#include "dungeon/minimap.hpp"
 #include "tools/param.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -34,6 +35,15 @@ namespace dungeon
 
         //! @}
 
+        //----------------//
+        //! @name Minimap
+        //! @{
+
+        //! Sets the layer shown in minimap.
+        inline void setMinimapLayer(const scene::Layer& layer) { m_minimap.setLayer(layer); }
+
+        //! @}
+
     protected:
 
         //----------------//
@@ -58,7 +68,7 @@ namespace dungeon
         //! Holds informations about one tab content.
         struct TabContent
         {
-            std::unique_ptr<nui::VStacker> stacker; //!< The stacker containing the tab content.
+            nui::VStacker stacker; //!< The stacker containing the tab content.
             std::vector<std::unique_ptr<nui::GrabButton>> buttons;  //!< The dynamic content for the tab.
         };
 
@@ -83,7 +93,8 @@ namespace dungeon
         nui::TabHolder m_tabHolder;                             //!< The tabs.
         std::array<TabContent, TabsID::COUNT> m_tabContents;    //!< The contents for the tabs.
 
-        // Ressources
+        // Elements
+        dungeon::Minimap m_minimap; //!< Shows the minimap of the dungeon.
         dungeon::Summary m_summary; //!< Shows the ressources.
     };
 }

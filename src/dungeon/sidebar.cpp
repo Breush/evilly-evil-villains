@@ -18,6 +18,7 @@ Sidebar::Sidebar()
     m_globalStacker.setRelativeOrigin({0.5f, 0.f});
     m_globalStacker.stackBack(m_summary, nui::Align::CENTER);
     m_globalStacker.stackBack(m_tabHolder, nui::Align::CENTER);
+    m_globalStacker.stackBack(m_minimap, nui::Align::CENTER);
 
     // Background
     // TODO Have a better image...
@@ -25,19 +26,15 @@ Sidebar::Sidebar()
     addPart(&m_background);
 
     // Tabs + tab content
-    m_tabContents[TabsID::MONSTERS].stacker = std::make_unique<nui::VStacker>();
-    m_tabContents[TabsID::TRAPS].stacker = std::make_unique<nui::VStacker>();
-    m_tabContents[TabsID::FACILITIES].stacker = std::make_unique<nui::VStacker>();
-
-    m_tabHolder.stackBack(_("Monsters"),    TextureID::DUNGEON_SIDEBAR_TAB_MONSTERS,    *m_tabContents[TabsID::MONSTERS].stacker);
-    m_tabHolder.stackBack(_("Traps"),       TextureID::DUNGEON_SIDEBAR_TAB_TRAPS,       *m_tabContents[TabsID::TRAPS].stacker);
-    m_tabHolder.stackBack(_("Facilities"),  TextureID::DUNGEON_SIDEBAR_TAB_FACILITIES,  *m_tabContents[TabsID::FACILITIES].stacker);
+    m_tabHolder.stackBack(_("Monsters"),    TextureID::DUNGEON_SIDEBAR_TAB_MONSTERS,    m_tabContents[TabsID::MONSTERS].stacker);
+    m_tabHolder.stackBack(_("Traps"),       TextureID::DUNGEON_SIDEBAR_TAB_TRAPS,       m_tabContents[TabsID::TRAPS].stacker);
+    m_tabHolder.stackBack(_("Facilities"),  TextureID::DUNGEON_SIDEBAR_TAB_FACILITIES,  m_tabContents[TabsID::FACILITIES].stacker);
 }
 
 Sidebar::~Sidebar()
 {
     for (auto& tabContent : m_tabContents) {
-        tabContent.stacker->unstackAll();
+        tabContent.stacker.unstackAll();
         tabContent.buttons.clear();
     }
 }
@@ -68,7 +65,7 @@ void Sidebar::refreshTabContents()
     // TODO Use data info: what is accessible, at what price?
 
     // Monsters
-    auto& monstersStacker = *m_tabContents[TabsID::MONSTERS].stacker;
+    auto& monstersStacker = m_tabContents[TabsID::MONSTERS].stacker;
     auto& monstersButtons = m_tabContents[TabsID::MONSTERS].buttons;
     monstersStacker.unstackAll();
     monstersButtons.clear();
@@ -77,7 +74,7 @@ void Sidebar::refreshTabContents()
         monstersStacker.stackBack(*monstersButton, nui::Align::CENTER);
 
     // Traps
-    auto& trapsStacker = *m_tabContents[TabsID::TRAPS].stacker;
+    auto& trapsStacker = m_tabContents[TabsID::TRAPS].stacker;
     auto& trapsButtons = m_tabContents[TabsID::TRAPS].buttons;
     trapsStacker.unstackAll();
     trapsButtons.clear();
@@ -88,7 +85,7 @@ void Sidebar::refreshTabContents()
         trapsStacker.stackBack(*trapsButton, nui::Align::CENTER);
 
     // Facilities
-    auto& facilitiesStacker = *m_tabContents[TabsID::FACILITIES].stacker;
+    auto& facilitiesStacker = m_tabContents[TabsID::FACILITIES].stacker;
     auto& facilitiesButtons = m_tabContents[TabsID::FACILITIES].buttons;
     facilitiesStacker.unstackAll();
     facilitiesButtons.clear();

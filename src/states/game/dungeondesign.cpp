@@ -60,6 +60,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     m_dungeonSidebar.setDepth(100.f); // TODO Debug thingy, as long as everything is not a child of sidebar
     m_dungeonSidebar.setRelativeOrigin({1.f, 0.f});
     m_dungeonSidebar.useData(m_dungeonData);
+    m_dungeonSidebar.setMinimapLayer(scene().layer("DUNGEON"));
 
     // Dungeon inter
     dungeonRoot.attachChild(m_dungeonInter);
@@ -101,29 +102,11 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     scene().layer("HORIZON").fitToVisibleRect(m_sceneHorizon);
     scene().layer("SKY").fitToVisibleRect(m_sceneSky);
 
-    // Minimap
-    m_minimapRoot = &scene().layer("DUNGEON").root();
-    m_minimapView.setSize(m_dungeonInter.size());
-    m_minimapView.setCenter(m_dungeonInter.getPosition() - m_dungeonInter.getOrigin() + m_dungeonInter.size() / 2.f);
-
     refreshDisplay();
-
-    // Center view
-    scene().centerRelative({0.5f, 1.f});
 }
 
 //-------------------//
 //----- Routine -----//
-
-void GameDungeonDesign::draw()
-{
-    baseClass::draw();
-
-    // Minimap
-    auto& window = Application::context().window;
-    window.setView(m_minimapView);
-    window.draw(*m_minimapRoot);
-}
 
 void GameDungeonDesign::refreshDisplay()
 {
@@ -142,17 +125,13 @@ void GameDungeonDesign::refreshDisplay()
     m_dungeonSidebar.setSize({sidebarWidth, resolution.y});
     m_dungeonSidebar.setLocalPosition({resolution.x, 0.f});
 
-    // Minimap viewport
-    // TODO Can this be an entity somehow? -> Surely
-    const sf::Vector2f minimapSize{70.f, 90.f};
-    const sf::FloatRect minimapRect{resolution.x - sidebarWidth, resolution.y - minimapSize.y, minimapSize.x, minimapSize.y};
-    auto minimapScreenRect = tools::mapRectCoordsToPixel(window, nuiView, minimapRect);
-    m_minimapView.setViewport(minimapScreenRect / screenSize);
-
     // Scene viewport
     const sf::FloatRect sceneRect{0.f, 0.f, resolution.x - sidebarWidth, resolution.y};
     auto sceneScreenRect = tools::mapRectCoordsToPixel(window, nuiView, sceneRect);
     scene().setViewport(sceneScreenRect / screenSize);
+
+    // Center view
+    scene().centerRelative({0.5f, 1.f});
 }
 
 void GameDungeonDesign::onQuit() noexcept

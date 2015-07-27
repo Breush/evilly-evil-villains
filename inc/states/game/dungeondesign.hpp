@@ -23,7 +23,6 @@ namespace states
         StateID id() const noexcept final { return StateID::GAME_DUNGEON_DESIGN; }
 
         // Routine
-        void draw() final;
         void refreshDisplay() final;
 
         // Events
@@ -59,8 +58,5 @@ namespace states
         const float m_depthFar      = 1.1f;
         const float m_depthHorizon  = 1.15f;
         const float m_depthSky      = 1.3f;
-
-        const scene::Entity* m_minimapRoot = nullptr;   //!< The layer to use for minimap drawing.
-        sf::View m_minimapView;                         //!< The minimap view.
     };
 }
