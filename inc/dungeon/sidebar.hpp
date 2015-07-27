@@ -11,18 +11,11 @@
 
 namespace dungeon
 {
-    //! The sidebar shown in Dungeon Design mode.
+    //! The sidebar shown in Dungeon Design state.
 
     class Sidebar final : public scene::Entity
     {
         using baseClass = scene::Entity;
-
-        //! What tab content is currently shown.
-        enum class Mode {
-            MONSTERS,
-            TRAPS,
-            FACILITIES,
-        };
 
     public:
 
@@ -31,15 +24,6 @@ namespace dungeon
 
         //! Destructor.
         ~Sidebar();
-
-        //---------------------//
-        //! @name Mode
-        //! @{
-
-        //! Sets what tab content is currently shown.
-        void setMode(Mode mode);
-
-        //! @}
 
         //---------------------//
         //! @name Dungeon data
@@ -60,14 +44,32 @@ namespace dungeon
 
         //! @}
 
-        //--------------------------//
-        //! @name Public properties
+        //--------------------------------//
+        //! @name Internal change updates
         //! @{
 
-        //! Whether the panel is currently reduced or not.
-        PARAMG(bool, m_reduced, reduced)
+        //! Refresh the tabs contents.
+        void refreshTabContents();
 
         //! @}
+
+    private:
+
+        //! Holds informations about one tab content.
+        struct TabContent
+        {
+            std::unique_ptr<nui::VStacker> stacker; //!< The stacker containing the tab content.
+            std::vector<std::unique_ptr<nui::GrabButton>> buttons;  //!< The dynamic content for the tab.
+        };
+
+        //! The different tabs.
+        enum TabsID
+        {
+            MONSTERS,
+            TRAPS,
+            FACILITIES,
+            COUNT,
+        };
 
     private:
 
@@ -78,9 +80,8 @@ namespace dungeon
         nui::VStacker m_globalStacker;  //!< Contains all elements.
 
         // Tabs
-        nui::TabHolder m_tabs;              //!< The tabs.
-        nui::VStacker m_tabContentStacker;  //!< The stacker containing the current tab content.
-        std::vector<std::unique_ptr<nui::GrabButton>> m_tabContent; //!< The dynamic content for the tabs.
+        nui::TabHolder m_tabs;                                  //!< The tabs.
+        std::array<TabContent, TabsID::COUNT> m_tabContents;    //!< The contents for the tabs.
 
         // Ressources
         dungeon::Summary m_summary; //!< Shows the ressources.

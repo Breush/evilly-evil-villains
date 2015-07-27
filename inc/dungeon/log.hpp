@@ -20,6 +20,15 @@ namespace dungeon
 
     public:
 
+        //! Decides the direction of stacking messages.
+        enum class Direction
+        {
+            OLD_BELOW,
+            NEW_BELOW,
+        };
+
+    public:
+
         //! Constructor.
         Log();
 
@@ -32,6 +41,18 @@ namespace dungeon
 
         //! Add a message to the log.
         void addMessage(std::wstring text, sf::Color color = sf::Color::White);
+
+        //! @}
+
+        //--------------------------//
+        //! @name Public properties
+        //! @{
+
+        //! Size override, as height is auto-controled.
+        PARAMGSU(float, m_width, width, setWidth, refreshSize)
+
+        //! Decides the direction of stacking messages.
+        PARAMGSU(Direction, m_direction, direction, setDirection, refreshMessages)
 
         //! @}
 
@@ -65,8 +86,11 @@ namespace dungeon
         //! Refresh the fit width for all messages.
         void refreshTextsWrap();
 
-        //! Refresh the size of the background to fit the height of the messages.
-        void refreshBackgroundSize();
+        //! Called to recompute the size from width.
+        void refreshSize();
+
+        //! Called to recompute the size.
+        void refreshHeight();
 
         //! @}
 
@@ -85,7 +109,7 @@ namespace dungeon
         float m_currentHeight = 0.f;    //!< The current height of the displayed messages.
 
         sf::RectangleShape m_background;    //!< The soft background, fitting the current size.
-        
+
         float m_characterSize = 0.f;    //!< The font size.
     };
 }

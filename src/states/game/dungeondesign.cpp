@@ -32,7 +32,6 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     auto& farRoot =     scene().addLayer("FAR",     m_depthFar).root();
     auto& horizonRoot = scene().addLayer("HORIZON", m_depthHorizon).root();
     auto& skyRoot =     scene().addLayer("SKY",     m_depthSky).root();
-    const auto& nuiSize = nuiLayer().size();
 
     // Dungeon data
     massert(!context::worlds.selected().folder.empty(), "Selected world is in an empty folder.");
@@ -45,14 +44,15 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 
     // Dungeon lock
     nuiRoot.attachChild(m_dungeonLock);
-    m_dungeonLock.setLocalPosition(nuiSize);
+    m_dungeonLock.setRelativePosition({1.f, 1.f});
     m_dungeonLock.setRelativeOrigin({1.f, 1.f});
     m_dungeonLock.useData(m_dungeonData);
 
     // Dungeon log
     nuiRoot.attachChild(m_dungeonLog);
-    m_dungeonLog.setSize({nuiSize.x / 4.f, nuiSize.y / 2.f});
-    m_dungeonLog.setLocalPosition({nuiSize.x - m_dungeonLog.size().x, 0.f});
+    m_dungeonLog.setDirection(dungeon::Log::Direction::OLD_BELOW);
+    m_dungeonLog.setRelativePosition({0.f, 1.f});
+    m_dungeonLog.setRelativeOrigin({0.f, 1.f});
     m_dungeonLog.setEmitter(&m_dungeonData);
 
     // Dungeon sidebar
@@ -133,6 +133,9 @@ void GameDungeonDesign::refreshDisplay()
     const auto& screenSize = Application::context().screenSize;
     const auto& resolution = Application::context().resolution;
     const auto& nuiView = nuiLayer().view();
+
+    // Log
+    m_dungeonLog.setWidth(resolution.x / 4.f);
 
     // Sidebar
     const float sidebarWidth = 200.f;

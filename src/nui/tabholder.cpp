@@ -13,10 +13,14 @@ using namespace nui;
 TabHolder::TabHolder()
     : m_width(0.f)
 {
+    // General
+    attachChild(m_globalStacker);
+
     // Tabs stacker
-    attachChild(m_tabsStacker);
     m_tabsStacker.centerOrigin();
     m_tabsStacker.setRelativePosition({0.5f, 0.5f});
+
+    refreshContent();
 }
 
 //-------------------//
@@ -24,7 +28,6 @@ TabHolder::TabHolder()
 
 void TabHolder::onChildSizeChanges(scene::Entity& child)
 {
-    m_height = child.size().y;
     refreshSize();
 }
 
@@ -63,23 +66,27 @@ void TabHolder::handleMouseLeft()
 //---------------------------//
 //----- Tabs management -----//
 
-void TabHolder::stack_back(std::wstring tooltipString, TextureID textureID, const SelectCallback& callback)
+void TabHolder::stackBack(std::wstring tooltipString, TextureID textureID, scene::Entity& content)
 {
     auto image = std::make_unique<sfe::RectangleShape>();
     image->setTexture(textureID);
     image->setSize({40.f, 40.f});
 
-    m_tabs.push_back({std::move(image), std::move(tooltipString), callback});
+    m_tabs.push_back({std::move(image), std::move(tooltipString), content});
     m_tabsStacker.stackBack(*m_tabs.back().image, nui::Align::CENTER);
+
+    // Select first tab on add
+    if (m_tabs.size() == 1u) {
+        m_selectedTab = &m_tabs.back();
+        refreshContent();
+    }
 }
 
 void TabHolder::select(uint tabNumber)
 {
     massert(tabNumber < m_tabs.size(), "Tab number " << tabNumber << " is too big.");
-
-    const auto& selectedTab = m_tabs[tabNumber];
-    if (selectedTab.callback != nullptr)
-        selectedTab.callback();
+    m_selectedTab = &m_tabs[tabNumber];
+    refreshContent();
 }
 
 //-----------------------------------//
@@ -87,5 +94,17 @@ void TabHolder::select(uint tabNumber)
 
 void TabHolder::refreshSize()
 {
+    m_height = m_globalStacker.size().y;
     setSize({m_width, m_height});
+}
+
+void TabHolder::refreshContent()
+{
+    m_globalStacker.unstackAll();
+    m_globalStacker.stackBack(m_tabsStacker);
+
+    if (m_selectedTab != nullptr)
+        m_globalStacker.stackBack(m_selectedTab->content);
+
+    refreshSize();
 }

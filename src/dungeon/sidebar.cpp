@@ -18,7 +18,6 @@ Sidebar::Sidebar()
     m_globalStacker.setRelativeOrigin({0.5f, 0.f});
     m_globalStacker.stackBack(m_summary, nui::Align::CENTER);
     m_globalStacker.stackBack(m_tabs, nui::Align::CENTER);
-    m_globalStacker.stackBack(m_tabContentStacker, nui::Align::CENTER);
 
     // Background
     // TODO Have a better image...
@@ -26,16 +25,21 @@ Sidebar::Sidebar()
     addPart(&m_background);
 
     // Tabs + tab content
-    m_tabs.stack_back(_("Monsters"),    TextureID::DUNGEON_SIDEBAR_TAB_MONSTERS,    [this] { setMode(Mode::MONSTERS); });
-    m_tabs.stack_back(_("Traps"),       TextureID::DUNGEON_SIDEBAR_TAB_TRAPS,       [this] { setMode(Mode::TRAPS); });
-    m_tabs.stack_back(_("Facilities"),  TextureID::DUNGEON_SIDEBAR_TAB_FACILITIES,  [this] { setMode(Mode::FACILITIES); });
-    m_tabContentStacker.setRelativeOrigin({0.5f, 0.f});
+    m_tabContents[TabsID::MONSTERS].stacker = std::make_unique<nui::VStacker>();
+    m_tabContents[TabsID::TRAPS].stacker = std::make_unique<nui::VStacker>();
+    m_tabContents[TabsID::FACILITIES].stacker = std::make_unique<nui::VStacker>();
+
+    m_tabs.stackBack(_("Monsters"),    TextureID::DUNGEON_SIDEBAR_TAB_MONSTERS,    *m_tabContents[TabsID::MONSTERS].stacker);
+    m_tabs.stackBack(_("Traps"),       TextureID::DUNGEON_SIDEBAR_TAB_TRAPS,       *m_tabContents[TabsID::TRAPS].stacker);
+    m_tabs.stackBack(_("Facilities"),  TextureID::DUNGEON_SIDEBAR_TAB_FACILITIES,  *m_tabContents[TabsID::FACILITIES].stacker);
 }
 
 Sidebar::~Sidebar()
 {
-    m_tabContentStacker.unstackAll();
-    m_tabContent.clear();
+    for (auto& tabContent : m_tabContents) {
+        tabContent.stacker->unstackAll();
+        tabContent.buttons.clear();
+    }
 }
 
 //-------------------//
@@ -56,32 +60,46 @@ void Sidebar::onSizeChanges()
 void Sidebar::useData(Data& data)
 {
     m_summary.useData(data);
+    refreshTabContents();
 }
 
-//----------------//
-//----- Mode -----//
+//-----------------------------------//
+//----- Internal change updates -----//
 
-void Sidebar::setMode(Mode mode)
+void Sidebar::refreshTabContents()
 {
-    m_tabContentStacker.unstackAll();
-    m_tabContent.clear();
+    // TODO Use data info: what is accessible, at what price?
 
-    switch (mode) {
-    case Mode::MONSTERS:
-        break;
+    // Monsters
+    auto& monstersStacker = *m_tabContents[TabsID::MONSTERS].stacker;
+    auto& monstersButtons = m_tabContents[TabsID::MONSTERS].buttons;
+    monstersStacker.unstackAll();
+    monstersButtons.clear();
 
-    case Mode::TRAPS:
-        m_tabContent.emplace_back(std::make_unique<dungeon::TrapGrabButton>(_("Pick-pock"), TextureID::DUNGEON_TRAPS_PICKPOCK_ICON, L"pickpock"));
-        break;
+    for (auto& monstersButton : monstersButtons)
+        monstersStacker.stackBack(*monstersButton, nui::Align::CENTER);
 
-    case Mode::FACILITIES:
-        m_tabContent.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Treasure"), TextureID::DUNGEON_FACILITIES_TREASURE_ICON, L"treasure"));
-        m_tabContent.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Entrance"), TextureID::DUNGEON_FACILITIES_ENTRANCE_ICON, L"entrance"));
-        m_tabContent.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Ladder"),   TextureID::DUNGEON_FACILITIES_LADDER_ICON,   L"ladder"));
-        break;
-    }
+    // Traps
+    auto& trapsStacker = *m_tabContents[TabsID::TRAPS].stacker;
+    auto& trapsButtons = m_tabContents[TabsID::TRAPS].buttons;
+    trapsStacker.unstackAll();
+    trapsButtons.clear();
 
-    // Add tab content to stacker
-    for (auto& tabContent : m_tabContent)
-        m_tabContentStacker.stackBack(*tabContent, nui::Align::CENTER);
+    trapsButtons.emplace_back(std::make_unique<dungeon::TrapGrabButton>(_("Pick-pock"), TextureID::DUNGEON_TRAPS_PICKPOCK_ICON, L"pickpock"));
+
+    for (auto& trapsButton : trapsButtons)
+        trapsStacker.stackBack(*trapsButton, nui::Align::CENTER);
+
+    // Facilities
+    auto& facilitiesStacker = *m_tabContents[TabsID::FACILITIES].stacker;
+    auto& facilitiesButtons = m_tabContents[TabsID::FACILITIES].buttons;
+    facilitiesStacker.unstackAll();
+    facilitiesButtons.clear();
+
+    facilitiesButtons.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Treasure"), TextureID::DUNGEON_FACILITIES_TREASURE_ICON, L"treasure"));
+    facilitiesButtons.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Entrance"), TextureID::DUNGEON_FACILITIES_ENTRANCE_ICON, L"entrance"));
+    facilitiesButtons.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Ladder"),   TextureID::DUNGEON_FACILITIES_LADDER_ICON,   L"ladder"));
+
+    for (auto& facilitiesButton : facilitiesButtons)
+        facilitiesStacker.stackBack(*facilitiesButton, nui::Align::CENTER);
 }

@@ -10,6 +10,7 @@
 using namespace dungeon;
 
 Log::Log()
+    : m_width(-1.f)
 {
     setDetectable(false);
 
@@ -25,8 +26,8 @@ Log::Log()
 
 void Log::onSizeChanges()
 {
-    refreshTextsWrap();
-    refreshBackgroundSize();
+    // Background
+    m_background.setSize({size().x, m_currentHeight});
 }
 
 void Log::updateRoutine(const sf::Time& dt)
@@ -99,8 +100,6 @@ void Log::addMessage(std::wstring text, sf::Color color)
     message.text.setColor(std::move(color));
     message.text.fitWidth(size().x);
 
-    m_currentHeight += boundsSize(message.text).y;
-
     m_messages.emplace_back(std::move(message));
     addPart(&m_messages.back().text);
     refreshMessages();
@@ -112,21 +111,39 @@ void Log::addMessage(std::wstring text, sf::Color color)
 void Log::refreshMessages()
 {
     m_currentHeight = 0.f;
-    for (auto& message : m_messages) {
-        message.text.setPosition({0.f, m_currentHeight});
-        m_currentHeight += boundsSize(message.text).y;
+
+    // New messages appear below the stack
+    if (m_direction == Direction::NEW_BELOW) {
+        for (auto& message : m_messages) {
+            message.text.setPosition({0.f, m_currentHeight});
+            m_currentHeight += boundsSize(message.text).y;
+        }
+    }
+    // Old messages appear below the stack
+    else if (m_direction == Direction::OLD_BELOW) {
+        for (auto& message : std::reverse(m_messages)) {
+            message.text.setPosition({0.f, m_currentHeight});
+            m_currentHeight += boundsSize(message.text).y;
+        }
     }
 
-    refreshBackgroundSize();
+    refreshHeight();
 }
 
 void Log::refreshTextsWrap()
 {
+    returnif (m_width <= 0.f);
     for (auto& message : m_messages)
-        message.text.fitWidth(size().x);
+        message.text.fitWidth(m_width);
 }
 
-void Log::refreshBackgroundSize()
+void Log::refreshSize()
 {
-    m_background.setSize({size().x, m_currentHeight});
+    setSize({m_width, m_currentHeight});
+    refreshTextsWrap();
+}
+
+void Log::refreshHeight()
+{
+    setSize({m_width, m_currentHeight});
 }

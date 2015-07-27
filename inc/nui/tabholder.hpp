@@ -2,6 +2,7 @@
 
 #include "scene/entity.hpp"
 #include "nui/hstacker.hpp"
+#include "nui/vstacker.hpp"
 #include "sfe/rectangleshape.hpp"
 #include "tools/param.hpp"
 
@@ -11,14 +12,17 @@
 
 namespace nui
 {
-    //! A tool to create tabs.
+    //! A UI element to create tabs.
+    /*!
+     *  The user creates any number of tabs,
+     *  and affects one entity to each.
+     *  The entity is shown below
+     *  when the corresponding tab is selected.
+     */
 
     class TabHolder final : public scene::Entity
     {
         using baseClass = scene::Entity;
-
-        //! Callback type on selection.
-        using SelectCallback = std::function<void()>;
 
     public:
 
@@ -33,7 +37,7 @@ namespace nui
         //! @{
 
         //! Stack a tab to the end.
-        void stack_back(std::wstring tooltipString, TextureID textureID, const SelectCallback& callback = nullptr);
+        void stackBack(std::wstring tooltipString, TextureID textureID, scene::Entity& content);
 
         //! Selects a specific tab.
         void select(uint tabNumber);
@@ -76,6 +80,9 @@ namespace nui
         //! Called to recompute the size.
         void refreshSize();
 
+        //! Refresh the selected tab content.
+        void refreshContent();
+
         //! @}
 
     private:
@@ -85,7 +92,7 @@ namespace nui
         {
             std::unique_ptr<sfe::RectangleShape> image; //!< The image.
             std::wstring tooltipString;                 //!< The string to print for tooltip.
-            SelectCallback callback;                    //!< What to do on selection.
+            scene::Entity& content;                     //!< The entity to show when tab selected.
         };
 
     private:
@@ -93,6 +100,10 @@ namespace nui
         // Tabs
         nui::HStacker m_tabsStacker;    //!< The stacker containing the tabs.
         std::vector<Tab> m_tabs;        //!< The tabs.
+        Tab* m_selectedTab = nullptr;   //!< The currently selected tab.
+
+        // Content
+        nui::VStacker m_globalStacker;
 
         // Control over size.
         float m_height; //!< Size override.
