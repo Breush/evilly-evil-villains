@@ -45,6 +45,10 @@ const sf::View& Graph::viewFromLayerRoot(const Entity* root) const
 
 void Graph::update(const sf::Time& dt)
 {
+    // Grabbing
+    if (m_grabbing)
+        m_scene.moveGrabbing(m_grabbingPosition, dt);
+
     // Update recursively all the entities
     m_scene.update(dt);
     m_nuiLayer.update(dt);
@@ -56,6 +60,9 @@ void Graph::update(const sf::Time& dt)
         m_focusShape.setTextureRect(sf::IntRect(-m_focusAnimation, -m_focusAnimation, focusSize.x, focusSize.y));
     }
 }
+
+//------------------//
+//----- Events -----//
 
 void Graph::handleEvent(const sf::Event& event)
 {
@@ -196,8 +203,8 @@ void Graph::focusHandleEvent(const sf::Event& event)
 
 void Graph::handleMouseWheelPressedEvent(const sf::Event& event)
 {
-    auto mousePos = mousePosition(event);
-    m_scene.startGrabbing(mousePos);
+    m_grabbingPosition = mousePosition(event);
+    m_scene.startGrabbing(m_grabbingPosition);
     m_grabbing = true;
 }
 
@@ -208,12 +215,8 @@ void Graph::handleMouseWheelReleasedEvent(const sf::Event& event)
 
 bool Graph::handleMouseMovedEvent(const sf::Event& event)
 {
-    returnif (m_grabbing == false) false;
-
-    auto mousePos = mousePosition(event);
-    m_scene.moveGrabbing(mousePos);
-
-    return true;
+    m_grabbingPosition = mousePosition(event);
+    return false;
 }
 
 void Graph::handleMouseWheelMovedEvent(const sf::Event& event)

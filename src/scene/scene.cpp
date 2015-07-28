@@ -121,6 +121,7 @@ void Scene::startGrabbing(const sf::Vector2i& mousePos)
 {
     const auto& window = Application::context().window;
     auto position = window.mapPixelToCoords(mousePos, m_refView);
+    m_grabbingMousePosition = mousePos;
     m_grabbingPosition = position;
 }
 
@@ -129,6 +130,13 @@ void Scene::moveGrabbing(const sf::Vector2i& mousePos)
     const auto& window = Application::context().window;
     auto position = window.mapPixelToCoords(mousePos, m_refView);
     m_refView.move(m_grabbingPosition - position);
+    adaptViewPosition();
+}
+
+void Scene::moveGrabbing(const sf::Vector2i& mousePos, const sf::Time& dt)
+{
+    returnif (m_grabbingMousePosition == mousePos);
+    m_refView.move(sf::v2f(mousePos - m_grabbingMousePosition) * dt.asSeconds());
     adaptViewPosition();
 }
 

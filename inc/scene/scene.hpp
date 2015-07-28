@@ -66,6 +66,9 @@ namespace scene
         //! To be called when it's currently grabbing and need to move.
         void moveGrabbing(const sf::Vector2i& mousePos);
 
+        //! Move the scene when currently grabbing, for a certain offset.
+        void moveGrabbing(const sf::Vector2i& mousePos, const sf::Time& dt);
+
         //! Ask for a zoom to a specific point.
         void zoom(const sf::Vector2i& mousePos, float zoomFactor);
 
@@ -150,6 +153,7 @@ namespace scene
 
         //! The grabbing position reference.
         sf::Vector2f m_grabbingPosition;
+        sf::Vector2i m_grabbingMousePosition;
 
         //! An emulated view supposed to be a layer at depth 1.
         //! It is never used to display anything, just to facilitate computations.

@@ -81,6 +81,7 @@ namespace scene
 
         // Grabbing
         bool m_grabbing = false; //!< For views
+        sf::Vector2i m_grabbingPosition;    //!< Mouse position of grabbing.
         std::unique_ptr<Grabbable> m_grabbable = nullptr; //!< For a specific grabbed object
 
         // Focusing system
