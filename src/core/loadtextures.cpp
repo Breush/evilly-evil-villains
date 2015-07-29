@@ -49,9 +49,7 @@ void Application::loadTextures()
     s_context.textures.load(TextureID::DUNGEON_SIDEBAR_TAB_FACILITIES,  "res/tex/dungeon/sidebar/tab/facilities.png");
 
     // Dungeon inter
-    s_context.textures.load(TextureID::DUNGEON_INTER_VOID_INNER_WALL, "res/tex/dungeon/inter/void_inner_wall.png");
-    s_context.textures.load(TextureID::DUNGEON_INTER_VOID_RIGHT_WALL, "res/tex/dungeon/inter/void_right_wall.png");
-    s_context.textures.load(TextureID::DUNGEON_INTER_VOID_FLOOR, "res/tex/dungeon/inter/void_floor.png");
+    s_context.textures.load(TextureID::DUNGEON_INTER_VOID_ROOM, "res/tex/dungeon/inter/void_room.png");
     s_context.textures.load(TextureID::DUNGEON_INTER_VOID_EAST_TRANSITION, "res/tex/dungeon/inter/void_east_transition.png");
     s_context.textures.load(TextureID::DUNGEON_INTER_VOID_WEST_TRANSITION, "res/tex/dungeon/inter/void_west_transition.png");
     s_context.textures.load(TextureID::DUNGEON_INTER_VOID_SOUTH_TRANSITION, "res/tex/dungeon/inter/void_south_transition.png");
@@ -60,9 +58,6 @@ void Application::loadTextures()
     s_context.textures.load(TextureID::DUNGEON_INTER_OUTER_WALL_EAST, "res/tex/dungeon/inter/outer_wall_east.png");
     s_context.textures.load(TextureID::DUNGEON_INTER_RIGHT_WALL, "res/tex/dungeon/inter/right_wall.png");
     s_context.textures.load(TextureID::DUNGEON_INTER_FLOOR, "res/tex/dungeon/inter/floor.png");
-    s_context.textures.load(TextureID::DUNGEON_INTER_ENTRANCE, "res/tex/dungeon/inter/entrance.png");
-    s_context.textures.load(TextureID::DUNGEON_INTER_LADDER, "res/tex/dungeon/inter/ladder.png");
-    s_context.textures.load(TextureID::DUNGEON_INTER_TREASURE, "res/tex/dungeon/inter/treasure.png");
 
     s_context.textures.setRepeated(TextureID::DUNGEON_INTER_OUTER_WALL_WEST, true);
     s_context.textures.setRepeated(TextureID::DUNGEON_INTER_OUTER_WALL_EAST, true);

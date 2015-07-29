@@ -601,8 +601,7 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
     // Room is not constructed
     if (state == Data::RoomState::VOID)
     {
-        addLayer(coords, TextureID::DUNGEON_INTER_VOID_INNER_WALL);
-        addLayer(coords, TextureID::DUNGEON_INTER_VOID_FLOOR);
+        addLayer(coords, TextureID::DUNGEON_INTER_VOID_ROOM);
 
         if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, Data::WEST)))
             addLayer(coords, TextureID::DUNGEON_INTER_VOID_WEST_TRANSITION);
@@ -610,9 +609,6 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
             addLayer(coords, TextureID::DUNGEON_INTER_VOID_SOUTH_TRANSITION);
         if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, Data::EAST)))
             addLayer(coords, TextureID::DUNGEON_INTER_VOID_EAST_TRANSITION);
-
-        if (coords.y == m_data->roomsByFloor() - 1u)
-            addLayer(coords, TextureID::DUNGEON_INTER_VOID_RIGHT_WALL);
 
         return;
     }
@@ -702,16 +698,21 @@ void Inter::refreshTileTraps(const sf::Vector2u& coords)
 
 void Inter::refreshOuterWalls()
 {
-    const auto& outerWallsTextureSize = Application::context().textures.get(TextureID::DUNGEON_INTER_OUTER_WALL_WEST).getSize();
     const auto& roomSize = Application::context().textures.get(TextureID::DUNGEON_INTER_INNER_WALL).getSize();
-    sf::Vector2f outerWallsRealSize(outerWallsTextureSize.x * m_grid.cellSize().x / roomSize.x, size().y);
-    sf::IntRect outerWallsRect(0, 0, outerWallsTextureSize.x, outerWallsTextureSize.y * m_grid.rows());
 
-    m_outerWalls[0].setSize(outerWallsRealSize);
-    m_outerWalls[0].setPosition(-outerWallsRealSize.x, 0.f);
-    m_outerWalls[0].setTextureRect(outerWallsRect);
+    // West wall
+    const auto& westTextureSize = Application::context().textures.get(TextureID::DUNGEON_INTER_OUTER_WALL_WEST).getSize();
+    sf::Vector2f westRealSize(westTextureSize.x * m_grid.cellSize().x / roomSize.x, size().y);
+    sf::IntRect westWallsRect(0, 0, westTextureSize.x, westTextureSize.y * m_grid.rows());
+    m_outerWalls[0].setSize(westRealSize);
+    m_outerWalls[0].setPosition(-westRealSize.x, 0.f);
+    m_outerWalls[0].setTextureRect(westWallsRect);
 
-    m_outerWalls[1].setSize(outerWallsRealSize);
+    // East wall
+    const auto& eastTextureSize = Application::context().textures.get(TextureID::DUNGEON_INTER_OUTER_WALL_EAST).getSize();
+    sf::Vector2f eastRealSize(eastTextureSize.x * m_grid.cellSize().x / roomSize.x, size().y);
+    sf::IntRect eastWallsRect(0, 0, eastTextureSize.x, eastTextureSize.y * m_grid.rows());
+    m_outerWalls[1].setSize(eastRealSize);
     m_outerWalls[1].setPosition(size().x, 0.f);
-    m_outerWalls[1].setTextureRect(outerWallsRect);
+    m_outerWalls[1].setTextureRect(eastWallsRect);
 }
