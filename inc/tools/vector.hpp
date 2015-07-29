@@ -29,13 +29,25 @@ namespace sf
 
     // Operators rect-vector
     template<typename T> Rect<T>& operator+=(Rect<T>& r, const Vector2<T>& v);
+    template<typename T> Rect<T>& operator-=(Rect<T>& r, const Vector2<T>& v);
     template<typename T> Rect<T>& operator*=(Rect<T>& r, const Vector2<T>& v);
     template<typename T> Rect<T>& operator/=(Rect<T>& r, const Vector2<T>& v);
-    template<typename T> Rect<T> operator/(Rect<T>& r, const Vector2<T>& v);
+    template<typename T> Rect<T> operator+(const Rect<T>& r, const Vector2<T>& v);
+    template<typename T> Rect<T> operator-(const Rect<T>& r, const Vector2<T>& v);
+    template<typename T> Rect<T> operator*(const Rect<T>& r, const Vector2<T>& v);
+    template<typename T> Rect<T> operator/(const Rect<T>& r, const Vector2<T>& v);
 
     // Stream operator
     template<typename T> std::ostream& operator<<(std::ostream& os, const Vector2<T>& v);
     template<typename T> std::wostream& operator<<(std::wostream& os, const Vector2<T>& v);
+    template<typename T> std::ostream& operator<<(std::ostream& os, const Rect<T>& v);
+    template<typename T> std::wostream& operator<<(std::wostream& os, const Rect<T>& v);
+}
+
+namespace tools
+{
+    //! Intersects two rect into one.
+    template<typename T> sf::Rect<T> intersect(const sf::Rect<T>& r1, const sf::Rect<T>& r2);
 }
 
 namespace std

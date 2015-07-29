@@ -113,6 +113,9 @@ namespace scene
         //! Expects inRelativePosition coordinates to be between 0.f and 1.f.
         void setRelativePosition(const sf::Vector2f& inRelativePosition);
 
+        //! Returns the global clip area of the entity.
+        inline sf::FloatRect globalClipArea() const { return m_globalClipArea; }
+
         //! @}
 
         //--------------------------//
@@ -156,6 +159,10 @@ namespace scene
 
         //! The absolute size of the entity.
         PARAMG(sf::Vector2f, m_size, size)
+
+        //! Specifies what is drawn for the entity (also affects children).
+        //! Set clipArea width or height to a negative value to draw it all.
+        PARAMGSU(sf::FloatRect, m_clipArea, clipArea, setClipArea, refreshClipArea)
 
         //! Whether the entity and its children will be drawn, and therefore detectable.
         PARAMGS(bool, m_visible, visible, setVisible)
@@ -382,6 +389,9 @@ namespace scene
         //! Refresh the relative position of children.
         void refreshChildrenRelativePosition();
 
+        //! Refresh the clip area and update children.
+        void refreshClipArea();
+
         //! @}
 
         //------------------------//
@@ -471,5 +481,11 @@ namespace scene
 
         //! The target status to visible, if mark is on.
         bool m_visibleMark;
+
+        //! The visual part of the entity, taking parent clip area in account.
+        sf::FloatRect m_globalClipArea = {0.f, 0.f, -1.f, -1.f};
+
+        //! Whether or not this entity has a valid globalClipArea.
+        bool m_globalClipping = false;
     };
 }

@@ -23,6 +23,7 @@ Entity::Entity(bool isLerpable)
     , m_localRotation(0.f)
     , m_localScale(1.f, 1.f)
     , m_size(0.f, 0.f)
+    , m_clipArea(0.f, 0.f, -1.f, -1.f)
     , m_visible(true)
     , m_transparent(false)
     , m_graph(nullptr)
@@ -78,6 +79,20 @@ void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
 {
     const auto& screenSize = Application::context().screenSize;
     const sf::Shader* initialShader = states.shader;
+    sf::FloatRect glClipArea;
+
+    // Clipping if needed
+    if (m_globalClipping)
+    {
+        glEnable(GL_SCISSOR_TEST);
+
+        glClipArea = m_globalClipArea;
+        glClipArea = states.transform.transformRect(glClipArea);
+        glClipArea = tools::mapRectCoordsToPixel(target, glClipArea);
+        glClipArea.top = screenSize.y - glClipArea.height - glClipArea.top; // SFML - GL compatibility
+
+        glScissor(glClipArea.left, glClipArea.top, glClipArea.width, glClipArea.height);
+    }
 
     // Drawing parts
     for (auto& part : m_parts)
@@ -86,23 +101,17 @@ void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
         if (part.shader != nullptr) states.shader = part.shader;
         else states.shader = initialShader;
 
-        // Clipping if needed
+        // Part clipping
         if (part.clipping) {
-            glEnable(GL_SCISSOR_TEST);
-
+            // Part clipping rect
             sf::FloatRect r(part.clippingRect);
-            r = states.transform.transformRect(r); // In view coordinates
-
-            // Into window coordinates
-            auto topLeft = target.mapCoordsToPixel({r.left, r.top});
-            auto bottomRight = target.mapCoordsToPixel({r.left + r.width, r.top + r.height});
-            r.left = topLeft.x;
-            r.top = topLeft.y;
-            r.width = bottomRight.x - topLeft.x;
-            r.height = bottomRight.y - topLeft.y;
-
-            // Correct position SFML <-> GLSL - In GL coordinates
+            r = states.transform.transformRect(r);
+            r = tools::mapRectCoordsToPixel(target, r);
             r.top = screenSize.y - r.height - r.top;
+
+            // If entity has already a clipping value, intersects
+            if (m_globalClipping) r = tools::intersect(r, glClipArea);
+            else glEnable(GL_SCISSOR_TEST);
 
             glScissor(r.left, r.top, r.width, r.height);
         }
@@ -110,10 +119,14 @@ void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
         // Effectively drawing this part
         target.draw(*part.drawable, states);
 
-        // End of clipping
-        if (part.clipping)
+        // Disable part clipping
+        if (part.clipping && !m_globalClipping)
             glDisable(GL_SCISSOR_TEST);
     }
+
+    // End of clipping
+    if (m_globalClipping)
+        glDisable(GL_SCISSOR_TEST);
 }
 
 void Entity::update(const sf::Time& dt)
@@ -536,6 +549,21 @@ void Entity::refreshChildrenRelativePosition()
         child->refreshRelativePosition();
 }
 
+void Entity::refreshClipArea()
+{
+    m_globalClipArea = m_clipArea;
+
+    if (m_parent != nullptr) {
+        auto position = m_localPosition - getOrigin();
+        m_globalClipArea = tools::intersect(m_globalClipArea, m_parent->globalClipArea() - position);
+    }
+
+    m_globalClipping = (m_globalClipArea.width >= 0.f && m_globalClipArea.height >= 0.f);
+
+    for (auto& child : m_children)
+        child->refreshClipArea();
+}
+
 //---------------------//
 //----- Utilities -----//
 
@@ -581,6 +609,7 @@ void Entity::setParent(Entity* inParent)
     m_parent = inParent;
     refreshFromLocal();
     refreshRelativePosition();
+    refreshClipArea();
 }
 
 //-----------------//

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "nui/vstacker.hpp"
+#include "nui/scrollarea.hpp"
 #include "nui/grabbutton.hpp"
 #include "nui/tabholder.hpp"
 #include "scene/entity.hpp"
@@ -68,7 +69,8 @@ namespace dungeon
         //! Holds informations about one tab content.
         struct TabContent
         {
-            nui::VStacker stacker; //!< The stacker containing the tab content.
+            nui::ScrollArea scrollArea; //!< The scrollable area.
+            nui::VStacker stacker;      //!< The stacker containing the tab content.
             std::vector<std::unique_ptr<nui::GrabButton>> buttons;  //!< The dynamic content for the tab.
         };
 

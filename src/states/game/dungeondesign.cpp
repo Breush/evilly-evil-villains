@@ -115,7 +115,6 @@ void GameDungeonDesign::refreshDisplay()
     const auto& window = Application::context().window;
     const auto& screenSize = Application::context().screenSize;
     const auto& resolution = Application::context().resolution;
-    const auto& nuiView = nuiLayer().view();
 
     // Log
     m_dungeonLog.setWidth(resolution.x / 4.f);
@@ -127,7 +126,7 @@ void GameDungeonDesign::refreshDisplay()
 
     // Scene viewport
     const sf::FloatRect sceneRect{0.f, 0.f, resolution.x - sidebarWidth, resolution.y};
-    auto sceneScreenRect = tools::mapRectCoordsToPixel(window, nuiView, sceneRect);
+    auto sceneScreenRect = tools::mapRectCoordsToPixel(window, sceneRect);
     scene().setViewport(sceneScreenRect / screenSize);
 
     // Center view

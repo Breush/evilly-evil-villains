@@ -136,7 +136,7 @@ void Scene::moveGrabbing(const sf::Vector2i& mousePos)
 void Scene::moveGrabbing(const sf::Vector2i& mousePos, const sf::Time& dt)
 {
     returnif (m_grabbingMousePosition == mousePos);
-    m_refView.move(sf::v2f(mousePos - m_grabbingMousePosition) * dt.asSeconds());
+    m_refView.move(3.f * sf::v2f(mousePos - m_grabbingMousePosition) * dt.asSeconds());
     adaptViewPosition();
 }
 

@@ -130,24 +130,28 @@ void TableLayout::positionChild(uint row, uint col, float x, float y)
 {
     returnif (m_children.count({row, col}) == 0u);
     auto& child = m_children.at({row, col});
+    float ox, oy;
 
     // x coordinates
     if (child.hAlign == Align::STANDARD)
-        x += m_hPadding;
+        ox = m_hPadding;
     else if (child.hAlign == Align::CENTER)
-        x += (m_cols[col].width - child.entity.size().x) / 2.f;
+        ox = (m_cols[col].width - child.entity.size().x) / 2.f;
     else if (child.hAlign == Align::OPPOSITE)
-        x += m_cols[col].width - child.entity.size().x - m_hPadding;
+        ox = m_cols[col].width - child.entity.size().x - m_hPadding;
 
     // y coordinates
     if (child.vAlign == Align::STANDARD)
-        y += m_vPadding;
+        oy = m_vPadding;
     else if (child.vAlign == Align::CENTER)
-        y += (m_rows[row].height - child.entity.size().y) / 2.f;
+        oy = (m_rows[row].height - child.entity.size().y) / 2.f;
     else if (child.vAlign == Align::OPPOSITE)
-        y += m_rows[row].height - child.entity.size().y - m_vPadding;
+        oy = m_rows[row].height - child.entity.size().y - m_vPadding;
 
-    child.entity.setLocalPosition({x, y});
+    child.entity.setLocalPosition({ox + x, oy + y});
+
+    if (m_cols[col].adapt != Adapt::FIT)
+        child.entity.setClipArea({0.f, 0.f, m_cols[col].width - 2.f * ox, m_rows[row].height - 2.f * oy});
 }
 
 //--------------------//

@@ -26,9 +26,12 @@ Sidebar::Sidebar()
     addPart(&m_background);
 
     // Tabs + tab content
-    m_tabHolder.stackBack(_("Monsters"),    TextureID::DUNGEON_SIDEBAR_TAB_MONSTERS,    m_tabContents[TabsID::MONSTERS].stacker);
-    m_tabHolder.stackBack(_("Traps"),       TextureID::DUNGEON_SIDEBAR_TAB_TRAPS,       m_tabContents[TabsID::TRAPS].stacker);
-    m_tabHolder.stackBack(_("Facilities"),  TextureID::DUNGEON_SIDEBAR_TAB_FACILITIES,  m_tabContents[TabsID::FACILITIES].stacker);
+    m_tabHolder.stackBack(_("Monsters"),    TextureID::DUNGEON_SIDEBAR_TAB_MONSTERS,    m_tabContents[TabsID::MONSTERS].scrollArea);
+    m_tabHolder.stackBack(_("Traps"),       TextureID::DUNGEON_SIDEBAR_TAB_TRAPS,       m_tabContents[TabsID::TRAPS].scrollArea);
+    m_tabHolder.stackBack(_("Facilities"),  TextureID::DUNGEON_SIDEBAR_TAB_FACILITIES,  m_tabContents[TabsID::FACILITIES].scrollArea);
+
+    for (auto& tabContent : m_tabContents)
+        tabContent.scrollArea.setContent(tabContent.stacker);
 }
 
 Sidebar::~Sidebar()
@@ -46,6 +49,10 @@ void Sidebar::onSizeChanges()
 {
     // Background
     m_background.setSize(size());
+
+    // All scroll areas
+    for (auto& tabContent : m_tabContents)
+        tabContent.scrollArea.setSize({size().x, 0.25f * size().y});
 }
 
 //------------------------//
@@ -92,6 +99,15 @@ void Sidebar::refreshTabContents()
 
     facilitiesButtons.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Treasure"), TextureID::DUNGEON_FACILITIES_TREASURE_ICON, L"treasure"));
     facilitiesButtons.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Entrance"), TextureID::DUNGEON_FACILITIES_ENTRANCE_ICON, L"entrance"));
+    facilitiesButtons.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Ladder"),   TextureID::DUNGEON_FACILITIES_LADDER_ICON,   L"ladder"));
+    // FIXME that duplicate is for testing
+    facilitiesButtons.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Ladder"),   TextureID::DUNGEON_FACILITIES_LADDER_ICON,   L"ladder"));
+    facilitiesButtons.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Ladder"),   TextureID::DUNGEON_FACILITIES_LADDER_ICON,   L"ladder"));
+    facilitiesButtons.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Ladder"),   TextureID::DUNGEON_FACILITIES_LADDER_ICON,   L"ladder"));
+    facilitiesButtons.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Ladder"),   TextureID::DUNGEON_FACILITIES_LADDER_ICON,   L"ladder"));
+    facilitiesButtons.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Ladder"),   TextureID::DUNGEON_FACILITIES_LADDER_ICON,   L"ladder"));
+    facilitiesButtons.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Ladder"),   TextureID::DUNGEON_FACILITIES_LADDER_ICON,   L"ladder"));
+    facilitiesButtons.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Ladder"),   TextureID::DUNGEON_FACILITIES_LADDER_ICON,   L"ladder"));
     facilitiesButtons.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Ladder"),   TextureID::DUNGEON_FACILITIES_LADDER_ICON,   L"ladder"));
 
     for (auto& facilitiesButton : facilitiesButtons)
