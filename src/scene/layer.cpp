@@ -35,6 +35,14 @@ void Layer::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(m_root, states);
 }
 
+void Layer::refreshSize()
+{
+    refreshDisplay();
+
+    if (m_onSizeChangesCallback != nullptr)
+        m_onSizeChangesCallback();
+}
+
 void Layer::refreshDisplay()
 {
     if (!m_ownViewport) {
@@ -95,11 +103,17 @@ void Layer::setViewport(const sf::FloatRect& viewport)
 void Layer::setRelativeCenter(const sf::Vector2f& relativeCenter)
 {
     m_view.setCenter(m_view.getSize() / 2.f + relativeCenter * (m_size - m_view.getSize()));
+
+    if (m_onViewChangesCallback != nullptr)
+        m_onViewChangesCallback();
 }
 
 void Layer::setViewSize(const sf::Vector2f& viewSize)
 {
     m_view.setSize(viewSize);
+
+    if (m_onViewChangesCallback != nullptr)
+        m_onViewChangesCallback();
 }
 
 Entity* Layer::entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos)

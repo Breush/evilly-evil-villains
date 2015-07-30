@@ -4,6 +4,8 @@
 
 #include <SFML/Graphics/View.hpp>
 
+#include <functional>
+
 namespace scene
 {
     //! A layer within the Graph.
@@ -15,6 +17,9 @@ namespace scene
 
     class Layer final : public sf::Drawable
     {
+        //! General callback function.
+        using Callback = std::function<void()>;
+
     public:
 
         //! Deleted default constructor.
@@ -35,6 +40,9 @@ namespace scene
 
         //! Reset the view to current screen status.
         void refreshDisplay();
+
+        //! Refresh from size change.
+        void refreshSize();
 
         //! @}
 
@@ -87,6 +95,18 @@ namespace scene
 
         //! @}
 
+        //------------------------//
+        //! @name Callback system
+        //! @{
+
+        //! Sets a callback function to call whenever the size changes.
+        void callOnSizeChanges(const Callback& callback) { m_onSizeChangesCallback = callback; }
+
+        //! Sets a callback function to call whenever the view changes.
+        void callOnViewChanges(const Callback& callback) { m_onViewChangesCallback = callback; }
+
+        //! @}
+
         //--------------------------//
         //! @name Public properties
         //! @{
@@ -95,7 +115,7 @@ namespace scene
         PARAMGSU(bool, m_manipulable, manipulable, setManipulable, refreshDisplay)
 
         //! The size of the region that can be displayed.
-        PARAMGSU(sf::Vector2f, m_size, size, setSize, refreshDisplay)
+        PARAMGSU(sf::Vector2f, m_size, size, setSize, refreshSize)
 
         //! The depth of the layer, only used with Scene.
         PARAMGS(float, m_depth, depth, setDepth)
@@ -112,5 +132,11 @@ namespace scene
 
         // Viewports
         bool m_ownViewport = false; //!< Whether or not we use a provided viewport.
+
+        //! Called whenever the size changes.
+        Callback m_onSizeChangesCallback = nullptr;
+
+        //! Called whenever the view changes.
+        Callback m_onViewChangesCallback = nullptr;
     };
 }

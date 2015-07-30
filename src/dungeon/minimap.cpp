@@ -9,11 +9,16 @@ using namespace dungeon;
 
 Minimap::Minimap()
 {
-    // Decorum
-    addPart(&m_background);
+    // Background
     m_background.setOutlineThickness(1.f);
     m_background.setOutlineColor(sf::Color::White);
     m_background.setFillColor({255u, 255u, 255u, 150u});
+
+    // Layer view indicator
+    addPart(&m_layerViewIndicator);
+    m_layerViewIndicator.setFillColor({255u, 255u, 255u, 100u});
+    m_layerViewIndicator.setOutlineColor(sf::Color::White);
+    m_layerViewIndicator.setOutlineThickness(1.f);
 
     refreshDisplay();
 }
@@ -21,24 +26,34 @@ Minimap::Minimap()
 //-------------------//
 //----- Routine -----//
 
+void Minimap::onTransformChanges()
+{
+    const auto& window = Application::context().window;
+    const auto& screenSize = Application::context().screenSize;
+    sf::FloatRect rect{getPosition().x, getPosition().y, size().x, size().y};
+    rect = tools::mapRectCoordsToPixel(window, rect);
+    m_view.setViewport(rect / screenSize);
+
+}
+
 void Minimap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    baseClass::draw(target, states);
-    returnif (m_layer == nullptr);
+    // We manage drawing ourself because of the view thingy.
+    returnif (!visible());
+    states.transform = getTransform();
 
-    // Recompute position,have to do it here because target is needed...
-    // TODO Have a flag to not recompute is nothing happened?
-    // Or move this to a refreshViewport function called when position/size changed.
-    const auto& screenSize = Application::context().screenSize;
-    const sf::FloatRect rect{getPosition().x, getPosition().y, size().x, size().y};
-    auto screenRect = tools::mapRectCoordsToPixel(target, rect);
-    const_cast<Minimap*>(this)->m_view.setViewport(screenRect / screenSize);
+    // Background
+    target.draw(m_background, states);
 
     // Draw the minimap
-    auto previousView = target.getView();
-    target.setView(m_view);
-    target.draw(m_layer->root());
-    target.setView(previousView);
+    if (m_layer != nullptr) {
+        auto previousView = target.getView();
+        target.setView(m_view);
+        target.draw(m_layer->root());
+        target.setView(previousView);
+    }
+
+    baseClass::draw(target, states);
 }
 
 void Minimap::onSizeChanges()
@@ -54,11 +69,39 @@ void Minimap::refreshDisplay()
 //-----------------//
 //----- Layer -----//
 
-void Minimap::setLayer(const scene::Layer& layer)
+void Minimap::setLayer(scene::Layer& layer)
 {
     m_layer = &layer;
+    returnif (m_layer == nullptr);
+
+    // Refresh
+    refreshSize();
+
+    // Callback
+    m_layer->callOnSizeChanges([this] { refreshSize(); });
+    m_layer->callOnViewChanges([this] { refreshViewIndicator(); });
+}
+
+//-----------------------------------//
+//----- Internal changes update -----//
+
+void Minimap::refreshSize()
+{
+    returnif (m_layer == nullptr);
 
     setSize(m_layer->size() / 15.f);
     m_view.setSize(m_layer->size());
     m_view.setCenter(m_layer->size() / 2.f);
+
+    refreshViewIndicator();
+}
+
+void Minimap::refreshViewIndicator()
+{
+    returnif (m_layer == nullptr);
+
+    auto relativeLayerViewCenter = m_layer->view().getCenter() / m_layer->size();
+    auto relativeLayerViewSize = m_layer->view().getSize() / m_layer->size();
+    m_layerViewIndicator.setSize(size() * relativeLayerViewSize);
+    m_layerViewIndicator.setPosition(size() * (relativeLayerViewCenter - relativeLayerViewSize / 2.f));
 }

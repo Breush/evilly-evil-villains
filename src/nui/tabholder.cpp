@@ -19,7 +19,7 @@ TabHolder::TabHolder()
     addPart(&m_background);
     m_background.setOutlineThickness(1.f);
     m_background.setOutlineColor(sf::Color::White);
-    m_background.setFillColor({255u, 255u, 255u, 100u});
+    m_background.setFillColor(sf::Color::Black);
 
     refreshContent();
 }
@@ -82,28 +82,65 @@ void TabHolder::stackBack(std::wstring tooltipString, TextureID textureID, scene
     m_tabs.push_back({std::move(image), std::move(tooltipString), content});
     m_tabsStacker.stackBack(*m_tabs.back().image, nui::Align::CENTER);
 
+    refreshTabBackground();
+
     // Select first tab on add
-    if (m_tabs.size() == 1u) {
-        m_selectedTab = &m_tabs.back();
-        refreshContent();
-    }
+    if (m_tabs.size() == 1u)
+        select(0u);
 }
 
 void TabHolder::select(uint tabNumber)
 {
     massert(tabNumber < m_tabs.size(), "Tab number " << tabNumber << " is too big.");
-    m_selectedTab = &m_tabs[tabNumber];
+    m_selectedTab = tabNumber;
+    refreshSelectedTab();
     refreshContent();
 }
 
 //-----------------------------------//
 //----- Internal change updates -----//
 
+void TabHolder::refreshSelectedTab()
+{
+    for (uint tabNumber = 0u; tabNumber < m_tabs.size(); ++tabNumber) {
+        auto& tabBackground = m_tabsBackgrounds[tabNumber];
+        if (m_selectedTab == tabNumber) tabBackground.setFillColor(sf::Color::White);
+        else                            tabBackground.setFillColor(sf::Color::Black);
+    }
+}
+
+void TabHolder::refreshTabBackground()
+{
+    // Remove all previous
+    for (auto& tabBackground : m_tabsBackgrounds)
+        removePart(&tabBackground);
+    m_tabsBackgrounds.clear();
+
+    // Max new size
+    float headerHeight = 0.f;
+    for (auto& tab : m_tabs)
+        headerHeight = std::max(headerHeight, tab.image->size().y);
+    m_tabsBackgrounds.resize(m_tabs.size());
+
+    // Add all and position
+    for (uint tabNumber = 0u; tabNumber < m_tabs.size(); ++tabNumber) {
+        const auto& tab = m_tabs[tabNumber];
+        auto& tabBackground = m_tabsBackgrounds[tabNumber];
+        tabBackground.setOutlineColor(sf::Color::White);
+        tabBackground.setOutlineThickness(1.f);
+        tabBackground.setSize({tab.image->size().x, headerHeight});
+        tabBackground.setPosition(tab.image->localPosition());
+        addPart(&tabBackground);
+    }
+
+    refreshSelectedTab();
+}
+
 void TabHolder::refreshContent()
 {
     m_globalStacker.unstackAll();
     m_globalStacker.stackBack(m_tabsStacker);
 
-    if (m_selectedTab != nullptr)
-        m_globalStacker.stackBack(m_selectedTab->content, nui::Align::CENTER);
+    if (m_selectedTab < m_tabs.size())
+        m_globalStacker.stackBack(m_tabs[m_selectedTab].content, nui::Align::CENTER);
 }

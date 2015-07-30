@@ -36,7 +36,7 @@ namespace dungeon
         //! @{
 
         //! Sets the layer shown.
-        void setLayer(const scene::Layer& layer);
+        void setLayer(scene::Layer& layer);
 
         //! @}
 
@@ -47,18 +47,32 @@ namespace dungeon
         //! @{
 
         void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
+        void onTransformChanges() final;
         void onSizeChanges() final;
         void refreshDisplay() final;
+
+        //! @}
+
+        //--------------------------------//
+        //! @name Internal changes update
+        //! @{
+
+        //! Refresh the from the layer size.
+        void refreshSize();
+
+        //! Refresh the representation of the view rectangle.
+        void refreshViewIndicator();
 
         //! @}
 
     private:
 
         // View elements
-        const scene::Layer* m_layer = nullptr;  //!< The layer to use for the minimap.
-        sf::View m_view;                        //!< The minimap view.
+        scene::Layer* m_layer = nullptr;    //!< The layer to use for the minimap.
+        sf::View m_view;                    //!< The minimap view.
 
         // Decorum
-        sf::RectangleShape m_background;    //!< The background.
+        sf::RectangleShape m_background;            //!< The background.
+        sf::RectangleShape m_layerViewIndicator;    //!< The rectangle of the view.
     };
 }

@@ -41,7 +41,7 @@ namespace dungeon
         //! @{
 
         //! Sets the layer shown in minimap.
-        inline void setMinimapLayer(const scene::Layer& layer) { m_minimap.setLayer(layer); }
+        inline void setMinimapLayer(scene::Layer& layer) { m_minimap.setLayer(layer); }
 
         //! @}
 

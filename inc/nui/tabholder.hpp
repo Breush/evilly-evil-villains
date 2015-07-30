@@ -75,6 +75,12 @@ namespace nui
         //! Refresh the selected tab content.
         void refreshContent();
 
+        //! Refresh tab background image.
+        void refreshTabBackground();
+
+        //! The selected tab has changed.
+        void refreshSelectedTab();
+
         //! @}
 
     private:
@@ -92,7 +98,7 @@ namespace nui
         // Tabs
         nui::HStacker m_tabsStacker;    //!< The stacker containing the tabs.
         std::vector<Tab> m_tabs;        //!< The tabs.
-        Tab* m_selectedTab = nullptr;   //!< The currently selected tab.
+        uint m_selectedTab = -1u;       //!< The currently selected tab.
 
         // Content
         nui::VStacker m_globalStacker;  //!< Contains tab head + content.
@@ -101,7 +107,7 @@ namespace nui
         float m_height; //!< Size override.
 
         // Decorum
-        sf::RectangleShape m_background;
-
+        sf::RectangleShape m_background;                    //!< The global background.
+        std::vector<sf::RectangleShape> m_tabsBackgrounds;  //!< The background for the tabs.
     };
 }
