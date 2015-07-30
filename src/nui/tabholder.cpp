@@ -19,7 +19,7 @@ TabHolder::TabHolder()
     addPart(&m_background);
     m_background.setOutlineThickness(1.f);
     m_background.setOutlineColor(sf::Color::White);
-    m_background.setFillColor(sf::Color::Black);
+    m_background.setFillColor({255u, 255u, 255u, 25u});
 
     refreshContent();
 }
@@ -29,7 +29,10 @@ TabHolder::TabHolder()
 
 void TabHolder::onSizeChanges()
 {
-    m_background.setSize(size());
+    // Background
+    // The -2.f are for the outline of the background.
+    m_background.setSize({size().x - 2.f, size().y - headerSize().y - 1.f});
+    m_background.setPosition({0.f, headerSize().y - 1.f});
 }
 
 void TabHolder::onChildSizeChanges(scene::Entity& child)
@@ -97,6 +100,24 @@ void TabHolder::select(uint tabNumber)
     refreshContent();
 }
 
+//-------------------------------//
+//----- Setters and getters -----//
+
+sf::Vector2f TabHolder::headerSize() const
+{
+    sf::Vector2f oHeaderSize;
+
+    // Width
+    oHeaderSize.x = size().x;
+
+    // Height
+    oHeaderSize.y = 0.f;
+    for (auto& tab : m_tabs)
+        oHeaderSize.y = std::max(oHeaderSize.y, tab.image->size().y);
+
+    return oHeaderSize;
+}
+
 //-----------------------------------//
 //----- Internal change updates -----//
 
@@ -115,20 +136,16 @@ void TabHolder::refreshTabBackground()
     for (auto& tabBackground : m_tabsBackgrounds)
         removePart(&tabBackground);
     m_tabsBackgrounds.clear();
-
-    // Max new size
-    float headerHeight = 0.f;
-    for (auto& tab : m_tabs)
-        headerHeight = std::max(headerHeight, tab.image->size().y);
     m_tabsBackgrounds.resize(m_tabs.size());
 
     // Add all and position
+    float headerHeight = headerSize().y;
     for (uint tabNumber = 0u; tabNumber < m_tabs.size(); ++tabNumber) {
         const auto& tab = m_tabs[tabNumber];
         auto& tabBackground = m_tabsBackgrounds[tabNumber];
         tabBackground.setOutlineColor(sf::Color::White);
         tabBackground.setOutlineThickness(1.f);
-        tabBackground.setSize({tab.image->size().x, headerHeight});
+        tabBackground.setSize({tab.image->size().x - 2.f, headerHeight - 2.f});
         tabBackground.setPosition(tab.image->localPosition());
         addPart(&tabBackground);
     }

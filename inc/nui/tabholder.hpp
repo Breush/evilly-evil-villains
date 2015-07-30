@@ -44,6 +44,15 @@ namespace nui
 
         //! @}
 
+        //----------------------------//
+        //! @name Setters and getters
+        //! @{
+
+        //! Gets the size of the header part (no padding).
+        sf::Vector2f headerSize() const;
+
+        //! @}
+
     protected:
 
         //----------------//

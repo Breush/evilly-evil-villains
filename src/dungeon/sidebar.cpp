@@ -2,6 +2,7 @@
 
 #include "core/application.hpp"
 #include "core/gettext.hpp"
+#include "config/nui.hpp"
 #include "dungeon/eventtype.hpp"
 #include "dungeon/facilities.hpp"
 #include "dungeon/traps.hpp"
@@ -23,7 +24,7 @@ Sidebar::Sidebar()
     // Background
     // TODO Have a better image...
     m_background.setTexture(&Application::context().textures.get(TextureID::DUNGEON_SIDEBAR_BACKGROUND));
-    addPart(&m_background);
+    //addPart(&m_background);
 
     // Tabs + tab content
     m_tabHolder.stackBack(_("Monsters"),    TextureID::DUNGEON_SIDEBAR_TAB_MONSTERS,    m_tabContents[TabsID::MONSTERS].scrollArea);
@@ -32,6 +33,8 @@ Sidebar::Sidebar()
 
     for (auto& tabContent : m_tabContents)
         tabContent.scrollArea.setContent(tabContent.stacker);
+
+    refreshDisplay();
 }
 
 Sidebar::~Sidebar()
@@ -45,14 +48,26 @@ Sidebar::~Sidebar()
 //-------------------//
 //----- Routine -----//
 
+void Sidebar::refreshDisplay()
+{
+    refreshScrollAreasSize();
+
+    baseClass::refreshDisplay();
+}
+
 void Sidebar::onSizeChanges()
 {
     // Background
     m_background.setSize(size());
 
-    // All scroll areas
-    for (auto& tabContent : m_tabContents)
-        tabContent.scrollArea.setSize({size().x, 0.25f * size().y});
+    // Elements
+    refreshScrollAreasSize();
+}
+
+void Sidebar::onChildSizeChanges(scene::Entity& child)
+{
+    if (&child != &m_tabHolder)
+        refreshScrollAreasSize();
 }
 
 //------------------------//
@@ -66,6 +81,23 @@ void Sidebar::useData(Data& data)
 
 //-----------------------------------//
 //----- Internal change updates -----//
+
+void Sidebar::refreshScrollAreasSize()
+{
+    // Compute new height
+    float height = size().y;
+
+    height -= m_minimap.size().y;
+    height -= m_summary.size().y;
+    height -= m_tabHolder.headerSize().y;
+
+    config::NUI cNUI;
+    height -= 3.f * cNUI.vPadding;
+
+    // Affect new size to all scroll areas
+    for (auto& tabContent : m_tabContents)
+        tabContent.scrollArea.setSize({size().x, height});
+}
 
 void Sidebar::refreshTabContents()
 {

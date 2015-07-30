@@ -51,7 +51,9 @@ namespace dungeon
         //! @name Routine
         //! @{
 
+        void refreshDisplay() final;
         void onSizeChanges() final;
+        void onChildSizeChanges(scene::Entity& child) final;
 
         //! @}
 
@@ -61,6 +63,9 @@ namespace dungeon
 
         //! Refresh the tabs contents.
         void refreshTabContents();
+
+        //! Refreh the scroll areas size.
+        void refreshScrollAreasSize();
 
         //! @}
 

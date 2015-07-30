@@ -9,7 +9,7 @@ NUI::NUI()
     auto nuiSize = Application::context().display.nui;
 
     hPadding = 2.f + 4.f * nuiSize;
-    vPadding = 2.f + 4.f * nuiSize;
+    vPadding = 3.f + 6.f * nuiSize;
 
     borderThick = 1.f;
 
