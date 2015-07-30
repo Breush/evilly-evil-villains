@@ -2,6 +2,7 @@
 
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
+#include "tools/vector.hpp"
 #include "config/nui.hpp"
 
 using namespace nui;
@@ -20,20 +21,34 @@ TableLayout::TableLayout()
 
 void TableLayout::onSizeChanges()
 {
+    refreshRowsSize();
+    refreshColsSize();
     refreshDimensions();
+    refreshChildrenPosition();
+}
+
+void TableLayout::onChildSizeChanges(scene::Entity&)
+{
+    // TODO OPTIM: It might be possible to detect which entity it is, and just refresh this one
+    refreshRowsSize();
+    refreshColsSize();
     refreshChildrenPosition();
 }
 
 void TableLayout::refreshDisplay()
 {
+    // Be sure all children have there definitive size
+    baseClass::refreshDisplay();
+
     config::NUI cNUI;
 
     if (m_hPaddingAuto) m_hPadding = cNUI.hPadding;
     if (m_vPaddingAuto) m_vPadding = cNUI.vPadding;
 
+    refreshRowsSize();
+    refreshColsSize();
     refreshDimensions();
     refreshChildrenPosition();
-    baseClass::refreshDisplay();
 }
 
 //---------------------//
@@ -133,25 +148,26 @@ void TableLayout::positionChild(uint row, uint col, float x, float y)
     float ox, oy;
 
     // x coordinates
-    if (child.hAlign == Align::STANDARD)
-        ox = m_hPadding;
-    else if (child.hAlign == Align::CENTER)
-        ox = (m_cols[col].width - child.entity.size().x) / 2.f;
-    else if (child.hAlign == Align::OPPOSITE)
-        ox = m_cols[col].width - child.entity.size().x - m_hPadding;
+    float dx = m_cols[col].width - child.entity.size().x;
+    if (child.hAlign == Align::STANDARD)        ox = m_hPadding;
+    else if (child.hAlign == Align::CENTER)     ox = dx / 2.f;
+    else if (child.hAlign == Align::OPPOSITE)   ox = dx - m_hPadding;
 
     // y coordinates
-    if (child.vAlign == Align::STANDARD)
-        oy = m_vPadding;
-    else if (child.vAlign == Align::CENTER)
-        oy = (m_rows[row].height - child.entity.size().y) / 2.f;
-    else if (child.vAlign == Align::OPPOSITE)
-        oy = m_rows[row].height - child.entity.size().y - m_vPadding;
+    float dy = m_rows[row].height - child.entity.size().y;
+    if (child.vAlign == Align::STANDARD)        oy = m_vPadding;
+    else if (child.vAlign == Align::CENTER)     oy = dy / 2.f;
+    else if (child.vAlign == Align::OPPOSITE)   oy = dy - m_vPadding;
 
-    child.entity.setLocalPosition({ox + x, oy + y});
+    child.entity.setLocalPosition({x + ox, y + oy});
 
-    if (m_cols[col].adapt != Adapt::FIT)
-        child.entity.setClipArea({0.f, 0.f, m_cols[col].width - 2.f * ox, m_rows[row].height - 2.f * oy});
+    // Clip child if too big
+    sf::FloatRect clipArea{0.f, 0.f, -1.f, -1.f};
+    if (ox + m_hPadding > dx) clipArea.width  = m_cols[col].width  - (ox + m_hPadding);
+    if (oy + m_vPadding > dy) clipArea.height = m_rows[row].height - (oy + m_vPadding);
+    if (clipArea.width >= 0.f && clipArea.height < 0.f) clipArea.height = child.entity.size().y;
+    if (clipArea.width < 0.f && clipArea.height >= 0.f) clipArea.width  = child.entity.size().x;
+    child.entity.setClipArea(clipArea);
 }
 
 //--------------------//
@@ -172,6 +188,7 @@ void TableLayout::setChild(uint row, uint col, scene::Entity& child, Align hAlig
 
     // TODO OPTIM Delay refresh until next updateRoutine()
     // so that multiple adds don't recompute uselessly
+    refreshDimensions(); // If and only if we have a fit adapt column
     refreshChildrenPosition();
 }
 

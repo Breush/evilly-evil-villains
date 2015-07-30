@@ -334,7 +334,7 @@ void ChoiceBox::refreshLines()
     m_topLine.setLength(m_buttonSize.x);
     m_botLine.setLength(m_buttonSize.x);
     m_topLine.setPosition(0.f, 0.f);
-    m_botLine.setPosition(0.f, m_buttonSize.y);
+    m_botLine.setPosition(0.f, m_buttonSize.y - 1.f);
 }
 
 void ChoiceBox::refreshArrows()

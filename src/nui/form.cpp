@@ -8,6 +8,7 @@ using namespace nui;
 
 Form::Form()
 {
+    // Table
     attachChild(m_table);
 
     refreshDisplay();
@@ -21,15 +22,6 @@ void Form::onSizeChanges()
     m_table.setSize(size());
 }
 
-void Form::refreshDisplay()
-{
-    config::NUI cNUI;
-
-    m_table.setDimensions(0u, 2u, 2.2f * cNUI.fontVSpace);
-
-    baseClass::refreshDisplay();
-}
-
 //--------------------//
 //----- Children -----//
 
@@ -41,11 +33,8 @@ void Form::add(std::wstring text, scene::Entity& child)
     m_labels[line]->setText(text);
     m_labels[line]->setPrestyle(sfe::Label::Prestyle::NUI);
 
+    m_table.setDimensions(m_labels.size(), 2u);
+    m_table.setRowAdapt(line, Adapt::FIT);
     m_table.setChild(line, 0u, *m_labels[line], Align::OPPOSITE);
     m_table.setChild(line, 1u, child);
 }
-
-#include "nui/form.hpp"
-
-using namespace nui;
-

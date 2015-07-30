@@ -156,19 +156,27 @@ void Application::processInput()
                 continue;
             }
 
-            // TODO Remove when config interface exists: NUI quick size change
-            if (event.key.code == sf::Keyboard::Numpad8) {
-                s_context.display.nui += 1;
-                std::cerr << "NUI size: " << s_context.display.nui << std::endl;
-                refreshDisplay();
-                continue;
-            }
+            // NUI quick size change
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+                if (event.key.code == sf::Keyboard::Numpad8) {
+                    s_context.display.nui += 1u;
+                    std::cerr << "NUI size: " << s_context.display.nui << std::endl;
+                    refreshDisplay();
+                    continue;
+                }
 
-            if (event.key.code == sf::Keyboard::Numpad2) {
-                s_context.display.nui -= 1;
-                std::cerr << "NUI size: " << s_context.display.nui << std::endl;
-                refreshDisplay();
-                continue;
+                if (event.key.code == sf::Keyboard::Numpad5) {
+                    std::cerr << "Refresh display" << std::endl;
+                    refreshDisplay();
+                    continue;
+                }
+
+                if (event.key.code == sf::Keyboard::Numpad2) {
+                    if (s_context.display.nui != 0u) s_context.display.nui -= 1u;
+                    std::cerr << "NUI size: " << s_context.display.nui << std::endl;
+                    refreshDisplay();
+                    continue;
+                }
             }
 #endif
         }

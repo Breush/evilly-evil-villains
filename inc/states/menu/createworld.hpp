@@ -46,6 +46,14 @@ namespace states
         //! @name Routine
         //! @{
 
+        void refreshDisplay() final;
+
+        //! @}
+
+        //---------------//
+        //! @name Events
+        //! @{
+
         bool handleEvent(const sf::Event& event) final;
 
         //! @}

@@ -46,6 +46,8 @@ void List::onSizeChanges()
 
 void List::refreshDisplay()
 {
+    baseClass::refreshDisplay();
+
     config::NUI cNUI;
 
     m_headerOffset = 3.f * cNUI.fontHSpace;
@@ -56,7 +58,6 @@ void List::refreshDisplay()
     if (!m_lines.empty()) selectLine(m_selectedLine);
 
     refreshBordersPosition();
-    baseClass::refreshDisplay();
 }
 
 //------------------//

@@ -32,9 +32,9 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
 
     // Form
     nuiRoot.attachChild(m_form);
-    m_form.centerOrigin();
-    m_form.setSize({500.f, 500.f});
-    m_form.setRelativePosition({0.5f, 0.5f});
+    m_form.setRelativeOrigin({0.5f, 0.f});
+    m_form.setSize({1000.f, 1000.f}); // Auto compute size
+    m_form.setRelativePosition({0.5f, 0.2f});
 
     // World name
     m_form.add(_("World name"), m_worldNameEntry);
@@ -45,6 +45,7 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     m_form.attachChild(m_createVillainButton);
     m_createVillainButton.setAction(_("(Manage)"), [this] { stackPush(StateID::MENU_MANAGEVILLAINS); });
     m_createVillainButton.showLines(false);
+    m_createVillainButton.setRelativeOrigin({0.f, 1.0f});
     refreshVillainsList();
 
     // Buttons
@@ -57,6 +58,18 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
 
     m_buttons[0].setAction(_("Back"), [this] { stackPop(); });
     m_buttons[1].setAction(_("Create and start playing"), [this] { createAndPlayWorld(); });
+
+    refreshDisplay();
+}
+
+//-------------------//
+//----- Routine -----//
+
+void MenuCreateWorld::refreshDisplay()
+{
+    baseClass::refreshDisplay();
+
+    m_createVillainButton.setLocalPosition(m_villainBox.localPosition() - m_villainBox.getOrigin() + m_villainBox.size());
 }
 
 //------------------//
@@ -84,8 +97,6 @@ void MenuCreateWorld::refreshVillainsList()
 
     for (const auto& villain : context::villains.get())
         m_villainBox.add(villain.name, nullptr);
-
-    m_createVillainButton.setLocalPosition(m_villainBox.localPosition() + sf::Vector2f{m_villainBox.size().x + 10.f, 0.f});
 }
 
 void MenuCreateWorld::createAndPlayWorld()

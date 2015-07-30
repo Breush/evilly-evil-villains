@@ -44,7 +44,6 @@ namespace nui
         //! @{
 
         void onSizeChanges() final;
-        void refreshDisplay() final;
 
         //! @}
 
