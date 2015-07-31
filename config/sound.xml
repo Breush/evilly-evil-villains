@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config type="sound">
+	<param name="global" relVolume="0.9" />
+	<param name="music" volume="60" />
+	<param name="sound" volume="80" />
+</config>

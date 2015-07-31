@@ -25,6 +25,7 @@ namespace resources
         void play(SoundID id, sf::Vector2f position);
 
         void stopAll();
+        void setVolume(float volume);
 
         void removeStoppedSounds();
         void setListenerPosition(sf::Vector2f position);
@@ -33,6 +34,12 @@ namespace resources
     private:
         resources::SoundBufferHolder m_soundBuffers;
         std::list<sf::Sound> m_sounds;
+
+        float m_volume = 100.f;
+        const float m_listenerZ = 300.f;
+        const float m_minDistance3D = 360.f; // sqrt(minDistance2D^2 + m_listener2^2)
+        const float m_attenuation = 50.f;
+        const float m_minDistance2D = 200.f;
     };
 }
 

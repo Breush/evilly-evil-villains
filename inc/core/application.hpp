@@ -7,6 +7,7 @@
 #include "resources/animationholder.hpp"
 #include "states/statestack.hpp"
 #include "config/display.hpp"
+#include "config/sound.hpp"
 
 #include <SFML/System/Time.hpp>
 #include <SFML/System/NonCopyable.hpp>
@@ -58,6 +59,7 @@ public:
         resources::AnimationHolder animations;  //!< The animations, parsed SCML files.
 
         config::Display display;    //!< The display configuration.
+        config::Sound   sound;      //!< The sound configuration.
     };
 
     //! Access the static context to get resources and window/screen information.

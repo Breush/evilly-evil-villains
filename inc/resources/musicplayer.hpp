@@ -24,11 +24,11 @@ namespace resources
         void stop();
 
         void setPaused(bool paused);
-        void setVolume(uint volume);
+        void setVolume(float volume);
 
     private:
         sf::Music m_music;
         std::map<MusicID, std::string> m_musics;
-        uint m_volume;
+        float m_volume;
     };
 }

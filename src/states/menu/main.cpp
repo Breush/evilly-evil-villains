@@ -20,7 +20,6 @@ MenuMain::MenuMain(StateStack& stack)
 
     // Menu theme
     Application::context().musics.play(MusicID::MENU_THEME);
-    Application::context().musics.setVolume(75);
 
     // Creating scene
     auto& nuiRoot = nuiLayer().root();

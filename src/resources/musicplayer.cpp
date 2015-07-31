@@ -8,8 +8,6 @@
 using namespace resources;
 
 MusicPlayer::MusicPlayer()
-    : m_music()
-    , m_volume(100)
 {
 }
 
@@ -37,7 +35,7 @@ void MusicPlayer::stop()
     m_music.stop();
 }
 
-void MusicPlayer::setVolume(uint volume)
+void MusicPlayer::setVolume(float volume)
 {
     if (m_volume != volume) {
         m_volume = volume;

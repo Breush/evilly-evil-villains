@@ -9,16 +9,6 @@
 
 using namespace resources;
 
-namespace
-{
-    // Sound coordinate system, point of view of a player in front of the screen:
-    // X = left; Y = up; Z = back (out of the screen)
-    const float ListenerZ = 300.f;
-    const float Attenuation = 8.f;
-    const float MinDistance2D = 200.f;
-    const float MinDistance3D = std::sqrt(MinDistance2D*MinDistance2D + ListenerZ*ListenerZ);
-}
-
 SoundPlayer::SoundPlayer()
     : m_soundBuffers()
     , m_sounds()
@@ -49,8 +39,9 @@ void SoundPlayer::play(SoundID id, sf::Vector2f position)
 
     sound.setBuffer(m_soundBuffers.get(id));
     sound.setPosition(position.x, -position.y, 0.f);
-    sound.setAttenuation(Attenuation);
-    sound.setMinDistance(MinDistance3D);
+    sound.setAttenuation(m_attenuation);
+    sound.setMinDistance(m_minDistance3D);
+    sound.setVolume(m_volume);
 
     sound.play();
 }
@@ -66,9 +57,14 @@ void SoundPlayer::removeStoppedSounds()
     std::erase_if(m_sounds, [](const sf::Sound& s) { return s.getStatus() == sf::Sound::Stopped; });
 }
 
+void SoundPlayer::setVolume(float volume)
+{
+    m_volume = volume;
+}
+
 void SoundPlayer::setListenerPosition(sf::Vector2f position)
 {
-    sf::Listener::setPosition(position.x, -position.y, ListenerZ);
+    sf::Listener::setPosition(position.x, -position.y, m_listenerZ);
 }
 
 sf::Vector2f SoundPlayer::getListenerPosition() const

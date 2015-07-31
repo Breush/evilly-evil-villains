@@ -60,9 +60,6 @@ MenuSelectWorld::MenuSelectWorld(StateStack& stack)
     m_buttons[2].setAction(_("Play"), [this] { playOnSelectedWorld(); });
     m_buttons[1].setAction(_("Back"), [this] { stackPop(); });
     m_buttons[0].setAction(_("Create new world"), [this] { stackPush(StateID::MENU_CREATEWORLD); });
-
-    // Ambient feeling music
-    Application::context().musics.setVolume(25);
 }
 
 bool MenuSelectWorld::handleEvent(const sf::Event& event)
