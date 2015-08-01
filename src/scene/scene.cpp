@@ -140,6 +140,12 @@ void Scene::moveGrabbing(const sf::Vector2i& mousePos, const sf::Time& dt)
     adaptViewPosition();
 }
 
+void Scene::moveView(const sf::Vector2f& offset)
+{
+    m_refView.move(offset);
+    adaptViewPosition();
+}
+
 Entity* Scene::entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos)
 {
     for (const auto& layer : std::reverse(m_layers)) {

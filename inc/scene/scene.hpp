@@ -69,6 +69,9 @@ namespace scene
         //! Move the scene when currently grabbing, for a certain offset.
         void moveGrabbing(const sf::Vector2i& mousePos, const sf::Time& dt);
 
+        //! Move the scene of a certain offset.
+        void moveView(const sf::Vector2f& offset);
+
         //! Ask for a zoom to a specific point.
         void zoom(const sf::Vector2i& mousePos, float zoomFactor);
 
