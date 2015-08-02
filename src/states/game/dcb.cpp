@@ -6,8 +6,6 @@
 
 using namespace states;
 
-// TODO Make this part fun somehow with negociation for the dosh value...
-
 GameDCB::GameDCB(StateStack& stack)
     : baseClass(stack)
 {
@@ -21,10 +19,8 @@ GameDCB::GameDCB(StateStack& stack)
     m_background.setSize(nuiSize);
 
     // Gauges
-    nuiRoot.attachChild(m_appreciationGauge);
-    m_appreciationGauge.setLocalPosition({50, 50});
-    m_appreciationGauge.setLimits(0.f, 534.f);
-    m_appreciationGauge.setValue(42.f);
+    nuiRoot.attachChild(m_gaugesManager);
+    m_gaugesManager.setLocalPosition({50, 50});
 
     // Buttons
     nuiRoot.attachChild(m_button);

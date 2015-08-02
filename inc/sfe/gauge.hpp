@@ -1,6 +1,7 @@
 #pragma once
 
 #include "scene/entity.hpp"
+#include "sfe/line.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
@@ -30,14 +31,24 @@ namespace sfe
         //! Set the limits for min/max values.
         void setLimits(float limitMin, float limitMax);
 
-        //! Set the value, which will be truncated if not between the min/max limits.
-        void setValue(float inValue);
+        //! Adds a bar at a specific value.
+        /*!
+         *  The color used is the color of the bar, and the new fill color
+         *  when the indicator is passed.
+         */
+        void addIndicator(float inValue, const sf::Color& color);
 
         //! @}
 
-        //----------------//
-        //! @name Getters
+        //----------------------------//
+        //! @name Getters and setters
         //! @{
+
+        //! Sets if the gauge is vertical or not. True for vertical.
+        void setVerticalOrientation(bool inVerticalOrientation);
+
+        //! Set the value, which will be truncated if not between the min/max limits.
+        void setValue(float inValue);
 
         //! Get the current value, as a proportion of min/max limits.
         float value();
@@ -52,7 +63,7 @@ namespace sfe
         PARAMGSU(float, m_length, length, setLength, updateSize)
 
         //! Whether the gauge is filled vertically or horizontally.
-        PARAMGSU(bool, m_verticalOrientation, verticalOrientation, setVerticalOrientation, refreshFiller)
+        PARAMG(bool, m_verticalOrientation, verticalOrientation)
 
         //! Whether the gauge is filled left -> right (bottom -> top) or the opposite way.
         PARAMGSU(bool, m_invertedAppearance, invertedAppearance, setInvertedAppearance, refreshFiller)
@@ -77,10 +88,27 @@ namespace sfe
         //! Set the size of the bar, given the length and nui configuration.
         void updateSize();
 
+        //! Called whenever orientation changed.
+        void refreshOrientation();
+
         //! Updates the visual part of the filler.
         void refreshFiller();
 
+        //! Refresh the indicators positions.
+        void refreshIndicators();
+
         //! @}
+
+    private:
+
+        //! Indicator line.
+        struct Indicator
+        {
+            std::unique_ptr<sfe::HLine> hline = nullptr;    //!< The horizontal line indicator (if vertical orientation).
+            std::unique_ptr<sfe::VLine> vline = nullptr;    //!< The vertical line indicator (if horizontal orientation).
+            sf::Color color = sf::Color::White;             //!< The color of the indicator.
+            float value = 0.f;                              //!< The value (position) of indicator.
+        };
 
     private:
 
@@ -93,5 +121,7 @@ namespace sfe
 
         float m_minHintSize;    //!< NUI proportional minimum side size.
         float m_maxHintSize;    //!< NUI proportional maximum side size.
+
+        std::vector<Indicator> m_indicators;    //!< All the indicators.
     };
 }

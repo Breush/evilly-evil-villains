@@ -3,7 +3,7 @@
 #include "states/state.hpp"
 #include "states/identifiers.hpp"
 #include "sfe/rectangleshape.hpp"
-#include "sfe/gauge.hpp"
+#include "dcb/gaugesmanager.hpp"
 #include "nui/button.hpp"
 
 namespace states
@@ -34,6 +34,7 @@ namespace states
 
         sfe::RectangleShape m_background;   //!< The background image.
         nui::Button m_button;               //!< The only one button in the world.
-        sfe::Gauge m_appreciationGauge;     //!< The gauge for bank appreciation of the player.
+
+        dcb::GaugesManager m_gaugesManager; //!< The gauges.
     };
 }
