@@ -1,7 +1,6 @@
 #pragma once
 
 #include "scene/entity.hpp"
-#include "dungeon/event.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/vstacker.hpp"
 #include "sfe/gauge.hpp"

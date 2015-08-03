@@ -27,11 +27,21 @@ void WrapText::rewrap()
     returnif (m_fitWidth < 0.f);
 
     // Word wrap - greedy algorithm
-    std::wistringstream str(m_wrapString);
     std::wstring prevString, string;
-    std::wstring word;
+    uint i = 0u;
 
-    while (str >> word) {
+    while (i != m_wrapString.size()) {
+        std::wstring word;
+        wchar_t c;
+
+        // Get word
+        while (i < m_wrapString.size() && !iswspace(c = m_wrapString[i])) {
+            word += c;
+            ++i;
+        }
+
+        // Update string, and add a Return character
+        // between last words if we went to far
         string += word;
         setString(string);
 
@@ -41,6 +51,11 @@ void WrapText::rewrap()
         }
 
         prevString = string;
-        string += L' ';
+
+        // Add separators
+        while (i < m_wrapString.size() && iswspace(c = m_wrapString[i])) {
+            string += c;
+            ++i;
+        }
     }
 }

@@ -49,7 +49,7 @@ void cleanExtraFiles()
 //----- Application -----//
 
 Application::Application()
-    : m_initialState(StateID::SPLASHSCREEN)
+    : m_initialState(StateID::MENU_CREATEWORLD)
 {
 #if DEBUG_GLOBAL > 0
     cleanExtraFiles();

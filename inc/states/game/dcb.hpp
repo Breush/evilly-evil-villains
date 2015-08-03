@@ -4,6 +4,7 @@
 #include "states/identifiers.hpp"
 #include "sfe/rectangleshape.hpp"
 #include "dcb/gaugesmanager.hpp"
+#include "dcb/bubble.hpp"
 #include "nui/button.hpp"
 
 namespace states
@@ -35,6 +36,7 @@ namespace states
         sfe::RectangleShape m_background;   //!< The background image.
         nui::Button m_button;               //!< The only one button in the world.
 
+        dcb::Bubble m_bubble;               //!< The message.
         dcb::GaugesManager m_gaugesManager; //!< The gauges.
     };
 }

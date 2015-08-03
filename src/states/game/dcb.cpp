@@ -22,6 +22,16 @@ GameDCB::GameDCB(StateStack& stack)
     nuiRoot.attachChild(m_gaugesManager);
     m_gaugesManager.setLocalPosition({50, 50});
 
+    // Message
+    nuiRoot.attachChild(m_bubble);
+    m_bubble.setRelativePosition({1.f, 0.f});
+    m_bubble.setRelativeOrigin({1.f, 0.f});
+    m_bubble.setSize(nuiSize / 3.f);
+    m_bubble.forceText(_("Welcome to the Dungeon Community Bank (DCB). "
+                         "I heard that you wanted to open your own dungeon, "
+                         "this is the kind of operation we like to support here.\n"
+                         "Let me just ask you: How do you want to name your tower of death?"));
+
     // Buttons
     nuiRoot.attachChild(m_button);
     m_button.setAction(_("Create dungeon"), [this] { createDungeon(); });

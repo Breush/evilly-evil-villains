@@ -11,7 +11,6 @@ namespace nui
 {
     //! A basic tool to let the user edit numbers.
     // TODO Enable long-click repeat
-    // TODO Add padding
 
     template<typename Value_t>
     class SpinBox final : public scene::Entity
