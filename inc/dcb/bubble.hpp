@@ -48,10 +48,24 @@ namespace dcb
 
         //! @}
 
+        //--------------------------------//
+        //! @name Internal change updates
+        //! @{
+
+        //! Refresh parts position and size.
+        void refreshParts();
+
+        //! @}
+
     private:
 
-        sf::RectangleShape m_background;    //!< The background.
         sfe::WrapText m_wrapText;           //!< The text shown.
         std::vector<std::wstring> m_texts;  //!< The list of texts.
+
+        // Decorum
+        sf::RectangleShape m_background;    //!< The background.
+        float m_hPadding;   //!< Horizontal padding value got from config.
+        float m_vPadding;   //!< Vertical padding value got from config.
+        float m_outlineThickness = 1.f; //!< Size of outline.
     };
 }

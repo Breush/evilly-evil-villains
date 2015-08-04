@@ -20,7 +20,8 @@ GameDCB::GameDCB(StateStack& stack)
 
     // Gauges
     nuiRoot.attachChild(m_gaugesManager);
-    m_gaugesManager.setLocalPosition({50, 50});
+    m_gaugesManager.setRelativePosition({0.f, 0.80f});
+    m_gaugesManager.setRelativeOrigin({0.f, 0.50f});
 
     // Message
     nuiRoot.attachChild(m_bubble);
@@ -29,8 +30,16 @@ GameDCB::GameDCB(StateStack& stack)
     m_bubble.setSize(nuiSize / 3.f);
     m_bubble.forceText(_("Welcome to the Dungeon Community Bank (DCB). "
                          "I heard that you wanted to open your own dungeon, "
-                         "this is the kind of operation we like to support here.\n"
+                         "this is the kind of operation we like to support here.\n\n"
                          "Let me just ask you: How do you want to name your tower of death?"));
+
+    // Answer box
+    nuiRoot.attachChild(m_answerBox);
+    m_answerBox.setSize({0.75f * nuiSize.x, 0.40f * nuiSize.y});
+    m_answerBox.setRelativePosition({0.25f, 0.60f});
+
+    uint answerID = m_answerBox.addAnswer({L"Test1", L"Test2", L"Test3", L"Test4"});
+    m_answerBox.showAnswer(answerID);
 
     // Buttons
     nuiRoot.attachChild(m_button);

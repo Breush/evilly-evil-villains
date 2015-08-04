@@ -4,6 +4,7 @@
 #include "states/identifiers.hpp"
 #include "sfe/rectangleshape.hpp"
 #include "dcb/gaugesmanager.hpp"
+#include "dcb/answerbox.hpp"
 #include "dcb/bubble.hpp"
 #include "nui/button.hpp"
 
@@ -37,6 +38,7 @@ namespace states
         nui::Button m_button;               //!< The only one button in the world.
 
         dcb::Bubble m_bubble;               //!< The message.
+        dcb::AnswerBox m_answerBox;         //!< The box with all possible answers.
         dcb::GaugesManager m_gaugesManager; //!< The gauges.
     };
 }

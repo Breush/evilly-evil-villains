@@ -13,16 +13,13 @@ Bubble::Bubble()
 
     // Background
     addPart(&m_background);
-    m_background.setOutlineThickness(1.f);
     m_background.setOutlineColor(sf::Color::White);
     m_background.setFillColor({255u, 255u, 255u, 10u});
-    m_background.setPosition({1.f, 1.f});
 
     // Text
     addPart(&m_wrapText);
-    m_wrapText.setFont(Application::context().fonts.get(FontID::MONO));
+    m_wrapText.setFont(Application::context().fonts.get(FontID::NUI));
     m_wrapText.setColor(sf::Color::White);
-    m_wrapText.setPosition({2.f, 2.f});
 
     refreshDisplay();
 }
@@ -32,10 +29,7 @@ Bubble::Bubble()
 
 void Bubble::onSizeChanges()
 {
-    m_background.setSize(size() - 2.f);
-
-    m_wrapText.fitWidth(size().x - 4.f);
-    setPartClippingRect(&m_wrapText, {0.f, 0.f, size().x - 4.f, size().y - 4.f});
+    refreshParts();
 }
 
 void Bubble::refreshDisplay()
@@ -43,7 +37,10 @@ void Bubble::refreshDisplay()
     config::NUI cNUI;
 
     m_wrapText.setCharacterSize(cNUI.fontSize);
+    m_hPadding = cNUI.hPadding;
+    m_vPadding = cNUI.vPadding;
 
+    refreshParts();
     baseClass::refreshDisplay();
 }
 
@@ -53,4 +50,18 @@ void Bubble::refreshDisplay()
 void Bubble::forceText(std::wstring text)
 {
     m_wrapText.setWrapString(std::move(text));
+}
+
+//-----------------------------------//
+//----- Internal change updates -----//
+
+void Bubble::refreshParts()
+{
+    m_background.setOutlineThickness(m_outlineThickness);
+    m_background.setPosition({m_outlineThickness, m_outlineThickness});
+    m_background.setSize(size() - 2.f * m_outlineThickness);
+
+    m_wrapText.setPosition({m_hPadding, m_vPadding});
+    m_wrapText.fitWidth(size().x - 2.f * m_hPadding);
+    setPartClippingRect(&m_wrapText, {0.f, 0.f, size().x - 2.f * m_hPadding, size().y - 2.f * m_vPadding});
 }
