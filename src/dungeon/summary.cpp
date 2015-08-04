@@ -19,17 +19,17 @@ Summary::Summary()
     addPart(&m_dungeonName);
 
     // Bars
-    // TODO Use images for logos
-    m_bars[BAR_DOSH].logo.setFillColor(sf::Color::Yellow);
-    m_bars[BAR_FAME].logo.setFillColor(sf::Color::Green);
+    m_bars[BAR_DOSH].logo.setTexture(&Application::context().textures.get(TextureID::ELEMENTS_DOSH));
+    m_bars[BAR_FAME].logo.setTexture(&Application::context().textures.get(TextureID::ELEMENTS_FAME));
 
     for (auto& bar : m_bars) {
         bar.text.setFont(font);
-        bar.text.setColor(sf::Color::White);
-
         addPart(&bar.logo);
         addPart(&bar.text);
     }
+
+    m_bars[BAR_DOSH].text.setColor({190u, 171u, 21u});
+    m_bars[BAR_FAME].text.setColor({102u, 151u, 196u});
 
     refreshDisplay();
 }

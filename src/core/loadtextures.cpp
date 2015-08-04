@@ -34,6 +34,10 @@ void Application::loadTextures()
     s_context.textures.load(TextureID::MENU_MAIN_BACKGROUND, "res/tex/menu/main/background.png");
     s_context.textures.load(TextureID::MENU_MAIN_LOGO, "res/tex/menu/main/logo.png", true);
 
+    // Elements
+    s_context.textures.load(TextureID::ELEMENTS_DOSH, "res/tex/elements/dosh.png");
+    s_context.textures.load(TextureID::ELEMENTS_FAME, "res/tex/elements/fame.png");
+
     // Dungeon scene
     s_context.textures.load(TextureID::DUNGEON_SCENE_FRONT,     "res/tex/dungeon/scene/front.png");
     s_context.textures.load(TextureID::DUNGEON_SCENE_CLOSE,     "res/tex/dungeon/scene/close.png");
