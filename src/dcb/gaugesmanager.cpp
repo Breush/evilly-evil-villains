@@ -50,3 +50,15 @@ void GaugesManager::refreshDisplay()
 {
     baseClass::refreshDisplay();
 }
+
+//--------------------------//
+//----- Gauges control -----//
+
+void GaugesManager::randomGauges(float seed, float min, float max)
+{
+    float mod = max - min + 1.f;
+    m_gauges[GaugeID::APPRECIATION].setValue(min + std::fmod(seed, mod));   seed *= 48271.f;
+    m_gauges[GaugeID::CONFUSION].setValue(min + std::fmod(seed, mod));      seed *= 48271.f;
+    m_gauges[GaugeID::TRUST].setValue(min + std::fmod(seed, mod));          seed *= 48271.f;
+    m_gauges[GaugeID::CONVICTION].setValue(min + std::fmod(seed, mod));
+}

@@ -5,13 +5,13 @@
 #include "resources/identifiers.hpp"
 #include "tools/debug.hpp"
 #include "tools/vector.hpp"
+#include "tools/tools.hpp"
 
 using namespace dcb;
 
 AnswerBox::AnswerBox()
+    : m_answerSelectedCallback(nullptr)
 {
-    setDetectable(false);
-
     // Background
     addPart(&m_background);
     m_background.setOutlineColor(sf::Color::White);
@@ -33,6 +33,27 @@ void AnswerBox::refreshDisplay()
 {
     refreshParts();
     baseClass::refreshDisplay();
+}
+
+//------------------//
+//----- Events -----//
+
+void AnswerBox::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
+{
+    returnif (button != sf::Mouse::Left);
+
+    float vOffset = 0.f;
+
+    for (uint i = 0u; i < m_texts.size(); ++i) {
+        // Max y for the answer
+        vOffset += boundsSize(m_texts[i]).y;
+
+        // Feedback on controller if clicked
+        if (mousePos.y < vOffset && m_answerSelectedCallback != nullptr) {
+            m_answerSelectedCallback(i);
+            return;
+        }
+    }
 }
 
 //---------------------------//

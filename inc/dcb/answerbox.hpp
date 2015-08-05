@@ -6,6 +6,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 
 #include <initializer_list>
+#include <functional>
 #include <vector>
 
 namespace dcb
@@ -16,6 +17,9 @@ namespace dcb
     class AnswerBox final : public scene::Entity
     {
         using baseClass = scene::Entity;
+
+        //! Used whenever an answer is selected.
+        using AnswerSelectedCallback = std::function<void(uint)>;
 
     public:
 
@@ -38,6 +42,15 @@ namespace dcb
 
         //! @}
 
+        //--------------------------//
+        //! @name Public properties
+        //! @{
+
+        //! Used whenever an answer is selected.
+        PARAMGS(AnswerSelectedCallback, m_answerSelectedCallback, answerSelectedCallback, setAnswerSelectedCallback)
+
+        //! @}
+
     protected:
 
         //----------------//
@@ -46,6 +59,14 @@ namespace dcb
 
         void onSizeChanges();
         void refreshDisplay() final;
+
+        //! @}
+
+        //---------------//
+        //! @name Events
+        //! @{
+
+        void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
 
         //! @}
 

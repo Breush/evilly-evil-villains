@@ -28,12 +28,19 @@ namespace dcb
         //! @name Text manipulation
         //! @{
 
-        //! Forces a text to be a certain value and does not register it.
+        //! Forces the message to be a certain value and does not register it.
         /*!
          *  This behavior is kind of against the philosophy
          *  of this entity. However this can be useful in some situation.
          */
-        void forceText(std::wstring text);
+        void forceMessage(const std::wstring& message);
+
+        //! Add a message.
+        //! @return The message ID.
+        uint addMessage(std::wstring message);
+
+        //! Show a specified message from its ID.
+        void showMessage(uint messageID);
 
         //! @}
 
@@ -59,8 +66,8 @@ namespace dcb
 
     private:
 
-        sfe::WrapText m_wrapText;           //!< The text shown.
-        std::vector<std::wstring> m_texts;  //!< The list of texts.
+        sfe::WrapText m_wrapText;               //!< The text shown.
+        std::vector<std::wstring> m_messages;   //!< The list of texts.
 
         // Decorum
         sf::RectangleShape m_background;    //!< The background.

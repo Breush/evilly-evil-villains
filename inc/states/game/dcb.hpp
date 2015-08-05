@@ -6,6 +6,7 @@
 #include "dcb/gaugesmanager.hpp"
 #include "dcb/answerbox.hpp"
 #include "dcb/bubble.hpp"
+#include "dcb/controller.hpp"
 #include "nui/button.hpp"
 
 namespace states
@@ -40,5 +41,6 @@ namespace states
         dcb::Bubble m_bubble;               //!< The message.
         dcb::AnswerBox m_answerBox;         //!< The box with all possible answers.
         dcb::GaugesManager m_gaugesManager; //!< The gauges.
+        dcb::Controller m_controller;       //!< Controls the content of the other DCB elements.
     };
 }

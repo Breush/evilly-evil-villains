@@ -47,9 +47,21 @@ void Bubble::refreshDisplay()
 //-----------------------------//
 //----- Text manipulation -----//
 
-void Bubble::forceText(std::wstring text)
+void Bubble::forceMessage(const std::wstring& message)
 {
-    m_wrapText.setWrapString(std::move(text));
+    m_wrapText.setWrapString(message);
+}
+
+uint Bubble::addMessage(std::wstring message)
+{
+    m_messages.emplace_back(std::move(message));
+    return m_messages.size() - 1u;
+}
+
+void Bubble::showMessage(uint messageID)
+{
+    massert(messageID < m_messages.size(), "Message ID " << messageID << " does not exists.");
+    m_wrapText.setWrapString(m_messages[messageID]);
 }
 
 //-----------------------------------//

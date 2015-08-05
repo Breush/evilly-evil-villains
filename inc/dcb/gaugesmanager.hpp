@@ -22,6 +22,15 @@ namespace dcb
         //! Default destructor.
         ~GaugesManager() = default;
 
+        //-----------------------//
+        //! @name Gauges control
+        //! @{
+
+        //! Randomize the gauges from the seed.
+        void randomGauges(float seed, float min, float max);
+
+        //! @}
+
     protected:
 
         //----------------//
