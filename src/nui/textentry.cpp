@@ -139,10 +139,12 @@ bool TextEntry::handleKeyboardEvent(const sf::Event& event)
     }
     // Edit the text entry
     else if (event.type == sf::Event::TextEntered) {
-        // TODO Associate a callback to Return?
         returnif (event.text.unicode == 1) false;           // Error
-        returnif (event.text.unicode == 13) false;          // Return
-        if (event.text.unicode == 8) deletePrevious();      // Backspace
+        if (event.text.unicode == 13) {                     // Return
+            if (m_onValidateCallback != nullptr)
+                m_onValidateCallback();
+        }
+        else if (event.text.unicode == 8) deletePrevious(); // Backspace
         else if (event.text.unicode == 127) deleteNext();   // Delete
         else addCharacter(event.text.unicode);              // Any correct character
         return true;
@@ -172,6 +174,11 @@ void TextEntry::setText(const std::wstring& str, bool sendCallback)
 void TextEntry::setOnTextChangeCallback(const TextChangeCallback& callback)
 {
     m_onTextChangeCallback = callback;
+}
+
+void TextEntry::setOnValidateCallback(const ValidateCallback& callback)
+{
+    m_onValidateCallback = callback;
 }
 
 //------------------//

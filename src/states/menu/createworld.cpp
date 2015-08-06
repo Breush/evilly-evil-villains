@@ -39,6 +39,7 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     // World name
     m_form.add(_("World name"), m_worldNameEntry);
     m_worldNameEntry.setLength(20u);
+    m_worldNameEntry.setOnValidateCallback([this] { createAndPlayWorld(); });
 
     // Villain
     m_form.add(_("Villain"), m_villainBox);

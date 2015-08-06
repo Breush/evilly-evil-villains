@@ -17,6 +17,9 @@ namespace nui
         //! Callback type used when a change occurs.
         using TextChangeCallback = std::function<void(const std::wstring&, const std::wstring&)>;
 
+        //! Callback type used when user press Return.
+        using ValidateCallback = std::function<void()>;
+
     public:
 
         //! Constructor.
@@ -35,14 +38,11 @@ namespace nui
         //! Set the current string and update, if sendCallback is false a callback will not be sent.
         void setText(const std::wstring& str, bool sendCallback = true);
 
-        //! @}
-
-        //-----------------//
-        //! @name Callback
-        //! @{
-
         //! Sets the callback called whenever the text changes.
         void setOnTextChangeCallback(const TextChangeCallback& callback);
+
+        //! Sets the callback called whenever the user presses Return.
+        void setOnValidateCallback(const ValidateCallback& callback);
 
         //! @}
 
@@ -187,5 +187,6 @@ namespace nui
         float m_fontHSpace = 0.f;   //!< The estimated horizontal space reserved for a character.
 
         TextChangeCallback m_onTextChangeCallback;  //!< Whenever the value changes.
+        ValidateCallback m_onValidateCallback;      //!< Whenever user presses Return.
     };
 }
