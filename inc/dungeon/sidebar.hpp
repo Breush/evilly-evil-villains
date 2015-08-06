@@ -11,6 +11,13 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
+// Forward declarations
+
+namespace scene
+{
+    class Scene;
+}
+
 namespace dungeon
 {
     //! The sidebar shown in Dungeon Design state.
@@ -22,7 +29,7 @@ namespace dungeon
     public:
 
         //! Constructor.
-        Sidebar();
+        Sidebar(scene::Scene& inScene);
 
         //! Destructor.
         ~Sidebar();
@@ -89,6 +96,8 @@ namespace dungeon
         };
 
     private:
+
+        scene::Scene& m_scene;  //!< The main scene, reference here for minimap interaction.
 
         // Decorum
         sf::RectangleShape m_background;    //!< The background.

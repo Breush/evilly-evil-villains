@@ -14,6 +14,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     : State(stack)
     , m_dungeonInter(m_contextMenu)
     , m_dungeonHero(&m_dungeonInter)
+    , m_dungeonSidebar(scene())
 {
     // During game, disable key repeat
     Application::context().window.setKeyRepeatEnabled(false);

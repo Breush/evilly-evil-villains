@@ -5,6 +5,8 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/View.hpp>
 
+#include <functional>
+
 // Forward declaration
 
 namespace scene
@@ -23,6 +25,9 @@ namespace dungeon
     {
         using baseClass = scene::Entity;
 
+        //! Type used when minimap is clicked.
+        using CallbackAction = std::function<void(const sf::Vector2f&)>;
+
     public:
 
         //! Constructor.
@@ -40,6 +45,16 @@ namespace dungeon
 
         //! @}
 
+        //---------------//
+        //! @name Action
+        //! @{
+
+        //! Sets the action on minimap clicked.
+        //! This returns the coordinates of the click in the binded view.
+        inline void setCallbackAction(const CallbackAction& callbackAction) { m_callbackAction = callbackAction; }
+
+        //! @}
+
     protected:
 
         //----------------//
@@ -50,6 +65,26 @@ namespace dungeon
         void onTransformChanges() final;
         void onSizeChanges() final;
         void refreshDisplay() final;
+
+        //! @}
+
+        //---------------//
+        //! @name Events
+        //! @{
+
+        void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseLeft() final;
+
+        //! @}
+
+        //---------------//
+        //! @name Action
+        //! @{
+
+        //! Gets in view coordinates and inform callback if exists.
+        void doAction(const sf::Vector2f& nuiPos);
 
         //! @}
 
@@ -70,6 +105,10 @@ namespace dungeon
         // View elements
         scene::Layer* m_layer = nullptr;    //!< The layer to use for the minimap.
         sf::View m_view;                    //!< The minimap view.
+
+        // Action
+        CallbackAction m_callbackAction = nullptr;  //!< Called when minimap is clicked.
+        bool m_grabbing = false;                    //!< True if user maintains a click.
 
         // Decorum
         sf::RectangleShape m_background;            //!< The background.

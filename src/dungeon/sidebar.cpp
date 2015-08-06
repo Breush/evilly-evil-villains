@@ -6,12 +6,14 @@
 #include "dungeon/eventtype.hpp"
 #include "dungeon/facilities.hpp"
 #include "dungeon/traps.hpp"
+#include "scene/scene.hpp"
 #include "resources/identifiers.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 
 using namespace dungeon;
 
-Sidebar::Sidebar()
+Sidebar::Sidebar(scene::Scene& inScene)
+    : m_scene(inScene)
 {
     // Global stacker
     attachChild(m_globalStacker);
@@ -25,6 +27,9 @@ Sidebar::Sidebar()
     // TODO Have a better image...
     m_background.setTexture(&Application::context().textures.get(TextureID::DUNGEON_SIDEBAR_BACKGROUND));
     //addPart(&m_background);
+
+    // Minimap
+    m_minimap.setCallbackAction([this] (const sf::Vector2f& position) { m_scene.setViewCenter(position); });
 
     // Tabs + tab content
     m_tabHolder.stackBack(_("Monsters"),    TextureID::DUNGEON_SIDEBAR_TAB_MONSTERS,    m_tabContents[TabsID::MONSTERS].scrollArea);

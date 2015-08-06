@@ -72,6 +72,9 @@ namespace scene
         //! Move the scene of a certain offset.
         void moveView(const sf::Vector2f& offset);
 
+        //! Move the scene to a certain center.
+        void setViewCenter(const sf::Vector2f& position);
+
         //! Ask for a zoom to a specific point.
         void zoom(const sf::Vector2i& mousePos, float zoomFactor);
 

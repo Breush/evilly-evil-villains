@@ -146,6 +146,12 @@ void Scene::moveView(const sf::Vector2f& offset)
     adaptViewPosition();
 }
 
+void Scene::setViewCenter(const sf::Vector2f& position)
+{
+    m_refView.setCenter(position);
+    adaptViewPosition();
+}
+
 Entity* Scene::entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos)
 {
     for (const auto& layer : std::reverse(m_layers)) {

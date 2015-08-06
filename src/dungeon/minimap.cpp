@@ -66,6 +66,47 @@ void Minimap::refreshDisplay()
     baseClass::refreshDisplay();
 }
 
+//------------------//
+//----- Events -----//
+
+void Minimap::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f& nuiPos)
+{
+    returnif (button != sf::Mouse::Left);
+    m_grabbing = true;
+    doAction(nuiPos);
+}
+
+void Minimap::handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f&)
+{
+    returnif (button != sf::Mouse::Left);
+    m_grabbing = false;
+}
+
+void Minimap::handleMouseMoved(const sf::Vector2f&, const sf::Vector2f& nuiPos)
+{
+    returnif (!m_grabbing);
+    doAction(nuiPos);
+}
+
+void Minimap::handleMouseLeft()
+{
+    m_grabbing = false;
+}
+
+//------------------//
+//----- Action -----//
+
+void Minimap::doAction(const sf::Vector2f& nuiPos)
+{
+    returnif (m_layer == nullptr);
+    returnif (m_callbackAction == nullptr);
+
+    const auto& window = Application::context().window;
+    auto pixel = window.mapCoordsToPixel(nuiPos);
+    auto viewCoordsClicked = window.mapPixelToCoords(pixel, m_view);
+    m_callbackAction(viewCoordsClicked);
+}
+
 //-----------------//
 //----- Layer -----//
 
