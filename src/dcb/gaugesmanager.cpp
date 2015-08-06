@@ -62,3 +62,9 @@ void GaugesManager::randomGauges(float seed, float min, float max)
     m_gauges[GaugeID::TRUST].setValue(min + std::fmod(seed, mod));          seed *= 48271.f;
     m_gauges[GaugeID::CONVICTION].setValue(min + std::fmod(seed, mod));
 }
+
+void GaugesManager::addToGauges(const std::array<float, GaugeID::COUNT>& gaugesValues)
+{
+    for (uint i = 0u; i < GaugeID::COUNT; ++i)
+        m_gauges[i].addValue(gaugesValues[i]);
+}

@@ -42,6 +42,9 @@ namespace dcb
         //! Show a specified message from its ID.
         void showMessage(uint messageID);
 
+        //! Remove all messages.
+        void clearMessages();
+
         //! @}
 
     protected:

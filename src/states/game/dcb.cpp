@@ -29,10 +29,10 @@ GameDCB::GameDCB(StateStack& stack)
     m_bubble.setRelativePosition({1.f, 0.f});
     m_bubble.setRelativeOrigin({1.f, 0.f});
     m_bubble.setSize(nuiSize / 3.f);
-    m_bubble.forceMessage(_("Welcome to the Dungeon Community Bank (DCB). "
+    /*m_bubble.forceMessage(_("Welcome to the Dungeon Community Bank (DCB). "
                             "I heard that you wanted to open your own dungeon, "
                             "this is the kind of operation we like to support here.\n\n"
-                            "Let me just ask you: How do you want to name your tower of death?"));
+                            "Let me just ask you: How do you want to name your tower of death?"));*/
 
     // Answer box
     nuiRoot.attachChild(m_answerBox);
@@ -48,6 +48,9 @@ GameDCB::GameDCB(StateStack& stack)
     // TODO Ask for dungeon name
     const auto& worldInfo = context::worlds.selected();
     m_controller.randomGaugesFromString(worldInfo.name);
+
+    // TODO Get correct translation file
+    m_controller.load("res/po/en_EN/dcb.xml");
 }
 
 void GameDCB::createDungeon()

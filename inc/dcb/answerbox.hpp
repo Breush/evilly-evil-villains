@@ -5,7 +5,6 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
-#include <initializer_list>
 #include <functional>
 #include <vector>
 
@@ -35,10 +34,13 @@ namespace dcb
 
         //! Add an answer with multiple choices.
         //! @return The answer ID.
-        uint addAnswer(std::initializer_list<std::wstring> choices);
+        uint addAnswer(std::vector<std::wstring> choices);
 
         //! Show a specified answer from its ID.
         void showAnswer(uint answerID);
+
+        //! Remove all answers.
+        void clearAnswers();
 
         //! @}
 

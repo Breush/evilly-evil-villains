@@ -50,6 +50,12 @@ namespace sfe
         //! Set the value, which will be truncated if not between the min/max limits.
         void setValue(float inValue);
 
+        //! Add to the value.
+        inline void addValue(float inValue) { setValue(value() + inValue); }
+
+        //! Substract from the value.
+        inline void subValue(float inValue) { setValue(value() - inValue); }
+
         //! Get the current value, as a proportion of min/max limits.
         float value();
 

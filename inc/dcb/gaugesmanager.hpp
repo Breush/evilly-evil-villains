@@ -6,13 +6,31 @@
 #include "sfe/gauge.hpp"
 #include "sfe/label.hpp"
 
+#include <array>
+
 namespace dcb
 {
+    // Forward declarations
+
+    class Controller;
+
     //! Controls the four gauges in the DBC negociation screen.
 
     class GaugesManager final : public scene::Entity
     {
         using baseClass = scene::Entity;
+
+        friend Controller;
+
+        //! The four gauges.
+        enum GaugeID
+        {
+            APPRECIATION,
+            CONFUSION,
+            TRUST,
+            CONVICTION,
+            COUNT,
+        };
 
     public:
 
@@ -29,6 +47,9 @@ namespace dcb
         //! Randomize the gauges from the seed.
         void randomGauges(float seed, float min, float max);
 
+        //! Add values to all gauges.
+        void addToGauges(const std::array<float, GaugeID::COUNT>& gaugesValues);
+
         //! @}
 
     protected:
@@ -41,16 +62,6 @@ namespace dcb
         void refreshDisplay() final;
 
         //! @}
-
-        //! The four gauges.
-        enum GaugeID
-        {
-            APPRECIATION,
-            CONFUSION,
-            TRUST,
-            CONVICTION,
-            COUNT,
-        };
 
     private:
 

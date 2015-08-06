@@ -59,7 +59,7 @@ void AnswerBox::handleMouseButtonPressed(const sf::Mouse::Button button, const s
 //---------------------------//
 //----- Answers control -----//
 
-uint AnswerBox::addAnswer(std::initializer_list<std::wstring> choices)
+uint AnswerBox::addAnswer(std::vector<std::wstring> choices)
 {
     m_answers.emplace_back(std::move(choices));
     return m_answers.size() - 1u;
@@ -85,6 +85,11 @@ void AnswerBox::showAnswer(uint answerID)
     }
 
     refreshTexts();
+}
+
+void AnswerBox::clearAnswers()
+{
+    m_answers.clear();
 }
 
 //-----------------------------------//

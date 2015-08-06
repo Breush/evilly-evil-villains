@@ -64,6 +64,11 @@ void Bubble::showMessage(uint messageID)
     m_wrapText.setWrapString(m_messages[messageID]);
 }
 
+void Bubble::clearMessages()
+{
+    m_messages.clear();
+}
+
 //-----------------------------------//
 //----- Internal change updates -----//
 
