@@ -66,7 +66,6 @@ void Controller::load(const std::string& file)
         m_points.emplace_back(answersPoints);
     }
 
-    m_answerBox.showAnswer(0u); // FIXME
     std::cerr << "Loaded " << m_points.size() << " answers" << std::endl;
 }
 
@@ -90,19 +89,19 @@ void Controller::addPointsFromType(AnswersPoints& answersPoints, const std::wstr
 
     if (type == L"lie") {
         points[GaugesManager::GaugeID::APPRECIATION]    = fmod(rand(), 31.f) - 15.f;
-        points[GaugesManager::GaugeID::CONFUSION]       = 0.f;
+        points[GaugesManager::GaugeID::CONFUSION]       = -fmod(rand(), 6.f);
         points[GaugesManager::GaugeID::TRUST]           = -fmod(rand(), 16.f);
         points[GaugesManager::GaugeID::CONVICTION]      = 15.f + fmod(rand(), 11.f);
     }
     else if (type == L"truth") {
         points[GaugesManager::GaugeID::APPRECIATION]    = 5.f + fmod(rand(), 21.f);
-        points[GaugesManager::GaugeID::CONFUSION]       = 0.f;
+        points[GaugesManager::GaugeID::CONFUSION]       = -fmod(rand(), 6.f);
         points[GaugesManager::GaugeID::TRUST]           = fmod(rand(), 31.f) - 15.f;
         points[GaugesManager::GaugeID::CONVICTION]      = -5.f - fmod(rand(), 16.f);
     }
     else if (type == L"sarcasm") {
         points[GaugesManager::GaugeID::APPRECIATION]    = -fmod(rand(), 16.f);
-        points[GaugesManager::GaugeID::CONFUSION]       = fmod(rand(), 31.f) - 15.f;
+        points[GaugesManager::GaugeID::CONFUSION]       = fmod(rand(), 5.f) - 15.f;
         points[GaugesManager::GaugeID::TRUST]           = 5.f + fmod(rand(), 21.f);
         points[GaugesManager::GaugeID::CONVICTION]      = -fmod(rand(), 6.f);
     }

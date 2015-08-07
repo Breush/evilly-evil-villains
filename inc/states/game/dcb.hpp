@@ -8,6 +8,7 @@
 #include "dcb/bubble.hpp"
 #include "dcb/controller.hpp"
 #include "nui/button.hpp"
+#include "nui/textentry.hpp"
 
 namespace states
 {
@@ -33,10 +34,14 @@ namespace states
         //! Creates the dungeon given the current data.
         void createDungeon();
 
+        //! Called when name is validated.
+        void onNameValidate();
+
     private:
 
         sfe::RectangleShape m_background;   //!< The background image.
-        nui::Button m_button;               //!< The only one button in the world.
+        nui::TextEntry m_nameEntry;         //!< The entry for the dungeon name.
+        nui::Button m_okButton;             //!< The only one button in the world.
 
         dcb::Bubble m_bubble;               //!< The message.
         dcb::AnswerBox m_answerBox;         //!< The box with all possible answers.
