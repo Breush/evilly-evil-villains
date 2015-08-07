@@ -1,12 +1,12 @@
 #include "dungeon/data.hpp"
 
+#include "dungeon/debug.hpp"
 #include "dungeon/graph.hpp"
 #include "dungeon/hero.hpp"
 #include "dungeon/traps.hpp"
 #include "dungeon/facilities/maker.hpp"
 #include "dungeon/traps/maker.hpp"
 #include "context/villains.hpp"
-#include "tools/debug.hpp"
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
 

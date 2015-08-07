@@ -78,9 +78,6 @@ void MenuSelectWorld::playOnSelectedWorld()
 {
     auto selectedWorld = m_list.selectedLine();
     auto& worldInfo = context::worlds.select(selectedWorld);
-
-    wdebug_application_1(L"Loading world " + worldInfo.name);
-
     stackClear(StateID::GAME_DUNGEON_DESIGN);
 }
 

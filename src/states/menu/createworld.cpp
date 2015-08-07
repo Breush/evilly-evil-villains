@@ -106,8 +106,6 @@ void MenuCreateWorld::createAndPlayWorld()
     auto villain = m_villainBox.selectedChoiceText();
     returnif (worldName.empty());
 
-    wdebug_application_1(L"Creating and playing on world " + worldName + L" with villain " + villain);
-
     // World data
     auto newWorldID = context::worlds.add(worldName, villain);
     context::worlds.select(newWorldID);

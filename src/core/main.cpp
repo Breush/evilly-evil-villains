@@ -1,5 +1,6 @@
 #include "core/application.hpp"
 #include "core/gettext.hpp"
+#include "core/debug.hpp"
 
 #include <stdexcept>
 #include <iostream>
@@ -16,7 +17,7 @@ int main(int argc, char *argv[])
 
     // Handle arguments
     for (int i = 1; i < argc; ++i)
-        mdebug_application_1("Argument: " << argv[i]);
+        mdebug_core_1("Argument: " << argv[i]);
 
     // Running application
     try {

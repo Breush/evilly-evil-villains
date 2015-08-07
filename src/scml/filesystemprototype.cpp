@@ -1,10 +1,9 @@
 #include "scml/filesystemprototype.hpp"
 
-#include "tools/debug.hpp"
-
 #include <climits> // PATH_MAX
 #include <algorithm> // find
 #include <stdexcept> // runtime_error
+#include <iostream>
 
 using namespace scml;
 
@@ -51,18 +50,16 @@ void FileSystemPrototype::load(scml::Data* data)
     for (auto const& file : folder.second->files) {
         // Image
         if (file.second->type == L"image") {
-            wdebug_scml_1(L"# FS: Loading image " << file.second->name);
             loadImageFile(folder.second->id, file.second->id, file.second->name);
         }
         // Sound
         else if (file.second->type == L"sound") {
-            wdebug_scml_1(L"# FS: Loading sound " << file.second->name);
             loadSoundFile(folder.second->id, file.second->id, file.second->name);
         }
         // Other?
         else {
-            wdebug_scml_1(L"# FS: NOT Loading unknown file type " << file.second->type
-                          << " for file " << file.second->name);
+            std::wcout << L"SCML # FS: NOT Loading unknown file type " << file.second->type
+                       << L" for file " << file.second->name;
         }
     }
 }

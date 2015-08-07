@@ -1,8 +1,8 @@
 #include "context/villains.hpp"
 
+#include "context/debug.hpp"
 #include "context/worlds.hpp"
 #include "tools/string.hpp"
-#include "tools/debug.hpp"
 #include "tools/time.hpp"
 #include "tools/filesystem.hpp"
 
@@ -33,10 +33,11 @@ void Villains::load()
     #if DEBUG_GLOBAL > 0
         std::wstring file(L"saves/villains_saved.xml");
         if (!fileExists(file)) file = L"saves/villains.xml";
-        std::wcout << L"|DEBUG| Loading villains file '" << file << L"'." << std::endl;
     #else
         std::wstring file(L"saves/villains.xml");
     #endif
+
+    wdebug_context_2(L"Loading villains info from " << file);
 
     m_villains.clear();
 
@@ -82,7 +83,7 @@ void Villains::save()
     }
 
     doc.save_file(file.c_str());
-    wdebug_application_1(L"Saving villains info to " << file);
+    wdebug_context_1(L"Saving villains info to " << file);
 
     worlds.save();
 }
@@ -92,7 +93,7 @@ void Villains::save()
 
 uint Villains::add(std::wstring name)
 {
-    wdebug_application_1(L"Created villain " << name << L".");
+    wdebug_context_1(L"Created villain " << name << L".");
 
     Villain villain;
 
@@ -105,7 +106,7 @@ uint Villains::add(std::wstring name)
 
 void Villains::remove(uint index)
 {
-    wdebug_application_1(L"Deleted villain " << m_villains[index].name << L" and all its worlds.");
+    wdebug_context_1(L"Deleted villain " << m_villains[index].name << L" and all its worlds.");
 
     removeWorlds(index);
     m_villains.erase(m_villains.begin() + index);

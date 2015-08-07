@@ -1,7 +1,7 @@
 #include "context/worlds.hpp"
 
+#include "context/debug.hpp"
 #include "tools/string.hpp"
-#include "tools/debug.hpp"
 #include "tools/time.hpp"
 #include "tools/filesystem.hpp"
 
@@ -24,10 +24,11 @@ void Worlds::load()
     #if DEBUG_GLOBAL > 0
         std::wstring file(L"saves/worlds_saved.xml");
         if (!fileExists(file)) file = L"saves/worlds.xml";
-        std::wcout << L"|DEBUG| Loading worlds file '" << file << L"'." << std::endl;
     #else
         std::wstring file(L"saves/worlds.xml");
     #endif
+
+    wdebug_context_2(L"Loading worlds info from " << file);
 
     m_worlds.clear();
 
@@ -81,7 +82,18 @@ void Worlds::save()
     }
 
     doc.save_file(file.c_str());
-    wdebug_application_1(L"Saving worlds info to " << file);
+    wdebug_context_1(L"Saving worlds info to " << file);
+}
+
+//-------------------------------//
+//----- Setters and getters -----//
+
+const Worlds::World& Worlds::select(uint index)
+{
+    massert(index < m_worlds.size(), "Index " << index << " is too big.");
+    m_selected = &get(index);
+    wdebug_context_1(L"Selected world #" << index << L" named " << m_selected->name);
+    return *m_selected;
 }
 
 //----------------------//
@@ -89,6 +101,8 @@ void Worlds::save()
 
 uint Worlds::add(std::wstring name, std::wstring villain)
 {
+    wdebug_context_1(L"Creating world " << name << L" with villain " << villain);
+
     World world;
 
     world.index = m_worlds.size();

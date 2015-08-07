@@ -72,18 +72,12 @@ namespace context
 
         //! @}
 
-        //----------------//
-        //! @name Setters
+        //----------------------------//
+        //! @name Setters and getters
         //! @{
 
         //! Get the vector of all worlds for read.
-        inline const World& select(uint index) { return *(m_selected = &get(index)); }
-
-        //! @}
-
-        //----------------//
-        //! @name Getters
-        //! @{
+        const World& select(uint index);
 
         //! Get the current world information.
         inline const World& selected() const { return *m_selected; }
