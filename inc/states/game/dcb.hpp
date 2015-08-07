@@ -32,7 +32,7 @@ namespace states
     protected:
 
         //! Creates the dungeon given the current data.
-        void createDungeon();
+        void confirmDungeonCreation();
 
         //! Called when name is validated.
         void onNameValidate();

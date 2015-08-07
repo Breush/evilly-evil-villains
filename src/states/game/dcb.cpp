@@ -3,6 +3,7 @@
 #include "core/gettext.hpp"
 #include "dungeon/data.hpp"
 #include "context/worlds.hpp"
+#include "context/villains.hpp"
 
 using namespace states;
 
@@ -51,8 +52,10 @@ GameDCB::GameDCB(StateStack& stack)
     m_okButton.setLocalPosition(m_nameEntry.localPosition() + sf::Vector2f{m_nameEntry.size().x / 2.f + 10.f, 0.f});
     m_okButton.setRelativeOrigin({0.f, 0.5f});
 
-    // TODO Get correct translation file
+    // Controller
+    // TODO Get correct translation file (once language is defined into config)
     m_controller.load("res/po/en_EN/dcb.xml");
+    m_controller.setOnSequenceFinishedCallback([this] { confirmDungeonCreation(); });
 }
 
 //-----------------------//
@@ -67,18 +70,39 @@ void GameDCB::onNameValidate()
     nuiLayer().root().attachChild(m_gaugesManager);
 
     m_controller.randomGaugesFromString(m_nameEntry.text());
-    // TODO m_controller.startSequence();
+    m_controller.startSequence();
 }
 
-void GameDCB::createDungeon()
+void GameDCB::confirmDungeonCreation()
 {
+    // TODO State GAMEOVER if conviction gauge has not enough
+
+    // Affects different creation
+    auto appreciation = m_gaugesManager.gaugeValue(dcb::GaugesManager::GaugeID::APPRECIATION);
+    //auto confusion = m_gaugesManager.gaugeValue(dcb::GaugesManager::GaugeID::CONFUSION);
+    auto trust = m_gaugesManager.gaugeValue(dcb::GaugesManager::GaugeID::TRUST);
+    auto conviction = m_gaugesManager.gaugeValue(dcb::GaugesManager::GaugeID::CONVICTION);
+
+    const auto& name = m_nameEntry.text();
+    uint loanValue = static_cast<uint>(1024.f + 2.f * appreciation * appreciation);
+    //float interestRate = 1.05f + 1.f / static_cast<float>(1u + confusion);
+    uint floorsCount = static_cast<uint>(17.f * (trust + conviction) / 200.f);
+    uint roomsByFloor = static_cast<uint>(2.f + 6.f * (trust * conviction) / 10000.f);
+
+    // Create dungeon with these values
     dungeon::Data dungeonData;
     const auto& worldInfo = context::worlds.selected();
 
-    dungeonData.setName(m_nameEntry.text());
-    dungeonData.setFloorsCount(7u);
-    dungeonData.setRoomsByFloor(5u);
+    dungeonData.setName(name);
+    dungeonData.setFloorsCount(floorsCount);
+    dungeonData.setRoomsByFloor(roomsByFloor);
+    // TODO dungeonData.setInterestRate(interestRate);
     dungeonData.createFiles(worldInfo.folder);
+
+    // Add loan to villain ressources
+    auto villain = context::villains.getFromWorldFolder(worldInfo.folder);
+    villain->doshWallet.add(loanValue);
+    context::villains.save();
 
     stackClear(StateID::GAME_DUNGEON_DESIGN);
 }

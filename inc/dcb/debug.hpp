@@ -5,7 +5,7 @@
 //-----------------------------//
 //---- Change defines here ----//
 
-#define DEBUG_DCB  1
+#define DEBUG_DCB  0
 
 //--------------------//
 //---- Debug mode ----//

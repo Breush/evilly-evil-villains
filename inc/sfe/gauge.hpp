@@ -57,7 +57,7 @@ namespace sfe
         inline void subValue(float inValue) { setValue(value() - inValue); }
 
         //! Get the current value, as a proportion of min/max limits.
-        float value();
+        float value() const;
 
         //! @}
 

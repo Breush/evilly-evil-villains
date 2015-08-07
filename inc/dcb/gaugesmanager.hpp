@@ -20,7 +20,7 @@ namespace dcb
     {
         using baseClass = scene::Entity;
 
-        friend Controller;
+    public:
 
         //! The four gauges.
         enum GaugeID
@@ -43,6 +43,9 @@ namespace dcb
         //-----------------------//
         //! @name Gauges control
         //! @{
+
+        //! Get the value of a specific gauge.
+        inline float gaugeValue(const GaugeID gaugeID) const { return m_gauges[gaugeID].value(); }
 
         //! Randomize the gauges from the seed.
         void randomGauges(float seed, float min, float max);

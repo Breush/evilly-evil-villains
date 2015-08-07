@@ -125,7 +125,7 @@ void Gauge::addIndicator(float inValue, const sf::Color& color)
 //-------------------//
 //----- Getters -----//
 
-float Gauge::value()
+float Gauge::value() const
 {
     return m_minLimit + m_percent * (m_maxLimit - m_minLimit);
 }

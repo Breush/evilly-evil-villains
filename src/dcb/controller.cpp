@@ -1,5 +1,6 @@
 #include "dcb/controller.hpp"
 
+#include "dcb/debug.hpp"
 #include "dcb/bubble.hpp"
 #include "dcb/answerbox.hpp"
 #include "tools/tools.hpp"
@@ -29,6 +30,33 @@ void Controller::randomGaugesFromString(const std::wstring& str)
 {
     std::hash<std::wstring> hasher;
     m_gaugesManager.randomGauges(static_cast<float>(hasher(str)), 5.f, 60.f);
+}
+
+void Controller::startSequence()
+{
+    // Reset and pick new question
+    m_questionsSeen.clear();
+    continueSequence();
+}
+
+void Controller::continueSequence()
+{
+    // Can't or should not pick anymore
+    if (m_questionsSeen.size() == m_questionsLimit || m_questionsSeen.size() == m_points.size()) {
+        if (m_onSequenceFinishedCallback != nullptr)
+            m_onSequenceFinishedCallback();
+        return;
+    }
+
+    // Pick
+    do { m_selectedQuestion = rand() % m_points.size(); }
+    while (m_questionsSeen.find(m_selectedQuestion) != std::end(m_questionsSeen));
+    m_questionsSeen.emplace(m_selectedQuestion);
+
+    // Show
+    m_bubble.showMessage(m_selectedQuestion);
+    m_answerBox.showAnswer(m_selectedQuestion);
+    mdebug_dcb_1("Showing question #" << m_selectedQuestion);
 }
 
 //-------------------//
@@ -66,7 +94,7 @@ void Controller::load(const std::string& file)
         m_points.emplace_back(answersPoints);
     }
 
-    std::cerr << "Loaded " << m_points.size() << " answers" << std::endl;
+    mdebug_dcb_1("Loaded " << m_points.size() << " messages/answers from file " << file);
 }
 
 //--------------------//
@@ -74,10 +102,9 @@ void Controller::load(const std::string& file)
 
 void Controller::onAnswerSelected(uint answerSelected)
 {
-    std::wcout << L"[dcb::Controller] Selected answer: " << answerSelected;
-
-    // TODO Know currently shown answer and replace that zero.
-    m_gaugesManager.addToGauges(m_points[0u][answerSelected]);
+    mdebug_dcb_1("Selected answer #" << answerSelected);
+    m_gaugesManager.addToGauges(m_points[m_selectedQuestion][answerSelected]);
+    continueSequence();
 }
 
 //-----------------------------//
