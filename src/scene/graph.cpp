@@ -1,5 +1,6 @@
 #include "scene/graph.hpp"
 
+#include "nui/debug.hpp"
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
 #include "scene/layer.hpp"
@@ -351,7 +352,8 @@ Entity* Graph::handleMouseEvent(const sf::Event& event)
         break;
     }
 
-    return entity;
+    // Entity coould have been detached/destroyed.
+    return entityFromPosition(mousePos, viewPos);
 }
 
 void Graph::setHoveredEntity(Entity* hoveredEntity)
