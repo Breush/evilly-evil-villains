@@ -436,6 +436,21 @@ void Inter::setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID)
     m_data->setRoomTrap(tileFromLocalPosition(relPos), trapID);
 }
 
+void Inter::destroyRoom(const sf::Vector2f& relPos)
+{
+    m_data->destroyRoom(tileFromLocalPosition(relPos));
+}
+
+void Inter::removeRoomTrap(const sf::Vector2f& relPos)
+{
+    m_data->removeRoomTrap(tileFromLocalPosition(relPos));
+}
+
+void Inter::removeRoomFacilities(const sf::Vector2f& relPos)
+{
+    m_data->removeRoomFacilities(tileFromLocalPosition(relPos));
+}
+
 void Inter::adaptFloorsCount(int relativeValue)
 {
     setFloorsCount(m_data->floorsCount() + relativeValue);

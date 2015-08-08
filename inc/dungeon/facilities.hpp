@@ -15,6 +15,7 @@ enum class TextureID : uint8;
 namespace dungeon
 {
     //! A generic facility interface.
+
     class Facility : public scene::Entity, public EventReceiver
     {
     public:
@@ -71,7 +72,7 @@ namespace dungeon
         //! @name Spawn and react
         //! @{
 
-        void grabbableReleased(Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
+        void grabbableButtonReleased(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
         std::unique_ptr<scene::Grabbable> spawnGrabbable() final;
 
         //! @}

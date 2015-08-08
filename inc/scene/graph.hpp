@@ -44,10 +44,12 @@ namespace scene
         void attachedEntity(Entity* entity);
 
         // Grabbing object
+        void removeGrabbable();
         void setGrabbable(std::unique_ptr<Grabbable> grabbable);
         Entity* entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos); //!< viewPos will be set to the position in the entity view
 
     protected:
+
         // Mouse detection
         void drawMouseDetector(sf::RenderTarget& target, sf::RenderStates states) const;
         Entity* handleMouseEvent(const sf::Event& event);

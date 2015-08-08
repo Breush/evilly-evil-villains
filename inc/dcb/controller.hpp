@@ -18,9 +18,13 @@ namespace dcb
 
     class Controller
     {
+        //! Holding points for each gauge.
         using Points = std::array<float, GaugesManager::GaugeID::COUNT>;
+
+        //! For each answers, points for each gauge.
         using AnswersPoints = std::vector<Points>;
 
+        //! Callback type.
         using Callback = std::function<void()>;
 
     public:

@@ -2,6 +2,7 @@
 
 #include "config/nui.hpp"
 
+#include <SFML/Window/Mouse.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 #include <memory>
@@ -40,13 +41,31 @@ namespace scene
         //! @name Spawn and react
         //! @{
 
-        //! Called by Graph via a Grabbable when the latter is released and before it's destroyed.
+        //! Called by Graph via a Grabbable when a mouse button is released.
         /*!
-         *  @param entity   The entity below the Grabbable when released.
+         *  @param entity   The entity below.
+         *  @param button   The button released.
          *  @param relPos   The position of the Grabbable relative to the entity coordinates.
          *  @param nuiPos   The absolute position of the Grabbable in the window.
          */
-        virtual void grabbableReleased(Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) = 0;
+        virtual void grabbableButtonReleased(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) {}
+
+        //! Called by Graph via a Grabbable when a mouse button is pressed.
+        /*!
+         *  @param entity   The entity below.
+         *  @param button   The button pressed.
+         *  @param relPos   The position of the Grabbable relative to the entity coordinates.
+         *  @param nuiPos   The absolute position of the Grabbable in the window.
+         */
+        virtual void grabbableButtonPressed(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) {}
+
+        //! Called by Graph via a Grabbable when the mouse is moved.
+        /*!
+         *  @param entity   The entity below.
+         *  @param relPos   The position of the Grabbable relative to the entity coordinates.
+         *  @param nuiPos   The absolute position of the Grabbable in the window.
+         */
+        virtual void grabbableMoved(Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) {}
 
         //! Creates the temporary grabbable object.
         virtual std::unique_ptr<Grabbable> spawnGrabbable() = 0;

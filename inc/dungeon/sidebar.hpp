@@ -92,15 +92,13 @@ namespace dungeon
             MONSTERS,
             TRAPS,
             FACILITIES,
+            TOOLS,
             COUNT,
         };
 
     private:
 
         scene::Scene& m_scene;  //!< The main scene, reference here for minimap interaction.
-
-        // Decorum
-        sf::RectangleShape m_background;    //!< The background.
 
         // Stacker
         nui::VStacker m_globalStacker;  //!< Contains all elements.

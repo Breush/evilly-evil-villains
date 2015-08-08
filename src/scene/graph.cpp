@@ -253,22 +253,26 @@ void Graph::handleMouseWheelMovedEvent(const sf::Event& event)
 void Graph::grabbableHandleMouseEvent(const sf::Event& event)
 {
     sf::Vector2i mousePos(mousePosition(event));
-    sf::Vector2f viewPos;
-    sf::Vector2f relPos;
-    Entity* entity;
-
     sf::Vector2f nuiPos(nuiPosition(mousePos));
+    sf::Vector2f viewPos, relPos;
+
+    Entity* entity = entityFromPosition(mousePos, viewPos);
+
+    if (entity != nullptr)
+        relPos = entity->getInverseTransform().transformPoint(viewPos);
 
     switch (event.type) {
     case sf::Event::MouseMoved:
         m_grabbable->setPosition(nuiPos);
+        m_grabbable->spawner().grabbableMoved(entity, relPos, nuiPos);
+        break;
+
+    case sf::Event::MouseButtonPressed:
+        m_grabbable->spawner().grabbableButtonPressed(entity, event.mouseButton.button, relPos, nuiPos);
         break;
 
     case sf::Event::MouseButtonReleased:
-        entity = entityFromPosition(mousePos, viewPos);
-        if (entity != nullptr) relPos = entity->getInverseTransform().transformPoint(viewPos);
-        m_grabbable->spawner().grabbableReleased(entity, relPos, nuiPos);
-        m_grabbable = nullptr;
+        m_grabbable->spawner().grabbableButtonReleased(entity, event.mouseButton.button, relPos, nuiPos);
         break;
 
     default:
@@ -278,10 +282,15 @@ void Graph::grabbableHandleMouseEvent(const sf::Event& event)
 
 void Graph::setGrabbable(std::unique_ptr<Grabbable> grabbable)
 {
-    returnif (grabbable.get() == nullptr);
+    returnif (grabbable == nullptr);
 
     m_grabbable = std::move(grabbable);
     m_grabbable->setPosition(nuiPosition());
+}
+
+void Graph::removeGrabbable()
+{
+    m_grabbable = nullptr;
 }
 
 //---------------------------//

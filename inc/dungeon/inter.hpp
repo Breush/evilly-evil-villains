@@ -74,6 +74,15 @@ namespace dungeon
         //! Find the room below the specified relative position and forward change to data.
         void setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID);
 
+        //! Find the room below the specified relative position and remove it if any.
+        void destroyRoom(const sf::Vector2f& relPos);
+
+        //! Find the room below the specified relative position and remove the trap in it if any.
+        void removeRoomTrap(const sf::Vector2f& relPos);
+
+        //! Find the room below the specified relative position and remove all the facilities in it if any.
+        void removeRoomFacilities(const sf::Vector2f& relPos);
+
         //! Change the number of floors.
         void adaptFloorsCount(int relativeValue);
 

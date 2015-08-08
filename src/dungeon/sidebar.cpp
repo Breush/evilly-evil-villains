@@ -6,6 +6,7 @@
 #include "dungeon/eventtype.hpp"
 #include "dungeon/facilities.hpp"
 #include "dungeon/traps.hpp"
+#include "dungeon/tools.hpp"
 #include "scene/scene.hpp"
 #include "resources/identifiers.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
@@ -23,11 +24,6 @@ Sidebar::Sidebar(scene::Scene& inScene)
     m_globalStacker.stackBack(m_tabHolder, nui::Align::CENTER);
     m_globalStacker.stackBack(m_minimap, nui::Align::CENTER);
 
-    // Background
-    // TODO Have a better image...
-    m_background.setTexture(&Application::context().textures.get(TextureID::DUNGEON_SIDEBAR_BACKGROUND));
-    //addPart(&m_background);
-
     // Minimap
     m_minimap.setCallbackAction([this] (const sf::Vector2f& position) { m_scene.setViewCenter(position); });
 
@@ -35,6 +31,7 @@ Sidebar::Sidebar(scene::Scene& inScene)
     m_tabHolder.stackBack(_("Monsters"),    TextureID::DUNGEON_SIDEBAR_TAB_MONSTERS,    m_tabContents[TabsID::MONSTERS].scrollArea);
     m_tabHolder.stackBack(_("Traps"),       TextureID::DUNGEON_SIDEBAR_TAB_TRAPS,       m_tabContents[TabsID::TRAPS].scrollArea);
     m_tabHolder.stackBack(_("Facilities"),  TextureID::DUNGEON_SIDEBAR_TAB_FACILITIES,  m_tabContents[TabsID::FACILITIES].scrollArea);
+    m_tabHolder.stackBack(_("Tools"),       TextureID::DUNGEON_SIDEBAR_TAB_TOOLS,       m_tabContents[TabsID::TOOLS].scrollArea);
 
     for (auto& tabContent : m_tabContents)
         tabContent.scrollArea.setContent(tabContent.stacker);
@@ -62,10 +59,6 @@ void Sidebar::refreshDisplay()
 
 void Sidebar::onSizeChanges()
 {
-    // Background
-    m_background.setSize(size());
-
-    // Elements
     refreshScrollAreasSize();
 }
 
@@ -140,4 +133,17 @@ void Sidebar::refreshTabContents()
 
     for (auto& facilitiesButton : facilitiesButtons)
         facilitiesStacker.stackBack(*facilitiesButton, nui::Align::CENTER);
+
+    // Toolss
+    auto& toolsStacker = m_tabContents[TabsID::TOOLS].stacker;
+    auto& toolsButtons = m_tabContents[TabsID::TOOLS].buttons;
+    toolsStacker.unstackAll();
+    toolsButtons.clear();
+
+    toolsButtons.emplace_back(std::make_unique<dungeon::ToolGrabButton>(_("Rooms destroyer"), dungeon::ToolID::ROOMS_DESTROYER));
+    toolsButtons.emplace_back(std::make_unique<dungeon::ToolGrabButton>(_("Traps remover"), dungeon::ToolID::TRAPS_REMOVER));
+    toolsButtons.emplace_back(std::make_unique<dungeon::ToolGrabButton>(_("Facilities remover"), dungeon::ToolID::FACILITIES_REMOVER));
+
+    for (auto& toolsButton : toolsButtons)
+        toolsStacker.stackBack(*toolsButton, nui::Align::CENTER);
 }

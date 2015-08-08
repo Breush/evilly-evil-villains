@@ -57,8 +57,8 @@ namespace dungeon
 
     //! A TrapGrabbable spawner.
     /*!
-     *  Implements the scene::GrabbableSpawner for a dungeon facility.
-     *  Will launch a callback on dungeon::Inter::setRoomFacility().
+     *  Implements the scene::GrabbableSpawner for a dungeon trap.
+     *  Will launch a callback on dungeon::Inter::setRoomTrap().
      */
 
     class TrapGrabButton final : public nui::GrabButton
@@ -79,15 +79,15 @@ namespace dungeon
         //! @name Spawn and react
         //! @{
 
-        void grabbableReleased(Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
+        void grabbableButtonReleased(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
         std::unique_ptr<scene::Grabbable> spawnGrabbable() final;
 
         //! @}
 
     private:
 
-        TextureID m_textureID;      //!< The texture of the grabbable and button.
-        std::wstring m_trapID;  //!< The facility to be constructed in the dungeon inter.
+        TextureID m_textureID;  //!< The texture of the grabbable and button.
+        std::wstring m_trapID;  //!< The trap to be constructed in the dungeon inter.
     };
 
     //! A trap temporary object.

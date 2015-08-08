@@ -51,6 +51,7 @@ void Application::loadTextures()
     s_context.textures.load(TextureID::DUNGEON_SIDEBAR_TAB_MONSTERS,    "res/tex/dungeon/sidebar/tab/monsters.png");
     s_context.textures.load(TextureID::DUNGEON_SIDEBAR_TAB_TRAPS,       "res/tex/dungeon/sidebar/tab/traps.png");
     s_context.textures.load(TextureID::DUNGEON_SIDEBAR_TAB_FACILITIES,  "res/tex/dungeon/sidebar/tab/facilities.png");
+    s_context.textures.load(TextureID::DUNGEON_SIDEBAR_TAB_TOOLS,  "res/tex/dungeon/sidebar/tab/tools.png");
 
     // Dungeon inter
     s_context.textures.load(TextureID::DUNGEON_INTER_VOID_ROOM, "res/tex/dungeon/inter/void_room.png");

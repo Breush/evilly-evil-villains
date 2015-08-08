@@ -19,8 +19,11 @@ TrapGrabButton::TrapGrabButton(const std::wstring& text, TextureID textureID, st
     setVisual(text, textureID);
 }
 
-void TrapGrabButton::grabbableReleased(Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f&)
+void TrapGrabButton::grabbableButtonReleased(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
 {
+    returnif (button != sf::Mouse::Left);
+    graph()->removeGrabbable();
+
     // Forward to dungeon::Inter if it is below
     auto dungeonInter = dynamic_cast<dungeon::Inter*>(entity);
     returnif (dungeonInter == nullptr);
