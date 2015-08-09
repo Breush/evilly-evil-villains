@@ -24,6 +24,7 @@ namespace sfe
         {
             NONE,
             NUI,
+            NUI_SOBER,
             NUI_TITLE,
             MENU_TITLE,
             MENU_POPUP_TITLE,

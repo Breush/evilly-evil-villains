@@ -4,14 +4,13 @@
 #include "dungeon/inter.hpp"
 #include "dungeon/data.hpp"
 #include "tools/random.hpp"
-#include "tools/debug.hpp"
 #include "tools/tools.hpp"
 
 #include <stdexcept> // runtime_error
 
 using namespace dungeon;
 
-Hero::Hero(const Inter* inter)
+Hero::Hero(Inter& inter)
     : baseClass(true)
     , m_running(false)
     , m_dosh(0u)
@@ -30,7 +29,6 @@ Hero::Hero(const Inter* inter)
     // Sprite
     attachChild(m_sprite);
     m_sprite.load(AnimationID::HEROES_GROO);
-    setLocalScale(m_inter->roomScale());
 
     // Lua
     if (!m_lua.load("res/ai/hero.lua"))
@@ -39,10 +37,34 @@ Hero::Hero(const Inter* inter)
     // Register
     m_lua["AIGetOut"] = [this] { AIGetOut(); };
     m_lua["AIStealTreasure"] = [this] { AIStealTreasure(); };
+
+    // Debug - show more info
+    #if DEBUG_AI > 0
+    sf::Color colorMain{119u, 158u, 203u, 150u};
+    sf::Color colorSecondary{174u, 198u, 207u, 150u};
+    for (uint i = 0u; i < m_overlays.size(); ++i) {
+        m_inter.attachChild(m_overlays[i]);
+        m_overlays[i].setFillColor((i == 0u)? colorMain : colorSecondary);
+        m_overlays[i].setVisible(false);
+        m_overlays[i].setDepth(1.f);
+
+        m_inter.attachChild(m_overlayLabels[i]);
+        m_overlayLabels[i].setPrestyle(sfe::Label::Prestyle::NUI_SOBER);
+        m_overlayLabels[i].setDepth(0.5f);
+    }
+    #endif
 }
 
 //-------------------//
 //----- Routine -----//
+
+void Hero::onTransformChanges()
+{
+    #if DEBUG_AI > 0
+    for (uint i = 0u; i < m_overlays.size(); ++i)
+        m_overlays[i].setSize(sf::Vector2f{256.f, 384.f} * localScale());
+    #endif
+}
 
 void Hero::updateAI(const sf::Time& dt)
 {
@@ -59,12 +81,16 @@ void Hero::updateAI(const sf::Time& dt)
     bestNodes.push_back(m_currentNode);
     int maxEvaluation = call("evaluate_reference", m_currentNode);
 
+    m_evaluations.clear();
+    m_evaluations.emplace_back(maxEvaluation);
+
     // If the hero escaped during evaluation, stop it here
     returnif (m_currentNode == nullptr);
 
     // Get the evaluation from lua
     for (const auto& neighbour : m_currentNode->neighbours) {
         int evaluation = call("evaluate", neighbour);
+        m_evaluations.emplace_back(evaluation);
 
         // Found a new limit for the best nodes
         if (evaluation > maxEvaluation) {
@@ -89,6 +115,11 @@ void Hero::setCurrentNode(const Graph::Node* node, bool firstNode)
 {
     returnif (m_currentNode == node);
 
+    #if DEBUG_AI > 0
+    // Show what make us decide for the next room
+    refreshDebugOverlays();
+    #endif
+
     Event event;
     event.action.hero = this;
 
@@ -100,6 +131,12 @@ void Hero::setCurrentNode(const Graph::Node* node, bool firstNode)
     }
 
     m_currentNode = node;
+
+    #if DEBUG_AI > 0
+    // Hide all when quitting
+    if (m_currentNode == nullptr)
+        refreshDebugOverlays();
+    #endif
 
     if (m_currentNode != nullptr) {
         // First visit to this node
@@ -119,7 +156,7 @@ void Hero::setCurrentNode(const Graph::Node* node, bool firstNode)
 //-----------------------------------//
 //----- Artificial intelligence -----//
 
-uint Hero::call(const char* function, const Graph::Node* node)
+Hero::Weight Hero::getWeight(const Graph::Node* node)
 {
     Weight weight;
     weight.visited =    m_nodeInfos[node->coords].visits;
@@ -127,6 +164,12 @@ uint Hero::call(const char* function, const Graph::Node* node)
     weight.altitude =   node->altitude;
     weight.treasure =   node->treasure;
     weight.exit =       node->entrance;
+    return weight;
+}
+
+uint Hero::call(const char* function, const Graph::Node* node)
+{
+    Weight weight = getWeight(node);
 
     m_lua["weight"].SetObj(weight,
                            "visited",   &Weight::visited,
@@ -223,8 +266,11 @@ void Hero::changedDosh()
 
 void Hero::refreshPositionFromNode(bool firstNode)
 {
-    const auto heroTilePosition = sf::Vector2f{m_inter->tileSize().x / 2.f, m_inter->tileSize().y * 0.8f};
-    lerpable()->setTargetPosition(m_inter->tileLocalPosition(m_currentNode->coords) + heroTilePosition);
+    returnif (m_currentNode == nullptr);
+
+    const auto tileLocalPosition = m_inter.tileLocalPosition(m_currentNode->coords);
+    const auto heroTilePosition = sf::Vector2f{m_inter.tileSize().x / 2.f, m_inter.tileSize().y * 0.8f};
+    lerpable()->setTargetPosition(tileLocalPosition + heroTilePosition);
     if (firstNode) setLocalPosition(lerpable()->targetPosition());
 
     // Select correct animation (right/left)
@@ -235,3 +281,53 @@ void Hero::refreshPositionFromNode(bool firstNode)
     else if (lerpable()->targetPosition().x < localPosition().x)
         m_sprite.select(L"lwalk");
 }
+
+#if DEBUG_AI > 0
+std::wstring stringFromWeight(const Hero::Weight& weight, const int evaluation)
+{
+    std::wstringstream str;
+    str << "eval.     " << evaluation << std::endl;
+    str << std::endl;
+    str << "weight    " << weight.visited << std::endl;
+    str << "visited   " << weight.visited << std::endl;
+    str << "lastVisit " << weight.lastVisit << std::endl;
+    str << std::endl;
+    str << "altitude  " << weight.altitude << std::endl;
+    str << "treasure  " << weight.treasure << std::endl;
+    str << "exit      " << weight.exit;
+    return std::move(str.str());
+}
+
+void Hero::refreshDebugOverlays()
+{
+    for (uint i = 0u; i < m_overlays.size(); ++i) {
+        m_overlays[i].setVisible(m_currentNode != nullptr);
+        m_overlayLabels[i].setVisible(m_currentNode != nullptr);
+    }
+
+    returnif (m_currentNode == nullptr);
+
+    // Main
+    // TODO Some code can be factored
+    const auto position = m_inter.tileLocalPosition(m_currentNode->coords);
+    m_overlays[0u].setLocalPosition(position);
+    m_overlayLabels[0u].setLocalPosition(position);
+    m_overlayLabels[0u].setText(stringFromWeight(getWeight(m_currentNode), m_evaluations[0u]));
+
+    // Neighbour
+    uint i = 0u;
+    for (; i < m_currentNode->neighbours.size(); ++i) {
+        Graph::Node* node = m_currentNode->neighbours[i];
+        const auto position = m_inter.tileLocalPosition(node->coords);
+        m_overlays[i + 1u].setLocalPosition(position);
+        m_overlayLabels[i + 1u].setLocalPosition(position);
+        m_overlayLabels[i + 1u].setText(stringFromWeight(getWeight(node), m_evaluations[i + 1u]));
+    }
+
+    // Remove all not neighbour
+    for (++i; i < m_overlays.size(); ++i) {
+        m_overlays[i].setVisible(false);
+        m_overlayLabels[i].setVisible(false);
+    }
+}
+#endif

@@ -84,6 +84,12 @@ void Label::setPrestyle(Prestyle prestyle)
             m_text.setCharacterSize(cNUI.fontSize);
             break;
 
+        case Prestyle::NUI_SOBER:
+            m_text.setFont(Application::context().fonts.get(FontID::MONO));
+            m_text.setColor(sf::Color::Black);
+            m_text.setCharacterSize(cNUI.fontSize);
+            break;
+
         case Prestyle::NUI_TITLE:
             m_text.setFont(Application::context().fonts.get(FontID::NUI));
             m_text.setColor(sf::Color::White);
@@ -114,7 +120,7 @@ void Label::setPrestyle(Prestyle prestyle)
         case Prestyle::MENU_SOBER_LIGHT:
             m_text.setFont(Application::context().fonts.get(FontID::MONO));
             m_text.setColor({255u, 255u, 255u, 128u});
-            m_text.setCharacterSize(1.f * cNUI.fontSize);
+            m_text.setCharacterSize(cNUI.fontSize);
             break;
     }
 

@@ -5,6 +5,8 @@
 #include "dungeon/event.hpp"
 #include "sfe/label.hpp"
 #include "sfe/animatedsprite.hpp"
+#include "sfe/rectangleshape.hpp"
+#include "ai/debug.hpp"
 
 #include <selene/selene.hpp>
 
@@ -39,7 +41,7 @@ namespace dungeon
     public:
 
         //! Constructor.
-        Hero(const Inter* inter);
+        Hero(Inter& inter);
 
         //! Default destructor.
         ~Hero() = default;
@@ -92,6 +94,7 @@ namespace dungeon
         //! @name Routine
         //! @{
 
+        void onTransformChanges() final;
         void updateAI(const sf::Time& dt) final;
 
         //! @}
@@ -107,6 +110,9 @@ namespace dungeon
         //--------------------------------//
         //! @name Artificial intelligence
         //! @{
+
+        //! Get all weight information from a node.
+        Weight getWeight(const Graph::Node* node);
 
         //! Returns the evaluation of a Lua function given a node.
         uint call(const char* function, const Graph::Node* node);
@@ -144,6 +150,11 @@ namespace dungeon
         //! Whenever the dosh changed.
         void changedDosh();
 
+        #if DEBUG_AI > 0
+        //! Refresh the overlay to current node and nearby ones.
+        void refreshDebugOverlays();
+        #endif
+
         //! @}
 
         //! A node extra information.
@@ -160,15 +171,22 @@ namespace dungeon
         // The graph
         Graph* m_graph = nullptr;                   //!< The graph of the dungeon to be read from.
         const Graph::Node* m_currentNode = nullptr; //!< The current room where is our hero.
-        const Inter* m_inter = nullptr;             //!< The dungeon inter, to get cellsize and position.
+        Inter& m_inter;                             //!< The dungeon inter, to get cellsize and position.
 
         // Artificial intelligence
         sel::State m_lua;               //!< The lua state.
         uint m_tick = 0u;               //!< The current tick (how many nodes has been visited so far).
         std::unordered_map<sf::Vector2u, NodeInfo> m_nodeInfos; //!< Remembers the visits of a certain node.
+        std::vector<int> m_evaluations; //!< Stores the evaluations of the rooms, mainnly used for debug.
 
         // Decorum
         sfe::Label m_doshLabel;         //!< How much dosh held by the hero.
         sfe::AnimatedSprite m_sprite;   //!< The sprite of the hero.
+
+        // Debug overlay
+        #if DEBUG_AI > 0
+        std::array<sfe::RectangleShape, 5u> m_overlays; //!< Backgrounds, one for each direction plus one central.
+        std::array<sfe::Label, 5u> m_overlayLabels;     //!< Text over backgrounds.
+        #endif
     };
 }
