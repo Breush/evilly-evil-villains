@@ -11,6 +11,7 @@ namespace dungeon
 
     enum class ToolID
     {
+        ROOMS_BUILDER,
         ROOMS_DESTROYER,
         TRAPS_REMOVER,
         FACILITIES_REMOVER,

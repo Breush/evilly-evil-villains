@@ -355,8 +355,8 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
 
     // Room does not exists yet
     if (room.state == Data::RoomState::VOID) {
-        std::wstring text = _("Construct room") + L" (-" + toWString(m_data->onCreateRoomCost) + L"d)";
-        if (m_data->onCreateRoomCost <= m_data->villain().doshWallet.value())
+        std::wstring text = _("Build room") + L" (-" + toWString(m_data->onConstructRoomCost) + L"d)";
+        if (m_data->onConstructRoomCost <= m_data->villain().doshWallet.value())
             m_contextMenu.addChoice(text, [=]() { m_data->constructRoom(coords); });
         else
             m_contextMenu.addChoice(text, nullptr);
@@ -434,6 +434,11 @@ void Inter::createRoomFacility(const sf::Vector2f& relPos, const std::wstring& f
 void Inter::setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID)
 {
     m_data->setRoomTrap(tileFromLocalPosition(relPos), trapID);
+}
+
+void Inter::constructRoom(const sf::Vector2f& relPos)
+{
+    m_data->constructRoom(tileFromLocalPosition(relPos));
 }
 
 void Inter::destroyRoom(const sf::Vector2f& relPos)

@@ -41,7 +41,7 @@ namespace dungeon
 
     public:
 
-        const uint onCreateRoomCost  = 1100u;   //!< The dosh cost for creating a room.
+        const uint onConstructRoomCost = 1100u; //!< The dosh cost for creating a room.
         const uint onDestroyRoomGain = 745u;    //!< The dosh gain when destroying a room.
 
         //! Defines the possibly accessible relative directions from a room.

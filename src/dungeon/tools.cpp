@@ -16,6 +16,10 @@ ToolGrabButton::ToolGrabButton(const std::wstring& text, ToolID toolID)
     : m_toolID(toolID)
 {
     switch (m_toolID) {
+        case ToolID::ROOMS_BUILDER:
+            m_textureID = TextureID::DUNGEON_TOOLS_ROOMS_BUILDER_ICON;
+            break;
+
         case ToolID::ROOMS_DESTROYER:
             m_textureID = TextureID::DUNGEON_TOOLS_ROOMS_DESTROYER_ICON;
             break;
@@ -44,9 +48,12 @@ void ToolGrabButton::grabbableButtonPressed(Entity* entity, const sf::Mouse::But
     auto dungeonInter = dynamic_cast<dungeon::Inter*>(entity);
     returnif (dungeonInter == nullptr);
 
-    // TODO Remove differently given the toolID
-    //dungeonInter->setRoomTrap(relPos, m_trapID);
+    // Different action given the toolID
     switch (m_toolID) {
+        case ToolID::ROOMS_BUILDER:
+            dungeonInter->constructRoom(relPos);
+            break;
+
         case ToolID::ROOMS_DESTROYER:
             dungeonInter->destroyRoom(relPos);
             break;

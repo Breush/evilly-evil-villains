@@ -140,6 +140,7 @@ void Sidebar::refreshTabContents()
     toolsStacker.unstackAll();
     toolsButtons.clear();
 
+    toolsButtons.emplace_back(std::make_unique<dungeon::ToolGrabButton>(_("Rooms builder"), dungeon::ToolID::ROOMS_BUILDER));
     toolsButtons.emplace_back(std::make_unique<dungeon::ToolGrabButton>(_("Rooms destroyer"), dungeon::ToolID::ROOMS_DESTROYER));
     toolsButtons.emplace_back(std::make_unique<dungeon::ToolGrabButton>(_("Traps remover"), dungeon::ToolID::TRAPS_REMOVER));
     toolsButtons.emplace_back(std::make_unique<dungeon::ToolGrabButton>(_("Facilities remover"), dungeon::ToolID::FACILITIES_REMOVER));

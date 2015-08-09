@@ -13,9 +13,7 @@
 	</floor>
 	<floor pos="1">
 		<room pos="0" state="void" />
-		<room pos="1" state="void">
-			<facility type="ladder" />
-		</room>
+		<room pos="1" state="void" />
 		<room pos="2" state="constructed">
 			<facility type="ladder" />
 		</room>
