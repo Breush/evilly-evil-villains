@@ -15,9 +15,30 @@ HeroesManager::HeroesManager(Inter& inter)
 void HeroesManager::update(const sf::Time& dt)
 {
     // Remove dead/out heroes
-    for (const auto& hero : m_removeHeroes)
-        std::erase_if(m_heroes, [hero](const std::unique_ptr<Hero>& inHero) { return inHero.get() == hero; });
-    m_removeHeroes.clear();
+    std::erase_if(m_heroesInfo, [](const HeroInfo& heroInfo) { return heroInfo.status == HeroStatus::TO_BE_REMOVED; });
+
+    returnif (!m_active);
+
+    // Consider other updates
+    for (auto& heroInfo : m_heroesInfo) {
+        // Spawn hero or update delay before spawning
+        if (heroInfo.status == HeroStatus::TO_SPAWN) {
+            heroInfo.data -= dt.asSeconds();
+            if (heroInfo.data <= 0.f) {
+                auto& hero = heroInfo.hero;
+                hero = std::make_unique<Hero>(*this, m_inter);
+                hero->setLocalScale(m_inter.roomScale());
+                hero->useGraph(*m_graph);
+                m_inter.attachChild(*hero);
+                heroInfo.status = HeroStatus::RUNNING;
+            }
+        }
+    }
+
+    // Next group
+    m_nextGroupDelay -= dt.asSeconds();
+    if (m_nextGroupDelay <= 0.f)
+        spawnHeroesGroup();
 }
 
 //------------------//
@@ -46,6 +67,20 @@ void HeroesManager::useGraph(Graph& graph)
 //--------------------//
 //----- Activity -----//
 
+void HeroesManager::spawnHeroesGroup()
+{
+    uint newHeroesCount = 1u + rand() % 5u;
+
+    float delay = 0.f;
+    for (uint i = 0u; i < newHeroesCount; ++i) {
+        m_heroesInfo.emplace_back();
+        m_heroesInfo.back().data = delay;
+        delay += 2.f + static_cast<float>(rand() % 12u);
+    }
+
+    m_nextGroupDelay = 37.f + static_cast<float>(rand() % 120u);
+}
+
 void HeroesManager::setActive(bool inActive)
 {
     returnif (m_graph == nullptr || m_data == nullptr);
@@ -54,18 +89,14 @@ void HeroesManager::setActive(bool inActive)
 
     // Start first wave of heroes
     if (m_active) {
-        // TODO Spawn more than one... random appearance + regularly
-        auto hero = std::make_unique<Hero>(*this, m_inter);
-        hero->setLocalScale(m_inter.roomScale());
-        hero->useGraph(*m_graph);
-        m_inter.attachChild(*hero);
-        m_heroes.emplace_back(std::move(hero));
+        spawnHeroesGroup();
     }
 
     // No more running, all heroes escaped
     else {
-        for (auto& hero : m_heroes)
-            heroGetsOut(hero.get());
+        std::erase_if(m_heroesInfo, [](const HeroInfo& heroInfo) { return heroInfo.hero == nullptr; });
+        for (auto& heroInfo : m_heroesInfo)
+            heroGetsOut(heroInfo.hero.get());
     }
 }
 
@@ -80,7 +111,12 @@ void HeroesManager::heroGetsOut(Hero* hero)
 
     // Remove hero from list
     hero->setVisible(false);
-    m_removeHeroes.emplace_back(hero);
+    for (auto& heroInfo : m_heroesInfo) {
+        if (heroInfo.hero.get() == hero) {
+            heroInfo.status = HeroStatus::TO_BE_REMOVED;
+            break;
+        }
+    }
 }
 
 void HeroesManager::heroLeftRoom(Hero* hero, const sf::Vector2u& coords)

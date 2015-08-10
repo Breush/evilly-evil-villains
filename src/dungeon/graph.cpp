@@ -5,6 +5,15 @@
 
 using namespace dungeon;
 
+//------------------//
+//----- Events -----//
+
+void Graph::receive(const Event& event)
+{
+    returnif (event.type != EventType::FACILITY_CHANGED);
+    refreshTreasure(m_nodes[{event.room.x, event.room.y}]);
+}
+
 //------------------------//
 //----- Dungeon data -----//
 
@@ -12,6 +21,7 @@ void Graph::useData(Data& data)
 {
     m_data = &data;
     m_data->linkGraph(this);
+    setEmitter(m_data);
 }
 
 Graph::ConstructError Graph::reconstructFromData()
@@ -40,9 +50,10 @@ Graph::ConstructError Graph::reconstructFromData()
                     if (m_startingNode == nullptr) m_startingNode = &node;
                     else return ConstructError::TOO_MANY_DOORS;
                 }
+
                 // Treasure
                 else if (facilityData.type() == L"treasure") {
-                    node.treasure = facilityData[L"dosh"].as_uint32();
+                    refreshTreasure(node);
                 }
             }
 
@@ -67,4 +78,19 @@ void Graph::reset()
 {
     m_nodes.clear();
     m_startingNode = nullptr;
+}
+
+//-----------------------------------//
+//----- Internal changes update -----//
+
+void Graph::refreshTreasure(Node& node)
+{
+    node.treasure = 0u;
+
+    returnif (!m_data->isRoomConstructed(node.coords));
+
+    auto& room = m_data->room(node.coords);
+    for (auto facilityData : room.facilities)
+        if (facilityData.type() == L"treasure")
+            node.treasure += facilityData[L"dosh"].as_uint32();
 }

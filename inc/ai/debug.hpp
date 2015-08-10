@@ -5,7 +5,7 @@
 //-----------------------------//
 //---- Change defines here ----//
 
-#define DEBUG_AI  1
+#define DEBUG_AI  0
 
 //--------------------//
 //---- Debug mode ----//

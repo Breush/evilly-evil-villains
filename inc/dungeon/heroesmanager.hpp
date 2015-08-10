@@ -83,10 +83,31 @@ namespace dungeon
         //! @name Activity
         //! @{
 
+        //! Spawns a new random group of heroes.
+        void spawnHeroesGroup();
+
         //! Whether the new heroes are sent and dungeon active.
         void setActive(bool inActive);
 
         //! @}
+
+    private:
+
+        //! Basic hero status, modifications occurs during update.
+        enum class HeroStatus
+        {
+            RUNNING,        //!< Hero is running inside the dungeon, standard status.
+            TO_BE_REMOVED,  //!< Hero will be removed during next update.
+            TO_SPAWN,       //!< Hero will spawn, delay indicated into data.
+        };
+
+        //! Contains an Hero plus its status.
+        struct HeroInfo
+        {
+            std::unique_ptr<Hero> hero = nullptr;       //!< Hero pointer.
+            HeroStatus status = HeroStatus::TO_SPAWN;   //!< Hero status.
+            float data = 0.f;                           //!< Extra data information.
+        };
 
     private:
 
@@ -96,8 +117,8 @@ namespace dungeon
         Inter& m_inter;             //!< The dungeon inter, to get cellsize and position.
 
         // Heroes
-        std::vector<std::unique_ptr<Hero>> m_heroes;    //!< All the heroes currently in the dungeon.
-        std::vector<Hero*> m_removeHeroes;              //!< List of dead/out heroes to remove on next update.
+        std::vector<HeroInfo> m_heroesInfo; //!< All the heroes currently in the dungeon.
+        float m_nextGroupDelay = -1.f;
 
         // Activity
         bool m_active = false;  //!< Whether the new heroes are sent and dungeon active.

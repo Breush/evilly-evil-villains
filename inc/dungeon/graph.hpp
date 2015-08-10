@@ -1,6 +1,7 @@
 #pragma once
 
 #include "tools/vector.hpp"
+#include "dungeon/event.hpp"
 
 #include <vector>
 #include <unordered_map>
@@ -13,7 +14,7 @@ namespace dungeon
 
     //! The abstract structure of a dungeon.
 
-    class Graph final
+    class Graph final : public EventReceiver
     {
     public:
 
@@ -78,12 +79,29 @@ namespace dungeon
 
     protected:
 
+        //---------------//
+        //! @name Events
+        //! @{
+
+        void receive(const Event& event) final;
+
+        //! @}
+
         //--------------//
         //! @name Graph
         //! @{
 
         //! Erase all information about the graph (still keeping the data).
         void reset();
+
+        //! @}
+
+        //--------------------------------//
+        //! @name Internal changes update
+        //! @{
+
+        //! Refresh the treasure dosh of a node.
+        void refreshTreasure(Node& node);
 
         //! @}
 
