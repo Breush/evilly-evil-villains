@@ -14,7 +14,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     : State(stack)
     , m_dungeonInter(m_contextMenu)
     , m_dungeonSidebar(scene())
-    , m_dungeonHero(m_dungeonInter)
+    , m_heroesManager(m_dungeonInter)
 {
     // During game, disable key repeat
     Application::context().window.setKeyRepeatEnabled(false);
@@ -71,13 +71,8 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     m_dungeonInter.setRelativeOrigin({0.f, 1.f});
 
     // Dungeon hero
-    // TODO Have a Hero manager or so (Hero then, should not be a receiver?)
-    m_dungeonInter.attachChild(m_dungeonHero);
-    m_dungeonHero.useGraph(m_dungeonGraph);
-    m_dungeonHero.useData(m_dungeonData);
-
-    // FIXME This should not be here.
-    m_dungeonHero.setLocalScale(m_dungeonInter.roomScale());
+    m_heroesManager.useGraph(m_dungeonGraph);
+    m_heroesManager.useData(m_dungeonData);
 
     // Decorum
     frontRoot.attachChild(m_sceneFront);
@@ -108,6 +103,12 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 
 //-------------------//
 //----- Routine -----//
+
+bool GameDungeonDesign::update(const sf::Time& dt)
+{
+    m_heroesManager.update(dt);
+    return baseClass::update(dt);
+}
 
 void GameDungeonDesign::refreshDisplay()
 {

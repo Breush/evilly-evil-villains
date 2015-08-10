@@ -1,6 +1,7 @@
 #include "dungeon/hero.hpp"
 
 #include "resources/identifiers.hpp"
+#include "dungeon/heroesmanager.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/data.hpp"
 #include "tools/random.hpp"
@@ -10,25 +11,23 @@
 
 using namespace dungeon;
 
-Hero::Hero(Inter& inter)
+Hero::Hero(HeroesManager& manager, Inter& inter)
     : baseClass(true)
-    , m_running(false)
     , m_dosh(0u)
+    , m_manager(manager)
     , m_inter(inter)
 {
-    setVisible(false);
-
     lerpable()->setPositionSpeed({50.f, 25.f});
-
-    // Dosh label
-    m_doshLabel.setPrestyle(sfe::Label::Prestyle::NUI);
-    m_doshLabel.setLocalPosition({5.f, -25.f});
-    m_doshLabel.centerOrigin();
-    attachChild(m_doshLabel);
 
     // Sprite
     attachChild(m_sprite);
     m_sprite.load(AnimationID::HEROES_GROO);
+
+    // Dosh label
+    attachChild(m_doshLabel);
+    m_doshLabel.setPrestyle(sfe::Label::Prestyle::NUI);
+    m_doshLabel.setLocalPosition({5.f, -25.f});
+    m_doshLabel.centerOrigin();
 
     // Lua
     if (!m_lua.load("res/ai/hero.lua"))
@@ -53,6 +52,11 @@ Hero::Hero(Inter& inter)
         m_overlayLabels[i].setDepth(0.5f);
     }
     #endif
+
+    // Reinitialize AI
+    m_tick = 0u;
+    m_nodeInfos.clear();
+    m_lua["init"]();
 }
 
 //-------------------//
@@ -68,8 +72,6 @@ void Hero::onTransformChanges()
 
 void Hero::updateAI(const sf::Time& dt)
 {
-    returnif (!m_running);
-
     // Look for next room
     returnif (lerpable()->positionLerping());
 
@@ -120,15 +122,9 @@ void Hero::setCurrentNode(const Graph::Node* node, bool firstNode)
     refreshDebugOverlays();
     #endif
 
-    Event event;
-    event.action.hero = this;
-
     // Emit signal when getting out
-    if (m_currentNode != nullptr) {
-        event.type = EventType::HERO_LEFT_ROOM;
-        event.action.room = {m_currentNode->coords.x, m_currentNode->coords.y};
-        emitter()->emit(event);
-    }
+    if (m_currentNode != nullptr)
+        m_manager.heroLeftRoom(this, m_currentNode->coords);
 
     m_currentNode = node;
 
@@ -147,9 +143,8 @@ void Hero::setCurrentNode(const Graph::Node* node, bool firstNode)
         m_nodeInfos[m_currentNode->coords].lastVisit = m_tick;
         refreshPositionFromNode(firstNode);
 
-        event.type = EventType::HERO_ENTERED_ROOM;
-        event.action.room = {m_currentNode->coords.x, m_currentNode->coords.y};
-        emitter()->emit(event);
+	// Emit signal when entering
+        m_manager.heroEnteredRoom(this, m_currentNode->coords);
     }
 }
 
@@ -184,25 +179,14 @@ uint Hero::call(const char* function, const Graph::Node* node)
 void Hero::AIGetOut()
 {
     returnif (!m_currentNode->entrance);
-    setRunning(false);
-
-    // If no dosh stolen -> hero is unhappy, fame decrease
-    if (dosh() == 0u) {
-        m_data->subFame(4u);
-    }
-
-    // The dosh held is lost for the player.
-    else {
-        setDosh(0u);
-        m_data->addFame(1u);
-    }
+    m_manager.heroGetsOut(this);
 }
 
 void Hero::AIStealTreasure()
 {
     auto maxStolenDosh = std::min(100u, m_currentNode->treasure);
     auto stolenDosh = 1u + rand() % maxStolenDosh;
-    m_data->stealTreasure(m_currentNode->coords, *this, stolenDosh);
+    m_manager.heroStealsTreasure(this, m_currentNode->coords, stolenDosh);
 }
 
 //-------------------------//
@@ -211,44 +195,14 @@ void Hero::AIStealTreasure()
 void Hero::useGraph(Graph& graph)
 {
     m_graph = &graph;
-}
 
-//--------------------------//
-//----- Dungeon events -----//
-
-void Hero::useData(Data& data)
-{
-    m_data = &data;
-    setEmitter(&data);
-}
-
-void Hero::receive(const Event& event)
-{
-    returnif (event.type != EventType::MODE_CHANGED);
-    setRunning(event.mode == Mode::INVASION);
+    // Get the door from the graph
+    m_lua["nonVisitedNodes"] = m_graph->uniqueNodesCount();
+    setCurrentNode(&m_graph->startingNode(), true);
 }
 
 //-----------------------------------//
 //----- Internal change updates -----//
-
-void Hero::changedRunning()
-{
-    setVisible(m_running);
-
-    if (m_running) {
-        // Reinitialize AI
-        m_tick = 0u;
-        m_nodeInfos.clear();
-        m_lua["init"]();
-
-        // Get the door from the graph (requires that it is correctly constructed).
-        m_lua["nonVisitedNodes"] = m_graph->uniqueNodesCount();
-        setCurrentNode(&m_graph->startingNode(), true);
-    }
-    else {
-        setCurrentNode(nullptr);
-    }
-}
 
 void Hero::changedDosh()
 {
@@ -288,7 +242,6 @@ std::wstring stringFromWeight(const Hero::Weight& weight, const int evaluation)
     std::wstringstream str;
     str << "eval.     " << evaluation << std::endl;
     str << std::endl;
-    str << "weight    " << weight.visited << std::endl;
     str << "visited   " << weight.visited << std::endl;
     str << "lastVisit " << weight.lastVisit << std::endl;
     str << std::endl;
@@ -298,31 +251,38 @@ std::wstring stringFromWeight(const Hero::Weight& weight, const int evaluation)
     return std::move(str.str());
 }
 
+void Hero::refreshDebugOverlay(uint index, const Graph::Node* node)
+{
+    // Make it visible
+    m_overlays[index].setVisible(true);
+    m_overlayLabels[index].setVisible(true);
+
+    // Reposition
+    const auto position = m_inter.tileLocalPosition(node->coords);
+    m_overlays[index].setLocalPosition(position);
+    m_overlayLabels[index].setLocalPosition(position);
+
+    // Text content
+    m_overlayLabels[index].setText(stringFromWeight(getWeight(node), m_evaluations[index]));
+}
+
 void Hero::refreshDebugOverlays()
 {
+    // Hide all
     for (uint i = 0u; i < m_overlays.size(); ++i) {
-        m_overlays[i].setVisible(m_currentNode != nullptr);
-        m_overlayLabels[i].setVisible(m_currentNode != nullptr);
+        m_overlays[i].setVisible(false);
+        m_overlayLabels[i].setVisible(false);
     }
 
     returnif (m_currentNode == nullptr);
 
     // Main
-    // TODO Some code can be factored
-    const auto position = m_inter.tileLocalPosition(m_currentNode->coords);
-    m_overlays[0u].setLocalPosition(position);
-    m_overlayLabels[0u].setLocalPosition(position);
-    m_overlayLabels[0u].setText(stringFromWeight(getWeight(m_currentNode), m_evaluations[0u]));
+    refreshDebugOverlay(0u, m_currentNode);
 
-    // Neighbour
+    // Neighbours
     uint i = 0u;
-    for (; i < m_currentNode->neighbours.size(); ++i) {
-        Graph::Node* node = m_currentNode->neighbours[i];
-        const auto position = m_inter.tileLocalPosition(node->coords);
-        m_overlays[i + 1u].setLocalPosition(position);
-        m_overlayLabels[i + 1u].setLocalPosition(position);
-        m_overlayLabels[i + 1u].setText(stringFromWeight(getWeight(node), m_evaluations[i + 1u]));
-    }
+    for (; i < m_currentNode->neighbours.size(); ++i)
+        refreshDebugOverlay(i + 1u, m_currentNode->neighbours[i]);
 
     // Remove all not neighbour
     for (++i; i < m_overlays.size(); ++i) {

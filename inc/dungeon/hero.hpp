@@ -2,10 +2,9 @@
 
 #include "scene/entity.hpp"
 #include "dungeon/graph.hpp"
-#include "dungeon/event.hpp"
-#include "sfe/label.hpp"
 #include "sfe/animatedsprite.hpp"
 #include "sfe/rectangleshape.hpp"
+#include "sfe/label.hpp"
 #include "ai/debug.hpp"
 
 #include <selene/selene.hpp>
@@ -14,12 +13,12 @@ namespace dungeon
 {
     // Forward declarations
 
-    class Data;
+    class HeroesManager;
     class Inter;
 
     //! A hero invading the dungeon.
 
-    class Hero final : public scene::Entity, public EventReceiver
+    class Hero final : public scene::Entity
     {
         using baseClass = scene::Entity;
 
@@ -41,28 +40,10 @@ namespace dungeon
     public:
 
         //! Constructor.
-        Hero(Inter& inter);
+        Hero(HeroesManager& manager, Inter& inter);
 
         //! Default destructor.
         ~Hero() = default;
-
-        //----------------------//
-        //! @name Dungeon graph
-        //! @{
-
-        //! The graph of the dungeon to be read from.
-        void useGraph(Graph& data);
-
-        //! @}
-
-        //--------------------//
-        //! @name Data events
-        //! @{
-
-        //! Set the dungeon data source.
-        void useData(Data& data);
-
-        //! @}
 
         //------------------//
         //! @name Resources
@@ -76,12 +57,18 @@ namespace dungeon
 
         //! @}
 
+        //----------------------//
+        //! @name Dungeon graph
+        //! @{
+
+        //! The graph of the dungeon to be read from.
+        void useGraph(Graph& graph);
+
+        //! @}
+
         //--------------------------//
         //! @name Public properties
         //! @{
-
-        //! Whether the hero is visible and active.
-        PARAMGSU(bool, m_running, running, setRunning, changedRunning);
 
         //!< How much dosh the hero holds currently.
         PARAMGSU(uint, m_dosh, dosh, setDosh, changedDosh);
@@ -96,14 +83,6 @@ namespace dungeon
 
         void onTransformChanges() final;
         void updateAI(const sf::Time& dt) final;
-
-        //! @}
-
-        //---------------//
-        //! @name Events
-        //! @{
-
-        void receive(const Event& event) final;
 
         //! @}
 
@@ -144,13 +123,13 @@ namespace dungeon
         //! Set firstNode to true if the hero enters the dungeon via this node.
         void refreshPositionFromNode(bool firstNode = false);
 
-        //! Whenever the running mode changed.
-        void changedRunning();
-
         //! Whenever the dosh changed.
         void changedDosh();
 
         #if DEBUG_AI > 0
+        //! Refresh an overlay position and content.
+        void refreshDebugOverlay(uint index, const Graph::Node* node);
+
         //! Refresh the overlay to current node and nearby ones.
         void refreshDebugOverlays();
         #endif
@@ -166,9 +145,8 @@ namespace dungeon
 
     private:
 
-        Data* m_data = nullptr; //!< Dungeon data.
-
         // The graph
+        HeroesManager& m_manager;                   //!< The heroes manager for feedback.
         Graph* m_graph = nullptr;                   //!< The graph of the dungeon to be read from.
         const Graph::Node* m_currentNode = nullptr; //!< The current room where is our hero.
         Inter& m_inter;                             //!< The dungeon inter, to get cellsize and position.

@@ -8,7 +8,7 @@
 #include "dungeon/sidebar.hpp"
 #include "dungeon/lock.hpp"
 #include "dungeon/log.hpp"
-#include "dungeon/hero.hpp"
+#include "dungeon/heroesmanager.hpp"
 #include "sfe/rectangleshape.hpp"
 
 namespace states
@@ -23,6 +23,7 @@ namespace states
         StateID id() const noexcept final { return StateID::GAME_DUNGEON_DESIGN; }
 
         // Routine
+        bool update(const sf::Time& dt) final;
         void refreshDisplay() final;
 
         // Events
@@ -39,7 +40,7 @@ namespace states
         dungeon::Sidebar m_dungeonSidebar;
         dungeon::Lock m_dungeonLock;
         dungeon::Log m_dungeonLog;
-        dungeon::Hero m_dungeonHero;
+        dungeon::HeroesManager m_heroesManager;
 
         // NUI
         nui::ContextMenu m_contextMenu;
