@@ -18,7 +18,7 @@ namespace facilities
         if (type == L"treasure") return std::make_unique<Treasure>(coords, eData);
         else if (type == L"ladder") return std::make_unique<Ladder>(coords, eData);
         else if (type == L"entrance") return std::make_unique<Entrance>(coords, eData);
-        else throw std::runtime_error("Unknown ElementData type.");
+        else throw std::runtime_error("Unknown ElementData type for Facility.");
     }
 
     //! Returns the cost for creating a facility.

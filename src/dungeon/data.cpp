@@ -77,7 +77,7 @@ void Data::loadDungeon(const std::wstring& file)
     const auto& dungeon = doc.child(L"dungeon");
 
     if (!dungeon)
-        throw std::runtime_error("File " + toString(file) + " is not a valid dungeon file: resources or dungeon node not found.");
+        throw std::runtime_error("File " + toString(file) + " is not a valid dungeon file.");
 
     //---- Dungeon
 
@@ -87,6 +87,15 @@ void Data::loadDungeon(const std::wstring& file)
     setFame(dungeon.attribute(L"fame").as_uint());
 
     wdebug_dungeon_1(L"Dungeon is " << m_name << L" of size " << m_floorsCount << "x" << m_roomsByFloor);
+
+    // Monsters
+    for (auto& monsterNode : dungeon.child(L"monsters").children(L"monster")) {
+        MonsterInfo monsterInfo;
+        monsterInfo.data.loadXML(monsterNode);
+        monsterInfo.coords.x = monsterNode.attribute(L"floor").as_uint();
+        monsterInfo.coords.y = monsterNode.attribute(L"room").as_uint();
+        m_monstersInfo.emplace_back(std::move(monsterInfo));
+    }
 
     // Floors
     m_floors.reserve(m_floorsCount);
@@ -135,6 +144,15 @@ void Data::saveDungeon(const std::wstring& file)
     dungeon.append_attribute(L"floorsCount") = m_floorsCount;
     dungeon.append_attribute(L"roomsByFloor") = m_roomsByFloor;
     dungeon.append_attribute(L"fame") = fame();
+
+    // Monsters
+    auto monstersNode = dungeon.append_child(L"monsters");
+    for (const auto& monsterInfo : m_monstersInfo) {
+        auto monsterNode = monstersNode.append_child(L"monster");
+        monsterInfo.data.saveXML(monsterNode);
+        monsterNode.append_attribute(L"floor") = monsterInfo.coords.x;
+        monsterNode.append_attribute(L"room") = monsterInfo.coords.y;
+    }
 
     // Floors
     for (uint floorPos = 0; floorPos < m_floors.size(); ++floorPos) {

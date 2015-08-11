@@ -69,7 +69,7 @@ namespace dungeon
         //! A room as in the xml specification.
         struct Room
         {
-            sf::Vector2u coords;                            //!< The floor/room coordinate of the room.
+            sf::Vector2u coords;                            //!< The floor/room coordinates of the room.
             RoomState state = RoomState::UNKNOWN;           //!< The current state.
 
             std::vector<ElementData> facilities;   //!< All the facilities.
@@ -81,6 +81,13 @@ namespace dungeon
         {
             uint pos;
             std::vector<Room> rooms;
+        };
+
+        //! A monster as stored in the xml.
+        struct MonsterInfo
+        {
+            ElementData data;       //!< Type of monster, plus individual information.
+            sf::Vector2u coords;    //!< Floor/room coordinates of where the monster is.
         };
 
     public:
@@ -198,9 +205,12 @@ namespace dungeon
 
         //! @}
 
-        //---------------//
-        //! @name Getter
+        //----------------//
+        //! @name Getters
         //! @{
+
+        //! Access the monsters list.
+        std::vector<MonsterInfo>& monstersInfo() { return m_monstersInfo; }
 
         //! Access the associated villain.
         context::Villain& villain() { return *m_villain; }
@@ -297,6 +307,9 @@ namespace dungeon
 
         //! A dungeon consists in a vector of floors.
         std::vector<Floor> m_floors;
+
+        //! A dungeon also has some list of monsters.
+        std::vector<MonsterInfo> m_monstersInfo;
 
         Graph* m_graph = nullptr;   //!< The graph linked to these data.
 

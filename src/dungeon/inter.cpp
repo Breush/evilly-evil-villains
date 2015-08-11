@@ -5,6 +5,7 @@
 #include "resources/identifiers.hpp"
 #include "context/villains.hpp"
 #include "dungeon/traps/maker.hpp"
+#include "dungeon/monsters/maker.hpp"
 #include "dungeon/facilities/maker.hpp"
 #include "tools/debug.hpp"
 #include "tools/event.hpp"
@@ -211,6 +212,7 @@ void Inter::refreshFromData()
     // Sets the new size
     refreshSize();
     refreshTiles();
+    refreshMonsters();
 }
 
 //---------------------------//
@@ -526,6 +528,17 @@ void Inter::refreshSize()
     const auto& floorsCount = m_data->floorsCount();
     const auto roomSize = m_roomScale * m_refRoomSize;
     setSize({roomSize.x * roomsByFloor, roomSize.y * floorsCount});
+}
+
+void Inter::refreshMonsters()
+{
+    m_monsters.clear();
+
+    for (auto& monsterInfo : m_data->monstersInfo()) {
+        auto monster = monsters::make(monsterInfo.coords, monsterInfo.data);
+        m_monsters.emplace_back(std::move(monster));
+        attachChild(*m_monsters.back());
+    }
 }
 
 void Inter::refreshTiles()

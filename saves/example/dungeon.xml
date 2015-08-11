@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <dungeon name="The Mighty Example" floorsCount="7" roomsByFloor="5" fame="41">
+    <monsters>
+        <monster type="creepim" floor="1" room="4" />
+    </monsters>
 	<floor pos="0">
 		<room pos="0" state="constructed" />
 		<room pos="1" state="constructed">
