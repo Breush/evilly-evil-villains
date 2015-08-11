@@ -57,7 +57,9 @@ void Inter::onSizeChanges()
     refreshOuterWalls();
 
     returnif (m_data == nullptr);
+    // TODO OPTIM Well, it's just position/size of elements that need to be updated, right?
     refreshTiles();
+    refreshMonsters();
 }
 
 //------------------//
@@ -170,6 +172,7 @@ void Inter::receive(const Event& event)
     case EventType::MODE_CHANGED:
         m_treasureEditSpinBox.markForVisible(false);
         m_invasion = (event.mode == Mode::INVASION);
+        refreshMonstersActivity();
         deselectTile();
         break;
 
@@ -535,10 +538,20 @@ void Inter::refreshMonsters()
     m_monsters.clear();
 
     for (auto& monsterInfo : m_data->monstersInfo()) {
-        auto monster = monsters::make(monsterInfo.coords, monsterInfo.data);
+        auto monster = monsters::make(monsterInfo.coords, monsterInfo.data, *this);
+        monster->setEmitter(m_data);
+        monster->useGraph(m_data->graph());
         m_monsters.emplace_back(std::move(monster));
         attachChild(*m_monsters.back());
     }
+
+    refreshMonstersActivity();
+}
+
+void Inter::refreshMonstersActivity()
+{
+    for (auto& monster : m_monsters)
+        monster->setActive(m_invasion);
 }
 
 void Inter::refreshTiles()

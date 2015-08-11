@@ -48,6 +48,9 @@ void ElementData::saveXML(pugi::xml_node& node) const
         else if (type == L"uint32") value = static_cast<unsigned int>(attribute.second.as_uint32());
         else if (type == L"uint64") value = static_cast<unsigned long long>(attribute.second.as_uint64());
 
+        else if (type == L"float")  value = attribute.second.as_float();
+        else if (type == L"double") value = attribute.second.as_double();
+
         else throw std::logic_error("Some MetaData has an invalid type.");
     }
 }
@@ -77,5 +80,8 @@ void ElementData::loadXML(const pugi::xml_node& node)
         else if (type == L"uint16") m_attributes[name] = static_cast<uint16>(child.attribute(L"value").as_uint());
         else if (type == L"uint32") m_attributes[name] = static_cast<uint32>(child.attribute(L"value").as_uint());
         else if (type == L"uint64") m_attributes[name] = static_cast<uint64>(child.attribute(L"value").as_ullong());
+
+        else if (type == L"float")  m_attributes[name] = child.attribute(L"value").as_float();
+        else if (type == L"double") m_attributes[name] = child.attribute(L"value").as_double();
     }
 }

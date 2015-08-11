@@ -4,7 +4,6 @@
 #include "dungeon/heroesmanager.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/data.hpp"
-#include "tools/random.hpp"
 #include "tools/tools.hpp"
 
 #include <stdexcept> // runtime_error
@@ -30,12 +29,9 @@ Hero::Hero(HeroesManager& manager, Inter& inter)
     m_doshLabel.centerOrigin();
 
     // Lua
-    if (!m_lua.load("res/ai/hero.lua"))
-        throw std::runtime_error("Failed to load hero AI.");
-
-    // Register
-    m_lua["AIGetOut"] = [this] { AIGetOut(); };
-    m_lua["AIStealTreasure"] = [this] { AIStealTreasure(); };
+    m_luaActor.loadFile("res/ai/hero.lua");
+    m_luaActor.state()["AIGetOut"] = [this] { AIGetOut(); };
+    m_luaActor.state()["AIStealTreasure"] = [this] { AIStealTreasure(); };
 
     // Debug - show more info
     #if DEBUG_AI > 0
@@ -52,11 +48,6 @@ Hero::Hero(HeroesManager& manager, Inter& inter)
         m_overlayLabels[i].setDepth(0.5f);
     }
     #endif
-
-    // Reinitialize AI
-    m_tick = 0u;
-    m_nodeInfos.clear();
-    m_lua["init"]();
 }
 
 //-------------------//
@@ -72,48 +63,15 @@ void Hero::onTransformChanges()
 
 void Hero::updateAI(const sf::Time& dt)
 {
-    // Look for next room
+    // Get next room if not already moving
     returnif (lerpable()->positionLerping());
-
-    returnif (m_currentNode == nullptr);
-    returnif (m_currentNode->neighbours.size() == 0u);
-
-    // Consider that the current room might be the best node
-    std::vector<const Graph::Node*> bestNodes;
-    bestNodes.push_back(m_currentNode);
-    int maxEvaluation = call("evaluate_reference", m_currentNode);
-
-    m_evaluations.clear();
-    m_evaluations.emplace_back(maxEvaluation);
-
-    // If the hero escaped during evaluation, stop it here
-    returnif (m_currentNode == nullptr);
-
-    // Get the evaluation from lua
-    for (const auto& neighbour : m_currentNode->neighbours) {
-        int evaluation = call("evaluate", neighbour);
-        m_evaluations.emplace_back(evaluation);
-
-        // Found a new limit for the best nodes
-        if (evaluation > maxEvaluation) {
-            maxEvaluation = evaluation;
-            bestNodes.clear();
-        }
-
-        // This node is among the best ones
-        if (evaluation == maxEvaluation)
-            bestNodes.push_back(neighbour);
-    }
-
-    // Switch to a new node randomly from the best ones
-    setCurrentNode(alea::rand(bestNodes));
-    ++m_tick;
+    setCurrentNode(m_luaActor.findNextNode(m_currentNode));
 }
 
 //---------------------------//
 //----- Node management -----//
 
-void Hero::setCurrentNode(const Graph::Node* node, bool firstNode)
+void Hero::setCurrentNode(const Graph::Node* node)
 {
     returnif (m_currentNode == node);
 
@@ -126,6 +84,7 @@ void Hero::setCurrentNode(const Graph::Node* node, bool firstNode)
     if (m_currentNode != nullptr)
         m_manager.heroLeftRoom(this, m_currentNode->coords);
 
+    bool firstNode = (m_currentNode == nullptr);
     m_currentNode = node;
 
     #if DEBUG_AI > 0
@@ -135,46 +94,13 @@ void Hero::setCurrentNode(const Graph::Node* node, bool firstNode)
     #endif
 
     if (m_currentNode != nullptr) {
-        // First visit to this node
-        if (m_nodeInfos[m_currentNode->coords].visits == 0u)
-            m_lua["nonVisitedNodes"] = static_cast<uint>(m_lua["nonVisitedNodes"]) - 1u;
-
-        m_nodeInfos[m_currentNode->coords].visits += 1u;
-        m_nodeInfos[m_currentNode->coords].lastVisit = m_tick;
         refreshPositionFromNode(firstNode);
-
-	// Emit signal when entering
         m_manager.heroEnteredRoom(this, m_currentNode->coords);
     }
 }
 
 //-----------------------------------//
 //----- Artificial intelligence -----//
-
-Hero::Weight Hero::getWeight(const Graph::Node* node)
-{
-    Weight weight;
-    weight.visited =    m_nodeInfos[node->coords].visits;
-    weight.lastVisit =  m_nodeInfos[node->coords].lastVisit;
-    weight.altitude =   node->altitude;
-    weight.treasure =   node->treasure;
-    weight.exit =       node->entrance;
-    return weight;
-}
-
-uint Hero::call(const char* function, const Graph::Node* node)
-{
-    Weight weight = getWeight(node);
-
-    m_lua["weight"].SetObj(weight,
-                           "visited",   &Weight::visited,
-                           "lastVisit", &Weight::lastVisit,
-                           "altitude",  &Weight::altitude,
-                           "treasure",  &Weight::treasure,
-                           "exit",      &Weight::exit);
-
-    return m_lua[function]();
-}
 
 void Hero::AIGetOut()
 {
@@ -194,11 +120,8 @@ void Hero::AIStealTreasure()
 
 void Hero::useGraph(Graph& graph)
 {
-    m_graph = &graph;
-
-    // Get the door from the graph
-    m_lua["nonVisitedNodes"] = m_graph->uniqueNodesCount();
-    setCurrentNode(&m_graph->startingNode(), true);
+    m_luaActor.useGraph(graph);
+    setCurrentNode(&graph.startingNode());
 }
 
 //-----------------------------------//
@@ -237,7 +160,7 @@ void Hero::refreshPositionFromNode(bool firstNode)
 }
 
 #if DEBUG_AI > 0
-std::wstring stringFromWeight(const Hero::Weight& weight, const int evaluation)
+std::wstring stringFromWeight(const ai::LuaActor::Weight& weight, const int evaluation)
 {
     std::wstringstream str;
     str << "eval.     " << evaluation << std::endl;
@@ -263,7 +186,7 @@ void Hero::refreshDebugOverlay(uint index, const Graph::Node* node)
     m_overlayLabels[index].setLocalPosition(position);
 
     // Text content
-    m_overlayLabels[index].setText(stringFromWeight(getWeight(node), m_evaluations[index]));
+    m_overlayLabels[index].setText(stringFromWeight(m_luaActor.getWeight(node), m_luaActor.evaluation(index)));
 }
 
 void Hero::refreshDebugOverlays()

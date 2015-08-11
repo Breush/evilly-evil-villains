@@ -108,6 +108,9 @@ namespace dungeon
         //! @name Tile management
         //! @{
 
+        //! Return the coordinates (floor/room) of the room below.
+        sf::Vector2u tileFromLocalPosition(const sf::Vector2f& pos);
+
         //! Returns the top-left coordinates in pixels of the tile situated at these coordinates.
         sf::Vector2f tileLocalPosition(const sf::Vector2u& coords) const;
 
@@ -142,9 +145,6 @@ namespace dungeon
         //------------------------//
         //! @name Tile management
         //! @{
-
-        //! Return the coordinates (floor/room) of the room below.
-        sf::Vector2u tileFromLocalPosition(const sf::Vector2f& pos);
 
         //! Remove all layers from the tile.
         void clearLayers(const sf::Vector2u& coords);
@@ -218,6 +218,9 @@ namespace dungeon
 
         //! Refresh all monsters from current data.
         void refreshMonsters();
+
+        //! Refresh all monsters activity state.
+        void refreshMonstersActivity();
 
         //! Refresh all tiles, updating state from data.
         void refreshTiles();

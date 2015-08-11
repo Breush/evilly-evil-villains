@@ -16,6 +16,9 @@ union MetaData_t
     uint16 as_uint16;
     uint32 as_uint32;
     uint64 as_uint64;
+
+    float as_float;
+    double as_double;
 };
 
 class MetaData
@@ -35,6 +38,9 @@ public:
     inline uint32& operator=(const uint32& rhs) { return m_data.as_uint32 = rhs; }
     inline uint64& operator=(const uint64& rhs) { return m_data.as_uint64 = rhs; }
 
+    inline float&  operator=(const float& rhs)  { return m_data.as_float  = rhs; }
+    inline double& operator=(const double& rhs) { return m_data.as_double = rhs; }
+
     inline const int8&  as_int8()  const { return m_data.as_int8; }
     inline const int16& as_int16() const { return m_data.as_int16; }
     inline const int32& as_int32() const { return m_data.as_int32; }
@@ -44,6 +50,9 @@ public:
     inline const uint16& as_uint16() const { return m_data.as_uint16; }
     inline const uint32& as_uint32() const { return m_data.as_uint32; }
     inline const uint64& as_uint64() const { return m_data.as_uint64; }
+
+    inline const float&  as_float()  const { return m_data.as_float; }
+    inline const double& as_double() const { return m_data.as_double; }
 
     inline int8&  as_int8()  { return m_data.as_int8; }
     inline int16& as_int16() { return m_data.as_int16; }
@@ -55,6 +64,9 @@ public:
     inline uint32& as_uint32() { return m_data.as_uint32; }
     inline uint64& as_uint64() { return m_data.as_uint64; }
 
+    inline float&  as_float()  { return m_data.as_float; }
+    inline double& as_double() { return m_data.as_double; }
+
     inline void init_int8 (int8  value) { m_type = L"int8";  m_data.as_int8  = value; }
     inline void init_int16(int16 value) { m_type = L"int16"; m_data.as_int16 = value; }
     inline void init_int32(int32 value) { m_type = L"int32"; m_data.as_int32 = value; }
@@ -64,6 +76,9 @@ public:
     inline void init_uint16(uint16 value) { m_type = L"uint16"; m_data.as_uint16 = value; }
     inline void init_uint32(uint32 value) { m_type = L"uint32"; m_data.as_uint32 = value; }
     inline void init_uint64(uint64 value) { m_type = L"uint64"; m_data.as_uint64 = value; }
+
+    inline void init_float (float value)  { m_type = L"float"; m_data.as_uint32 = value; }
+    inline void init_double(double value) { m_type = L"double"; m_data.as_uint64 = value; }
 
 private:
 

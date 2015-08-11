@@ -198,7 +198,8 @@ namespace dungeon
         //! @name Mode
         //! @{
 
-        inline Mode mode() const { return m_mode; } //!< Get the current mode.
+        //! Get the current mode.
+        inline Mode mode() const { return m_mode; }
 
         //! Set the current mode.
         void setMode(Mode mode);
@@ -214,6 +215,9 @@ namespace dungeon
 
         //! Access the associated villain.
         context::Villain& villain() { return *m_villain; }
+
+        //! Access the associated graph.
+        Graph& graph() { return *m_graph; }
 
         //! @}
 
