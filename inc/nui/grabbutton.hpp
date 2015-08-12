@@ -32,7 +32,6 @@ namespace nui
         //! @name Events
         //! @{
 
-        //! Spawn grabbable on click and set it to graph.
         void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
 
         //! @}

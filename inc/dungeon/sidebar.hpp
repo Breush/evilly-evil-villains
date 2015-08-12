@@ -7,6 +7,7 @@
 #include "scene/entity.hpp"
 #include "dungeon/summary.hpp"
 #include "dungeon/minimap.hpp"
+#include "dungeon/monsters.hpp"
 #include "tools/param.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -84,6 +85,7 @@ namespace dungeon
             nui::ScrollArea scrollArea; //!< The scrollable area.
             nui::VStacker stacker;      //!< The stacker containing the tab content.
             std::vector<std::unique_ptr<nui::GrabButton>> buttons;  //!< The dynamic content for the tab.
+            std::vector<std::unique_ptr<MonsterCage>> monsterCage;  //!< The dynamic content for monsters.
         };
 
         //! The different tabs.

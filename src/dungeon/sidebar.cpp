@@ -60,6 +60,7 @@ void Sidebar::refreshDisplay()
 void Sidebar::onSizeChanges()
 {
     refreshScrollAreasSize();
+    refreshTabContents();
 }
 
 void Sidebar::onChildSizeChanges(scene::Entity& child)
@@ -103,12 +104,16 @@ void Sidebar::refreshTabContents()
 
     // Monsters
     auto& monstersStacker = m_tabContents[TabsID::MONSTERS].stacker;
-    auto& monstersButtons = m_tabContents[TabsID::MONSTERS].buttons;
+    auto& monstersCages = m_tabContents[TabsID::MONSTERS].monsterCage;
     monstersStacker.unstackAll();
-    monstersButtons.clear();
+    monstersCages.clear();
 
-    for (auto& monstersButton : monstersButtons)
-        monstersStacker.stackBack(*monstersButton, nui::Align::CENTER);
+    monstersCages.emplace_back(std::make_unique<MonsterCage>(L"creepim"));
+
+    for (auto& monsterCage : monstersCages) {
+        monsterCage->setSize({size().x, 80.f});
+        monstersStacker.stackBack(*monsterCage, nui::Align::CENTER);
+    }
 
     // Traps
     auto& trapsStacker = m_tabContents[TabsID::TRAPS].stacker;
@@ -127,9 +132,9 @@ void Sidebar::refreshTabContents()
     facilitiesStacker.unstackAll();
     facilitiesButtons.clear();
 
-    facilitiesButtons.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Treasure"), TextureID::DUNGEON_FACILITIES_TREASURE_ICON, L"treasure"));
-    facilitiesButtons.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Entrance"), TextureID::DUNGEON_FACILITIES_ENTRANCE_ICON, L"entrance"));
-    facilitiesButtons.emplace_back(std::make_unique<dungeon::FacilityGrabButton>(_("Ladder"),   TextureID::DUNGEON_FACILITIES_LADDER_ICON,   L"ladder"));
+    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Treasure"), TextureID::DUNGEON_FACILITIES_TREASURE_ICON, L"treasure"));
+    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Entrance"), TextureID::DUNGEON_FACILITIES_ENTRANCE_ICON, L"entrance"));
+    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Ladder"),   TextureID::DUNGEON_FACILITIES_LADDER_ICON,   L"ladder"));
 
     for (auto& facilitiesButton : facilitiesButtons)
         facilitiesStacker.stackBack(*facilitiesButton, nui::Align::CENTER);
@@ -140,10 +145,10 @@ void Sidebar::refreshTabContents()
     toolsStacker.unstackAll();
     toolsButtons.clear();
 
-    toolsButtons.emplace_back(std::make_unique<dungeon::ToolGrabButton>(_("Rooms builder"), dungeon::ToolID::ROOMS_BUILDER));
-    toolsButtons.emplace_back(std::make_unique<dungeon::ToolGrabButton>(_("Rooms destroyer"), dungeon::ToolID::ROOMS_DESTROYER));
-    toolsButtons.emplace_back(std::make_unique<dungeon::ToolGrabButton>(_("Traps remover"), dungeon::ToolID::TRAPS_REMOVER));
-    toolsButtons.emplace_back(std::make_unique<dungeon::ToolGrabButton>(_("Facilities remover"), dungeon::ToolID::FACILITIES_REMOVER));
+    toolsButtons.emplace_back(std::make_unique<ToolGrabButton>(_("Rooms builder"), dungeon::ToolID::ROOMS_BUILDER));
+    toolsButtons.emplace_back(std::make_unique<ToolGrabButton>(_("Rooms destroyer"), dungeon::ToolID::ROOMS_DESTROYER));
+    toolsButtons.emplace_back(std::make_unique<ToolGrabButton>(_("Traps remover"), dungeon::ToolID::TRAPS_REMOVER));
+    toolsButtons.emplace_back(std::make_unique<ToolGrabButton>(_("Facilities remover"), dungeon::ToolID::FACILITIES_REMOVER));
 
     for (auto& toolsButton : toolsButtons)
         toolsStacker.stackBack(*toolsButton, nui::Align::CENTER);

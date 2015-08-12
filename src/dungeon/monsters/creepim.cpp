@@ -112,4 +112,7 @@ void Creepim::refreshPositionFromNode(bool teleport)
     const auto monsterTilePosition = sf::Vector2f{m_inter.tileSize().x / 2.f, m_inter.tileSize().y * 0.62f};
     lerpable()->setTargetPosition(tileLocalPosition + monsterTilePosition);
     if (teleport) setLocalPosition(lerpable()->targetPosition());
+
+    // TODO Changing room, we need to check if there is some hero in it,
+    // and explode if so.
 }
