@@ -25,9 +25,9 @@ void FacilityGrabButton::grabbableButtonReleased(Entity* entity, const sf::Mouse
     graph()->removeGrabbable();
 
     // Forward to dungeon::Inter if it is below
-    auto dungeonInter = dynamic_cast<dungeon::Inter*>(entity);
-    returnif (dungeonInter == nullptr);
-    dungeonInter->createRoomFacility(relPos, m_facilityID);
+    auto inter = dynamic_cast<Inter*>(entity);
+    returnif (inter == nullptr);
+    inter->createRoomFacility(relPos, m_facilityID);
 }
 
 std::unique_ptr<scene::Grabbable> FacilityGrabButton::spawnGrabbable()

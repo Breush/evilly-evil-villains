@@ -5,6 +5,7 @@
 #include "dungeon/hero.hpp"
 #include "dungeon/traps.hpp"
 #include "dungeon/facilities/maker.hpp"
+#include "dungeon/monsters/maker.hpp"
 #include "dungeon/traps/maker.hpp"
 #include "context/villains.hpp"
 #include "tools/string.hpp"
@@ -416,6 +417,20 @@ void Data::removeRoomTrap(const sf::Vector2u& coords)
     Event event;
     event.type = EventType::TRAP_CHANGED;
     event.room = {coords.x, coords.y};
+    EventEmitter::emit(event);
+}
+
+void Data::addMonster(const sf::Vector2u& coords, const std::wstring& monsterID)
+{
+    m_monstersInfo.emplace_back();
+    auto& monsterInfo = m_monstersInfo.back();
+
+    // TODO Cost of monster..?
+    monsterInfo.data.create(monsterID);
+    monsterInfo.coords = coords;
+
+    Event event;
+    event.type = EventType::MONSTER_ADDED;
     EventEmitter::emit(event);
 }
 

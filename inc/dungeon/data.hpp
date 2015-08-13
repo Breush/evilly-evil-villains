@@ -172,6 +172,9 @@ namespace dungeon
         //! Will emit an event if a change occured.
         void removeRoomTrap(const sf::Vector2u& coords);
 
+        //! Add the specified type of monster to the dungeon.
+        void addMonster(const sf::Vector2u& coords, const std::wstring& monsterID);
+
         //! @}
 
         //-------------------------//

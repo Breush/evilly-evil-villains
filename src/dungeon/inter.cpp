@@ -164,6 +164,10 @@ void Inter::receive(const Event& event)
         m_tileRefreshPending.emplace_back([=]() { return refreshTileTraps(coords); });
         break;
 
+    case EventType::MONSTER_ADDED:
+        m_tileRefreshPending.emplace_back([=]() { return refreshMonsters(); });
+        break;
+
     case EventType::HARVESTABLE_DOSH_CHANGED:
         coords = {event.room.x, event.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTileDoshLabel(coords); });
@@ -439,6 +443,11 @@ void Inter::createRoomFacility(const sf::Vector2f& relPos, const std::wstring& f
 void Inter::setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID)
 {
     m_data->setRoomTrap(tileFromLocalPosition(relPos), trapID);
+}
+
+void Inter::addMonster(const sf::Vector2f& relPos, const std::wstring& monsterID)
+{
+    m_data->addMonster(tileFromLocalPosition(relPos), monsterID);
 }
 
 void Inter::constructRoom(const sf::Vector2f& relPos)

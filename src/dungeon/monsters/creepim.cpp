@@ -16,12 +16,11 @@ Creepim::Creepim(const sf::Vector2u& coords, ElementData& elementdata, dungeon::
         m_elementdata[L"rx"].init_float(0.f);
         m_elementdata[L"ry"].init_float(0.f);
     }
-    else {
-        const auto tileLocalPosition = m_inter.tileLocalPosition(m_coords);
-        const auto monsterTilePosition = sf::Vector2f{m_inter.tileSize().x / 2.f, m_inter.tileSize().y * 0.62f};
-        lerpable()->setTargetPosition(tileLocalPosition + monsterTilePosition);
-        setLocalPosition(lerpable()->targetPosition());
-    }
+
+    const auto tileLocalPosition = m_inter.tileLocalPosition(m_coords);
+    const auto monsterTilePosition = sf::Vector2f{m_inter.tileSize().x / 2.f, m_inter.tileSize().y * 0.62f};
+    lerpable()->setTargetPosition(tileLocalPosition + monsterTilePosition);
+    setLocalPosition(lerpable()->targetPosition());
 
     // Decorum
     attachChild(m_sprite);

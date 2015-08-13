@@ -2,6 +2,7 @@
 
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
+#include "dungeon/inter.hpp"
 #include "tools/vector.hpp"
 
 using namespace dungeon;
@@ -29,10 +30,19 @@ void MonsterCage::onSizeChanges()
 
 void MonsterCage::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
+    if (button == sf::Mouse::Left)
+      graph()->setGrabbable(spawnGrabbable());
 }
 
 void MonsterCage::grabbableButtonReleased(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos)
 {
+    returnif (button != sf::Mouse::Left);
+    graph()->removeGrabbable();
+
+    // Forward to dungeon::Inter if it is below
+    auto inter = dynamic_cast<Inter*>(entity);
+    returnif (inter == nullptr);
+    inter->addMonster(relPos, m_monsterID);
 }
 
 std::unique_ptr<scene::Grabbable> MonsterCage::spawnGrabbable()
@@ -46,9 +56,12 @@ std::unique_ptr<scene::Grabbable> MonsterCage::spawnGrabbable()
 MonsterGrabbable::MonsterGrabbable(scene::GrabbableSpawner& spawner)
     : baseClass(spawner)
 {
+    m_sprite.setSize({25.f, 25.f});
+    m_sprite.setFillColor(sf::Color::White);
 }
 
 void MonsterGrabbable::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+    states.transform *= getTransform();
     target.draw(m_sprite, states);
 }
