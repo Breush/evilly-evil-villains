@@ -4,6 +4,7 @@
 #include "scene/grabbable.hpp"
 #include "dungeon/elementdata.hpp"
 #include "dungeon/event.hpp"
+#include "ai/dumbpuppet.hpp"
 #include "tools/param.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -132,6 +133,7 @@ namespace dungeon
 
         // Decorum
         sf::RectangleShape m_background;    //!< Background.
+        ai::DumbPuppet m_monsterPuppet;     //!< Puppet that moves from left to right.
     };
 
     //! A monster temporary object.
