@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<resources dosh="0" fame="0" />
-<dungeon name="Dungeon" floorsCount="3" roomsByFloor="4">
+<dungeon name="Dungeon" floorsCount="3" roomsByFloor="4" fame="0">
+	<monsters />
 	<floor pos="0">
 		<room pos="0" state="constructed" />
 		<room pos="1" state="constructed" />

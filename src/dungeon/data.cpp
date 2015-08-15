@@ -32,8 +32,16 @@ std::wstring Data::load(const std::wstring& folder)
 
     context::villains.load();
     m_villain = context::villains.getFromWorldFolder(folder);
-    massert(m_villain != nullptr, "Could not find villain.");
-    m_villain->doshWallet.setEvents(this, EventType::DOSH_CHANGED);
+
+    // We keep that case possible for tests.
+    if (m_villain == nullptr) {
+        std::wcout << L"/!\\ No villain found for folder '" << folder << "'." << std::endl;
+        std::wcout << L" |  If the game crashes soon, that could be related." << std::endl;
+        std::wcout << L" |  If you are running a test file, no problem here." << std::endl;
+    }
+    else {
+        m_villain->doshWallet.setEvents(this, EventType::DOSH_CHANGED);
+    }
 
     std::wstring mainDungeonFilename = L"saves/" + folder + L"dungeon.xml";
     loadDungeon(mainDungeonFilename);
