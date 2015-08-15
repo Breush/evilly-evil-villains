@@ -99,6 +99,12 @@ void Application::loadTextures()
     s_context.textures.load(TextureID::DUNGEON_TRAPS_PICKPOCK_LOOP_DOWN, "res/tex/dungeon/traps/pickpock/loop_down.png", true);
     s_context.textures.load(TextureID::DUNGEON_TRAPS_PICKPOCK_LOOP_UP, "res/tex/dungeon/traps/pickpock/loop_up.png", true);
 
+    // Dungeon tools
+    s_context.textures.load(TextureID::DUNGEON_TOOLS_ROOMS_BUILDER_ICON, "res/tex/dungeon/tools/rooms_builder_icon.png");
+    s_context.textures.load(TextureID::DUNGEON_TOOLS_ROOMS_DESTROYER_ICON, "res/tex/dungeon/tools/rooms_destroyer_icon.png");
+    s_context.textures.load(TextureID::DUNGEON_TOOLS_FACILITIES_REMOVER_ICON, "res/tex/dungeon/tools/facilities_remover_icon.png");
+    s_context.textures.load(TextureID::DUNGEON_TOOLS_TRAPS_REMOVER_ICON, "res/tex/dungeon/tools/traps_remover_icon.png");
+
     // Dungeon lock
     s_context.textures.load(TextureID::DUNGEON_LOCK, "res/tex/dungeon/panel/lock.png");
 
