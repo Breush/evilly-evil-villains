@@ -7,9 +7,6 @@
 #include <initializer_list>
 #include <map>
 
-// TODO Add clipping Area https://github.com/LaurentGomila/SFML/pull/846
-// To be managed in scene::Entity and auto-enable it here.
-
 namespace nui
 {
     //! A layout to display other entities in a table way.

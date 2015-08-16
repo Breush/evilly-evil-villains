@@ -274,7 +274,8 @@ void Application::switchFullscreenMode()
 
 void Application::refresh()
 {
-    refreshDisplay();
+    refreshSounds();
     refreshShaders();
+    refreshDisplay();
 }
 

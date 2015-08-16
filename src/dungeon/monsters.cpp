@@ -35,7 +35,7 @@ void MonsterCage::onSizeChanges()
 
     // Puppets
     // TODO Why 25.f? Use collision box, position 0.f means 0.f + colBox
-    m_monsterPuppet.setInitialLocalPosition({25.f, 0.62 * size().y});
+    m_monsterPuppet.setInitialLocalPosition({25.f, 0.62f * size().y});
     m_monsterPuppet.setHorizontalRange(25.f, size().x - 25.f);
 }
 

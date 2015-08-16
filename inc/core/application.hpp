@@ -148,6 +148,7 @@ protected:
 
     void refreshDisplay();  //!< Adapt all views to current window settings.
     void refreshShaders();  //!< Adapt all shaders to current window settings.
+    void refreshSounds();   //!< Adapt all sounds position/volume to current settings.
 
     void updateShaders(const sf::Time& dt);     //!< Animate the shaders.
     void updateAnimations(const sf::Time& dt);  //!< Animate the currently played animations.

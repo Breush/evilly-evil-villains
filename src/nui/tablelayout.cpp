@@ -29,7 +29,7 @@ void TableLayout::onSizeChanges()
 
 void TableLayout::onChildSizeChanges(scene::Entity&)
 {
-    // TODO OPTIM: It might be possible to detect which entity it is, and just refresh this one
+    // TODO OPTIM It might be possible to detect which entity it is, and just refresh this one
     refreshRowsSize();
     refreshColsSize();
     refreshChildrenPosition();
