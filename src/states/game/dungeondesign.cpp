@@ -126,13 +126,8 @@ void GameDungeonDesign::refreshWindow(const config::WindowInfo& cWindow)
 
     // Scene viewport
     const sf::FloatRect sceneRect{0.f, 0.f, resolution.x - sidebarWidth, resolution.y};
-    auto sceneScreenRect = tools::mapRectCoordsToPixel(window, sceneRect);
+    auto sceneScreenRect = tools::mapRectCoordsToPixel(window, sceneRect, &nuiLayer().view());
     scene().setViewport(sceneScreenRect / screenSize);
-
-    // FIXME There a bug here: apparently, window is not completely in final state
-    // and mapRectCoordsToPixel gives wrong values.
-    // Go to fullscreen (F11) when on GameDungeonDesign state to see the problem.
-    std::cerr << sceneScreenRect << " " << screenSize << std::endl;
 
     // Center view
     scene().centerRelative({0.5f, 1.f});

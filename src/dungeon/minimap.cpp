@@ -31,7 +31,6 @@ void Minimap::onTransformChanges()
     sf::FloatRect rect{getPosition().x, getPosition().y, size().x, size().y};
     rect = tools::mapRectCoordsToPixel(window, rect);
     m_view.setViewport(rect / screenSize);
-
 }
 
 void Minimap::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -58,8 +57,6 @@ void Minimap::onSizeChanges()
 {
     m_background.setSize(size());
 }
-
-// TODO Add refreshWindow
 
 void Minimap::refreshNUI(const config::NUIGuides& cNUI)
 {

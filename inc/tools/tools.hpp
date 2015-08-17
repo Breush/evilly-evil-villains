@@ -18,11 +18,21 @@ namespace tools
     }
 
     // TODO Move to its own file?
-    inline sf::FloatRect mapRectCoordsToPixel(const sf::RenderTarget& target, const sf::FloatRect& rect)
+    inline sf::FloatRect mapRectCoordsToPixel(const sf::RenderTarget& target, const sf::FloatRect& rect, const sf::View* view = nullptr)
     {
+        // Get coords
+        sf::Vector2i topLeft, bottomRight;
+        if (view != nullptr) {
+            topLeft = target.mapCoordsToPixel({rect.left, rect.top}, *view);
+            bottomRight = target.mapCoordsToPixel({rect.left + rect.width, rect.top + rect.height}, *view);
+        }
+        else {
+            topLeft = target.mapCoordsToPixel({rect.left, rect.top});
+            bottomRight = target.mapCoordsToPixel({rect.left + rect.width, rect.top + rect.height});
+        }
+
+        // Compute rect
         sf::FloatRect pixelRect;
-        auto topLeft = target.mapCoordsToPixel({rect.left, rect.top});
-        auto bottomRight = target.mapCoordsToPixel({rect.left + rect.width, rect.top + rect.height});
         pixelRect.left = topLeft.x;
         pixelRect.top = topLeft.y;
         pixelRect.width = bottomRight.x - topLeft.x;

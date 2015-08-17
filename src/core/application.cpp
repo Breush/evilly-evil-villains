@@ -209,7 +209,7 @@ void Application::processInput()
             clearWindowEvents(event, sf::Event::Resized);
             s_context.windowInfo.screenSize = sf::Vector2f(event.size.width, event.size.height);
             s_context.windowInfo.recompute();
-                    refreshWindow();
+            refreshWindow();
             break;
         }
 

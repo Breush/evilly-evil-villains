@@ -163,17 +163,10 @@ private:
     //! Fixed timestep to update game logic.
     const sf::Time m_timePerFrame = sf::seconds(1.f/60.f);
 
-    //! Modifying the speed of the whole game.
-    float m_gameTimeFactor = 1.f;
-
-    //! The game time since game loop is running.
-    float m_gameTime = 0.f;
-
-    //! Controls whether to continue game loop.
-    bool m_running = false;
-
-    //! The initial state push into the stack (not fixed for easy debugging).
-    StateID m_initialState;
+    float m_gameTimeFactor = 1.f;   //!< Modifying the speed of the whole game.
+    float m_gameTime = 0.f;         //!< The game time since game loop is running.
+    bool m_running = false;         //!< Controls whether to continue game loop.
+    StateID m_initialState;         //!< The initial state push into the stack (not fixed for easy debugging).
 
     // Visual part
     states::StateStack m_stateStack;    //!< The stack of states.
