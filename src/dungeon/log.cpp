@@ -3,7 +3,7 @@
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
 #include "dungeon/data.hpp"
-#include "config/nui.hpp"
+#include "config/nuiguides.hpp"
 #include "tools/tools.hpp"
 #include "tools/platform-fixes.hpp" // reverse()
 
@@ -17,8 +17,6 @@ Log::Log()
     // Background
     m_background.setFillColor({255u, 255u, 255u, 192u});
     addPart(&m_background);
-
-    refreshDisplay();
 }
 
 //-------------------//
@@ -53,13 +51,11 @@ void Log::updateRoutine(const sf::Time& dt)
         refreshMessages();
 }
 
-void Log::refreshDisplay()
+void Log::refreshNUI(const config::NUIGuides& cNUI)
 {
-    config::NUI cNUI;
-
     m_characterSize = cNUI.fontSize;
 
-    baseClass::refreshDisplay();
+    baseClass::refreshNUI(cNUI);
 }
 
 //------------------//

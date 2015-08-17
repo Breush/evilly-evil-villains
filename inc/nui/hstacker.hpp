@@ -31,7 +31,7 @@ namespace nui
 
         void onSizeChanges() final;
         void onChildSizeChanges(scene::Entity& child) final;
-        void refreshDisplay() final;
+        void refreshNUI(const config::NUIGuides& cNUI) final;
 
         void updateSize() final;
 

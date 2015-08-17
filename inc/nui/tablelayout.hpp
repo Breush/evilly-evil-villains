@@ -90,7 +90,7 @@ namespace nui
 
         void onSizeChanges() final;
         void onChildSizeChanges(scene::Entity& child) final;
-        void refreshDisplay() final;
+        void refreshNUI(const config::NUIGuides& cNUI) final;
 
         //! @}
 
@@ -125,6 +125,9 @@ namespace nui
         //! Refresh the height of all rows.
         void refreshRowsSize();
 
+        //! Refresh on auto padding changes.
+        void refreshPaddingAuto();
+
         //! @}
 
         //--------------------------//
@@ -132,10 +135,10 @@ namespace nui
         //! @{
 
         //! Whether the horizontal padding should be computed automatically.
-        PARAMGSU(bool, m_hPaddingAuto, hPaddingAuto, setHPaddingAuto, refreshDisplay)
+        PARAMGSU(bool, m_hPaddingAuto, hPaddingAuto, setHPaddingAuto, refreshPaddingAuto)
 
         //! Whether the vertical padding should be computed automatically.
-        PARAMGSU(bool, m_vPaddingAuto, vPaddingAuto, setVPaddingAuto, refreshDisplay)
+        PARAMGSU(bool, m_vPaddingAuto, vPaddingAuto, setVPaddingAuto, refreshPaddingAuto)
 
         //! @}
 
@@ -173,6 +176,9 @@ namespace nui
         std::vector<RowInfo> m_rows;    //!< The rows' data.
         std::vector<ColInfo> m_cols;    //!< The columns' data.
 
+        // Decorum
+        float m_hRefPadding;    //!< The horizontal padding from config.
+        float m_vRefPadding;    //!< The vertical padding from config.
         float m_hPadding;   //!< The horizontal padding.
         float m_vPadding;   //!< The vertical padding.
     };

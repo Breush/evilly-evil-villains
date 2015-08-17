@@ -9,9 +9,8 @@
 using namespace config;
 
 Display::Display()
-    : fullscreen(false)
-    , resolution(1024.f, 576.f) // 16/9
-    , nui(2)
+    : window({false, {1360.f, 768.f}})
+    , nui({2u, 3.f})
 {
     pugi::xml_document doc;
 
@@ -29,51 +28,65 @@ Display::Display()
     }
 
     // File is OK, parsing it
-    for (auto& param : config.children(L"param")) {
+    // Note: Groups are transparents, we don't really care
+    // if a parameter is not in the correct group
+    for (auto& group : config.children(L"group")) {
+    for (auto& param : group.children(L"param")) {
         std::wstring name = param.attribute(L"name").as_string();
 
-        // Fullscreen
+        // Window
         if (name == L"fullscreen") {
-            fullscreen = param.attribute(L"enabled").as_bool();
+            window.fullscreen = param.attribute(L"enabled").as_bool();
         }
-
-        // Resolution
         else if (name == L"resolution") {
-            resolution.x = param.attribute(L"width").as_float();
-            resolution.y = param.attribute(L"height").as_float();
+            window.resolution.x = param.attribute(L"width").as_float();
+            window.resolution.y = param.attribute(L"height").as_float();
         }
 
         // NUI
-        else if (name == L"nui") {
-            nui = param.attribute(L"size").as_uint();
+        else if (name == L"size") {
+            nui.size = param.attribute(L"value").as_uint();
         }
+        else if (name == L"fontFactor") {
+            nui.fontFactor = param.attribute(L"value").as_uint();
+        }
+    }
     }
 }
 
 void Display::save()
 {
-    pugi::xml_node param;
+    pugi::xml_node param, group;
 
     // Creating XML
     pugi::xml_document doc;
     auto config = doc.append_child(L"config");
     config.append_attribute(L"type") = L"display";
 
-    // Fullscreen
-    param = config.append_child(L"param");
-    param.append_attribute(L"name") = L"fullscreen";
-    param.append_attribute(L"enabled") = fullscreen;
+    // Window
+    group = config.append_child(L"group");
+    param.append_attribute(L"name") = L"window";
 
-    // Resolution
-    param = config.append_child(L"param");
+    param = group.append_child(L"param");
+    param.append_attribute(L"name") = L"fullscreen";
+    param.append_attribute(L"enabled") = window.fullscreen;
+
+    param = group.append_child(L"param");
     param.append_attribute(L"name") = L"resolution";
-    param.append_attribute(L"width") = resolution.x;
-    param.append_attribute(L"height") = resolution.y;
+    param.append_attribute(L"width") = window.resolution.x;
+    param.append_attribute(L"height") = window.resolution.y;
 
     // NUI
-    param = config.append_child(L"param");
+    group = config.append_child(L"group");
     param.append_attribute(L"name") = L"nui";
-    param.append_attribute(L"size") = nui;
+
+    param = group.append_child(L"param");
+    param.append_attribute(L"name") = L"size";
+    param.append_attribute(L"value") = nui.size;
+
+    param = group.append_child(L"param");
+    param.append_attribute(L"name") = L"fontFactor";
+    param.append_attribute(L"value") = nui.fontFactor;
 
     #if DEBUG_GLOBAL > 0
         doc.save_file("config/display_saved.xml");

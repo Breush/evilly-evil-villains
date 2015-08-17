@@ -77,7 +77,7 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    const auto& screenSize = Application::context().screenSize;
+    const auto& screenSize = Application::context().windowInfo.screenSize;
     const sf::Shader* initialShader = states.shader;
     sf::FloatRect glClipArea;
 
@@ -176,10 +176,22 @@ void Entity::updateChanges()
     }
 }
 
-void Entity::refreshDisplay()
+void Entity::refreshWindow(const config::WindowInfo& cWindow)
 {
     for (auto& child : m_children)
-        child->refreshDisplay();
+        child->refreshWindow(cWindow);
+}
+
+void Entity::refreshNUI(const config::NUIGuides& cNUI)
+{
+    for (auto& child : m_children)
+        child->refreshNUI(cNUI);
+}
+
+void Entity::refresh()
+{
+    refreshWindow(Application::context().windowInfo);
+    refreshNUI(Application::context().nuiGuides);
 }
 
 //-------------------------------//
@@ -609,6 +621,12 @@ void Entity::giveFocus()
 
 void Entity::setParent(Entity* inParent)
 {
+    // If it has no parent before,
+    // a refresh of NUI/Window is forced.
+    if (m_parent == nullptr && inParent != nullptr)
+        refresh();
+
+    // Affect new parent
     m_parent = inParent;
     refreshFromLocal();
     refreshRelativePosition();

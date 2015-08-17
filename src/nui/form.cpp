@@ -1,6 +1,5 @@
 #include "nui/form.hpp"
 
-#include "config/nui.hpp"
 #include "sfe/label.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 
@@ -10,8 +9,6 @@ Form::Form()
 {
     // Table
     attachChild(m_table);
-
-    refreshDisplay();
 }
 
 //-------------------//

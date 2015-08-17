@@ -48,6 +48,7 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     m_createVillainButton.showLines(false);
     m_createVillainButton.setRelativeOrigin({0.f, 1.0f});
     refreshVillainsList();
+    m_createVillainButton.setLocalPosition(m_villainBox.localPosition() - m_villainBox.getOrigin() + m_villainBox.size());
 
     // Buttons
     nuiRoot.attachChild(m_buttonsStacker);
@@ -59,18 +60,6 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
 
     m_buttons[0].setAction(_("Back"), [this] { stackPop(); });
     m_buttons[1].setAction(_("Create and start playing"), [this] { createAndPlayWorld(); });
-
-    refreshDisplay();
-}
-
-//-------------------//
-//----- Routine -----//
-
-void MenuCreateWorld::refreshDisplay()
-{
-    baseClass::refreshDisplay();
-
-    m_createVillainButton.setLocalPosition(m_villainBox.localPosition() - m_villainBox.getOrigin() + m_villainBox.size());
 }
 
 //------------------//

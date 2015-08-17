@@ -393,7 +393,8 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
     m_contextMenu.markForVisible(true);
 
     // Re-adjust, so that it does not get out of screen
-    const auto& resolution = Application::context().resolution;
+    // TODO Do that on a refreshWindow() call
+    const auto& resolution = Application::context().windowInfo.resolution;
     m_contextMenu.keepInside({0.f, 0.f, resolution.x, resolution.y});
 }
 

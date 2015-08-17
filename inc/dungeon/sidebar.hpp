@@ -59,7 +59,7 @@ namespace dungeon
         //! @name Routine
         //! @{
 
-        void refreshDisplay() final;
+        void refreshNUI(const config::NUIGuides& cNUI) final;
         void onSizeChanges() final;
         void onChildSizeChanges(scene::Entity& child) final;
 
@@ -112,5 +112,8 @@ namespace dungeon
         // Elements
         dungeon::Minimap m_minimap; //!< Shows the minimap of the dungeon.
         dungeon::Summary m_summary; //!< Shows the ressources.
+
+        // Decorum
+        float m_vPadding;   //!< Vertical padding.
     };
 }

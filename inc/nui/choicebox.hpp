@@ -118,7 +118,7 @@ namespace nui
 
         void onSizeChanges() override;
         void updateRoutine(const sf::Time& dt) final;
-        void refreshDisplay() override;
+        void refreshNUI(const config::NUIGuides& cNUI) override;
 
         //! @}
 

@@ -5,6 +5,8 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
+// TODO Move gauge into nui
+
 namespace sfe
 {
     //! A variable gauge entity to show a percentage.
@@ -83,7 +85,7 @@ namespace sfe
         //! @{
 
         void onSizeChanges() final;
-        void refreshDisplay() final;
+        void refreshNUI(const config::NUIGuides& cNUI) final;
 
         //! @}
 

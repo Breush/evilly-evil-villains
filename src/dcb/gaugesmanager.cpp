@@ -34,8 +34,6 @@ GaugesManager::GaugesManager()
     m_labels[GaugeID::CONFUSION].setText(_("Confusion"));
     m_labels[GaugeID::TRUST].setText(_("Trust"));
     m_labels[GaugeID::CONVICTION].setText(_("Conviction"));
-
-    refreshDisplay();
 }
 
 //-------------------//
@@ -44,11 +42,6 @@ GaugesManager::GaugesManager()
 void GaugesManager::onChildSizeChanges(scene::Entity&)
 {
     setSize(m_globalStacker.size());
-}
-
-void GaugesManager::refreshDisplay()
-{
-    baseClass::refreshDisplay();
 }
 
 //--------------------------//

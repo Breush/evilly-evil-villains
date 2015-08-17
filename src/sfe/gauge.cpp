@@ -1,6 +1,6 @@
 #include "sfe/gauge.hpp"
 
-#include "config/nui.hpp"
+#include "config/nuiguides.hpp"
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
 #include "tools/vector.hpp"
@@ -21,8 +21,6 @@ Gauge::Gauge()
     m_background.setOutlineThickness(1.f);
     m_background.setFillColor(sf::Color::Black);
     m_filler.setFillColor(sf::Color::White);
-
-    refreshDisplay();
 }
 
 //-------------------//
@@ -35,15 +33,14 @@ void Gauge::onSizeChanges()
     refreshFiller();
 }
 
-void Gauge::refreshDisplay()
+void Gauge::refreshNUI(const config::NUIGuides& cNUI)
 {
-    config::NUI cNUI;
+    baseClass::refreshNUI(cNUI);
 
     m_minHintSize = cNUI.hintSize * 4.f;
     m_maxHintSize = cNUI.hintSize / 8.f;
 
     updateSize();
-    baseClass::refreshDisplay();
 }
 
 //-------------------------//

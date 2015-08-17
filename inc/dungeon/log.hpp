@@ -64,7 +64,7 @@ namespace dungeon
 
         void onSizeChanges() final;
         void updateRoutine(const sf::Time& dt) final;
-        void refreshDisplay() final;
+        void refreshNUI(const config::NUIGuides& cNUI) final;
 
         //! @}
 

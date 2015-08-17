@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
 <config type="display">
-	<param name="fullscreen" enabled="false" />
-	<param name="resolution" width="1360" height="768" />
-	<param name="nui" size="2" />
+	<group type="window">
+		<param name="fullscreen" enabled="false" />
+		<param name="resolution" width="1360" height="768" />
+	</group>
+	<group type="nui">
+		<param name="size" value="2" />
+		<param name="fontFactor" value="3." />
+	</group>
 </config>

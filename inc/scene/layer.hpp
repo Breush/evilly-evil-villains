@@ -6,6 +6,14 @@
 
 #include <functional>
 
+// Forward declarations
+
+namespace config
+{
+    class NUIGuides;
+    class WindowInfo;
+}
+
 namespace scene
 {
     //! A layer within the Graph.
@@ -38,8 +46,11 @@ namespace scene
         //! Set target to layer view and draw layer recursively.
         void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
 
-        //! Reset the view to current screen status.
-        void refreshDisplay();
+        //! Reset views to current screen status.
+        void refreshWindow(const config::WindowInfo& cWindow);
+
+        //! Refresh NUI appearance.
+        void refreshNUI(const config::NUIGuides& cNUI);
 
         //! Refresh from size change.
         void refreshSize();
@@ -80,6 +91,9 @@ namespace scene
         //! Even if not found, viewPos is set to the position within the layer view.
         Entity* entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos);
 
+        //! Called whenever manipuability status changed.
+        void refreshManipulability();
+
         //! @}
 
         //---------------------//
@@ -112,7 +126,7 @@ namespace scene
         //! @{
 
         //! Whether the layer needs to control the view.
-        PARAMGSU(bool, m_manipulable, manipulable, setManipulable, refreshDisplay)
+        PARAMGSU(bool, m_manipulable, manipulable, setManipulable, refreshManipulability)
 
         //! The size of the region that can be displayed.
         PARAMGSU(sf::Vector2f, m_size, size, setSize, refreshSize)

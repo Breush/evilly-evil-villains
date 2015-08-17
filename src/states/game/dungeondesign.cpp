@@ -97,8 +97,6 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     scene().layer("FAR").fitToVisibleRect(m_sceneFar);
     scene().layer("HORIZON").fitToVisibleRect(m_sceneHorizon);
     scene().layer("SKY").fitToVisibleRect(m_sceneSky);
-
-    refreshDisplay();
 }
 
 //-------------------//
@@ -110,13 +108,13 @@ bool GameDungeonDesign::update(const sf::Time& dt)
     return baseClass::update(dt);
 }
 
-void GameDungeonDesign::refreshDisplay()
+void GameDungeonDesign::refreshWindow(const config::WindowInfo& cWindow)
 {
-    baseClass::refreshDisplay();
+    baseClass::refreshWindow(cWindow);
 
     const auto& window = Application::context().window;
-    const auto& screenSize = Application::context().screenSize;
-    const auto& resolution = Application::context().resolution;
+    const auto& screenSize = cWindow.screenSize;
+    const auto& resolution = cWindow.resolution;
 
     // Log
     m_dungeonLog.setWidth(resolution.x / 4.f);
@@ -130,6 +128,11 @@ void GameDungeonDesign::refreshDisplay()
     const sf::FloatRect sceneRect{0.f, 0.f, resolution.x - sidebarWidth, resolution.y};
     auto sceneScreenRect = tools::mapRectCoordsToPixel(window, sceneRect);
     scene().setViewport(sceneScreenRect / screenSize);
+
+    // FIXME There a bug here: apparently, window is not completely in final state
+    // and mapRectCoordsToPixel gives wrong values.
+    // Go to fullscreen (F11) when on GameDungeonDesign state to see the problem.
+    std::cerr << sceneScreenRect << " " << screenSize << std::endl;
 
     // Center view
     scene().centerRelative({0.5f, 1.f});

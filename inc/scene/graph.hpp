@@ -12,23 +12,40 @@
 
 namespace scene
 {
-    /** scene::Graph
-     *      Manage focus and hovering through different layers
-     **/
+    // TODO DOC
+
+    //! Scene graph to manage draing, focus and events of entities.
 
     class Graph final : public sf::Drawable
     {
     public:
+
+        //! Constructor.
         Graph();
+
+        //! Default destructor.
         ~Graph() = default;
 
-        // Routine
-        void update(const sf::Time& dt);
-        void handleEvent(const sf::Event& event);
-        void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+        //----------------//
+        //! @name Routine
+        //! @{
 
-        //! Reset the scene's views to current screen status.
-        void refreshDisplay();
+        //! Draw the graph recursively.
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
+
+        //! Update the graph recursively.
+        void update(const sf::Time& dt);
+
+        //! Handle event recursively.
+        void handleEvent(const sf::Event& event);
+
+        //! Reset views to current screen status.
+        void refreshWindow(const config::WindowInfo& cWindow);
+
+        //! Refresh NUI appearance.
+        void refreshNUI(const config::NUIGuides& cNUI);
+
+        //! @}
 
         // Access layers
         Layer& nuiLayer() { return m_nuiLayer; }

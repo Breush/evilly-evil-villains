@@ -7,11 +7,8 @@
 
 void VisualDebug::init()
 {
-    refreshDisplay();
-
     // Getting font from holder
     m_text.setPosition(10.f, 10.f);
-    m_text.setCharacterSize(16);
     m_text.setColor(sf::Color::White);
     m_text.setFont(Application::context().fonts.get(FontID::MONO));
 
@@ -45,29 +42,30 @@ void VisualDebug::update(const sf::Time& dt)
     }
 }
 
-void VisualDebug::draw()
+void VisualDebug::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     returnif (!m_visible);
 
     // Update internal state
-    ++m_renderedFrames;
+    ++const_cast<uint&>(m_renderedFrames);
 
     // Draw
-    auto& window = Application::context().window;
-    window.setView(m_view);
-    window.draw(m_background);
-    window.draw(m_text);
+    target.setView(m_view);
+    target.draw(m_background, states);
+    target.draw(m_text, states);
 }
 
-void VisualDebug::refreshDisplay()
+void VisualDebug::refreshWindow(const config::WindowInfo& cWindow)
 {
-    const auto& resolution = Application::context().resolution;
-    const auto& viewport = Application::context().viewport;
-
     // The view
-    m_view.setViewport(viewport);
-    m_view.setSize(resolution);
-    m_view.setCenter(resolution / 2.f);
+    m_view.setViewport(cWindow.viewport);
+    m_view.setSize(cWindow.resolution);
+    m_view.setCenter(cWindow.resolution / 2.f);
+}
+
+void VisualDebug::refreshNUI(const config::NUIGuides& cNUI)
+{
+    m_text.setCharacterSize(cNUI.fontSize);
 }
 
 //-----------------------------------//

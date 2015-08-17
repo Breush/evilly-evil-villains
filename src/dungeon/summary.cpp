@@ -2,7 +2,6 @@
 
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
-#include "config/nui.hpp"
 #include "context/villains.hpp"
 #include "dungeon/data.hpp"
 
@@ -30,8 +29,6 @@ Summary::Summary()
 
     m_bars[BAR_DOSH].text.setColor({190u, 171u, 21u});
     m_bars[BAR_FAME].text.setColor({102u, 151u, 196u});
-
-    refreshDisplay();
 }
 
 //-------------------//
@@ -51,9 +48,9 @@ void Summary::updateSize()
     setSize({maxWidth, m_vPadding + (BAR_COUNT + 1.f) * m_barHeight});
 }
 
-void Summary::refreshDisplay()
+void Summary::refreshNUI(const config::NUIGuides& cNUI)
 {
-    config::NUI cNUI;
+    baseClass::refreshNUI(cNUI);
 
     m_barImageSide = cNUI.fontVSpace;
     m_fontSize = cNUI.fontSize;
@@ -80,7 +77,6 @@ void Summary::refreshDisplay()
     }
 
     updateSize();
-    baseClass::refreshDisplay();
 }
 
 //------------------------//

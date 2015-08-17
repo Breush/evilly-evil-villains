@@ -4,9 +4,18 @@
 
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/View.hpp>
+#include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/System/Time.hpp>
 #include <SFML/System/NonCopyable.hpp>
+
+// Forward declarations
+
+namespace config
+{
+    class NUIGuides;
+    class WindowInfo;
+}
 
 //! A state-stack-independent class to print debug information.
 /*!
@@ -15,7 +24,7 @@
  *  we might also print it.
  */
 
-class VisualDebug final : sf::NonCopyable
+class VisualDebug final : public sf::Drawable, private sf::NonCopyable
 {
 public:
 
@@ -33,10 +42,13 @@ public:
     void update(const sf::Time& dt);
 
     //! Basic drawing to the main window.
-    void draw();
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
 
     //! Reset the views to current screen status.
-    void refreshDisplay();
+    void refreshWindow(const config::WindowInfo& cWindow);
+
+    //! Refresh states' NUI appearance.
+    void refreshNUI(const config::NUIGuides& cNUI);
 
     //! @}
 

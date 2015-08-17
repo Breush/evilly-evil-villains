@@ -11,10 +11,15 @@ void Application::loadSounds()
     s_context.sounds.load(SoundID::NUI_ACCEPT, "res/snd/accept.wav");
     s_context.sounds.load(SoundID::NUI_REFUSE, "res/snd/refuse.wav");
     s_context.sounds.load(SoundID::NUI_SELECT, "res/snd/select.wav");
+
+    refreshSounds();
 }
 
 void Application::refreshSounds()
 {
-    s_context.sounds.setListenerPosition(s_context.resolution / 2.f);
-    s_context.sounds.setVolume(s_context.sound.effectiveSoundVolume);
+    const auto& resolution = s_context.windowInfo.resolution;
+    const auto& effectiveSoundVolume = s_context.sound.effectiveSoundVolume;
+
+    s_context.sounds.setListenerPosition(resolution / 2.f);
+    s_context.sounds.setVolume(effectiveSoundVolume);
 }

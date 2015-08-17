@@ -6,8 +6,11 @@
 #include "resources/soundplayer.hpp"
 #include "resources/animationholder.hpp"
 #include "states/statestack.hpp"
+#include "config/windowinfo.hpp"
+#include "config/nuiguides.hpp"
 #include "config/display.hpp"
 #include "config/sound.hpp"
+#include "tools/int.hpp"
 
 #include <SFML/System/Time.hpp>
 #include <SFML/System/NonCopyable.hpp>
@@ -33,33 +36,25 @@ public:
     //! This structure holds all resources managers and window/screen information.
     struct Context
     {
-        //! Initialize window and screen context.
-        /*!
-         *  @parma iResolution  The resolution to be used.
-         *  @param iTitle       The title of the window.
-         *  @param iStyle       The SFML flags to set the style of the window.
-         */
-        void init(const sf::Vector2f& iResolution, const std::string& iTitle, const uint32_t& iStyle);
+        //! Constructor.
+        Context() : windowInfo(display.window) {}
 
-        sf::Vector2f resolution;        //!< The current resolution.
-        sf::FloatRect viewport;         //!< The current viewport.
-        sf::Vector2f screenSize;        //!< Represents the dimension of the drawable part of the window,
-                                        //! it should be reset at each resize.
-        sf::Vector2f effectiveDisplay;  //!< Represents the dimensions of the viewport centered
-                                        //! for the window, keeping the same ratio as resolution.
-        std::string title;              //!< The title of the window.
-        uint32_t style;                 //!< The style of the window, as defined by SFML.
+        //! Recreates the window from current config::WindowInfo.
+        void recreateWindow();
 
-        sf::RenderWindow window;                //!< The window, final destination of all draws.
-        resources::TextureHolder textures;      //!< The textures.
-        resources::ShaderHolder shaders;        //!< The shaders.
-        resources::FontHolder fonts;            //!< The fonts.
-        resources::MusicPlayer musics;          //!< The musics.
-        resources::SoundPlayer sounds;          //!< The sounds.
-        resources::AnimationHolder animations;  //!< The animations, parsed SCML files.
+        sf::RenderWindow window;    //!< The window, final destination of all draws.
 
-        config::Display display;    //!< The display configuration.
-        config::Sound   sound;      //!< The sound configuration.
+        resources::TextureHolder    textures;   //!< The textures.
+        resources::ShaderHolder     shaders;    //!< The shaders.
+        resources::FontHolder       fonts;      //!< The fonts.
+        resources::MusicPlayer      musics;     //!< The musics.
+        resources::SoundPlayer      sounds;     //!< The sounds.
+        resources::AnimationHolder  animations; //!< The animations, parsed SCML files.
+
+        config::Display     display;    //!< The display configuration.
+        config::Sound       sound;      //!< The sound configuration.
+        config::NUIGuides   nuiGuides;  //!< Guidelines for NUI elements.
+        config::WindowInfo  windowInfo; //!< Extra informations for window parameters.
     };
 
     //! Access the static context to get resources and window/screen information.
@@ -67,8 +62,9 @@ public:
 
 public:
 
-    //-----------------------//
-    //----- Application -----//
+    //--------------------//
+    //! @name Application
+    //! @{
 
     //! Application constructor.
     Application();
@@ -83,10 +79,13 @@ public:
      */
     void run();
 
+    //! @}
+
 protected:
 
-    //-------------------------------//
-    //----- Logic and rendering -----//
+    //----------------------------//
+    //! @name Logic and rendering
+    //! @{
 
     //! Input polling.
     /*!
@@ -112,8 +111,11 @@ protected:
      */
     void render();
 
-    //-----------------------------//
-    //----- Window management -----//
+    //! @}
+
+    //--------------------------//
+    //! @name Window management
+    //! @{
 
     //! Poll out all events from the window.
     void clearWindowEvents();
@@ -129,14 +131,11 @@ protected:
     //! Quick way switch to switch fullscreen mode, recreate a context and refresh.
     void switchFullscreenMode();
 
-    //! Tells the components that need screen information to refresh.
-    /*!
-     *  Views and shaders will update there internal information.
-     */
-    void refresh();
+    //! @}
 
-    //-----------------------------------//
-    //----- Pre-loading and refresh -----//
+    //--------------------------------//
+    //! @name Pre-loading and refresh
+    //! @{
 
     void loadTextures();    //!< Load textures into memory.
     void loadShaders();     //!< Load shaders into memory.
@@ -146,12 +145,15 @@ protected:
     void loadAnimations();  //!< Load animations into memory.
     void loadStates();      //!< Register states.
 
-    void refreshDisplay();  //!< Adapt all views to current window settings.
+    void refreshNUI();      //!< Adapt all NUI elements.
+    void refreshWindow();   //!< Adapt all views to current window settings.
     void refreshShaders();  //!< Adapt all shaders to current window settings.
     void refreshSounds();   //!< Adapt all sounds position/volume to current settings.
 
     void updateShaders(const sf::Time& dt);     //!< Animate the shaders.
     void updateAnimations(const sf::Time& dt);  //!< Animate the currently played animations.
+
+    //! @}
 
 private:
 
@@ -173,10 +175,8 @@ private:
     //! The initial state push into the stack (not fixed for easy debugging).
     StateID m_initialState;
 
-    //! The stack of states.
-    states::StateStack m_stateStack;
-
-    //! The debug information.
-    VisualDebug m_visualDebug;
+    // Visual part
+    states::StateStack m_stateStack;    //!< The stack of states.
+    VisualDebug m_visualDebug;          //!< The debug information.
 };
 

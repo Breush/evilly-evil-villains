@@ -1,7 +1,5 @@
 #pragma once
 
-#include "config/nui.hpp"
-
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
@@ -92,26 +90,10 @@ namespace scene
         Grabbable() = delete;
 
         //! Constructor given the original spawner.
-        Grabbable(GrabbableSpawner& spawner) : m_spawner(spawner)
-        {
-            refreshDisplay();
-        }
+        Grabbable(GrabbableSpawner& spawner) : m_spawner(spawner) {}
 
         //! Default destructor.
         virtual ~Grabbable() = default;
-
-        //----------------//
-        //! @name Routine
-        //! @{
-
-        //! To be called whenever the config NUI changed (managed by scene::Graph).
-        inline void refreshDisplay()
-        {
-            config::NUI cNUI;
-            m_sizeHint = {cNUI.hintImageSide, cNUI.hintImageSide};
-        }
-
-        //! @}
 
         //-----------------//
         //! @name Callback
@@ -137,6 +119,6 @@ namespace scene
         GrabbableSpawner& m_spawner;
 
         //! An indicator to set the size of the derived grabbable.
-        sf::Vector2f m_sizeHint;
+        sf::Vector2f m_sizeHint = sf::Vector2f{25.f, 25.f};
     };
 }

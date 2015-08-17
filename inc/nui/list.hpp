@@ -93,7 +93,7 @@ namespace nui
 
         void updateRoutine(const sf::Time& dt) final;
         void onSizeChanges() final;
-        void refreshDisplay() final;
+        void refreshNUI(const config::NUIGuides& cNUI) final;
 
         //! @}
 

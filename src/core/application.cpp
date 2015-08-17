@@ -2,7 +2,6 @@
 
 #include "tools/debug.hpp"
 #include "tools/vector.hpp"
-#include "config/display.hpp"
 #include "states/identifiers.hpp"
 
 #include <SFML/Window/Event.hpp>
@@ -16,12 +15,11 @@ Application::Context Application::s_context;
 //-------------------//
 //----- Context -----//
 
-void Application::Context::init(const sf::Vector2f& iResolution, const std::string& iTitle, const uint32_t& iStyle)
+void Application::Context::recreateWindow()
 {
-    title = iTitle;
-    style = iStyle;
-    resolution = iResolution;
-    effectiveDisplay = resolution;
+    const auto& title = windowInfo.title;
+    const auto& style = windowInfo.style;
+    const auto& resolution = display.window.resolution;
 
     if (window.isOpen())
         window.close();
@@ -32,7 +30,8 @@ void Application::Context::init(const sf::Vector2f& iResolution, const std::stri
         throw std::runtime_error("Cannot initialize window.");
 
     window.setVerticalSyncEnabled(true);
-    screenSize = sf::v2f(window.getSize());
+    windowInfo.screenSize = sf::v2f(window.getSize());
+    windowInfo.recompute();
 }
 
 //-----------------//
@@ -55,10 +54,15 @@ Application::Application()
     cleanExtraFiles();
 #endif
 
-    s_context.init(s_context.display.resolution, "Evilly Evil Villains", sf::Style::Default);
-    if (s_context.display.fullscreen) switchFullscreenMode();
-    else refresh();
+    // Context - create window
+    s_context.windowInfo.title = "Evilly Evil Villains";
+    s_context.windowInfo.style = sf::Style::Default;
+    if (s_context.display.window.fullscreen) switchFullscreenMode();
+    else s_context.recreateWindow();
 
+    // Load all on start
+    // TODO Well, do not ALL on start,
+    // or, at least, do it during some splash/loading-screen
     loadTextures();
     loadShaders();
     loadFonts();
@@ -67,8 +71,13 @@ Application::Application()
     loadAnimations();
     loadStates();
 
+    // All is ready, go for it
     m_stateStack.pushState(m_initialState);
     m_visualDebug.init();
+
+    // Full refresh on start
+    refreshWindow();
+    refreshNUI();
 }
 
 void Application::run()
@@ -159,22 +168,28 @@ void Application::processInput()
             // NUI quick size change
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
                 if (event.key.code == sf::Keyboard::Numpad8) {
-                    s_context.display.nui += 1u;
-                    std::cerr << "NUI size: " << s_context.display.nui << std::endl;
-                    refreshDisplay();
-                    continue;
-                }
-
-                if (event.key.code == sf::Keyboard::Numpad5) {
-                    std::cerr << "Refresh display" << std::endl;
-                    refreshDisplay();
+                    s_context.display.nui.size += 1u;
+                    std::cerr << "NUI size: " << s_context.display.nui.size << std::endl;
+                    refreshNUI();
                     continue;
                 }
 
                 if (event.key.code == sf::Keyboard::Numpad2) {
-                    if (s_context.display.nui != 0u) s_context.display.nui -= 1u;
-                    std::cerr << "NUI size: " << s_context.display.nui << std::endl;
-                    refreshDisplay();
+                    if (s_context.display.nui.size != 0u) s_context.display.nui.size -= 1u;
+                    std::cerr << "NUI size: " << s_context.display.nui.size << std::endl;
+                    refreshNUI();
+                    continue;
+                }
+
+                if (event.key.code == sf::Keyboard::Numpad7) {
+                    std::cerr << "Forcing refreshNUI()" << std::endl;
+                    refreshNUI();
+                    continue;
+                }
+
+                if (event.key.code == sf::Keyboard::Numpad9) {
+                    std::cerr << "Forcing refreshWindow()" << std::endl;
+                    refreshWindow();
                     continue;
                 }
             }
@@ -189,12 +204,12 @@ void Application::processInput()
             break;
         }
 
-        // Resizing window
+        // Resizing window (grab only the last of these events)
         if (event.type == sf::Event::Resized) {
-            // Grab only the last resize event
             clearWindowEvents(event, sf::Event::Resized);
-            s_context.screenSize = sf::Vector2f(event.size.width, event.size.height);
-            refresh();
+            s_context.windowInfo.screenSize = sf::Vector2f(event.size.width, event.size.height);
+            s_context.windowInfo.recompute();
+                    refreshWindow();
             break;
         }
 
@@ -216,38 +231,31 @@ void Application::update(const sf::Time& dt)
 void Application::render()
 {
     s_context.window.clear();
-
-    m_stateStack.draw();
-    m_visualDebug.draw();
-
+    s_context.window.draw(m_stateStack);
+    s_context.window.draw(m_visualDebug);
     s_context.window.display();
 }
 
 //-----------------------------//
 //----- Window management -----//
 
-void Application::refreshDisplay()
+void Application::refreshNUI()
 {
-    const auto& screenSize = s_context.screenSize;
-    const auto& resolution = s_context.resolution;
+    s_context.nuiGuides.recompute(s_context.display.nui);
 
-    s_context.viewport = {0.f, 0.f, 1.f, 1.f};
-    const auto viewRatio = screenSize / resolution;
+    m_stateStack.refreshNUI(s_context.nuiGuides);
+    m_visualDebug.refreshNUI(s_context.nuiGuides);
+}
 
-    if (viewRatio.x > viewRatio.y) {
-        s_context.viewport.width = viewRatio.y / viewRatio.x;
-        s_context.viewport.left = (1.f - s_context.viewport.width) / 2.f;
-    }
-    else if (viewRatio.x < viewRatio.y) {
-        s_context.viewport.height = viewRatio.x / viewRatio.y;
-        s_context.viewport.top = (1.f - s_context.viewport.height) / 2.f;
-    }
-
-    s_context.effectiveDisplay = {screenSize.x * s_context.viewport.width, screenSize.y * s_context.viewport.height};
-
+void Application::refreshWindow()
+{
     // Refresh all views
-    m_stateStack.refreshDisplay();
-    m_visualDebug.refreshDisplay();
+    m_stateStack.refreshWindow(s_context.windowInfo);
+    m_visualDebug.refreshWindow(s_context.windowInfo);
+
+    // Refresh shaders
+    refreshShaders();
+    refreshSounds();
 }
 
 void Application::clearWindowEvents()
@@ -267,15 +275,7 @@ void Application::clearWindowEvents(sf::Event& event, sf::Event::EventType type)
 void Application::switchFullscreenMode()
 {
     // Switching fullscreen flag
-    s_context.style ^= sf::Style::Fullscreen;
-    s_context.init(s_context.resolution, s_context.title, s_context.style);
-    refresh();
+    s_context.windowInfo.style ^= sf::Style::Fullscreen;
+    s_context.recreateWindow();
+    refreshWindow();
 }
-
-void Application::refresh()
-{
-    refreshSounds();
-    refreshShaders();
-    refreshDisplay();
-}
-

@@ -2,6 +2,7 @@
 
 #include "states/state.hpp"
 
+#include <SFML/Graphics/Drawable.hpp>
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/System/Time.hpp>
 
@@ -9,6 +10,8 @@
 #include <utility>
 #include <functional>
 #include <map>
+
+// Forward declarations
 
 namespace sf
 {
@@ -18,18 +21,65 @@ namespace sf
 
 namespace states
 {
-    class StateStack : private sf::NonCopyable
+    //! States manager as a stacked states machine.
+
+    class StateStack final : public sf::Drawable, private sf::NonCopyable
     {
     public:
-        enum class Action {
-            PUSH,
-            POP,
-            CLEAR,
-        };
 
-    public:
-        explicit StateStack() = default;
+        //! Default constructor.
+        StateStack() = default;
 
+        //! Default destructor.
+        ~StateStack() = default;
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        //! Draw the stack.
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
+
+        //! Update the states.
+        void update(const sf::Time& dt);
+
+        //! Handle event.
+        void handleEvent(const sf::Event& event);
+
+        //! Reset the states' views to current screen status.
+        void refreshWindow(const config::WindowInfo& cWindow);
+
+        //! Refresh states' NUI appearance.
+        void refreshNUI(const config::NUIGuides& cNUI);
+
+        //! @}
+
+        //--------------//
+        //! @name Stack
+        //! @{
+
+        //! Return true is stack has no state active in it.
+        bool isEmpty() const;
+
+        //! Return true is specified state exists in stack.
+        bool isStateVisible(StateID stateID) const;
+
+        //! @}
+
+        //----------------------//
+        //! @name State control
+        //! @{
+
+        //! Push a state to the front.
+        void pushState(StateID stateID);
+
+        //! Pop front-most state.
+        void popState();
+
+        //! Pops all states.
+        void clearStates();
+
+        //! Add a new state to the factory.
         template <typename T>
         void registerState(StateID stateID)
         {
@@ -38,34 +88,46 @@ namespace states
             };
         }
 
-        void update(const sf::Time& dt);
-        void draw();
-        void handleEvent(const sf::Event& event);
+        //! @}
 
-        void pushState(StateID stateID);
-        void popState();
-        void clearStates();
+    protected:
 
-        bool isEmpty() const;
-        bool isStateVisible(StateID stateID) const;
+        //--------------//
+        //! @name Stack
+        //! @{
 
-        //! Reset the states' views to current screen status.
-        void refreshDisplay();
-
-    private:
+        //! Create a state from its ID.
         std::unique_ptr<State> createState(StateID stateID);
+
+        //! Apply all pending changes.
         void applyPendingChanges();
 
-        struct PendingChange {
-            explicit PendingChange(Action inAction, StateID inStateID) : action(inAction), stateID(inStateID) {}
+        //! @}
 
-            Action action;
-            StateID stateID;
+        //! Possible actions to do with states.
+        enum class Action
+        {
+            PUSH,   //!< Add a state on top.
+            POP,    //!< Remove the state on top.
+            CLEAR,  //!< Remove all states.
+        };
+
+        //! An action to do on a state.
+        struct PendingChange
+        {
+            Action action;      //!< The action.
+            StateID stateID;    //!< The state.
         };
 
     private:
+
+        //! The stack consists in a stack of states.
         std::vector<std::unique_ptr<State>> m_stack;
-        std::vector<PendingChange> m_pendingList;
+
+        //! The pending changes list.
+        std::vector<PendingChange> m_pendingChanges;
+
+        //! Creates states according to their ID.
         std::map<StateID, std::function<std::unique_ptr<State>()>> m_factories;
     };
 }

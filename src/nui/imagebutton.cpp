@@ -2,7 +2,6 @@
 
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
-#include "config/nui.hpp"
 #include "tools/vector.hpp"
 
 using namespace nui;
@@ -14,8 +13,6 @@ ImageButton::ImageButton()
 
     // Image
     addPart(&m_image);
-
-    refreshDisplay();
 }
 
 //-------------------//
@@ -42,14 +39,12 @@ void ImageButton::onSizeChanges()
     }
 }
 
-void ImageButton::refreshDisplay()
+void ImageButton::refreshNUI(const config::NUIGuides& cNUI)
 {
-    config::NUI cNUI;
+    baseClass::refreshNUI(cNUI);
 
     m_imageSize = {cNUI.hintImageSide, cNUI.hintImageSide};
     m_vPadding = cNUI.vPadding;
-
-    baseClass::refreshDisplay();
 }
 
 //-------------------//

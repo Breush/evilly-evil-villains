@@ -42,14 +42,6 @@ namespace states
 
     protected:
 
-        //----------------//
-        //! @name Routine
-        //! @{
-
-        void refreshDisplay() final;
-
-        //! @}
-
         //---------------//
         //! @name Events
         //! @{

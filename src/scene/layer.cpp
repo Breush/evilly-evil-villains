@@ -15,10 +15,6 @@ Layer::Layer(Graph* graph)
     m_root.setDetectable(false);
     m_root.setFocusable(false);
     m_root.setTransparent(true);
-
-    // Keep visible so that children will be drawn
-
-    refreshDisplay();
 }
 
 //-------------------//
@@ -37,30 +33,28 @@ void Layer::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Layer::refreshSize()
 {
-    refreshDisplay();
+    // Set the root entity to the size of the layer.
+    // This is used for relative positionning of entities.
+    m_root.setSize(m_size);
+    refreshManipulability();
 
     if (m_onSizeChangesCallback != nullptr)
         m_onSizeChangesCallback();
 }
 
-void Layer::refreshDisplay()
+void Layer::refreshWindow(const config::WindowInfo& cWindow)
 {
-    if (!m_ownViewport) {
-        const auto& viewport = Application::context().viewport;
-        m_view.setViewport(viewport);
-    }
-
-    // Set the root entity to the size of the layer.
-    // This is used for relative positionning of entities.
-    m_root.setSize(m_size);
-
-    if (!m_manipulable) {
-        m_view.setSize(m_size);
-        m_view.setCenter(m_size / 2.f);
-    }
+    if (!m_ownViewport)
+        m_view.setViewport(cWindow.viewport);
 
     // Recursively update the whole layer.
-    m_root.refreshDisplay();
+    m_root.refreshWindow(cWindow);
+}
+
+void Layer::refreshNUI(const config::NUIGuides& cNUI)
+{
+    // Recursively update the whole layer.
+    m_root.refreshNUI(cNUI);
 }
 
 //-------------------//
@@ -121,4 +115,12 @@ Entity* Layer::entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& vi
     const auto& window = Application::context().window;
     viewPos = window.mapPixelToCoords(mousePos, m_view);
     return m_root.firstOver(viewPos);
+}
+
+void Layer::refreshManipulability()
+{
+    if (!m_manipulable) {
+        m_view.setSize(m_size);
+        m_view.setCenter(m_size / 2.f);
+    }
 }

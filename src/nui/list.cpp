@@ -2,7 +2,6 @@
 
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
-#include "config/nui.hpp"
 #include "sfe/label.hpp"
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
@@ -22,8 +21,6 @@ List::List()
     // Highlight
     m_selectionHighlight.setFillColor({255u, 255u, 255u, 32u});
     m_hoverHighlight.setFillColor(sf::Color::Transparent);
-
-    refreshDisplay();
 }
 
 //-------------------//
@@ -44,17 +41,15 @@ void List::onSizeChanges()
     refreshBordersPosition();
 }
 
-void List::refreshDisplay()
+void List::refreshNUI(const config::NUIGuides& cNUI)
 {
-    baseClass::refreshDisplay();
-
-    config::NUI cNUI;
+    baseClass::refreshNUI(cNUI);
 
     m_headerOffset = 3.f * cNUI.fontHSpace;
     m_lineHeight = cNUI.borderThick + cNUI.fontVSpace + 2.f * cNUI.vPadding;
     m_table.setDimensions(0u, m_columns.size(), m_lineHeight);
 
-    // Refresh selection highlight.
+    // Refresh selection highlight
     if (!m_lines.empty()) selectLine(m_selectedLine);
 
     refreshBordersPosition();

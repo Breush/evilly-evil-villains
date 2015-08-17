@@ -33,16 +33,23 @@ void Scene::draw(sf::RenderTarget& target, sf::RenderStates states) const
     for (auto& layer : m_layers)
         target.draw(*layer, states);
 }
-void Scene::refreshDisplay()
+
+void Scene::refreshWindow(const config::WindowInfo& cWindow)
 {
-    if (!m_ownViewport) {
-        const auto& viewport = Application::context().viewport;
-        m_refView.setViewport(viewport);
-    }
+    // Viewport
+    if (!m_ownViewport)
+        m_refView.setViewport(cWindow.viewport);
 
     // Layers
     for (auto& layer : m_layers)
-        layer->refreshDisplay();
+        layer->refreshWindow(cWindow);
+}
+
+void Scene::refreshNUI(const config::NUIGuides& cNUI)
+{
+    // Layers
+    for (auto& layer : m_layers)
+        layer->refreshNUI(cNUI);
 }
 
 //----------------------------//
@@ -204,8 +211,8 @@ void Scene::adaptViewZoom()
 
 void Scene::updateReferenceMinMax()
 {
-    const auto& viewport = (m_ownViewport)? m_viewport : Application::context().viewport;
-    const auto& screenSize = Application::context().screenSize;
+    const auto& viewport = (m_ownViewport)? m_viewport : Application::context().windowInfo.viewport;
+    const auto& screenSize = Application::context().windowInfo.screenSize;
     sf::Vector2f viewportSize{viewport.width * screenSize.x, viewport.height * screenSize.y};
 
     auto viewRatio = viewportSize.x / viewportSize.y;

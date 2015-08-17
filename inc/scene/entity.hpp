@@ -20,6 +20,12 @@ namespace sf
     class Event;
 }
 
+namespace config
+{
+    class NUIGuides;
+    class WindowInfo;
+}
+
 namespace scene
 {
     // Forward declarations
@@ -230,8 +236,14 @@ namespace scene
         //! Check and call parent on changes if options enabled.
         void updateChanges();
 
-        //! Called whenever the screen config changed.
-        virtual void refreshDisplay();
+        //! Refresh on window config changed.
+        virtual void refreshWindow(const config::WindowInfo& cWindow);
+
+        //! Refresh NUI appearance.
+        virtual void refreshNUI(const config::NUIGuides& cNUI);
+
+        //! Full refresh (window + NUI).
+        void refresh();
 
         //! @}
 

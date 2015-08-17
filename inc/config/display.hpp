@@ -14,9 +14,19 @@ namespace config
         //! Save the data to the corresponding config file.
         void save();
 
-        bool fullscreen;            //!< Whether the fullscreen is enabled.
-        sf::Vector2f resolution;    //!< The resolution used to play the game.
-        uint nui;                   //!< The size of the user interface.
+        //! Window specific parameters.
+        struct Window
+        {
+            bool fullscreen;            //!< Whether the fullscreen is enabled.
+            sf::Vector2f resolution;    //!< The resolution used to play the game.
+        } window;
+
+        //! NUI specific parameters.
+        struct NUI
+        {
+            uint size;              //!< The reference size of the user interface.
+            float fontFactor;       //!< Font factor as reference.
+        } nui;
     };
 }
 

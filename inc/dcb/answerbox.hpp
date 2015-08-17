@@ -60,7 +60,7 @@ namespace dcb
         //! @{
 
         void onSizeChanges();
-        void refreshDisplay() final;
+        void refreshNUI(const config::NUIGuides& cNUI) final;
 
         //! @}
 

@@ -45,11 +45,14 @@ namespace sfe
 
     protected:
         void updateSize();
-        void refreshDisplay() final;
+        void refreshNUI(const config::NUIGuides& cNUI) final;
 
     private:
 
         Prestyle m_prestyle = Prestyle::NONE;
         sf::Text m_text;
+
+        // Decorum
+        float m_fontSize;   //!< Reference font size.
     };
 }

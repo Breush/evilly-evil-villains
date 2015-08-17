@@ -2,7 +2,6 @@
 
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
-#include "config/nui.hpp"
 
 using namespace sfe;
 
@@ -11,8 +10,6 @@ Label::Label()
     setDetectable(false);
 
     addPart(&m_text);
-
-    refreshDisplay();
 }
 
 //-------------------//
@@ -24,14 +21,14 @@ void Label::updateSize()
     setSize({bounds.left + bounds.width, bounds.top + bounds.height});
 }
 
-void Label::refreshDisplay()
+void Label::refreshNUI(const config::NUIGuides& cNUI)
 {
-    config::NUI cNUI;
+    baseClass::refreshNUI(cNUI);
+
+    m_fontSize = cNUI.fontSize;
 
     if (m_prestyle != Prestyle::NONE) setPrestyle(m_prestyle);
     else setCharacterSize(cNUI.fontSize);
-
-    baseClass::refreshDisplay();
 }
 
 //------------------//
@@ -71,8 +68,6 @@ void Label::setPrestyle(Prestyle prestyle)
 {
     m_prestyle = prestyle;
 
-    config::NUI cNUI;
-
     switch (m_prestyle)
     {
         case Prestyle::NONE:
@@ -81,46 +76,46 @@ void Label::setPrestyle(Prestyle prestyle)
         case Prestyle::NUI:
             m_text.setFont(Application::context().fonts.get(FontID::NUI));
             m_text.setColor(sf::Color::White);
-            m_text.setCharacterSize(cNUI.fontSize);
+            m_text.setCharacterSize(m_fontSize);
             break;
 
         case Prestyle::NUI_SOBER:
             m_text.setFont(Application::context().fonts.get(FontID::MONO));
             m_text.setColor(sf::Color::Black);
-            m_text.setCharacterSize(cNUI.fontSize);
+            m_text.setCharacterSize(m_fontSize);
             break;
 
         case Prestyle::NUI_TITLE:
             m_text.setFont(Application::context().fonts.get(FontID::NUI));
             m_text.setColor(sf::Color::White);
             m_text.setStyle(sf::Text::Style::Bold);
-            m_text.setCharacterSize(cNUI.fontSize);
+            m_text.setCharacterSize(m_fontSize);
             break;
 
         case Prestyle::MENU_TITLE:
             m_text.setFont(Application::context().fonts.get(FontID::HORROR));
             m_text.setStyle(sf::Text::Style::Bold);
             m_text.setColor(sf::Color::White);
-            m_text.setCharacterSize(1.6f * cNUI.fontSize);
+            m_text.setCharacterSize(1.6f * m_fontSize);
             break;
 
         case Prestyle::MENU_POPUP_TITLE:
             m_text.setFont(Application::context().fonts.get(FontID::HORROR));
             m_text.setStyle(sf::Text::Style::Bold);
             m_text.setColor(sf::Color::White);
-            m_text.setCharacterSize(3.2f * cNUI.fontSize);
+            m_text.setCharacterSize(3.2f * m_fontSize);
             break;
 
         case Prestyle::MENU_SOBER:
             m_text.setFont(Application::context().fonts.get(FontID::MONO));
             m_text.setColor(sf::Color::White);
-            m_text.setCharacterSize(1.1f * cNUI.fontSize);
+            m_text.setCharacterSize(1.1f * m_fontSize);
             break;
 
         case Prestyle::MENU_SOBER_LIGHT:
             m_text.setFont(Application::context().fonts.get(FontID::MONO));
             m_text.setColor({255u, 255u, 255u, 128u});
-            m_text.setCharacterSize(cNUI.fontSize);
+            m_text.setCharacterSize(m_fontSize);
             break;
     }
 

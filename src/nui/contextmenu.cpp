@@ -2,7 +2,6 @@
 
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
-#include "config/nui.hpp"
 
 using namespace nui;
 
@@ -19,8 +18,6 @@ ContextMenu::ContextMenu()
     m_title.setFont(Application::context().fonts.get(FontID::NUI));
     m_title.setStyle(sf::Text::Bold);
     m_title.setColor(sf::Color::White);
-
-    refreshDisplay();
 }
 
 //-------------------//
@@ -75,9 +72,9 @@ void ContextMenu::updateSize()
     setSize(border);
 }
 
-void ContextMenu::refreshDisplay()
+void ContextMenu::refreshNUI(const config::NUIGuides& cNUI)
 {
-    config::NUI cNUI;
+    baseClass::refreshNUI(cNUI);
 
     m_fontSize = cNUI.fontSize;
     m_padding = cNUI.hPadding;
@@ -89,7 +86,6 @@ void ContextMenu::refreshDisplay()
         choiceInfo.text.setCharacterSize(m_fontSize);
 
     updateSize();
-    baseClass::refreshDisplay();
 }
 
 //------------------------//

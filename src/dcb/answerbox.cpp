@@ -1,6 +1,5 @@
 #include "dcb/answerbox.hpp"
 
-#include "config/nui.hpp"
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
 #include "tools/debug.hpp"
@@ -16,8 +15,6 @@ AnswerBox::AnswerBox()
     addPart(&m_background);
     m_background.setOutlineColor(sf::Color::White);
     m_background.setFillColor({255u, 255u, 255u, 10u});
-
-    refreshDisplay();
 }
 
 //-------------------//
@@ -29,10 +26,11 @@ void AnswerBox::onSizeChanges()
     refreshParts();
 }
 
-void AnswerBox::refreshDisplay()
+void AnswerBox::refreshNUI(const config::NUIGuides& cNUI)
 {
+    baseClass::refreshNUI(cNUI);
+
     refreshParts();
-    baseClass::refreshDisplay();
 }
 
 //------------------//

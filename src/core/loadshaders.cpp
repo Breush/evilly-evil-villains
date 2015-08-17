@@ -25,9 +25,9 @@ void Application::refreshShaders()
 {
     returnif (!sf::Shader::isAvailable());
 
-    const auto& screenSize = s_context.screenSize;
-    const auto& resolution = s_context.resolution;
-    const auto& effectiveDisplay = s_context.effectiveDisplay;
+    const auto& screenSize = s_context.windowInfo.screenSize;
+    const auto& resolution = s_context.windowInfo.resolution;
+    const auto& effectiveDisplay = s_context.windowInfo.effectiveDisplay;
 
     // NUI
     s_context.shaders.setParameter(ShaderID::NUI_HOVER, "texture", sf::Shader::CurrentTexture);

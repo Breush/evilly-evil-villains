@@ -24,8 +24,6 @@ Graph::Graph()
 
     // NUI layer
     m_nuiLayer.setManipulable(false);
-
-    refreshDisplay();
 }
 
 const sf::View& Graph::viewFromLayerRoot(const Entity* root) const
@@ -44,6 +42,21 @@ const sf::View& Graph::viewFromLayerRoot(const Entity* root) const
 //-------------------//
 //----- Routine -----//
 
+void Graph::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    // Draw all layers
+    target.draw(m_scene, states);
+    target.draw(m_nuiLayer, states);
+
+    // Drawing grabbed object
+    // Note: Layer is now NUI
+    if (m_grabbable != nullptr)
+        target.draw(*m_grabbable, states);
+
+    // Hovered child on debug
+    debug_nui_1(drawMouseDetector(target, states));
+}
+
 void Graph::update(const sf::Time& dt)
 {
     // Grabbing
@@ -61,9 +74,6 @@ void Graph::update(const sf::Time& dt)
         m_focusShape.setTextureRect(sf::IntRect(-m_focusAnimation, -m_focusAnimation, focusSize.x, focusSize.y));
     }
 }
-
-//------------------//
-//----- Events -----//
 
 void Graph::handleEvent(const sf::Event& event)
 {
@@ -111,27 +121,17 @@ void Graph::handleEvent(const sf::Event& event)
     focusHandleEvent(event);
 }
 
-void Graph::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Graph::refreshWindow(const config::WindowInfo& cWindow)
 {
-    // Draw all layers
-    target.draw(m_scene, states);
-    target.draw(m_nuiLayer, states);
+    m_nuiLayer.setSize(cWindow.resolution);
 
-    // Drawing grabbed object
-    // Note: Layer is now NUI
-    if (m_grabbable != nullptr)
-        target.draw(*m_grabbable, states);
-
-    // Hovered child on debug
-    debug_nui_1(drawMouseDetector(target, states));
+    m_nuiLayer.refreshWindow(cWindow);
+    m_scene.refreshWindow(cWindow);
 }
 
-void Graph::refreshDisplay()
+void Graph::refreshNUI(const config::NUIGuides& cNUI)
 {
-    const auto& resolution = Application::context().resolution;
-
-    m_scene.refreshDisplay();
-    m_nuiLayer.setSize(resolution);
+    m_scene.refreshNUI(cNUI);
 }
 
 //--------------------//

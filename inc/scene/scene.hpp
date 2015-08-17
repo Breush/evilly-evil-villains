@@ -11,10 +11,16 @@
 #include <list>
 #include <unordered_map>
 
+// Forward declarations
+
+namespace config
+{
+    class NUIGuides;
+    class WindowInfo;
+}
+
 namespace scene
 {
-    // Forward declarations
-
     class Entity;
     class Graph;
     class Layer;
@@ -44,8 +50,11 @@ namespace scene
         //! Recursively draw all layers.
         void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
 
-        //! Reset the layers' views to current screen status.
-        void refreshDisplay();
+        //! Reset views to current screen status.
+        void refreshWindow(const config::WindowInfo& cWindow);
+
+        //! Refresh NUI appearance.
+        void refreshNUI(const config::NUIGuides& cNUI);
 
         //! @}
 

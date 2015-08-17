@@ -20,17 +20,15 @@ namespace nui
         addPart(&m_minus);
         m_plus.setTexture(&Application::context().textures.get(TextureID::NUI_PLUS));
         m_minus.setTexture(&Application::context().textures.get(TextureID::NUI_MINUS));
-
-        refreshDisplay();
     }
 
     //-------------------//
     //----- Routine -----//
 
     template<typename Value_t>
-    void SpinBox<Value_t>::refreshDisplay()
+    void SpinBox<Value_t>::refreshNUI(const config::NUIGuides& cNUI)
     {
-        baseClass::refreshDisplay();
+        baseClass::refreshNUI(cNUI);
         refreshEntry();
     }
 

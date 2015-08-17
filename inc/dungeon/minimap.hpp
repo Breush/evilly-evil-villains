@@ -64,7 +64,7 @@ namespace dungeon
         void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
         void onTransformChanges() final;
         void onSizeChanges() final;
-        void refreshDisplay() final;
+        void refreshNUI(const config::NUIGuides& cNUI) final;
 
         //! @}
 

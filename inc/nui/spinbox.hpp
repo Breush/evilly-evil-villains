@@ -77,7 +77,7 @@ namespace nui
         //! @name Routine
         //! @{
 
-        void refreshDisplay() final;
+        void refreshNUI(const config::NUIGuides& cNUI) final;
 
         //! @}
 

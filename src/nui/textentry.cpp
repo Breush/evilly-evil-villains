@@ -2,7 +2,6 @@
 
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
-#include "config/nui.hpp"
 #include "tools/vector.hpp"
 
 using namespace nui;
@@ -29,8 +28,6 @@ TextEntry::TextEntry()
 
     m_cursorText = m_text;
     m_selectText = m_text;
-
-    refreshDisplay();
 }
 
 //-------------------//
@@ -67,9 +64,9 @@ void TextEntry::updateRoutine(const sf::Time& dt)
     }
 }
 
-void TextEntry::refreshDisplay()
+void TextEntry::refreshNUI(const config::NUIGuides& cNUI)
 {
-    config::NUI cNUI;
+    baseClass::refreshNUI(cNUI);
 
     m_text.setCharacterSize(cNUI.fontSize);
     m_cursorText.setCharacterSize(cNUI.fontSize);
@@ -80,7 +77,6 @@ void TextEntry::refreshDisplay()
     m_fontHSpace = cNUI.fontHSpace;
 
     updateSize();
-    baseClass::refreshDisplay();
 }
 
 //------------------//

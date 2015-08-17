@@ -62,7 +62,6 @@ namespace dcb
         //! @{
 
         void onChildSizeChanges(scene::Entity& child);
-        void refreshDisplay() final;
 
         //! @}
 

@@ -2,26 +2,24 @@
 
 #include "tools/tools.hpp"
 #include "tools/vector.hpp"
-#include "config/nui.hpp"
+#include "config/nuiguides.hpp"
 
 using namespace nui;
 
 HStacker::HStacker()
 {
-    refreshDisplay();
 }
 
 //-------------------//
 //----- Routine -----//
 
-void HStacker::refreshDisplay()
+void HStacker::refreshNUI(const config::NUIGuides& cNUI)
 {
-    config::NUI cNUI;
+    baseClass::refreshNUI(cNUI);
 
     m_padding = cNUI.vPadding;
 
     updateSize();
-    baseClass::refreshDisplay();
 }
 
 void HStacker::onSizeChanges()

@@ -12,8 +12,6 @@ Lock::Lock()
     // Sprite
     addPart(&m_lock);
     m_lock.setTexture(Application::context().textures.get(TextureID::DUNGEON_LOCK));
-
-    refreshDisplay();
 }
 
 //-------------------//
@@ -25,14 +23,13 @@ void Lock::onSizeChanges()
     m_lock.setScale(size() / sf::v2f(textureSize));
 }
 
-void Lock::refreshDisplay()
+void Lock::refreshNUI(const config::NUIGuides& cNUI)
 {
-    config::NUI cNUI;
+    baseClass::refreshNUI(cNUI);
 
     sf::Vector2f targetSize{cNUI.hintImageSide, cNUI.hintImageSide};
 
     setSize(targetSize);
-    baseClass::refreshDisplay();
 }
 
 //------------------------//

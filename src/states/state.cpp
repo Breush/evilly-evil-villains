@@ -3,59 +3,65 @@
 #include "core/application.hpp"
 #include "states/statestack.hpp"
 
+#include <SFML/Graphics/RenderTarget.hpp>
+
 using namespace states;
 
 State::State(StateStack& stack)
-    : m_stack(&stack)
+    : m_stack(stack)
 {
+    // Refresh graph (init size, etc.)
+    m_sceneGraph.refreshWindow(Application::context().windowInfo);
+    m_sceneGraph.refreshNUI(Application::context().nuiGuides);
 }
 
-//----- Scene graph calls -----//
+//-------------------//
+//----- Routine -----//
 
-// TODO The target should be passed here
-void State::draw()
+void State::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    auto& window = Application::context().window;
-    window.draw(m_sceneGraph);
+    target.draw(m_sceneGraph, states);
 }
 
 bool State::update(const sf::Time& dt)
 {
     m_sceneGraph.update(dt);
-    return false;
+    return true;
 }
 
 bool State::handleEvent(const sf::Event& event)
 {
+    // TODO this boolean should be forwarded
     m_sceneGraph.handleEvent(event);
     return false;
 }
 
+//----------------------------//
 //----- Stack operations -----//
 
 void State::stackPopPush(StateID stateID)
 {
-    m_stack->popState();
-    m_stack->pushState(stateID);
+    m_stack.popState();
+    m_stack.pushState(stateID);
 }
 
 void State::stackPush(StateID stateID)
 {
-    m_stack->pushState(stateID);
+    m_stack.pushState(stateID);
 }
 
 void State::stackPop()
 {
-    m_stack->popState();
+    m_stack.popState();
 }
 
 void State::stackClear()
 {
-    m_stack->clearStates();
+    m_stack.clearStates();
 }
 
 void State::stackClear(StateID stateID)
 {
-    m_stack->clearStates();
-    m_stack->pushState(stateID);
+    m_stack.clearStates();
+    m_stack.pushState(stateID);
 }

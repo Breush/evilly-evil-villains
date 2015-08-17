@@ -18,13 +18,14 @@ namespace states
         using baseClass = State;
 
     public:
+
         GameDungeonDesign(StateStack& stack);
         virtual ~GameDungeonDesign() = default;
         StateID id() const noexcept final { return StateID::GAME_DUNGEON_DESIGN; }
 
         // Routine
         bool update(const sf::Time& dt) final;
-        void refreshDisplay() final;
+        void refreshWindow(const config::WindowInfo& cWindow) final;
 
         // Events
         bool handleEvent(const sf::Event& event) final;
@@ -33,6 +34,7 @@ namespace states
         void onQuit() noexcept final;
 
     private:
+
         // Dungeon
         dungeon::Data m_dungeonData;
         dungeon::Graph m_dungeonGraph;

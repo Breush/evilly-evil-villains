@@ -5,7 +5,6 @@
 #include "tools/tools.hpp"
 #include "tools/vector.hpp"
 #include "tools/debug.hpp"
-#include "config/nui.hpp"
 
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -35,8 +34,6 @@ ChoiceBox::ChoiceBox()
         addPart(&m_lArrow);
         addPart(&m_rArrow);
     }
-
-    refreshDisplay();
 }
 
 //-------------------//
@@ -52,9 +49,9 @@ void ChoiceBox::onSizeChanges()
     refresh();
 }
 
-void ChoiceBox::refreshDisplay()
+void ChoiceBox::refreshNUI(const config::NUIGuides& cNUI)
 {
-    config::NUI cNUI;
+    baseClass::refreshNUI(cNUI);
 
     m_fontVSpace = cNUI.fontVSpace;
     m_arrowOffset = 2.f * cNUI.hPadding;
@@ -66,7 +63,6 @@ void ChoiceBox::refreshDisplay()
     m_text.setCharacterSize(cNUI.fontSize);
 
     updateSize();
-    baseClass::refreshDisplay();
 }
 
 //-------------------//

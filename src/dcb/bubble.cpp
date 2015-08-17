@@ -1,6 +1,5 @@
 #include "dcb/bubble.hpp"
 
-#include "config/nui.hpp"
 #include "core/application.hpp"
 #include "resources/identifiers.hpp"
 #include "tools/vector.hpp"
@@ -20,8 +19,6 @@ Bubble::Bubble()
     addPart(&m_wrapText);
     m_wrapText.setFont(Application::context().fonts.get(FontID::NUI));
     m_wrapText.setColor(sf::Color::White);
-
-    refreshDisplay();
 }
 
 //-------------------//
@@ -32,16 +29,15 @@ void Bubble::onSizeChanges()
     refreshParts();
 }
 
-void Bubble::refreshDisplay()
+void Bubble::refreshNUI(const config::NUIGuides& cNUI)
 {
-    config::NUI cNUI;
+    baseClass::refreshNUI(cNUI);
 
     m_wrapText.setCharacterSize(cNUI.fontSize);
     m_hPadding = cNUI.hPadding;
     m_vPadding = cNUI.vPadding;
 
     refreshParts();
-    baseClass::refreshDisplay();
 }
 
 //-----------------------------//

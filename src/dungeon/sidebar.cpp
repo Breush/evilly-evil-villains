@@ -2,7 +2,6 @@
 
 #include "core/application.hpp"
 #include "core/gettext.hpp"
-#include "config/nui.hpp"
 #include "dungeon/eventtype.hpp"
 #include "dungeon/facilities.hpp"
 #include "dungeon/traps.hpp"
@@ -35,8 +34,6 @@ Sidebar::Sidebar(scene::Scene& inScene)
 
     for (auto& tabContent : m_tabContents)
         tabContent.scrollArea.setContent(tabContent.stacker);
-
-    refreshDisplay();
 }
 
 Sidebar::~Sidebar()
@@ -50,11 +47,13 @@ Sidebar::~Sidebar()
 //-------------------//
 //----- Routine -----//
 
-void Sidebar::refreshDisplay()
+void Sidebar::refreshNUI(const config::NUIGuides& cNUI)
 {
-    refreshScrollAreasSize();
+    baseClass::refreshNUI(cNUI);
 
-    baseClass::refreshDisplay();
+    m_vPadding = 3.f * cNUI.vPadding;
+
+    refreshScrollAreasSize();
 }
 
 void Sidebar::onSizeChanges()
@@ -89,9 +88,7 @@ void Sidebar::refreshScrollAreasSize()
     height -= m_minimap.size().y;
     height -= m_summary.size().y;
     height -= m_tabHolder.headerSize().y;
-
-    config::NUI cNUI;
-    height -= 3.f * cNUI.vPadding;
+    height -= m_vPadding;
 
     // Affect new size to all scroll areas
     for (auto& tabContent : m_tabContents)

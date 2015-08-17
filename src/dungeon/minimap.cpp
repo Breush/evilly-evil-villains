@@ -19,8 +19,6 @@ Minimap::Minimap()
     m_layerViewIndicator.setFillColor({255u, 255u, 255u, 100u});
     m_layerViewIndicator.setOutlineColor(sf::Color::White);
     m_layerViewIndicator.setOutlineThickness(1.f);
-
-    refreshDisplay();
 }
 
 //-------------------//
@@ -29,7 +27,7 @@ Minimap::Minimap()
 void Minimap::onTransformChanges()
 {
     const auto& window = Application::context().window;
-    const auto& screenSize = Application::context().screenSize;
+    const auto& screenSize = Application::context().windowInfo.screenSize;
     sf::FloatRect rect{getPosition().x, getPosition().y, size().x, size().y};
     rect = tools::mapRectCoordsToPixel(window, rect);
     m_view.setViewport(rect / screenSize);
@@ -61,9 +59,11 @@ void Minimap::onSizeChanges()
     m_background.setSize(size());
 }
 
-void Minimap::refreshDisplay()
+// TODO Add refreshWindow
+
+void Minimap::refreshNUI(const config::NUIGuides& cNUI)
 {
-    baseClass::refreshDisplay();
+    baseClass::refreshNUI(cNUI);
 }
 
 //------------------//

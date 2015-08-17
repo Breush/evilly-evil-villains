@@ -1,7 +1,6 @@
 #include "nui/popdialog.hpp"
 
 #include "core/application.hpp"
-#include "config/nui.hpp"
 #include "tools/vector.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 
@@ -29,8 +28,6 @@ PopDialog::PopDialog()
 
     // Buttons
     m_mainStacker.stackBack(m_buttonsStacker, nui::Align::OPPOSITE);
-
-    refreshDisplay();
 }
 
 PopDialog::~PopDialog()
@@ -51,14 +48,13 @@ void PopDialog::onChildSizeChanges(scene::Entity&)
     refreshBoxBackground();
 }
 
-void PopDialog::refreshDisplay()
+void PopDialog::refreshNUI(const config::NUIGuides& cNUI)
 {
-    config::NUI cNUI;
+    baseClass::refreshNUI(cNUI);
 
     m_message.setCharacterSize(cNUI.fontSize);
 
     refreshBoxBackground();
-    baseClass::refreshDisplay();
 }
 
 //------------------//

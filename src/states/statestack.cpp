@@ -1,57 +1,57 @@
 #include "states/statestack.hpp"
 
+#include "core/application.hpp"
 #include "states/identifiers.hpp"
+#include "config/nuiguides.hpp"
+#include "tools/platform-fixes.hpp" // reverse
 #include "tools/debug.hpp"
 
+#include <SFML/Graphics/RenderTarget.hpp>
+
 using namespace states;
+
+//-------------------//
+//----- Routine -----//
 
 void StateStack::update(const sf::Time& dt)
 {
     // Iterate from top to bottom, stop as soon as update() returns false
-    for (auto itr = m_stack.rbegin(); itr != m_stack.rend(); ++itr)
-        if (!(*itr)->update(dt))
+    for (auto& state : std::reverse(m_stack))
+        if (!state->update(dt))
             break;
 
     applyPendingChanges();
 }
 
-void StateStack::draw()
+void StateStack::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     // Draw all active states from bottom to top
-    for (auto& state : m_stack)
-        state->draw();
+    for (const auto& state : m_stack)
+        target.draw(*state, states);
 }
 
 void StateStack::handleEvent(const sf::Event& event)
 {
     // Iterate from top to bottom, stop as soon as handleEvent() returns false
-    for (auto itr = m_stack.rbegin(); itr != m_stack.rend(); ++itr)
-        if (!(*itr)->handleEvent(event))
+    for (auto& state : std::reverse(m_stack))
+        if (!state->handleEvent(event))
             break;
-
-    applyPendingChanges();
 }
 
-void StateStack::refreshDisplay()
+void StateStack::refreshWindow(const config::WindowInfo& cWindow)
 {
     for (auto& state : m_stack)
-        state->refreshDisplay();
+        state->refreshWindow(cWindow);
 }
 
-void StateStack::pushState(StateID stateID)
+void StateStack::refreshNUI(const config::NUIGuides& cNUI)
 {
-    m_pendingList.emplace_back(Action::PUSH, stateID);
+    for (auto& state : m_stack)
+        state->refreshNUI(cNUI);
 }
 
-void StateStack::popState()
-{
-    m_pendingList.emplace_back(Action::POP, StateID::NONE);
-}
-
-void StateStack::clearStates()
-{
-    m_pendingList.emplace_back(Action::CLEAR, StateID::NONE);
-}
+//-----------------//
+//----- Stack -----//
 
 bool StateStack::isEmpty() const
 {
@@ -78,25 +78,23 @@ std::unique_ptr<State> StateStack::createState(StateID stateID)
 void StateStack::applyPendingChanges()
 {
     // Apply changes
-    for (PendingChange change : m_pendingList) {
+    for (PendingChange change : m_pendingChanges) {
         switch (change.action) {
         case Action::PUSH:
-            if (!m_stack.empty())
-                m_stack.back()->onHide();
+            if (!m_stack.empty()) m_stack.back()->onHide();
             m_stack.emplace_back(std::move(createState(change.stateID)));
+            m_stack.back()->refreshWindow(Application::context().windowInfo);
+            m_stack.back()->refreshNUI(Application::context().nuiGuides);
             break;
 
         case Action::POP:
-            if (!m_stack.empty())
-                m_stack.back()->onQuit();
+            if (!m_stack.empty()) m_stack.back()->onQuit();
             m_stack.pop_back();
-            if (!m_stack.empty())
-                m_stack.back()->onShow();
+            if (!m_stack.empty()) m_stack.back()->onShow();
             break;
 
         case Action::CLEAR:
-            for (auto& state : m_stack)
-                state->onQuit();
+            for (auto& state : m_stack) state->onQuit();
             m_stack.clear();
             break;
 
@@ -106,5 +104,23 @@ void StateStack::applyPendingChanges()
     }
 
     // Clear list
-    m_pendingList.clear();
+    m_pendingChanges.clear();
+}
+
+//--------------------------//
+//----- States control -----//
+
+void StateStack::pushState(StateID stateID)
+{
+    m_pendingChanges.push_back({Action::PUSH, stateID});
+}
+
+void StateStack::popState()
+{
+    m_pendingChanges.push_back({Action::POP, StateID::NONE});
+}
+
+void StateStack::clearStates()
+{
+    m_pendingChanges.push_back({Action::CLEAR, StateID::NONE});
 }

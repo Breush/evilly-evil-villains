@@ -3,7 +3,7 @@
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
 #include "tools/vector.hpp"
-#include "config/nui.hpp"
+#include "config/nuiguides.hpp"
 
 using namespace nui;
 
@@ -12,8 +12,6 @@ TableLayout::TableLayout()
     , m_vPaddingAuto(true)
 {
     setDetectable(false);
-
-    refreshDisplay();
 }
 
 //-------------------//
@@ -35,16 +33,15 @@ void TableLayout::onChildSizeChanges(scene::Entity&)
     refreshChildrenPosition();
 }
 
-void TableLayout::refreshDisplay()
+void TableLayout::refreshNUI(const config::NUIGuides& cNUI)
 {
     // Be sure all children have there definitive size
-    baseClass::refreshDisplay();
+    baseClass::refreshNUI(cNUI);
 
-    config::NUI cNUI;
+    m_hRefPadding = cNUI.hPadding;
+    m_vRefPadding = cNUI.vPadding;
 
-    if (m_hPaddingAuto) m_hPadding = cNUI.hPadding;
-    if (m_vPaddingAuto) m_vPadding = cNUI.vPadding;
-
+    refreshPaddingAuto();
     refreshRowsSize();
     refreshColsSize();
     refreshDimensions();
@@ -92,7 +89,7 @@ void TableLayout::overridePadding(float hPadding, float vPadding)
     if (!m_hPaddingAuto) m_hPadding = hPadding;
     if (!m_vPaddingAuto) m_vPadding = vPadding;
 
-    refreshDisplay();
+    refreshPaddingAuto();
 }
 
 float TableLayout::colOffset(uint col)
@@ -343,5 +340,11 @@ void TableLayout::refreshDimensions()
             col.width = m_colsStep;
         }
     }
+}
+
+void TableLayout::refreshPaddingAuto()
+{
+    if (m_hPaddingAuto) m_hPadding = m_hRefPadding;
+    if (m_vPaddingAuto) m_vPadding = m_vRefPadding;
 }
 
