@@ -42,6 +42,9 @@ Display::Display()
             window.resolution.x = param.attribute(L"width").as_float();
             window.resolution.y = param.attribute(L"height").as_float();
         }
+        else if (name == L"antialiasing") {
+            window.antialiasingLevel = param.attribute(L"level").as_uint();
+        }
 
         // NUI
         else if (name == L"size") {
@@ -75,6 +78,10 @@ void Display::save()
     param.append_attribute(L"name") = L"resolution";
     param.append_attribute(L"width") = window.resolution.x;
     param.append_attribute(L"height") = window.resolution.y;
+
+    param = group.append_child(L"param");
+    param.append_attribute(L"name") = L"antialiasing";
+    param.append_attribute(L"level") = window.antialiasingLevel;
 
     // NUI
     group = config.append_child(L"group");

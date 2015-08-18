@@ -1,6 +1,6 @@
 #include "core/application.hpp"
 
-#include "tools/debug.hpp"
+#include "core/debug.hpp"
 #include "tools/vector.hpp"
 #include "states/identifiers.hpp"
 
@@ -20,18 +20,35 @@ void Application::Context::recreateWindow()
     const auto& title = windowInfo.title;
     const auto& style = windowInfo.style;
     const auto& resolution = display.window.resolution;
+    const auto& antialiasingLevel = display.window.antialiasingLevel;
+
+    mdebug_core_1("Recreating window with resolution " << resolution);
 
     if (window.isOpen())
         window.close();
 
-    window.create(sf::VideoMode(resolution.x, resolution.y), title, style);
+    sf::ContextSettings contextSettings;
+    contextSettings.antialiasingLevel = antialiasingLevel;
+    window.create(sf::VideoMode(resolution.x, resolution.y), title, style, contextSettings);
 
     if (!window.isOpen())
         throw std::runtime_error("Cannot initialize window.");
 
+    // Window parameters
+    sf::Image icon;
+    if (icon.loadFromFile("res/tex/global/icon.png"))
+        window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
     window.setVerticalSyncEnabled(true);
+
+    // Window info
     windowInfo.screenSize = sf::v2f(window.getSize());
     windowInfo.recompute();
+
+    // Global log
+    debug_core_1(const auto& settings = window.getSettings());
+    mdebug_core_1("OpenGL version used: " << settings.majorVersion << "." << settings.minorVersion);
+    mdebug_core_1("Depth bits: " << settings.depthBits << " | Stencil bits: " << settings.stencilBits);
+    mdebug_core_1("Antialiasing level: " << settings.antialiasingLevel);
 }
 
 //-----------------//

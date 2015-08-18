@@ -19,6 +19,7 @@ namespace config
         {
             bool fullscreen;            //!< Whether the fullscreen is enabled.
             sf::Vector2f resolution;    //!< The resolution used to play the game.
+            uint antialiasingLevel;     //!< The antialiasing level.
         } window;
 
         //! NUI specific parameters.
