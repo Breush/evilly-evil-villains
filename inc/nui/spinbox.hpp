@@ -10,7 +10,6 @@
 namespace nui
 {
     //! A basic tool to let the user edit numbers.
-    // TODO Enable long-click repeat
 
     template<typename Value_t>
     class SpinBox final : public scene::Entity
@@ -77,6 +76,7 @@ namespace nui
         //! @name Routine
         //! @{
 
+        void updateRoutine(const sf::Time& dt) final;
         void refreshNUI(const config::NUIGuides& cNUI) final;
 
         //! @}
@@ -86,6 +86,17 @@ namespace nui
         //! @{
 
         void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseLeft() final;
+
+        //! @}
+
+        //-----------------//
+        //! @name Callback
+        //! @{
+
+        //! Add or sub given stored position.
+        void doActionFromStoredPosition();
 
         //! @}
 
@@ -104,11 +115,18 @@ namespace nui
         Value_t m_step;     //!< The value to add or substract when +/-.
 
         Callback m_callback = nullptr;  //!< The callback function called on any change.
+        sf::Vector2f m_storedPosition;  //!< Stored position of last mouse left click.
 
         // NUI
         nui::NumberEntry<Value_t> m_entry;   //!< The entry itself.
         sf::RectangleShape m_plus;  //!< The + sign.
         sf::RectangleShape m_minus; //!< The - sign.
+
+        // Click repeat
+        bool m_crActive = false;                        //!< Whether or not the click repeat is active.
+        float m_crTimer = -1.f;                         //!< Set timer, or virtual click will be sent when negative.
+        const float m_crDelayBeforeRepeating = 0.6f;    //!< Initial delay before enabling repeating.
+        const float m_crDelayBetweenRepeats = 0.1f;     //!< Delay between two repeats.
     };
 }
 

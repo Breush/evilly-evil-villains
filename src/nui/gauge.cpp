@@ -1,4 +1,4 @@
-#include "sfe/gauge.hpp"
+#include "nui/gauge.hpp"
 
 #include "config/nuiguides.hpp"
 #include "tools/tools.hpp"
@@ -6,7 +6,7 @@
 #include "tools/vector.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 
-using namespace sfe;
+using namespace nui;
 
 Gauge::Gauge()
     : m_length(100.f)

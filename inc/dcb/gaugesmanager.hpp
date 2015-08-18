@@ -3,7 +3,7 @@
 #include "scene/entity.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/vstacker.hpp"
-#include "sfe/gauge.hpp"
+#include "nui/gauge.hpp"
 #include "sfe/label.hpp"
 
 #include <array>
@@ -69,7 +69,7 @@ namespace dcb
 
         nui::HStacker m_globalStacker;  //!< Main stacker containing other stackers.
         std::array<nui::VStacker, GaugeID::COUNT> m_stackers;   //!< The stackers, one for each pair gauge/label.
-        std::array<sfe::Gauge, GaugeID::COUNT> m_gauges;        //!< The gauges.
+        std::array<nui::Gauge, GaugeID::COUNT> m_gauges;        //!< The gauges.
         std::array<sfe::Label, GaugeID::COUNT> m_labels;        //!< The labels.
     };
 }

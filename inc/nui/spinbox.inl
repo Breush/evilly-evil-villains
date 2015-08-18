@@ -26,6 +26,19 @@ namespace nui
     //----- Routine -----//
 
     template<typename Value_t>
+    void SpinBox<Value_t>::updateRoutine(const sf::Time& dt)
+    {
+        // Click repeat
+        if (m_crActive) {
+            m_crTimer -= dt.asSeconds();
+            if (m_crTimer <= 0.f) {
+                m_crTimer = m_crDelayBetweenRepeats;
+                doActionFromStoredPosition();
+            }
+        }
+    }
+
+    template<typename Value_t>
     void SpinBox<Value_t>::refreshNUI(const config::NUIGuides& cNUI)
     {
         baseClass::refreshNUI(cNUI);
@@ -40,15 +53,42 @@ namespace nui
     {
         returnif (button != sf::Mouse::Left);
 
-        // Check if a +/- is clicked.
-        returnif (mousePos.x < m_entry.size().x);
+        // Activate click repeat
+        m_crActive = true;
+        m_crTimer = m_crDelayBeforeRepeating;
+        m_storedPosition = mousePos;
 
-        if (mousePos.y < m_entry.size().y / 2.f) addStep();
-        else subStep();
+        doActionFromStoredPosition();
+    }
+
+    template<typename Value_t>
+    void SpinBox<Value_t>::handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f&)
+    {
+        returnif (button != sf::Mouse::Left);
+
+        // Deactivate click repeat
+        m_crActive = false;
+    }
+
+    template<typename Value_t>
+    void SpinBox<Value_t>::handleMouseLeft()
+    {
+        // Deactivate click repeat
+        m_crActive = false;
     }
 
     //--------------------//
     //----- Callback -----//
+
+    template<typename Value_t>
+    void SpinBox<Value_t>::doActionFromStoredPosition()
+    {
+        // Check if a +/- is clicked
+        returnif (m_storedPosition.x < m_entry.size().x);
+
+        if (m_storedPosition.y < m_entry.size().y / 2.f) addStep();
+        else subStep();
+    }
 
     template<typename Value_t>
     void SpinBox<Value_t>::setCallback(const Callback& callback)
