@@ -1,6 +1,7 @@
 #include "sfe/wraptext.hpp"
 
 #include "tools/tools.hpp"
+#include "tools/int.hpp"
 
 #include <sstream>
 
