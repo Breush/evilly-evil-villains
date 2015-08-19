@@ -11,8 +11,8 @@ macro(eev_set_option var default type docstring)
     set(${var} ${${var}} CACHE ${type} ${docstring} FORCE)
 endmacro()
 
-# Usefull variables
-set(AUTHOR_EMAIL sherlock.breust@gmail.com)
+# Useful variables
+set(AUTHOR_EMAIL alexis.breust@jumpingtoasts.com)
 
 #=====
 # Project
@@ -60,11 +60,23 @@ file(GLOB_RECURSE CODE_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*.cpp inc/*.hpp in
 list(REMOVE_ITEM CODE_FILES ${CODE_MAIN_FILE} ${VERSION_OUTPUT_FILE})
 
 #=====
+# Create SFML libraries
+
+set(SFML_ROOT_DIR ${CMAKE_SOURCE_DIR}/ext/sfml)
+set(SFML_SOURCE_DIR ${CMAKE_SOURCE_DIR}/ext/sfml/src/SFML)
+set(SFML_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/ext/include/SFML)
+
+add_subdirectory(${SFML_ROOT_DIR})
+
+get_directory_property(SFML_LIBRARIES DIRECTORY ${SFML_SOURCE_DIR} DEFINITION SFML_LIBRARIES)
+
+#=====
 # Create library
 
 # We create a library so that binaries can be easily shared with other programs
 set(EEV_LIBRARIES eev-common)
 add_library(${EEV_LIBRARIES} ${CODE_FILES})
+target_link_libraries(${EEV_LIBRARIES} ${SFML_LIBRARIES})
 
 #=====
 # Create game executable
@@ -73,7 +85,7 @@ eev_set_option(EEV_EXTRA_INCLUDE_PATH "" STRING "Add extra include path if neede
 include_directories(${EEV_EXTRA_INCLUDE_PATH})
 
 include_directories(${CMAKE_SOURCE_DIR}/inc/)
-include_directories(${CMAKE_SOURCE_DIR}/ext/)
+include_directories(${CMAKE_SOURCE_DIR}/ext/include)
 
 add_executable(${EXECUTABLE_NAME} ${CODE_MAIN_FILE})
 target_link_libraries(${EXECUTABLE_NAME} ${EEV_LIBRARIES})

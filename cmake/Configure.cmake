@@ -3,7 +3,7 @@
 #-----
 # Version
 
-# TODO This is dulicated with main cmake
+# TODO This is duplicated with main cmake
 set(VERSION_INPUT_FILE inc/core/define.hpp.in)
 set(VERSION_OUTPUT_FILE inc/core/define.hpp)
 

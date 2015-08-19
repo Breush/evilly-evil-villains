@@ -1,16 +1,6 @@
 # ${EXECUTABLE_NAME} should be set before calling
 
 #=====
-# Find SFML 2.X
-
-eev_set_option(SFML_ROOT "" STRING "Where is SFML installed")
-find_package(SFML 2 REQUIRED system window graphics audio)
-if (SFML_FOUND)
-	include_directories(${SFML_INCLUDE_DIR})
-	target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
-endif ()
-
-#=====
 # Find Lua
 
 find_package(Lua REQUIRED)
