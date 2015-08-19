@@ -33,6 +33,7 @@
 #include <SFML/System/Err.hpp>
 #include <sstream>
 
+using ptrdiff_t = std::ptrdiff_t;
 
 namespace sf
 {
