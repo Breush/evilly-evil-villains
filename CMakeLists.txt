@@ -60,6 +60,15 @@ file(GLOB_RECURSE CODE_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*.cpp inc/*.hpp in
 list(REMOVE_ITEM CODE_FILES ${CODE_MAIN_FILE} ${VERSION_OUTPUT_FILE})
 
 #=====
+# Link Steam workshop
+
+set(STEAM_ROOT_DIR ${CMAKE_SOURCE_DIR}/ext/steam)
+
+add_subdirectory(${STEAM_ROOT_DIR})
+
+get_directory_property(STEAM_LIBRARIES DIRECTORY ${STEAM_ROOT_DIR} DEFINITION STEAM_LIBRARIES)
+
+#=====
 # Create SFML libraries
 
 set(SFML_ROOT_DIR ${CMAKE_SOURCE_DIR}/ext/sfml)
@@ -75,8 +84,11 @@ get_directory_property(SFML_LIBRARIES DIRECTORY ${SFML_SOURCE_DIR} DEFINITION SF
 
 # We create a library so that binaries can be easily shared with other programs
 set(EEV_LIBRARIES eev-common)
+
 add_library(${EEV_LIBRARIES} ${CODE_FILES})
+
 target_link_libraries(${EEV_LIBRARIES} ${SFML_LIBRARIES})
+target_link_libraries(${EEV_LIBRARIES} ${STEAM_LIBRARIES})
 
 #=====
 # Create game executable
