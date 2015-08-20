@@ -74,7 +74,12 @@ void Creepim::receive(const Event& event)
     // If the hero is near us
     sf::Vector2u coords(event.action.room.x, event.action.room.y);
     if (m_inter.tileFromLocalPosition(localPosition()) == coords) {
-        std::cerr << "BOUM! Creepim explodes in room " << coords << std::endl;
+        dungeon::Event event;
+        event.type = dungeon::EventType::MONSTER_EXPLODES_ROOM;
+        event.action.monster = this;
+        event.action.room.x = coords.x;
+        event.action.room.y = coords.y;
+        emitter()->emit(event);
     }
 }
 
@@ -107,11 +112,12 @@ void Creepim::refreshPositionFromNode(bool teleport)
 {
     returnif (m_currentNode == nullptr);
 
-    const auto tileLocalPosition = m_inter.tileLocalPosition(m_currentNode->coords);
+    m_coords = m_currentNode->coords;
+    const auto tileLocalPosition = m_inter.tileLocalPosition(m_coords);
     const auto monsterTilePosition = sf::Vector2f{m_inter.tileSize().x / 2.f, m_inter.tileSize().y * 0.62f};
     lerpable()->setTargetPosition(tileLocalPosition + monsterTilePosition);
     if (teleport) setLocalPosition(lerpable()->targetPosition());
 
-    // TODO Changing room, we need to check if there is some hero in it,
+    // TODO Changing room, we need to check if there is some hero in it
     // and explode if so.
 }

@@ -250,7 +250,7 @@ void Data::constructRoom(const sf::Vector2u& coords)
     EventEmitter::emit(event);
 }
 
-void Data::destroyRoom(const sf::Vector2u& coords)
+void Data::destroyRoom(const sf::Vector2u& coords, bool hard)
 {
     returnif (coords.x >= m_floorsCount);
     returnif (coords.y >= m_roomsByFloor);
@@ -262,6 +262,12 @@ void Data::destroyRoom(const sf::Vector2u& coords)
     // Clear elements
     removeRoomFacilities(coords);
     removeRoomTrap(coords);
+
+    // Hard mode: destroy monsters inside.
+    // TODO Hard should not retrieve money from facilities/traps.
+    if (hard) {
+        std::erase_if(m_monstersInfo, [coords] (const MonsterInfo& monsterInfo) { return monsterInfo.coords == coords; });
+    }
 
     Event event;
     event.type = EventType::ROOM_DESTROYED;

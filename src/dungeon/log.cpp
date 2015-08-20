@@ -68,9 +68,11 @@ void Log::receive(const Event& event)
 
     // Create text from event
     if (event.type == EventType::ROOM_CONSTRUCTED)
-        str << L"CONSTRUCTED Room " << event.room.x << L"/" << event.room.y;
+        str << L"CONSTRUCTED room " << event.room.x << L"/" << event.room.y;
     else if (event.type == EventType::ROOM_DESTROYED)
-        str << L"DESTROYED Room " << event.room.x << L"/" << event.room.y;
+        str << L"DESTROYED room " << event.room.x << L"/" << event.room.y;
+    else if (event.type == EventType::MONSTER_EXPLODES_ROOM)
+        str << L"MONSTER explodes in room " << event.action.room.x << L"/" << event.action.room.y;
     else if (event.type == EventType::ERROR)
         str << L"[!] " << event.message;
     else

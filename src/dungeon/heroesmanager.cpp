@@ -46,8 +46,30 @@ void HeroesManager::update(const sf::Time& dt)
 
 void HeroesManager::receive(const Event& event)
 {
-    returnif (event.type != EventType::MODE_CHANGED);
-    setActive(event.mode == Mode::INVASION);
+    sf::Vector2u coords;
+
+    switch (event.type) {
+    case EventType::MODE_CHANGED:
+        setActive(event.mode == Mode::INVASION);
+        break;
+
+    case EventType::MONSTER_EXPLODES_ROOM:
+        // Remove all heroes in that room
+        for (auto& heroInfo : m_heroesInfo) {
+            auto& hero = heroInfo.hero;
+            if (hero == nullptr) continue;
+
+            coords = {event.action.room.x, event.action.room.y};
+            if (m_inter.tileFromLocalPosition(hero->localPosition()) == coords
+                || hero->currentNode()->coords == coords) {
+                heroInfo.status = HeroStatus::TO_BE_REMOVED;
+            }
+        }
+        break;
+
+    default:
+        break;
+    }
 }
 
 //-------------------------------//

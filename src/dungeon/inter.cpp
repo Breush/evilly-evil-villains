@@ -168,6 +168,14 @@ void Inter::receive(const Event& event)
         m_tileRefreshPending.emplace_back([=]() { return refreshMonsters(); });
         break;
 
+    case EventType::MONSTER_EXPLODES_ROOM:
+        coords = {event.action.room.x, event.action.room.y};
+        m_data->destroyRoom(coords, true);
+        m_data->graph().reconstructFromData();
+        // TODO What happens if we destroy entrance?
+        m_tileRefreshPending.emplace_back([=]() { return refreshMonsters(); });
+        break;
+
     case EventType::HARVESTABLE_DOSH_CHANGED:
         coords = {event.room.x, event.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTileDoshLabel(coords); });
@@ -456,9 +464,9 @@ void Inter::constructRoom(const sf::Vector2f& relPos)
     m_data->constructRoom(tileFromLocalPosition(relPos));
 }
 
-void Inter::destroyRoom(const sf::Vector2f& relPos)
+void Inter::destroyRoom(const sf::Vector2u& coords)
 {
-    m_data->destroyRoom(tileFromLocalPosition(relPos));
+    m_data->destroyRoom(coords);
 }
 
 void Inter::removeRoomTrap(const sf::Vector2f& relPos)

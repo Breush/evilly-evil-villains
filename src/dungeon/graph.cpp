@@ -10,8 +10,14 @@ using namespace dungeon;
 
 void Graph::receive(const Event& event)
 {
-    returnif (event.type != EventType::FACILITY_CHANGED);
-    refreshTreasure(m_nodes[{event.room.x, event.room.y}]);
+    switch (event.type) {
+    case EventType::FACILITY_CHANGED:
+        refreshTreasure(m_nodes[event.room.x][event.room.y]);
+        break;
+
+    default:
+        break;
+    }
 }
 
 //------------------------//
@@ -24,22 +30,32 @@ void Graph::useData(Data& data)
     setEmitter(m_data);
 }
 
+// TODO Maybe do also a updateFromData() which does not reinitialize every node?
 Graph::ConstructError Graph::reconstructFromData()
 {
     massert(m_data != nullptr, "Reconstructing dungeon::Graph with dungeon::Data not set.");
-    reset();
 
     const auto& floorsCount = m_data->floorsCount();
     const auto& roomsByFloor = m_data->roomsByFloor();
+
+    // Soft reset: will keep memory as it was if same dungeon size.
+    m_startingNode = nullptr;
+    if (floorsCount != m_nodes.size() || roomsByFloor != m_nodes[0u].size()) {
+        m_nodes.resize(floorsCount);
+        for (auto& floorNodes : m_nodes)
+            floorNodes.resize(roomsByFloor);
+    }
 
     for (uint floorIndex = 0u; floorIndex < floorsCount; ++floorIndex)
     for (uint roomIndex = 0u; roomIndex < roomsByFloor; ++roomIndex) {
         sf::Vector2u roomCoords({floorIndex, roomIndex});
         auto& room = m_data->room(roomCoords);
+        auto& node = m_nodes[floorIndex][roomIndex];
+        node.neighbours.clear();
 
         if (m_data->isRoomConstructed(roomCoords)) {
             // Initialize this particular room
-            auto& node = m_nodes[roomCoords];
+            node.constructed = true;
             node.altitude = floorIndex + 1u;
             node.coords = roomCoords;
 
@@ -59,8 +75,13 @@ Graph::ConstructError Graph::reconstructFromData()
 
             // Check neighbourhood
             for (auto direction : {Data::EAST, Data::WEST, Data::NORTH, Data::SOUTH})
-                if (m_data->roomNeighbourAccessible(roomCoords, direction))
-                    node.neighbours.emplace_back(&m_nodes[m_data->roomNeighbourCoords(roomCoords, direction)]);
+                if (m_data->roomNeighbourAccessible(roomCoords, direction)) {
+                    auto neighbourCoords = m_data->roomNeighbourCoords(roomCoords, direction);
+                    node.neighbours.emplace_back(&m_nodes[neighbourCoords.x][neighbourCoords.y]);
+                }
+        }
+        else {
+            node.constructed = false;
         }
     }
 

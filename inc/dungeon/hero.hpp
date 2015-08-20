@@ -49,6 +49,15 @@ namespace dungeon
 
         //! @}
 
+        //----------------//
+        //! @name Getters
+        //! @{
+
+        //! The graph of the dungeon to be read from.
+        inline const Graph::Node* currentNode() const { return m_currentNode; }
+
+        //! @}
+
         //--------------------------//
         //! @name Public properties
         //! @{

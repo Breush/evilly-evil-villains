@@ -82,7 +82,10 @@ namespace dungeon
         void constructRoom(const sf::Vector2f& relPos);
 
         //! Find the room below the specified relative position and remove it if any.
-        void destroyRoom(const sf::Vector2f& relPos);
+        inline void destroyRoom(const sf::Vector2f& relPos) { destroyRoom(tileFromLocalPosition(relPos)); }
+
+        //! Remove the room at coords if any.
+        void destroyRoom(const sf::Vector2u& coords);
 
         //! Find the room below the specified relative position and remove the trap in it if any.
         void removeRoomTrap(const sf::Vector2f& relPos);

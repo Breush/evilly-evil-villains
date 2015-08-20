@@ -7,6 +7,7 @@ namespace dungeon
     // Forward declarations
 
     class Hero;
+    class Monster;
 
     //! All the possible dungeon events.
     enum class EventType
@@ -19,6 +20,7 @@ namespace dungeon
         FACILITY_CHANGED,           //!< Room facility changed.
         TRAP_CHANGED,               //!< Room trap changed.
         MONSTER_ADDED,              //!< A monster has been added to the dungeon.
+        MONSTER_EXPLODES_ROOM,      //!< A monster exploded in the dungeon.
         HARVESTABLE_DOSH_CHANGED,   //!< The harvestable dosh in a room changed.
         HERO_ENTERED_ROOM,          //!< A hero entered a room.
         HERO_LEFT_ROOM,             //!< A hero left a room.
@@ -51,10 +53,14 @@ namespace dungeon
             RoomCoords room;        //!< The coordinates of a room whenever it is constructed/destroyed.
             const wchar_t* message; //!< An additional information.
 
-            //! When a hero interacts with a room.
+            //! When an action interacts with a room.
             struct
             {
-                Hero* hero;         //!< The hero concerned.
+                union
+                {
+                    Hero* hero;         //!< The hero concerned.
+                    Monster* monster;   //!< The monster concerned.
+                };
                 RoomCoords room;    //!< The coordinates of the room.
             } action;
 
@@ -63,7 +69,6 @@ namespace dungeon
             {
                 RoomCoords room;    //!< The coordinates of the room.
             } facility;
-
         };
     };
 }

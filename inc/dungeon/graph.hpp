@@ -33,6 +33,8 @@ namespace dungeon
          */
         struct Node
         {
+            bool constructed = false;
+
             std::vector<Node*> neighbours;  //!< The neighbourhood of the node.
             sf::Vector2u coords;            //!< The original room coordinates from data.
 
@@ -67,7 +69,7 @@ namespace dungeon
         //! @{
 
         //! Simple getter to access nodes.
-        inline const Node& node(const sf::Vector2u& roomCoords) const { return m_nodes.at(roomCoords); }
+        inline const Node& node(const sf::Vector2u& coords) const { return m_nodes.at(coords.x).at(coords.y); }
 
         //! Simple getter to access the starting node.
         inline const Node& startingNode() const { return *m_startingNode; }
@@ -111,7 +113,7 @@ namespace dungeon
         Data* m_data = nullptr;
 
         //! All the nodes within the graph.
-        std::unordered_map<sf::Vector2u, Node> m_nodes;
+        std::vector<std::vector<Node>> m_nodes;
 
         //! The node with the dungeon door.
         Node* m_startingNode = nullptr;

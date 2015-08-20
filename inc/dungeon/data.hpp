@@ -130,7 +130,8 @@ namespace dungeon
         void constructRoom(const sf::Vector2u& coords);
 
         //! Destroy a room.
-        void destroyRoom(const sf::Vector2u& coords);
+        //! @param hard destroy monsters inside.
+        void destroyRoom(const sf::Vector2u& coords, bool hard = false);
 
         //! Return true if you can access the next room from the specified one.
         //! In the case of unexisting room, it returns false.
