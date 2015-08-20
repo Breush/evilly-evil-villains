@@ -572,7 +572,6 @@ void Texture::bind(const Texture* texture, CoordinateType coordinateType)
 ////////////////////////////////////////////////////////////
 unsigned int Texture::getMaximumSize()
 {
-    // TODO: Remove this lock when it becomes unnecessary in C++11
     Lock lock(mutex);
 
     static unsigned int size = checkMaximumTextureSize();

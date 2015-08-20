@@ -1223,7 +1223,6 @@ void WindowImplX11::requestFocus()
     ScopedXcbPtr<xcb_generic_error_t> error(NULL);
 
     // Check if window is viewable (not on other desktop, ...)
-    // TODO: Check also if minimized
     ScopedXcbPtr<xcb_get_window_attributes_reply_t> attributes(xcb_get_window_attributes_reply(
         m_connection,
         xcb_get_window_attributes(
@@ -2003,7 +2002,6 @@ bool WindowImplX11::processEvent(xcb_generic_event_t* windowEvent)
             xcb_key_press_event_t* e = reinterpret_cast<xcb_key_press_event_t*>(windowEvent);
 
             // Fill the event parameters
-            // TODO: if modifiers are wrong, use XGetModifierMapping to retrieve the actual modifiers mapping
             Event event;
             event.type        = Event::KeyPressed;
             event.key.code    = keycodeToSF(e->detail);

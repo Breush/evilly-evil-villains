@@ -67,7 +67,6 @@ namespace
     // Retrieve the maximum number of texture units available
     GLint getMaxTextureUnits()
     {
-        // TODO: Remove this lock when it becomes unnecessary in C++11
         sf::Lock lock(mutex);
 
         static GLint maxUnits = checkMaxTextureUnits();
@@ -499,7 +498,6 @@ void Shader::bind(const Shader* shader)
 ////////////////////////////////////////////////////////////
 bool Shader::isAvailable()
 {
-    // TODO: Remove this lock when it becomes unnecessary in C++11
     Lock lock(mutex);
 
     static bool available = checkShadersAvailable();

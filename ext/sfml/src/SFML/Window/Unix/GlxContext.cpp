@@ -350,7 +350,6 @@ XVisualInfo GlxContext::selectBestVisual(::Display* display, unsigned int bitsPe
                 samples = 0;
             }
 
-            // TODO: Replace this with proper acceleration detection
             bool accelerated = true;
 
             // Evaluate the visual
