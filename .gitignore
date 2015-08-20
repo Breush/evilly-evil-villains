@@ -16,12 +16,14 @@ Makefile
 CMakeCache.txt
 cmake_install.cmake
 CTestTestfile.cmake
+*.dir
 
 libeev*
 
 *.layout
 *.depend
 *.o
+*.obj
 *.exe
 *.pot
 *.mo
@@ -31,3 +33,4 @@ libeev*
 *.orig
 *.rej
 *_debug.xml
+*.vcxproj*

@@ -5,7 +5,15 @@
 
 namespace steam
 {
-    #include "steam_api.h"
+	// Steam officially knows only Visual C++ on Windows,
+	// this corrects it to be aware of MinGW
+	#if defined(_WIN32)
+	#if defined(__GNUC__)
+		#undef _WIN32
+	#endif
+	#endif
+	
+	#include "steam_api.h"
     #include "steam_gameserver.h"
 }
 

@@ -110,11 +110,11 @@ macro(sfml_add_library target)
     endif()
 
     # add the install rule
-    install(TARGETS ${target}
-            RUNTIME DESTINATION bin COMPONENT bin
-            LIBRARY DESTINATION lib${LIB_SUFFIX} COMPONENT bin
-            ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT devel
-            FRAMEWORK DESTINATION ${CMAKE_INSTALL_FRAMEWORK_PREFIX} COMPONENT bin)
+    #install(TARGETS ${target}
+    #        RUNTIME DESTINATION bin COMPONENT bin
+    #        LIBRARY DESTINATION lib${LIB_SUFFIX} COMPONENT bin
+    #        ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT devel
+    #        FRAMEWORK DESTINATION ${CMAKE_INSTALL_FRAMEWORK_PREFIX} COMPONENT bin)
 endmacro()
 
 # add a new target which is a SFML example
