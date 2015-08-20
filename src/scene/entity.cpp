@@ -446,6 +446,14 @@ void Entity::setSize(const sf::Vector2f& inSize)
     onSizeChanges();
 }
 
+void Entity::setLocalPosition(const sf::Vector2f& inLocalPosition)
+{
+    m_localPosition = inLocalPosition;
+
+    refreshKeepInsideLocalRect();
+    refreshFromLocalPosition();
+}
+
 void Entity::setShader(ShaderID shaderID)
 {
     if (shaderID == ShaderID::NONE) m_shader = nullptr;
@@ -544,6 +552,7 @@ void Entity::refreshFromLocalScale()
 void Entity::refreshOrigin()
 {
     setOrigin(m_relativeOrigin * m_size);
+    refreshKeepInsideLocalRect();
     refreshFromLocalPosition();
 }
 
@@ -579,31 +588,55 @@ void Entity::refreshClipArea()
         child->refreshClipArea();
 }
 
+bool Entity::refreshKeepInsideLocalRect()
+{
+    bool moved = false;
+
+    // Horizontal
+    if (m_insideLocalRect.width > 0.f) {
+        // West
+        auto xw = m_localPosition.x - getOrigin().x;
+        if (xw < m_insideLocalRect.left) {
+            m_localPosition.x += m_insideLocalRect.left - xw;
+            moved = true;
+        }
+
+        // East
+        auto xe = m_localPosition.x + m_size.x - getOrigin().x;
+        if (xe > m_insideLocalRect.left + m_insideLocalRect.width) {
+            m_localPosition.x += m_insideLocalRect.left + m_insideLocalRect.width - xe;
+            moved = true;
+        }
+    }
+
+    // Vertical
+    if (m_insideLocalRect.height > 0.f) {
+        // North
+        auto yn = m_localPosition.y - getOrigin().y;
+        if (yn < m_insideLocalRect.top) {
+            m_localPosition.y += m_insideLocalRect.top - yn;
+            moved = true;
+        }
+
+        // South
+        auto ys = m_localPosition.y + m_size.y - getOrigin().y;
+        if (ys > m_insideLocalRect.top + m_insideLocalRect.height) {
+            m_localPosition.y += m_insideLocalRect.top + m_insideLocalRect.height - ys;
+            moved = true;
+        }
+    }
+
+    return moved;
+}
+
 //---------------------//
 //----- Utilities -----//
 
-void Entity::keepInside(const sf::FloatRect& localRect)
+void Entity::setKeepInsideLocalRect(const sf::FloatRect& localRect)
 {
-    // West
-    auto xw = m_localPosition.x - getOrigin().x;
-    if (xw < localRect.left)
-        m_localPosition.x += localRect.left - xw;
-
-    // East
-    auto xe = m_localPosition.x + m_size.x - getOrigin().x;
-    if (xe > localRect.left + localRect.width)
-        m_localPosition.x += localRect.left + localRect.width - xe;
-
-    // North
-    auto yn = m_localPosition.y - getOrigin().y;
-    if (yn < localRect.top)
-        m_localPosition.y += localRect.top - yn;
-
-    // South
-    auto ys = m_localPosition.y + m_size.y - getOrigin().y;
-    if (ys > localRect.top + localRect.height)
-        m_localPosition.y += localRect.top + localRect.height - ys;
-
+    returnif (m_insideLocalRect == localRect);
+    m_insideLocalRect = localRect;
+    refreshKeepInsideLocalRect();
     refreshFromLocalPosition();
 }
 

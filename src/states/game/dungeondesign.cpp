@@ -41,7 +41,8 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 
     // Context menu
     nuiRoot.attachChild(m_contextMenu);
-    m_contextMenu.setDepth(0.f);
+    m_contextMenu.setRelativeOrigin({0.5f, 0.05f});
+    m_contextMenu.setDepth(-1.f);
 
     // Dungeon lock
     nuiRoot.attachChild(m_dungeonLock);
@@ -115,6 +116,10 @@ void GameDungeonDesign::refreshWindow(const config::WindowInfo& cWindow)
     const auto& window = Application::context().window;
     const auto& screenSize = cWindow.screenSize;
     const auto& resolution = cWindow.resolution;
+
+    // Re-adjust, so that it does not get out of screen
+    // TODO Have relativeKeepInside?
+    m_contextMenu.setKeepInsideLocalRect({0.f, 0.f, resolution.x, resolution.y});
 
     // Log
     m_dungeonLog.setWidth(resolution.x / 4.f);

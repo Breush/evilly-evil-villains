@@ -45,7 +45,7 @@ Inter::Inter(nui::ContextMenu& contextMenu)
 
 void Inter::updateRoutine(const sf::Time&)
 {
-    // Update traps
+    // Do delayed refresh
     for (const auto& tileRefresh : m_tileRefreshPending)
         tileRefresh();
     m_tileRefreshPending.clear();
@@ -397,13 +397,7 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
 
     // Context positions
     m_contextMenu.setLocalPosition(nuiPos);
-    m_contextMenu.setOrigin({m_contextMenu.size().x / 2.f, 10.f});
     m_contextMenu.markForVisible(true);
-
-    // Re-adjust, so that it does not get out of screen
-    // TODO Do that on a refreshWindow() call
-    const auto& resolution = Application::context().windowInfo.resolution;
-    m_contextMenu.keepInside({0.f, 0.f, resolution.x, resolution.y});
 }
 
 void Inter::showEditTreasureDialog(const sf::Vector2u& coords)

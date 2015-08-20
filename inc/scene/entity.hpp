@@ -101,12 +101,19 @@ namespace scene
         //! Set the size property.
         void setSize(const sf::Vector2f& inSize);
 
+        //! Set the local position property.
+        void setLocalPosition(const sf::Vector2f& inLocalPosition);
+
         //! Whether the entity is centered.
         //! This function overwrites the relativeOrigin property.
         void centerOrigin();
 
         //! If needed, moves the entity local coordinates so that it stays inside the borders.
-        void keepInside(const sf::FloatRect& localRect);
+        /*!
+         *  If one do not want change on the horizontal (resp. vertical) axes,
+         *  one just need to set width (resp. height) to negative value.
+         */
+        void setKeepInsideLocalRect(const sf::FloatRect& localRect);
 
         //! The local positions (origin taken in acount) and size.
         sf::FloatRect localBounds();
@@ -148,7 +155,7 @@ namespace scene
         PARAMGSU(sf::Vector2f, m_relativeOrigin, relativeOrigin, setRelativeOrigin, refreshOrigin)
 
         //! The position of the entity relative to its parent's coordinates.
-        PARAMGSU(sf::Vector2f, m_localPosition, localPosition, setLocalPosition, refreshFromLocalPosition)
+        PARAMG(sf::Vector2f, m_localPosition, localPosition)
 
         //! The rotation of the entity relative to its parent's rotation.
         PARAMGSU(float, m_localRotation, localRotation, setLocalRotation, refreshFromLocalRotation)
@@ -407,6 +414,13 @@ namespace scene
         //! Refresh the clip area and update children.
         void refreshClipArea();
 
+        //! Moves the entity to keep it between m_insideLocalRect coordinates.
+        //! @return true if m_localPosition has been modified.
+        // TODO For this to be fully effective, we need to override setOrigin()
+        // so that we can do a refreshKeepInsideRect() on change
+        // which is almost done in setRelativeOrigin...
+        bool refreshKeepInsideLocalRect();
+
         //! @}
 
         //------------------------//
@@ -499,6 +513,9 @@ namespace scene
 
         //! The visual part of the entity, taking parent clip area in account.
         sf::FloatRect m_globalClipArea = {0.f, 0.f, -1.f, -1.f};
+
+        //! The entity will be kept between this limits if width/height is not negative.
+        sf::FloatRect m_insideLocalRect = {0.f, 0.f, -1.f, -1.f};
 
         //! Whether or not this entity has a valid globalClipArea.
         bool m_globalClipping = false;
