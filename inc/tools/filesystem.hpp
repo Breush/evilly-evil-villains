@@ -14,6 +14,8 @@
     #include <dirent.h>
 #endif
 
+// TODO Make .inl
+
 //! Quick tool to extract file extension.
 inline std::string fileExtension(const std::string& file)
 {
@@ -62,24 +64,29 @@ inline std::vector<FileInfo> listFiles(const std::string& directory, bool recurs
 #if defined(__WIN32__)
     // Windows
     HANDLE dir;
-    WIN32_FIND_DATA file_data;
+    WIN32_FIND_DATA fileData;
 
-    if ((dir = FindFirstFile((directory + "/*").c_str(), &file_data)) == INVALID_HANDLE_VALUE)
-        return; /* No files found */
+    // No files found
+    if ((dir = FindFirstFile((directory + "/*").c_str(), &fileData)) == INVALID_HANDLE_VALUE)
+        return filesInfo;
 
     do {
-        const string file_name = file_data.cFileName;
-        const string full_file_name = directory + "/" + file_name;
-        const bool is_directory = (file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+        const std::string fileName = fileData.cFileName;
+        const std::string fullFileName = directory + "/" + fileName;
 
-        if (file_name[0] == '.')
+        // Hidden file or ./.. directories
+        if (fileName[0] == '.')
             continue;
 
-        if (is_directory)
-            continue;
+        // Do recursive if wanted
+        const bool isDirectory = (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+        if (isDirectory && recursive) {
+            std::vector<FileInfo> recFilesInfo = listFiles(fullFileName, true);
+            filesInfo.insert(std::end(filesInfo), std::begin(recFilesInfo), std::end(recFilesInfo));
+        }
 
-        filesInfo.push_back(full_file_name);
-    } while (FindNextFile(dir, &file_data));
+        filesInfo.push_back({fileName, fullFileName, isDirectory});
+    } while (FindNextFile(dir, &fileData));
 
     FindClose(dir);
 
