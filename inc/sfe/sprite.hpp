@@ -5,15 +5,13 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 
-// Forward declarations
-
-enum class TextureID : uint8;
-
 namespace sfe
 {
     /** sfe::Sprite
      *      Just a wrapper of sf::Sprite to a scene::Entity
      **/
+
+    // TODO DOC
 
     class Sprite final : public scene::Entity
     {
@@ -24,7 +22,7 @@ namespace sfe
         Sprite();
         ~Sprite() = default;
 
-        void setTexture(TextureID textureID);
+        void setTexture(const std::string& textureID);
 
     private:
         sf::Sprite m_sprite;

@@ -1,6 +1,5 @@
 #include "dungeon/facilities/ladder.hpp"
 
-#include "resources/identifiers.hpp"
 #include "tools/tools.hpp"
 
 using namespace dungeon::facilities;
@@ -24,15 +23,15 @@ void Ladder::setDesign(Design design)
 {
     switch (design) {
     case Design::MAIN:
-        m_sprite.setTexture(TextureID::DUNGEON_FACILITIES_LADDER_MAIN);
+        m_sprite.setTexture("res/tex/dungeon/facilities/ladder/main.png");
         break;
 
     case Design::EXIT_MAIN:
-        m_sprite.setTexture(TextureID::DUNGEON_FACILITIES_LADDER_EXIT_MAIN);
+        m_sprite.setTexture("res/tex/dungeon/facilities/ladder/exit_main.png");
         break;
 
     case Design::EXIT_END:
-        m_sprite.setTexture(TextureID::DUNGEON_FACILITIES_LADDER_EXIT_END);
+        m_sprite.setTexture("res/tex/dungeon/facilities/ladder/exit_end.png");
         break;
     }
 }

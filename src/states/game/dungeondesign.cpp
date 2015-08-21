@@ -1,7 +1,6 @@
 #include "states/game/dungeondesign.hpp"
 
 #include "core/application.hpp"
-#include "resources/identifiers.hpp"
 #include "context/worlds.hpp"
 #include "tools/tools.hpp"
 #include "tools/vector.hpp"
@@ -83,12 +82,12 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     horizonRoot.attachChild(m_sceneHorizon);
     skyRoot.attachChild(m_sceneSky);
 
-    m_sceneFront.setTexture(TextureID::DUNGEON_SCENE_FRONT);
-    m_sceneClose.setTexture(TextureID::DUNGEON_SCENE_CLOSE);
-    m_sceneMiddle.setTexture(TextureID::DUNGEON_SCENE_MIDDLE);
-    m_sceneFar.setTexture(TextureID::DUNGEON_SCENE_FAR);
-    m_sceneHorizon.setTexture(TextureID::DUNGEON_SCENE_HORIZON);
-    m_sceneSky.setTexture(TextureID::DUNGEON_SCENE_SKY);
+    m_sceneFront.setTexture("res/tex/dungeon/scene/front.png");
+    m_sceneClose.setTexture("res/tex/dungeon/scene/close.png");
+    m_sceneMiddle.setTexture("res/tex/dungeon/scene/middle.png");
+    m_sceneFar.setTexture("res/tex/dungeon/scene/far.png");
+    m_sceneHorizon.setTexture("res/tex/dungeon/scene/horizon.png");
+    m_sceneSky.setTexture("res/tex/dungeon/scene/sky.png");
 
     // Adjust images to new maxZoom
     // TODO Sky is streched, use a setScale instead of setSize inside that function?

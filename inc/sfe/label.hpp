@@ -5,9 +5,7 @@
 
 #include <SFML/Graphics/Text.hpp>
 
-// Forward declarations
-
-enum class FontID : uint8;
+// TODO DOC
 
 namespace sfe
 {
@@ -36,11 +34,11 @@ namespace sfe
         Label();
         virtual ~Label() = default;
 
-        void setFont(FontID fontID);
+        void setFont(const std::string& fontID);
         void setColor(const sf::Color& color);
         void setCharacterSize(uint characterSize);
         void setText(const std::wstring& text);
-        void setText(const std::wstring& text, FontID fontID);
+        void setText(const std::wstring& text, const std::string& fontID);
         void setPrestyle(Prestyle prestyle);
 
     protected:

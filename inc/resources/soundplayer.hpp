@@ -9,6 +9,8 @@
 
 #include <list>
 
+// TODO DOC
+
 namespace resources
 {
     class SoundPlayer : private sf::NonCopyable
@@ -16,13 +18,11 @@ namespace resources
     public:
         SoundPlayer();
 
-        void load(SoundID id, const std::string& filename, bool store = false);
+        void load(const std::string& filename);
 
-        void storeID(SoundID id, const std::wstring& filename);
-        SoundID getID(const std::wstring& filename);
-
-        void play(SoundID id);
-        void play(SoundID id, sf::Vector2f position);
+        void storeID(const std::string& id, const std::wstring& filename);
+        void play(const std::string& id);
+        void play(const std::string& id, sf::Vector2f position);
 
         void stopAll();
         void setVolume(float volume);
@@ -32,7 +32,7 @@ namespace resources
         sf::Vector2f getListenerPosition() const;
 
     private:
-        resources::SoundBufferHolder m_soundBuffers;
+        SoundBufferHolder m_soundBuffers;
         std::list<sf::Sound> m_sounds;
 
         float m_volume = 100.f;

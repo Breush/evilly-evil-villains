@@ -3,13 +3,9 @@
 #include "scml/filesystemprototype.hpp"
 #include "scml/entityprototype.hpp"
 
+#include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
-
-// Forward declarations
-
-enum class TextureID : uint8;
-enum class SoundID : uint8;
 
 namespace scml
 {
@@ -26,13 +22,14 @@ public:
 
     std::pair<uint, uint> getImageDimensions(int folderID, int fileID) const override;
 
-    TextureID getTexture(int folderID, int fileID) const;
-    SoundID getSound(int folderID, int fileID) const;
+    sf::Texture& getTexture(int folderID, int fileID) const;
+    // TODO Why not const std::string& ?
+    std::string getSound(int folderID, int fileID) const;
 
 private:
     // Folder, File
-    std::map<std::pair<int, int>, TextureID> textures;
-    std::map<std::pair<int, int>, SoundID> sounds;
+    std::map<std::pair<int, int>, sf::Texture*> textures;
+    std::map<std::pair<int, int>, std::string> sounds;
 };
 
 class Entity : public EntityPrototype

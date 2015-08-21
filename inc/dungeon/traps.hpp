@@ -68,7 +68,7 @@ namespace dungeon
     public:
 
         //! Constructor, affecting texture and look.
-        TrapGrabButton(const std::wstring& text, TextureID textureID, std::wstring trapID);
+        TrapGrabButton(const std::wstring& text, const std::string& textureID, std::wstring trapID);
 
         //! Default destructor.
         ~TrapGrabButton() = default;
@@ -86,8 +86,8 @@ namespace dungeon
 
     private:
 
-        TextureID m_textureID;  //!< The texture of the grabbable and button.
-        std::wstring m_trapID;  //!< The trap to be constructed in the dungeon inter.
+        std::string m_textureID;    //!< The texture of the grabbable and button.
+        std::wstring m_trapID;      //!< The trap to be constructed in the dungeon inter.
     };
 
     //! A trap temporary object.
@@ -102,7 +102,7 @@ namespace dungeon
     public:
 
         //! Constructor, affecting texture and look.
-        TrapGrabbable(scene::GrabbableSpawner& spawner, TextureID textureID);
+        TrapGrabbable(scene::GrabbableSpawner& spawner, const std::string& textureID);
 
         //! Default destructor.
         ~TrapGrabbable() = default;

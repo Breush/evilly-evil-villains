@@ -47,8 +47,8 @@ namespace dungeon
 
     private:
 
-        TextureID m_textureID;  //!< The texture of the grabbable and button.
-        ToolID m_toolID;        //!< The tool.
+        std::string m_textureID;    //!< The texture of the grabbable and button.
+        ToolID m_toolID;            //!< The tool.
     };
 
     //! A tool temporary object, when selected.
@@ -63,7 +63,7 @@ namespace dungeon
     public:
 
         //! Constructor, affecting texture and look.
-        ToolGrabbable(scene::GrabbableSpawner& spawner, TextureID textureID);
+        ToolGrabbable(scene::GrabbableSpawner& spawner, const std::string& textureID);
 
         //! Default destructor.
         ~ToolGrabbable() = default;

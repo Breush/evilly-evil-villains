@@ -3,6 +3,7 @@
 #include "core/application.hpp"
 #include "tools/vector.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
+#include "tools/tools.hpp"
 
 using namespace nui;
 

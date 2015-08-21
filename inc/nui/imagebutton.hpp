@@ -4,10 +4,6 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 
-// Forward declarations
-
-enum class TextureID : uint8;
-
 namespace nui
 {
     //! A button with an image to execute actions.
@@ -32,10 +28,10 @@ namespace nui
         //! @{
 
         //! Set the image to be displayed.
-        void setImage(TextureID imageID);
+        void setImage(const std::string& imageID);
 
         //! Set all the visual information.
-        void setVisual(const std::wstring& text, TextureID imageID);
+        void setVisual(const std::wstring& text, const std::string& imageID);
 
         //! @}
 

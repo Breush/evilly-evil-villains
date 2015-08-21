@@ -1,16 +1,24 @@
 #include "core/application.hpp"
 
-#include "resources/identifiers.hpp"
+#include "core/debug.hpp"
+#include "tools/filesystem.hpp"
 
 void Application::loadSounds()
 {
-    // Splash-screen
-    s_context.sounds.load(SoundID::JUMPINGTOASTS, "res/snd/jumping-toasts.wav", true);
+    uint soundsCount = 0u;
 
-    // NUI
-    s_context.sounds.load(SoundID::NUI_ACCEPT, "res/snd/accept.wav");
-    s_context.sounds.load(SoundID::NUI_REFUSE, "res/snd/refuse.wav");
-    s_context.sounds.load(SoundID::NUI_SELECT, "res/snd/select.wav");
+    // Recursively load all files in resource directory
+    for (const auto& fileInfo : listFiles("res/snd", true)) {
+        // Load only sounds files
+        if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "wav")
+            continue;
+
+        s_context.sounds.load(fileInfo.fullName);
+
+        ++soundsCount;
+    }
+
+    mdebug_core_1("Loaded " << soundsCount << " sounds.");
 
     refreshSounds();
 }

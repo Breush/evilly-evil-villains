@@ -1,9 +1,9 @@
 #include "scml/interface.hpp"
 
 #include "core/application.hpp"
-#include "resources/identifiers.hpp"
 #include "tools/tools.hpp" // mapFind
 #include "tools/vector.hpp"
+#include "tools/string.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -28,11 +28,11 @@ void FileSystem::clear()
 
 bool FileSystem::loadImageFile(int folderID, int fileID, const std::wstring& filename)
 {
-    TextureID id = Application::context().textures.getID(filename);
+    auto& texture = Application::context().textures.get(toString(filename));
 
-    if (!textures.insert(std::make_pair(std::make_pair(folderID, fileID), id)).second) {
-        std::wcerr << L"scml::FileSystem failed to load image: Loading " << filename
-                  << L" duplicates the folder/file id " << folderID << "/" << fileID << std::endl;
+    if (!textures.insert(std::make_pair(std::make_pair(folderID, fileID), &texture)).second) {
+        std::wcout << L"scml::FileSystem failed to load image: Loading " << filename
+                   << L" duplicates the folder/file id " << folderID << "/" << fileID << std::endl;
         return false;
     }
 
@@ -41,32 +41,31 @@ bool FileSystem::loadImageFile(int folderID, int fileID, const std::wstring& fil
 
 std::pair<uint, uint> FileSystem::getImageDimensions(int folderID, int fileID) const
 {
-    // TODO There is certainly a better way to do
-    const auto& texture = Application::context().textures.get(getTexture(folderID, fileID));
+    const auto& texture = getTexture(folderID, fileID);
     return std::make_pair(texture.getSize().x, texture.getSize().y);
 }
 
-TextureID FileSystem::getTexture(int folderID, int fileID) const
+sf::Texture& FileSystem::getTexture(int folderID, int fileID) const
 {
-    return tools::mapFind(textures, std::make_pair(folderID, fileID));
+    return *tools::mapFind(textures, std::make_pair(folderID, fileID));
 }
 
 //----- Sounds
 
 bool FileSystem::loadSoundFile(int folderID, int fileID, const std::wstring& filename)
 {
-    SoundID id = Application::context().sounds.getID(filename);
+    auto soundID = toString(filename);
 
-    if (!sounds.insert(std::make_pair(std::make_pair(folderID, fileID), id)).second) {
-        std::wcerr << L"scml::FileSystem failed to load sound: Loading " << filename
-                  << L" duplicates the folder/file id " << folderID << "/" << fileID << std::endl;
+    if (!sounds.insert(std::make_pair(std::make_pair(folderID, fileID), soundID)).second) {
+        std::wcout << L"scml::FileSystem failed to load sound: Loading " << filename
+                   << L" duplicates the folder/file id " << folderID << "/" << fileID << std::endl;
         return false;
     }
 
     return true;
 }
 
-SoundID FileSystem::getSound(int folderID, int fileID) const
+std::string FileSystem::getSound(int folderID, int fileID) const
 {
     return tools::mapFind(sounds, std::make_pair(folderID, fileID));
 }
@@ -93,13 +92,14 @@ std::pair<uint, uint> Entity::getImageDimensions(int folderID, int fileID) const
     return m_fileSystem->getImageDimensions(folderID, fileID);
 }
 
-// (x, y) specifies the center point of the image.  x, y, and angle are in SCML coordinate system (+x to the right, +y up, +angle counter-clockwise)
+// (x, y) specifies the center point of the image.  x, y, and angle are in SCML coordinate system
+// (+x to the right, +y up, +angle counter-clockwise)
 void Entity::draw_internal(int folderID, int fileID, float x, float y, float angle, float scale_x, float scale_y)
 {
     y = -y;
     angle = 360 - angle;
 
-    const auto& texture = Application::context().textures.get(m_fileSystem->getTexture(folderID, fileID));
+    const auto& texture = m_fileSystem->getTexture(folderID, fileID);
 
     m_sprite.setTexture(texture, true);
     m_sprite.setOrigin(sf::v2f(texture.getSize() / 2u));

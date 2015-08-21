@@ -1,7 +1,6 @@
 #include "dungeon/lock.hpp"
 
 #include "core/application.hpp"
-#include "resources/identifiers.hpp"
 #include "tools/vector.hpp"
 #include "dungeon/data.hpp"
 
@@ -11,7 +10,7 @@ Lock::Lock()
 {
     // Sprite
     addPart(&m_lock);
-    m_lock.setTexture(Application::context().textures.get(TextureID::DUNGEON_LOCK));
+    m_lock.setTexture(Application::context().textures.get("res/tex/dungeon/panel/lock.png"));
 }
 
 //-------------------//
@@ -43,7 +42,7 @@ void Lock::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Ve
 
 void Lock::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
-    setPartShader(&m_lock, ShaderID::NUI_HOVER);
+    setPartShader(&m_lock, "nui/hover");
 }
 
 void Lock::handleMouseLeft()

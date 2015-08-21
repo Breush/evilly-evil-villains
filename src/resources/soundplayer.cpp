@@ -1,6 +1,5 @@
 #include "resources/soundplayer.hpp"
 
-#include "resources/identifiers.hpp"
 #include "tools/platform-fixes.hpp" // erase_if
 #include "core/gettext.hpp" // string2wstring
 
@@ -17,22 +16,17 @@ SoundPlayer::SoundPlayer()
     sf::Listener::setDirection(0.f, 0.f, -1.f);
 }
 
-void SoundPlayer::load(SoundID id, const std::string& filename, bool store)
+void SoundPlayer::load(const std::string& filename)
 {
-    m_soundBuffers.load(id, filename, store);
+    m_soundBuffers.load(filename);
 }
 
-SoundID SoundPlayer::getID(const std::wstring& filename)
-{
-    return m_soundBuffers.getID(filename);
-}
-
-void SoundPlayer::play(SoundID id)
+void SoundPlayer::play(const std::string& id)
 {
     play(id, getListenerPosition());
 }
 
-void SoundPlayer::play(SoundID id, sf::Vector2f position)
+void SoundPlayer::play(const std::string& id, sf::Vector2f position)
 {
     m_sounds.emplace_back();
     sf::Sound& sound = m_sounds.back();

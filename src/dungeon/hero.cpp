@@ -1,6 +1,5 @@
 #include "dungeon/hero.hpp"
 
-#include "resources/identifiers.hpp"
 #include "dungeon/heroesmanager.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/data.hpp"
@@ -20,7 +19,7 @@ Hero::Hero(HeroesManager& manager, Inter& inter)
 
     // Sprite
     attachChild(m_sprite);
-    m_sprite.load(AnimationID::HEROES_GROO);
+    m_sprite.load("res/scml/heroes/groo.scml");
 
     // Dosh label
     attachChild(m_doshLabel);

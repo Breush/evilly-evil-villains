@@ -5,7 +5,6 @@
 #include "tools/time.hpp"
 #include "tools/tools.hpp"
 #include "context/worlds.hpp"
-#include "resources/identifiers.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>

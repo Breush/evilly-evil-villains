@@ -1,7 +1,7 @@
 #include "nui/contextmenu.hpp"
 
 #include "core/application.hpp"
-#include "resources/identifiers.hpp"
+#include "tools/tools.hpp"
 
 using namespace nui;
 
@@ -12,10 +12,10 @@ ContextMenu::ContextMenu()
 
     // Background
     // TODO Have own background image
-    m_background.setTexture(&Application::context().textures.get(TextureID::DUNGEON_SIDEBAR_BACKGROUND));
+    m_background.setTexture(&Application::context().textures.get("res/tex/dungeon/sidebar/background.png"));
 
     // Title
-    m_title.setFont(Application::context().fonts.get(FontID::NUI));
+    m_title.setFont(Application::context().fonts.get("res/font/nui.ttf"));
     m_title.setStyle(sf::Text::Bold);
     m_title.setColor(sf::Color::White);
 }
@@ -103,10 +103,10 @@ void ContextMenu::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Ve
     uint choice = choiceFromCoords(mousePos);
 
     if (choice < m_choices.size() && m_choices[choice].callback != nullptr) {
-        Application::context().sounds.play(SoundID::NUI_ACCEPT);
+        Application::context().sounds.play("res/snd/accept.wav");
         m_choices[choice].callback();
     } else {
-        Application::context().sounds.play(SoundID::NUI_REFUSE);
+        Application::context().sounds.play("res/snd/refuse.wav");
         markForVisible(true);
     }
 }
@@ -117,7 +117,7 @@ void ContextMenu::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vecto
 
     resetPartsShader();
     if (choice < m_choices.size() && m_choices[choice].callback != nullptr)
-        setPartShader(&m_choices[choice].text, ShaderID::NUI_HOVER);
+        setPartShader(&m_choices[choice].text, "nui/hover");
 }
 
 void ContextMenu::handleMouseLeft()
@@ -155,7 +155,7 @@ void ContextMenu::addChoice(const std::wstring& text, Callback callback)
     choiceInfo.callback = callback;
 
     // Getting font from holder
-    sf::Font& font = Application::context().fonts.get(FontID::NUI);
+    sf::Font& font = Application::context().fonts.get("res/font/nui.ttf");
     choiceInfo.text.setFont(font);
     choiceInfo.text.setCharacterSize(m_fontSize);
 

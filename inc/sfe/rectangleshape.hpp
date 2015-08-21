@@ -4,10 +4,6 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
-// Forward declarations
-
-enum class TextureID : uint8;
-
 namespace sfe
 {
     //! Wrapper of sf::RectangleShape as a scene::Entity.
@@ -29,7 +25,7 @@ namespace sfe
         //! @{
 
         //! Wrapper to set a texture.
-        void setTexture(TextureID textureID);
+        void setTexture(const std::string& textureID);
 
         //! Wrapper to set the fill color.
         inline void setFillColor(const sf::Color& color)

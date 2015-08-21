@@ -1,142 +1,72 @@
-#include "tools/string.hpp" // toWString
-#include "tools/tools.hpp" // returnif
+#include "tools/platform-fixes.hpp" // make_unique
 
 #include <stdexcept> // runtime_error
-#include <iostream>
 
 namespace resources
 {
-    template <typename Resource, typename Identifier>
-    inline void ResourceHolder<Resource, Identifier>::load(Identifier id)
-    {
-        insertResource(id, std::unique_ptr<Resource>(new Resource));
-    }
+    //--------------------------//
+    //----- ResourceHolder -----//
 
-    template <typename Resource, typename Identifier>
-    inline void ResourceHolder<Resource, Identifier>::load(Identifier id, const std::string& filename, bool store)
+    template <typename Resource>
+    inline Resource& ResourceHolder<Resource>::load(const std::string& filename)
     {
         // Create and load resource
-        std::unique_ptr<Resource> resource(new Resource());
+        auto resource = std::make_unique<Resource>();
         if (!resource->loadFromFile(filename))
-            throw std::runtime_error("ResourceHolder::load - Failed to load " + filename);
+            throw std::runtime_error("[ResourceHolder] Failed to load '" + filename + "'. Ouch.");
 
         // If loading successful, insert resource to map
-        insertResource(id, std::move(resource));
-        if (store) storeID(id, toWString(filename));
+        return insertResource(filename, std::move(resource));
     }
 
-    template <typename Resource, typename Identifier>
+    template <typename Resource>
     template <typename Parameter>
-    inline void ResourceHolder<Resource, Identifier>::load(Identifier id, const std::string& filename, const Parameter& secondParam)
+    inline Resource& ResourceHolder<Resource>::load(const std::string& id, const std::string& filename, const Parameter& parameter)
     {
         // Create and load resource
-        std::unique_ptr<Resource> resource(new Resource());
-        if (!resource->loadFromFile(filename, secondParam))
-            throw std::runtime_error("ResourceHolder::load - Failed to load " + filename);
+        auto resource = std::make_unique<Resource>();
+        if (!resource->loadFromFile(filename, parameter))
+            throw std::runtime_error("[ResourceHolder] Failed to load '" + filename + "'. Ouch.");
 
         // If loading successful, insert resource to map
-        insertResource(id, std::move(resource));
+        return insertResource(id, std::move(resource));
     }
 
-    template <typename Resource, typename Identifier>
-    inline void ResourceHolder<Resource, Identifier>::loadVoid(Identifier id)
-    {
-        m_resourcesMap.insert(std::make_pair(id, nullptr));
-    }
-
-    template <typename Resource, typename Identifier>
-    inline Resource& ResourceHolder<Resource, Identifier>::get(Identifier id)
+    template <typename Resource>
+    inline bool ResourceHolder<Resource>::exists(const std::string& id)
     {
         auto found = m_resourcesMap.find(id);
+        return (found != m_resourcesMap.end());
+    }
 
-        if (found == m_resourcesMap.end()) {
-            if (id != Identifier::DEFAULT) {
-                std::cerr << "/!\\ Resource id '" << static_cast<uint16>(id) << "' not found.";
-                std::cerr << " Using DEFAULT instead." << std::endl;
-                return get(Identifier::DEFAULT);
-            } else {
-                throw std::runtime_error("DEFAULT resource not found. Ouch.");
-            }
-        }
+    template <typename Resource>
+    inline Resource& ResourceHolder<Resource>::get(const std::string& id)
+    {
+        auto found = m_resourcesMap.find(id);
+        if (found == m_resourcesMap.end())
+            throw std::runtime_error("[ResourceHolder] Resource '" + id + "' not found. Ouch.");
 
         return *found->second;
     }
 
-    template <typename Resource, typename Identifier>
-    inline const Resource& ResourceHolder<Resource, Identifier>::get(Identifier id) const
+    template <typename Resource>
+    inline const Resource& ResourceHolder<Resource>::get(const std::string& id) const
     {
         auto found = m_resourcesMap.find(id);
-
-        if (found == m_resourcesMap.end()) {
-            if (id != Identifier::DEFAULT) {
-                std::cerr << "/!\\ Resource not found. Using DEFAULT instead." << std::endl;
-                return get(Identifier::DEFAULT);
-            } else {
-                throw std::runtime_error("DEFAULT resource not found. Ouch.");
-            }
-        }
+        if (found == m_resourcesMap.end())
+            throw std::runtime_error("[ResourceHolder] Resource '" + id + "' not found. Ouch.");
 
         return *found->second;
     }
 
-    template <typename Resource, typename Identifier>
-    inline void ResourceHolder<Resource, Identifier>::storeID(Identifier id, const std::wstring& filename)
+    template <typename Resource>
+    inline Resource& ResourceHolder<Resource>::insertResource(std::string id, std::unique_ptr<Resource> resource)
     {
-        insertFilename(id, filename);
-    }
+        auto inserted = m_resourcesMap.insert(std::make_pair(std::move(id), std::move(resource)));
+        if (!inserted.second)
+            throw std::runtime_error("[ResourceHolder] Unable to insert resource '" + id + "'. Ouch.");
 
-    template <typename Resource, typename Identifier>
-    inline Identifier ResourceHolder<Resource, Identifier>::getID(const std::wstring& filename)
-    {
-        auto found = m_filenameMap.find(filename);
-        wassert(found != m_filenameMap.end(), L"ID from filename " << filename << L" not found");
-        return found->second;
-    }
-
-    template <typename Resource, typename Identifier>
-    inline void ResourceHolder<Resource, Identifier>::insertResource(Identifier id, std::unique_ptr<Resource> resource)
-    {
-        // Insert and check success
-        auto inserted = m_resourcesMap.insert(std::make_pair(id, std::move(resource)));
-        massert(inserted.second, "Cannot add resource");
-    }
-
-    template <typename Resource, typename Identifier>
-    inline void ResourceHolder<Resource, Identifier>::insertFilename(Identifier id, const std::wstring& filename)
-    {
-        // Insert and check success
-        auto inserted = m_filenameMap.insert(std::make_pair(filename, id));
-        wassert(inserted.second, L"Cannot add filename " << filename << L". Was it already added?");
-    }
-
-    // For textures
-    template <typename Resource, typename Identifier>
-    inline void ResourceHolder<Resource, Identifier>::setSmooth(Identifier id, bool smoothActive)
-    {
-        auto found = m_resourcesMap.find(id);
-        massert(found != m_resourcesMap.end(), "Resource not found");
-
-        found->second->setSmooth(smoothActive);
-    }
-
-    template <typename Resource, typename Identifier>
-    inline void ResourceHolder<Resource, Identifier>::setRepeated(Identifier id, bool repeated)
-    {
-        auto found = m_resourcesMap.find(id);
-        massert(found != m_resourcesMap.end(), "Resource not found");
-
-        found->second->setRepeated(repeated);
-    }
-
-    // For shaders
-    template <typename Resource, typename Identifier>
-    template <typename Parameter>
-    inline void ResourceHolder<Resource, Identifier>::setParameter(Identifier id, const std::string& name, const Parameter& param)
-    {
-        auto found = m_resourcesMap.find(id);
-        returnif (found == m_resourcesMap.end());
-
-        found->second->setParameter(name, param);
+        return *inserted.first->second;
     }
 }
 

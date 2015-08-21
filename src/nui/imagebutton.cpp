@@ -1,7 +1,6 @@
 #include "nui/imagebutton.hpp"
 
 #include "core/application.hpp"
-#include "resources/identifiers.hpp"
 #include "tools/vector.hpp"
 
 using namespace nui;
@@ -68,19 +67,19 @@ void ImageButton::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vecto
     // From button
     baseClass::handleMouseMoved(mousePos, nuiPos);
 
-    setPartShader(&m_image, ShaderID::NUI_HOVER);
+    setPartShader(&m_image, "nui/hover");
 }
 
 //------------------//
 //----- Action -----//
 
-void ImageButton::setImage(TextureID imageID)
+void ImageButton::setImage(const std::string& imageID)
 {
     m_image.setTexture(Application::context().textures.get(imageID));
     updateSize();
 }
 
-void ImageButton::setVisual(const std::wstring& text, TextureID imageID)
+void ImageButton::setVisual(const std::wstring& text, const std::string& imageID)
 {
     setText(text);
     setImage(imageID);

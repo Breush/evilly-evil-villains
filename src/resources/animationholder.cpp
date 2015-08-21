@@ -1,8 +1,8 @@
 #include "resources/animationholder.hpp"
 
-#include "resources/identifiers.hpp"
 #include "scml/data.hpp"
 #include "sfe/animatedsprite.hpp"
+#include "tools/platform-fixes.hpp"
 
 using namespace resources;
 
@@ -12,25 +12,25 @@ void AnimationHolder::update(const sf::Time& dt)
         animatedSprite->updateAnimation(dt);
 }
 
-void AnimationHolder::load(AnimationID id, const std::string& filename)
+void AnimationHolder::load(const std::string& filename)
 {
     // Data
-    m_scmlHolder.load(id, filename);
+    m_scmlHolder.load(filename);
 
     // File system
-    std::unique_ptr<scml::FileSystem> fs(new scml::FileSystem());
-    m_fsMap.insert(std::make_pair(id, std::move(fs)));
-    m_fsMap[id]->load(&getData(id));
+    auto fs = std::make_unique<scml::FileSystem>();
+    m_fsMap.insert(std::make_pair(filename, std::move(fs)));
+    m_fsMap[filename]->load(&getData(filename));
 }
 
 //----- Getters -----//
 
-scml::Data& AnimationHolder::getData(AnimationID id)
+scml::Data& AnimationHolder::getData(const std::string& id)
 {
     return m_scmlHolder.get(id);
 }
 
-scml::FileSystem& AnimationHolder::getFileSystem(AnimationID id)
+scml::FileSystem& AnimationHolder::getFileSystem(const std::string& id)
 {
     return *m_fsMap[id];
 }

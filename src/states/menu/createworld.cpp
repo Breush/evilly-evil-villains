@@ -6,7 +6,6 @@
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
 #include "tools/string.hpp"
-#include "resources/identifiers.hpp"
 
 using namespace states;
 

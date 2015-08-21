@@ -3,7 +3,6 @@
 #include "core/application.hpp"
 #include "core/gettext.hpp"
 #include "core/define.hpp"
-#include "resources/identifiers.hpp"
 #include "tools/vector.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -19,7 +18,7 @@ MenuMain::MenuMain(StateStack& stack)
     Application::context().window.setKeyRepeatEnabled(true);
 
     // Menu theme
-    Application::context().musics.play(MusicID::MENU_THEME);
+    Application::context().musics.play("menu_theme");
 
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
@@ -27,14 +26,14 @@ MenuMain::MenuMain(StateStack& stack)
     float maxSide = std::max(nuiSize.x, nuiSize.y);
 
     // Background
-    auto textureSize = sf::v2f(Application::context().textures.get(TextureID::MENU_MAIN_BACKGROUND).getSize());
+    auto textureSize = sf::v2f(Application::context().textures.get("res/tex/menu/main/background.png").getSize());
     auto scaleFactor = maxSide / textureSize.x;
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
-    m_background.setTexture(TextureID::MENU_MAIN_BACKGROUND);
-    m_background.setShader(ShaderID::MENU_MAIN_BACKGROUND);
+    m_background.setTexture("res/tex/menu/main/background.png");
+    m_background.setShader("menu/background");
     m_background.setLocalScale({scaleFactor, scaleFactor});
-    Application::context().shaders.setParameter(ShaderID::MENU_MAIN_BACKGROUND, "textureSize", scaleFactor * textureSize);
+    Application::context().shaders.get("menu/background").setParameter("textureSize", scaleFactor * textureSize);
 
     // Copyright label
     nuiRoot.attachChild(m_copyrightLabel);
@@ -72,7 +71,7 @@ MenuMain::MenuMain(StateStack& stack)
     nuiRoot.attachChild(m_reactImage);
     m_reactImage.centerOrigin();
     m_reactImage.setRelativePosition({0.5f, 0.2f});
-    m_reactImage.setShader(ShaderID::MENU_MAIN_LOGO);
+    m_reactImage.setShader("menu/name");
     m_reactImage.setMouseLeftDeselect(false);
 
     // Setting callbacks

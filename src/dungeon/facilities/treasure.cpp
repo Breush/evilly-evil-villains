@@ -1,6 +1,5 @@
 #include "dungeon/facilities/treasure.hpp"
 
-#include "resources/identifiers.hpp"
 #include "tools/tools.hpp"
 
 using namespace dungeon::facilities;
@@ -16,5 +15,5 @@ Treasure::Treasure(const sf::Vector2u& coords, ElementData& elementdata)
 
     // Decorum
     attachChild(m_sprite);
-    m_sprite.load(AnimationID::DUNGEON_FACILITIES_TREASURE);
+    m_sprite.load("res/scml/dungeon/facilities/treasure.scml");
 }

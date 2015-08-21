@@ -56,7 +56,7 @@ void AnimatedSprite::refresh()
 //---------------------//
 //----- Animation -----//
 
-void AnimatedSprite::load(AnimationID id)
+void AnimatedSprite::load(const std::string& id)
 {
     auto& data = Application::context().animations.getData(id);
     auto& fs = Application::context().animations.getFileSystem(id);

@@ -1,6 +1,5 @@
 #include "states/quit.hpp"
 
-#include "resources/identifiers.hpp"
 #include "core/gettext.hpp"
 #include "tools/tools.hpp"
 

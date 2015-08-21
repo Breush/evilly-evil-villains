@@ -8,12 +8,10 @@
 
 #include <map>
 
-// Forward declarations
-
-enum class TextureID : uint8;
-
 namespace nui
 {
+    // TODO DOC
+
     class ReactImage : public scene::Entity
     {
         using baseClass = scene::Entity;
@@ -32,7 +30,7 @@ namespace nui
         std::wstring& getReact() { return m_react; }
 
         // Texture
-        void setImageTexture(TextureID id);
+        void setImageTexture(const std::string& textureId);
 
         // React management
         void addReactFromFile(const std::string& file);

@@ -1,7 +1,6 @@
 #include "states/game/pause.hpp"
 
 #include "core/gettext.hpp"
-#include "resources/identifiers.hpp"
 #include "tools/tools.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>

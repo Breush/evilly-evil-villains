@@ -15,10 +15,6 @@
 #include <array>
 #include <unordered_map>
 
-// Forward declarations
-
-enum class TextureID : uint8;
-
 namespace dungeon
 {
     //! The dungeon itself, handling user interactions.
@@ -156,7 +152,7 @@ namespace dungeon
         void clearLayers(const sf::Vector2u& coords);
 
         //! Add a layer to the tile.
-        void addLayer(const sf::Vector2u& coords, TextureID);
+        void addLayer(const sf::Vector2u& coords,  const std::string& textureID);
 
         //! Remove all tiles.
         void clearTiles();

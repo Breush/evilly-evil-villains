@@ -1,9 +1,9 @@
 #include "nui/reactimage.hpp"
 
 #include "core/application.hpp"
-#include "resources/identifiers.hpp"
 #include "tools/math.hpp"
-#include "tools/debug.hpp"
+#include "tools/tools.hpp"
+#include "tools/string.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <pugixml/pugixml.hpp>
@@ -53,7 +53,7 @@ void ReactImage::refreshImage()
 //-------------------//
 //----- Texture -----//
 
-void ReactImage::setImageTexture(TextureID id)
+void ReactImage::setImageTexture(const std::string& id)
 {
     sf::Texture& texture = Application::context().textures.get(id);
     m_image.setTexture(texture);
@@ -83,7 +83,7 @@ void ReactImage::addReactFromFile(const std::string& file)
     // Get texture if any
     std::wstring textureString = reactImageNode.attribute(L"texture").as_string();
     if (!textureString.empty())
-        setImageTexture(Application::context().textures.getID(textureString));
+        setImageTexture(toString(textureString));
 
     // Adding children
     for (const auto& reactNode : reactImageNode.children()) {
@@ -132,7 +132,7 @@ void ReactImage::activateReact(const std::wstring& key)
         return;
 
     setActiveReact(key);
-    Application::context().sounds.play(SoundID::NUI_SELECT);
+    Application::context().sounds.play("res/snd/select.wav");
 }
 
 //--------------------------------//
@@ -171,12 +171,12 @@ void ReactImage::handleMouseButtonPressed(const sf::Mouse::Button button, const 
 
     // Maybe callback is not set
     if (m_reacts[m_react].callback == nullptr) {
-        Application::context().sounds.play(SoundID::NUI_REFUSE);
+        Application::context().sounds.play("res/snd/refuse.wav");
         return;
     }
 
     // Accept callback
-    Application::context().sounds.play(SoundID::NUI_ACCEPT);
+    Application::context().sounds.play("res/snd/accept.wav");
     m_reacts[m_react].callback();
 }
 

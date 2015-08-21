@@ -12,8 +12,6 @@
 
 // Forward declarations
 
-enum class ShaderID : uint8;
-
 namespace sf
 {
     class Shader;
@@ -119,8 +117,7 @@ namespace scene
         sf::FloatRect localBounds();
 
         //! Set the shader applied to the whole entity.
-        //! Use ShaderID::NONE to remove current shader.
-        void setShader(ShaderID shaderID);
+        void setShader(const std::string& shaderID);
 
         //! Set the position relative to the size of the parent.
         //! Expects inRelativePosition coordinates to be between 0.f and 1.f.
@@ -354,7 +351,7 @@ namespace scene
         void addPart(sf::Drawable* drawable);
 
         //! Set shader of the part.
-        void setPartShader(sf::Drawable* drawable, ShaderID shader);
+        void setPartShader(sf::Drawable* drawable, const std::string& shader);
 
         //! Reset this part shader to nullptr.
         void resetPartShader(sf::Drawable* drawable);

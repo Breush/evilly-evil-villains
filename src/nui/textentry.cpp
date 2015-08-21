@@ -1,8 +1,9 @@
 #include "nui/textentry.hpp"
 
 #include "core/application.hpp"
-#include "resources/identifiers.hpp"
 #include "tools/vector.hpp"
+#include "tools/string.hpp"
+#include "tools/tools.hpp"
 
 using namespace nui;
 
@@ -16,7 +17,7 @@ TextEntry::TextEntry()
     m_background.setFillColor(sf::Color::White);
 
     addPart(&m_text);
-    m_text.setFont(Application::context().fonts.get(FontID::NUI));
+    m_text.setFont(Application::context().fonts.get("res/font/nui.ttf"));
     m_text.setColor(sf::Color::Black);
 
     addPart(&m_cursor);

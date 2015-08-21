@@ -1,6 +1,5 @@
 #include "dungeon/traps/pickpock.hpp"
 
-#include "resources/identifiers.hpp"
 #include "dungeon/hero.hpp"
 #include "dungeon/data.hpp"
 #include "tools/tools.hpp"
@@ -20,7 +19,7 @@ PickPock::PickPock(const sf::Vector2u& coords, ElementData& elementdata)
 
     // Decorum
     attachChild(m_sprite);
-    m_sprite.load(AnimationID::DUNGEON_TRAPS_PICKPOCK);
+    m_sprite.load("res/scml/dungeon/traps/pickpock.scml");
 }
 
 //-------------------------//

@@ -8,10 +8,6 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
-// Forward declarations
-
-enum class TextureID : uint8;
-
 namespace dungeon
 {
     //! A generic facility interface.
@@ -61,7 +57,7 @@ namespace dungeon
     public:
 
         //! Constructor, affecting texture and look.
-        FacilityGrabButton(const std::wstring& text, TextureID textureID, std::wstring facilityID);
+        FacilityGrabButton(const std::wstring& text, const std::string& textureID, std::wstring facilityID);
 
         //! Default destructor.
         ~FacilityGrabButton() = default;
@@ -79,7 +75,7 @@ namespace dungeon
 
     private:
 
-        TextureID m_textureID;      //!< The texture of the grabbable and button.
+        std::string m_textureID;    //!< The texture of the grabbable and button.
         std::wstring m_facilityID;  //!< The facility to be constructed in the dungeon inter.
     };
 
@@ -95,7 +91,7 @@ namespace dungeon
     public:
 
         //! Constructor, affecting texture and look.
-        FacilityGrabbable(scene::GrabbableSpawner& spawner, TextureID textureID);
+        FacilityGrabbable(scene::GrabbableSpawner& spawner, const std::string& textureID);
 
         //! Default destructor.
         ~FacilityGrabbable() = default;

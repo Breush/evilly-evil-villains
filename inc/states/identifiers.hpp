@@ -2,7 +2,8 @@
 
 #include "tools/int.hpp"
 
-enum class StateID : uint8 {
+enum class StateID : uint8
+{
     NONE,
     QUIT,
     SPLASHSCREEN,

@@ -1,7 +1,6 @@
 #include "dcb/answerbox.hpp"
 
 #include "core/application.hpp"
-#include "resources/identifiers.hpp"
 #include "tools/debug.hpp"
 #include "tools/vector.hpp"
 #include "tools/tools.hpp"
@@ -99,7 +98,7 @@ void AnswerBox::refreshTexts()
 
     for (auto& text : m_texts) {
         text.fitWidth(size().x);
-        text.setFont(Application::context().fonts.get(FontID::NUI));
+        text.setFont(Application::context().fonts.get("res/font/nui.ttf"));
         text.setColor(sf::Color::White);
         text.setPosition({0.f, vOffset});
         vOffset += boundsSize(text).y;

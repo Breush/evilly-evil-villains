@@ -1,7 +1,6 @@
 #include "dungeon/monsters.hpp"
 
 #include "core/application.hpp"
-#include "resources/identifiers.hpp"
 #include "dungeon/inter.hpp"
 #include "tools/vector.hpp"
 
@@ -15,7 +14,7 @@ MonsterCage::MonsterCage(std::wstring monsterID)
 {
     // Background
     addPart(&m_background);
-    m_background.setTexture(&Application::context().textures.get(TextureID::DUNGEON_SIDEBAR_TAB_MONSTERS_CAGE));
+    m_background.setTexture(&Application::context().textures.get("res/tex/dungeon/sidebar/tab/monsters/cage.png"));
 
     // Puppets
     // TODO Have X puppets because there is X monsters in the reserve

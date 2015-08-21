@@ -1,7 +1,6 @@
 #include "sfe/rectangleshape.hpp"
 
 #include "core/application.hpp"
-#include "resources/identifiers.hpp"
 
 using namespace sfe;
 
@@ -15,7 +14,7 @@ RectangleShape::RectangleShape()
 //--------------------//
 //----- Wrappers -----//
 
-void RectangleShape::setTexture(TextureID textureID)
+void RectangleShape::setTexture(const std::string& textureID)
 {
     m_rectangleShape.setTexture(&Application::context().textures.get(textureID));
 }

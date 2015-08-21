@@ -1,21 +1,24 @@
 #include "core/application.hpp"
 
-#include "resources/identifiers.hpp"
+#include "core/debug.hpp"
+#include "tools/filesystem.hpp"
 
 void Application::loadAnimations()
 {
-    // Splash-screen
-    s_context.animations.load(AnimationID::JUMPINGTOASTS, "res/scml/jumping-toasts.scml");
+    uint animationsCount = 0u;
 
-    // Dungeon traps
-    s_context.animations.load(AnimationID::DUNGEON_TRAPS_PICKPOCK, "res/scml/dungeon/traps/pickpock.scml");
+    // Recursively load all files in resource directory
+    for (const auto& fileInfo : listFiles("res/scml", true)) {
+        // Load only animations files
+        if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "scml")
+            continue;
 
-    // Dungeon facilities
-    s_context.animations.load(AnimationID::DUNGEON_FACILITIES_ENTRANCE, "res/scml/dungeon/facilities/entrance.scml");
-    s_context.animations.load(AnimationID::DUNGEON_FACILITIES_TREASURE, "res/scml/dungeon/facilities/treasure.scml");
+        s_context.animations.load(fileInfo.fullName);
 
-    // Heroes
-    s_context.animations.load(AnimationID::HEROES_GROO, "res/scml/heroes/groo.scml");
+        ++animationsCount;
+    }
+
+    mdebug_core_1("Loaded " << animationsCount << " animations.");
 }
 
 void Application::updateAnimations(const sf::Time& dt)

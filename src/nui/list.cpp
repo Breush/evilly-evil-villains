@@ -1,7 +1,6 @@
 #include "nui/list.hpp"
 
 #include "core/application.hpp"
-#include "resources/identifiers.hpp"
 #include "sfe/label.hpp"
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
@@ -69,12 +68,12 @@ void List::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Ve
     // Double-click?
     if (m_doubleClickDelay >= 0.f) {
         returnif (m_callback == nullptr);
-        Application::context().sounds.play(SoundID::NUI_SELECT);
+        Application::context().sounds.play("res/snd/select.wav");
         m_callback();
     }
     else {
         m_doubleClickDelay = 0.f;
-        Application::context().sounds.play(SoundID::NUI_SELECT);
+        Application::context().sounds.play("res/snd/select.wav");
         selectLine(line);
     }
 }
@@ -97,16 +96,16 @@ bool List::handleKeyboardEvent(const sf::Event& event)
     // Confirm
     if (event.key.code == sf::Keyboard::Return) {
         returnif (m_lines.empty() || m_callback == nullptr) false;
-        Application::context().sounds.play(SoundID::NUI_SELECT);
+        Application::context().sounds.play("res/snd/select.wav");
         m_callback();
     }
     // Up
     else if (event.key.code == sf::Keyboard::Up) {
         if (m_selectedLine == 0u) {
-            Application::context().sounds.play(SoundID::NUI_REFUSE);
+            Application::context().sounds.play("res/snd/refuse.wav");
         }
         else {
-            Application::context().sounds.play(SoundID::NUI_SELECT);
+            Application::context().sounds.play("res/snd/select.wav");
             selectLine(m_selectedLine - 1u);
         }
         return true;
@@ -114,10 +113,10 @@ bool List::handleKeyboardEvent(const sf::Event& event)
     // Down
     else if (event.key.code == sf::Keyboard::Down) {
         if (m_selectedLine == m_lines.size() - 1u) {
-            Application::context().sounds.play(SoundID::NUI_REFUSE);
+            Application::context().sounds.play("res/snd/refuse.wav");
         }
         else {
-            Application::context().sounds.play(SoundID::NUI_SELECT);
+            Application::context().sounds.play("res/snd/select.wav");
             selectLine(m_selectedLine + 1u);
         }
         return true;
@@ -219,7 +218,7 @@ void List::hoverLine(uint line)
 
         // Set shader effect
         for (auto& cell : m_lines[line].cells)
-            cell.label->setShader(ShaderID::NUI_HOVER);
+            cell.label->setShader("nui/hover");
 
         // Set highlight
         float yLine = (line + 1u) * m_lineHeight;
@@ -233,7 +232,7 @@ void List::clearHoveredLine()
 
     // Remove shader effect
     for (auto& cell : m_lines[m_hoveredLine].cells)
-        cell.label->setShader(ShaderID::NONE);
+        cell.label->setShader("");
 
     // Remove highlight
     m_hoverHighlight.setFillColor(sf::Color::Transparent);

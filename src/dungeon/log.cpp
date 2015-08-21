@@ -1,7 +1,6 @@
 #include "dungeon/log.hpp"
 
 #include "core/application.hpp"
-#include "resources/identifiers.hpp"
 #include "dungeon/data.hpp"
 #include "config/nuiguides.hpp"
 #include "tools/tools.hpp"
@@ -93,7 +92,7 @@ void Log::addMessage(std::wstring text, sf::Color color)
     Message message;
 
     message.text.setWrapString(std::move(text));
-    message.text.setFont(Application::context().fonts.get(FontID::MONO));
+    message.text.setFont(Application::context().fonts.get("res/font/mono.ttf"));
     message.text.setCharacterSize(m_characterSize);
     message.text.setColor(std::move(color));
     message.text.fitWidth(size().x);

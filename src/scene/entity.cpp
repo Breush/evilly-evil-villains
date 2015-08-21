@@ -1,7 +1,6 @@
 #include "scene/entity.hpp"
 
 #include "core/application.hpp"
-#include "resources/identifiers.hpp"
 #include "sfe/lerpable.hpp"
 #include "scene/graph.hpp"
 #include "tools/debug.hpp"
@@ -374,7 +373,7 @@ void Entity::removePart(sf::Drawable* drawable)
     throw std::logic_error("Trying to remove a part that was not previously added.");
 }
 
-void Entity::setPartShader(sf::Drawable* drawable, ShaderID shaderID)
+void Entity::setPartShader(sf::Drawable* drawable, const std::string& shaderID)
 {
     returnif (!sf::Shader::isAvailable());
 
@@ -454,9 +453,9 @@ void Entity::setLocalPosition(const sf::Vector2f& inLocalPosition)
     refreshFromLocalPosition();
 }
 
-void Entity::setShader(ShaderID shaderID)
+void Entity::setShader(const std::string& shaderID)
 {
-    if (shaderID == ShaderID::NONE) m_shader = nullptr;
+    if (shaderID.empty()) m_shader = nullptr;
     else m_shader = &Application::context().shaders.get(shaderID);
 }
 

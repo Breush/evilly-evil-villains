@@ -1,7 +1,6 @@
 #include "nui/tabholder.hpp"
 
 #include "core/gettext.hpp"
-#include "resources/identifiers.hpp"
 #include "dungeon/sidebar.hpp"
 #include "sfe/lerpable.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
@@ -76,7 +75,7 @@ void TabHolder::handleMouseLeft()
 //---------------------------//
 //----- Tabs management -----//
 
-void TabHolder::stackBack(std::wstring tooltipString, TextureID textureID, scene::Entity& content)
+void TabHolder::stackBack(std::wstring tooltipString, const std::string& textureID, scene::Entity& content)
 {
     auto image = std::make_unique<sfe::RectangleShape>();
     image->setTexture(textureID);

@@ -1,60 +1,69 @@
 #pragma once
 
-#include "tools/int.hpp"
-
 #include <map>
 #include <string>
 #include <memory>
 
 namespace resources
 {
-    template <typename Resource, typename Identifier>
+    //! Dynamic structure that keep a ressource type into memory.
+    //! Used for loading once then storing textures/sounds/shaders/fonts.
+    // TODO Add "setDefault(std::string)"
+
+    template <typename Resource>
     class ResourceHolder
     {
     public:
-        void load(Identifier id, const std::string& filename, bool store = false);
 
+        //----------------//
+        //! @name Storage
+        //! @{
+
+        //! Load resource into memory.
+        Resource& load(const std::string& filename);
+
+        //! Load resource into memory with special parameter to loadFromFile (for shaders).
         template <typename Parameter>
-        void load(Identifier id, const std::string& filename, const Parameter& param);
+        Resource& load(const std::string& id, const std::string& filename, const Parameter& parameter);
 
-        void load(Identifier id);       //!< Will create a not loaded unique_ptr<Resource>
-        void loadVoid(Identifier id);   //!< Will associate nullptr to the identifier
+        //! @}
 
-        // Returns resource from ID
-        Resource& get(Identifier id);
-        const Resource& get(Identifier id) const;
+        //---------------//
+        //! @name Access
+        //! @{
 
-        // If a load has been done, return ID from filename
-        void storeID(Identifier id, const std::wstring& filename);
-        Identifier getID(const std::wstring& filename);
+        //! Returns true if resource exists.
+        bool exists(const std::string& id);
 
-        // For textures
-        void setSmooth(Identifier id, bool smoothActive);
-        void setRepeated(Identifier id, bool repeated);
+        //! Get resource from its ID/file name.
+        Resource& get(const std::string& id);
 
-        // For shaders
-        template<typename Parameter>
-        void setParameter(Identifier id, const std::string& name, const Parameter& param);
+        //! Get resource from its ID/file name.
+        const Resource& get(const std::string& id) const;
+
+        //! @}
 
     protected:
-        void insertResource(Identifier id, std::unique_ptr<Resource> resource);
-        void insertFilename(Identifier id, const std::wstring& filename);
+
+        //----------------//
+        //! @name Storage
+        //! @{
+
+        //! Stores resource into memory.
+        Resource& insertResource(std::string id, std::unique_ptr<Resource> resource);
+
+        //! @}
 
     private:
-        std::map<Identifier, std::unique_ptr<Resource>> m_resourcesMap;
-        std::map<std::wstring, Identifier> m_filenameMap;
+
+        //! Storage.
+        std::map<std::string, std::unique_ptr<Resource>> m_resourcesMap;
     };
 }
 
 //----- Few type definitions
 
 // Forward declarations
-
-enum class TextureID : uint8;
-enum class ShaderID : uint8;
-enum class FontID : uint8;
-enum class SoundID : uint8;
-enum class AnimationID : uint8;
 
 namespace sf
 {
@@ -72,11 +81,11 @@ namespace scml
 
 namespace resources
 {
-    using TextureHolder =       ResourceHolder<sf::Texture, TextureID>;
-    using ShaderHolder =        ResourceHolder<sf::Shader, ShaderID>;
-    using FontHolder =          ResourceHolder<sf::Font, FontID>;
-    using SoundBufferHolder =   ResourceHolder<sf::SoundBuffer, SoundID>;
-    using SCMLHolder =          ResourceHolder<scml::Data, AnimationID>;
+    using TextureHolder =       ResourceHolder<sf::Texture>;
+    using ShaderHolder =        ResourceHolder<sf::Shader>;
+    using FontHolder =          ResourceHolder<sf::Font>;
+    using SoundBufferHolder =   ResourceHolder<sf::SoundBuffer>;
+    using SCMLHolder =          ResourceHolder<scml::Data>;
 }
 
 #include "holder.inl"

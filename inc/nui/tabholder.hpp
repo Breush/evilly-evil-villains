@@ -37,7 +37,7 @@ namespace nui
         //! @{
 
         //! Stack a tab to the end.
-        void stackBack(std::wstring tooltipString, TextureID textureID, scene::Entity& content);
+        void stackBack(std::wstring tooltipString, const std::string& textureID, scene::Entity& content);
 
         //! Selects a specific tab.
         void select(uint tabNumber);

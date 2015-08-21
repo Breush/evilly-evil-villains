@@ -5,30 +5,27 @@
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Audio/Music.hpp>
 
-#include <map>
+#include <vector>
 #include <string>
 
-// Forward declaration
-enum class MusicID : uint8;
+// TODO DOC
 
 namespace resources
 {
     class MusicPlayer : private sf::NonCopyable
     {
     public:
-        MusicPlayer();
+        MusicPlayer() = default;
 
-        void load(MusicID id, const std::string& filename);
-
-        void play(MusicID id);
+        void play(const std::string&  id);
         void stop();
 
         void setPaused(bool paused);
         void setVolume(float volume);
 
     private:
+
         sf::Music m_music;
-        std::map<MusicID, std::string> m_musics;
         float m_volume;
     };
 }

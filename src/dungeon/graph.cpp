@@ -10,6 +10,8 @@ using namespace dungeon;
 
 void Graph::receive(const Event& event)
 {
+    returnif (m_data == nullptr || m_nodes.empty());
+
     switch (event.type) {
     case EventType::FACILITY_CHANGED:
         refreshTreasure(m_nodes[event.room.x][event.room.y]);

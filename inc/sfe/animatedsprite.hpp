@@ -11,8 +11,6 @@
 
 // Forward declarations
 
-enum class AnimationID : uint8;
-
 namespace resources
 {
     class AnimationHolder;
@@ -42,7 +40,7 @@ namespace sfe
         //! @{
 
         //! Load a specific SCML.
-        void load(AnimationID id);
+        void load(const std::string& id);
 
         //! Selects the animation to be played.
         void select(const std::wstring& animationName);

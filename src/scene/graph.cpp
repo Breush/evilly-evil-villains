@@ -2,7 +2,6 @@
 
 #include "nui/debug.hpp"
 #include "core/application.hpp"
-#include "resources/identifiers.hpp"
 #include "scene/layer.hpp"
 #include "tools/math.hpp"
 #include "tools/event.hpp"
@@ -18,8 +17,8 @@ Graph::Graph()
     , m_nuiLayer(this)
 {
     // Focusing
-    m_focusShader = &Application::context().shaders.get(ShaderID::NUI_FOCUS);
-    m_focusShape.setTexture(&Application::context().textures.get(TextureID::NUI_FOCUS));
+    m_focusShader = &Application::context().shaders.get("nui/focus");
+    m_focusShape.setTexture(&Application::context().textures.get("res/tex/nui/focus.png"));
     m_focusShape.setFillColor({255, 255, 255, 100});
 
     // NUI layer
@@ -150,8 +149,8 @@ void Graph::updateFocusSprite()
 
     sf::Vector2f globalFocusPosition = m_focusedEntity->getPosition() - m_focusedEntity->getOrigin() + focusPosition;
 
-    Application::context().shaders.setParameter(ShaderID::NUI_FOCUS, "position", globalFocusPosition);
-    Application::context().shaders.setParameter(ShaderID::NUI_FOCUS, "textureSize", focusSize);
+    Application::context().shaders.get("nui/focus").setParameter("position", globalFocusPosition);
+    Application::context().shaders.get("nui/focus").setParameter("textureSize", focusSize);
 }
 
 void Graph::setFocusedEntity(Entity* focusedEntity)

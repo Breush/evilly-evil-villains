@@ -1,7 +1,6 @@
 #include "dungeon/tools.hpp"
 
 #include "core/application.hpp"
-#include "resources/identifiers.hpp"
 #include "dungeon/inter.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 
@@ -17,19 +16,19 @@ ToolGrabButton::ToolGrabButton(const std::wstring& text, ToolID toolID)
 {
     switch (m_toolID) {
         case ToolID::ROOMS_BUILDER:
-            m_textureID = TextureID::DUNGEON_TOOLS_ROOMS_BUILDER_ICON;
+            m_textureID = "res/tex/dungeon/tools/rooms_builder_icon.png";
             break;
 
         case ToolID::ROOMS_DESTROYER:
-            m_textureID = TextureID::DUNGEON_TOOLS_ROOMS_DESTROYER_ICON;
+            m_textureID = "res/tex/dungeon/tools/rooms_destroyer_icon.png";
             break;
 
         case ToolID::TRAPS_REMOVER:
-            m_textureID = TextureID::DUNGEON_TOOLS_TRAPS_REMOVER_ICON;
+            m_textureID = "res/tex/dungeon/tools/traps_remover_icon.png";
             break;
 
         case ToolID::FACILITIES_REMOVER:
-            m_textureID = TextureID::DUNGEON_TOOLS_FACILITIES_REMOVER_ICON;
+            m_textureID = "res/tex/dungeon/tools/facilities_remover_icon.png";
             break;
     }
 
@@ -76,7 +75,7 @@ std::unique_ptr<scene::Grabbable> ToolGrabButton::spawnGrabbable()
 //---------------------//
 //----- Grabbable -----//
 
-ToolGrabbable::ToolGrabbable(scene::GrabbableSpawner& spawner, TextureID textureID)
+ToolGrabbable::ToolGrabbable(scene::GrabbableSpawner& spawner, const std::string& textureID)
     : baseClass(spawner)
 {
     m_sprite.setTexture(&Application::context().textures.get(textureID));

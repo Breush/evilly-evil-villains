@@ -1,7 +1,6 @@
 #include "dungeon/facilities.hpp"
 
 #include "core/application.hpp"
-#include "resources/identifiers.hpp"
 #include "dungeon/inter.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 
@@ -12,7 +11,7 @@ using namespace dungeon;
 //----------------------//
 //----- GrabButton -----//
 
-FacilityGrabButton::FacilityGrabButton(const std::wstring& text, TextureID textureID, std::wstring facilityID)
+FacilityGrabButton::FacilityGrabButton(const std::wstring& text, const std::string& textureID, std::wstring facilityID)
     : m_textureID(textureID)
     , m_facilityID(facilityID)
 {
@@ -38,7 +37,7 @@ std::unique_ptr<scene::Grabbable> FacilityGrabButton::spawnGrabbable()
 //---------------------//
 //----- Grabbable -----//
 
-FacilityGrabbable::FacilityGrabbable(scene::GrabbableSpawner& spawner, TextureID textureID)
+FacilityGrabbable::FacilityGrabbable(scene::GrabbableSpawner& spawner, const std::string& textureID)
     : baseClass(spawner)
 {
     m_sprite.setTexture(&Application::context().textures.get(textureID));

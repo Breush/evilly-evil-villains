@@ -1,7 +1,6 @@
 #include "dungeon/summary.hpp"
 
 #include "core/application.hpp"
-#include "resources/identifiers.hpp"
 #include "context/villains.hpp"
 #include "dungeon/data.hpp"
 
@@ -9,7 +8,7 @@ using namespace dungeon;
 
 Summary::Summary()
 {
-    const auto& font = Application::context().fonts.get(FontID::NUI);
+    const auto& font = Application::context().fonts.get("res/font/nui.ttf");
 
     // Dungeon name
     m_dungeonName.setFont(font);
@@ -18,8 +17,8 @@ Summary::Summary()
     addPart(&m_dungeonName);
 
     // Bars
-    m_bars[BAR_DOSH].logo.setTexture(&Application::context().textures.get(TextureID::ELEMENTS_DOSH));
-    m_bars[BAR_FAME].logo.setTexture(&Application::context().textures.get(TextureID::ELEMENTS_FAME));
+    m_bars[BAR_DOSH].logo.setTexture(&Application::context().textures.get("res/tex/elements/dosh.png"));
+    m_bars[BAR_FAME].logo.setTexture(&Application::context().textures.get("res/tex/elements/fame.png"));
 
     for (auto& bar : m_bars) {
         bar.text.setFont(font);

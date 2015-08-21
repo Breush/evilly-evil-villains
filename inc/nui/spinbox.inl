@@ -1,7 +1,6 @@
 #pragma once
 
 #include "core/application.hpp"
-#include "resources/identifiers.hpp"
 
 namespace nui
 {
@@ -18,8 +17,8 @@ namespace nui
         // Plus/minus
         addPart(&m_plus);
         addPart(&m_minus);
-        m_plus.setTexture(&Application::context().textures.get(TextureID::NUI_PLUS));
-        m_minus.setTexture(&Application::context().textures.get(TextureID::NUI_MINUS));
+        m_plus.setTexture(&Application::context().textures.get("res/tex/nui/plus.png"));
+        m_minus.setTexture(&Application::context().textures.get("res/tex/nui/minus.png"));
     }
 
     //-------------------//
