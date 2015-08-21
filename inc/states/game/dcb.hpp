@@ -2,7 +2,7 @@
 
 #include "states/state.hpp"
 #include "states/identifiers.hpp"
-#include "sfe/rectangleshape.hpp"
+#include "sfe/animatedsprite.hpp"
 #include "dcb/gaugesmanager.hpp"
 #include "dcb/answerbox.hpp"
 #include "dcb/bubble.hpp"
@@ -39,7 +39,7 @@ namespace states
 
     private:
 
-        sfe::RectangleShape m_background;   //!< The background image.
+        sfe::AnimatedSprite m_background;   //!< The animated background.
         nui::TextEntry m_nameEntry;         //!< The entry for the dungeon name.
         nui::Button m_okButton;             //!< The only one button in the world.
 

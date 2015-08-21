@@ -1,5 +1,6 @@
 #include "states/game/dcb.hpp"
 
+#include "core/application.hpp"
 #include "core/gettext.hpp"
 #include "dungeon/data.hpp"
 #include "context/worlds.hpp"
@@ -16,9 +17,12 @@ GameDCB::GameDCB(StateStack& stack)
     const auto& nuiSize = nuiLayer().size();
 
     // Background
+    const auto& backgroundSize = Application::context().textures.get("res/tex/dcb/scene/background.png").getSize();
     nuiRoot.attachChild(m_background);
-    m_background.setFillColor({10, 10, 10});
-    m_background.setSize(nuiSize);
+    m_background.load("res/scml/dcb/scene.scml");
+    m_background.setRelativePosition({0.5f, 0.5f});
+    // TODO Currently only OK for 16:9 resolutions
+    m_background.setLocalScale(nuiSize / sf::v2f(backgroundSize));
 
     // Gauges
     m_gaugesManager.setRelativePosition({0.f, 0.80f});

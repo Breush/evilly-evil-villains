@@ -12,7 +12,7 @@ Bubble::Bubble()
     // Background
     addPart(&m_background);
     m_background.setOutlineColor(sf::Color::White);
-    m_background.setFillColor({255u, 255u, 255u, 10u});
+    m_background.setFillColor({0u, 0u, 0u, 150u});
 
     // Text
     addPart(&m_wrapText);

@@ -4,6 +4,7 @@
 #include "tools/filesystem.hpp"
 
 // TODO Make all textures and sounds to shaders principle? (no res/xxx/ nor extension)
+// TODO We should definitely be loading BCD textures only when needed!
 
 void Application::loadTextures()
 {
