@@ -3,6 +3,7 @@
 #include "tools/int.hpp"
 
 #include <SFML/System/Vector2.hpp>
+#include <string>
 
 namespace config
 {
@@ -28,6 +29,12 @@ namespace config
             uint size;              //!< The reference size of the user interface.
             float fontFactor;       //!< Font factor as reference.
         } nui;
+
+        //! Generic parameters.
+        struct Global
+        {
+            std::wstring language;   //!< Language code (i.e. en_EN).
+        } global;
     };
 }
 

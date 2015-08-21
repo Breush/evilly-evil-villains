@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<dcb>
+	<message question="Et dîtes-moi... Combien de donjons avez-vous déjà dirigés ?">
+	    <answer type="lie">Ne vous inquiétez pas, je gère : j'ai déjà dirigé des dizaines de donjons.</answer>
+	    <answer type="truth">Ben... Aucun... mais, franchement, je le sens bien ce coup-là !</answer>
+	    <answer type="sarcasm">Des centaines, pour sûr ! Vous n'avez jamais entendu parler de moi ?</answer>
+	    <answer type="absurd">J'étais le référent général de la bibliothèque municipale l'année dernière. C'est quasiment pareil, non ?</answer>
+	</message>
+	<message question="Bon, la question pourra vous paraître étrange mais... Voulez-vous m'épouser ?">
+	    <answer type="lie">Non, merci.</answer>
+	    <answer type="truth">Je préfère encore épouser un Gr'oo dans son marais natal.</answer>
+	    <answer type="sarcasm">Si on peut s'arranger sur le taux d'intérêts, pourquoi pas !</answer>
+	    <answer type="absurd">C'est une question piège... Vous ne voulez pas vraiment m'épouser... Pas vrai ?</answer>
+	</message>
+	<message question="Qu'est-ce qui vous fait penser que vous êtes suffisamment qualifié pour ce travail ?">
+	    <answer type="lie">Il n'y a juste personne de mieux placé que moi pour ce job. Voilà tout.</answer>
+	    <answer type="truth">Eh bien... En fait, c'est possible que je ne sois pas à ce point qualifié...</answer>
+	    <answer type="sarcasm">Non mais vous comprenez bien que l'expérience professionnelle ne se trouve pas dans les poils de Birbilon, j'espère !</answer>
+	    <answer type="absurd">Quand j'étais petit, je construisais des petits donjons avec des cartes.</answer>
+	</message>
+	<message question="Et... Combien de sous espérez-vous que je vous donne ?">
+	    <answer type="lie">Je ne suis pas ici pour vos sous, mais pour discuter d'un grand projet.</answer>
+	    <answer type="truth">En un mot : beaucoup. S'il-vous-plaît ?</answer>
+	    <answer type="sarcasm">Ca dépend de combien vous êtes prêt à me donner.</answer>
+	    <answer type="absurd">Qu'est-ce que l'argent ? Si ce n'est des bouts de ferraille auxquels on a décidé d'attribuer de la valeur !</answer>
+	</message>
+	<message question="Bien, bien, bien... Et si je vous demandez de décrire la gestion d'un donjon en quatre mots ?">
+	    <answer type="lie">Rentabilité. Confiance. Gloire. Popularité.</answer>
+	    <answer type="truth">Pièges. Monstres. Aménagements. Outils.</answer>
+	    <answer type="sarcasm">Vraiment. Stupide. Comme. Question.</answer>
+	    <answer type="absurd">Canapé. Ornithorynque. Donjon. Richesse.</answer>
+	</message>
+	<message question="Oh... Parlez-moi de vous.">
+	    <answer type="lie">Par-delà les Monts Kiloï, on me connaît sous le nom de Lapin Tueur.</answer>
+	    <answer type="truth">Il n'y a pas grand-chose à dire. Je souhaite juste un joli donjon parce que je déteste le monde entier.</answer>
+	    <answer type="sarcasm">Pourquoi vous ne me parleriez pas plutôt de vous ? Vous avez de si beaux yeux !</answer>
+	    <answer type="absurd">Je suis un carotte. Métaphoriquement parlant, bien sûr.</answer>
+	</message>
+	<message question="Hum... Allez-vous avoir besoin d'aide dans la gestion de votre donjon ?">
+	    <answer type="lie">Jamais de la vie ! Je suis un vrai, moi.</answer>
+	    <answer type="truth">Je ne pense que j'aurai assez d'argent pour engager des serviteurs... ben voilà quoi...</answer>
+	    <answer type="sarcasm">Vous comptez m'aider à construire le donjon?</answer>
+	    <answer type="absurd">J'aurai peut-être besoin de quelqu'un pour le ménage, si vous vous proposez...</answer>
+	</message>
+	<message question="Bon alors... Vous avez des questions à me poser ?">
+	    <answer type="lie">Pas de questions. Je veux juste de l'action.</answer>
+	    <answer type="truth">Ouais, combien de sous vous êtes prêt à me filer ?</answer>
+	    <answer type="sarcasm">Et moi qui pensais que c'était VOUS qui posiez les questions !</answer>
+	    <answer type="absurd">Je peux vous poser une réponse à la place ?</answer>
+	</message>
+	<message question="Je suis pas sûr... Vous ne seriez pas en train de me mentir ?">
+	    <answer type="lie">Mentir ? Sûrement pas à un banquier aussi respectable que vous !</answer>
+	    <answer type="truth">Les mensonges sont la source de tous les maux. Et moi, je suis mauvais.</answer>
+	    <answer type="sarcasm">Je suis censé répondre la vérité à cette question ?</answer>
+	    <answer type="absurd">Pourquoi vous voulez me faire pleurer ?</answer>
+	</message>
+	<message question="Au fait... J'ai entendu dire que vous auriez tué le dernier banquier avec lequel vous avez traité. C'est vrai ?">
+	    <answer type="lie">C'est vrai, oui... J'ai l'air plus méchant maintenant ?</answer>
+	    <answer type="truth">Bien sûr que non, je ne veux pas de problème avec les banquiers !</answer>
+	    <answer type="sarcasm">Si c'était vrai, je m'en rappellerais, n'est-ce pas ?</answer>
+	    <answer type="absurd">Qui vous a dit ça ? C'est un banquier, hein ? Je vais le tuer !</answer>
+	</message>
+</dcb>
+

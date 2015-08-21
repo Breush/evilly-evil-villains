@@ -5,6 +5,7 @@
 #include "dungeon/data.hpp"
 #include "context/worlds.hpp"
 #include "context/villains.hpp"
+#include "tools/filesystem.hpp"
 
 using namespace states;
 
@@ -57,9 +58,13 @@ GameDCB::GameDCB(StateStack& stack)
     m_okButton.setRelativeOrigin({0.f, 0.5f});
 
     // Controller
-    // TODO Get correct translation file (once language is defined into config)
-    m_controller.load("res/po/en_EN/dcb.xml");
+    const auto& languageCode = Application::context().display.global.language;
     m_controller.setOnSequenceFinishedCallback([this] { confirmDungeonCreation(); });
+	
+	// Try to load specific language file. If none, just go back to English.
+	std::string controllerFile = "res/po/" + toString(languageCode) + "/dcb.xml";
+	if (fileExists(controllerFile)) m_controller.load(controllerFile);
+	else m_controller.load("res/po/en_EN/dcb.xml");
 }
 
 //-----------------------//

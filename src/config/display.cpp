@@ -11,6 +11,7 @@ using namespace config;
 Display::Display()
     : window({false, {1360.f, 768.f}})
     , nui({2u, 3.f})
+    , global({L"en_EN"})
 {
     pugi::xml_document doc;
 
@@ -28,7 +29,7 @@ Display::Display()
     }
 
     // File is OK, parsing it
-    // Note: Groups are transparents, we don't really care
+    // Note: Groups are transparent, we don't really care
     // if a parameter is not in the correct group
     for (auto& group : config.children(L"group")) {
     for (auto& param : group.children(L"param")) {
@@ -52,6 +53,11 @@ Display::Display()
         }
         else if (name == L"fontFactor") {
             nui.fontFactor = param.attribute(L"value").as_uint();
+        }
+
+        // Global
+        else if (name == L"language") {
+            global.language = param.attribute(L"code").as_string();
         }
     }
     }

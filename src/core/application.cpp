@@ -1,8 +1,10 @@
 #include "core/application.hpp"
 
 #include "core/debug.hpp"
-#include "tools/vector.hpp"
+#include "core/gettext.hpp"
 #include "states/identifiers.hpp"
+#include "tools/vector.hpp"
+#include "tools/string.hpp"
 
 #include <SFML/Window/Event.hpp>
 #include <string>
@@ -76,6 +78,9 @@ Application::Application()
     s_context.windowInfo.style = sf::Style::Default;
     if (s_context.display.window.fullscreen) switchFullscreenMode();
     else s_context.recreateWindow();
+
+    // Initialize language
+    internationalization::init(toString(s_context.display.global.language));
 
     // Load all on start
     // TODO Well, do not ALL on start,

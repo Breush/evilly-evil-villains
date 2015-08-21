@@ -9,4 +9,7 @@
 		<param name="size" value="2" />
 		<param name="fontFactor" value="3." />
 	</group>
+	<group type="global">
+		<param name="language" code="en_EN" />
+	</group>
 </config>

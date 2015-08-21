@@ -12,9 +12,6 @@ int main(int argc, char *argv[])
     Application app;
     int returnStatus = EXIT_SUCCESS;
 
-    // Initialize language
-    internationalization::init("");
-
     // Disable synchronisation
     // Note: Remove the safety of using printf/scanf (so don't use them)
     // but this makes the streams faster.
@@ -43,6 +40,9 @@ int main(int argc, char *argv[])
     // Closing Steam
     if (steamActivated)
         steam::SteamAPI_Shutdown();
+
+    // Free internationalization
+    internationalization::close();
 
     return returnStatus;
 }

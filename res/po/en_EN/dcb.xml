@@ -1,16 +1,64 @@
 <?xml version="1.0"?>
 <dcb>
 	<message question="And... How many dungeons have you already managed?">
-	    <answer type="lie">Well... None... but I feel like I will be the evilest man ever!</answer>
-	    <answer type="truth">I have enough experience in that domain: I managed dozens of dungeons.</answer>
+	    <answer type="lie">I have enough experience in that domain: I managed dozens of dungeons.</answer>
+	    <answer type="truth">Well... None... but I feel like I will be the evilest man ever!</answer>
 	    <answer type="sarcasm">Hundreds of thousands, for sure! Have you never heard of me?</answer>
 	    <answer type="absurd">I was the manager of the city's library last year. I guess it's the same, right?</answer>
 	</message>
 	<message question="This is a bit strange to ask, but... Will you marry me?">
-	    <answer type="lie">No, I won't.</answer>
+	    <answer type="lie">Do you really want that?</answer>
 	    <answer type="truth">I would prefer marrying a Gr'oo in its home swamp.</answer>
 	    <answer type="sarcasm">If that could get me a better interest rate, I would marry you every day!</answer>
-	    <answer type="absurd">This is a trap question... You do not really want to marry me... Right?</answer>
+	    <answer type="absurd">This is a tricky question... You do not really want to marry me... Right?</answer>
+	</message>
+	<message question="What makes you think you are qualified enough for this job?">
+	    <answer type="lie">There is no one more qualified than me. That's it.</answer>
+	    <answer type="truth">Well... I might not be THAT much qualified...</answer>
+	    <answer type="sarcasm">You do know that experience does not magically come from Bibilon's fur... Right?</answer>
+	    <answer type="absurd">When I was young, I build small card dungeon of cards.</answer>
+	</message>
+	<message question="And... How much money do you expect me to give you?">
+	    <answer type="lie">I am not here for your money, I am here to collaborate on a great project.</answer>
+	    <answer type="truth">To be concise: a  lot. Please?</answer>
+	    <answer type="sarcasm">How much are you ready to give me?</answer>
+	    <answer type="absurd">What's money? Just a bunch of metal we all agreed it worth something.</answer>
+	</message>
+	<message question="Very nice... But how would you describe dungeon management in four words?">
+	    <answer type="lie">Rentability. Confidence. Fame. Popularity.</answer>
+	    <answer type="truth">Traps. Monsters. Facilities. Tools.</answer>
+	    <answer type="sarcasm">Such. A. Stupid. Question.</answer>
+	    <answer type="absurd">Couch. Platypus. Dungeon. Rich.</answer>
+	</message>
+	<message question="Oh... Tell me about yourself.">
+	    <answer type="lie">Beyond the Kiloï Mountains, I am known as The Killer Rabbit.</answer>
+	    <answer type="truth">There not to much to say. I just want a nice dungeon because I hate this world.</answer>
+	    <answer type="sarcasm">Why don't you tell me about yourself, instead? You have such beautiful eyes.</answer>
+	    <answer type="absurd">I am a carrot. Metaphorically, of course.</answer>
+	</message>
+	<message question="Hem... Will you need help doing your job?">
+	    <answer type="lie">Never! I am a true one.</answer>
+	    <answer type="truth">I don't think you'll give enough money to hire minions... so...</answer>
+	    <answer type="sarcasm">Are you going to help me build that dungeon?</answer>
+	    <answer type="absurd">I might need someone for the cleaning.</answer>
+	</message>
+	<message question="Ok then... Do you have any question you want to ask me?">
+	    <answer type="lie">No question. I just want action.</answer>
+	    <answer type="truth">Yeah, how much money are you ready to give me?</answer>
+	    <answer type="sarcasm">I thought YOU the guy asking questions!</answer>
+	    <answer type="absurd">Can I ask you an answer instead?</answer>
+	</message>
+	<message question="I am not sure... Are you lying to me?">
+	    <answer type="lie">Lying? Not to a respectable banker like you are!</answer>
+	    <answer type="truth">Lies are the root of all evil. So, yeah, I am.</answer>
+	    <answer type="sarcasm">Should I tell the truth to this question?</answer>
+	    <answer type="absurd">Do you really want to make me cry?</answer>
+	</message>
+	<message question="By the way... I heard you killed the last banker you've seen. Is that true?">
+	    <answer type="lie">I did... Does that make me look more terrifying?</answer>
+	    <answer type="truth">Of course not, I don't want problem with bankers!</answer>
+	    <answer type="sarcasm">If that would have happenned, I would remember, right?</answer>
+	    <answer type="absurd">Who told you that? Is that a banker? I'll kill him!</answer>
 	</message>
 </dcb>
 
