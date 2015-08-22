@@ -1,7 +1,7 @@
 #include "scml/interface.hpp"
 
 #include "core/application.hpp"
-#include "tools/tools.hpp" // mapFind
+#include "tools/tools.hpp"
 #include "tools/vector.hpp"
 #include "tools/string.hpp"
 
@@ -48,7 +48,7 @@ std::pair<uint, uint> FileSystem::getImageDimensions(int folderID, int fileID) c
 
 sf::Texture& FileSystem::getTexture(int folderID, int fileID) const
 {
-    return *tools::mapFind(textures, std::make_pair(folderID, fileID));
+    return *textures.at({folderID, fileID});
 }
 
 //----- Sounds
@@ -66,9 +66,9 @@ bool FileSystem::loadSoundFile(int folderID, int fileID, const std::wstring& fil
     return true;
 }
 
-std::string FileSystem::getSound(int folderID, int fileID) const
+const std::string& FileSystem::getSound(int folderID, int fileID) const
 {
-    return tools::mapFind(sounds, std::make_pair(folderID, fileID));
+    return sounds.at({folderID, fileID});
 }
 
 //------------------//

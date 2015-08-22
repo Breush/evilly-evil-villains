@@ -170,7 +170,7 @@ void Inter::receive(const Event& event)
     case EventType::MONSTER_EXPLODES_ROOM:
         coords = {event.action.room.x, event.action.room.y};
         m_data->destroyRoom(coords, true);
-        m_data->graph().reconstructFromData();
+        m_data->graph().updateFromData();
         // TODO What happens if we destroy entrance?
         m_tileRefreshPending.emplace_back([=]() { return refreshMonsters(); });
         break;
@@ -300,9 +300,8 @@ void Inter::selectTile(const sf::Vector2u& coords)
     deselectTile();
     m_selectedTile = &m_tiles.at(coords);
 
-    // TODO Have a NUI_SELECT shader
     for (auto& layer : m_selectedTile->layers)
-        setPartShader(&layer, "nui/hover");
+        setPartShader(&layer, "nui/select");
 }
 
 void Inter::deselectTile()
@@ -345,10 +344,11 @@ void Inter::resetHoveredTile()
 
 void Inter::addFacilityChoice(const sf::Vector2u& coords, const std::wstring& facilityID, const std::wstring& facilityName)
 {
+    auto facilityData = findOfType(m_data->room(coords).facilities, facilityID);
+
     // The facility is already there
-    if (hasOfType(m_data->room(coords).facilities, facilityID)) {
-        // TODO Add gain when facilities are in same model than traps
-        std::wstring text = _("Remove") + L" " + facilityName;
+    if (facilityData != std::end(m_data->room(coords).facilities)) {
+        std::wstring text = _("Remove") + L" " + facilityName + L" (+" + toWString(facilities::onDestroyGain(*facilityData)) + L"d)";
         m_contextMenu.addChoice(text, [=]() { m_data->removeRoomFacility(coords, facilityID); });
     }
 

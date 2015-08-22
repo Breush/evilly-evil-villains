@@ -32,7 +32,6 @@ void Graph::useData(Data& data)
     setEmitter(m_data);
 }
 
-// TODO Maybe do also a updateFromData() which does not reinitialize every node?
 Graph::ConstructError Graph::reconstructFromData()
 {
     massert(m_data != nullptr, "Reconstructing dungeon::Graph with dungeon::Data not set.");
@@ -48,42 +47,54 @@ Graph::ConstructError Graph::reconstructFromData()
             floorNodes.resize(roomsByFloor);
     }
 
+    // Affect invariable attributes
     for (uint floorIndex = 0u; floorIndex < floorsCount; ++floorIndex)
     for (uint roomIndex = 0u; roomIndex < roomsByFloor; ++roomIndex) {
         sf::Vector2u roomCoords({floorIndex, roomIndex});
-        auto& room = m_data->room(roomCoords);
         auto& node = m_nodes[floorIndex][roomIndex];
+        node.altitude = floorIndex + 1u;
+        node.coords = roomCoords;
+    }
+
+    return updateFromData();
+}
+
+Graph::ConstructError Graph::updateFromData()
+{
+    m_startingNode = nullptr;
+
+    for (auto& floorNodes : m_nodes)
+    for (auto& node : floorNodes) {
+        // Cleaning
+        node.entrance = false;
         node.neighbours.clear();
+        node.constructed = m_data->isRoomConstructed(node.coords);
 
-        if (m_data->isRoomConstructed(roomCoords)) {
-            // Initialize this particular room
-            node.constructed = true;
-            node.altitude = floorIndex + 1u;
-            node.coords = roomCoords;
+        if (!node.constructed) continue;
 
-            for (auto facilityData : room.facilities) {
-                // Entrance
-                if (facilityData.type() == L"entrance") {
-                    node.entrance = true;
-                    if (m_startingNode == nullptr) m_startingNode = &node;
-                    else return ConstructError::TOO_MANY_DOORS;
-                }
+        auto& room = m_data->room(node.coords);
 
-                // Treasure
-                else if (facilityData.type() == L"treasure") {
-                    refreshTreasure(node);
-                }
+        // Check facilities
+        for (auto facilityData : room.facilities) {
+            // Entrance
+            if (facilityData.type() == L"entrance") {
+                node.entrance = true;
+                if (m_startingNode == nullptr) m_startingNode = &node;
+                else return ConstructError::TOO_MANY_DOORS;
             }
 
-            // Check neighbourhood
-            for (auto direction : {Data::EAST, Data::WEST, Data::NORTH, Data::SOUTH})
-                if (m_data->roomNeighbourAccessible(roomCoords, direction)) {
-                    auto neighbourCoords = m_data->roomNeighbourCoords(roomCoords, direction);
-                    node.neighbours.emplace_back(&m_nodes[neighbourCoords.x][neighbourCoords.y]);
-                }
+            // Treasure
+            else if (facilityData.type() == L"treasure") {
+                refreshTreasure(node);
+            }
         }
-        else {
-            node.constructed = false;
+
+        // Check neighbourhood
+        for (auto direction : {Data::EAST, Data::WEST, Data::NORTH, Data::SOUTH}) {
+            if (m_data->roomNeighbourAccessible(node.coords, direction)) {
+                auto neighbourCoords = m_data->roomNeighbourCoords(node.coords, direction);
+                node.neighbours.emplace_back(&m_nodes[neighbourCoords.x][neighbourCoords.y]);
+            }
         }
     }
 

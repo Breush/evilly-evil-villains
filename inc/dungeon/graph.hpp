@@ -33,7 +33,7 @@ namespace dungeon
          */
         struct Node
         {
-            bool constructed = false;
+            bool constructed = false;       //!< True if node is a constructed room.
 
             std::vector<Node*> neighbours;  //!< The neighbourhood of the node.
             sf::Vector2u coords;            //!< The original room coordinates from data.
@@ -58,9 +58,11 @@ namespace dungeon
         //! The data of the dungeon to be read from.
         void useData(Data& data);
 
-        //! Updates the graph to the current data.
-        //! Returns the type of error if not well formatted.
+        //! Reconstruct size of graph (and update it) to the current data.
         ConstructError reconstructFromData();
+
+        //! Updates the graph to the current data.
+        ConstructError updateFromData();
 
         //! @}
 

@@ -8,7 +8,6 @@ namespace resources
 {
     //! Dynamic structure that keep a ressource type into memory.
     //! Used for loading once then storing textures/sounds/shaders/fonts.
-    // TODO Add "setDefault(std::string)"
 
     template <typename Resource>
     class ResourceHolder

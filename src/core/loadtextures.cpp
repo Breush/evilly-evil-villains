@@ -20,7 +20,7 @@ void Application::loadTextures()
         ++texturesCount;
     }
 
-    mdebug_core_1("Loaded " << texturesCount << " textures.");
+    mdebug_core_2("Loaded " << texturesCount << " textures.");
 
     // Backup
     s_context.textures.setDefault("default");

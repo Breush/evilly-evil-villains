@@ -182,7 +182,7 @@ void Data::clear()
 
 int Data::getNumAnimations(int entity) const
 {
-    Entity* e = tools::mapFind(entities, entity);
+    Entity* e = entities.at(entity);
     if (e == nullptr) {
         return -1;
     }

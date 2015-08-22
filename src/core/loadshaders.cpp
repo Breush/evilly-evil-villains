@@ -41,7 +41,10 @@ void Application::loadShaders()
         ++shadersCount;
     }
 
-    mdebug_core_1("Loaded " << shadersCount << " shaders.");
+    mdebug_core_2("Loaded " << shadersCount << " shaders.");
+
+    // Backup
+    s_context.shaders.setDefault("default");
 
     refreshShaders();
 }

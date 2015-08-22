@@ -23,8 +23,7 @@ public:
     std::pair<uint, uint> getImageDimensions(int folderID, int fileID) const override;
 
     sf::Texture& getTexture(int folderID, int fileID) const;
-    // TODO Why not const std::string& ?
-    std::string getSound(int folderID, int fileID) const;
+    const std::string& getSound(int folderID, int fileID) const;
 
 private:
     // Folder, File

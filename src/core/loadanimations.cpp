@@ -18,7 +18,7 @@ void Application::loadAnimations()
         ++animationsCount;
     }
 
-    mdebug_core_1("Loaded " << animationsCount << " animations.");
+    mdebug_core_2("Loaded " << animationsCount << " animations.");
 }
 
 void Application::updateAnimations(const sf::Time& dt)

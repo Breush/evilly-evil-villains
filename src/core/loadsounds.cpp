@@ -18,7 +18,7 @@ void Application::loadSounds()
         ++soundsCount;
     }
 
-    mdebug_core_1("Loaded " << soundsCount << " sounds.");
+    mdebug_core_2("Loaded " << soundsCount << " sounds.");
 
     refreshSounds();
 }

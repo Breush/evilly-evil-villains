@@ -18,5 +18,5 @@ void Application::loadFonts()
         ++fontsCount;
     }
 
-    mdebug_core_1("Loaded " << fontsCount << " fonts.");
+    mdebug_core_2("Loaded " << fontsCount << " fonts.");
 }
