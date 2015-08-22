@@ -3,7 +3,6 @@
 #include "core/debug.hpp"
 #include "tools/filesystem.hpp"
 
-// TODO Make all textures and sounds to shaders principle? (no res/xxx/ nor extension)
 // TODO We should definitely be loading BCD textures only when needed!
 
 void Application::loadTextures()
@@ -23,14 +22,17 @@ void Application::loadTextures()
 
     mdebug_core_1("Loaded " << texturesCount << " textures.");
 
+    // Backup
+    s_context.textures.setDefault("default");
+
     // Repeated
-    s_context.textures.get("res/tex/nui/focus.png").setRepeated(true);
-    s_context.textures.get("res/tex/default.png").setRepeated(true);
-    s_context.textures.get("res/tex/jumping-toasts/background.png").setRepeated(true);
-    s_context.textures.get("res/tex/dungeon/sidebar/tab/monsters/cage.png").setRepeated(true);
-    s_context.textures.get("res/tex/dungeon/inter/outer_wall_west.png").setRepeated(true);
-    s_context.textures.get("res/tex/dungeon/inter/outer_wall_east.png").setRepeated(true);
+    s_context.textures.get("nui/focus").setRepeated(true);
+    s_context.textures.get("default").setRepeated(true);
+    s_context.textures.get("jumping-toasts/background").setRepeated(true);
+    s_context.textures.get("dungeon/sidebar/tab/monsters/cage").setRepeated(true);
+    s_context.textures.get("dungeon/inter/outer_wall_west").setRepeated(true);
+    s_context.textures.get("dungeon/inter/outer_wall_east").setRepeated(true);
 
     // Smooth
-    s_context.textures.get("res/tex/jumping-toasts/toast-cut.png").setSmooth(false);
+    s_context.textures.get("jumping-toasts/toast-cut").setSmooth(false);
 }

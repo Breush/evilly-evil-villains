@@ -28,7 +28,8 @@ void FileSystem::clear()
 
 bool FileSystem::loadImageFile(int folderID, int fileID, const std::wstring& filename)
 {
-    auto& texture = Application::context().textures.get(toString(filename));
+    auto id = Application::context().textures.getID(toString(filename));
+    auto& texture = Application::context().textures.get(id);
 
     if (!textures.insert(std::make_pair(std::make_pair(folderID, fileID), &texture)).second) {
         std::wcout << L"scml::FileSystem failed to load image: Loading " << filename
@@ -54,7 +55,7 @@ sf::Texture& FileSystem::getTexture(int folderID, int fileID) const
 
 bool FileSystem::loadSoundFile(int folderID, int fileID, const std::wstring& filename)
 {
-    auto soundID = toString(filename);
+    auto soundID = Application::context().sounds.getID(toString(filename));
 
     if (!sounds.insert(std::make_pair(std::make_pair(folderID, fileID), soundID)).second) {
         std::wcout << L"scml::FileSystem failed to load sound: Loading " << filename

@@ -20,7 +20,7 @@ namespace resources
 
         void load(const std::string& filename);
 
-        void storeID(const std::string& id, const std::wstring& filename);
+        std::string getID(const std::string& filename);
         void play(const std::string& id);
         void play(const std::string& id, sf::Vector2f position);
 

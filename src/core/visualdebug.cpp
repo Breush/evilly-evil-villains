@@ -10,7 +10,7 @@ void VisualDebug::init()
     // Getting font from holder
     m_text.setPosition(10.f, 10.f);
     m_text.setColor(sf::Color::White);
-    m_text.setFont(Application::context().fonts.get("res/font/mono.ttf"));
+    m_text.setFont(Application::context().fonts.get("mono"));
 
     // Setting background
     m_background.setPosition(0.f, 0.f);

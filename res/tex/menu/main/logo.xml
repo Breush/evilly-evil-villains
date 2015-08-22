@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<reactimage texture="res/tex/menu/main/logo.png">
+<reactimage texture="menu/main/logo">
 	<react key="V" left="61"  top="118" width="39" height="71" />
 	<react key="I" left="251" top="76"  width="12" height="30" />
 	<react key="L" left="122" top="117" width="39" height="70" />

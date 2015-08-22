@@ -132,7 +132,7 @@ void ReactImage::activateReact(const std::wstring& key)
         return;
 
     setActiveReact(key);
-    Application::context().sounds.play("res/snd/select.wav");
+    Application::context().sounds.play("select");
 }
 
 //--------------------------------//
@@ -171,12 +171,12 @@ void ReactImage::handleMouseButtonPressed(const sf::Mouse::Button button, const 
 
     // Maybe callback is not set
     if (m_reacts[m_react].callback == nullptr) {
-        Application::context().sounds.play("res/snd/refuse.wav");
+        Application::context().sounds.play("refuse");
         return;
     }
 
     // Accept callback
-    Application::context().sounds.play("res/snd/accept.wav");
+    Application::context().sounds.play("accept");
     m_reacts[m_react].callback();
 }
 

@@ -17,17 +17,17 @@ SplashScreen::SplashScreen(StateStack& stack)
     float maxSide = std::max(nuiSize.x, nuiSize.y);
 
     // Background
-    const auto& textureSize = Application::context().textures.get("res/tex/jumping-toasts/background.png").getSize();
+    const auto& textureSize = Application::context().textures.get("jumping-toasts/background").getSize();
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
-    m_background.setTexture("res/tex/jumping-toasts/background.png");
+    m_background.setTexture("jumping-toasts/background");
     m_background.setShader("menu/splashscreen");
     m_background.setLocalScale(maxSide / sf::v2f(textureSize));
     m_background.setLocalPosition((nuiSize - maxSide) / 2.f);
 
     // Animation
     nuiRoot.attachChild(m_logo);
-    m_logo.load("res/scml/jumping-toasts.scml");
+    m_logo.load("jumping-toasts");
     m_logo.setRelativePosition({0.5f, 0.5f});
     m_logo.setLooping(false);
     m_logo.restart();

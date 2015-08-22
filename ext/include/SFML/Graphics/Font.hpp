@@ -399,7 +399,7 @@ private:
 /// sf::Font font;
 ///
 /// // Load it from a file
-/// if (!font.loadFromFile("arial.ttf"))
+/// if (!font.loadFromFile("arial"))
 /// {
 ///     // error...
 /// }

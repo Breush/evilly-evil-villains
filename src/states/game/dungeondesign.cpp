@@ -82,12 +82,12 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     horizonRoot.attachChild(m_sceneHorizon);
     skyRoot.attachChild(m_sceneSky);
 
-    m_sceneFront.setTexture("res/tex/dungeon/scene/front.png");
-    m_sceneClose.setTexture("res/tex/dungeon/scene/close.png");
-    m_sceneMiddle.setTexture("res/tex/dungeon/scene/middle.png");
-    m_sceneFar.setTexture("res/tex/dungeon/scene/far.png");
-    m_sceneHorizon.setTexture("res/tex/dungeon/scene/horizon.png");
-    m_sceneSky.setTexture("res/tex/dungeon/scene/sky.png");
+    m_sceneFront.setTexture("dungeon/scene/front");
+    m_sceneClose.setTexture("dungeon/scene/close");
+    m_sceneMiddle.setTexture("dungeon/scene/middle");
+    m_sceneFar.setTexture("dungeon/scene/far");
+    m_sceneHorizon.setTexture("dungeon/scene/horizon");
+    m_sceneSky.setTexture("dungeon/scene/sky");
 
     // Adjust images to new maxZoom
     // TODO Sky is streched, use a setScale instead of setSize inside that function?

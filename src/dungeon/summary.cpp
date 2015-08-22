@@ -8,7 +8,7 @@ using namespace dungeon;
 
 Summary::Summary()
 {
-    const auto& font = Application::context().fonts.get("res/font/nui.ttf");
+    const auto& font = Application::context().fonts.get("nui");
 
     // Dungeon name
     m_dungeonName.setFont(font);
@@ -17,8 +17,8 @@ Summary::Summary()
     addPart(&m_dungeonName);
 
     // Bars
-    m_bars[BAR_DOSH].logo.setTexture(&Application::context().textures.get("res/tex/elements/dosh.png"));
-    m_bars[BAR_FAME].logo.setTexture(&Application::context().textures.get("res/tex/elements/fame.png"));
+    m_bars[BAR_DOSH].logo.setTexture(&Application::context().textures.get("elements/dosh"));
+    m_bars[BAR_FAME].logo.setTexture(&Application::context().textures.get("elements/fame"));
 
     for (auto& bar : m_bars) {
         bar.text.setFont(font);

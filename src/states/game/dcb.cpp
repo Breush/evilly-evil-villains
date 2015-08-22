@@ -18,9 +18,9 @@ GameDCB::GameDCB(StateStack& stack)
     const auto& nuiSize = nuiLayer().size();
 
     // Background
-    const auto& backgroundSize = Application::context().textures.get("res/tex/dcb/scene/background.png").getSize();
+    const auto& backgroundSize = Application::context().textures.get("dcb/scene/background").getSize();
     nuiRoot.attachChild(m_background);
-    m_background.load("res/scml/dcb/scene.scml");
+    m_background.load("dcb/scene");
     m_background.setRelativePosition({0.5f, 0.5f});
     // TODO Currently only OK for 16:9 resolutions
     m_background.setLocalScale(nuiSize / sf::v2f(backgroundSize));
@@ -60,11 +60,11 @@ GameDCB::GameDCB(StateStack& stack)
     // Controller
     const auto& languageCode = Application::context().display.global.language;
     m_controller.setOnSequenceFinishedCallback([this] { confirmDungeonCreation(); });
-	
-	// Try to load specific language file. If none, just go back to English.
-	std::string controllerFile = "res/po/" + toString(languageCode) + "/dcb.xml";
-	if (fileExists(controllerFile)) m_controller.load(controllerFile);
-	else m_controller.load("res/po/en_EN/dcb.xml");
+
+    // Try to load specific language file. If none, just go back to English.
+    std::string controllerFile = "res/po/" + toString(languageCode) + "/dcb.xml";
+    if (fileExists(controllerFile)) m_controller.load(controllerFile);
+    else m_controller.load("res/po/en_EN/dcb.xml");
 }
 
 //-----------------------//

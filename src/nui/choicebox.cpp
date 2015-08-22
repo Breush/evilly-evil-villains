@@ -19,7 +19,7 @@ ChoiceBox::ChoiceBox()
     setFocusable(true);
 
     // Getting font from holder
-    sf::Font& font = Application::context().fonts.get("res/font/nui.ttf");
+    sf::Font& font = Application::context().fonts.get("nui");
     m_text.setFont(font);
 
     // Add all parts
@@ -131,18 +131,18 @@ void ChoiceBox::acceptChoice()
 {
     // Maybe callback is not set
     if (m_choices[m_selectedChoice].callback == nullptr) {
-        Application::context().sounds.play("res/snd/refuse.wav");
+        Application::context().sounds.play("refuse");
         return;
     }
 
-    Application::context().sounds.play("res/snd/accept.wav");
+    Application::context().sounds.play("accept");
     m_choices[m_selectedChoice].callback();
 }
 
 void ChoiceBox::switchChoiceLeft()
 {
     if (m_choices.size() <= 1u) return;
-    Application::context().sounds.play("res/snd/select.wav");
+    Application::context().sounds.play("select");
 
     if (m_selectedChoice == 0u) selectChoice(m_choices.size() - 1u);
     else selectChoice(m_selectedChoice - 1u);
@@ -151,7 +151,7 @@ void ChoiceBox::switchChoiceLeft()
 void ChoiceBox::switchChoiceRight()
 {
     if (m_choices.size() <= 1u) return;
-    Application::context().sounds.play("res/snd/select.wav");
+    Application::context().sounds.play("select");
 
     if (m_selectedChoice == m_choices.size() - 1u) selectChoice(0u);
     else selectChoice(m_selectedChoice + 1u);

@@ -30,13 +30,13 @@ Inter::Inter(nui::ContextMenu& contextMenu)
     m_treasureEditSpinBox.setStep(10u);
 
     // Outer walls
-    m_outerWalls[0].setTexture(&Application::context().textures.get("res/tex/dungeon/inter/outer_wall_west.png"));
-    m_outerWalls[1].setTexture(&Application::context().textures.get("res/tex/dungeon/inter/outer_wall_east.png"));
+    m_outerWalls[0].setTexture(&Application::context().textures.get("dungeon/inter/outer_wall_west"));
+    m_outerWalls[1].setTexture(&Application::context().textures.get("dungeon/inter/outer_wall_east"));
     addPart(&m_outerWalls[0]);
     addPart(&m_outerWalls[1]);
 
     // Ref size
-    m_refRoomSize = sf::v2f(Application::context().textures.get("res/tex/dungeon/inter/inner_wall.png").getSize());
+    m_refRoomSize = sf::v2f(Application::context().textures.get("dungeon/inter/inner_wall").getSize());
 }
 
 //-------------------//
@@ -651,31 +651,31 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
     if (state == Data::RoomState::UNKNOWN) {
         std::cerr << "/!\\ Found a room with unknown state at " << coords << "." << std::endl;
         std::cerr << "If that is a recurrent issue, please report this bug." << std::endl;
-        addLayer(coords, "res/tex/default.png");
+        addLayer(coords, "default");
         return;
     }
 
     // Room is not constructed
     if (state == Data::RoomState::VOID)
     {
-        addLayer(coords, "res/tex/dungeon/inter/void_room.png");
+        addLayer(coords, "dungeon/inter/void_room");
 
         if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, Data::WEST)))
-            addLayer(coords, "res/tex/dungeon/inter/void_west_transition.png");
+            addLayer(coords, "dungeon/inter/void_west_transition");
         if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, Data::SOUTH)))
-            addLayer(coords, "res/tex/dungeon/inter/void_south_transition.png");
+            addLayer(coords, "dungeon/inter/void_south_transition");
         if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, Data::EAST)))
-            addLayer(coords, "res/tex/dungeon/inter/void_east_transition.png");
+            addLayer(coords, "dungeon/inter/void_east_transition");
 
         return;
     }
 
     // Add room textures
-    addLayer(coords, "res/tex/dungeon/inter/inner_wall.png");
-    addLayer(coords, "res/tex/dungeon/inter/floor.png");
+    addLayer(coords, "dungeon/inter/inner_wall");
+    addLayer(coords, "dungeon/inter/floor");
 
     if (!m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, Data::EAST)))
-        addLayer(coords, "res/tex/dungeon/inter/right_wall.png");
+        addLayer(coords, "dungeon/inter/right_wall");
 }
 
 void Inter::refreshTileFacilities(const sf::Vector2u& coords)
@@ -755,10 +755,10 @@ void Inter::refreshTileTraps(const sf::Vector2u& coords)
 
 void Inter::refreshOuterWalls()
 {
-    const auto& roomSize = Application::context().textures.get("res/tex/dungeon/inter/inner_wall.png").getSize();
+    const auto& roomSize = Application::context().textures.get("dungeon/inter/inner_wall").getSize();
 
     // West wall
-    const auto& westTextureSize = Application::context().textures.get("res/tex/dungeon/inter/outer_wall_west.png").getSize();
+    const auto& westTextureSize = Application::context().textures.get("dungeon/inter/outer_wall_west").getSize();
     sf::Vector2f westRealSize(westTextureSize.x * m_grid.cellSize().x / roomSize.x, size().y);
     sf::IntRect westWallsRect(0, 0, westTextureSize.x, westTextureSize.y * m_grid.rows());
     m_outerWalls[0].setSize(westRealSize);
@@ -766,7 +766,7 @@ void Inter::refreshOuterWalls()
     m_outerWalls[0].setTextureRect(westWallsRect);
 
     // East wall
-    const auto& eastTextureSize = Application::context().textures.get("res/tex/dungeon/inter/outer_wall_east.png").getSize();
+    const auto& eastTextureSize = Application::context().textures.get("dungeon/inter/outer_wall_east").getSize();
     sf::Vector2f eastRealSize(eastTextureSize.x * m_grid.cellSize().x / roomSize.x, size().y);
     sf::IntRect eastWallsRect(0, 0, eastTextureSize.x, eastTextureSize.y * m_grid.rows());
     m_outerWalls[1].setSize(eastRealSize);

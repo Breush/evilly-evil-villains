@@ -16,19 +16,19 @@ ToolGrabButton::ToolGrabButton(const std::wstring& text, ToolID toolID)
 {
     switch (m_toolID) {
         case ToolID::ROOMS_BUILDER:
-            m_textureID = "res/tex/dungeon/tools/rooms_builder_icon.png";
+            m_textureID = "dungeon/tools/rooms_builder_icon";
             break;
 
         case ToolID::ROOMS_DESTROYER:
-            m_textureID = "res/tex/dungeon/tools/rooms_destroyer_icon.png";
+            m_textureID = "dungeon/tools/rooms_destroyer_icon";
             break;
 
         case ToolID::TRAPS_REMOVER:
-            m_textureID = "res/tex/dungeon/tools/traps_remover_icon.png";
+            m_textureID = "dungeon/tools/traps_remover_icon";
             break;
 
         case ToolID::FACILITIES_REMOVER:
-            m_textureID = "res/tex/dungeon/tools/facilities_remover_icon.png";
+            m_textureID = "dungeon/tools/facilities_remover_icon";
             break;
     }
 

@@ -98,7 +98,7 @@ void AnswerBox::refreshTexts()
 
     for (auto& text : m_texts) {
         text.fitWidth(size().x);
-        text.setFont(Application::context().fonts.get("res/font/nui.ttf"));
+        text.setFont(Application::context().fonts.get("nui"));
         text.setColor(sf::Color::White);
         text.setPosition({0.f, vOffset});
         vOffset += boundsSize(text).y;

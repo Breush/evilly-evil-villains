@@ -23,15 +23,15 @@ void Ladder::setDesign(Design design)
 {
     switch (design) {
     case Design::MAIN:
-        m_sprite.setTexture("res/tex/dungeon/facilities/ladder/main.png");
+        m_sprite.setTexture("dungeon/facilities/ladder/main");
         break;
 
     case Design::EXIT_MAIN:
-        m_sprite.setTexture("res/tex/dungeon/facilities/ladder/exit_main.png");
+        m_sprite.setTexture("dungeon/facilities/ladder/exit_main");
         break;
 
     case Design::EXIT_END:
-        m_sprite.setTexture("res/tex/dungeon/facilities/ladder/exit_end.png");
+        m_sprite.setTexture("dungeon/facilities/ladder/exit_end");
         break;
     }
 }

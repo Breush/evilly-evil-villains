@@ -16,11 +16,12 @@ void AnimationHolder::load(const std::string& filename)
 {
     // Data
     m_scmlHolder.load(filename);
+    auto id = m_scmlHolder.getID(filename);
 
     // File system
     auto fs = std::make_unique<scml::FileSystem>();
-    m_fsMap.insert(std::make_pair(filename, std::move(fs)));
-    m_fsMap[filename]->load(&getData(filename));
+    m_fsMap.insert(std::make_pair(id, std::move(fs)));
+    m_fsMap[id]->load(&getData(id));
 }
 
 //----- Getters -----//

@@ -24,7 +24,11 @@ namespace resources
 
         //! Load resource into memory with special parameter to loadFromFile (for shaders).
         template <typename Parameter>
-        Resource& load(const std::string& id, const std::string& filename, const Parameter& parameter);
+        Resource& load(const std::string& filename, const Parameter& parameter);
+
+        //! Sets the backup resource to use when id does not exists.
+        //! Provided id should exists.
+        void setDefault(const std::string& id);
 
         //! @}
 
@@ -32,13 +36,20 @@ namespace resources
         //! @name Access
         //! @{
 
-        //! Returns true if resource exists.
-        bool exists(const std::string& id);
+        //! Gets the ID of the file from filename.
+        //! res/xxx/dir/file.yyy -> dir/file
+        std::string getID(const std::string& filename) const;
 
-        //! Get resource from its ID/file name.
+        //! Returns true if resource exists.
+        bool stored(const std::string& id) const;
+
+        //! Returns true if resource exists.
+        inline bool fileStored(const std::string& filename) const { return stored(getID(filename)); };
+
+        //! Get resource from its ID.
         Resource& get(const std::string& id);
 
-        //! Get resource from its ID/file name.
+        //! Get resource from its ID.
         const Resource& get(const std::string& id) const;
 
         //! @}
@@ -56,8 +67,8 @@ namespace resources
 
     private:
 
-        //! Storage.
-        std::map<std::string, std::unique_ptr<Resource>> m_resourcesMap;
+        std::map<std::string, std::unique_ptr<Resource>> m_resourcesMap;    //!< Storage.
+        Resource* m_default = nullptr;  //!< Backup when an other is not found.
     };
 }
 
@@ -71,7 +82,6 @@ namespace sf
     class Shader;
     class Font;
     class SoundBuffer;
-    class View;
 }
 
 namespace scml

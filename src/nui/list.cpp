@@ -68,12 +68,12 @@ void List::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Ve
     // Double-click?
     if (m_doubleClickDelay >= 0.f) {
         returnif (m_callback == nullptr);
-        Application::context().sounds.play("res/snd/select.wav");
+        Application::context().sounds.play("select");
         m_callback();
     }
     else {
         m_doubleClickDelay = 0.f;
-        Application::context().sounds.play("res/snd/select.wav");
+        Application::context().sounds.play("select");
         selectLine(line);
     }
 }
@@ -96,16 +96,16 @@ bool List::handleKeyboardEvent(const sf::Event& event)
     // Confirm
     if (event.key.code == sf::Keyboard::Return) {
         returnif (m_lines.empty() || m_callback == nullptr) false;
-        Application::context().sounds.play("res/snd/select.wav");
+        Application::context().sounds.play("select");
         m_callback();
     }
     // Up
     else if (event.key.code == sf::Keyboard::Up) {
         if (m_selectedLine == 0u) {
-            Application::context().sounds.play("res/snd/refuse.wav");
+            Application::context().sounds.play("refuse");
         }
         else {
-            Application::context().sounds.play("res/snd/select.wav");
+            Application::context().sounds.play("select");
             selectLine(m_selectedLine - 1u);
         }
         return true;
@@ -113,10 +113,10 @@ bool List::handleKeyboardEvent(const sf::Event& event)
     // Down
     else if (event.key.code == sf::Keyboard::Down) {
         if (m_selectedLine == m_lines.size() - 1u) {
-            Application::context().sounds.play("res/snd/refuse.wav");
+            Application::context().sounds.play("refuse");
         }
         else {
-            Application::context().sounds.play("res/snd/select.wav");
+            Application::context().sounds.play("select");
             selectLine(m_selectedLine + 1u);
         }
         return true;

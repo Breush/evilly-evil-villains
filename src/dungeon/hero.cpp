@@ -19,7 +19,7 @@ Hero::Hero(HeroesManager& manager, Inter& inter)
 
     // Sprite
     attachChild(m_sprite);
-    m_sprite.load("res/scml/heroes/groo.scml");
+    m_sprite.load("heroes/groo");
 
     // Dosh label
     attachChild(m_doshLabel);

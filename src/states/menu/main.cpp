@@ -26,11 +26,11 @@ MenuMain::MenuMain(StateStack& stack)
     float maxSide = std::max(nuiSize.x, nuiSize.y);
 
     // Background
-    auto textureSize = sf::v2f(Application::context().textures.get("res/tex/menu/main/background.png").getSize());
+    auto textureSize = sf::v2f(Application::context().textures.get("menu/main/background").getSize());
     auto scaleFactor = maxSide / textureSize.x;
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
-    m_background.setTexture("res/tex/menu/main/background.png");
+    m_background.setTexture("menu/main/background");
     m_background.setShader("menu/background");
     m_background.setLocalScale({scaleFactor, scaleFactor});
     Application::context().shaders.get("menu/background").setParameter("textureSize", scaleFactor * textureSize);

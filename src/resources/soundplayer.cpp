@@ -26,6 +26,11 @@ void SoundPlayer::play(const std::string& id)
     play(id, getListenerPosition());
 }
 
+std::string SoundPlayer::getID(const std::string& filename)
+{
+    return m_soundBuffers.getID(filename);
+}
+
 void SoundPlayer::play(const std::string& id, sf::Vector2f position)
 {
     m_sounds.emplace_back();

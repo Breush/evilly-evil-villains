@@ -18,7 +18,7 @@ Graph::Graph()
 {
     // Focusing
     m_focusShader = &Application::context().shaders.get("nui/focus");
-    m_focusShape.setTexture(&Application::context().textures.get("res/tex/nui/focus.png"));
+    m_focusShape.setTexture(&Application::context().textures.get("nui/focus"));
     m_focusShape.setFillColor({255, 255, 255, 100});
 
     // NUI layer

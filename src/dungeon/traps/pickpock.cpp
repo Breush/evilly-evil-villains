@@ -19,7 +19,7 @@ PickPock::PickPock(const sf::Vector2u& coords, ElementData& elementdata)
 
     // Decorum
     attachChild(m_sprite);
-    m_sprite.load("res/scml/dungeon/traps/pickpock.scml");
+    m_sprite.load("dungeon/traps/pickpock");
 }
 
 //-------------------------//

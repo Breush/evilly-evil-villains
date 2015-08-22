@@ -19,25 +19,23 @@ void Application::loadShaders()
         if (fileInfo.isDirectory || (extension != "frag" && extension != "vert"))
             continue;
 
-        // Get ID
-        std::string fileNoExtension = file.substr(0u, file.find_last_of("."));
-        std::string shaderID = fileNoExtension.substr(fileNoExtension.find_first_of("/") + 1u);
-        shaderID = shaderID.substr(shaderID.find_first_of("/") + 1u);
+        // Is there a corresponding vert/frag file?
+        std::string coupleFile = file.substr(0u, file.find_last_of("."));
+        coupleFile = coupleFile + ((extension == "frag")? ".vert" : ".frag");
 
         // If we did not already add a couple
-        if (s_context.shaders.exists(shaderID)) continue;
+        if (s_context.shaders.fileStored(coupleFile)) continue;
 
         // If there is a couple of shaders frag/vert to add
-        std::string coupleFile = fileNoExtension + "." + ((extension == "frag")? "vert" : "frag");
         if (fileExists(coupleFile)) {
             // We let vertex file add it
             if (extension != "vert") continue;
-            s_context.shaders.load(shaderID, file, coupleFile);
+            s_context.shaders.load(file, coupleFile);
         }
 
         // No couple
         else {
-            s_context.shaders.load(shaderID, file, (extension == "frag")? sf::Shader::Fragment : sf::Shader::Vertex);
+            s_context.shaders.load(file, (extension == "frag")? sf::Shader::Fragment : sf::Shader::Vertex);
         }
 
         ++shadersCount;

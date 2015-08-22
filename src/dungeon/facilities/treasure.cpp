@@ -15,5 +15,5 @@ Treasure::Treasure(const sf::Vector2u& coords, ElementData& elementdata)
 
     // Decorum
     attachChild(m_sprite);
-    m_sprite.load("res/scml/dungeon/facilities/treasure.scml");
+    m_sprite.load("dungeon/facilities/treasure");
 }

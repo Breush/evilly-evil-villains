@@ -26,10 +26,10 @@ Sidebar::Sidebar(scene::Scene& inScene)
     m_minimap.setCallbackAction([this] (const sf::Vector2f& position) { m_scene.setViewCenter(position); });
 
     // Tabs + tab content
-    m_tabHolder.stackBack(_("Monsters"),    "res/tex/dungeon/sidebar/tab/monsters.png",    m_tabContents[TabsID::MONSTERS].scrollArea);
-    m_tabHolder.stackBack(_("Traps"),       "res/tex/dungeon/sidebar/tab/traps.png",       m_tabContents[TabsID::TRAPS].scrollArea);
-    m_tabHolder.stackBack(_("Facilities"),  "res/tex/dungeon/sidebar/tab/facilities.png",  m_tabContents[TabsID::FACILITIES].scrollArea);
-    m_tabHolder.stackBack(_("Tools"),       "res/tex/dungeon/sidebar/tab/tools.png",       m_tabContents[TabsID::TOOLS].scrollArea);
+    m_tabHolder.stackBack(_("Monsters"),    "dungeon/sidebar/tab/monsters",    m_tabContents[TabsID::MONSTERS].scrollArea);
+    m_tabHolder.stackBack(_("Traps"),       "dungeon/sidebar/tab/traps",       m_tabContents[TabsID::TRAPS].scrollArea);
+    m_tabHolder.stackBack(_("Facilities"),  "dungeon/sidebar/tab/facilities",  m_tabContents[TabsID::FACILITIES].scrollArea);
+    m_tabHolder.stackBack(_("Tools"),       "dungeon/sidebar/tab/tools",       m_tabContents[TabsID::TOOLS].scrollArea);
 
     for (auto& tabContent : m_tabContents)
         tabContent.scrollArea.setContent(tabContent.stacker);
@@ -117,7 +117,7 @@ void Sidebar::refreshTabContents()
     trapsStacker.unstackAll();
     trapsButtons.clear();
 
-    trapsButtons.emplace_back(std::make_unique<dungeon::TrapGrabButton>(_("Pick-pock"), "res/tex/dungeon/traps/pickpock/icon.png", L"pickpock"));
+    trapsButtons.emplace_back(std::make_unique<dungeon::TrapGrabButton>(_("Pick-pock"), "dungeon/traps/pickpock/icon", L"pickpock"));
 
     for (auto& trapsButton : trapsButtons)
         trapsStacker.stackBack(*trapsButton, nui::Align::CENTER);
@@ -128,9 +128,9 @@ void Sidebar::refreshTabContents()
     facilitiesStacker.unstackAll();
     facilitiesButtons.clear();
 
-    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Treasure"), "res/tex/dungeon/facilities/treasure/icon.png", L"treasure"));
-    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Entrance"), "res/tex/dungeon/facilities/entrance/icon.png", L"entrance"));
-    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Ladder"),   "res/tex/dungeon/facilities/ladder/icon.png",   L"ladder"));
+    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Treasure"), "dungeon/facilities/treasure/icon", L"treasure"));
+    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Entrance"), "dungeon/facilities/entrance/icon", L"entrance"));
+    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Ladder"),   "dungeon/facilities/ladder/icon",   L"ladder"));
 
     for (auto& facilitiesButton : facilitiesButtons)
         facilitiesStacker.stackBack(*facilitiesButton, nui::Align::CENTER);

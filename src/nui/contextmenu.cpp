@@ -12,10 +12,10 @@ ContextMenu::ContextMenu()
 
     // Background
     // TODO Have own background image
-    m_background.setTexture(&Application::context().textures.get("res/tex/dungeon/sidebar/background.png"));
+    m_background.setTexture(&Application::context().textures.get("dungeon/sidebar/background"));
 
     // Title
-    m_title.setFont(Application::context().fonts.get("res/font/nui.ttf"));
+    m_title.setFont(Application::context().fonts.get("nui"));
     m_title.setStyle(sf::Text::Bold);
     m_title.setColor(sf::Color::White);
 }
@@ -103,10 +103,10 @@ void ContextMenu::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Ve
     uint choice = choiceFromCoords(mousePos);
 
     if (choice < m_choices.size() && m_choices[choice].callback != nullptr) {
-        Application::context().sounds.play("res/snd/accept.wav");
+        Application::context().sounds.play("accept");
         m_choices[choice].callback();
     } else {
-        Application::context().sounds.play("res/snd/refuse.wav");
+        Application::context().sounds.play("refuse");
         markForVisible(true);
     }
 }
@@ -155,7 +155,7 @@ void ContextMenu::addChoice(const std::wstring& text, Callback callback)
     choiceInfo.callback = callback;
 
     // Getting font from holder
-    sf::Font& font = Application::context().fonts.get("res/font/nui.ttf");
+    sf::Font& font = Application::context().fonts.get("nui");
     choiceInfo.text.setFont(font);
     choiceInfo.text.setCharacterSize(m_fontSize);
 

@@ -73,46 +73,46 @@ void Label::setPrestyle(Prestyle prestyle)
             break;
 
         case Prestyle::NUI:
-            m_text.setFont(Application::context().fonts.get("res/font/nui.ttf"));
+            m_text.setFont(Application::context().fonts.get("nui"));
             m_text.setColor(sf::Color::White);
             m_text.setCharacterSize(m_fontSize);
             break;
 
         case Prestyle::NUI_SOBER:
-            m_text.setFont(Application::context().fonts.get("res/font/mono.ttf"));
+            m_text.setFont(Application::context().fonts.get("mono"));
             m_text.setColor(sf::Color::Black);
             m_text.setCharacterSize(m_fontSize);
             break;
 
         case Prestyle::NUI_TITLE:
-            m_text.setFont(Application::context().fonts.get("res/font/nui.ttf"));
+            m_text.setFont(Application::context().fonts.get("nui"));
             m_text.setColor(sf::Color::White);
             m_text.setStyle(sf::Text::Style::Bold);
             m_text.setCharacterSize(m_fontSize);
             break;
 
         case Prestyle::MENU_TITLE:
-            m_text.setFont(Application::context().fonts.get("res/font/horror.ttf"));
+            m_text.setFont(Application::context().fonts.get("horror"));
             m_text.setStyle(sf::Text::Style::Bold);
             m_text.setColor(sf::Color::White);
             m_text.setCharacterSize(1.6f * m_fontSize);
             break;
 
         case Prestyle::MENU_POPUP_TITLE:
-            m_text.setFont(Application::context().fonts.get("res/font/horror.ttf"));
+            m_text.setFont(Application::context().fonts.get("horror"));
             m_text.setStyle(sf::Text::Style::Bold);
             m_text.setColor(sf::Color::White);
             m_text.setCharacterSize(3.2f * m_fontSize);
             break;
 
         case Prestyle::MENU_SOBER:
-            m_text.setFont(Application::context().fonts.get("res/font/mono.ttf"));
+            m_text.setFont(Application::context().fonts.get("mono"));
             m_text.setColor(sf::Color::White);
             m_text.setCharacterSize(1.1f * m_fontSize);
             break;
 
         case Prestyle::MENU_SOBER_LIGHT:
-            m_text.setFont(Application::context().fonts.get("res/font/mono.ttf"));
+            m_text.setFont(Application::context().fonts.get("mono"));
             m_text.setColor({255u, 255u, 255u, 128u});
             m_text.setCharacterSize(m_fontSize);
             break;

@@ -9,5 +9,5 @@ Entrance::Entrance(const sf::Vector2u& coords, ElementData& elementdata)
 {
     // Decorum
     attachChild(m_sprite);
-    m_sprite.load("res/scml/dungeon/facilities/entrance.scml");
+    m_sprite.load("dungeon/facilities/entrance");
 }

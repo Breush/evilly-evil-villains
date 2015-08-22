@@ -17,7 +17,7 @@ TextEntry::TextEntry()
     m_background.setFillColor(sf::Color::White);
 
     addPart(&m_text);
-    m_text.setFont(Application::context().fonts.get("res/font/nui.ttf"));
+    m_text.setFont(Application::context().fonts.get("nui"));
     m_text.setColor(sf::Color::Black);
 
     addPart(&m_cursor);

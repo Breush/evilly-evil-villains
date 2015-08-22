@@ -14,7 +14,7 @@ MonsterCage::MonsterCage(std::wstring monsterID)
 {
     // Background
     addPart(&m_background);
-    m_background.setTexture(&Application::context().textures.get("res/tex/dungeon/sidebar/tab/monsters/cage.png"));
+    m_background.setTexture(&Application::context().textures.get("dungeon/sidebar/tab/monsters/cage"));
 
     // Puppets
     // TODO Have X puppets because there is X monsters in the reserve
