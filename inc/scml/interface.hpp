@@ -43,7 +43,7 @@ public:
 
     void convert_to_SCML_coords(float& x, float& y, float& angle) override;
     std::pair<uint, uint> getImageDimensions(int folderID, int fileID) const override;
-    void draw_internal(int folderID, int fileID, float x, float y, float angle, float scale_x, float scale_y) override;
+    void draw_internal(int folderID, int fileID, float x, float y, float angle, float scale_x, float scale_y, float alpha) override;
 
     void play_sound(int folderID, int fileID) override;
 

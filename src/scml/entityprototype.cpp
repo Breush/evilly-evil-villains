@@ -198,7 +198,7 @@ void EntityPrototype::draw_simple_object(Animation::Mainline::Key::Object* obj1)
     }
 
     // Let the renderer draw it
-    draw_internal(obj1->folder, obj1->file, sprite_x, sprite_y, obj_transform.angle, obj_transform.scale_x, obj_transform.scale_y);
+    draw_internal(obj1->folder, obj1->file, sprite_x, sprite_y, obj_transform.angle, obj_transform.scale_x, obj_transform.scale_y, obj1->a);
 }
 
 const std::pair<float, float>& EntityPrototype::getImagePivots(int folder, int file) const
@@ -240,6 +240,7 @@ void EntityPrototype::draw_tweened_object(Animation::Mainline::Key::Object_Ref* 
 
         // Tween with next key's object
         obj_transform.lerp(Transform(obj2->x, obj2->y, obj2->angle, obj2->scale_x, obj2->scale_y), t, t_key1->spin);
+        float alpha = interpolate(obj1->a, obj2->a, t);
 
         if (obj_transform.scale_x * obj_transform.scale_y < 0) {
             obj_transform.angle = -obj_transform.angle;
@@ -268,7 +269,7 @@ void EntityPrototype::draw_tweened_object(Animation::Mainline::Key::Object_Ref* 
         rotate_point(sprite_x, sprite_y, obj_transform.angle, obj_transform.x, obj_transform.y);
 
         // Let the renderer draw it
-        draw_internal(obj1->folder, obj1->file, sprite_x, sprite_y, obj_transform.angle, obj_transform.scale_x, obj_transform.scale_y);
+        draw_internal(obj1->folder, obj1->file, sprite_x, sprite_y, obj_transform.angle, obj_transform.scale_x, obj_transform.scale_y, alpha);
     }
 }
 

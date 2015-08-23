@@ -493,8 +493,9 @@ public:
      * \param angle Angle (in degrees) in SCML coordinate system
      * \param scale_x Scale factor in the x-direction
      * \param scale_y Scale factor in the y-direction
+     * \param alpha Opacity factor
      */
-    virtual void draw_internal(int folderID, int fileID, float x, float y, float angle, float scale_x, float scale_y) = 0;
+    virtual void draw_internal(int folderID, int fileID, float x, float y, float angle, float scale_x, float scale_y, float alpha) = 0;
 
     /*! \brief Chooses and resets the current animation.
      *

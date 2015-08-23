@@ -95,7 +95,7 @@ std::pair<uint, uint> Entity::getImageDimensions(int folderID, int fileID) const
 
 // (x, y) specifies the center point of the image.  x, y, and angle are in SCML coordinate system
 // (+x to the right, +y up, +angle counter-clockwise)
-void Entity::draw_internal(int folderID, int fileID, float x, float y, float angle, float scale_x, float scale_y)
+void Entity::draw_internal(int folderID, int fileID, float x, float y, float angle, float scale_x, float scale_y, float alpha)
 {
     y = -y;
     angle = 360 - angle;
@@ -107,6 +107,7 @@ void Entity::draw_internal(int folderID, int fileID, float x, float y, float ang
     m_sprite.setScale(scale_x, scale_y);
     m_sprite.setRotation(angle);
     m_sprite.setPosition(x, y);
+    m_sprite.setColor({255u, 255u, 255u, static_cast<uint8>(alpha * 255.f)});
 
     m_target->draw(m_sprite);
 }
