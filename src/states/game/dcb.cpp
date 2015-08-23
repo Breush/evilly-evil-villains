@@ -18,12 +18,24 @@ GameDCB::GameDCB(StateStack& stack)
     const auto& nuiSize = nuiLayer().size();
 
     // Background
-    const auto& backgroundSize = Application::context().textures.get("dcb/scene/background").getSize();
-    nuiRoot.attachChild(m_background);
-    m_background.load("dcb/scene");
-    m_background.setRelativePosition({0.5f, 0.5f});
     // TODO Currently only OK for 16:9 resolutions
-    m_background.setLocalScale(nuiSize / sf::v2f(backgroundSize));
+    const auto& backgroundSize = Application::context().textures.get("dcb/scene/stage").getSize();
+    auto backgroundScale = nuiSize / sf::v2f(backgroundSize);
+
+    nuiRoot.attachChild(m_trees);
+    m_trees.load("dcb/scene/trees");
+    m_trees.setRelativePosition({0.5f, 0.5f});
+    m_trees.setLocalScale(backgroundScale);
+
+    nuiRoot.attachChild(m_stage);
+    m_stage.load("dcb/scene/stage");
+    m_stage.setRelativePosition({0.5f, 0.5f});
+    m_stage.setLocalScale(backgroundScale);
+
+    nuiRoot.attachChild(m_candle);
+    m_candle.load("dcb/scene/candle");
+    m_candle.setRelativePosition({0.5f, 0.5f});
+    m_candle.setLocalScale(backgroundScale);
 
     // Gauges
     m_gaugesManager.setRelativePosition({0.f, 0.80f});

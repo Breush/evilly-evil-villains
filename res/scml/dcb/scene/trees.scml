@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r4.1">
+    <folder id="0" name="res/tex/dcb/scene">
+        <file id="0" name="res/tex/dcb/scene/background.png" width="3480" height="1654" pivot_x="0" pivot_y="1"/>
+        <file id="1" name="res/tex/dcb/scene/stage.png" width="3840" height="2160" pivot_x="0" pivot_y="1"/>
+        <file id="2" name="res/tex/dcb/scene/filoam.png" width="923" height="1014" pivot_x="0" pivot_y="1"/>
+    </folder>
+    <folder id="1" name="res/tex/dcb/scene/candle">
+        <file id="0" name="res/tex/dcb/scene/candle/stand.png" width="354" height="701" pivot_x="0" pivot_y="1"/>
+        <file id="1" name="res/tex/dcb/scene/candle/fire.png" width="343" height="212" pivot_x="0" pivot_y="1"/>
+        <file id="2" name="res/tex/dcb/scene/candle/aura.png" width="1374" height="1138" pivot_x="0" pivot_y="1"/>
+    </folder>
+    <folder id="2" name="res/tex/dcb/scene/trees">
+        <file id="0" name="res/tex/dcb/scene/trees/tree_left.png" width="631" height="793" pivot_x="0" pivot_y="1"/>
+        <file id="1" name="res/tex/dcb/scene/trees/tree_middle_left.png" width="901" height="1267" pivot_x="0" pivot_y="1"/>
+        <file id="2" name="res/tex/dcb/scene/trees/tree_middle_right.png" width="1500" height="1441" pivot_x="0" pivot_y="1"/>
+        <file id="3" name="res/tex/dcb/scene/trees/tree_right.png" width="581" height="374" pivot_x="0" pivot_y="1"/>
+        <file id="4" name="res/tex/dcb/scene/trees/leaves_left.png" width="383" height="592" pivot_x="0" pivot_y="1"/>
+        <file id="5" name="res/tex/dcb/scene/trees/leaves_middle.png" width="566" height="310" pivot_x="0" pivot_y="1"/>
+        <file id="6" name="res/tex/dcb/scene/trees/leaves_right.png" width="381" height="447" pivot_x="0" pivot_y="1"/>
+    </folder>
+    <entity id="0" name="scene">
+        <obj_info name="scene_stage" realname="stage" type="sprite">
+            <frames/>
+        </obj_info>
+        <obj_info name="scene_background" realname="background" type="sprite">
+            <frames>
+                <i folder="0" file="0"/>
+            </frames>
+        </obj_info>
+        <obj_info name="scene_filoam" realname="filoam" type="sprite">
+            <frames/>
+        </obj_info>
+        <obj_info name="scene_tree_left" realname="tree_left" type="sprite">
+            <frames>
+                <i folder="2" file="0"/>
+            </frames>
+        </obj_info>
+        <obj_info name="scene_tree_middle_left" realname="tree_middle_left" type="sprite">
+            <frames>
+                <i folder="2" file="1"/>
+            </frames>
+        </obj_info>
+        <obj_info name="scene_tree_middle_right" realname="tree_middle_right" type="sprite">
+            <frames>
+                <i folder="2" file="2"/>
+            </frames>
+        </obj_info>
+        <obj_info name="scene_tree_right" realname="tree_right" type="sprite">
+            <frames>
+                <i folder="2" file="3"/>
+            </frames>
+        </obj_info>
+        <obj_info name="scene_leaves_left_000" realname="leaves_left_000" type="sprite">
+            <frames>
+                <i folder="2" file="4"/>
+            </frames>
+        </obj_info>
+        <obj_info name="scene_leaves_middle_000" realname="leaves_middle_000" type="sprite">
+            <frames>
+                <i folder="2" file="5"/>
+            </frames>
+        </obj_info>
+        <obj_info name="scene_leaves_right_000" realname="leaves_right_000" type="sprite">
+            <frames>
+                <i folder="2" file="6"/>
+            </frames>
+        </obj_info>
+        <animation id="0" name="idle" length="10000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" name="background" folder="0" file="0" abs_x="-1734" abs_y="1080" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" name="tree_right" folder="2" file="3" abs_x="1160.869565" abs_y="139.130435" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="4" key="0" z_index="1"/>
+                    <object_ref id="2" name="tree_middle_right" folder="2" file="2" abs_x="26.086957" abs_y="1080" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="3" key="0" z_index="2"/>
+                    <object_ref id="3" name="tree_middle_left" folder="2" file="1" abs_x="-830.434783" abs_y="1080" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="2" key="0" z_index="3"/>
+                    <object_ref id="4" name="tree_left" folder="2" file="0" abs_x="-1947.826087" abs_y="504.347826" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="1" key="0" z_index="4"/>
+                    <object_ref id="5" name="leaves_left_000" folder="2" file="4" abs_x="-1586.666667" abs_y="1043.333333" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="5" key="0" z_index="5"/>
+                    <object_ref id="6" name="leaves_middle_000" folder="2" file="5" abs_x="-186.666667" abs_y="1066.666667" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="6" key="0" z_index="6"/>
+                    <object_ref id="7" name="leaves_right_000" folder="2" file="6" abs_x="1303.333333" abs_y="1073.333333" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="7" key="0" z_index="7"/>
+                </key>
+                <key id="1" time="1003">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="4" key="0" z_index="1"/>
+                    <object_ref id="2" timeline="3" key="0" z_index="2"/>
+                    <object_ref id="3" timeline="2" key="0" z_index="3"/>
+                    <object_ref id="4" timeline="1" key="1" z_index="4"/>
+                    <object_ref id="5" timeline="5" key="0" z_index="5"/>
+                    <object_ref id="6" timeline="6" key="0" z_index="6"/>
+                    <object_ref id="7" timeline="7" key="0" z_index="7"/>
+                </key>
+                <key id="2" time="1953">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="4" key="0" z_index="1"/>
+                    <object_ref id="2" timeline="3" key="0" z_index="2"/>
+                    <object_ref id="3" timeline="2" key="0" z_index="3"/>
+                    <object_ref id="4" timeline="1" key="2" z_index="4"/>
+                    <object_ref id="5" timeline="5" key="0" z_index="5"/>
+                    <object_ref id="6" timeline="6" key="0" z_index="6"/>
+                    <object_ref id="7" timeline="7" key="0" z_index="7"/>
+                </key>
+                <key id="3" time="2874">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="4" key="0" z_index="1"/>
+                    <object_ref id="2" timeline="3" key="0" z_index="2"/>
+                    <object_ref id="3" timeline="2" key="0" z_index="3"/>
+                    <object_ref id="4" timeline="1" key="3" z_index="4"/>
+                    <object_ref id="5" timeline="5" key="0" z_index="5"/>
+                    <object_ref id="6" timeline="6" key="0" z_index="6"/>
+                    <object_ref id="7" timeline="7" key="0" z_index="7"/>
+                </key>
+                <key id="4" time="4551">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="4" key="0" z_index="1"/>
+                    <object_ref id="2" timeline="3" key="0" z_index="2"/>
+                    <object_ref id="3" timeline="2" key="0" z_index="3"/>
+                    <object_ref id="4" timeline="1" key="4" z_index="4"/>
+                    <object_ref id="5" timeline="5" key="0" z_index="5"/>
+                    <object_ref id="6" timeline="6" key="0" z_index="6"/>
+                    <object_ref id="7" timeline="7" key="0" z_index="7"/>
+                </key>
+                <key id="5" time="5660">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="4" key="0" z_index="1"/>
+                    <object_ref id="2" timeline="3" key="0" z_index="2"/>
+                    <object_ref id="3" timeline="2" key="0" z_index="3"/>
+                    <object_ref id="4" timeline="1" key="5" z_index="4"/>
+                    <object_ref id="5" timeline="5" key="0" z_index="5"/>
+                    <object_ref id="6" timeline="6" key="0" z_index="6"/>
+                    <object_ref id="7" timeline="7" key="0" z_index="7"/>
+                </key>
+                <key id="6" time="6933">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="4" key="0" z_index="1"/>
+                    <object_ref id="2" timeline="3" key="0" z_index="2"/>
+                    <object_ref id="3" timeline="2" key="0" z_index="3"/>
+                    <object_ref id="4" timeline="1" key="6" z_index="4"/>
+                    <object_ref id="5" timeline="5" key="0" z_index="5"/>
+                    <object_ref id="6" timeline="6" key="0" z_index="6"/>
+                    <object_ref id="7" timeline="7" key="0" z_index="7"/>
+                </key>
+                <key id="7" time="8211">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="4" key="0" z_index="1"/>
+                    <object_ref id="2" timeline="3" key="0" z_index="2"/>
+                    <object_ref id="3" timeline="2" key="0" z_index="3"/>
+                    <object_ref id="4" timeline="1" key="7" z_index="4"/>
+                    <object_ref id="5" timeline="5" key="0" z_index="5"/>
+                    <object_ref id="6" timeline="6" key="0" z_index="6"/>
+                    <object_ref id="7" timeline="7" key="0" z_index="7"/>
+                </key>
+            </mainline>
+            <timeline id="0" obj="1" name="background">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="-1734" y="1080" angle="0"/>
+                </key>
+            </timeline>
+            <timeline id="1" obj="3" name="tree_left">
+                <key id="0" spin="0">
+                    <object folder="2" file="0" x="-1947.826087" y="504.347826" angle="0"/>
+                </key>
+                <key id="1" time="1003" spin="0">
+                    <object folder="2" file="0" x="-1947.826087" y="526.222826" angle="0"/>
+                </key>
+                <key id="2" time="1953" spin="0">
+                    <object folder="2" file="0" x="-1963.451087" y="508.645439" angle="0"/>
+                </key>
+                <key id="3" time="2874" spin="0">
+                    <object folder="2" file="0" x="-1958.289536" y="533.085291" angle="0"/>
+                </key>
+                <key id="4" time="4551" spin="0">
+                    <object folder="2" file="0" x="-1955.827116" y="498.197349" angle="0"/>
+                </key>
+                <key id="5" time="5660" spin="0">
+                    <object folder="2" file="0" x="-1957.323718" y="508.824116" angle="0"/>
+                </key>
+                <key id="6" time="6933" spin="0">
+                    <object folder="2" file="0" x="-1945.162892" y="501.26114" angle="0"/>
+                </key>
+                <key id="7" time="8211" spin="0">
+                    <object folder="2" file="0" x="-1958.772629" y="521.297343" angle="0"/>
+                </key>
+            </timeline>
+            <timeline id="2" obj="4" name="tree_middle_left">
+                <key id="0" spin="0">
+                    <object folder="2" file="1" x="-830.434783" y="1080" angle="0"/>
+                </key>
+            </timeline>
+            <timeline id="3" obj="5" name="tree_middle_right">
+                <key id="0" spin="0">
+                    <object folder="2" file="2" x="26.086957" y="1080" angle="0"/>
+                </key>
+            </timeline>
+            <timeline id="4" obj="6" name="tree_right">
+                <key id="0" spin="0">
+                    <object folder="2" file="3" x="1160.869565" y="139.130435" angle="0"/>
+                </key>
+            </timeline>
+            <timeline id="5" obj="7" name="leaves_left_000">
+                <key id="0" spin="0">
+                    <object folder="2" file="4" x="-1586.666667" y="1043.333333" angle="0"/>
+                </key>
+            </timeline>
+            <timeline id="6" obj="8" name="leaves_middle_000">
+                <key id="0" spin="0">
+                    <object folder="2" file="5" x="-186.666667" y="1066.666667" angle="0"/>
+                </key>
+            </timeline>
+            <timeline id="7" obj="9" name="leaves_right_000">
+                <key id="0" spin="0">
+                    <object folder="2" file="6" x="1303.333333" y="1073.333333" angle="0"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

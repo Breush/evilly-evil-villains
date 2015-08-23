@@ -39,7 +39,6 @@ namespace states
 
     private:
 
-        sfe::AnimatedSprite m_background;   //!< The animated background.
         nui::TextEntry m_nameEntry;         //!< The entry for the dungeon name.
         nui::Button m_okButton;             //!< The only one button in the world.
 
@@ -47,5 +46,10 @@ namespace states
         dcb::AnswerBox m_answerBox;         //!< The box with all possible answers.
         dcb::GaugesManager m_gaugesManager; //!< The gauges.
         dcb::Controller m_controller;       //!< Controls the content of the other DCB elements.
+
+        // Decorum
+        sfe::AnimatedSprite m_trees;        //!< The animated trees.
+        sfe::AnimatedSprite m_stage;        //!< The animated stage.
+        sfe::AnimatedSprite m_candle;       //!< The animated candle.
     };
 }
