@@ -222,27 +222,24 @@ bool Graph::handleMouseMovedEvent(const sf::Event& event)
 void Graph::handleMouseWheelMovedEvent(const sf::Event& event)
 {
     float delta = static_cast<float>(event.mouseWheel.delta);
-
-    // TODO Scroll factor to be in config
-    float scrollFactor = 20.f;
+    const auto& scrollingFactor = Application::context().display.global.scrollingFactor;
 
     // With Control pressed, zoom
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
-        // TODO Zoom factor to be in config
-        auto mousePos = mousePosition(event);
-        float zoomFactor = (delta < 0.f)? 1.05f : 0.95f;
+        const auto& zoomSpeed = Application::context().display.global.zoomSpeed;
+        float zoomFactor = 1.f + ((delta < 0.f)? zoomSpeed : -zoomSpeed);
         zoomFactor = std::pow(zoomFactor, std::abs(delta));
-        m_scene.zoom(mousePos, zoomFactor);
+        m_scene.zoom(mousePosition(event), zoomFactor);
     }
 
     // With Shift pressed, move horizontally
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
-        m_scene.moveView({-scrollFactor * delta, 0.f});
+        m_scene.moveView({-scrollingFactor * delta, 0.f});
     }
 
     // Else, move vertically
     else {
-        m_scene.moveView({0.f, -scrollFactor * delta});
+        m_scene.moveView({0.f, -scrollingFactor * delta});
     }
 }
 

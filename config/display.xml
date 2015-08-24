@@ -11,5 +11,7 @@
 	</group>
 	<group type="global">
 		<param name="language" code="en_EN" />
+		<param name="scrollingFactor" value="20.f" />
+		<param name="zoomSpeed" value="0.05f" />
 	</group>
 </config>

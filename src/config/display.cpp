@@ -11,7 +11,7 @@ using namespace config;
 Display::Display()
     : window({false, {1360.f, 768.f}})
     , nui({2u, 3.f})
-    , global({L"en_EN"})
+    , global({L"en_EN", 20.f, 0.05f})
 {
     pugi::xml_document doc;
 
@@ -31,7 +31,7 @@ Display::Display()
     // File is OK, parsing it
     // Note: Groups are transparent, we don't really care
     // if a parameter is not in the correct group
-    for (auto& group : config.children(L"group")) {
+    for (auto& group : config.children(L"group"))
     for (auto& param : group.children(L"param")) {
         std::wstring name = param.attribute(L"name").as_string();
 
@@ -59,7 +59,12 @@ Display::Display()
         else if (name == L"language") {
             global.language = param.attribute(L"code").as_string();
         }
-    }
+        else if (name == L"scrollingFactor") {
+            global.scrollingFactor = param.attribute(L"value").as_float();
+        }
+        else if (name == L"zoomSpeed") {
+            global.zoomSpeed = param.attribute(L"value").as_float();
+        }
     }
 }
 
@@ -100,6 +105,22 @@ void Display::save()
     param = group.append_child(L"param");
     param.append_attribute(L"name") = L"fontFactor";
     param.append_attribute(L"value") = nui.fontFactor;
+
+    // Global
+    group = config.append_child(L"group");
+    param.append_attribute(L"name") = L"global";
+
+    param = group.append_child(L"param");
+    param.append_attribute(L"name") = L"language";
+    param.append_attribute(L"code") = global.language.c_str();
+
+    param = group.append_child(L"param");
+    param.append_attribute(L"name") = L"scrollingFactor";
+    param.append_attribute(L"value") = global.scrollingFactor;
+
+    param = group.append_child(L"param");
+    param.append_attribute(L"name") = L"zoomSpeed";
+    param.append_attribute(L"value") = global.zoomSpeed;
 
     #if DEBUG_GLOBAL > 0
         doc.save_file("config/display_saved.xml");

@@ -33,7 +33,9 @@ namespace config
         //! Generic parameters.
         struct Global
         {
-            std::wstring language;   //!< Language code (i.e. en_EN).
+            std::wstring language;  //!< Language code (i.e. en_EN).
+            float scrollingFactor;  //!< Scrolling speed.
+            float zoomSpeed;        //!< Zoom speed, percentage of variation.
         } global;
     };
 }
