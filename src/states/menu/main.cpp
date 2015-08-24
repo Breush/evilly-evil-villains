@@ -75,7 +75,7 @@ MenuMain::MenuMain(StateStack& stack)
     m_reactImage.setMouseLeftDeselect(false);
 
     // Setting callbacks
-    m_reactImage.addReactFromFile("res/tex/menu/main/logo.xml");
+    m_reactImage.loadFromFile("res/tex/menu/main/logo.xml");
     m_reactImage.setReactCallback(m_choices[0], singlePlayer);
     m_reactImage.setReactCallback(m_choices[1], multiPlayer);
     m_reactImage.setReactCallback(m_choices[2], villains);
@@ -91,11 +91,14 @@ bool MenuMain::update(const sf::Time& dt)
     }
 
     // Checking if reactImage changed
-    else if (m_reactImage.reactChanged()) {
-        for (uint i = 0; i < m_choices.size(); ++i) {
-            if (m_choices[i] == m_reactImage.getReact()) {
-                m_choiceBox.selectChoice(i);
-                break;
+    else if (m_reactImage.activeReactChanged()) {
+        const auto* activeKey = m_reactImage.activeReactKey();
+        if (activeKey != nullptr) {
+            for (uint i = 0; i < m_choices.size(); ++i) {
+                if (m_choices[i] == *activeKey) {
+                    m_choiceBox.selectChoice(i);
+                    break;
+                }
             }
         }
     }

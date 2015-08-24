@@ -10,70 +10,136 @@
 
 namespace nui
 {
-    // TODO DOC
+    //! A sprite with certain parts clickable.
+    /*!
+     *  Reacts are the rectangle sub-parts of an image,
+     *  they are link to key string.
+     */
 
-    class ReactImage : public scene::Entity
+    class ReactImage final : public scene::Entity
     {
         using baseClass = scene::Entity;
 
-    protected:
+    public:
+
+        //! Callback type for functions called when a react is clicked.
         using Callback = std::function<void()>;
 
     public:
+
+        //! Constructor.
         ReactImage();
-        virtual ~ReactImage() = default;
 
-        // Routine
-        void updateRoutine(const sf::Time& dt) override;
+        //! Default destructor.
+        ~ReactImage() = default;
 
-        // React handling
-        std::wstring& getReact() { return m_react; }
+        //--------------//
+        //! @name Control
+        //! @{
 
-        // Texture
-        void setImageTexture(const std::string& textureId);
+        //! Load texture and reacts information from a XML file.
+        void loadFromFile(const std::string& file);
 
-        // React management
-        void addReactFromFile(const std::string& file);
-        void addReact(const std::wstring& key, sf::FloatRect rect, const Callback callback = nullptr);
+        //! @}
+
+        //----------------//
+        //! @name Texture
+        //! @{
+
+        //! Set the texture used.
+        void setTexture(const std::string& textureId);
+
+        //! @}
+
+        //-------------------------//
+        //! @name React management
+        //! @{
+
+        //! True if active react changed since last update.
+        bool activeReactChanged() const { return m_activeReactChanged; }
+
+        //! Add a new react to the list.
+        void addReact(std::wstring key, sf::IntRect rect, const Callback callback = nullptr);
+
+        //! Sets the react callback a posteriori.
         void setReactCallback(const std::wstring& key, const Callback callback);
+
+        //! Select a react to be active.
         void setActiveReact(const std::wstring& key);
+
+        //! Get the key of the currently active react.
+        inline const std::wstring* activeReactKey() const { return (m_activeReact != nullptr)? &m_activeReact->key : nullptr; }
+
+        //! @}
+
+        //--------------------------//
+        //! @name Public properties
+        //! @{
+
+        //! Whether or not to deselect react when mouse is over none.
+        PARAMGS(bool, m_mouseLeftDeselect, mouseLeftDeselect, setMouseLeftDeselect)
+
+        //! @}
 
     protected:
 
-        void refreshImage();
+        //----------------//
+        //! @name Routine
+        //! @{
 
-        // Events
-        void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
-        void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
-        void handleMouseLeft() override;
+        void updateRoutine(const sf::Time& dt) final;
+
+        //! @}
+
+        //---------------//
+        //! @name Events
+        //! @{
+
+        void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseLeft() final;
+
+        //! @}
+
+        //-------------------------------------//
+        //! @name Selection of draw rectangles
+        //! @{
 
         // Affect visible rectangles to sprite
         void selectImageRect();
         void selectActiveRect();
-        void activateReact(const std::wstring& key);
 
-        struct ReactInfo {
-            sf::FloatRect rect;
-            Callback callback;
+        //! @}
+
+        //--------------------------------//
+        //! @name Internal changes update
+        //! @{
+
+        //! Refresh the internal buffer to current state.
+        void refreshBuffer();
+
+        //! @}
+
+        //! All react information.
+        struct ReactInfo
+        {
+            std::wstring key;               //!< The key for this react.
+            sf::IntRect rect;               //!< The rectangle sub-part of the image.
+            Callback callback = nullptr;    //!< The callback to call when this part is clicked.
         };
 
-        // Params
-        PARAMGS(bool, m_mouseLeftDeselect, mouseLeftDeselect, setMouseLeftDeselect)
-        PARAMG(bool, m_reactChanged, reactChanged)
-
     private:
-        // Target to store final image
-        sf::RenderTexture m_target;
 
         // Image
-        sf::Sprite m_image;
-        sf::Sprite m_sprite;
-        sf::FloatRect m_imageRect;
-        sf::FloatRect* m_activeRect = nullptr;
+        sf::RenderTexture m_buffer;    //!< The internal buffer.
+        sf::Sprite m_image;            //!< The original texture.
+        sf::Sprite m_sprite;           //!< Sprite displaying the final texture from the buffer.
+        sf::FloatRect m_imageRect;     //!< The sub-part to draw to buffer.
 
         // React
-        std::map<std::wstring, ReactInfo> m_reacts;
-        std::wstring m_react;
+        std::vector<ReactInfo> m_reacts;            //!< All the reacts.
+        const ReactInfo* m_activeReact = nullptr;   //!< The active react.
+        bool m_activeReactChanged = false;          //!< True if active react changed since last update.
     };
 }
 
