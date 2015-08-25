@@ -48,6 +48,9 @@ namespace sfe
         //! Restart the current animation.
         void restart();
 
+        //! Start or stop the current animation.
+        inline void setStarted(bool iStarted) { m_started = iStarted; }
+
         //! Whether the animation is started (running).
         inline bool started() const { return m_started; }
 
@@ -68,10 +71,12 @@ namespace sfe
         //! @name Routine
         //! @{
 
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
+
         //! Internally called to update the animation state.
         void updateAnimation(const sf::Time& dt);
 
-        void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
+        //! Refresh all entities.
         void refresh();
 
         //! @}

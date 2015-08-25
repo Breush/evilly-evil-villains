@@ -26,10 +26,7 @@ void DumbPuppet::updateAI(const sf::Time& dt)
 
 void DumbPuppet::setSource(const std::string& source)
 {
-    // TODO Use source
-    m_sprite.setFillColor(sf::Color::White);
-    m_sprite.setSize({30.f, 30.f});
-    setOrigin({15.f, 15.f});
+    m_sprite.load(source);
 }
 
 void DumbPuppet::setInitialLocalPosition(const sf::Vector2f& position)

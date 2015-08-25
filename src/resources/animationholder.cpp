@@ -33,7 +33,7 @@ scml::Data& AnimationHolder::getData(const std::string& id)
 
 scml::FileSystem& AnimationHolder::getFileSystem(const std::string& id)
 {
-    return *m_fsMap[id];
+    return (m_scmlHolder.stored(id))? *m_fsMap[id] : *m_fsMap["default"];
 }
 
 //----- Animated sprites -----//

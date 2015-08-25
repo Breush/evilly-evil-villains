@@ -24,8 +24,10 @@ Creepim::Creepim(const sf::Vector2u& coords, ElementData& elementdata, dungeon::
 
     // Decorum
     attachChild(m_sprite);
-    m_sprite.setSize({50.f, 50.f});
-    setOrigin({25.f, 25.f});
+    m_sprite.load("dungeon/monster/creepim");
+    m_sprite.setStarted(false);
+    // TODO Get correct scale from inter
+    m_sprite.setLocalScale({0.3f, 0.3f});
 
     // Lua
     m_luaActor.loadFile("res/ai/monsters/creepim.lua");
@@ -100,11 +102,11 @@ void Creepim::refreshFromActivity()
     if (active()) {
         m_luaActor.reinit();
         setCurrentNode(&m_graph->node(m_inter.tileFromLocalPosition(localPosition())));
-        m_sprite.setFillColor(sf::Color::White);
+        m_sprite.setStarted(true);
     }
     else {
         setCurrentNode(nullptr);
-        m_sprite.setFillColor({100u, 100u, 100u});
+        m_sprite.setStarted(false);
     }
 }
 

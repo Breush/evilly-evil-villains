@@ -32,6 +32,8 @@ namespace resources
         void load(const std::string& filename);
         void update(const sf::Time& dt);
 
+        inline void setDefault(const std::string& id) { m_scmlHolder.setDefault(id); }
+
         // Called by animated sprites
         void push(sfe::AnimatedSprite* animatedSprite);
         void pop(sfe::AnimatedSprite* animatedSprite);

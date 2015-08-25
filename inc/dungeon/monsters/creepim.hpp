@@ -1,7 +1,7 @@
 #pragma once
 
 #include "dungeon/monsters.hpp"
-// #include "sfe/animatedsprite.hpp"
+#include "sfe/animatedsprite.hpp"
 #include "sfe/rectangleshape.hpp"
 #include "ai/luaactor.hpp"
 
@@ -77,8 +77,7 @@ namespace monsters
         dungeon::Graph* m_graph = nullptr;  //!< Abstract dungeon graph.
 
         // Decorum
-        // TODO sfe::AnimatedSprite m_sprite;   //!< The sprite.
-        sfe::RectangleShape m_sprite;
+        sfe::AnimatedSprite m_sprite;   //!< The sprite.
 
         // Artificial intelligence
         ai::LuaActor m_luaActor;                    //!< Loads lua file and move into the graph.

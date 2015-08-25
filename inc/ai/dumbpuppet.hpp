@@ -1,7 +1,7 @@
 #pragma once
 
 #include "scene/entity.hpp"
-#include "sfe/rectangleshape.hpp"
+#include "sfe/animatedsprite.hpp"
 
 // TODO Why is that in AI?
 // Should be in sfe maybe
@@ -52,7 +52,6 @@ namespace ai
         float m_minX = -1.f;    //!< Mininum horizontal local position.
         float m_maxX = -1.f;    //!< Maximum horizontal local position.
 
-        // TODO sfe::AnimatedSprite m_sprite;   //!< The sprite.
-        sfe::RectangleShape m_sprite;
+        sfe::AnimatedSprite m_sprite;   //!< The sprite.
     };
 }

@@ -19,6 +19,9 @@ void Application::loadAnimations()
     }
 
     mdebug_core_2("Loaded " << animationsCount << " animations.");
+
+    // Backup
+    s_context.animations.setDefault("default");
 }
 
 void Application::updateAnimations(const sf::Time& dt)

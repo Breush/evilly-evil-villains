@@ -18,9 +18,8 @@ MonsterCage::MonsterCage(std::wstring monsterID)
 
     // Puppets
     // TODO Have X puppets because there is X monsters in the reserve
-    // TODO That would be good to remove indexing with enums...
     attachChild(m_monsterPuppet);
-    m_monsterPuppet.setSource(toString(L"dungeon/monsters/" + monsterID));
+    m_monsterPuppet.setSource(toString(L"dungeon/monsters/" + m_monsterID));
 }
 
 void MonsterCage::onSizeChanges()
@@ -36,6 +35,8 @@ void MonsterCage::onSizeChanges()
     // TODO Why 25.f? Use collision box, position 0.f means 0.f + colBox
     m_monsterPuppet.setInitialLocalPosition({25.f, 0.62f * size().y});
     m_monsterPuppet.setHorizontalRange(25.f, size().x - 25.f);
+    // TODO Get proportionate scaling for cage texture
+    m_monsterPuppet.setLocalScale({0.10f, 0.10f});
 }
 
 void MonsterCage::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
