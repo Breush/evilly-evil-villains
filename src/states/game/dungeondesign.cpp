@@ -43,12 +43,6 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     m_contextMenu.setRelativeOrigin({0.5f, 0.05f});
     m_contextMenu.setDepth(-1.f);
 
-    // Dungeon lock
-    nuiRoot.attachChild(m_dungeonLock);
-    m_dungeonLock.setRelativePosition({1.f, 1.f});
-    m_dungeonLock.setRelativeOrigin({1.f, 1.f});
-    m_dungeonLock.useData(m_dungeonData);
-
     // Dungeon log
     nuiRoot.attachChild(m_dungeonLog);
     m_dungeonLog.setDirection(dungeon::Log::Direction::OLD_BELOW);
@@ -58,7 +52,6 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 
     // Dungeon sidebar
     nuiRoot.attachChild(m_dungeonSidebar);
-    m_dungeonSidebar.setDepth(100.f); // TODO Debug thingy, as long as everything is not a child of sidebar
     m_dungeonSidebar.setRelativeOrigin({1.f, 0.f});
     m_dungeonSidebar.useData(m_dungeonData);
     m_dungeonSidebar.setMinimapLayer(scene().layer("DUNGEON"));

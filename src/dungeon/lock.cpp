@@ -10,7 +10,8 @@ Lock::Lock()
 {
     // Sprite
     addPart(&m_lock);
-    m_lock.setTexture(Application::context().textures.get("dungeon/panel/lock"));
+    const auto& texture = Application::context().textures.get("dungeon/panel/lock");
+    m_lock.setTexture(texture);
 }
 
 //-------------------//

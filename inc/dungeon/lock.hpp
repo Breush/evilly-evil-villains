@@ -79,7 +79,7 @@ namespace dungeon
 
         Data* m_data = nullptr; //!< Dungeon data.
 
-        sf::Sprite m_lock;          //!< Display Sprite for design/invasion modes.
+        sf::Sprite m_lock;          //!< Display sprite for design/invasion modes.
         sf::Vector2f m_targetSize;  //!< The visible size of the lock.
     };
 }

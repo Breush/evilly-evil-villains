@@ -1,10 +1,14 @@
 #include "resources/musicplayer.hpp"
 
 #include "tools/debug.hpp"
+#include "tools/tools.hpp"
 
 #include <stdexcept> // runtime_error
 
 using namespace resources;
+
+//-------------------------//
+//----- Music control -----//
 
 void MusicPlayer::play(const std::string& id)
 {
@@ -23,16 +27,13 @@ void MusicPlayer::stop()
 
 void MusicPlayer::setVolume(float volume)
 {
-    if (m_volume != volume) {
-        m_volume = volume;
-        m_music.setVolume(m_volume);
-    }
+    returnif (m_volume == volume);
+    m_volume = volume;
+    m_music.setVolume(m_volume);
 }
 
 void MusicPlayer::setPaused(bool paused)
 {
-    if (paused)
-        m_music.pause();
-    else
-        m_music.play();
+    if (paused) m_music.pause();
+    else        m_music.play();
 }

@@ -6,11 +6,17 @@
 
 using namespace resources;
 
+//-------------------//
+//----- Routine -----//
+
 void AnimationHolder::update(const sf::Time& dt)
 {
     for (auto& animatedSprite : m_animatedSprites)
         animatedSprite->updateAnimation(dt);
 }
+
+//-------------------//
+//----- Storage -----//
 
 void AnimationHolder::load(const std::string& filename)
 {
@@ -24,6 +30,7 @@ void AnimationHolder::load(const std::string& filename)
     m_fsMap[id]->load(&getData(id));
 }
 
+//-------------------//
 //----- Getters -----//
 
 scml::Data& AnimationHolder::getData(const std::string& id)
@@ -36,6 +43,7 @@ scml::FileSystem& AnimationHolder::getFileSystem(const std::string& id)
     return (m_scmlHolder.stored(id))? *m_fsMap[id] : *m_fsMap["default"];
 }
 
+//----------------------------//
 //----- Animated sprites -----//
 
 void AnimationHolder::push(sfe::AnimatedSprite* animatedSprite)

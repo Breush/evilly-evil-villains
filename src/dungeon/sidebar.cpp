@@ -21,6 +21,7 @@ Sidebar::Sidebar(scene::Scene& inScene)
     m_globalStacker.stackBack(m_summary, nui::Align::CENTER);
     m_globalStacker.stackBack(m_tabHolder, nui::Align::CENTER);
     m_globalStacker.stackBack(m_minimap, nui::Align::CENTER);
+    m_globalStacker.stackBack(m_lock, nui::Align::CENTER);
 
     // Minimap
     m_minimap.setCallbackAction([this] (const sf::Vector2f& position) { m_scene.setViewCenter(position); });
@@ -50,7 +51,7 @@ void Sidebar::refreshNUI(const config::NUIGuides& cNUI)
 {
     baseClass::refreshNUI(cNUI);
 
-    m_vPadding = 3.f * cNUI.vPadding;
+    m_vPadding = cNUI.vPadding;
 
     refreshScrollAreasSize();
 }
@@ -73,6 +74,7 @@ void Sidebar::onChildSizeChanges(scene::Entity& child)
 void Sidebar::useData(Data& data)
 {
     m_summary.useData(data);
+    m_lock.useData(data);
     refreshTabContents();
 }
 
@@ -86,8 +88,9 @@ void Sidebar::refreshScrollAreasSize()
 
     height -= m_minimap.size().y;
     height -= m_summary.size().y;
+    height -= m_lock.size().y;
     height -= m_tabHolder.headerSize().y;
-    height -= m_vPadding;
+    height -= 4.f * m_vPadding;
 
     // Affect new size to all scroll areas
     for (auto& tabContent : m_tabContents)
