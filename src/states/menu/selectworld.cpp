@@ -41,10 +41,9 @@ MenuSelectWorld::MenuSelectWorld(StateStack& stack)
     m_list.setColumnAdapt(3, nui::Adapt::FIT);
 
     // Load list of worlds
-    // TODO Have time format within gettext so that each country can choose its own representation
     context::worlds.load();
     for (const auto& world : context::worlds.get())
-        m_list.addLine({world.villain, world.name, world.mainDungeon, time2wstring("%Y-%m-%d", world.lastPlayed)});
+        m_list.addLine({world.villain, world.name, world.mainDungeon, time2wstring(toString(_("%Y-%m-%d")), world.lastPlayed)});
     m_list.setActionCallback([this] { playOnSelectedWorld(); });
 
     // Stacker for buttons
