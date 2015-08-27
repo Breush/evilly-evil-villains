@@ -20,6 +20,7 @@ MonsterCage::MonsterCage(std::wstring monsterID)
     // TODO Have X puppets because there is X monsters in the reserve
     attachChild(m_monsterPuppet);
     m_monsterPuppet.setSource(toString(L"dungeon/monsters/" + m_monsterID));
+    m_monsterPuppet.lerpable()->setPositionSpeed({100.f, 100.f});
 }
 
 void MonsterCage::onSizeChanges()
@@ -27,7 +28,9 @@ void MonsterCage::onSizeChanges()
     // Background, fit texture to height
     m_background.setSize(size());
     const auto& textureSize = m_background.getTexture()->getSize();
-    auto textureRectWidth  = static_cast<int>(size().x * (textureSize.y / size().y));
+    float scaleFactor = size().y / textureSize.y;
+
+    auto textureRectWidth  = static_cast<int>(size().x / scaleFactor);
     auto textureRectHeight = static_cast<int>(textureSize.y);
     m_background.setTextureRect({0, 0, textureRectWidth, textureRectHeight});
 
@@ -35,8 +38,7 @@ void MonsterCage::onSizeChanges()
     // TODO Why 25.f? Use collision box, position 0.f means 0.f + colBox
     m_monsterPuppet.setInitialLocalPosition({25.f, 0.62f * size().y});
     m_monsterPuppet.setHorizontalRange(25.f, size().x - 25.f);
-    // TODO Get proportionate scaling for cage texture
-    m_monsterPuppet.setLocalScale({0.10f, 0.10f});
+    m_monsterPuppet.setLocalScale({scaleFactor, scaleFactor});
 }
 
 void MonsterCage::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
