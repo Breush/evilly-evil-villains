@@ -69,6 +69,16 @@ add_subdirectory(${STEAM_ROOT_DIR})
 get_directory_property(STEAM_LIBRARIES DIRECTORY ${STEAM_ROOT_DIR} DEFINITION STEAM_LIBRARIES)
 
 #=====
+# Create Box2D libraries
+
+set(BOX2D_ROOT_DIR ${CMAKE_SOURCE_DIR}/ext/box2d)
+set(BOX2D_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/ext/include/Box2D)
+
+add_subdirectory(${BOX2D_ROOT_DIR})
+
+get_directory_property(BOX2D_LIBRARIES DIRECTORY ${BOX2D_ROOT_DIR} DEFINITION BOX2D_LIBRARIES)
+
+#=====
 # Create SFML libraries
 
 set(SFML_ROOT_DIR ${CMAKE_SOURCE_DIR}/ext/sfml)

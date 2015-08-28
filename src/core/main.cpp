@@ -2,7 +2,7 @@
 #include "core/gettext.hpp"
 #include "core/debug.hpp"
 
-#include <steam/steam.h>
+#include <steam/steam.hpp>
 
 #include <stdexcept>
 #include <iostream>
