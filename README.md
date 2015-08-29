@@ -10,11 +10,15 @@ You'll need C++11-compliant compiler. On Windows, getting g++-4.8 through [MinGW
 
 ### Integrated libraries
 
-The program is based on [SFML] (https://github.com/SFML/SFML). One objective is to provide the game on Steam portal, which, under Linux, runs the game in a small virtual machine. If the virtual machine does not contain a package, you have to provide it when shipping. And, it does not contain the SFML packages, that is why the source code of SFML in incorporated in order to recompile the library (and slightly improve it).
+The program is based on [SFML](https://github.com/SFML/SFML). One objective is to provide the game on Steam portal, which, under Linux, runs the game in a small virtual machine. If the virtual machine does not contain a package, you have to provide it when shipping. And, it does not contain the SFML packages, that is why the source code of SFML in incorporated in order to recompile the library (and slightly improve it).
 
 The integrated library (header-only) [pugixml](https://github.com/zeux/pugixml) is a light-weight C++11-friendly tool to read/write XML files. It has no dependencies.
 
 [Selene](https://github.com/jeremyong/Selene) is a C++11 wrapper around Lua interface.
+
+The Steamworks API has been integrated too. It provides access too Steam interfacing for Achievements, Network over Steam friends, and other things.
+
+[Box2D](https://github.com/erincatto/Box2D) is a C++ library providing physics and collisions for 2D games.
 
 ## Linux
 
