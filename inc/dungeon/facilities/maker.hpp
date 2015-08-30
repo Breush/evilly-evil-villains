@@ -9,15 +9,19 @@
 
 namespace dungeon
 {
+    // Forward declarations
+
+    class Inter;
+
 namespace facilities
 {
     //! Create and initialize the corresponding Facility from a ElementData.
-    inline std::unique_ptr<Facility> make(const sf::Vector2u& coords, ElementData& eData)
+    inline std::unique_ptr<Facility> make(const sf::Vector2u& coords, ElementData& eData, dungeon::Inter& inter)
     {
         const auto& type = eData.type();
-        if (type == L"treasure") return std::make_unique<Treasure>(coords, eData);
-        else if (type == L"ladder") return std::make_unique<Ladder>(coords, eData);
-        else if (type == L"entrance") return std::make_unique<Entrance>(coords, eData);
+        if (type == L"treasure") return std::make_unique<Treasure>(coords, eData, inter);
+        else if (type == L"ladder") return std::make_unique<Ladder>(coords, eData, inter);
+        else if (type == L"entrance") return std::make_unique<Entrance>(coords, eData, inter);
         else throw std::runtime_error("Unknown ElementData type for Facility.");
     }
 

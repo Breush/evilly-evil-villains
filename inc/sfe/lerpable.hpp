@@ -6,6 +6,7 @@
 #include <SFML/System/Vector2.hpp>
 
 // Forward declarations
+
 namespace scene
 {
     class Entity;

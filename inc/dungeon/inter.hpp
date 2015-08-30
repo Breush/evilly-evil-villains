@@ -121,6 +121,15 @@ namespace dungeon
 
         //! @}
 
+        //------------------------//
+        //! @name Children access
+        //! @{
+
+        //! Get the villain from data.
+        context::Villain& villain() { return m_data->villain(); }
+
+        //! @}
+
     protected:
 
         //----------------//

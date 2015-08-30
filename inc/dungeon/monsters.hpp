@@ -28,8 +28,8 @@ namespace dungeon
         Monster(const sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter)
             : baseClass(true)
             , m_active(false)
-            , m_inter(inter)
             , m_coords(coords)
+            , m_inter(inter)
             , m_elementdata(elementdata)
         {
             setDetectable(false);
@@ -77,8 +77,8 @@ namespace dungeon
 
     protected:
 
-        dungeon::Inter& m_inter;        //!< To be able to interact with nearby elements.
         sf::Vector2u m_coords;          //!< The initial room in which the monster is set.
+        dungeon::Inter& m_inter;        //!< To be able to interact with nearby elements.
         ElementData& m_elementdata;     //!< The data corresponding to the monster.
     };
 

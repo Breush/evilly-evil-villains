@@ -8,17 +8,18 @@
 
 namespace dungeon
 {
+    // Forward declarations
+
+    class Inter;
+
 namespace traps
 {
     //! Create and initialize the corresponding Trap from a ElementData.
-    // TODO Make that on the same signature that facilities maker.
-    inline std::unique_ptr<Trap> make(Data::Room& room)
+    inline std::unique_ptr<Trap> make(const sf::Vector2u& coords, ElementData& eData, dungeon::Inter& inter)
     {
-        returnif (!room.trap.exists()) nullptr;
-        const auto& type = room.trap.type();
-
-        if (type == L"pickpock") return std::make_unique<PickPock>(room.coords, room.trap);
-        else throw std::runtime_error("Unknown ElementData type.");
+        const auto& type = eData.type();
+        if (type == L"pickpock") return std::make_unique<PickPock>(coords, eData, inter);
+        else throw std::runtime_error("Unknown ElementData type for Trap.");
     }
 
     //! Returns the cost for creating a trap.

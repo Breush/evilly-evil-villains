@@ -20,7 +20,7 @@ namespace traps
     public:
 
         //! Constructor.
-        PickPock(const sf::Vector2u& coords, ElementData& elementdata);
+        PickPock(const sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter);
 
         //! Default destructor.
         ~PickPock() = default;

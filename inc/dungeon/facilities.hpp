@@ -10,6 +10,10 @@
 
 namespace dungeon
 {
+    // Forward declarations
+
+    class Inter;
+
     //! A generic facility interface.
 
     class Facility : public scene::Entity, public EventReceiver
@@ -18,8 +22,9 @@ namespace dungeon
 
         //! Constructor.
         //! Set the reference to the room in data.
-        Facility(const sf::Vector2u& coords, ElementData& elementdata)
+        Facility(const sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter)
             : m_coords(coords)
+            , m_inter(inter)
             , m_elementdata(elementdata)
         {
             setDetectable(false);
@@ -40,8 +45,9 @@ namespace dungeon
 
     protected:
 
-        sf::Vector2u m_coords;  //!< The room in which the facility is set.
-        ElementData& m_elementdata;   //!< The data corresponding to the facility.
+        sf::Vector2u m_coords;          //!< The room in which the facility is set.
+        dungeon::Inter& m_inter;        //!< To be able to interact with nearby elements.
+        ElementData& m_elementdata;     //!< The data corresponding to the facility.
     };
 
     //! A FacilityGrabbable spawner.

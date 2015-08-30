@@ -12,6 +12,9 @@ Sprite::Sprite()
     addPart(&m_sprite);
 }
 
+//--------------------//
+//----- Wrappers -----//
+
 void Sprite::setTexture(const std::string& textureID)
 {
     const auto& texture = Application::context().textures.get(textureID);

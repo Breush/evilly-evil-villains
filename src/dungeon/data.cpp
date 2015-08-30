@@ -344,19 +344,11 @@ void Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     auto& roomInfo = room(coords);
     returnif (hasOfType(roomInfo.facilities, facilityID));
 
+    returnif (!m_villain->doshWallet.sub(facilities::onCreateCost(facilityID)));
+
     roomInfo.facilities.emplace_back();
     auto& facility = roomInfo.facilities.back();
-
-    if (m_villain->doshWallet.sub(facilities::onCreateCost(facilityID))) {
-        facility.create(facilityID);
-    }
-
-    // TODO Let treasure facility do it itself in its constructor?
-    if (facilityID == L"treasure") {
-        facility[L"dosh"].init_uint32(0u);
-        if (m_villain->doshWallet.sub(100u))
-            facility[L"dosh"].init_uint32(100u);
-    }
+    facility.create(facilityID);
 
     Event event;
     event.type = EventType::FACILITY_CHANGED;
@@ -404,19 +396,19 @@ void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
     returnif (roomInfo.trap.exists() && roomInfo.trap.type() == trapID);
 
     // Continue if and only if wallet authorize us
-    if (m_villain->doshWallet.addsub(traps::onDestroyGain(roomInfo.trap), traps::onCreateCost(trapID))) {
-        // Destroy previous trap if any
-        roomInfo.trap.clear();
+    returnif (!m_villain->doshWallet.addsub(traps::onDestroyGain(roomInfo.trap), traps::onCreateCost(trapID)));
 
-        // Set the trap to the new one.
-        roomInfo.trap.create(trapID);
+    // Destroy previous trap if any
+    roomInfo.trap.clear();
 
-        // Emit event
-        Event event;
-        event.type = EventType::TRAP_CHANGED;
-        event.room = {coords.x, coords.y};
-        EventEmitter::emit(event);
-    }
+    // Set the trap to the new one.
+    roomInfo.trap.create(trapID);
+
+    // Emit event
+    Event event;
+    event.type = EventType::TRAP_CHANGED;
+    event.room = {coords.x, coords.y};
+    EventEmitter::emit(event);
 }
 
 void Data::removeRoomTrap(const sf::Vector2u& coords)

@@ -10,6 +10,8 @@ namespace sfe
 {
     //----- Line -----//
 
+    // TODO DOC
+
     class Line : public sf::Drawable, public sf::Transformable
     {
     public:

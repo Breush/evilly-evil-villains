@@ -16,7 +16,7 @@ namespace facilities
     public:
 
         //! Constructor.
-        Entrance(const sf::Vector2u& coords, ElementData& elementdata);
+        Entrance(const sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter);
 
         //! Default destructor.
         ~Entrance() = default;

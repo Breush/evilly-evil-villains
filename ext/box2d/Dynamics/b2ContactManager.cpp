@@ -114,7 +114,7 @@ void b2ContactManager::Collide()
 		int32 indexB = c->GetChildIndexB();
 		b2Body* bodyA = fixtureA->GetBody();
 		b2Body* bodyB = fixtureB->GetBody();
-		 
+
 		// Is this contact flagged for filtering?
 		if (c->m_flags & b2Contact::e_filterFlag)
 		{
@@ -194,8 +194,6 @@ void b2ContactManager::AddPair(void* proxyUserDataA, void* proxyUserDataB)
 		return;
 	}
 
-	// TODO_ERIN use a hash table to remove a potential bottleneck when both
-	// bodies have a lot of contacts.
 	// Does a contact already exist?
 	b2ContactEdge* edge = bodyB->GetContactList();
 	while (edge)

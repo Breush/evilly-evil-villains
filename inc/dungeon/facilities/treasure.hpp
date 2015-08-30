@@ -16,7 +16,7 @@ namespace facilities
     public:
 
         //! Constructor.
-        Treasure(const sf::Vector2u& coords, ElementData& elementdata);
+        Treasure(const sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter);
 
         //! Default destructor.
         ~Treasure() = default;

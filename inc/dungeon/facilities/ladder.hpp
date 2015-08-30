@@ -26,7 +26,7 @@ namespace facilities
     public:
 
         //! Constructor.
-        Ladder(const sf::Vector2u& coords, ElementData& elementdata);
+        Ladder(const sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter);
 
         //! Default destructor.
         ~Ladder() = default;

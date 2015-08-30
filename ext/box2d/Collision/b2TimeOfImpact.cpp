@@ -39,8 +39,6 @@ struct b2SeparationFunction
 		e_faceB
 	};
 
-	// TODO_ERIN might not need to return the separation
-
 	float32 Initialize(const b2SimplexCache* cache,
 		const b2DistanceProxy* proxyA, const b2Sweep& sweepA,
 		const b2DistanceProxy* proxyB, const b2Sweep& sweepB,
@@ -100,7 +98,7 @@ struct b2SeparationFunction
 			m_type = e_faceA;
 			b2Vec2 localPointA1 = m_proxyA->GetVertex(cache->indexA[0]);
 			b2Vec2 localPointA2 = m_proxyA->GetVertex(cache->indexA[1]);
-			
+
 			m_axis = b2Cross(localPointA2 - localPointA1, 1.0f);
 			m_axis.Normalize();
 			b2Vec2 normal = b2Mul(xfA.q, m_axis);
@@ -140,7 +138,7 @@ struct b2SeparationFunction
 
 				b2Vec2 localPointA = m_proxyA->GetVertex(*indexA);
 				b2Vec2 localPointB = m_proxyB->GetVertex(*indexB);
-				
+
 				b2Vec2 pointA = b2Mul(xfA, localPointA);
 				b2Vec2 pointB = b2Mul(xfB, localPointB);
 
@@ -154,7 +152,7 @@ struct b2SeparationFunction
 				b2Vec2 pointA = b2Mul(xfA, m_localPoint);
 
 				b2Vec2 axisB = b2MulT(xfB.q, -normal);
-				
+
 				*indexA = -1;
 				*indexB = m_proxyB->GetSupport(axisB);
 
@@ -279,7 +277,7 @@ void b2TimeOfImpact(b2TOIOutput* output, const b2TOIInput* input)
 	b2Assert(target > tolerance);
 
 	float32 t1 = 0.0f;
-	const int32 k_maxIterations = 20;	// TODO_ERIN b2Settings
+	const int32 k_maxIterations = 20;
 	int32 iter = 0;
 
 	// Prepare input for distance query.
@@ -444,7 +442,7 @@ void b2TimeOfImpact(b2TOIOutput* output, const b2TOIInput* input)
 					a2 = t;
 					s2 = s;
 				}
-				
+
 				if (rootIterCount == 50)
 				{
 					break;

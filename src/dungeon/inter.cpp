@@ -697,7 +697,7 @@ void Inter::refreshTileFacilities(const sf::Vector2u& coords)
 
     // Facilities
     for (auto& facilityData : room.facilities) {
-        auto facility = facilities::make(coords, facilityData);
+        auto facility = facilities::make(coords, facilityData, *this);
         facility->setLocalPosition(tileLocalPosition(coords) + tileSize() / 2.f);
         facility->setLocalScale(m_roomScale);
         facility->setEmitter(m_data);
@@ -716,7 +716,7 @@ void Inter::refreshTileFacilities(const sf::Vector2u& coords)
     if (needWayDown) {
         // TODO This creates a pending reference inside ladder (which is not used, but still...)
         ElementData elementData;
-        auto ladder = std::make_unique<facilities::Ladder>(coords, elementData);
+        auto ladder = std::make_unique<facilities::Ladder>(coords, elementData, *this);
         ladder->setDesign(facilities::Ladder::Design::EXIT_END);
         ladder->setLocalPosition(tileLocalPosition(coords) + tileSize() / 2.f);
         ladder->setLocalScale(m_roomScale);
@@ -745,7 +745,7 @@ void Inter::refreshTileTraps(const sf::Vector2u& coords)
     returnif (!room.trap.exists());
 
     // Trap
-    tile.trap = traps::make(room);
+    tile.trap = traps::make(coords, room.trap, *this);
     tile.trap->setLocalPosition(tileLocalPosition(coords) + tileSize() / 2.f);
     tile.trap->setLocalScale(m_roomScale);
     tile.trap->setEmitter(m_data);

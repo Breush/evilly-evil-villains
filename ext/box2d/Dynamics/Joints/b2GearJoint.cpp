@@ -55,8 +55,6 @@ b2GearJoint::b2GearJoint(const b2GearJointDef* def)
 
 	float32 coordinateA, coordinateB;
 
-	// TODO_ERIN there might be some problem with the joint edges in b2Joint.
-
 	m_bodyC = m_joint1->GetBodyA();
 	m_bodyA = m_joint1->GetBodyB();
 
@@ -363,7 +361,6 @@ bool b2GearJoint::SolvePositionConstraints(const b2SolverData& data)
 	data.positions[m_indexD].c = cD;
 	data.positions[m_indexD].a = aD;
 
-	// TODO_ERIN not implemented
 	return linearError < b2_linearSlop;
 }
 

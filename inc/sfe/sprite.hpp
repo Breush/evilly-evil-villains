@@ -7,11 +7,7 @@
 
 namespace sfe
 {
-    /** sfe::Sprite
-     *      Just a wrapper of sf::Sprite to a scene::Entity
-     **/
-
-    // TODO DOC
+    //! Wrapper of sf::Sprite as a scene::Entity.
 
     class Sprite final : public scene::Entity
     {
@@ -19,12 +15,24 @@ namespace sfe
 
     public:
 
+        //! Constructor.
         Sprite();
+
+        //! Default destructor.
         ~Sprite() = default;
 
+        //-----------------//
+        //! @name Wrappers
+        //! @{
+
+        //! Wrapper to set a texture.
         void setTexture(const std::string& textureID);
 
+        //! @}
+
     private:
+
+        //! The sprite itself.
         sf::Sprite m_sprite;
     };
 }

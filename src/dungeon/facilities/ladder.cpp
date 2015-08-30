@@ -4,8 +4,8 @@
 
 using namespace dungeon::facilities;
 
-Ladder::Ladder(const sf::Vector2u& coords, ElementData& elementdata)
-    : baseClass(coords, elementdata)
+Ladder::Ladder(const sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter)
+    : baseClass(coords, elementdata, inter)
 {
     // Is behind almost everything
     setDepth(500.f);

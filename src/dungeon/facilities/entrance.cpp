@@ -4,8 +4,8 @@
 
 using namespace dungeon::facilities;
 
-Entrance::Entrance(const sf::Vector2u& coords, ElementData& elementdata)
-    : baseClass(coords, elementdata)
+Entrance::Entrance(const sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter)
+    : baseClass(coords, elementdata, inter)
 {
     // Decorum
     attachChild(m_sprite);

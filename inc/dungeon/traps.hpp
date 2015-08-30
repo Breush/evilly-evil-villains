@@ -10,6 +10,10 @@
 
 namespace dungeon
 {
+    // Forward declarations
+
+    class Inter;
+
     //! A generic trap interface.
     class Trap : public scene::Entity, public EventReceiver
     {
@@ -17,8 +21,9 @@ namespace dungeon
 
         //! Constructor.
         //! Set the reference to the room in data.
-        Trap(const sf::Vector2u& coords, ElementData& elementdata)
+        Trap(const sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter)
             : m_coords(coords)
+            , m_inter(inter)
             , m_elementdata(elementdata)
         {
             setDetectable(false);
@@ -51,8 +56,9 @@ namespace dungeon
 
     protected:
 
-        sf::Vector2u m_coords;  //!< The room in which the trap is set.
-        ElementData& m_elementdata;   //!< The data corresponding to the trap.
+        sf::Vector2u m_coords;          //!< The room in which the trap is set.
+        dungeon::Inter& m_inter;        //!< To be able to interact with nearby elements.
+        ElementData& m_elementdata;     //!< The data corresponding to the trap.
     };
 
     //! A TrapGrabbable spawner.
