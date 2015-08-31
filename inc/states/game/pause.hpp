@@ -8,25 +8,44 @@
 
 namespace states
 {
-    class GamePause : public State
+    class GamePause final : public State
     {
         using baseClass = State;
 
     public:
-        GamePause(StateStack& stack);
-        virtual ~GamePause() = default;
-        StateID id() const noexcept override { return StateID::GAME_PAUSE; }
 
-        // Routines
-        bool handleEvent(const sf::Event& event) override;
+        //! Constructor.
+        GamePause(StateStack& stack);
+
+        //! Default destructor.
+        ~GamePause() = default;
+
+        //----------------------//
+        //! @name State control
+        //! @{
+
+        StateID id() const noexcept final { return StateID::GAME_PAUSE; }
+
+        //! @}
+
+    protected:
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        void handleEvent(const sf::Event& event) final;
+
+        //! @}
 
     private:
+
         // Decorum
-        sfe::RectangleShape m_background;
-        sfe::Label m_title;
+        sfe::RectangleShape m_background;   //!< Background.
+        sfe::Label m_title;                 //!< Title.
 
         // NUI
-        nui::Button m_continueButton;
-        nui::Button m_mainMenuButton;
+        nui::Button m_continueButton;   //!< Continue button.
+        nui::Button m_mainMenuButton;   //!< Go back to main menu.
     };
 }

@@ -28,18 +28,24 @@ namespace states
         //! Default destructor.
         ~MenuCreateVillain() = default;
 
-        //! The state identifier.
-        StateID id() const noexcept final { return StateID::MENU_CREATEVILLAIN; }
-
-        //---------------//
-        //! @name Events
+        //----------------------//
+        //! @name State control
         //! @{
 
-        bool handleEvent(const sf::Event& event) final;
+        //! The state identifier.
+        StateID id() const noexcept final { return StateID::MENU_CREATEVILLAIN; }
 
         //! @}
 
     protected:
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        void handleEvent(const sf::Event& event) final;
+
+        //! @}
 
         //---------------------------//
         //! @name Villain management

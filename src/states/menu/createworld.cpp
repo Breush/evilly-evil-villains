@@ -61,19 +61,19 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     m_buttons[1].setAction(_("Create and start playing"), [this] { createAndPlayWorld(); });
 }
 
-//------------------//
-//----- Events -----//
+//-------------------//
+//----- Routine -----//
 
-bool MenuCreateWorld::handleEvent(const sf::Event& event)
+void MenuCreateWorld::handleEvent(const sf::Event& event)
 {
     // Escape quits current state
     if (event.type == sf::Event::KeyPressed
         && event.key.code == sf::Keyboard::Escape) {
         stackPop();
-        return false;
+        return;
     }
 
-    return State::handleEvent(event);
+    State::handleEvent(event);
 }
 
 //-----------------------------//

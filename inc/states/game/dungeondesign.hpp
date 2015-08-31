@@ -18,19 +18,32 @@ namespace states
 
     public:
 
+        //! Constructor.
         GameDungeonDesign(StateStack& stack);
-        virtual ~GameDungeonDesign() = default;
-        StateID id() const noexcept final { return StateID::GAME_DUNGEON_DESIGN; }
 
-        // Routine
+        //! Default destructor.
+        ~GameDungeonDesign() = default;
+
+        //----------------------//
+        //! @name State control
+        //! @{
+
+        StateID id() const noexcept final { return StateID::GAME_DUNGEON_DESIGN; }
+        void onQuit() noexcept final;
+
+        //! @}
+
+    protected:
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
         bool update(const sf::Time& dt) final;
+        void handleEvent(const sf::Event& event) final;
         void refreshWindow(const config::WindowInfo& cWindow) final;
 
-        // Events
-        bool handleEvent(const sf::Event& event) final;
-
-        // Virtual
-        void onQuit() noexcept final;
+        //! @}
 
     private:
 

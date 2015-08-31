@@ -137,22 +137,21 @@ void GameDungeonDesign::onQuit() noexcept
     m_dungeonData.save(context::worlds.selected().folder);
 }
 
-//------------------//
-//----- Events -----//
+//-------------------//
+//----- Routine -----//
 
-bool GameDungeonDesign::handleEvent(const sf::Event& event)
+void GameDungeonDesign::handleEvent(const sf::Event& event)
 {
     // Global events
     m_dungeonInter.handleGlobalEvent(event);
     m_contextMenu.handleGlobalEvent(event);
 
-    if (event.type == sf::Event::KeyPressed) {
-        // Escape pressed, trigger the pause screen
-        if (event.key.code == sf::Keyboard::Escape) {
-            stackPush(StateID::GAME_PAUSE);
-        }
+    if (event.type == sf::Event::KeyPressed
+        && event.key.code == sf::Keyboard::Escape) {
+        stackPush(StateID::GAME_PAUSE);
+        return;
     }
 
-    return State::handleEvent(event);
+    State::handleEvent(event);
 }
 

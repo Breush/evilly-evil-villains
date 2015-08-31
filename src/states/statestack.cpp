@@ -32,10 +32,8 @@ void StateStack::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void StateStack::handleEvent(const sf::Event& event)
 {
-    // Iterate from top to bottom, stop as soon as handleEvent() returns false
-    for (auto& state : std::reverse(m_stack))
-        if (!state->handleEvent(event))
-            break;
+    // Front state keeps event control
+    m_stack.back()->handleEvent(event);
 }
 
 void StateStack::refreshWindow(const config::WindowInfo& cWindow)

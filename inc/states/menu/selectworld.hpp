@@ -17,25 +17,50 @@ namespace states
         using baseClass = State;
 
     public:
-        MenuSelectWorld(StateStack& stack);
-        virtual ~MenuSelectWorld() = default;
-        StateID id() const noexcept override { return StateID::MENU_SELECTWORLD; }
 
-        // Routines
-        bool handleEvent(const sf::Event& event) override;
+        //! Constructor.
+        MenuSelectWorld(StateStack& stack);
+
+        //! Default destructor.
+        ~MenuSelectWorld() = default;
+
+        //----------------------//
+        //! @name State control
+        //! @{
+
+        StateID id() const noexcept final { return StateID::MENU_SELECTWORLD; }
+
+        //! @}
 
     protected:
-        // Actions
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        void handleEvent(const sf::Event& event) final;
+
+        //! @}
+
+
+        //---------------//
+        //! @name Action
+        //! @{
+
+        //! Start game on selected world.
         void playOnSelectedWorld();
 
-    private:
-        // NUI
-        nui::List m_list;
-        nui::HStacker m_stacker;
-        std::array<nui::Button, 3> m_buttons;
+        //! @}
 
-        // Background and title
-        sfe::Label m_title;
-        sfe::RectangleShape m_background;
+    private:
+
+        // NUI
+        nui::List m_list;                       //!< List of worlds.
+        nui::HStacker m_stacker;                //!< Stacker for buttons.
+        std::array<nui::Button, 3> m_buttons;   //!< Buttons Create/Back/Play
+
+        // Decorum
+        sfe::Label m_title;                 //!< Title.
+        sfe::RectangleShape m_background;   //!< Background.
     };
 }

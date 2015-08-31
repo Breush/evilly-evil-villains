@@ -29,11 +29,9 @@ bool State::update(const sf::Time& dt)
     return true;
 }
 
-bool State::handleEvent(const sf::Event& event)
+void State::handleEvent(const sf::Event& event)
 {
-    // TODO this boolean should be forwarded
     m_sceneGraph.handleEvent(event);
-    return false;
 }
 
 //----------------------------//

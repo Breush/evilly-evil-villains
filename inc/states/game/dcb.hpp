@@ -24,10 +24,16 @@ namespace states
         GameDCB(StateStack& stack);
 
         //! Default destructor.
-        ~GameDCB() final = default;
+        ~GameDCB() = default;
+
+        //----------------------//
+        //! @name State control
+        //! @{
 
         //! ID of the state.
         StateID id() const noexcept final { return StateID::GAME_DCB; }
+
+        //! @}
 
     protected:
 

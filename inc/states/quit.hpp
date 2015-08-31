@@ -8,24 +8,45 @@
 
 namespace states
 {
-    class Quit : public State
+    //! State shown when the user wants to quit the game.
+
+    class Quit final : public State
     {
     public:
-        Quit(StateStack& stack);
-        virtual ~Quit() = default;
-        StateID id() const noexcept override { return StateID::QUIT; }
 
-        // Routines
-        bool handleEvent(const sf::Event& event) override;
+        //! Constructor.
+        Quit(StateStack& stack);
+
+        //! Default destructor.
+        ~Quit() = default;
+
+        //----------------------//
+        //! @name State control
+        //! @{
+
+        StateID id() const noexcept final { return StateID::QUIT; }
+
+        //! @}
+
+    protected:
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        void handleEvent(const sf::Event& event) final;
+
+        //! @}
 
     private:
+
         // Decorum
-        sfe::RectangleShape m_background;
-        sfe::Label m_title;
+        sfe::RectangleShape m_background;   //!< Background.
+        sfe::Label m_title;                 //!< Title.
 
         // NUI
-        nui::Button m_noButton;
-        nui::Button m_yesButton;
+        nui::Button m_noButton;             //!< Cancel button.
+        nui::Button m_yesButton;            //!< Accept button.
     };
 }
 

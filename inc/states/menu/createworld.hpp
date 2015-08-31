@@ -42,11 +42,11 @@ namespace states
 
     protected:
 
-        //---------------//
-        //! @name Events
+        //----------------//
+        //! @name Routine
         //! @{
 
-        bool handleEvent(const sf::Event& event) final;
+        void handleEvent(const sf::Event& event) final;
 
         //! @}
 

@@ -42,14 +42,17 @@ GamePause::GamePause(StateStack& stack)
     m_mainMenuButton.centerOrigin();
 }
 
-bool GamePause::handleEvent(const sf::Event& event)
+//-------------------//
+//----- Routine -----//
+
+void GamePause::handleEvent(const sf::Event& event)
 {
     // Back to previous state on Escape
     if (event.type == sf::Event::KeyPressed
         && event.key.code == sf::Keyboard::Escape) {
         stackPop();
-        return false;
+        return;
     }
 
-    return State::handleEvent(event);
+    State::handleEvent(event);
 }

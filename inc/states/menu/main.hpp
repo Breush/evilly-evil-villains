@@ -11,30 +11,49 @@
 
 namespace states
 {
-    class MenuMain : public State
+    //! Main menu state.
+
+    class MenuMain final : public State
     {
         using baseClass = State;
 
     public:
-        MenuMain(StateStack& stack);
-        virtual ~MenuMain() = default;
-        StateID id() const noexcept override { return StateID::MENU_MAIN; }
 
-        // Routines
-        bool update(const sf::Time& dt) override;
-        bool handleEvent(const sf::Event& event) override;
+        //! Constructor.
+        MenuMain(StateStack& stack);
+
+        //! Default destructor.
+        ~MenuMain() = default;
+
+        //----------------------//
+        //! @name State control
+        //! @{
+
+        StateID id() const noexcept final { return StateID::MENU_MAIN; }
+
+        //! @}
+
+    protected:
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        bool update(const sf::Time& dt) final;
+        void handleEvent(const sf::Event& event) final;
+
+        //! @}
 
     private:
-        // NUI
-        nui::ChoiceBox m_choiceBox;
-        nui::ReactImage m_reactImage;
 
-        // Choices possibilities
-        std::vector<std::wstring> m_choices;
+        // NUI
+        nui::ChoiceBox m_choiceBox;             //!< The box containing choices.
+        nui::ReactImage m_reactImage;           //!< The reactive image.
+        std::vector<std::wstring> m_choices;    //!< The list of choices.
 
         // Decorum
-        sfe::Sprite m_background;
-        sfe::Label m_versionLabel;
-        sfe::Label m_copyrightLabel;
+        sfe::Sprite m_background;       //!< Background.
+        sfe::Label m_versionLabel;      //!< Version of the application.
+        sfe::Label m_copyrightLabel;    //!< Copyright info.
     };
 }

@@ -36,15 +36,18 @@ Quit::Quit(StateStack& stack)
     m_yesButton.centerOrigin();
 }
 
-bool Quit::handleEvent(const sf::Event& event)
+//-------------------//
+//----- Routine -----//
+
+void Quit::handleEvent(const sf::Event& event)
 {
     // Back to previous state on Escape
     if (event.type == sf::Event::KeyPressed
         && event.key.code == sf::Keyboard::Escape) {
         stackPop();
-        return false;
+        return;
     }
 
-    return State::handleEvent(event);
+    State::handleEvent(event);
 }
 

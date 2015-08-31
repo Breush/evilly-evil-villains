@@ -83,6 +83,9 @@ MenuMain::MenuMain(StateStack& stack)
     m_reactImage.setReactCallback(m_choices[4], quitGame);
 }
 
+//-------------------//
+//----- Routine -----//
+
 bool MenuMain::update(const sf::Time& dt)
 {
     // Checking if choiceBox changed
@@ -106,14 +109,14 @@ bool MenuMain::update(const sf::Time& dt)
     return State::update(dt);
 }
 
-bool MenuMain::handleEvent(const sf::Event& event)
+void MenuMain::handleEvent(const sf::Event& event)
 {
     // Escape opens quit screen
     if (event.type == sf::Event::KeyPressed
         && event.key.code == sf::Keyboard::Escape) {
         stackPush(StateID::QUIT);
-        return false;
+        return;
     }
 
-    return State::handleEvent(event);
+    State::handleEvent(event);
 }

@@ -60,17 +60,23 @@ MenuSelectWorld::MenuSelectWorld(StateStack& stack)
     m_buttons[0].setAction(_("Create new world"), [this] { stackPush(StateID::MENU_CREATEWORLD); });
 }
 
-bool MenuSelectWorld::handleEvent(const sf::Event& event)
+//-------------------//
+//----- Routine -----//
+
+void MenuSelectWorld::handleEvent(const sf::Event& event)
 {
     // Escape quits current state
     if (event.type == sf::Event::KeyPressed
         && event.key.code == sf::Keyboard::Escape) {
         stackPop();
-        return false;
+        return;
     }
 
-    return State::handleEvent(event);
+    State::handleEvent(event);
 }
+
+//-----------------------------//
+//----- Worlds management -----//
 
 void MenuSelectWorld::playOnSelectedWorld()
 {

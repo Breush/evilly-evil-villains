@@ -54,27 +54,19 @@ MenuManageVillains::MenuManageVillains (StateStack& stack)
     m_buttons[2].setAction(_("Back"), [this] { stackPop(); });
 }
 
-//------------------//
-//----- Events -----//
+//-------------------//
+//----- Routine -----//
 
-bool MenuManageVillains::handleEvent(const sf::Event& event)
+void MenuManageVillains::handleEvent(const sf::Event& event)
 {
     // Escape quits current state
     if (event.type == sf::Event::KeyPressed
         && event.key.code == sf::Keyboard::Escape) {
         stackPop();
-        return false;
+        return;
     }
 
-    return State::handleEvent(event);
-}
-
-void MenuManageVillains::refreshVillainsList() noexcept
-{
-    // Reload list
-    m_list.clearLines();
-    for (const auto& villain : context::villains.get())
-        m_list.addLine({villain.name, toWString(villain.doshWallet.value()), toWString(villain.worldsCount())});
+    State::handleEvent(event);
 }
 
 //-------------------------------//
@@ -109,4 +101,12 @@ void MenuManageVillains::confirmDeletion(uint villain)
     context::villains.save();
     refreshVillainsList();
     m_popDialog.close();
+}
+
+void MenuManageVillains::refreshVillainsList() noexcept
+{
+    // Reload list
+    m_list.clearLines();
+    for (const auto& villain : context::villains.get())
+        m_list.addLine({villain.name, toWString(villain.doshWallet.value()), toWString(villain.worldsCount())});
 }

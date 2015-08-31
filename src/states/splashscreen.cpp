@@ -33,6 +33,9 @@ SplashScreen::SplashScreen(StateStack& stack)
     m_logo.restart();
 }
 
+//-------------------//
+//----- Routine -----//
+
 bool SplashScreen::update(const sf::Time& dt)
 {
     // Check on animated entities
@@ -42,14 +45,15 @@ bool SplashScreen::update(const sf::Time& dt)
     return State::update(dt);
 }
 
-bool SplashScreen::handleEvent(const sf::Event& event)
+void SplashScreen::handleEvent(const sf::Event& event)
 {
     // Back to previous state on Escape
     if (event.type == sf::Event::KeyPressed
         && event.key.code == sf::Keyboard::Escape) {
-        stackPopPush(StateID::MENU_MAIN);
         Application::context().sounds.stopAll();
+        stackPopPush(StateID::MENU_MAIN);
+        return;
     }
 
-    return State::handleEvent(event);
+    State::handleEvent(event);
 }

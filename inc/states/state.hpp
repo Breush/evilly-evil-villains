@@ -31,9 +31,6 @@ namespace states
         //! Default destructor.
         virtual ~State() = default;
 
-        //! ID binding.
-        virtual StateID id() const noexcept = 0;
-
         //----------------//
         //! @name Routine
         //! @{
@@ -42,10 +39,11 @@ namespace states
         void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
 
         //! Update the state.
+        //! Return false to prevent update of below states in the pile.
         virtual bool update(const sf::Time& dt);
 
         //! Let the graph handle event.
-        virtual bool handleEvent(const sf::Event& event);
+        virtual void handleEvent(const sf::Event& event);
 
         //! Reset views to current screen status.
         inline virtual void refreshWindow(const config::WindowInfo& cWindow) { m_sceneGraph.refreshWindow(cWindow); }
@@ -55,9 +53,12 @@ namespace states
 
         //! @}
 
-        //--------------//
-        //! @name State
+        //----------------------//
+        //! @name State control
         //! @{
+
+        //! ID binding.
+        virtual StateID id() const noexcept = 0;
 
         //! Called whenever the state is shown on top.
         virtual void onShow() noexcept { m_sceneGraph.updateFocusSprite(); }
