@@ -27,7 +27,7 @@ void Arrow::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 //----- LArrow -----//
 
-void LArrow::update()
+void LArrow::updateFromLength()
 {
     m_vertices[0].position = {length()/2.f, length()/2.f};
     m_vertices[1].position = {length(),     length()};
@@ -37,7 +37,7 @@ void LArrow::update()
 
 //----- RArrow -----//
 
-void RArrow::update()
+void RArrow::updateFromLength()
 {
     m_vertices[0].position = {length()/2.f, length()/2.f};
     m_vertices[1].position = {0.f,          length()};

@@ -35,7 +35,7 @@ namespace resources
         //! @name Access
         //! @{
 
-        //! Gets the ID of the file from filename.
+        //! Gets the ID of the resource from filename.
         //! res/xxx/dir/file.yyy -> dir/file
         std::string getID(const std::string& filename) const;
 

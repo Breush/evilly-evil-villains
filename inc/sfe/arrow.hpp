@@ -23,10 +23,10 @@ namespace sfe
 
     protected:
         // Update vertices positions or colors
-        virtual void update() = 0;
+        virtual void updateFromLength() = 0;
 
         // Params
-        PARAMGSU(float, m_length, length, setLength, update);
+        PARAMGSU(float, m_length, length, setLength, updateFromLength);
 
     protected:
         sf::VertexArray m_vertices;
@@ -41,7 +41,7 @@ namespace sfe
         virtual ~LArrow() = default;
 
     protected:
-        void update() override;
+        void updateFromLength() override;
     };
 
     //----- RArrow -----//
@@ -53,7 +53,7 @@ namespace sfe
         virtual ~RArrow() = default;
 
     protected:
-        void update() override;
+        void updateFromLength() override;
     };
 }
 

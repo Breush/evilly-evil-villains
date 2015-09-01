@@ -16,19 +16,25 @@ SoundPlayer::SoundPlayer()
     sf::Listener::setDirection(0.f, 0.f, -1.f);
 }
 
+//------------------------------//
+//----- Storage and access -----//
+
 void SoundPlayer::load(const std::string& filename)
 {
     m_soundBuffers.load(filename);
 }
 
-void SoundPlayer::play(const std::string& id)
-{
-    play(id, getListenerPosition());
-}
-
 std::string SoundPlayer::getID(const std::string& filename)
 {
     return m_soundBuffers.getID(filename);
+}
+
+//-------------------------//
+//----- Sound control -----//
+
+void SoundPlayer::play(const std::string& id)
+{
+    play(id, getListenerPosition());
 }
 
 void SoundPlayer::play(const std::string& id, sf::Vector2f position)
@@ -60,6 +66,9 @@ void SoundPlayer::setVolume(float volume)
 {
     m_volume = volume;
 }
+
+//--------------------//
+//----- Listener -----//
 
 void SoundPlayer::setListenerPosition(sf::Vector2f position)
 {

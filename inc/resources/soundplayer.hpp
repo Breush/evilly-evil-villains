@@ -9,37 +9,76 @@
 
 #include <list>
 
-// TODO DOC
-
 namespace resources
 {
-    class SoundPlayer : private sf::NonCopyable
+    //! Holder for sounds.
+
+    class SoundPlayer final : private sf::NonCopyable
     {
     public:
+
+        //! Constructor.
         SoundPlayer();
 
+        //! Default destructor.
+        ~SoundPlayer() = default;
+
+        //---------------------------//
+        //! @name Storage and access
+        //! @{
+
+        //! Load resource into memory.
         void load(const std::string& filename);
 
+        //! Gets the ID of the resource from filename.
         std::string getID(const std::string& filename);
+
+        //! @}
+
+        //----------------------//
+        //! @name Sound control
+        //! @{
+
+        //! Play a sound, from default position.
         void play(const std::string& id);
+
+        //! Play a sound, from specified position.
         void play(const std::string& id, sf::Vector2f position);
 
+        //! Stop all sounds.
+        //! Note: not removing them from list.
         void stopAll();
+
+        //! Set the volume to play new sounds.
         void setVolume(float volume);
 
+        //! Clean list of sounds.
         void removeStoppedSounds();
+
+        //! @}
+
+        //-----------------//
+        //! @name Listener
+        //! @{
+
+        //! Set the default position for new sounds.
         void setListenerPosition(sf::Vector2f position);
+
+        //! Get the default position for new sounds.
         sf::Vector2f getListenerPosition() const;
 
-    private:
-        SoundBufferHolder m_soundBuffers;
-        std::list<sf::Sound> m_sounds;
+        //! @}
 
-        float m_volume = 100.f;
-        const float m_listenerZ = 300.f;
-        const float m_minDistance3D = 360.f; // sqrt(minDistance2D^2 + m_listener2^2)
-        const float m_attenuation = 50.f;
-        const float m_minDistance2D = 200.f;
+    private:
+
+        SoundBufferHolder m_soundBuffers;   //!< Sound player.
+        std::list<sf::Sound> m_sounds;      //!< Sound list.
+        float m_volume = 100.f;             //!< Current volume for new sounds.
+
+
+        const float m_listenerZ = 300.f;        //!< Z-depth for listener.
+        const float m_minDistance2D = 200.f;    //!< Distance from screen.
+        const float m_minDistance3D = 360.f;    //!< sqrt(minDistance2D^2 + m_listener2^2)
+        const float m_attenuation = 50.f;       //!< Attenuation factor.
     };
 }
-
