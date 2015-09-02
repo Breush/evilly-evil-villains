@@ -6,54 +6,98 @@
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
 
-// TODO DOC
-
 namespace sfe
 {
-    //----- Arrow -----//
+    //! Abstract class to display a simple arrow.
 
     class Arrow : public sf::Drawable, public sf::Transformable
     {
     public:
+
+        //! Constructor.
         Arrow();
+
+        //! Default destructor.
         virtual ~Arrow() = default;
 
-        // Virtual
-        void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        //! Implements sf::Drawable routine.
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
+
+        //! @}
+
+        //--------------------------//
+        //! @name Public properties
+        //! @{
+
+        //! Size override.
+        PARAMGSU(float, m_length, length, setLength, updateFromLength)
+
+        //! @}
 
     protected:
-        // Update vertices positions or colors
+
+        //----------------//
+        //! @name Updates
+        //! @{
+
+        //! Abstract method to recompute vertices position when length changed.
         virtual void updateFromLength() = 0;
 
-        // Params
-        PARAMGSU(float, m_length, length, setLength, updateFromLength);
+        //! @}
 
     protected:
+
+        //! An arrow is just 4 vertices.
         sf::VertexArray m_vertices;
     };
 
-    //----- LArrow -----//
+    //! An sf::Drawable arrow going left.
 
-    class LArrow : public Arrow
+    class LArrow final : public Arrow
     {
     public:
+
+        //! Default constructor.
         LArrow() = default;
-        virtual ~LArrow() = default;
+
+        //! Default destructor.
+        ~LArrow() = default;
 
     protected:
-        void updateFromLength() override;
+
+        //----------------//
+        //! @name Updates
+        //! @{
+
+        void updateFromLength() final;
+
+        //! @}
     };
 
-    //----- RArrow -----//
+    //! An sf::Drawable arrow going right.
 
-    class RArrow : public Arrow
+    class RArrow final : public Arrow
     {
     public:
+
+        //! Default constructor.
         RArrow() = default;
-        virtual ~RArrow() = default;
+
+        //! Default destructor.
+        ~RArrow() = default;
 
     protected:
-        void updateFromLength() override;
+
+        //----------------//
+        //! @name Updates
+        //! @{
+
+        void updateFromLength() final;
+
+        //! @}
     };
 }
-

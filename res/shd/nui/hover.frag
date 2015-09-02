@@ -2,6 +2,8 @@ uniform sampler2D texture;
 
 void main()
 {
+    // TODO VertexArray does not work well
+
     vec2 texCoord = gl_TexCoord[0].xy;
     vec4 original = texture2D(texture, texCoord);
     vec4 pixel = vec4(0.f);

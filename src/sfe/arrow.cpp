@@ -4,6 +4,7 @@
 
 using namespace sfe;
 
+//-----------------//
 //----- Arrow -----//
 
 Arrow::Arrow()
@@ -12,7 +13,7 @@ Arrow::Arrow()
 {
     m_vertices[0].color = sf::Color::White;
     m_vertices[1].color = sf::Color::White;
-    m_vertices[2].color = sf::Color::Transparent;
+    m_vertices[2].color = sf::Color::White;
     m_vertices[3].color = sf::Color::White;
 }
 
@@ -25,6 +26,7 @@ void Arrow::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(m_vertices, states);
 }
 
+//------------------//
 //----- LArrow -----//
 
 void LArrow::updateFromLength()
@@ -35,6 +37,7 @@ void LArrow::updateFromLength()
     m_vertices[3].position = {length(),     0.f};
 }
 
+//------------------//
 //----- RArrow -----//
 
 void RArrow::updateFromLength()
@@ -44,4 +47,3 @@ void RArrow::updateFromLength()
     m_vertices[2].position = {length(),     length()/2.f};
     m_vertices[3].position = {0.f,          0.f};
 }
-
