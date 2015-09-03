@@ -5,6 +5,8 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
+#include <SFML/Graphics/RenderTexture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 
 namespace sfe
 {
@@ -29,12 +31,21 @@ namespace sfe
 
         //! @}
 
+        //----------------//
+        //! @name Control
+        //! @{
+
+        //! Size override.
+        void setLength(float inLength);
+
+        //! @}
+
         //--------------------------//
         //! @name Public properties
         //! @{
 
         //! Size override.
-        PARAMGSU(float, m_length, length, setLength, updateFromLength)
+        PARAMG(float, m_length, length)
 
         //! @}
 
@@ -47,18 +58,29 @@ namespace sfe
         //! Abstract method to recompute vertices position when length changed.
         virtual void updateFromLength() = 0;
 
+        //! Refresh the target texture.
+        void refreshRenderTexture();
+
         //! @}
 
     protected:
 
         //! An arrow is just 4 vertices.
         sf::VertexArray m_vertices;
+
+        //! Drawn to a texture to be able to use a shader.
+        sf::RenderTexture m_renderTexture;
+
+        //! The displayed part.
+        sf::Sprite m_sprite;
     };
 
     //! An sf::Drawable arrow going left.
 
     class LArrow final : public Arrow
     {
+        using baseClass = Arrow;
+
     public:
 
         //! Default constructor.
@@ -82,6 +104,8 @@ namespace sfe
 
     class RArrow final : public Arrow
     {
+        using baseClass = Arrow;
+
     public:
 
         //! Default constructor.
