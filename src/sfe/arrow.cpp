@@ -21,6 +21,8 @@ Arrow::Arrow()
 
 void Arrow::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+    returnif (m_length < 1.f);
+
     // Transform from sf::Tranformable
     states.transform *= getTransform();
 
@@ -30,7 +32,7 @@ void Arrow::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Arrow::setLength(float inLength)
 {
-    returnif (m_length == inLength);
+    returnif (m_length == inLength || inLength < 1.f);
     m_length = inLength;
     updateFromLength();
 }
@@ -52,8 +54,6 @@ void Arrow::refreshRenderTexture()
 
 void LArrow::updateFromLength()
 {
-    returnif (length() <= 0.f);
-
     m_vertices[0].position = {length()/2.f, length()/2.f};
     m_vertices[1].position = {length(),     length()};
     m_vertices[2].position = {0.f,          length()/2.f};
@@ -67,8 +67,6 @@ void LArrow::updateFromLength()
 
 void RArrow::updateFromLength()
 {
-    returnif (length() <= 0.f);
-
     m_vertices[0].position = {length()/2.f, length()/2.f};
     m_vertices[1].position = {0.f,          length()};
     m_vertices[2].position = {length(),     length()/2.f};
