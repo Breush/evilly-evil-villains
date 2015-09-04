@@ -7,8 +7,6 @@
 
 using namespace sfe;
 
-//----- Grid -----//
-
 Grid::Grid()
     : m_rows(0)
     , m_columns(0)
@@ -16,6 +14,9 @@ Grid::Grid()
     , m_visible(true)
 {
 }
+
+//-------------------//
+//----- Routine -----//
 
 void Grid::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
@@ -31,6 +32,9 @@ void Grid::draw(sf::RenderTarget& target, sf::RenderStates states) const
     for (auto& hBorder : m_hBorders)
         target.draw(hBorder, states);
 }
+
+//-------------------//
+//----- Updates -----//
 
 void Grid::update()
 {
@@ -53,7 +57,8 @@ void Grid::update()
     }
 }
 
-//----- Setters -----//
+//-----------------------//
+//----- Interaction -----//
 
 void Grid::setRowsColumns(const uint& inRows, const uint& inColumns)
 {
@@ -61,8 +66,6 @@ void Grid::setRowsColumns(const uint& inRows, const uint& inColumns)
     m_columns = inColumns;
     update();
 }
-
-//----- Interaction -----//
 
 sf::Vector2u Grid::rowColumnFromCoords(const sf::Vector2f& coords) const
 {

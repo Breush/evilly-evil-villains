@@ -5,19 +5,17 @@
 
 #include <SFML/Graphics/Text.hpp>
 
-// TODO DOC
-
 namespace sfe
 {
-    /** sfe::Label
-     *      Just a wrapper of sf::Text to a scene::Entity
-     **/
+    //! A wrapper around sf::Text as an entity.
 
-    class Label : public scene::Entity
+    class Label final : public scene::Entity
     {
         using baseClass = scene::Entity;
 
     public:
+
+        //! Prestyle that contains font, size and color.
         enum class Prestyle
         {
             NONE,
@@ -31,26 +29,57 @@ namespace sfe
         };
 
     public:
-        Label();
-        virtual ~Label() = default;
 
+        //! Constructor.
+        Label();
+
+        //! Default destructor.
+        ~Label() = default;
+
+        //---------------//
+        //! @name Visual
+        //! @{
+
+        //! Set text font.
         void setFont(const std::string& fontID);
+
+        //! Set text color.
         void setColor(const sf::Color& color);
+
+        //! Set character size.
         void setCharacterSize(uint characterSize);
+
+        //! Set text string.
         void setText(const std::wstring& text);
+
+        //! Set text string and font.
         void setText(const std::wstring& text, const std::string& fontID);
+
+        //! Set a prestyle.
         void setPrestyle(Prestyle prestyle);
 
+        //! @}
+
     protected:
-        void updateSize();
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
         void refreshNUI(const config::NUIGuides& cNUI) final;
+
+        //! Updates the size of the entity to current bounds.
+        void updateSize();
+
+        //! @}
 
     private:
 
-        Prestyle m_prestyle = Prestyle::NONE;
-        sf::Text m_text;
+        // Style
+        Prestyle m_prestyle = Prestyle::NONE;   //!< The font, color and size override.
+        sf::Text m_text;                        //!< The text.
 
-        // Decorum
+        // Parameters
         float m_fontSize;   //!< Reference font size.
     };
 }

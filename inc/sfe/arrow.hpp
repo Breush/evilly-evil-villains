@@ -26,7 +26,7 @@ namespace sfe
         //! @name Routine
         //! @{
 
-        //! Implements sf::Drawable routine.
+        //! Implements sf::Drawable drawing routine.
         void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
 
         //! @}
