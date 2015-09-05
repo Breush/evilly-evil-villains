@@ -64,6 +64,15 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
 //-------------------//
 //----- Routine -----//
 
+bool MenuCreateWorld::update(const sf::Time& dt)
+{
+    // If no villain, pop create villain
+    if (context::villains.get().empty() && !isStateVisible(StateID::MENU_CREATEVILLAIN))
+        stackPush(StateID::MENU_CREATEVILLAIN);
+
+    return baseClass::update(dt);
+}
+
 void MenuCreateWorld::handleEvent(const sf::Event& event)
 {
     // Escape quits current state

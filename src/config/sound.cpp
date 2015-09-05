@@ -1,5 +1,8 @@
 #include "config/sound.hpp"
 
+// TODO Make config/debug
+#include "context/debug.hpp"
+#include "tools/filesystem.hpp"
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
 
@@ -12,15 +15,23 @@ Sound::Sound()
     pugi::xml_document doc;
 
     #if DEBUG_GLOBAL > 0
-        doc.load_file("config/sound_debug.xml");
+        std::wstring file(L"config/sound_saved.xml");
+        if (!fileExists(file)) file = L"config/sound.xml";
     #else
-        doc.load_file("config/sound.xml");
+        std::wstring file(L"config/sound.xml");
     #endif
+
+    // Create file if not existing yet
+    if (!fileExists(file)) {
+        wdebug_context_1(L"Sound config file does not seem to exist yet. Using default parameters.");
+        createDirectory(L"config");
+        return;
+    }
 
     // Checks if we read the file OK
     const auto& config = doc.child(L"config");
     if (!config || config.attribute(L"type").as_string() != std::wstring(L"sound")) {
-        std::cerr << "[CONFIG] Could not find valid sound config file. Using default parameters." << std::endl;
+        wdebug_context_1(L"Could not find valid sound config file. Using default parameters.");
         return;
     }
 

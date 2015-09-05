@@ -1,5 +1,8 @@
 #include "config/display.hpp"
 
+// TODO Make config/debug
+#include "context/debug.hpp"
+#include "tools/filesystem.hpp"
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
 
@@ -16,15 +19,23 @@ Display::Display()
     pugi::xml_document doc;
 
     #if DEBUG_GLOBAL > 0
-        doc.load_file("config/display_debug.xml");
+        std::wstring file(L"config/display_saved.xml");
+        if (!fileExists(file)) file = L"config/display.xml";
     #else
-        doc.load_file("config/display.xml");
+        std::wstring file(L"config/display.xml");
     #endif
+
+    // Create file if not existing yet
+    if (!fileExists(file)) {
+        wdebug_context_1(L"Display config file does not seem to exist yet. Using default parameters.");
+        createDirectory(L"config");
+        return;
+    }
 
     // Checks if we read the file OK
     const auto& config = doc.child(L"config");
     if (!config || config.attribute(L"type").as_string() != std::wstring(L"display")) {
-        std::cerr << "[CONFIG] Could not find valid display config file. Using default parameters." << std::endl;
+        wdebug_context_1(L"Could not find valid display config file. Using default parameters.");
         return;
     }
 

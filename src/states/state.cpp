@@ -63,3 +63,8 @@ void State::stackClear(StateID stateID)
     m_stack.clearStates();
     m_stack.pushState(stateID);
 }
+
+bool State::isStateVisible(StateID stateID) const
+{
+    return m_stack.isStateVisible(stateID);
+}

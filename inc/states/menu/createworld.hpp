@@ -46,6 +46,7 @@ namespace states
         //! @name Routine
         //! @{
 
+        bool update(const sf::Time& dt) final;
         void handleEvent(const sf::Event& event) final;
 
         //! @}

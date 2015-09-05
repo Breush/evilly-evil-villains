@@ -104,6 +104,9 @@ namespace states
         //! Remove top state then add the specified state on top.
         void stackPopPush(StateID stateID);
 
+        //! Return true is specified state exists in stack.
+        bool isStateVisible(StateID stateID) const;
+
         //! @}
 
     private:

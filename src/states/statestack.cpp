@@ -5,6 +5,7 @@
 #include "config/nuiguides.hpp"
 #include "tools/platform-fixes.hpp" // reverse
 #include "tools/debug.hpp"
+#include "tools/tools.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
@@ -32,6 +33,8 @@ void StateStack::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void StateStack::handleEvent(const sf::Event& event)
 {
+    returnif (m_stack.empty());
+
     // Front state keeps event control
     m_stack.back()->handleEvent(event);
 }

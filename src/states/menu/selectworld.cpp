@@ -80,8 +80,11 @@ void MenuSelectWorld::handleEvent(const sf::Event& event)
 
 void MenuSelectWorld::playOnSelectedWorld()
 {
+    if (m_list.empty()) return;
+
     auto selectedWorld = m_list.selectedLine();
-    auto& worldInfo = context::worlds.select(selectedWorld);
+    context::worlds.select(selectedWorld);
+
     stackClear(StateID::GAME_DUNGEON_DESIGN);
 }
 

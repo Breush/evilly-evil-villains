@@ -32,6 +32,13 @@ void Worlds::load()
 
     m_worlds.clear();
 
+    // Create file if not existing yet
+    if (!fileExists(file)) {
+        wdebug_context_1(L"Worlds file does not seem to exist yet. Using default one.");
+        createDirectory(L"saves");
+        return;
+    }
+
     // Parsing XML
     pugi::xml_document doc;
     doc.load_file(file.c_str());

@@ -39,6 +39,13 @@ void Villains::load()
 
     wdebug_context_2(L"Loading villains info from " << file);
 
+    // Create file if not existing yet
+    if (!fileExists(file)) {
+        wdebug_context_1(L"Villains file does not seem to exist yet. Using default one.");
+        createDirectory(L"saves");
+        return;
+    }
+
     m_villains.clear();
 
     // Parsing XML

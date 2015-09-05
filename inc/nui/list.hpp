@@ -71,6 +71,9 @@ namespace nui
         //! Add a line to the end of the list.
         void addLine(const std::initializer_list<std::wstring>& values);
 
+        //! Return true if no line in list.
+        inline bool empty() const { return m_lines.empty(); }
+
         //! @}
 
         //----------------------//
