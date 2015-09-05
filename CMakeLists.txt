@@ -13,6 +13,9 @@ endmacro()
 
 # Useful variables
 set(AUTHOR_EMAIL alexis.breust@jumpingtoasts.com)
+set(EEV_VERSION_SWEET_NAME Pαpaya)
+set(EEV_VERSION_MAJ 0)
+set(EEV_VERSION_MIN 1)
 
 #=====
 # Project
@@ -54,6 +57,7 @@ endif ()
 
 # Files for project
 set(CODE_MAIN_FILE src/core/main.cpp)
+set(VERSION_INPUT_FILE inc/core/define.hpp.in)
 set(VERSION_OUTPUT_FILE inc/core/define.hpp)
 file(GLOB_RECURSE SOURCES_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*.cpp)
 file(GLOB_RECURSE CODE_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*.cpp inc/*.hpp inc/*.hpp.in inc/*.inl res/shd/*.vert res/shd/*.frag res/ai/*.lua)
@@ -117,7 +121,13 @@ include(${CMAKE_SOURCE_DIR}/cmake/LoadEEVDependencies.cmake)
 #=====
 # Configure
 
-add_custom_target(configure COMMAND ${CMAKE_COMMAND} -P cmake/Configure.cmake
+add_custom_target(configure COMMAND ${CMAKE_COMMAND}
+                  -D VERSION_OUTPUT_FILE=${VERSION_OUTPUT_FILE}
+                  -D VERSION_INPUT_FILE=${VERSION_INPUT_FILE}
+                  -D EEV_VERSION_SWEET_NAME=${EEV_VERSION_SWEET_NAME}
+                  -D EEV_VERSION_MAJ=${EEV_VERSION_MAJ}
+                  -D EEV_VERSION_MIN=${EEV_VERSION_MIN}
+                  -P cmake/Configure.cmake
                   COMMENT "Updating configuration")
 add_dependencies(${EEV_LIBRARIES} configure)
 
@@ -190,4 +200,16 @@ endforeach ()
 
 # New target
 add_custom_target(translation DEPENDS ${POT_FILE} ${MO_FILES})
+
+#=====
+# Distrib target
+
+add_custom_target(distrib COMMAND ${CMAKE_COMMAND} 
+                  -D EEV_VERSION_SWEET_NAME=${EEV_VERSION_SWEET_NAME}
+                  -D EEV_VERSION_MAJ=${EEV_VERSION_MAJ}
+                  -D EEV_VERSION_MIN=${EEV_VERSION_MIN}
+                  -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                  -P cmake/Distribute.cmake
+                  COMMENT "Creating archive")
+add_dependencies(distrib ${EXECUTABLE_NAME} translation)
 

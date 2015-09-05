@@ -3,17 +3,13 @@
 #-----
 # Version
 
-# TODO This is duplicated with main cmake
-set(VERSION_INPUT_FILE inc/core/define.hpp.in)
-set(VERSION_OUTPUT_FILE inc/core/define.hpp)
-
-# Check if repository is a git one.
 if (EXISTS ${CMAKE_SOURCE_DIR}/.git)
+    # Check if repository is a git one.
     execute_process(COMMAND git rev-list HEAD --count
                     OUTPUT_VARIABLE EEV_VERSION_REVISION
                     OUTPUT_STRIP_TRAILING_WHITESPACE)
-# Or maybe a svn one.
 else ()
+    # Or maybe a svn one.
     execute_process(COMMAND svnversion .
                     OUTPUT_VARIABLE EEV_VERSION_REVISION
                     OUTPUT_STRIP_TRAILING_WHITESPACE)
