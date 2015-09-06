@@ -10,3 +10,8 @@ file(COPY res DESTINATION ${DISTRIB_DIR})
 
 # Binaries
 file(COPY bin/${CMAKE_BUILD_TYPE}/ DESTINATION ${DISTRIB_DIR})
+
+# Librairies
+file(COPY ${EEV_DYNLIB} DESTINATION ${DISTRIB_DIR})
+
+message("Exported archive to ${DISTRIB_DIR}")

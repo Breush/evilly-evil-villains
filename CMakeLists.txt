@@ -207,11 +207,14 @@ add_custom_target(translation DEPENDS ${POT_FILE} ${MO_FILES})
 #=====
 # Distrib target
 
+set(EEV_DYNLIB ${LUA_LIBRARIES})
+
 add_custom_target(distrib COMMAND ${CMAKE_COMMAND} 
                   -D EEV_VERSION_SWEET_NAME=${EEV_VERSION_SWEET_NAME}
                   -D EEV_VERSION_MAJ=${EEV_VERSION_MAJ}
                   -D EEV_VERSION_MIN=${EEV_VERSION_MIN}
                   -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+				  -D EEV_DYNLIB=${EEV_DYNLIB}
                   -P cmake/Distribute.cmake
                   COMMENT "Creating archive")
 add_dependencies(distrib ${EXECUTABLE_NAME} translation)
