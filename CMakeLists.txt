@@ -53,6 +53,9 @@ if (CMAKE_BUILD_TYPE MATCHES "Debug")
 elseif (CMAKE_BUILD_TYPE MATCHES "Release")
     # Optimisation flags
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+    
+    # Static libc++ for distribution
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
 else ()
     # Configuration error
     message(FATAL_ERROR "Wrong CMAKE_BUILD_TYPE, should be Debug or Release")
