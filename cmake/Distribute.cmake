@@ -12,6 +12,8 @@ file(COPY res DESTINATION ${DISTRIB_DIR})
 file(COPY bin/${CMAKE_BUILD_TYPE}/ DESTINATION ${DISTRIB_DIR})
 
 # Librairies
-file(COPY ${EEV_DYNLIB} DESTINATION ${DISTRIB_DIR})
+if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+	file(COPY ext/lib/win32/ DESTINATION ${DISTRIB_DIR})
+endif()
 
 message("Exported archive to ${DISTRIB_DIR}")
