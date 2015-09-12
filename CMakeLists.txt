@@ -38,10 +38,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE}"
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 # Compiler options
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -rdynamic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-    
+
     # GCC
     if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
         execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
@@ -53,12 +53,17 @@ if (CMAKE_BUILD_TYPE MATCHES "Debug")
 elseif (CMAKE_BUILD_TYPE MATCHES "Release")
     # Optimisation flags
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
-    
+
     # Static libc++ for distribution
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static")
 else ()
     # Configuration error
     message(FATAL_ERROR "Wrong CMAKE_BUILD_TYPE, should be Debug or Release")
+endif ()
+
+# Under Linux with GCC, enable call-stack generation
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU" AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -rdynamic")
 endif ()
 
 # Files for project
@@ -210,7 +215,7 @@ add_custom_target(translation DEPENDS ${POT_FILE} ${MO_FILES})
 #=====
 # Distrib target
 
-add_custom_target(distrib COMMAND ${CMAKE_COMMAND} 
+add_custom_target(distrib COMMAND ${CMAKE_COMMAND}
                   -D EEV_VERSION_SWEET_NAME=${EEV_VERSION_SWEET_NAME}
                   -D EEV_VERSION_MAJ=${EEV_VERSION_MAJ}
                   -D EEV_VERSION_MIN=${EEV_VERSION_MIN}

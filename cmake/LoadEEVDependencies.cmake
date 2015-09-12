@@ -3,7 +3,9 @@
 #=====
 # Add DL (for call-stack dynamic check)
 
-target_link_libraries(${EXECUTABLE_NAME} dl)
+if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    target_link_libraries(${EXECUTABLE_NAME} dl)
+endif ()
 
 #=====
 # Find Lua

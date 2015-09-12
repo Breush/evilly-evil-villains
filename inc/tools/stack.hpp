@@ -1,7 +1,12 @@
 #pragma once
 
+#if defined(__GNUC__)
+#if not defined(__MINGW32__)
+    #include <execinfo.h>
+#endif
+#endif
+
 #include <dlfcn.h>
-#include <execinfo.h>
 #include <typeinfo>
 #include <string>
 #include <memory>
@@ -23,17 +28,20 @@ namespace tools
         std::string file;
         std::string function;
     };
-    
+
     //! Stack-trace base class, for retrieving the current call-stack.
     class CallStack
     {
     public:
-    
+
         //! Recompute the current callstack.
         void refresh(const size_t numDiscard = 0)
         {
             m_entryStack.clear();
-        
+
+            #if defined(__GNUC__)
+            #if not defined(__MINGW32__)
+
             using namespace abi;
 
             // retrieve call-stack
@@ -47,16 +55,16 @@ namespace tools
                 int p = 0;
                 while (messages[i][p] != '(' && messages[i][p] != ' ' && messages[i][p] != 0)
                     ++p;
-            
+
                 // We'll get filename and line number through addr2line function
                 char syscom[256];
                 sprintf(syscom, "addr2line %p -e %.*s", trace[i], p, messages[i]);
-        
+
                 char fileBuffer[1024];
                 FILE *syscomFile = popen(syscom, "r");
                 fgets(fileBuffer, sizeof(fileBuffer), syscomFile);
                 pclose(syscomFile);
-                
+
                 // Get function name
                 Dl_info dlinfo;
                 dladdr(trace[i], &dlinfo);
@@ -66,7 +74,7 @@ namespace tools
                 char* demangled = abi::__cxa_demangle(symname, nullptr, 0, &status);
                 if (status == 0 && demangled)
                     symname = demangled;
-                    
+
                 // Create entry
                 Entry entry;
                 entry.file = fileBuffer;
@@ -77,15 +85,17 @@ namespace tools
                 entry.line = atoi(strstr(fileBuffer, ":") + 1);
                 entry.function = (symname)? symname : "??";
                 m_entryStack.emplace_back(entry);
-                
+
                 // Freeing
                 if (demangled)
                     free(demangled);
-                    
+
                 // Stop when we hit main
                 if (entry.function == "main")
                     break;
             }
+            #endif
+            #endif
         }
 
         //! Serializes the entire call-stack into a text string.
@@ -103,4 +113,3 @@ namespace tools
         std::vector<Entry> m_entryStack;
     };
 }
-

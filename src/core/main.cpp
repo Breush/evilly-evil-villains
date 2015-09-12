@@ -12,9 +12,10 @@
 tools::CallStack callStack;
 
 #if defined(__GNUC__)
+#if not defined(__MINGW32__)
 extern "C"
 {
-    //! Inject the callstack generation each time a exception is launched. 
+    //! Inject the callstack generation each time a exception is launched.
     void __cxa_throw(void* ex, void* info, void (*dest)(void*))
     {
         // Recompute the stack from here, skip this function.
@@ -26,6 +27,7 @@ extern "C"
         rethrow(ex, info, dest);
     }
 }
+#endif
 #endif
 
 //! Main function.
