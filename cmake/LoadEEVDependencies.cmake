@@ -1,6 +1,11 @@
 # ${EXECUTABLE_NAME} should be set before calling
 
 #=====
+# Add DL (for call-stack dynamic check)
+
+target_link_libraries(${EXECUTABLE_NAME} dl)
+
+#=====
 # Find Lua
 
 find_package(Lua REQUIRED)

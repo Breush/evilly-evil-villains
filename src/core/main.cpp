@@ -1,12 +1,34 @@
 #include "core/application.hpp"
 #include "core/gettext.hpp"
 #include "core/debug.hpp"
+#include "tools/stack.hpp"
 
 #include <steam/steam.hpp>
 
 #include <stdexcept>
 #include <iostream>
 
+//! The call stack.
+tools::CallStack callStack;
+
+#if defined(__GNUC__)
+extern "C"
+{
+    //! Inject the callstack generation each time a exception is launched. 
+    void __cxa_throw(void* ex, void* info, void (*dest)(void*))
+    {
+        // Recompute the stack from here, skip this function.
+        callStack.refresh(1);
+
+        // We get the original name for the GCC throw
+        static void (*const rethrow)(void*,void*,void(*)(void*)) __attribute__ ((noreturn))
+            = (void (*)(void*,void*,void(*)(void*)))dlsym(RTLD_NEXT, "__cxa_throw");
+        rethrow(ex, info, dest);
+    }
+}
+#endif
+
+//! Main function.
 int main(int argc, char *argv[])
 {
     Application app;
@@ -34,6 +56,8 @@ int main(int argc, char *argv[])
     }
     catch(std::exception& e) {
         std::cerr << std::endl << "[!] Exception caught: " << e.what() << std::endl;
+        std::cerr << "Here's the call stack when the exception occured:" << std::endl;
+        std::cerr << callStack.toString();
         returnStatus = EXIT_FAILURE;
     }
 
