@@ -60,21 +60,21 @@ void MonsterCage::grabbableButtonReleased(Entity* entity, const sf::Mouse::Butto
 
 std::unique_ptr<scene::Grabbable> MonsterCage::spawnGrabbable()
 {
-    return std::make_unique<MonsterGrabbable>(*this);
+    return std::make_unique<MonsterGrabbable>(*this, m_monsterID);
 }
 
 //----------------------------//
 //----- MonsterGrabbable -----//
 
-MonsterGrabbable::MonsterGrabbable(scene::GrabbableSpawner& spawner)
+MonsterGrabbable::MonsterGrabbable(scene::GrabbableSpawner& spawner, const std::wstring& monsterID)
     : baseClass(spawner)
 {
-    m_sprite.setSize({25.f, 25.f});
-    m_sprite.setFillColor(sf::Color::White);
+    m_sprite.load(toString(L"dungeon/monsters/" + monsterID));
 }
 
 void MonsterGrabbable::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+    // FIXME that does not work with the sfe::AnimatedSprite
     states.transform *= getTransform();
     target.draw(m_sprite, states);
 }

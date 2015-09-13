@@ -428,6 +428,9 @@ void Data::removeRoomTrap(const sf::Vector2u& coords)
 
 void Data::addMonster(const sf::Vector2u& coords, const std::wstring& monsterID)
 {
+    auto& roomInfo = room(coords);
+    returnif (roomInfo.state != RoomState::CONSTRUCTED);
+
     m_monstersInfo.emplace_back();
     auto& monsterInfo = m_monstersInfo.back();
 

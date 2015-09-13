@@ -148,7 +148,7 @@ namespace dungeon
     public:
 
         //! Constructor, affecting texture and look.
-        MonsterGrabbable(scene::GrabbableSpawner& spawner);
+        MonsterGrabbable(scene::GrabbableSpawner& spawner, const std::wstring& monsterID);
 
         //! Default destructor.
         ~MonsterGrabbable() = default;
@@ -166,6 +166,6 @@ namespace dungeon
     private:
 
         //! Holding the image of the grabbable.
-        sf::RectangleShape m_sprite;
+        sfe::AnimatedSprite m_sprite;
     };
 }
