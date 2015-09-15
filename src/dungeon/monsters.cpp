@@ -70,11 +70,14 @@ MonsterGrabbable::MonsterGrabbable(scene::GrabbableSpawner& spawner, const std::
     : baseClass(spawner)
 {
     m_sprite.load(toString(L"dungeon/monsters/" + monsterID));
+    m_sprite.setLocalScale({0.5f, 0.5f});
 }
 
 void MonsterGrabbable::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    // FIXME that does not work with the sfe::AnimatedSprite
-    states.transform *= getTransform();
+    // FIXME This a trick because sfe::AnimatedSprite does not consider states.transform
+    const_cast<sfe::AnimatedSprite&>(m_sprite).setLocalPosition(getPosition());
+
+    //states.transform *= getTransform();
     target.draw(m_sprite, states);
 }

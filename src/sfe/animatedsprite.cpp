@@ -25,6 +25,8 @@ AnimatedSprite::~AnimatedSprite()
 
 void AnimatedSprite::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+    // TODO This does not take states transform in account?
+
     // Drawing all parts of animation
     // because scml::Entity can not be managed by scene::Graph
     for (const auto& entity : m_entities) {
