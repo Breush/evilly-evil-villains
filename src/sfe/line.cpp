@@ -4,6 +4,7 @@
 
 using namespace sfe;
 
+//----------------//
 //----- Line -----//
 
 Line::Line()
@@ -31,6 +32,7 @@ void Line::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(m_vertices, states);
 }
 
+//-----------------//
 //----- HLine -----//
 
 void HLine::update()
@@ -41,6 +43,7 @@ void HLine::update()
     m_vertices[3].position = {length(), 0.f};
 }
 
+//-----------------//
 //----- VLine -----//
 
 void VLine::update()
@@ -50,3 +53,4 @@ void VLine::update()
     m_vertices[2].position = {0.f, (1.f - shade()) * length()};
     m_vertices[3].position = {0.f, length()};
 }
+

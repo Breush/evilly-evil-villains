@@ -27,7 +27,8 @@ void TableLayout::onSizeChanges()
 
 void TableLayout::onChildSizeChanges(scene::Entity&)
 {
-    // TODO OPTIM It might be possible to detect which entity it is, and just refresh this one
+    // Note: It's not possible to detect which entity it is, and just refresh this one,
+    // because it might change the position dimensions of other rows/cols.
     refreshRowsSize();
     refreshColsSize();
     refreshChildrenPosition();

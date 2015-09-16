@@ -5,7 +5,7 @@
 
 // TODO We should definitely be loading BCD textures only when needed!
 
-void Application::loadTextures()
+void Application::loadTextures(/* TODO const std::string& folder*/)
 {
     uint texturesCount = 0u;
 
@@ -36,3 +36,4 @@ void Application::loadTextures()
     // Smooth
     s_context.textures.get("jumping-toasts/toast-cut").setSmooth(false);
 }
+
