@@ -1,19 +1,24 @@
 #pragma once
 
-//-----------------------------//
-//---- Change defines here ----//
+//----------------------------//
+//---- CMAKE defines here ----//
 
-// Should be ON until release
-#if not defined(DEBUG_GLOBAL)
-    #define DEBUG_GLOBAL        1
-#endif
+// To be ON until Release
+#cmakedefine EEV_DEBUG_MODE
 
 //--------------------//
 //---- Debug mode ----//
 
+#if defined(EEV_DEBUG_MODE)
+    #define DEBUG_GLOBAL 1
+#else
+    #define DEBUG_GLOBAL 0
+#endif
+
 // If global off, remove all
-#if DEBUG_GLOBAL == 0
+#if DEBUG_GLOBAL < 1
     // Generic
+    // TODO Add file stream into some log file?
     #define debug_generic(PRINT, ...)  ((void) 0)
     #define mdebug_generic(PRINT, ...) ((void) 0)
     #define wdebug_generic(PRINT, ...) ((void) 0)

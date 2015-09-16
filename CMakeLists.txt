@@ -40,22 +40,20 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 # Compiler options
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
+    set(EEV_DEBUG_MODE ON)
+    
+    # Warnings flags
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
-    # GCC
-    if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-        execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
-        if (GCC_VERSION VERSION_GREATER 5 OR GCC_VERSION VERSION_EQUAL 5)
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wsuggest-override")
-            set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wsuggest-final-types -Wsuggest-final-methods")
-        endif()
-    endif ()
 elseif (CMAKE_BUILD_TYPE MATCHES "Release")
+    set(EEV_DEBUG_MODE OFF)
+
     # Optimisation flags
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 
     # Static libc++ for distribution
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static")
+
 else ()
     # Configuration error
     message(FATAL_ERROR "Wrong CMAKE_BUILD_TYPE, should be Debug or Release")
@@ -70,9 +68,11 @@ endif ()
 set(CODE_MAIN_FILE src/core/main.cpp)
 set(VERSION_INPUT_FILE inc/core/define.hpp.in)
 set(VERSION_OUTPUT_FILE inc/core/define.hpp)
+set(DEBUG_INPUT_FILE inc/tools/debug.hpp.in)
+set(DEBUG_OUTPUT_FILE inc/tools/debug.hpp)
 file(GLOB_RECURSE SOURCES_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*.cpp)
 file(GLOB_RECURSE CODE_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*.cpp inc/*.hpp inc/*.hpp.in inc/*.inl res/shd/*.vert res/shd/*.frag res/ai/*.lua)
-list(REMOVE_ITEM CODE_FILES ${CODE_MAIN_FILE} ${VERSION_OUTPUT_FILE})
+list(REMOVE_ITEM CODE_FILES ${CODE_MAIN_FILE} ${VERSION_OUTPUT_FILE} ${DEBUG_OUTPUT_FILE})
 
 #=====
 # Link Steam workshop
@@ -133,6 +133,9 @@ include(${CMAKE_SOURCE_DIR}/cmake/LoadEEVDependencies.cmake)
 # Configure
 
 add_custom_target(configure COMMAND ${CMAKE_COMMAND}
+                  -D DEBUG_OUTPUT_FILE=${DEBUG_OUTPUT_FILE}
+                  -D DEBUG_INPUT_FILE=${DEBUG_INPUT_FILE}
+                  -D EEV_DEBUG_MODE=${EEV_DEBUG_MODE}
                   -D VERSION_OUTPUT_FILE=${VERSION_OUTPUT_FILE}
                   -D VERSION_INPUT_FILE=${VERSION_INPUT_FILE}
                   -D EEV_VERSION_SWEET_NAME=${EEV_VERSION_SWEET_NAME}
@@ -215,12 +218,15 @@ add_custom_target(translation DEPENDS ${POT_FILE} ${MO_FILES})
 #=====
 # Distrib target
 
-add_custom_target(distrib COMMAND ${CMAKE_COMMAND}
-                  -D EEV_VERSION_SWEET_NAME=${EEV_VERSION_SWEET_NAME}
-                  -D EEV_VERSION_MAJ=${EEV_VERSION_MAJ}
-                  -D EEV_VERSION_MIN=${EEV_VERSION_MIN}
-                  -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-                  -D CMAKE_SYSTEM_NAME=${CMAKE_SYSTEM_NAME}
-                  -P cmake/Distribute.cmake
-                  COMMENT "Creating archive")
-add_dependencies(distrib ${EXECUTABLE_NAME} translation)
+if (EEV_DEBUG_MODE)
+    add_custom_target(distrib COMMAND ${CMAKE_COMMAND}
+                      -D EEV_VERSION_SWEET_NAME=${EEV_VERSION_SWEET_NAME}
+                      -D EEV_VERSION_MAJ=${EEV_VERSION_MAJ}
+                      -D EEV_VERSION_MIN=${EEV_VERSION_MIN}
+                      -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                      -D CMAKE_SYSTEM_NAME=${CMAKE_SYSTEM_NAME}
+                      -P cmake/Distribute.cmake
+                      COMMENT "Creating archive")
+    add_dependencies(distrib ${EXECUTABLE_NAME} translation)
+endif ()
+
