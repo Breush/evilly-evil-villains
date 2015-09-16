@@ -8,55 +8,109 @@
 
 namespace sfe
 {
-    //----- Line -----//
-
-    // TODO DOC
+    //! Abstract class to display a simple line.
 
     class Line : public sf::Drawable, public sf::Transformable
     {
     public:
+    
+        //! Constructor.
         Line();
+        
+        //! Default destructor.
         virtual ~Line() = default;
 
-        // Routine
-        void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+        //----------------//
+        //! @name Routine
+        //! @{
 
-        // Aspect
+        //! Implements sf::Drawable drawing routine.
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
+
+        //! @}
+
+        //----------------//
+        //! @name Control
+        //! @{
+        
+        //! Set line color.
         void setColor(const sf::Color& color);
+        
+        //! @}
 
-    protected:
-        // Update vertices positions
-        virtual void update() = 0;
+        //--------------------------//
+        //! @name Public properties
+        //! @{
 
-        // Params
+        //! Size override.
         PARAMGSU(float, m_length, length, setLength, update);
+
+        //! Percent of line fading away in borders.
         PARAMGSU(float, m_shade, shade, setShade, update);
+        
+        //! @}
+    
+    protected:
+
+        //----------------//
+        //! @name Updates
+        //! @{
+
+        //! Update vertices positions.
+        virtual void update() = 0;
+        
+        //! @}
 
     protected:
+    
+        //! A line is just 4 vertices.
         sf::VertexArray m_vertices;
     };
 
-    //----- HLine -----//
+    //! An horizontal sf::Drawable line.
 
-    class HLine : public Line
+    class HLine final : public Line
     {
     public:
+    
+        //! Default constructor.
         HLine() = default;
-        virtual ~HLine() = default;
+        
+        //! Default destructor.
+        ~HLine() = default;
 
     protected:
-        void update() override;
+
+        //----------------//
+        //! @name Updates
+        //! @{
+        
+        void update() final;
+        
+        //! @}
     };
 
-    //----- VLine -----//
+    //! A vertical sf::Drawable line.
 
-    class VLine : public Line
+    class VLine final : public Line
     {
     public:
+    
+        //! Default constructor.
         VLine() = default;
-        virtual ~VLine() = default;
+        
+        //! Default destructor.
+        ~VLine() = default;
 
     protected:
-        void update() override;
+
+        //----------------//
+        //! @name Updates
+        //! @{
+        
+        void update() final;
+        
+        //! @}
     };
 }
+

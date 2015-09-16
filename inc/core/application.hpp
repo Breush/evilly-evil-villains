@@ -148,6 +148,7 @@ protected:
     void refreshNUI();      //!< Adapt all NUI elements.
     void refreshWindow();   //!< Adapt all views to current window settings.
     void refreshShaders();  //!< Adapt all shaders to current window settings.
+    void refreshMusics();   //!< Adapt all musics volume to current settings.
     void refreshSounds();   //!< Adapt all sounds position/volume to current settings.
 
     void updateShaders(const sf::Time& dt);     //!< Animate the shaders.

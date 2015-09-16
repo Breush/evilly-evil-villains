@@ -11,7 +11,7 @@ namespace dungeon
     // Forward declarations
 
     class EventReceiver;
-    enum class EventType;
+    enum class EventType; // TODO Make that a abstract class inherited in dungeon::EventType
     struct Event;
 
     //! Base class for those who want to be able to emit a dungeon event.

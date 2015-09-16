@@ -100,7 +100,7 @@ namespace sfe
         //! @}
     };
 
-    //! An sf::Drawable arrow going right.
+    //! A sf::Drawable arrow going right.
 
     class RArrow final : public Arrow
     {
