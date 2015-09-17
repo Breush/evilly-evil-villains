@@ -1,4 +1,4 @@
-#include "sfe/rectangleshape.hpp"
+#include "scene/wrappers/rectangleshape.hpp"
 
 #include "core/application.hpp"
 

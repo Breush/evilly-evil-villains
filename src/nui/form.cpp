@@ -1,6 +1,6 @@
 #include "nui/form.hpp"
 
-#include "sfe/label.hpp"
+#include "scene/wrappers/label.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 
 using namespace nui;

@@ -1,4 +1,4 @@
-#include "sfe/animatedsprite.hpp"
+#include "scene/wrappers/animatedsprite.hpp"
 
 #include "core/application.hpp"
 #include "tools/platform-fixes.hpp" // make_unique

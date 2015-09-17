@@ -1,4 +1,4 @@
-#include "sfe/label.hpp"
+#include "scene/wrappers/label.hpp"
 
 #include "core/application.hpp"
 

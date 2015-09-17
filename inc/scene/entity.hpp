@@ -1,6 +1,6 @@
 #pragma once
 
-#include "sfe/lerpable.hpp"
+#include "scene/components/lerpable.hpp"
 #include "tools/param.hpp"
 #include "tools/int.hpp"
 

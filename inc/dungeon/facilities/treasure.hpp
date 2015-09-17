@@ -1,7 +1,7 @@
 #pragma once
 
 #include "dungeon/facilities.hpp"
-#include "sfe/animatedsprite.hpp"
+#include "scene/wrappers/animatedsprite.hpp"
 
 namespace dungeon
 {

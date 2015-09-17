@@ -5,8 +5,8 @@
 #include "nui/list.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/button.hpp"
-#include "sfe/rectangleshape.hpp"
-#include "sfe/label.hpp"
+#include "scene/wrappers/rectangleshape.hpp"
+#include "scene/wrappers/label.hpp"
 
 #include <array>
 

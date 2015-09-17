@@ -2,7 +2,6 @@
 
 #include "core/gettext.hpp"
 #include "dungeon/sidebar.hpp"
-#include "sfe/lerpable.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"

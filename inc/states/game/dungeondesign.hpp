@@ -8,7 +8,7 @@
 #include "dungeon/sidebar.hpp"
 #include "dungeon/log.hpp"
 #include "dungeon/heroesmanager.hpp"
-#include "sfe/rectangleshape.hpp"
+#include "scene/wrappers/rectangleshape.hpp"
 
 namespace states
 {

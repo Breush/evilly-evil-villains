@@ -4,9 +4,9 @@
 #include "dungeon/graph.hpp"
 #include "dungeon/event.hpp"
 #include "dungeon/hero.hpp"
-#include "sfe/label.hpp"
-#include "sfe/animatedsprite.hpp"
-#include "sfe/rectangleshape.hpp"
+#include "scene/wrappers/label.hpp"
+#include "scene/wrappers/animatedsprite.hpp"
+#include "scene/wrappers/rectangleshape.hpp"
 #include "ai/debug.hpp"
 
 #include <selene/selene.hpp>

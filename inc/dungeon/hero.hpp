@@ -1,9 +1,9 @@
 #pragma once
 
 #include "scene/entity.hpp"
-#include "sfe/animatedsprite.hpp"
-#include "sfe/rectangleshape.hpp"
-#include "sfe/label.hpp"
+#include "scene/wrappers/animatedsprite.hpp"
+#include "scene/wrappers/rectangleshape.hpp"
+#include "scene/wrappers/label.hpp"
 #include "ai/luaactor.hpp"
 #include "ai/debug.hpp"
 

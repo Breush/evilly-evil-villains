@@ -1,8 +1,8 @@
 #pragma once
 
 #include "dungeon/monsters.hpp"
-#include "sfe/animatedsprite.hpp"
-#include "sfe/rectangleshape.hpp"
+#include "scene/wrappers/animatedsprite.hpp"
+#include "scene/wrappers/rectangleshape.hpp"
 #include "ai/luaactor.hpp"
 
 namespace dungeon

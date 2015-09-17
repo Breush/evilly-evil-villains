@@ -7,8 +7,8 @@
 #include "nui/form.hpp"
 #include "nui/textentry.hpp"
 #include "nui/popdialog.hpp"
-#include "sfe/label.hpp"
-#include "sfe/rectangleshape.hpp"
+#include "scene/wrappers/label.hpp"
+#include "scene/wrappers/rectangleshape.hpp"
 
 #include <array>
 

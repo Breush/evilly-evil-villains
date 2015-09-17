@@ -4,6 +4,7 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
+// TODO namespace scene
 namespace sfe
 {
     //! Wrapper of sf::RectangleShape as a scene::Entity.

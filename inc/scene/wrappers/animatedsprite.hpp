@@ -16,6 +16,7 @@ namespace resources
     class AnimationHolder;
 }
 
+// TODO namespace scene
 namespace sfe
 {
     /*! Animated sprite using a SCML file.

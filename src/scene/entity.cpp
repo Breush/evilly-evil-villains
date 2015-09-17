@@ -1,7 +1,7 @@
 #include "scene/entity.hpp"
 
 #include "core/application.hpp"
-#include "sfe/lerpable.hpp"
+#include "scene/components/lerpable.hpp"
 #include "scene/graph.hpp"
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"

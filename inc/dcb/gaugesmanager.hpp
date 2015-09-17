@@ -4,7 +4,7 @@
 #include "nui/hstacker.hpp"
 #include "nui/vstacker.hpp"
 #include "nui/gauge.hpp"
-#include "sfe/label.hpp"
+#include "scene/wrappers/label.hpp"
 
 #include <array>
 

@@ -3,8 +3,8 @@
 #include "states/state.hpp"
 #include "states/identifiers.hpp"
 #include "nui/button.hpp"
-#include "sfe/rectangleshape.hpp"
-#include "sfe/label.hpp"
+#include "scene/wrappers/rectangleshape.hpp"
+#include "scene/wrappers/label.hpp"
 
 namespace states
 {

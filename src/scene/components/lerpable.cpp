@@ -1,4 +1,4 @@
-#include "sfe/lerpable.hpp"
+#include "scene/components/lerpable.hpp"
 
 #include "scene/entity.hpp"
 #include "tools/debug.hpp"

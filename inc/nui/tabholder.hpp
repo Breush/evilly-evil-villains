@@ -3,7 +3,7 @@
 #include "scene/entity.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/vstacker.hpp"
-#include "sfe/rectangleshape.hpp"
+#include "scene/wrappers/rectangleshape.hpp"
 #include "tools/param.hpp"
 
 #include <vector>

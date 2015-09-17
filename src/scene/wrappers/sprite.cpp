@@ -1,4 +1,4 @@
-#include "sfe/sprite.hpp"
+#include "scene/wrappers/sprite.hpp"
 
 #include "core/application.hpp"
 #include "tools/vector.hpp"

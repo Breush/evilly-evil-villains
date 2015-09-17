@@ -5,6 +5,7 @@
 
 #include <SFML/Graphics/Text.hpp>
 
+// TODO namespace scene
 namespace sfe
 {
     //! A wrapper around sf::Text as an entity.

@@ -2,7 +2,7 @@
 
 #include "states/state.hpp"
 #include "states/identifiers.hpp"
-#include "sfe/animatedsprite.hpp"
+#include "scene/wrappers/animatedsprite.hpp"
 #include "dcb/gaugesmanager.hpp"
 #include "dcb/answerbox.hpp"
 #include "dcb/bubble.hpp"

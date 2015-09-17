@@ -1,7 +1,7 @@
 #include "nui/list.hpp"
 
 #include "core/application.hpp"
-#include "sfe/label.hpp"
+#include "scene/wrappers/label.hpp"
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
 #include "tools/platform-fixes.hpp" // make_unique

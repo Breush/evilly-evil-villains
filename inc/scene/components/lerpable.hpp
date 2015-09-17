@@ -12,6 +12,7 @@ namespace scene
     class Entity;
 }
 
+// TODO namespace scene, should inherits from some scene::Component
 namespace sfe
 {
     /*! This component of an Entity allows to interpolate various parameters over time.

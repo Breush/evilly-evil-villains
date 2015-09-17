@@ -2,8 +2,8 @@
 
 #include "states/state.hpp"
 #include "states/identifiers.hpp"
-#include "sfe/animatedsprite.hpp"
-#include "sfe/sprite.hpp"
+#include "scene/wrappers/animatedsprite.hpp"
+#include "scene/wrappers/sprite.hpp"
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <list>

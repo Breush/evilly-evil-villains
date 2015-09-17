@@ -4,8 +4,8 @@
 #include "states/identifiers.hpp"
 #include "nui/choicebox.hpp"
 #include "nui/reactimage.hpp"
-#include "sfe/label.hpp"
-#include "sfe/sprite.hpp"
+#include "scene/wrappers/label.hpp"
+#include "scene/wrappers/sprite.hpp"
 
 #include <SFML/Graphics/Text.hpp>
 

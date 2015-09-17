@@ -1,7 +1,7 @@
 #include "resources/animationholder.hpp"
 
 #include "scml/data.hpp"
-#include "sfe/animatedsprite.hpp"
+#include "scene/wrappers/animatedsprite.hpp"
 #include "tools/platform-fixes.hpp"
 
 using namespace resources;

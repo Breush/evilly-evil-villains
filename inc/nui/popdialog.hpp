@@ -4,8 +4,8 @@
 #include "nui/vstacker.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/button.hpp"
-#include "sfe/label.hpp"
-#include "sfe/rectangleshape.hpp"
+#include "scene/wrappers/label.hpp"
+#include "scene/wrappers/rectangleshape.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <memory> // std::unique_ptr

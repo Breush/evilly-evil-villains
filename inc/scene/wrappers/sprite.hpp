@@ -5,6 +5,7 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 
+// TODO namespace scene
 namespace sfe
 {
     //! Wrapper of sf::Sprite as a scene::Entity.

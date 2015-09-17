@@ -2,8 +2,8 @@
 
 #include "states/state.hpp"
 #include "states/identifiers.hpp"
-#include "sfe/rectangleshape.hpp"
-#include "sfe/label.hpp"
+#include "scene/wrappers/rectangleshape.hpp"
+#include "scene/wrappers/label.hpp"
 #include "nui/form.hpp"
 #include "nui/textentry.hpp"
 #include "nui/choicebox.hpp"

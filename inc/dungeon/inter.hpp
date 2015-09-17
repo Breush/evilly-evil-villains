@@ -9,7 +9,7 @@
 #include "nui/contextmenu.hpp"
 #include "nui/spinbox.hpp"
 #include "sfe/grid.hpp"
-#include "sfe/label.hpp"
+#include "scene/wrappers/label.hpp"
 #include "tools/vector.hpp"
 
 #include <array>
