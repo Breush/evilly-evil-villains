@@ -4,8 +4,7 @@
 #include "tools/int.hpp"
 #include "sfe/line.hpp"
 #include "sfe/arrow.hpp"
-
-#include <SFML/Graphics/Text.hpp>
+#include "sfe/richtext.hpp"
 
 #include <vector>
 #include <string>
@@ -175,7 +174,7 @@ namespace nui
         //! @{
 
         //! The currently displayed text.
-        sf::Text& text() { return m_text; }
+        sfe::RichText& text() { return m_text; }
 
         //! The currently displayed top line (if any).
         sfe::HLine& topLine() { return m_topLine; }
@@ -202,7 +201,7 @@ namespace nui
         //! Whether the choice has changed since last update.
         bool m_choiceChanged = true;
 
-        sf::Text m_text;        //!< The displayed text.
+        sfe::RichText m_text;   //!< The displayed text.
         sfe::HLine m_topLine;   //!< The displayed top line.
         sfe::HLine m_botLine;   //!< The displayed bottom line.
         sfe::LArrow m_lArrow;   //!< The displayed left arrow.

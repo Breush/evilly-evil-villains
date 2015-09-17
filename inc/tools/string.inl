@@ -104,8 +104,9 @@ inline std::wstring& filterSpecial(std::wstring& str, bool lower)
 //-----------------------//
 //----- SFML addons -----//
 
-inline sf::Vector2f boundsSize(const sf::Text& text)
+template<class Bounded_t>
+inline sf::Vector2f boundsSize(const Bounded_t& bounded)
 {
-    const auto& bounds = text.getLocalBounds();
+    const auto& bounds = bounded.getLocalBounds();
     return {bounds.left + bounds.width, bounds.top + bounds.height};
 }

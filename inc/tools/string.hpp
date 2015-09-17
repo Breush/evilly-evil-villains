@@ -20,7 +20,7 @@ inline std::wstring& toUppercase(std::wstring& str);
 inline std::string& filterSpecial(std::string& str, bool lower = true);
 inline std::wstring& filterSpecial(std::wstring& str, bool lower = true);
 
-// Return the local bounds of the text
-inline sf::Vector2f boundsSize(const sf::Text& text);
+// Return the local bounds of a element (i.e. a text)
+template <class Bounded_t> inline sf::Vector2f boundsSize(const Bounded_t& bounded);
 
 #include "string.inl"

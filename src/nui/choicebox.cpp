@@ -315,7 +315,7 @@ void ChoiceBox::refreshText()
 
     // If new choice need a callback, color if inactive
     if (m_choices[m_selectedChoice].callback == nullptr)
-        m_text.setColor(sf::Color(150, 150, 150));
+        m_text.setColor({150u, 150u, 150u, 255u});
     else
         m_text.setColor(sf::Color::White);
 
@@ -353,7 +353,7 @@ void ChoiceBox::updateButtonSize()
     m_buttonSize = {0.f, m_fontVSpace};
 
     for (auto& choice : m_choices) {
-        sf::Text text(m_text);
+        auto text(m_text);
         text.setString(choice.text);
         const auto& bounds = text.getLocalBounds();
         m_buttonSize.x = std::max(m_buttonSize.x, (bounds.left + bounds.width));
