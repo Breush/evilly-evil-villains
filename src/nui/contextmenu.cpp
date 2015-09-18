@@ -11,8 +11,7 @@ ContextMenu::ContextMenu()
     setVisible(false);
 
     // Background
-    // TODO Have own background image
-    m_background.setTexture(&Application::context().textures.get("dungeon/sidebar/background"));
+    m_background.setTexture(&Application::context().textures.get("nui/contextmenu"));
 
     // Title
     m_title.setFont(Application::context().fonts.get("nui"));

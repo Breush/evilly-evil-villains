@@ -43,7 +43,7 @@ if (CMAKE_BUILD_TYPE MATCHES "Debug")
     set(EEV_DEBUG_MODE ON)
     
     # Warnings flags
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmax-errors=1 -Wall")
 
 elseif (CMAKE_BUILD_TYPE MATCHES "Release")
     set(EEV_DEBUG_MODE OFF)

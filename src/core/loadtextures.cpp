@@ -3,37 +3,43 @@
 #include "core/debug.hpp"
 #include "tools/filesystem.hpp"
 
-// TODO We should definitely be loading BCD textures only when needed!
-
-void Application::loadTextures(/* TODO const std::string& folder*/)
+void Application::loadTextures(const std::initializer_list<std::string>& folders)
 {
-    uint texturesCount = 0u;
-
     // Recursively load all files in resource directory
-    for (const auto& fileInfo : listFiles("res/tex", true)) {
-        // Load only png files
-        if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "png")
-            continue;
+    for (const auto& folder : folders) {
+        uint texturesCount = 0u;
 
-        s_context.textures.load(fileInfo.fullName);
+        for (const auto& fileInfo : listFiles("res/tex/" + folder, true)) {
+            // Load only png files
+            if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "png")
+                continue;
 
-        ++texturesCount;
+            s_context.textures.load(fileInfo.fullName);
+
+            ++texturesCount;
+        }
+
+        mdebug_core_2("Loaded " << texturesCount << " textures from " << folder << ".");
     }
-
-    mdebug_core_2("Loaded " << texturesCount << " textures.");
-
-    // Backup
-    s_context.textures.setDefault("default");
-
-    // Repeated
-    s_context.textures.get("nui/focus").setRepeated(true);
-    s_context.textures.get("default").setRepeated(true);
-    s_context.textures.get("jumping-toasts/background").setRepeated(true);
-    s_context.textures.get("dungeon/sidebar/tab/monsters/cage").setRepeated(true);
-    s_context.textures.get("dungeon/inter/outer_wall_west").setRepeated(true);
-    s_context.textures.get("dungeon/inter/outer_wall_east").setRepeated(true);
-
-    // Smooth
-    s_context.textures.get("jumping-toasts/toast-cut").setSmooth(false);
 }
 
+void Application::freeTextures(const std::initializer_list<std::string>& folders)
+{
+    for (const auto& folder : folders) {
+        s_context.textures.freeMatchingPrefix(folder);
+
+        mdebug_core_2("Freed textures from " << folder << ".");
+    }
+}
+
+void Application::preloadTextures()
+{
+    // Force default
+    s_context.textures.load("res/tex/default.png");
+    s_context.textures.get("default").setRepeated(true);
+    s_context.textures.setDefault("default");
+
+    // And NUI
+    loadTextures({"nui"});
+    s_context.textures.get("nui/focus").setRepeated(true);
+}

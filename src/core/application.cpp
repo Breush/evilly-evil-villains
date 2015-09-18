@@ -82,15 +82,13 @@ Application::Application()
     // Initialize language
     internationalization::init(toString(s_context.display.global.language));
 
-    // Load all on start
-    // TODO Well, do not ALL on start,
-    // or, at least, do it during some splash/loading-screen
-    loadTextures();
+    // Load all on start (except textures)
+    preloadTextures();
     loadShaders();
     loadFonts();
     loadMusics();
     loadSounds();
-    loadAnimations();
+    preloadAnimations();
     loadStates();
 
     // All is ready, go for it

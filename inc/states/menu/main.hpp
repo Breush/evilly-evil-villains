@@ -22,8 +22,8 @@ namespace states
         //! Constructor.
         MenuMain(StateStack& stack);
 
-        //! Default destructor.
-        ~MenuMain() = default;
+        //! Destructor.
+        ~MenuMain();
 
         //----------------------//
         //! @name State control

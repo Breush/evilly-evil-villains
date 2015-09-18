@@ -23,8 +23,8 @@ namespace states
         //! Constructor.
         GameDCB(StateStack& stack);
 
-        //! Default destructor.
-        ~GameDCB() = default;
+        //! Destructor.
+        ~GameDCB();
 
         //----------------------//
         //! @name State control

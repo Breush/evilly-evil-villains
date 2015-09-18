@@ -30,10 +30,15 @@ Inter::Inter(nui::ContextMenu& contextMenu)
     m_treasureEditSpinBox.setStep(10u);
 
     // Outer walls
-    m_outerWalls[0].setTexture(&Application::context().textures.get("dungeon/inter/outer_wall_west"));
-    m_outerWalls[1].setTexture(&Application::context().textures.get("dungeon/inter/outer_wall_east"));
     addPart(&m_outerWalls[0]);
     addPart(&m_outerWalls[1]);
+}
+
+void Inter::init()
+{
+    // Outer walls
+    m_outerWalls[0].setTexture(&Application::context().textures.get("dungeon/inter/outer_wall_west"));
+    m_outerWalls[1].setTexture(&Application::context().textures.get("dungeon/inter/outer_wall_east"));
 
     // Ref size
     m_refRoomSize = sf::v2f(Application::context().textures.get("dungeon/inter/inner_wall").getSize());

@@ -36,6 +36,9 @@ namespace dungeon
         //! Destructor.
         ~Sidebar();
 
+        //! Initialize after textures are loaded.
+        void init();
+
         //---------------------//
         //! @name Dungeon data
         //! @{

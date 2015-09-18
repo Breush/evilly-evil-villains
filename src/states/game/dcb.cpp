@@ -13,6 +13,10 @@ GameDCB::GameDCB(StateStack& stack)
     : baseClass(stack)
     , m_controller(m_gaugesManager, m_bubble, m_answerBox)
 {
+    // Loading resources
+    Application::loadTextures({"dcb"});
+    Application::loadAnimations({"dcb"});
+
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
     const auto& nuiSize = nuiLayer().size();
@@ -77,6 +81,13 @@ GameDCB::GameDCB(StateStack& stack)
     std::string controllerFile = "res/po/" + toString(languageCode) + "/dcb.xml";
     if (fileExists(controllerFile)) m_controller.load(controllerFile);
     else m_controller.load("res/po/en_EN/dcb.xml");
+}
+
+GameDCB::~GameDCB()
+{
+    // Freeing resources
+    Application::freeTextures({"dcb"});
+    Application::freeAnimations({"dcb"});
 }
 
 //-----------------------//

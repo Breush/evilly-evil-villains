@@ -31,6 +31,9 @@ namespace dungeon
         //! Default destructor.
         virtual ~Inter() = default;
 
+        //! Initialize after textures are loaded.
+        void init();
+
         //----------------//
         //! @name Events
         //! @{

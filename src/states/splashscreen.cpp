@@ -11,6 +11,12 @@ using namespace states;
 SplashScreen::SplashScreen(StateStack& stack)
     : State(stack)
 {
+    // Loading resources
+    Application::loadTextures({"jumping-toasts"});
+    Application::loadAnimations({"jumping-toasts"});
+    Application::context().textures.get("jumping-toasts/background").setRepeated(true);
+    Application::context().textures.get("jumping-toasts/toast-cut").setSmooth(false);
+
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
     const auto& nuiSize = nuiLayer().size();
@@ -27,10 +33,17 @@ SplashScreen::SplashScreen(StateStack& stack)
 
     // Animation
     nuiRoot.attachChild(m_logo);
-    m_logo.load("jumping-toasts");
+    m_logo.load("jumping-toasts/logo");
     m_logo.setRelativePosition({0.5f, 0.5f});
     m_logo.setLooping(false);
     m_logo.restart();
+}
+
+SplashScreen::~SplashScreen()
+{
+    // Freeing resources
+    Application::freeTextures({"jumping-toasts"});
+    Application::freeAnimations({"jumping-toasts"});
 }
 
 //-------------------//

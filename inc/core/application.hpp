@@ -81,6 +81,18 @@ public:
 
     //! @}
 
+    //--------------------------------------//
+    //! @name Loading and freeing resources
+    //! @{
+
+    static void loadTextures(const std::initializer_list<std::string>& folders);    //!< Load all textures inside folders into memory.
+    static void loadAnimations(const std::initializer_list<std::string>& folders);  //!< Load all animations inside folders into memory.
+
+    static void freeTextures(const std::initializer_list<std::string>& folders);    //!< Free all textures in folders from memory.
+    static void freeAnimations(const std::initializer_list<std::string>& folders);  //!< Free all animations in folders from memory.
+
+    //! @}
+
 protected:
 
     //----------------------------//
@@ -137,13 +149,13 @@ protected:
     //! @name Pre-loading and refresh
     //! @{
 
-    void loadTextures();    //!< Load textures into memory.
-    void loadShaders();     //!< Load shaders into memory.
-    void loadFonts();       //!< Load fonts into memory.
-    void loadMusics();      //!< Load musics file information.
-    void loadSounds();      //!< Load sounds file information.
-    void loadAnimations();  //!< Load animations into memory.
-    void loadStates();      //!< Register states.
+    void preloadTextures();     //!< Load all shared textures.
+    void loadShaders();         //!< Load shaders into memory.
+    void loadFonts();           //!< Load fonts into memory.
+    void loadMusics();          //!< Load musics file information.
+    void loadSounds();          //!< Load sounds file information.
+    void preloadAnimations();   //!< Load all shared animations.
+    void loadStates();          //!< Register states.
 
     void refreshNUI();      //!< Adapt all NUI elements.
     void refreshWindow();   //!< Adapt all views to current window settings.

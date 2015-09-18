@@ -19,8 +19,8 @@ namespace states
         //! Constructor.
         SplashScreen(StateStack& stack);
 
-        //! Default destructor.
-        ~SplashScreen() = default;
+        //! Destructor.
+        ~SplashScreen();
 
         //----------------------//
         //! @name State control

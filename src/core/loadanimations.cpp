@@ -3,24 +3,39 @@
 #include "core/debug.hpp"
 #include "tools/filesystem.hpp"
 
-void Application::loadAnimations()
+void Application::loadAnimations(const std::initializer_list<std::string>& folders)
 {
-    uint animationsCount = 0u;
-
     // Recursively load all files in resource directory
-    for (const auto& fileInfo : listFiles("res/scml", true)) {
-        // Load only animations files
-        if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "scml")
-            continue;
+    for (const auto& folder : folders) {
+        uint animationsCount = 0u;
 
-        s_context.animations.load(fileInfo.fullName);
+        for (const auto& fileInfo : listFiles("res/scml/" + folder, true)) {
+            // Load only animations files
+            if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "scml")
+                continue;
 
-        ++animationsCount;
+            s_context.animations.load(fileInfo.fullName);
+
+            ++animationsCount;
+        }
+
+        mdebug_core_2("Loaded " << animationsCount << " animations from " << folder << ".");
     }
+}
 
-    mdebug_core_2("Loaded " << animationsCount << " animations.");
+void Application::freeAnimations(const std::initializer_list<std::string>& folders)
+{
+    for (const auto& folder : folders) {
+        s_context.animations.freeMatchingPrefix(folder);
 
-    // Backup
+        mdebug_core_2("Freed animations from " << folder << ".");
+    }
+}
+
+void Application::preloadAnimations()
+{
+    // Force default
+    s_context.animations.load("res/scml/default.scml");
     s_context.animations.setDefault("default");
 }
 

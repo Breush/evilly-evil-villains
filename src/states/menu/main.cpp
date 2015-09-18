@@ -14,6 +14,9 @@ MenuMain::MenuMain(StateStack& stack)
     : baseClass(stack)
     , m_choices{L"V", L"I", L"L", L"Y", L"S"}
 {
+    // Loading resources
+    Application::loadTextures({"menu"});
+
     // During menus, enable key repeat
     Application::context().window.setKeyRepeatEnabled(true);
 
@@ -81,6 +84,12 @@ MenuMain::MenuMain(StateStack& stack)
     m_reactImage.setReactCallback(m_choices[2], villains);
     m_reactImage.setReactCallback(m_choices[3], configuration);
     m_reactImage.setReactCallback(m_choices[4], quitGame);
+}
+
+MenuMain::~MenuMain()
+{
+    // Freeing resources
+    Application::freeTextures({"menu"});
 }
 
 //-------------------//

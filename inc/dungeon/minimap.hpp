@@ -36,6 +36,9 @@ namespace dungeon
         //! Default destructor.
         ~Minimap() = default;
 
+        //! Initialize after textures are loaded.
+        void init();
+
         //--------------//
         //! @name Layer
         //! @{

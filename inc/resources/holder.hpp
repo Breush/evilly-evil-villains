@@ -10,7 +10,7 @@ namespace resources
     //! Used for loading once then storing textures/sounds/shaders/fonts.
 
     template <typename Resource>
-    class ResourceHolder
+    class Holder
     {
     public:
 
@@ -24,6 +24,12 @@ namespace resources
         //! Load resource into memory with special parameter to loadFromFile (for shaders).
         template <typename Parameter>
         Resource& load(const std::string& filename, const Parameter& parameter);
+
+        //! Remove a resource from memory.
+        void free(const std::string& id);
+
+        //! Remove all resource from memory with id starting with specified prefix.
+        void freeMatchingPrefix(const std::string& prefix);
 
         //! Sets the backup resource to use when id does not exists.
         //! Provided id should exists.
@@ -90,11 +96,11 @@ namespace scml
 
 namespace resources
 {
-    using TextureHolder =       ResourceHolder<sf::Texture>;
-    using ShaderHolder =        ResourceHolder<sf::Shader>;
-    using FontHolder =          ResourceHolder<sf::Font>;
-    using SoundBufferHolder =   ResourceHolder<sf::SoundBuffer>;
-    using SCMLHolder =          ResourceHolder<scml::Data>;
+    using TextureHolder =       Holder<sf::Texture>;
+    using ShaderHolder =        Holder<sf::Shader>;
+    using FontHolder =          Holder<sf::Font>;
+    using SoundBufferHolder =   Holder<sf::SoundBuffer>;
+    using SCMLHolder =          Holder<scml::Data>;
 }
 
 #include "holder.inl"

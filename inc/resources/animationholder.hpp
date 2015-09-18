@@ -56,6 +56,12 @@ namespace resources
         //! Load animation resource into memory.
         void load(const std::string& filename);
 
+        //! Remove an animation from memory.
+        void free(const std::string& id);
+
+        //! Remove all animations from memory with id starting with specified prefix.
+        void freeMatchingPrefix(const std::string& prefix);
+
         //! Sets the backup resource to use when id does not exists.
         //! Provided id should exists.
         inline void setDefault(const std::string& id) { m_scmlHolder.setDefault(id); }

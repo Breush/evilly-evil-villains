@@ -21,8 +21,8 @@ namespace states
         //! Constructor.
         GameDungeonDesign(StateStack& stack);
 
-        //! Default destructor.
-        ~GameDungeonDesign() = default;
+        //! Destructor.
+        ~GameDungeonDesign();
 
         //----------------------//
         //! @name State control

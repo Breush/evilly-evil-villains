@@ -21,6 +21,10 @@ Minimap::Minimap()
     m_layerViewIndicator.setOutlineThickness(1.f);
 }
 
+void Minimap::init()
+{
+}
+
 //-------------------//
 //----- Routine -----//
 

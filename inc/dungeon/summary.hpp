@@ -43,6 +43,9 @@ namespace dungeon
         //! Default destructor.
         ~Summary() = default;
 
+        //! Initialize after textures are loaded.
+        void init();
+
         //---------------------//
         //! @name Dungeon data
         //! @{

@@ -5,7 +5,7 @@
 //-----------------------------//
 //---- Change defines here ----//
 
-#define DEBUG_CORE  5
+#define DEBUG_CORE  1
 
 //--------------------//
 //---- Debug mode ----//

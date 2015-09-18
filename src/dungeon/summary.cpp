@@ -11,23 +11,27 @@ Summary::Summary()
     const auto& font = Application::context().fonts.get("nui");
 
     // Dungeon name
+    addPart(&m_dungeonName);
     m_dungeonName.setFont(font);
     m_dungeonName.setColor(sf::Color::White);
     m_dungeonName.setStyle(sf::Text::Bold | sf::Text::Underlined);
-    addPart(&m_dungeonName);
 
     // Bars
-    m_bars[BAR_DOSH].logo.setTexture(&Application::context().textures.get("elements/dosh"));
-    m_bars[BAR_FAME].logo.setTexture(&Application::context().textures.get("elements/fame"));
-
     for (auto& bar : m_bars) {
-        bar.text.setFont(font);
         addPart(&bar.logo);
         addPart(&bar.text);
+        bar.text.setFont(font);
     }
 
     m_bars[BAR_DOSH].text.setColor({190u, 171u, 21u});
     m_bars[BAR_FAME].text.setColor({102u, 151u, 196u});
+}
+
+void Summary::init()
+{
+    // Bars
+    m_bars[BAR_DOSH].logo.setTexture(&Application::context().textures.get("elements/dosh"));
+    m_bars[BAR_FAME].logo.setTexture(&Application::context().textures.get("elements/fame"));
 }
 
 //-------------------//

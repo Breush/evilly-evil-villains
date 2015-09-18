@@ -25,6 +25,9 @@ namespace dungeon
         //! Default destructor.
         ~Lock() = default;
 
+        //! Initialize after textures are loaded.
+        void init();
+
         //------------------------//
         //! @name Mode management
         //! @{
@@ -72,6 +75,9 @@ namespace dungeon
 
         //! Refresh the display of the lock given the current mode.
         void updateMode();
+
+        //! Refresh sprite scale using current size.
+        void refreshImageScale();
 
         //! @}
 

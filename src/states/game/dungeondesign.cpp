@@ -15,11 +15,23 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     , m_dungeonSidebar(scene())
     , m_heroesManager(m_dungeonInter)
 {
+    // Loading resources
+    Application::loadTextures({"dungeon", "elements", "heroes"});
+    Application::loadAnimations({"dungeon", "heroes"});
+
+    Application::context().textures.get("dungeon/sidebar/tab/monsters/cage").setRepeated(true);
+    Application::context().textures.get("dungeon/inter/outer_wall_west").setRepeated(true);
+    Application::context().textures.get("dungeon/inter/outer_wall_east").setRepeated(true);
+
     // During game, disable key repeat
     Application::context().window.setKeyRepeatEnabled(false);
 
     // Stop music if any
     Application::context().musics.stop();
+
+    // Inits
+    m_dungeonInter.init();
+    m_dungeonSidebar.init();
 
     // Creating scene
     sf::Vector2f sceneSize(1200.f, 2700.f);
@@ -90,6 +102,13 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     scene().layer("FAR").fitToVisibleRect(m_sceneFar);
     scene().layer("HORIZON").fitToVisibleRect(m_sceneHorizon);
     scene().layer("SKY").fitToVisibleRect(m_sceneSky);
+}
+
+GameDungeonDesign::~GameDungeonDesign()
+{
+    // Freeing resources
+    Application::freeTextures({"dungeon", "elements", "heroes"});
+    Application::freeAnimations({"dungeon", "heroes"});
 }
 
 //-------------------//

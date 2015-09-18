@@ -1,8 +1,9 @@
 #include "dungeon/lock.hpp"
 
 #include "core/application.hpp"
-#include "tools/vector.hpp"
 #include "dungeon/data.hpp"
+#include "tools/vector.hpp"
+#include "tools/tools.hpp"
 
 using namespace dungeon;
 
@@ -10,8 +11,12 @@ Lock::Lock()
 {
     // Sprite
     addPart(&m_lock);
-    const auto& texture = Application::context().textures.get("dungeon/panel/lock");
-    m_lock.setTexture(texture);
+}
+
+void Lock::init()
+{
+    m_lock.setTexture(Application::context().textures.get("dungeon/panel/lock"));
+    refreshImageScale();
 }
 
 //-------------------//
@@ -19,8 +24,7 @@ Lock::Lock()
 
 void Lock::onSizeChanges()
 {
-    const auto& textureSize = m_lock.getTexture()->getSize();
-    m_lock.setScale(size() / sf::v2f(textureSize));
+    refreshImageScale();
 }
 
 void Lock::refreshNUI(const config::NUIGuides& cNUI)
@@ -94,4 +98,15 @@ void Lock::switchMode()
         m_data->setMode(Mode::DESIGN);
         break;
     }
+}
+
+//-----------------------------------//
+//----- Internal change updates -----//
+
+void Lock::refreshImageScale()
+{
+    auto pTexture = m_lock.getTexture();
+    returnif (pTexture == nullptr);
+
+    m_lock.setScale(size() / sf::v2f(pTexture->getSize()));
 }
