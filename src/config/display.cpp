@@ -31,6 +31,7 @@ Display::Display()
     }
 
     // Checks if we read the file OK
+    doc.load_file(file.c_str());
     const auto& config = doc.child(L"config");
     if (!config || config.attribute(L"type").as_string() != std::wstring(L"display")) {
         wdebug_config_1(L"Could not find valid display config file. Using default parameters.");
