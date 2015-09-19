@@ -83,29 +83,25 @@ void Graph::handleEvent(const sf::Event& event)
 
     // Delegate for mouse
     if (isMouse(event)) {
-        // Mouse wheel
-        if (event.type == sf::Event::MouseWheelMoved) {
-            handleMouseWheelMovedEvent(event);
-            return;
-        }
-        else if (event.type == sf::Event::MouseButtonPressed
-                && event.mouseButton.button == sf::Mouse::Button::Middle) {
-            handleMouseWheelPressedEvent(event);
-            return;
-        }
-        else if (event.type == sf::Event::MouseButtonReleased
-                && event.mouseButton.button == sf::Mouse::Button::Middle) {
-            handleMouseWheelReleasedEvent(event);
-            return;
-        }
-        else if (event.type == sf::Event::MouseMoved) {
+        // Keep event if in grab mode
+        if (event.type == sf::Event::MouseMoved)
             returnif (handleMouseMovedEvent(event));
-        }
 
         // Set focus on click
         auto entity = handleMouseEvent(event);
-        if (entity != nullptr && event.type == sf::Event::MouseButtonPressed)
-            setFocusedEntity(entity);
+        if (entity != nullptr) {
+            if (event.type == sf::Event::MouseButtonPressed)
+                setFocusedEntity(entity);
+            return;
+        }
+
+        // Let this graph manage special events
+        if (event.type == sf::Event::MouseWheelMoved)
+            handleMouseWheelMovedEvent(event);
+        else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Button::Middle)
+            handleMouseWheelPressedEvent(event);
+        else if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Button::Middle)
+            handleMouseWheelReleasedEvent(event);
 
         return;
     }
