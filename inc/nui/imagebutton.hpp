@@ -41,7 +41,6 @@ namespace nui
         //! @name Routine
         //! @{
 
-        void onSizeChanges() final;
         void refreshNUI(const config::NUIGuides& cNUI) final;
 
         //! @}
@@ -54,11 +53,14 @@ namespace nui
 
         //! @}
 
-        //-------------------------------//
-        //! @name Internal state updates
+        //--------------------------------//
+        //! @name Internal change updates
         //! @{
 
         void updateSize() final;
+
+        //! Refresh image/text positions.
+        void refreshElementsPositions();
 
         //! @}
 

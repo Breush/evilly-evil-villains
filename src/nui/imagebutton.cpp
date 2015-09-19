@@ -17,46 +17,12 @@ ImageButton::ImageButton()
 //-------------------//
 //----- Routine -----//
 
-void ImageButton::onSizeChanges()
-{
-    // From button, will refresh all positions
-    baseClass::onSizeChanges();
-
-    // Image
-    if (m_image.getTexture() != nullptr) {
-        const auto& textureSize = m_image.getTexture()->getSize();
-        m_image.setScale(m_imageSize / sf::v2f(textureSize));
-        m_image.setPosition({(size().x - m_imageSize.x) / 2.f, 0.f});
-    }
-
-    // Re-positioning
-    const sf::Vector2f offset((size().x - maxTextSize().x) / 2.f, m_imageSize.y + m_vPadding);
-    text().move(offset);
-    if (linesShowed()) {
-        topLine().move(offset);
-        botLine().move(offset);
-    }
-}
-
 void ImageButton::refreshNUI(const config::NUIGuides& cNUI)
 {
     baseClass::refreshNUI(cNUI);
 
     m_imageSize = {cNUI.hintImageSide, cNUI.hintImageSide};
     m_vPadding = cNUI.vPadding;
-}
-
-//-------------------//
-//----- Changes -----//
-
-void ImageButton::updateSize()
-{
-    updateButtonSize();
-
-    const auto& buttonDimensions = buttonSize();
-    auto width = std::max(buttonDimensions.x, m_imageSize.x);
-    auto height = buttonDimensions.y + m_imageSize.y + m_vPadding;
-    setSize({width, height});
 }
 
 //------------------------//
@@ -83,4 +49,36 @@ void ImageButton::setVisual(const std::wstring& text, const std::string& imageID
 {
     setText(text);
     setImage(imageID);
+}
+
+//-----------------------------------//
+//----- Internal change updates -----//
+
+void ImageButton::updateSize()
+{
+    updateButtonSize();
+
+    const auto& buttonDimensions = buttonSize();
+    auto width = std::max(buttonDimensions.x, m_imageSize.x);
+    auto height = buttonDimensions.y + m_imageSize.y + m_vPadding;
+    setSize({width, height});
+    refreshElementsPositions();
+}
+
+void ImageButton::refreshElementsPositions()
+{
+    // Image
+    if (m_image.getTexture() != nullptr) {
+        const auto& textureSize = m_image.getTexture()->getSize();
+        m_image.setScale(m_imageSize / sf::v2f(textureSize));
+        m_image.setPosition({(size().x - m_imageSize.x) / 2.f, 0.f});
+    }
+
+    // Re-positioning
+    const sf::Vector2f offset((size().x - maxTextSize().x) / 2.f, m_imageSize.y + m_vPadding);
+    text().move(offset);
+    if (linesShowed()) {
+        topLine().move(offset);
+        botLine().move(offset);
+    }
 }

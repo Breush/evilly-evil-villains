@@ -434,6 +434,8 @@ sf::FloatRect Entity::localBounds()
 
 void Entity::setSize(const sf::Vector2f& inSize)
 {
+    returnif (m_size == inSize);
+
     m_size = inSize;
     m_sizeChanges = true;
 
