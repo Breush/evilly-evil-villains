@@ -13,11 +13,13 @@
 using namespace scene;
 
 Graph::Graph()
-    : m_scene(this)
+    : m_focusShader(nullptr)
+    , m_scene(this)
     , m_nuiLayer(this)
 {
     // Focusing
-    m_focusShader = &Application::context().shaders.get("nui/focus");
+    if (sf::Shader::isAvailable())
+        m_focusShader = &Application::context().shaders.get("nui/focus");
     m_focusShape.setTexture(&Application::context().textures.get("nui/focus"));
     m_focusShape.setFillColor({255, 255, 255, 100});
 
@@ -147,10 +149,11 @@ void Graph::updateFocusSprite()
     m_focusShape.setPosition(focusPosition);
     m_focusShape.setSize(focusSize);
 
-    sf::Vector2f globalFocusPosition = m_focusedEntity->getPosition() - m_focusedEntity->getOrigin() + focusPosition;
-
-    Application::context().shaders.get("nui/focus").setParameter("position", globalFocusPosition);
-    Application::context().shaders.get("nui/focus").setParameter("textureSize", focusSize);
+    if (sf::Shader::isAvailable()) {
+        sf::Vector2f globalFocusPosition = m_focusedEntity->getPosition() - m_focusedEntity->getOrigin() + focusPosition;
+        Application::context().shaders.get("nui/focus").setParameter("position", globalFocusPosition);
+        Application::context().shaders.get("nui/focus").setParameter("textureSize", focusSize);
+    }
 }
 
 void Graph::setFocusedEntity(Entity* focusedEntity)

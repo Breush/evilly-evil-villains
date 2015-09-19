@@ -36,7 +36,9 @@ MenuMain::MenuMain(StateStack& stack)
     m_background.setTexture("menu/main/background");
     m_background.setShader("menu/background");
     m_background.setLocalScale({scaleFactor, scaleFactor});
-    Application::context().shaders.get("menu/background").setParameter("textureSize", scaleFactor * textureSize);
+
+    if (sf::Shader::isAvailable())
+        Application::context().shaders.get("menu/background").setParameter("textureSize", scaleFactor * textureSize);
 
     // Copyright label
     nuiRoot.attachChild(m_copyrightLabel);

@@ -6,7 +6,6 @@
 
 void Application::loadShaders()
 {
-    // TODO Yeah, sure... but... what do we do about that?
     returnif (!sf::Shader::isAvailable());
 
     uint shadersCount = 0u;
@@ -75,6 +74,8 @@ void Application::refreshShaders()
 
 void Application::updateShaders(const sf::Time& dt)
 {
+    returnif (!sf::Shader::isAvailable());
+
     s_context.shaders.get("menu/splashscreen").setParameter("time", m_gameTime / 5.f);
     s_context.shaders.get("menu/background").setParameter("time", m_gameTime / 25.f);
     s_context.shaders.get("menu/name").setParameter("time", m_gameTime / 5.f);

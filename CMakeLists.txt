@@ -218,7 +218,7 @@ add_custom_target(translation DEPENDS ${POT_FILE} ${MO_FILES})
 #=====
 # Distrib target
 
-if (EEV_DEBUG_MODE)
+if (NOT EEV_DEBUG_MODE)
     add_custom_target(distrib COMMAND ${CMAKE_COMMAND}
                       -D EEV_VERSION_SWEET_NAME=${EEV_VERSION_SWEET_NAME}
                       -D EEV_VERSION_MAJ=${EEV_VERSION_MAJ}

@@ -455,6 +455,8 @@ void Entity::setLocalPosition(const sf::Vector2f& inLocalPosition)
 
 void Entity::setShader(const std::string& shaderID)
 {
+    returnif (!sf::Shader::isAvailable());
+
     if (shaderID.empty()) m_shader = nullptr;
     else m_shader = &Application::context().shaders.get(shaderID);
 }

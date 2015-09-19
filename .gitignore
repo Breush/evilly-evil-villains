@@ -12,6 +12,7 @@ cover/*.info
 cover/html
 
 inc/core/define.hpp
+inc/tools/debug.hpp
 
 Makefile
 CMakeCache.txt
