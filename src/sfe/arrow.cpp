@@ -32,7 +32,7 @@ void Arrow::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Arrow::setLength(float inLength)
 {
-    returnif (m_length == inLength || inLength < 1.f);
+    returnif (m_length == inLength || inLength < 1.f || std::isnan(inLength));
     m_length = inLength;
     updateFromLength();
 }
