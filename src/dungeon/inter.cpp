@@ -514,7 +514,7 @@ void Inter::harvestTileDosh(const sf::Vector2u& coords)
     refreshTileDoshLabel(coords);
 }
 
-void Inter::configureDoshLabel(std::unique_ptr<sfe::Label>& doshLabel, const uint dosh, const sf::Color& color)
+void Inter::configureDoshLabel(std::unique_ptr<scene::Label>& doshLabel, const uint dosh, const sf::Color& color)
 {
     // Nothing if no dosh
     if (dosh == 0u) {
@@ -524,8 +524,8 @@ void Inter::configureDoshLabel(std::unique_ptr<sfe::Label>& doshLabel, const uin
 
     // Create label if does not exists
     if (doshLabel == nullptr) {
-        doshLabel = std::make_unique<sfe::Label>();
-        doshLabel->setPrestyle(sfe::Label::Prestyle::NUI);
+        doshLabel = std::make_unique<scene::Label>();
+        doshLabel->setPrestyle(scene::Label::Prestyle::NUI);
         doshLabel->setColor(color);
         attachChild(*doshLabel);
     }

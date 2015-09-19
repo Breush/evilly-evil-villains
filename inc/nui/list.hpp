@@ -12,7 +12,7 @@
 
 // Forward declarations
 
-namespace sfe
+namespace scene
 {
     class Label;
 }
@@ -148,7 +148,7 @@ namespace nui
         //! The information of a cell.
         struct CellInfo
         {
-            std::unique_ptr<sfe::Label> label;  //!< The label of the cell.
+            std::unique_ptr<scene::Label> label;  //!< The label of the cell.
         };
 
         //! The information of a line.
@@ -160,7 +160,7 @@ namespace nui
         //! The information of a column.
         struct ColumnInfo
         {
-            std::unique_ptr<sfe::Label> title;  //!< The title of this column.
+            std::unique_ptr<scene::Label> title;  //!< The title of this column.
             Align hAlign = Align::STANDARD;     //!< The horizontal alignment of children in this column.
             Align vAlign = Align::CENTER;       //!< The vertical alignment of children in this column.
         };

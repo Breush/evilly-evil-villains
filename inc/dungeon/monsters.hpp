@@ -166,6 +166,6 @@ namespace dungeon
     private:
 
         //! Holding the image of the grabbable.
-        sfe::AnimatedSprite m_sprite;
+        scene::AnimatedSprite m_sprite;
     };
 }

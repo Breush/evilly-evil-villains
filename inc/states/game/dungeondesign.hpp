@@ -59,12 +59,12 @@ namespace states
         nui::ContextMenu m_contextMenu;
 
         // Scene
-        sfe::RectangleShape m_sceneFront;
-        sfe::RectangleShape m_sceneClose;
-        sfe::RectangleShape m_sceneMiddle;
-        sfe::RectangleShape m_sceneFar;
-        sfe::RectangleShape m_sceneHorizon;
-        sfe::RectangleShape m_sceneSky;
+        scene::RectangleShape m_sceneFront;
+        scene::RectangleShape m_sceneClose;
+        scene::RectangleShape m_sceneMiddle;
+        scene::RectangleShape m_sceneFar;
+        scene::RectangleShape m_sceneHorizon;
+        scene::RectangleShape m_sceneSky;
 
         const float m_depthFront    = 0.95f;
         const float m_depthClose    = 1.f;

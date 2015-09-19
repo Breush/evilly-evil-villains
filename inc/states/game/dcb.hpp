@@ -54,8 +54,8 @@ namespace states
         dcb::Controller m_controller;       //!< Controls the content of the other DCB elements.
 
         // Decorum
-        sfe::AnimatedSprite m_trees;        //!< The animated trees.
-        sfe::AnimatedSprite m_stage;        //!< The animated stage.
-        sfe::AnimatedSprite m_candle;       //!< The animated candle.
+        scene::AnimatedSprite m_trees;        //!< The animated trees.
+        scene::AnimatedSprite m_stage;        //!< The animated stage.
+        scene::AnimatedSprite m_candle;       //!< The animated candle.
     };
 }

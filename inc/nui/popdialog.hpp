@@ -97,9 +97,9 @@ namespace nui
 
         // Decorum
         sf::RectangleShape m_background;                        //!< Background.
-        sfe::RectangleShape m_boxBackground;                    //!< Background for message box.
-        sfe::Label m_title;                                     //!< The title of the message box.
-        sfe::Label m_message;                                   //!< The displayed message.
+        scene::RectangleShape m_boxBackground;                    //!< Background for message box.
+        scene::Label m_title;                                     //!< The title of the message box.
+        scene::Label m_message;                                   //!< The displayed message.
         nui::VStacker m_mainStacker;                            //!< Stacks for message box.
         nui::HStacker m_buttonsStacker;                         //!< Stacks all buttons.
         std::vector<std::unique_ptr<nui::Button>> m_buttons;    //!< All buttons, defined by user.

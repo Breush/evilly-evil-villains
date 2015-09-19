@@ -41,8 +41,8 @@ namespace states
     private:
 
         // Decorum
-        sfe::RectangleShape m_background;   //!< Background.
-        sfe::Label m_title;                 //!< Title.
+        scene::RectangleShape m_background;   //!< Background.
+        scene::Label m_title;                 //!< Title.
 
         // NUI
         nui::Button m_continueButton;   //!< Continue button.

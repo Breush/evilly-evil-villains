@@ -72,7 +72,7 @@ namespace traps
 
         uint m_maxDosh = 20u;           //!< The max amount of dosh this trap can hold.
 
-        sfe::AnimatedSprite m_sprite;   //!< The sprite.
+        scene::AnimatedSprite m_sprite;   //!< The sprite.
     };
 }
 }

@@ -24,8 +24,8 @@ PopDialog::PopDialog()
     m_mainStacker.setRelativePosition({0.5f, 0.5f});
     m_mainStacker.stackBack(m_title);
     m_mainStacker.stackBack(m_message);
-    m_title.setPrestyle(sfe::Label::Prestyle::NUI_TITLE);
-    m_message.setPrestyle(sfe::Label::Prestyle::NUI);
+    m_title.setPrestyle(scene::Label::Prestyle::NUI_TITLE);
+    m_message.setPrestyle(scene::Label::Prestyle::NUI);
 
     // Buttons
     m_mainStacker.stackBack(m_buttonsStacker, nui::Align::OPPOSITE);

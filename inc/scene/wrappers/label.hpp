@@ -5,14 +5,13 @@
 
 #include <SFML/Graphics/Text.hpp>
 
-// TODO namespace scene
-namespace sfe
+namespace scene
 {
     //! A wrapper around sf::Text as an entity.
 
-    class Label final : public scene::Entity
+    class Label final : public Entity
     {
-        using baseClass = scene::Entity;
+        using baseClass = Entity;
 
     public:
 

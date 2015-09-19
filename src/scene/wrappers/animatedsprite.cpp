@@ -5,7 +5,7 @@
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
 
-using namespace sfe;
+using namespace scene;
 
 AnimatedSprite::AnimatedSprite(bool isLerpable)
     : baseClass(isLerpable)

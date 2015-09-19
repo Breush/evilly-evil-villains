@@ -97,7 +97,7 @@ namespace nui
         //! Contains a tab information.
         struct Tab
         {
-            std::unique_ptr<sfe::RectangleShape> image; //!< The image.
+            std::unique_ptr<scene::RectangleShape> image; //!< The image.
             std::wstring tooltipString;                 //!< The string to print for tooltip.
             scene::Entity& content;                     //!< The entity to show when tab selected.
         };

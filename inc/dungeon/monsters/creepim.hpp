@@ -77,7 +77,7 @@ namespace monsters
         dungeon::Graph* m_graph = nullptr;  //!< Abstract dungeon graph.
 
         // Decorum
-        sfe::AnimatedSprite m_sprite;   //!< The sprite.
+        scene::AnimatedSprite m_sprite;   //!< The sprite.
 
         // Artificial intelligence
         ai::LuaActor m_luaActor;                    //!< Loads lua file and move into the graph.

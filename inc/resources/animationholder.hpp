@@ -10,7 +10,7 @@
 
 // Forward declarations
 
-namespace sfe
+namespace scene
 {
     class AnimatedSprite;
 }
@@ -30,7 +30,7 @@ namespace resources
      */
     class AnimationHolder final : private sf::NonCopyable
     {
-        friend class sfe::AnimatedSprite;
+        friend class scene::AnimatedSprite;
 
     public:
 
@@ -75,10 +75,10 @@ namespace resources
         //! @{
 
         //! Register an animated sprite in the list.
-        void push(sfe::AnimatedSprite* animatedSprite);
+        void push(scene::AnimatedSprite* animatedSprite);
 
         //! Unregister an animated sprite.
-        void pop(sfe::AnimatedSprite* animatedSprite);
+        void pop(scene::AnimatedSprite* animatedSprite);
 
         //! @}
 
@@ -103,6 +103,6 @@ namespace resources
         std::map<std::string, std::unique_ptr<scml::FileSystem>> m_fsMap;
 
         //! The animated sprites list.
-        std::list<sfe::AnimatedSprite*> m_animatedSprites;
+        std::list<scene::AnimatedSprite*> m_animatedSprites;
     };
 }

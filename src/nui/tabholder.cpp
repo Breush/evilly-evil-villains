@@ -76,7 +76,7 @@ void TabHolder::handleMouseLeft()
 
 void TabHolder::stackBack(std::wstring tooltipString, const std::string& textureID, scene::Entity& content)
 {
-    auto image = std::make_unique<sfe::RectangleShape>();
+    auto image = std::make_unique<scene::RectangleShape>();
     image->setTexture(textureID);
     image->setSize({40.f, 40.f});
 

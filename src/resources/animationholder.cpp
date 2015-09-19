@@ -65,12 +65,12 @@ scml::FileSystem& AnimationHolder::getFileSystem(const std::string& id)
 //----------------------------//
 //----- Animated sprites -----//
 
-void AnimationHolder::push(sfe::AnimatedSprite* animatedSprite)
+void AnimationHolder::push(scene::AnimatedSprite* animatedSprite)
 {
     m_animatedSprites.emplace_back(animatedSprite);
 }
 
-void AnimationHolder::pop(sfe::AnimatedSprite* animatedSprite)
+void AnimationHolder::pop(scene::AnimatedSprite* animatedSprite)
 {
     auto found = std::find(m_animatedSprites.begin(), m_animatedSprites.end(), animatedSprite);
     m_animatedSprites.erase(found);

@@ -218,7 +218,7 @@ namespace dungeon
         //! @{
 
         //! Set the dosh label to a specific value.
-        void configureDoshLabel(std::unique_ptr<sfe::Label>& doshLabel, const uint dosh, const sf::Color& color);
+        void configureDoshLabel(std::unique_ptr<scene::Label>& doshLabel, const uint dosh, const sf::Color& color);
 
         //--------------------------------//
         //! @name Internal change updates
@@ -273,8 +273,8 @@ namespace dungeon
             std::vector<sf::RectangleShape> layers;             //!< All sprites to draw, from furthest to nearest.
             std::vector<std::unique_ptr<Facility>> facilities;  //!< The facilities in the tile.
             std::unique_ptr<Trap> trap = nullptr;               //!< The trap, protecting the tile.
-            std::unique_ptr<sfe::Label> totalDoshLabel;         //!< The total dosh inside the room.
-            std::unique_ptr<sfe::Label> harvestableDoshLabel;   //!< The harvestable dosh.
+            std::unique_ptr<scene::Label> totalDoshLabel;         //!< The total dosh inside the room.
+            std::unique_ptr<scene::Label> harvestableDoshLabel;   //!< The harvestable dosh.
         };
 
     private:

@@ -23,7 +23,7 @@ Hero::Hero(HeroesManager& manager, Inter& inter)
 
     // Dosh label
     attachChild(m_doshLabel);
-    m_doshLabel.setPrestyle(sfe::Label::Prestyle::NUI);
+    m_doshLabel.setPrestyle(scene::Label::Prestyle::NUI);
     m_doshLabel.setLocalPosition({5.f, -25.f});
     m_doshLabel.centerOrigin();
 
@@ -43,7 +43,7 @@ Hero::Hero(HeroesManager& manager, Inter& inter)
         m_overlays[i].setDepth(1.f);
 
         m_inter.attachChild(m_overlayLabels[i]);
-        m_overlayLabels[i].setPrestyle(sfe::Label::Prestyle::NUI_SOBER);
+        m_overlayLabels[i].setPrestyle(scene::Label::Prestyle::NUI_SOBER);
         m_overlayLabels[i].setDepth(0.5f);
     }
     #endif

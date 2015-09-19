@@ -66,7 +66,7 @@ namespace states
         std::array<nui::Button, 2> m_buttons;   //!< Create / Back
 
         // Background and title
-        sfe::Label m_title;                 //!< The title of the menu page.
-        sfe::RectangleShape m_background;   //!< The background of the menu page.
+        scene::Label m_title;                 //!< The title of the menu page.
+        scene::RectangleShape m_background;   //!< The background of the menu page.
     };
 }

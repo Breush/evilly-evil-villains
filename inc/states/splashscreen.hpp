@@ -44,7 +44,7 @@ namespace states
     private:
 
         // Decorum
-        sfe::Sprite m_background;   //!< Background.
-        sfe::AnimatedSprite m_logo; //!< Company logo.
+        scene::Sprite m_background;   //!< Background.
+        scene::AnimatedSprite m_logo; //!< Company logo.
     };
 }

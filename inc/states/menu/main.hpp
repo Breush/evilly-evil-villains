@@ -52,8 +52,8 @@ namespace states
         std::vector<std::wstring> m_choices;    //!< The list of choices.
 
         // Decorum
-        sfe::Sprite m_background;       //!< Background.
-        sfe::Label m_versionLabel;      //!< Version of the application.
-        sfe::Label m_copyrightLabel;    //!< Copyright info.
+        scene::Sprite m_background;       //!< Background.
+        scene::Label m_versionLabel;      //!< Version of the application.
+        scene::Label m_copyrightLabel;    //!< Copyright info.
     };
 }

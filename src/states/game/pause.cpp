@@ -26,7 +26,7 @@ GamePause::GamePause(StateStack& stack)
     // Title
     nuiRoot.attachChild(m_title);
     m_title.setText(_("Game paused"));
-    m_title.setPrestyle(sfe::Label::Prestyle::MENU_POPUP_TITLE);
+    m_title.setPrestyle(scene::Label::Prestyle::MENU_POPUP_TITLE);
     m_title.setRelativePosition({0.5f, 0.35f});
     m_title.centerOrigin();
 

@@ -132,13 +132,13 @@ namespace dungeon
         ai::LuaActor m_luaActor;        //!< Loads lua file and move into the graph.
 
         // Decorum
-        sfe::Label m_doshLabel;         //!< How much dosh held by the hero.
-        sfe::AnimatedSprite m_sprite;   //!< The sprite of the hero.
+        scene::Label m_doshLabel;         //!< How much dosh held by the hero.
+        scene::AnimatedSprite m_sprite;   //!< The sprite of the hero.
 
         // Debug overlay
         #if DEBUG_AI > 0
-        std::array<sfe::RectangleShape, 5u> m_overlays; //!< Backgrounds, one for each direction plus one central.
-        std::array<sfe::Label, 5u> m_overlayLabels;     //!< Text over backgrounds.
+        std::array<scene::RectangleShape, 5u> m_overlays; //!< Backgrounds, one for each direction plus one central.
+        std::array<scene::Label, 5u> m_overlayLabels;     //!< Text over backgrounds.
         #endif
     };
 }

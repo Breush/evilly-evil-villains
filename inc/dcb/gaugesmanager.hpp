@@ -70,6 +70,6 @@ namespace dcb
         nui::HStacker m_globalStacker;  //!< Main stacker containing other stackers.
         std::array<nui::VStacker, GaugeID::COUNT> m_stackers;   //!< The stackers, one for each pair gauge/label.
         std::array<nui::Gauge, GaugeID::COUNT> m_gauges;        //!< The gauges.
-        std::array<sfe::Label, GaugeID::COUNT> m_labels;        //!< The labels.
+        std::array<scene::Label, GaugeID::COUNT> m_labels;        //!< The labels.
     };
 }

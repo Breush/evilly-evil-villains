@@ -19,7 +19,7 @@ GaugesManager::GaugesManager()
         stacker.stackBack(gauge, nui::Align::CENTER);
         stacker.stackBack(label, nui::Align::CENTER);
 
-        label.setPrestyle(sfe::Label::Prestyle::NUI);
+        label.setPrestyle(scene::Label::Prestyle::NUI);
     }
 
     // Gauges

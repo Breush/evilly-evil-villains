@@ -52,6 +52,6 @@ namespace ai
         float m_minX = -1.f;    //!< Mininum horizontal local position.
         float m_maxX = -1.f;    //!< Maximum horizontal local position.
 
-        sfe::AnimatedSprite m_sprite;   //!< The sprite.
+        scene::AnimatedSprite m_sprite;   //!< The sprite.
     };
 }

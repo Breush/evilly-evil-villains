@@ -136,9 +136,9 @@ void List::setColumnsTitles(const std::initializer_list<std::wstring>& titles)
     uint column = 0u;
     for (auto& title : titles) {
         // Create new label and add to table
-        m_columns[column].title = std::make_unique<sfe::Label>();
+        m_columns[column].title = std::make_unique<scene::Label>();
         m_columns[column].title->setText(std::move(title));
-        m_columns[column].title->setPrestyle(sfe::Label::Prestyle::NUI_TITLE);
+        m_columns[column].title->setPrestyle(scene::Label::Prestyle::NUI_TITLE);
         m_table.setChild(0u, column, *m_columns[column].title);
         ++column;
     }
@@ -188,9 +188,9 @@ void List::addLine(const std::initializer_list<std::wstring>& values)
     uint row = m_lines.size() + 1u;
     uint column = 0u;
     for (auto& value : values) {
-        line.cells[column].label = std::make_unique<sfe::Label>();
+        line.cells[column].label = std::make_unique<scene::Label>();
         line.cells[column].label->setText(value);
-        line.cells[column].label->setPrestyle(sfe::Label::Prestyle::NUI);
+        line.cells[column].label->setPrestyle(scene::Label::Prestyle::NUI);
         line.cells[column].label->setDetectable(false);
         m_table.setChild(row, column, *line.cells[column].label, m_columns[column].hAlign, m_columns[column].vAlign);
         ++column;

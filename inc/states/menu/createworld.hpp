@@ -72,8 +72,8 @@ namespace states
     private:
 
         // Background and title
-        sfe::Label m_title;                 //!< The title.
-        sfe::RectangleShape m_background;   //!< The background.
+        scene::Label m_title;                 //!< The title.
+        scene::RectangleShape m_background;   //!< The background.
 
         // Form
         nui::Form m_form;                   //!< The form containing the following items.

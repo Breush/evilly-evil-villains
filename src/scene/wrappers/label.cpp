@@ -2,7 +2,7 @@
 
 #include "core/application.hpp"
 
-using namespace sfe;
+using namespace scene;
 
 Label::Label()
 {

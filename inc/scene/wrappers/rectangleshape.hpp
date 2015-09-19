@@ -4,14 +4,13 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
-// TODO namespace scene
-namespace sfe
+namespace scene
 {
     //! Wrapper of sf::RectangleShape as a scene::Entity.
 
-    class RectangleShape final : public scene::Entity
+    class RectangleShape final : public Entity
     {
-        using baseClass = scene::Entity;
+        using baseClass = Entity;
 
     public:
 

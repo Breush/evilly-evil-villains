@@ -33,7 +33,7 @@ namespace facilities
 
     private:
 
-        sfe::AnimatedSprite m_sprite;   //!< The sprite.
+        scene::AnimatedSprite m_sprite;   //!< The sprite.
     };
 }
 }

@@ -26,9 +26,9 @@ void Form::add(std::wstring text, scene::Entity& child)
 {
     uint line = m_labels.size();
 
-    m_labels.emplace_back(std::make_unique<sfe::Label>());
+    m_labels.emplace_back(std::make_unique<scene::Label>());
     m_labels[line]->setText(text);
-    m_labels[line]->setPrestyle(sfe::Label::Prestyle::NUI);
+    m_labels[line]->setPrestyle(scene::Label::Prestyle::NUI);
 
     m_table.setDimensions(m_labels.size(), 2u);
     m_table.setRowAdapt(line, Adapt::FIT);

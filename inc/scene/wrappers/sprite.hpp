@@ -5,14 +5,13 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 
-// TODO namespace scene
-namespace sfe
+namespace scene
 {
     //! Wrapper of sf::Sprite as a scene::Entity.
 
-    class Sprite final : public scene::Entity
+    class Sprite final : public Entity
     {
-        using baseClass = scene::Entity;
+        using baseClass = Entity;
 
     public:
 

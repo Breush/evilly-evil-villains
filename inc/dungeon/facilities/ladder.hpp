@@ -52,7 +52,7 @@ namespace facilities
 
     private:
 
-        sfe::Sprite m_sprite;   //!< The sprite.
+        scene::Sprite m_sprite;   //!< The sprite.
     };
 }
 }

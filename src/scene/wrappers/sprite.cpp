@@ -3,7 +3,7 @@
 #include "core/application.hpp"
 #include "tools/vector.hpp"
 
-using namespace sfe;
+using namespace scene;
 
 Sprite::Sprite()
 {

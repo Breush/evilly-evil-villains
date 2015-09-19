@@ -16,17 +16,16 @@ namespace resources
     class AnimationHolder;
 }
 
-// TODO namespace scene
-namespace sfe
+namespace scene
 {
     /*! Animated sprite using a SCML file.
      *  Just load it and you are set.
      */
 
-    class AnimatedSprite : public scene::Entity
+    class AnimatedSprite : public Entity
     {
         friend class resources::AnimationHolder;
-        using baseClass = scene::Entity;
+        using baseClass = Entity;
 
     public:
 

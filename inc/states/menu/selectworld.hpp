@@ -60,7 +60,7 @@ namespace states
         std::array<nui::Button, 3> m_buttons;   //!< Buttons Create/Back/Play
 
         // Decorum
-        sfe::Label m_title;                 //!< Title.
-        sfe::RectangleShape m_background;   //!< Background.
+        scene::Label m_title;                 //!< Title.
+        scene::RectangleShape m_background;   //!< Background.
     };
 }
