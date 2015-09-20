@@ -1,10 +1,9 @@
-#include "scene/wrappers/label.hpp"
-
 #include "core/application.hpp"
 
 using namespace scene;
 
-Label::Label()
+template<class Text_t>
+TLabel<Text_t>::TLabel()
 {
     setDetectable(false);
 
@@ -14,13 +13,15 @@ Label::Label()
 //-------------------//
 //----- Routine -----//
 
-void Label::updateSize()
+template<class Text_t>
+void TLabel<Text_t>::updateSize()
 {
     const auto& bounds = m_text.getLocalBounds();
     setSize({bounds.left + bounds.width, bounds.top + bounds.height});
 }
 
-void Label::refreshNUI(const config::NUIGuides& cNUI)
+template<class Text_t>
+void TLabel<Text_t>::refreshNUI(const config::NUIGuides& cNUI)
 {
     baseClass::refreshNUI(cNUI);
 
@@ -33,37 +34,43 @@ void Label::refreshNUI(const config::NUIGuides& cNUI)
 //------------------//
 //----- Visual -----//
 
-void Label::setFont(const std::string& fontID)
+template<class Text_t>
+void TLabel<Text_t>::setFont(const std::string& fontID)
 {
     m_text.setFont(Application::context().fonts.get(fontID));
     updateSize();
 }
 
-void Label::setColor(const sf::Color& color)
+template<class Text_t>
+void TLabel<Text_t>::setColor(const sf::Color& color)
 {
     m_text.setColor(color);
 }
 
-void Label::setCharacterSize(uint characterSize)
+template<class Text_t>
+void TLabel<Text_t>::setCharacterSize(uint characterSize)
 {
     m_text.setCharacterSize(characterSize);
     updateSize();
 }
 
-void Label::setText(const std::wstring& text)
+template<class Text_t>
+void TLabel<Text_t>::setText(const std::wstring& text)
 {
     m_text.setString(text);
     updateSize();
 }
 
-void Label::setText(const std::wstring& text, const std::string& fontID)
+template<class Text_t>
+void TLabel<Text_t>::setText(const std::wstring& text, const std::string& fontID)
 {
     m_text.setString(text);
     m_text.setFont(Application::context().fonts.get(fontID));
     updateSize();
 }
 
-void Label::setPrestyle(Prestyle prestyle)
+template<class Text_t>
+void TLabel<Text_t>::setPrestyle(Prestyle prestyle)
 {
     m_prestyle = prestyle;
 

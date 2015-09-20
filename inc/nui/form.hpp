@@ -1,16 +1,10 @@
 #pragma once
 
 #include "scene/entity.hpp"
+#include "scene/wrappers/label.hpp"
 #include "nui/tablelayout.hpp"
 
 #include <vector>
-
-// Forward declarations
-
-namespace scene
-{
-    class Label;
-}
 
 namespace nui
 {
