@@ -213,10 +213,10 @@ namespace nui
         //! The displayed size of this button.
         sf::Vector2f m_buttonSize;
 
-        float m_arrowOffset;    //!< The gap between arrows and text.
-        float m_lineOffset;     //!< The gap between lines and text.
-        float m_arrowSize;      //!< The width of the arrows.
-        float m_lineSize;       //!< The thickness of the lines.
-        float m_fontVSpace;     //!< The vertical space reserved for the text.
+        float m_arrowOffset = 0.f;  //!< The gap between arrows and text.
+        float m_lineOffset = 0.f;   //!< The gap between lines and text.
+        float m_arrowSize = 0.f;    //!< The width of the arrows.
+        float m_lineSize = 0.f;     //!< The thickness of the lines.
+        float m_fontVSpace = 0.f;   //!< The vertical space reserved for the text.
     };
 }
