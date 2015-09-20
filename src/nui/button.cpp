@@ -36,11 +36,11 @@ void Button::setAction(const std::wstring& text, const Callback callback)
 //------------------//
 //----- Events -----//
 
-void Button::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f&)
+bool Button::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f&)
 {
-    returnif (button != sf::Mouse::Left);
-
+    returnif (button != sf::Mouse::Left) false;
     acceptChoice();
+    return true;
 }
 
 bool Button::handleKeyboardEvent(const sf::Event& event)

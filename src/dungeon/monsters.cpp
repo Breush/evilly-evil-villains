@@ -41,10 +41,11 @@ void MonsterCage::onSizeChanges()
     m_monsterPuppet.setLocalScale({scaleFactor, scaleFactor});
 }
 
-void MonsterCage::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
+bool MonsterCage::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
-    if (button == sf::Mouse::Left)
-      graph()->setGrabbable(spawnGrabbable());
+    returnif (button != sf::Mouse::Left) false;
+    graph()->setGrabbable(spawnGrabbable());
+    return true;
 }
 
 void MonsterCage::grabbableButtonReleased(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos)

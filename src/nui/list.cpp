@@ -56,17 +56,17 @@ void List::refreshNUI(const config::NUIGuides& cNUI)
 //------------------//
 //----- Events -----//
 
-void List::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
+bool List::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
-    returnif (button != sf::Mouse::Left);
+    returnif (button != sf::Mouse::Left) false;
 
     // Do not take first line, they are the columns titles
     uint line = mousePos.y / m_lineHeight - 1u;
-    returnif (line >= m_lines.size());
+    returnif (line >= m_lines.size()) false;
 
     // Double-click?
     if (m_doubleClickDelay >= 0.f) {
-        returnif (m_callback == nullptr);
+        returnif (m_callback == nullptr) true;
         Application::context().sounds.play("select");
         m_callback();
     }
@@ -75,12 +75,15 @@ void List::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Ve
         Application::context().sounds.play("select");
         selectLine(line);
     }
+
+    return true;
 }
 
-void List::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
+bool List::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
     uint line = mousePos.y / m_lineHeight - 1u;
     hoverLine(line);
+    return true;
 }
 
 void List::handleMouseLeft()

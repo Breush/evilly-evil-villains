@@ -88,11 +88,12 @@ void Graph::handleEvent(const sf::Event& event)
             returnif (handleMouseMovedEvent(event));
 
         // Set focus on click
-        auto entity = handleMouseEvent(event);
+        bool entityKeptEvent = false;
+        auto entity = handleMouseEvent(event, entityKeptEvent);
         if (entity != nullptr) {
             if (event.type == sf::Event::MouseButtonPressed)
                 setFocusedEntity(entity);
-            return;
+            returnif (entityKeptEvent);
         }
 
         // Let this graph manage special events
@@ -318,7 +319,7 @@ void Graph::drawMouseDetector(sf::RenderTarget& target, sf::RenderStates states)
     target.draw(rectangleShape);
 }
 
-Entity* Graph::handleMouseEvent(const sf::Event& event)
+Entity* Graph::handleMouseEvent(const sf::Event& event, bool& entityKeptEvent)
 {
     // Let grabbable manage if any
     if (m_grabbable != nullptr) {
@@ -327,36 +328,48 @@ Entity* Graph::handleMouseEvent(const sf::Event& event)
     }
 
     sf::Vector2i mousePos(mousePosition(event));
+    sf::Vector2f nuiPos(nuiPosition(mousePos));
     sf::Vector2f viewPos;
 
-    // Getting entity touched if any
+    // Getting entity touched if any,
+    // and setting viewPos to the position of mouse in the entity's layer's view
     Entity* entity = entityFromPosition(mousePos, viewPos);
     setHoveredEntity(entity);
-    returnif (entity == nullptr) nullptr;
-
-    // Getting relative coordinates
-    sf::Vector2f nuiPos(nuiPosition(mousePos));
-    sf::Vector2f relPos(entity->getInverseTransform().transformPoint(viewPos));
 
     // Calling child callback
-    switch (event.type) {
-    case sf::Event::MouseMoved:
-        entity->handleMouseMoved(relPos, nuiPos);
-        break;
-    case sf::Event::MouseButtonPressed:
-        entity->handleMouseButtonPressed(event.mouseButton.button, relPos, nuiPos);
-        break;
-    case sf::Event::MouseButtonReleased:
-        entity->handleMouseButtonReleased(event.mouseButton.button, relPos, nuiPos);
-        break;
-    case sf::Event::MouseWheelMoved:
-        entity->handleMouseWheelMoved(event.mouseWheel.delta, relPos, nuiPos);
-        break;
-    default:
-        break;
+    entityKeptEvent = false;
+    while (entity != nullptr) {
+        // Get the relative position of mouse in the entity
+        sf::Vector2f relPos(entity->getInverseTransform().transformPoint(viewPos));
+
+        switch (event.type) {
+        case sf::Event::MouseMoved:
+            entityKeptEvent = entity->handleMouseMoved(relPos, nuiPos);
+            break;
+
+        case sf::Event::MouseButtonPressed:
+            entityKeptEvent = entity->handleMouseButtonPressed(event.mouseButton.button, relPos, nuiPos);
+            break;
+
+        case sf::Event::MouseButtonReleased:
+            entityKeptEvent = entity->handleMouseButtonReleased(event.mouseButton.button, relPos, nuiPos);
+            break;
+
+        case sf::Event::MouseWheelMoved:
+            entityKeptEvent = entity->handleMouseWheelMoved(event.mouseWheel.delta, relPos, nuiPos);
+            break;
+
+        default:
+            break;
+        }
+
+        // Try entity parent
+        if (!entityKeptEvent) entity = entity->parent();
+        else break;
     }
 
-    // Entity coould have been detached/destroyed.
+    // Entity could have been detached/destroyed,
+    // and we just want to return the foremost entity.
     return entityFromPosition(mousePos, viewPos);
 }
 

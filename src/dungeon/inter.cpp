@@ -101,7 +101,7 @@ void Inter::handleGlobalEvent(const sf::Event& event)
 #endif
 }
 
-void Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
+bool Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
     // Selected the tile below
     selectTile(mousePos);
@@ -113,7 +113,7 @@ void Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::V
     // Do nothing in invasion
     if (m_invasion) {
         deselectTile();
-        return;
+        return true;
     }
 
     // Remove spinbox interface if any
@@ -122,14 +122,17 @@ void Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::V
     // Pop the context menu up
     if (button == sf::Mouse::Right)
         showTileContextMenu(m_selectedTile->coords, nuiPos);
+
+    return true;
 }
 
-void Inter::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
+bool Inter::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
-    returnif (m_invasion);
+    returnif (m_invasion) false;
 
     auto coords = tileFromLocalPosition(mousePos);
     setHoveredTile(coords);
+    return true;
 }
 
 void Inter::handleMouseLeft()

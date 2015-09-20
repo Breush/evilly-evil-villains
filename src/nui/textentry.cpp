@@ -83,9 +83,9 @@ void TextEntry::refreshNUI(const config::NUIGuides& cNUI)
 //------------------//
 //----- Events -----//
 
-void TextEntry::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
+bool TextEntry::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
-    returnif (button != sf::Mouse::Left);
+    returnif (button != sf::Mouse::Left) false;
 
     deselect();
     m_selecting = true;
@@ -95,23 +95,26 @@ void TextEntry::handleMouseButtonPressed(const sf::Mouse::Button button, const s
     m_cursorString = m_cursorText.getString();
 
     updateDynamicText();
+    return true;
 }
 
-void TextEntry::handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
+bool TextEntry::handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
-    returnif (button != sf::Mouse::Left);
+    returnif (button != sf::Mouse::Left) false;
     m_selecting = false;
+    return true;
 }
 
-void TextEntry::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
+bool TextEntry::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
-    returnif (!m_selecting);
+    returnif (!m_selecting) false;
 
     uint selectEnd = getCharacterPosition(mousePos.x, m_cursorText);
     m_cursorString = m_cursorText.getString();
     select(m_selectStart, selectEnd);
 
     updateDynamicText();
+    return true;
 }
 
 bool TextEntry::handleKeyboardEvent(const sf::Event& event)

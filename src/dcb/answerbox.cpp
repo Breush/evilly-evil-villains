@@ -35,9 +35,9 @@ void AnswerBox::refreshNUI(const config::NUIGuides& cNUI)
 //------------------//
 //----- Events -----//
 
-void AnswerBox::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
+bool AnswerBox::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
-    returnif (button != sf::Mouse::Left);
+    returnif (button != sf::Mouse::Left) false;
 
     float vOffset = 0.f;
 
@@ -48,9 +48,11 @@ void AnswerBox::handleMouseButtonPressed(const sf::Mouse::Button button, const s
         // Feedback on controller if clicked
         if (mousePos.y < vOffset && m_answerSelectedCallback != nullptr) {
             m_answerSelectedCallback(i);
-            return;
+            return true;
         }
     }
+
+    return true;
 }
 
 //---------------------------//

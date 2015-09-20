@@ -48,9 +48,9 @@ namespace nui
     //----- Events -----//
 
     template<typename Value_t>
-    void SpinBox<Value_t>::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
+    bool SpinBox<Value_t>::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
     {
-        returnif (button != sf::Mouse::Left);
+        returnif (button != sf::Mouse::Left) false;
 
         // Activate click repeat
         m_crActive = true;
@@ -58,15 +58,17 @@ namespace nui
         m_storedPosition = mousePos;
 
         doActionFromStoredPosition();
+        return true;
     }
 
     template<typename Value_t>
-    void SpinBox<Value_t>::handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f&)
+    bool SpinBox<Value_t>::handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f&)
     {
-        returnif (button != sf::Mouse::Left);
+        returnif (button != sf::Mouse::Left) false;
 
         // Deactivate click repeat
         m_crActive = false;
+        return true;
     }
 
     template<typename Value_t>

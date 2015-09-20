@@ -280,7 +280,7 @@ namespace scene
          *  @param mousePos The position of the mouse relative to entity coordinates.
          *  @param nuiPos   The absolute position of the mouse in the NUI layer.
          */
-        virtual void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) {}
+        virtual bool handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) { return false; }
 
         //! If entity is detectable, this is called when a mouse button is pressed over the entity.
         /*!
@@ -288,7 +288,7 @@ namespace scene
          *  @param mousePos The position of the mouse relative to entity coordinates.
          *  @param nuiPos   The absolute position of the mouse in the NUI layer.
          */
-        virtual void handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) {}
+        virtual bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) { return false; }
 
         //! If entity is detectable, this is called when a mouse button is released over the entity.
         /*!
@@ -296,7 +296,7 @@ namespace scene
          *  @param mousePos The position of the mouse relative to entity coordinates.
          *  @param nuiPos   The absolute position of the mouse in the NUI layer.
          */
-        virtual void handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) {}
+        virtual bool handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) { return false; }
 
         //! If entity is detectable, this is called when mouse wheel moves over the entity.
         /*!
@@ -304,7 +304,7 @@ namespace scene
          *  @param mousePos The position of the mouse relative to entity coordinates.
          *  @param nuiPos   The absolute position of the mouse in the NUI layer.
          */
-        virtual void handleMouseWheelMoved(const int delta, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) {}
+        virtual bool handleMouseWheelMoved(const int delta, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) { return false; }
 
         //! If entity is detectable, this is called when mouse leaves the entity.
         virtual void handleMouseLeft() {}

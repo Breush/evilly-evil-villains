@@ -70,23 +70,26 @@ void Minimap::refreshNUI(const config::NUIGuides& cNUI)
 //------------------//
 //----- Events -----//
 
-void Minimap::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f& nuiPos)
+bool Minimap::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f& nuiPos)
 {
-    returnif (button != sf::Mouse::Left);
+    returnif (button != sf::Mouse::Left) false;
     m_grabbing = true;
     doAction(nuiPos);
+    return true;
 }
 
-void Minimap::handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f&)
+bool Minimap::handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f&)
 {
-    returnif (button != sf::Mouse::Left);
+    returnif (button != sf::Mouse::Left) false;
     m_grabbing = false;
+    return true;
 }
 
-void Minimap::handleMouseMoved(const sf::Vector2f&, const sf::Vector2f& nuiPos)
+bool Minimap::handleMouseMoved(const sf::Vector2f&, const sf::Vector2f& nuiPos)
 {
-    returnif (!m_grabbing);
+    returnif (!m_grabbing) false;
     doAction(nuiPos);
+    return true;
 }
 
 void Minimap::handleMouseLeft()

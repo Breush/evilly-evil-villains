@@ -39,15 +39,17 @@ void Lock::refreshNUI(const config::NUIGuides& cNUI)
 //------------------------//
 //----- Mouse events -----//
 
-void Lock::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f&)
+bool Lock::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f&)
 {
-    if (button == sf::Mouse::Left)
-        switchMode();
+    returnif (button == sf::Mouse::Left) false;
+    switchMode();
+    return true;
 }
 
-void Lock::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
+bool Lock::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
     setPartShader(&m_lock, "nui/hover");
+    return true;
 }
 
 void Lock::handleMouseLeft()

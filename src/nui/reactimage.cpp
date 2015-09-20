@@ -32,36 +32,38 @@ void ReactImage::updateRoutine(const sf::Time& dt)
 //------------------//
 //----- Events -----//
 
-void ReactImage::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
+bool ReactImage::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
-    returnif (button != sf::Mouse::Left);
-    returnif (m_activeReact == nullptr);
+    returnif (button != sf::Mouse::Left) false;
+    returnif (m_activeReact == nullptr) true;
 
     const auto& callback = m_activeReact->callback;
 
     // Maybe callback is not set
     if (callback == nullptr) {
         Application::context().sounds.play("refuse");
-        return;
+        return true;
     }
 
     // Accept callback
     Application::context().sounds.play("accept");
     callback();
+    return true;
 }
 
-void ReactImage::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
+bool ReactImage::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
     // Looking for active react
     for (auto& react : m_reacts) {
         if (react.rect.contains(sf::v2i(mousePos))) {
             setActiveReact(react.key);
-            return;
+            return true;
         }
     }
 
     // Nothing found means no active react
     handleMouseLeft();
+    return true;
 }
 
 void ReactImage::handleMouseLeft()

@@ -110,12 +110,13 @@ void PopDialog::setExitCallback(Callback callback)
 //------------------//
 //----- Events -----//
 
-void PopDialog::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vector2f& mousePos, const sf::Vector2f&)
+bool PopDialog::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
-    returnif (m_exitCallback == nullptr);
+    returnif (m_exitCallback == nullptr) true;
 
     // If inside the message box, the background get this event, and is not here
     m_exitCallback();
+    return true;
 }
 
 //-----------------------------------//

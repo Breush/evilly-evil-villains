@@ -69,7 +69,7 @@ namespace scene
 
         // Mouse detection
         void drawMouseDetector(sf::RenderTarget& target, sf::RenderStates states) const;
-        Entity* handleMouseEvent(const sf::Event& event);
+        Entity* handleMouseEvent(const sf::Event& event, bool& entityKeptEvent);
         void setHoveredEntity(Entity* hoveredEntity);
 
         // Focusing system

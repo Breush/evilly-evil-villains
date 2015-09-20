@@ -49,7 +49,7 @@ namespace nui
         //! @name Events
         //! @{
 
-        void handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        bool handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
 
         //! @}
 

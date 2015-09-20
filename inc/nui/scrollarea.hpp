@@ -47,7 +47,7 @@ namespace nui
         //! @name Events
         //! @{
 
-        void handleMouseWheelMoved(const int delta, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        bool handleMouseWheelMoved(const int delta, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
 
         //! @}
 

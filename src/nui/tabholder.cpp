@@ -42,9 +42,9 @@ void TabHolder::onChildSizeChanges(scene::Entity& child)
 //------------------//
 //----- Events -----//
 
-void TabHolder::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
+bool TabHolder::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
-    returnif (button != sf::Mouse::Left);
+    returnif (button != sf::Mouse::Left) false;
 
     uint tabNumber = 0u;
     for (auto& tab : m_tabs) {
@@ -61,10 +61,13 @@ void TabHolder::handleMouseButtonPressed(const sf::Mouse::Button button, const s
 
         ++tabNumber;
     }
+
+    return true;
 }
 
-void TabHolder::handleMouseMoved(const sf::Vector2f&, const sf::Vector2f&)
+bool TabHolder::handleMouseMoved(const sf::Vector2f&, const sf::Vector2f&)
 {
+    return true;
 }
 
 void TabHolder::handleMouseLeft()

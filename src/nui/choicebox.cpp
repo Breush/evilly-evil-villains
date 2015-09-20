@@ -197,49 +197,48 @@ void ChoiceBox::setChoiceCallback(uint choice, Callback callback)
 //------------------------//
 //----- Mouse events -----//
 
-void ChoiceBox::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
+bool ChoiceBox::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
-    returnif (button != sf::Mouse::Left);
+    returnif (button != sf::Mouse::Left) false;
 
     // Without arrows: choices loop
     if (!m_arrowsShowed) {
         switchChoiceRight();
-        return;
+        return true;
     }
 
-    // With arrows and arrow selected
-    if (isLeftArrowSelected(mousePos.x)) {
+    // Left arrow selected
+    if (isLeftArrowSelected(mousePos.x))
         switchChoiceLeft();
-        return;
-    }
-
-    if (isRightArrowSelected(mousePos.x)) {
+    // Right arrow selected
+    else if (isRightArrowSelected(mousePos.x))
         switchChoiceRight();
-        return;
-    }
-
     // With arrows, text selected
-    acceptChoice();
+    else
+        acceptChoice();
+
+    return true;
 }
 
-void ChoiceBox::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
+bool ChoiceBox::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
     resetPartsShader();
 
     // Hovering arrows
     if (isLeftArrowSelected(mousePos.x)) {
         setPartShader(&m_lArrow, "nui/hover");
-        return;
+        return true;
     }
 
-    if (isRightArrowSelected(mousePos.x)) {
+    else if (isRightArrowSelected(mousePos.x)) {
         setPartShader(&m_rArrow, "nui/hover");
-        return;
+        return true;
     }
 
     // Text is being hovered
-    returnif (m_selectedChoice == -1u || m_choices[m_selectedChoice].callback == nullptr);
+    returnif (m_selectedChoice == -1u || m_choices[m_selectedChoice].callback == nullptr) true;
     setPartShader(&m_text, "nui/hover");
+    return true;
 }
 
 void ChoiceBox::handleMouseLeft()

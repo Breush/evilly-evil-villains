@@ -97,26 +97,31 @@ void ContextMenu::handleGlobalEvent(const sf::Event& event)
         markForVisible(false);
 }
 
-void ContextMenu::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vector2f& mousePos, const sf::Vector2f&)
+bool ContextMenu::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
     uint choice = choiceFromCoords(mousePos);
 
     if (choice < m_choices.size() && m_choices[choice].callback != nullptr) {
         Application::context().sounds.play("accept");
         m_choices[choice].callback();
-    } else {
+    }
+    else {
         Application::context().sounds.play("refuse");
         markForVisible(true);
     }
+
+    return true;
 }
 
-void ContextMenu::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
+bool ContextMenu::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
     uint choice = choiceFromCoords(mousePos);
 
     resetPartsShader();
     if (choice < m_choices.size() && m_choices[choice].callback != nullptr)
         setPartShader(&m_choices[choice].text, "nui/hover");
+
+    return true;
 }
 
 void ContextMenu::handleMouseLeft()

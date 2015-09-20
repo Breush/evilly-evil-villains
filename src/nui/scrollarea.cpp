@@ -33,12 +33,13 @@ void ScrollArea::onChildSizeChanges(scene::Entity&)
 //------------------//
 //----- Events -----//
 
-void ScrollArea::handleMouseWheelMoved(const int delta, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
+bool ScrollArea::handleMouseWheelMoved(const int delta, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
     const auto& scrollingFactor = Application::context().display.global.scrollingFactor;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) m_offset += {delta * scrollingFactor, 0.f};
     else m_offset += {0.f, delta * scrollingFactor};
     refreshContentStatus();
+    return true;
 }
 
 //------------------------------//

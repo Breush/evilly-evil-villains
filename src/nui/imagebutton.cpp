@@ -28,12 +28,13 @@ void ImageButton::refreshNUI(const config::NUIGuides& cNUI)
 //------------------------//
 //----- Mouse events -----//
 
-void ImageButton::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
+bool ImageButton::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
     // From button
-    baseClass::handleMouseMoved(mousePos, nuiPos);
+    bool returnValue = baseClass::handleMouseMoved(mousePos, nuiPos);
 
     setPartShader(&m_image, "nui/hover");
+    return returnValue;
 }
 
 //------------------//
