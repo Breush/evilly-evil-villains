@@ -12,12 +12,13 @@
 
 namespace scene
 {
-    // TODO DOC
-
-    //! Scene graph to manage draing, focus and events of entities.
+    //! Scene graph to manage drawing, focus and events of entities.
+    //! It stores the NUI layer and the scene (multiple layers).
 
     class Graph final : public sf::Drawable
     {
+        friend class Entity;
+
     public:
 
         //! Constructor.
@@ -47,64 +48,149 @@ namespace scene
 
         //! @}
 
-        // Access layers
-        Layer& nuiLayer() { return m_nuiLayer; }
-        Scene& scene() { return m_scene; }
-        const sf::View& viewFromLayerRoot(const Entity* root) const;
+        //----------------------//
+        //! @name Access layers
+        //! @{
 
-        // Focusing system
-        void setFocusedEntity(Entity* focusedEntity);
+        //! The NUI layer.
+        inline Layer& nuiLayer() { return m_nuiLayer; }
+
+        //! The scene (multiple layers).
+        inline Scene& scene() { return m_scene; }
+
+        //! @}
+
+        //------------------------//
+        //! @name Focusing system
+        //! @{
+
+        //! Ask for recomputation of focused sprite.
         void updateFocusSprite();
 
-        // Entity callbacks
-        void detachedEntity(Entity* entity);
-        void attachedEntity(Entity* entity);
+        //! Get the focus shader.
+        inline const sf::Shader* focusShader() const { return m_focusShader; }
 
-        // Grabbing object
-        void removeGrabbable();
+        //! Get the focus shape.
+        inline const sf::RectangleShape& focusShape() const { return m_focusShape; }
+
+        //! @}
+
+        //-----------------//
+        //! @name Grabbing
+        //! @{
+
+        //! Set an object to be the current grabbable.
         void setGrabbable(std::unique_ptr<Grabbable> grabbable);
-        Entity* entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos); //!< viewPos will be set to the position in the entity view
+
+        //! Remove the currently grabbed object.
+        void removeGrabbable();
+
+        //! @}
 
     protected:
 
-        // Mouse detection
-        void drawMouseDetector(sf::RenderTarget& target, sf::RenderStates states) const;
-        Entity* handleMouseEvent(const sf::Event& event, bool& entityKeptEvent);
-        void setHoveredEntity(Entity* hoveredEntity);
+        //---------------//
+        //! @name Events
+        //! @{
 
-        // Focusing system
-        void focusHandleEvent(const sf::Event& event);
-
-        // Grabbing object
-        void grabbableHandleMouseEvent(const sf::Event& event);
-
-        // View manipulation
+        //! Called when the event is a mouse wheel pressed and if no entity used it.
         void handleMouseWheelPressedEvent(const sf::Event& event);
+
+        //! Called when the event is a mouse wheel released and if no entity used it.
         void handleMouseWheelReleasedEvent(const sf::Event& event);
+
+        //! Called when the event is a mouse wheel moved and if no entity used it.
         void handleMouseWheelMovedEvent(const sf::Event& event);
+
+        //! Called when the event is a mouse moved, before any entity uses it,
+        //! have to return true to keep event.
         bool handleMouseMovedEvent(const sf::Event& event);
 
+        //! @}
+
+        //-------------------------//
+        //! @name Entity callbacks
+        //! @{
+
+        //! Called whenever an entity is detached from this graph.
+        void detachedEntity(Entity* entity);
+
+        //! Called whenever an entity is attached to this graph.
+        void attachedEntity(Entity* entity);
+
+        //! @}
+
+        //------------------------//
+        //! @name Focusing system
+        //! @{
+
+        //! Set the currently focused entity.
+        void setFocusedEntity(Entity* focusedEntity);
+
+        //! Let focused entity managed the event.
+        void focusHandleEvent(const sf::Event& event);
+
+        //! @}
+
+        //------------------------//
+        //! @name Mouse detection
+        //! @{
+
+        //! Manage the mouse event, return the first detectable entity below the mouse position.
+        Entity* handleMouseEvent(const sf::Event& event, bool& entityKeptEvent);
+
+        //! Debug interface drawing detection box of hovered entity.
+        void drawMouseDetector(sf::RenderTarget& target, sf::RenderStates states) const;
+
+        //! Set the hovered entity.
+        void setHoveredEntity(Entity* hoveredEntity);
+
+        //! Get the position in NUI from mouse position.
+        //! Let default value in order to automatically evaluate mouse position.
         sf::Vector2f nuiPosition(sf::Vector2i mousePosition = {-1, -1});
 
-        // Params - TODO Why are these params?
-        PARAMG(sf::Shader*, m_focusShader, focusShader)
-        PARAMG(sf::RectangleShape, m_focusShape, focusShape)
+        //! @}
+
+        //-----------------//
+        //! @name Grabbing
+        //! @{
+
+        //! Let the grabbable object manage the event.
+        void grabbableHandleMouseEvent(const sf::Event& event);
+
+        //! @}
+
+        //-------------------------//
+        //! @name Entity detection
+        //! @{
+
+        //! Find the front-most detectable entity below the mouse position.
+        //! \param viewPos will be set to the position in the entity's layer's view.
+        Entity* entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos);
+
+        //! Get the view associated to specified layer's root.
+        const sf::View& viewFromLayerRoot(const Entity* root) const;
+
+        //! @}
 
     private:
+
         // Layers
-        Scene m_scene;
-        Layer m_nuiLayer;
-
-        // Mouse detection
-        Entity* m_hoveredEntity = nullptr;
-
-        // Grabbing
-        bool m_grabbing = false; //!< For views
-        sf::Vector2i m_grabbingPosition;    //!< Mouse position of grabbing.
-        std::unique_ptr<Grabbable> m_grabbable = nullptr; //!< For a specific grabbed object
+        Scene m_scene;      //!< The main scene.
+        Layer m_nuiLayer;   //!< The NUI layer.
 
         // Focusing system
-        Entity* m_focusedEntity = nullptr;
-        float m_focusAnimation = 0.f;
+        Entity* m_focusedEntity = nullptr;      //!< The currently focused entity.
+        float m_focusAnimation = 0.f;           //!< The time of focusing animation.
+        sf::Shader* m_focusShader = nullptr;    //!< Shader for focus effect.
+        sf::RectangleShape m_focusShape;        //!< Shape for focus effect.
+
+        // Mouse detection
+        Entity* m_hoveredEntity = nullptr;  //!< The currently hovered entity.
+
+        // Grabbing
+        bool m_grabbing = false;                            //!< Whether the grabbing scene is active or not.
+        sf::Vector2i m_grabbingPosition;                    //!< Start of grabbing mouse position.
+        std::unique_ptr<Grabbable> m_grabbable = nullptr;   //!< The grabbed object.
     };
 }

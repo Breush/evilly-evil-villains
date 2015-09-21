@@ -13,8 +13,7 @@
 using namespace scene;
 
 Graph::Graph()
-    : m_focusShader(nullptr)
-    , m_scene(this)
+    : m_scene(this)
     , m_nuiLayer(this)
 {
     // Focusing
@@ -25,19 +24,6 @@ Graph::Graph()
 
     // NUI layer
     m_nuiLayer.setManipulable(false);
-}
-
-const sf::View& Graph::viewFromLayerRoot(const Entity* root) const
-{
-    if (&m_nuiLayer.root() == root)
-        return m_nuiLayer.view();
-
-    for (const auto& layer : m_scene.layers())
-        if (&layer->root() == root)
-            return layer->view();
-
-    // Not found: problem
-    throw std::runtime_error("Scene graph is inconsistent.");
 }
 
 //-------------------//
@@ -115,7 +101,6 @@ void Graph::handleEvent(const sf::Event& event)
     else focusKept = m_focusedEntity->handleJoystickEvent(event);
     returnif (focusKept);
 
-    // TODO Have a grabbed focus feedback (on mouse)
     focusHandleEvent(event);
 }
 
@@ -198,8 +183,8 @@ void Graph::focusHandleEvent(const sf::Event& event)
     }
 }
 
-//---------------------------//
-//----- Zooming feature -----//
+//------------------//
+//----- Events -----//
 
 void Graph::handleMouseWheelPressedEvent(const sf::Event& event)
 {
@@ -321,6 +306,8 @@ void Graph::drawMouseDetector(sf::RenderTarget& target, sf::RenderStates states)
 
 Entity* Graph::handleMouseEvent(const sf::Event& event, bool& entityKeptEvent)
 {
+    entityKeptEvent = false;
+
     // Let grabbable manage if any
     if (m_grabbable != nullptr) {
         grabbableHandleMouseEvent(event);
@@ -337,7 +324,6 @@ Entity* Graph::handleMouseEvent(const sf::Event& event, bool& entityKeptEvent)
     setHoveredEntity(entity);
 
     // Calling child callback
-    entityKeptEvent = false;
     while (entity != nullptr) {
         // Get the relative position of mouse in the entity
         sf::Vector2f relPos(entity->getInverseTransform().transformPoint(viewPos));
@@ -384,6 +370,9 @@ void Graph::setHoveredEntity(Entity* hoveredEntity)
     m_hoveredEntity = hoveredEntity;
 }
 
+//---------------------------//
+//---- Entity detection -----//
+
 Entity* Graph::entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos)
 {
     // Check whether a detectable entity is at that position in NUI layer
@@ -392,6 +381,19 @@ Entity* Graph::entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& vi
 
     // If not, check if there is one in scene layers
     return m_scene.entityFromPosition(mousePos, viewPos);
+}
+
+const sf::View& Graph::viewFromLayerRoot(const Entity* root) const
+{
+    if (&m_nuiLayer.root() == root)
+        return m_nuiLayer.view();
+
+    for (const auto& layer : m_scene.layers())
+        if (&layer->root() == root)
+            return layer->view();
+
+    // Not found: problem
+    throw std::runtime_error("Scene graph is inconsistent.");
 }
 
 //---------------------------//
