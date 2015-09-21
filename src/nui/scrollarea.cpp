@@ -20,18 +20,74 @@ ScrollArea::ScrollArea()
 void ScrollArea::onSizeChanges()
 {
     returnif (m_content == nullptr);
-    refreshContentStatus();
     refreshBars();
+    refreshContentStatus();
 }
 
 void ScrollArea::onChildSizeChanges(scene::Entity&)
 {
-    refreshContentStatus();
     refreshBars();
+    refreshContentStatus();
 }
 
 //------------------//
 //----- Events -----//
+
+bool ScrollArea::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
+{
+    if (m_vBarGrabbed) {
+        m_offset.y = m_offsetStartGrabbing.y + (m_mouseStartGrabbing.y - mousePos.y);
+        refreshContentStatus();
+        return true;
+    }
+
+    if (m_hBarGrabbed) {
+        m_offset.x = m_offsetStartGrabbing.x + (m_mouseStartGrabbing.x - mousePos.x);
+        refreshContentStatus();
+        return true;
+    }
+
+    return false;
+}
+
+bool ScrollArea::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
+{
+    returnif (button != sf::Mouse::Left) false;
+
+    // Detect if mouse is over vertical bar
+    sf::FloatRect vLocalBounds({0.f, 0.f}, m_vBar.getSize());
+    if (vLocalBounds.contains(m_vBar.getInverseTransform().transformPoint(mousePos))) {
+        m_offsetStartGrabbing = m_offset;
+        m_mouseStartGrabbing = mousePos;
+        m_vBarGrabbed = true;
+        return true;
+    }
+
+    // Detect if mouse is over horizontal bar
+    sf::FloatRect hLocalBounds({0.f, 0.f}, m_hBar.getSize());
+    if (hLocalBounds.contains(m_hBar.getInverseTransform().transformPoint(mousePos))) {
+        m_offsetStartGrabbing = m_offset;
+        m_mouseStartGrabbing = mousePos;
+        m_hBarGrabbed = true;
+        return true;
+    }
+
+    return false;
+}
+
+bool ScrollArea::handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f&)
+{
+    returnif (button != sf::Mouse::Left) false;
+    m_vBarGrabbed = false;
+    m_hBarGrabbed = false;
+    return true;
+}
+
+void ScrollArea::handleMouseLeft()
+{
+    m_vBarGrabbed = false;
+    m_hBarGrabbed = false;
+}
 
 bool ScrollArea::handleMouseWheelMoved(const int delta, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
@@ -49,8 +105,8 @@ void ScrollArea::setContent(scene::Entity& entity)
 {
     m_content = &entity;
     attachChild(*m_content);
-    refreshContentStatus();
     refreshBars();
+    refreshContentStatus();
 }
 
 //-----------------------------------//
@@ -66,12 +122,12 @@ void ScrollArea::refreshBars()
 
     if (freeContentSize.x > 0.f) {
         addPart(&m_hBar);
-        m_barsLength.x = size().x * freeContentSize.x / m_content->size().x;
+        m_barsLength.x = size().x * (1.f - freeContentSize.x / m_content->size().x);
     }
 
     if (freeContentSize.y > 0.f) {
         addPart(&m_vBar);
-        m_barsLength.y = size().y * freeContentSize.y / m_content->size().y;
+        m_barsLength.y = size().y * (1.f - freeContentSize.y / m_content->size().y);
     }
 
     // Bar offsets

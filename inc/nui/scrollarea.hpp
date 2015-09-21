@@ -47,7 +47,11 @@ namespace nui
         //! @name Events
         //! @{
 
+        bool handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        bool handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
         bool handleMouseWheelMoved(const int delta, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseLeft() final;
 
         //! @}
 
@@ -73,6 +77,12 @@ namespace nui
         sf::RectangleShape m_hBar;  //!< Horizontal bar.
         sf::Vector2f m_barsLength;  //!< Horizontal/vertical bars lengths.
         sf::Vector2f m_barsOffset;  //!< Horizontal/vertical bars offsets.
+
+        // Bars grabbing
+        bool m_vBarGrabbed = false;         //!< True if grabbing the vertical bar.
+        bool m_hBarGrabbed = false;         //!< True if grabbing the horizontal bar.
+        sf::Vector2f m_mouseStartGrabbing;  //!< Position of mouse when start grabbing.
+        sf::Vector2f m_offsetStartGrabbing; //!< Position of content offset when start grabbing.
     };
 }
 
