@@ -28,6 +28,7 @@ Inter::Inter(nui::ContextMenu& contextMenu)
     m_treasureEditSpinBox.setDepth(-1.f);
     m_treasureEditSpinBox.setVisible(false);
     m_treasureEditSpinBox.setStep(10u);
+    m_treasureEditSpinBox.setOnValidateCallback([this]() { m_treasureEditSpinBox.markForVisible(false); });
 
     // Outer walls
     addPart(&m_outerWalls[0]);
@@ -417,7 +418,7 @@ void Inter::showEditTreasureDialog(const sf::Vector2u& coords)
     m_treasureEditSpinBox.set(treasureDosh);
     m_treasureEditSpinBox.setLocalPosition(tileLocalPosition(coords));
     m_treasureEditSpinBox.setMaxLimit(treasureDosh + m_data->villain().doshWallet.value());
-    m_treasureEditSpinBox.setCallback([this, &coords, &treasureData] (uint32 oldValue, uint32 newValue) {
+    m_treasureEditSpinBox.setOnValueChangeCallback([this, &coords, &treasureData] (uint32 oldValue, uint32 newValue) {
         // Sub or add
         if (newValue >= oldValue) m_data->villain().doshWallet.sub(newValue - oldValue);
         else m_data->villain().doshWallet.add(oldValue - newValue);

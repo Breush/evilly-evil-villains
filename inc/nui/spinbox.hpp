@@ -17,7 +17,10 @@ namespace nui
         using baseClass = scene::Entity;
 
         //! Callback type used when a change occurs.
-        using Callback = std::function<void(Value_t, Value_t)>;
+        using ValueChangeCallback = std::function<void(Value_t, Value_t)>;
+
+        //! Callback type used when user press Return.
+        using ValidateCallback = std::function<void()>;
 
     public:
 
@@ -49,12 +52,15 @@ namespace nui
 
         //! @}
 
-        //-----------------//
-        //! @name Callback
+        //------------------//
+        //! @name Callbacks
         //! @{
 
         //! Sets the callback to the specified one.
-        void setCallback(const Callback& callback);
+        void setOnValueChangeCallback(const ValueChangeCallback& callback);
+
+        //! Sets the callback called when Return is pressed.
+        void setOnValidateCallback(const ValidateCallback& validateCallback);
 
         //! @}
 
@@ -114,8 +120,8 @@ namespace nui
         Value_t m_value;    //!< The current and displayed value.
         Value_t m_step;     //!< The value to add or substract when +/-.
 
-        Callback m_callback = nullptr;  //!< The callback function called on any change.
-        sf::Vector2f m_storedPosition;  //!< Stored position of last mouse left click.
+        ValueChangeCallback m_callback = nullptr;   //!< The callback function called on any change.
+        sf::Vector2f m_storedPosition;              //!< Stored position of last mouse left click.
 
         // NUI
         nui::NumberEntry<Value_t> m_entry;   //!< The entry itself.

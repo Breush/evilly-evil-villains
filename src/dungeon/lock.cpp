@@ -41,7 +41,7 @@ void Lock::refreshNUI(const config::NUIGuides& cNUI)
 
 bool Lock::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f&)
 {
-    returnif (button == sf::Mouse::Left) false;
+    returnif (button != sf::Mouse::Left) false;
     switchMode();
     return true;
 }

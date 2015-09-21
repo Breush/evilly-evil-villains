@@ -92,7 +92,7 @@ namespace nui
     }
 
     template<typename Value_t>
-    void SpinBox<Value_t>::setCallback(const Callback& callback)
+    void SpinBox<Value_t>::setOnValueChangeCallback(const ValueChangeCallback& callback)
     {
         m_callback = callback;
 
@@ -107,6 +107,12 @@ namespace nui
             if (m_callback != nullptr)
                 m_callback(oldValue, m_value);
         });
+    }
+
+    template<typename Value_t>
+    void SpinBox<Value_t>::setOnValidateCallback(const ValidateCallback& validateCallback)
+    {
+        m_entry.setOnValidateCallback(validateCallback);
     }
 
     //----------------------------//

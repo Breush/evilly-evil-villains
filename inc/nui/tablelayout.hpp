@@ -177,10 +177,10 @@ namespace nui
         std::vector<ColInfo> m_cols;    //!< The columns' data.
 
         // Decorum
-        float m_hRefPadding;    //!< The horizontal padding from config.
-        float m_vRefPadding;    //!< The vertical padding from config.
-        float m_hPadding;   //!< The horizontal padding.
-        float m_vPadding;   //!< The vertical padding.
+        float m_hRefPadding = 0.f;  //!< The horizontal padding from config.
+        float m_vRefPadding = 0.f;  //!< The vertical padding from config.
+        float m_hPadding = 0.f;     //!< The horizontal padding.
+        float m_vPadding = 0.f;     //!< The vertical padding.
     };
 }
 
