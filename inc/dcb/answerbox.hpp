@@ -1,16 +1,17 @@
 #pragma once
 
-#include "scene/entity.hpp"
-#include "sfe/wraptext.hpp"
+#include "scene/wrappers/label.hpp"
+#include "nui/scrollarea.hpp"
+#include "nui/vstacker.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
 #include <functional>
+#include <memory>
 #include <vector>
 
 namespace dcb
 {
-    // TODO Use a scroll area inside to be sure height is kept.
     //! Shows a set of answers from a predifined list.
 
     class AnswerBox final : public scene::Entity
@@ -76,7 +77,7 @@ namespace dcb
         //! @name Internal change updates
         //! @{
 
-        //! Refresh texts position and size.
+        //! Refresh texts size.
         void refreshTexts();
 
         //! Refresh parts position and size.
@@ -87,11 +88,14 @@ namespace dcb
     private:
 
         std::vector<std::vector<std::wstring>> m_answers;   //!< An answers consists in a list of choices.
-        std::vector<sfe::WrapText> m_texts;                 //!< All the texts shown.
-        // TODO Replace by WrapLabel so that this can be added to a stacker
+        // TODO Make it WrapLabel
+        std::vector<std::unique_ptr<scene::Label>> m_texts; //!< All the texts shown.
+        nui::ScrollArea m_scrollArea;                       //!< The scroll area.
+        nui::VStacker m_stacker;                            //!< Stacker inside the scroll area.
 
         // Decorum
         sf::RectangleShape m_background;    //!< The background.
-        float m_outlineThickness = 1.f; //!< Size of outline.
+        float m_outlineThickness = 1.f;     //!< Size of outline.
+        float m_vPadding = 0.f;             //!< Vertical padding.
     };
 }

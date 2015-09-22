@@ -42,8 +42,8 @@ GameDCB::GameDCB(StateStack& stack)
     m_candle.setLocalScale(backgroundScale);
 
     // Gauges
-    m_gaugesManager.setRelativePosition({0.f, 0.80f});
-    m_gaugesManager.setRelativeOrigin({0.f, 0.50f});
+    m_gaugesManager.setRelativePosition({0.f, 1.f});
+    m_gaugesManager.setRelativeOrigin({0.f, 1.f});
 
     // Message
     nuiRoot.attachChild(m_bubble);
@@ -57,8 +57,9 @@ GameDCB::GameDCB(StateStack& stack)
 
     // Answer box
     nuiRoot.attachChild(m_answerBox);
-    m_answerBox.setSize({0.75f * nuiSize.x, 0.40f * nuiSize.y});
-    m_answerBox.setRelativePosition({0.25f, 0.60f});
+    m_answerBox.setSize({0.50f * nuiSize.x, 0.30f * nuiSize.y});
+    m_answerBox.setRelativePosition({0.5f, 1.0f});
+    m_answerBox.setRelativeOrigin({0.4f, 1.0f});
 
     // Entry
     m_answerBox.attachChild(m_nameEntry);

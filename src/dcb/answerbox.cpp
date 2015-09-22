@@ -1,8 +1,8 @@
 #include "dcb/answerbox.hpp"
 
-#include "core/application.hpp"
-#include "tools/debug.hpp"
+#include "tools/platform-fixes.hpp"
 #include "tools/vector.hpp"
+#include "tools/debug.hpp"
 #include "tools/tools.hpp"
 
 using namespace dcb;
@@ -10,6 +10,10 @@ using namespace dcb;
 AnswerBox::AnswerBox()
     : m_answerSelectedCallback(nullptr)
 {
+    // Scroll area
+    attachChild(m_scrollArea);
+    m_scrollArea.setContent(m_stacker);
+
     // Background
     addPart(&m_background);
     m_background.setOutlineColor(sf::Color::White);
@@ -21,6 +25,7 @@ AnswerBox::AnswerBox()
 
 void AnswerBox::onSizeChanges()
 {
+    m_scrollArea.setSize(size());
     refreshTexts();
     refreshParts();
 }
@@ -28,6 +33,8 @@ void AnswerBox::onSizeChanges()
 void AnswerBox::refreshNUI(const config::NUIGuides& cNUI)
 {
     baseClass::refreshNUI(cNUI);
+
+    m_vPadding = cNUI.vPadding;
 
     refreshParts();
 }
@@ -43,13 +50,15 @@ bool AnswerBox::handleMouseButtonPressed(const sf::Mouse::Button button, const s
 
     for (uint i = 0u; i < m_texts.size(); ++i) {
         // Max y for the answer
-        vOffset += boundsSize(m_texts[i]).y;
+        vOffset += m_texts[i]->size().y;
 
         // Feedback on controller if clicked
         if (mousePos.y < vOffset && m_answerSelectedCallback != nullptr) {
             m_answerSelectedCallback(i);
             return true;
         }
+
+        vOffset += m_vPadding;
     }
 
     return true;
@@ -69,18 +78,17 @@ void AnswerBox::showAnswer(uint answerID)
     massert(answerID < m_answers.size(), "Answer ID " << answerID << " does not exists.");
 
     // Remove all previous texts
-    for (auto& text : m_texts)
-        removePart(&text);
-
-    // Resize
-    const auto& answer = m_answers[answerID];
-    m_texts.resize(answer.size());
+    m_stacker.unstackAll();
+    m_texts.clear();
 
     // Affects new answer
-    for (uint i = 0u; i < m_texts.size(); ++i) {
-        auto& text = m_texts[i];
-        text.setWrapString(answer[i]);
-        addPart(&text);
+    for (const auto& answer : m_answers[answerID]) {
+        auto text = std::make_unique<scene::Label>();
+        text->setColor(sf::Color::White);
+        text->setText(answer);
+        text->setFont("nui");
+        m_texts.emplace_back(std::move(text));
+        m_stacker.stackBack(*m_texts.back());
     }
 
     refreshTexts();
@@ -96,14 +104,8 @@ void AnswerBox::clearAnswers()
 
 void AnswerBox::refreshTexts()
 {
-    float vOffset = 0.f;
-
     for (auto& text : m_texts) {
-        text.fitWidth(size().x);
-        text.setFont(Application::context().fonts.get("nui"));
-        text.setColor(sf::Color::White);
-        text.setPosition({0.f, vOffset});
-        vOffset += boundsSize(text).y;
+        // fitWidth() when wrapLabel
     }
 }
 
