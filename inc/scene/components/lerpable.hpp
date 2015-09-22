@@ -12,9 +12,9 @@ namespace scene
     class Entity;
 }
 
-// TODO namespace scene, should inherits from some scene::Component
-namespace sfe
+namespace scene
 {
+    // TODO Should inherits from some scene::Component
     /*! This component of an Entity allows to interpolate various parameters over time.
      *  For example, set a targetPosition and a speed, the entity will move at that speed
      *  to the provided targetPosition.
@@ -22,12 +22,12 @@ namespace sfe
 
     class Lerpable
     {
-        friend class scene::Entity;
+        friend class Entity;
 
     public:
 
         //! Constructor.
-        Lerpable(scene::Entity* entity);
+        Lerpable(Entity* entity);
 
         //! Default destructor.
         virtual ~Lerpable() = default;

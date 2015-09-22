@@ -33,7 +33,7 @@ Entity::Entity(bool isLerpable)
 {
     // Lerpable component
     if (isLerpable)
-        m_lerpable = std::make_unique<sfe::Lerpable>(this);
+        m_lerpable = std::make_unique<scene::Lerpable>(this);
 }
 
 Entity::~Entity()

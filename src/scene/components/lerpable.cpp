@@ -4,9 +4,9 @@
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
 
-using namespace sfe;
+using namespace scene;
 
-Lerpable::Lerpable(scene::Entity* entity)
+Lerpable::Lerpable(Entity* entity)
     : m_positionLerping(false)
     , m_positionSpeed(250.f, 250.f)
     , m_entity(entity)

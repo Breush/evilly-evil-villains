@@ -64,7 +64,7 @@ namespace scene
          *  Different from nullptr if entity constructor was created
          *  with lerpable option on.
          */
-        sfe::Lerpable* lerpable() noexcept { return m_lerpable.get(); }
+        scene::Lerpable* lerpable() noexcept { return m_lerpable.get(); }
 
         //! @}
 
@@ -485,7 +485,7 @@ namespace scene
         std::vector<Part> m_parts;
 
         //! The lerpable component.
-        std::unique_ptr<sfe::Lerpable> m_lerpable = nullptr;
+        std::unique_ptr<scene::Lerpable> m_lerpable = nullptr;
 
         //! The shader used to draw the entity.
         sf::Shader* m_shader = nullptr;
