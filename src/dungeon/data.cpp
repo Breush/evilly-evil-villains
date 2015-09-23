@@ -431,10 +431,12 @@ void Data::addMonster(const sf::Vector2u& coords, const std::wstring& monsterID)
     auto& roomInfo = room(coords);
     returnif (roomInfo.state != RoomState::CONSTRUCTED);
 
+    // Continue if and only if wallet authorize us
+    returnif (!m_villain->doshWallet.sub(monsters::onCreateCost(monsterID)));
+
     m_monstersInfo.emplace_back();
     auto& monsterInfo = m_monstersInfo.back();
 
-    // TODO Cost of monster..?
     monsterInfo.data.create(monsterID);
     monsterInfo.coords = coords;
 
