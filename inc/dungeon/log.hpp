@@ -2,7 +2,7 @@
 
 #include "scene/entity.hpp"
 #include "dungeon/event.hpp"
-#include "sfe/wraptext.hpp"
+#include "sfe/twraptext.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
@@ -97,8 +97,8 @@ namespace dungeon
         //! A displayed message.
         struct Message
         {
-            sfe::WrapText text;     //!< The visible part of the message, with return to line if needed.
-            float aliveSince = 0.f; //!< The time elapsed since the message was created, in seconds.
+            sfe::WrapText<sf::Text> text;   //!< The visible part of the message, with return to line if needed.
+            float aliveSince = 0.f;         //!< The time elapsed since the message was created, in seconds.
         };
 
     private:

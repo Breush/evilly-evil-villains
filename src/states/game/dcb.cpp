@@ -53,7 +53,7 @@ GameDCB::GameDCB(StateStack& stack)
     m_bubble.forceMessage(_("Welcome to the Dungeon Community Bank (DCB). "
                             "I heard that you wanted to open your own dungeon, "
                             "this is the kind of operation we like to support here.\n\n"
-                            "Let me just ask you: How do you want to name your tower of death?"));
+                            "Let me just ask you: *How do you want to name your tower of death?*"));
 
     // Answer box
     nuiRoot.attachChild(m_answerBox);

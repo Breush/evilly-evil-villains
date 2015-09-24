@@ -74,11 +74,11 @@ namespace sfe
         //! @name Bounds
         //! @{
 
-        //! Get the local bounding rectangle of the entity.
+        //! Get the local bounding rectangle.
         inline sf::FloatRect getLocalBounds() const { return m_localBounds; }
 
-        //! Get the global bounding rectangle of the entity.
-        inline sf::FloatRect getGlobalBounds() const { return getTransform().transformRect(m_localBounds); }
+        //! Get the global bounding rectangle.
+        inline sf::FloatRect getGlobalBounds() const { return getTransform().transformRect(getLocalBounds()); }
 
         //! @}
 

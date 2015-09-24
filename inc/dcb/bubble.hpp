@@ -1,7 +1,8 @@
 #pragma once
 
 #include "scene/entity.hpp"
-#include "sfe/wraptext.hpp"
+#include "sfe/twraptext.hpp"
+#include "sfe/richtext.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
@@ -69,8 +70,8 @@ namespace dcb
 
     private:
 
-        sfe::WrapText m_wrapText;               //!< The text shown.
-        std::vector<std::wstring> m_messages;   //!< The list of texts.
+        sfe::WrapText<sfe::RichText> m_wrapText;    //!< The text shown.
+        std::vector<std::wstring> m_messages;       //!< The list of texts.
 
         // Decorum
         sf::RectangleShape m_background;    //!< The background.

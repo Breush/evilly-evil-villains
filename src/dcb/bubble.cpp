@@ -44,7 +44,7 @@ void Bubble::refreshNUI(const config::NUIGuides& cNUI)
 
 void Bubble::forceMessage(const std::wstring& message)
 {
-    m_wrapText.setWrapString(message);
+    m_wrapText.setString(message);
 }
 
 uint Bubble::addMessage(std::wstring message)
@@ -56,7 +56,7 @@ uint Bubble::addMessage(std::wstring message)
 void Bubble::showMessage(uint messageID)
 {
     massert(messageID < m_messages.size(), "Message ID " << messageID << " does not exists.");
-    m_wrapText.setWrapString(m_messages[messageID]);
+    m_wrapText.setString(m_messages[messageID]);
 }
 
 void Bubble::clearMessages()
