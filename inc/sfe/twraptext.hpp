@@ -58,6 +58,18 @@ namespace sfe
         //! Get the font.
         inline const sf::Font* getFont() const { return m_text.getFont(); }
 
+        //! Set text style.
+        void setStyle(uint32 style);
+
+        //! Get the font.
+        inline uint32 getStyle() const { return m_text.getStyle(); }
+
+        //! @}
+
+        //---------------//
+        //! @name Bounds
+        //! @{
+
         //! Get the local bounding rectangle.
         inline sf::FloatRect getLocalBounds() const { return m_text.getLocalBounds(); }
 

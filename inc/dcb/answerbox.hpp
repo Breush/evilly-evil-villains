@@ -1,8 +1,9 @@
 #pragma once
 
-#include "scene/wrappers/label.hpp"
+#include "scene/wrappers/wraplabel.hpp"
 #include "nui/scrollarea.hpp"
 #include "nui/vstacker.hpp"
+#include "sfe/richtext.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
@@ -87,11 +88,10 @@ namespace dcb
 
     private:
 
-        std::vector<std::vector<std::wstring>> m_answers;   //!< An answers consists in a list of choices.
-        // TODO Make it WrapLabel
-        std::vector<std::unique_ptr<scene::Label>> m_texts; //!< All the texts shown.
-        nui::ScrollArea m_scrollArea;                       //!< The scroll area.
-        nui::VStacker m_stacker;                            //!< Stacker inside the scroll area.
+        std::vector<std::vector<std::wstring>> m_answers;                       //!< An answers consists in a list of choices.
+        std::vector<std::unique_ptr<scene::WrapLabel<sfe::RichText>>> m_texts;  //!< All the texts shown.
+        nui::ScrollArea m_scrollArea;                                           //!< The scroll area.
+        nui::VStacker m_stacker;                                                //!< Stacker inside the scroll area.
 
         // Decorum
         sf::RectangleShape m_background;    //!< The background.

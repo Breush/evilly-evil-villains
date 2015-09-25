@@ -45,6 +45,13 @@ namespace sfe
         rewrap();
     }
 
+    template<class Text_t>
+    void WrapText<Text_t>::setStyle(uint32 style)
+    {
+        m_text.setStyle(style);
+        rewrap();
+    }
+
     //-------------------//
     //----- Fitting -----//
 

@@ -25,11 +25,11 @@ namespace sfe
         //! Parsed text info.
         struct TextInfo
         {
-            sf::Text text;                      //!< The text indeed.
-            sf::String string;                  //!< The string of the text.
-            sf::String colorKey = "default";    //!< Color key.
-            uint32 style = sf::Text::Regular;   //!< Style (italic/bold/underlined).
-            bool newLine = false;               //!< True if ends in new line.
+            sf::Text text;          //!< The text indeed.
+            sf::String string;      //!< The string of the text.
+            sf::String colorKey;    //!< Color key.
+            uint32 style;           //!< Style (italic/bold/underlined).
+            bool newLine = false;   //!< True if ends in new line.
         };
 
     public:
@@ -67,6 +67,12 @@ namespace sfe
 
         //! Get the font.
         inline const sf::Font* getFont() const { return m_font; }
+
+        //! Set text style.
+        void setStyle(uint32 style);
+
+        //! Get the font.
+        inline uint32 getStyle() const { return m_defaultStyle; }
 
         //! @}
 
@@ -117,6 +123,9 @@ namespace sfe
         //! Refresh the color of all elements.
         void refreshColors();
 
+        //! Refresh the style of all elements.
+        void refreshStyle();
+
         //! Refresh the character size of all elements.
         void refreshCharacterSize();
 
@@ -137,6 +146,7 @@ namespace sfe
         sf::FloatRect m_localBounds;    //!< Local bounds.
 
         sf::Color m_defaultColor = sf::Color::White;    //!< The color to use when none is specified.
+        uint32 m_defaultStyle = sf::Text::Regular;      //!< The style used when none is specified.
         uint m_characterSize = 0u;                      //!< Size of all texts.
         const sf::Font* m_font = nullptr;               //!< Font of all texts.
     };

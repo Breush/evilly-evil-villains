@@ -10,7 +10,7 @@ namespace scene
     //! A wrapper around sf::Text-like as an entity.
 
     template<class Text_t>
-    class TLabel final : public Entity
+    class TLabel : public Entity
     {
         using baseClass = Entity;
 
@@ -71,6 +71,15 @@ namespace scene
 
         //! Updates the size of the entity to current bounds.
         void updateSize();
+
+        //! @}
+
+        //--------------------------//
+        //! @name Inherited getters
+        //! @{
+
+        //! Get the text.
+        Text_t& text() { return m_text; }
 
         //! @}
 

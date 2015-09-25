@@ -83,7 +83,7 @@ void AnswerBox::showAnswer(uint answerID)
 
     // Affects new answer
     for (const auto& answer : m_answers[answerID]) {
-        auto text = std::make_unique<scene::Label>();
+        auto text = std::make_unique<scene::WrapLabel<sfe::RichText>>();
         text->setColor(sf::Color::White);
         text->setText(answer);
         text->setFont("nui");
@@ -104,9 +104,8 @@ void AnswerBox::clearAnswers()
 
 void AnswerBox::refreshTexts()
 {
-    for (auto& text : m_texts) {
-        // fitWidth() when wrapLabel
-    }
+    for (auto& text : m_texts)
+        text->fitWidth(size().x);
 }
 
 void AnswerBox::refreshParts()

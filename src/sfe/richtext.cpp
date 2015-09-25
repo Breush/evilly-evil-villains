@@ -43,6 +43,12 @@ void RichText::setColor(const sf::Color& color)
     refreshColors();
 }
 
+void RichText::setStyle(uint32 style)
+{
+    m_defaultStyle = style;
+    refreshStyle();
+}
+
 //-----------------------------------//
 //----- Internal change updates -----//
 
@@ -59,6 +65,12 @@ void RichText::refreshColors()
 {
     for (auto& textInfo : m_textsInfo)
         textInfo.text.setColor(interpretColor(textInfo.colorKey));
+}
+
+void RichText::refreshStyle()
+{
+    for (auto& textInfo : m_textsInfo)
+        textInfo.text.setStyle(textInfo.style | m_defaultStyle);
 }
 
 void RichText::refreshCharacterSize()
@@ -143,7 +155,7 @@ void RichText::reparseSource()
     // Affect string and all parameters to texts
     for (auto& textInfo : m_textsInfo) {
         textInfo.text.setString(textInfo.string);
-        textInfo.text.setStyle(textInfo.style);
+        textInfo.text.setStyle(textInfo.style | m_defaultStyle);
         textInfo.text.setColor(interpretColor(textInfo.colorKey));
         textInfo.text.setCharacterSize(m_characterSize);
         if (m_font != nullptr) textInfo.text.setFont(*m_font);
