@@ -94,7 +94,7 @@ namespace scene
             case Prestyle::NUI_TITLE:
                 m_text.setFont(Application::context().fonts.get("nui"));
                 m_text.setColor(sf::Color::White);
-                m_text.setStyle(sf::Text::Style::Bold);
+                m_text.setStyle(sf::Text::Bold);
                 m_text.setCharacterSize(m_fontSize);
                 break;
 
@@ -107,7 +107,7 @@ namespace scene
 
             case Prestyle::MENU_POPUP_TITLE:
                 m_text.setFont(Application::context().fonts.get("horror"));
-                m_text.setStyle(sf::Text::Style::Bold);
+                m_text.setStyle(sf::Text::Bold);
                 m_text.setColor(sf::Color::White);
                 m_text.setCharacterSize(3.2f * m_fontSize);
                 break;

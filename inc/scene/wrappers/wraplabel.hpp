@@ -18,7 +18,11 @@ namespace scene
         //! @{
 
         //! Set the width within which the text should fit.
-        inline void fitWidth(float inFitWidth) { baseClass::text().fitWidth(inFitWidth); }
+        inline void fitWidth(float inFitWidth)
+        {
+            baseClass::text().fitWidth(inFitWidth);
+            baseClass::updateSize();
+        }
 
         //! @}
     };
