@@ -11,6 +11,15 @@ RectangleShape::RectangleShape()
     addPart(&m_rectangleShape);
 }
 
+//-------------------//
+//----- Routine -----//
+
+void RectangleShape::onSizeChanges()
+{
+    m_rectangleShape.setSize(size());
+    setScale(scale());
+}
+
 //--------------------//
 //----- Wrappers -----//
 

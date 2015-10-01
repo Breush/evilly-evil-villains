@@ -30,6 +30,16 @@ namespace scene
 
         //! @}
 
+    protected:
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        void onSizeChanges() final;
+
+        //! @}
+
     private:
 
         //! The sprite itself.

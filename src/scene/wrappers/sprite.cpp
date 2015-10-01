@@ -12,6 +12,14 @@ Sprite::Sprite()
     addPart(&m_sprite);
 }
 
+//-------------------//
+//----- Routine -----//
+
+void Sprite::onSizeChanges()
+{
+    setScale(scale());
+}
+
 //--------------------//
 //----- Wrappers -----//
 

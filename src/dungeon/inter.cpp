@@ -104,6 +104,8 @@ void Inter::handleGlobalEvent(const sf::Event& event)
 
 bool Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
+    returnif (button == sf::Mouse::Middle) false;
+
     // Selected the tile below
     selectTile(mousePos);
 

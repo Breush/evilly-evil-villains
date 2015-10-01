@@ -22,6 +22,8 @@ namespace sf
     // Operators vector-vector
     template<typename T> Vector2<T> operator/(const Vector2<T>& v1, const Vector2<T>& v2);
     template<typename T> Vector2<T> operator*(const Vector2<T>& v1, const Vector2<T>& v2);
+    template<typename T> Vector2<T>& operator/=(Vector2<T>& v1, const Vector2<T>& v2);
+    template<typename T> Vector2<T>& operator*=(Vector2<T>& v1, const Vector2<T>& v2);
 
     // Operators vector-constant
     template<typename T> Vector2<T> operator-(const Vector2<T>& v, const T& z);

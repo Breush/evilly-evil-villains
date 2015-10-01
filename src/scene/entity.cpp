@@ -22,6 +22,7 @@ Entity::Entity(bool isLerpable)
     , m_localRotation(0.f)
     , m_localScale(1.f, 1.f)
     , m_size(0.f, 0.f)
+    , m_scale(1.f, 1.f)
     , m_clipArea(0.f, 0.f, -1.f, -1.f)
     , m_visible(true)
     , m_transparent(false)
@@ -479,15 +480,15 @@ void Entity::refreshFromLocal()
     if (m_parent != nullptr) {
         setPosition(m_parent->getPosition() - m_parent->getOrigin());
         setRotation(m_parent->getRotation());
-        setScale(m_parent->getScale());
+        m_scale = m_parent->scale();
         move(m_localPosition);
         rotate(m_localRotation);
-        scale(m_localScale);
+        m_scale *= m_localScale;
     }
     else {
         setPosition(m_localPosition);
         setRotation(m_localRotation);
-        setScale(m_localScale);
+        m_scale = m_localScale;
     }
 
     if (m_focused) m_graph->updateFocusSprite();
@@ -537,11 +538,10 @@ void Entity::refreshFromLocalScale()
     m_localChanges = true;
 
     if (m_parent != nullptr) {
-        setScale(m_parent->getScale());
-        scale(m_localScale);
-    }
-    else {
-        setScale(m_localScale);
+        m_scale = m_parent->scale();
+        m_scale *= m_localScale;
+    } else {
+        m_scale = m_localScale;
     }
 
     if (m_focused) m_graph->updateFocusSprite();
@@ -549,12 +549,12 @@ void Entity::refreshFromLocalScale()
     for (auto& child : m_children)
         child->refreshFromLocalScale();
 
-    onScaleChanges();
+    onSizeChanges();
 }
 
 void Entity::refreshOrigin()
 {
-    setOrigin(m_relativeOrigin * m_size);
+    setOrigin(m_relativeOrigin * m_size * m_scale);
     refreshKeepInsideLocalRect();
     refreshFromLocalPosition();
 }

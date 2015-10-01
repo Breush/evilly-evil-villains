@@ -41,10 +41,7 @@ namespace scene
         //! @name Routine
         //! @{
 
-        void onSizeChanges() final
-        {
-            m_rectangleShape.setSize(size());
-        }
+        void onSizeChanges() final;
 
         //! @}
 

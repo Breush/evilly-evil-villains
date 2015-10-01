@@ -31,7 +31,7 @@ void AnimatedSprite::draw(sf::RenderTarget& target, sf::RenderStates states) con
     // because scml::Entity can not be managed by scene::Graph
     for (const auto& entity : m_entities) {
         entity->setScreen(&target);
-        entity->draw(getPosition().x, getPosition().y, getRotation(), getScale().x, getScale().y);
+        entity->draw(getPosition().x, getPosition().y, getRotation(), scale().x, scale().y);
     }
 
     baseClass::draw(target, states);

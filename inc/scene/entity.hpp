@@ -157,18 +157,16 @@ namespace scene
         //! The rotation of the entity relative to its parent's rotation.
         PARAMGSU(float, m_localRotation, localRotation, setLocalRotation, refreshFromLocalRotation)
 
-        // FIXME There is something very wrong here, find a way to update the size
-        // the scale is changed?
-
         //! The scale of the entity relative to its parent's scale.
-        /*!
-         *  NOTE: There might be some incompatibility with the size property and the scale one.
-         *  The design is still unclear, using both is depreciated.
-         */
         PARAMGSU(sf::Vector2f, m_localScale, localScale, setLocalScale, refreshFromLocalScale)
 
         //! The absolute size of the entity.
+        //! Displayed size is size() * scale().
         PARAMG(sf::Vector2f, m_size, size)
+
+        //! The absolute scale of the entity.
+        //! Displayed size is size() * scale().
+        PARAMG(sf::Vector2f, m_scale, scale)
 
         //! Specifies what is drawn for the entity (also affects children).
         //! Set clipArea width or height to a negative value to draw it all.
@@ -201,13 +199,10 @@ namespace scene
         //! Called whenever the position/rotation/scale changed.
         virtual void onTransformChanges() {}
 
-        //! Called whenever scale changed.
-        virtual void onScaleChanges() {}
-
-        //! Called whenever size changed.
+        //! Called whenever size or scale changed.
         /*!
          *  Should be reimplemented in inherited classes to adapt
-         *  display to the size.
+         *  display to the size and scale.
          */
         virtual void onSizeChanges() {}
 
