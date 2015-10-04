@@ -1,10 +1,10 @@
 #pragma once
 
-#include "dungeon/eventtype.hpp"
+#include <string>
 
 // Forward declarations
 
-namespace dungeon
+namespace context
 {
     class EventEmitter;
 }
@@ -54,7 +54,7 @@ namespace context
         //!
 
         //! Sets what to use for events.
-        void setEvents(dungeon::EventEmitter* emitter, dungeon::EventType eventType);
+        void setEvents(EventEmitter* emitter, std::string eventType);
 
         //! @}
 
@@ -62,7 +62,7 @@ namespace context
 
         uint m_value = 0u;  //!< The value, instead.
 
-        dungeon::EventEmitter* m_emitter = nullptr; //!< The emitter to use on changes.
-        dungeon::EventType m_eventType;             //!< The type of events to use on changes.
+        EventEmitter* m_emitter = nullptr; //!< The emitter to use on changes.
+        std::string m_eventType;           //!< The type of events to use on changes.
     };
 }

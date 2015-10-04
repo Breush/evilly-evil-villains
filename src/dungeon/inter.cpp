@@ -148,58 +148,46 @@ void Inter::handleMouseLeft()
 //--------------------------//
 //----- Dungeon events -----//
 
-void Inter::receive(const Event& event)
+void Inter::receive(const context::Event& event)
 {
+    const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
     sf::Vector2u coords;
 
-    switch (event.type)
-    {
-    case EventType::ROOM_DESTROYED:
-    case EventType::ROOM_CONSTRUCTED:
-        coords = {event.room.x, event.room.y};
+    if (event.type == "room_destroyed" || event.type == "room_constructed") {
+        coords = {devent.room.x, devent.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTile(coords); });
         m_tileRefreshPending.emplace_back([=]() { return refreshNeighboursLayers(coords); });
-        break;
-
-    case EventType::FACILITY_CHANGED:
-        coords = {event.facility.room.x, event.facility.room.y};
+    }
+    else if (event.type == "facility_changed") {
+        coords = {devent.facility.room.x, devent.facility.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTileFacilities(coords); });
         m_tileRefreshPending.emplace_back([=]() { return refreshTileDoshLabel(coords); });
         // TODO That's only because of ladder...
         m_tileRefreshPending.emplace_back([=]() { return refreshNeighboursFacilities(coords); });
-        break;
-
-    case EventType::TRAP_CHANGED:
-        coords = {event.room.x, event.room.y};
+    }
+    else if (event.type == "trap_changed") {
+        coords = {devent.room.x, devent.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTileTraps(coords); });
-        break;
-
-    case EventType::MONSTER_ADDED:
+    }
+    else if (event.type == "monster_added") {
         m_tileRefreshPending.emplace_back([=]() { return refreshMonsters(); });
-        break;
-
-    case EventType::MONSTER_EXPLODES_ROOM:
-        coords = {event.action.room.x, event.action.room.y};
+    }
+    else if (event.type == "room_exploded") {
+        coords = {devent.action.room.x, devent.action.room.y};
         m_data->destroyRoom(coords, true);
         m_data->graph().updateFromData();
         // TODO What happens if we destroy entrance?
         m_tileRefreshPending.emplace_back([=]() { return refreshMonsters(); });
-        break;
-
-    case EventType::HARVESTABLE_DOSH_CHANGED:
-        coords = {event.room.x, event.room.y};
+    }
+    else if (event.type == "harvestable_dosh_changed") {
+        coords = {devent.room.x, devent.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTileDoshLabel(coords); });
-        break;
-
-    case EventType::MODE_CHANGED:
+    }
+    else if (event.type == "mode_changed") {
         m_treasureEditSpinBox.markForVisible(false);
-        m_invasion = (event.mode == Mode::INVASION);
+        m_invasion = (devent.mode == Mode::INVASION);
         refreshMonstersActivity();
         deselectTile();
-        break;
-
-    default:
-        break;
     }
 }
 
@@ -427,13 +415,13 @@ void Inter::showEditTreasureDialog(const sf::Vector2u& coords)
         treasureData[L"dosh"].as_uint32() = newValue;
 
         // Global dosh changed
-        emitter()->emit(EventType::DOSH_CHANGED);
+        emitter()->emit("dosh_changed");
 
         // Treasure dosh changed
-        Event event;
-        event.type = EventType::FACILITY_CHANGED;
-        event.facility.room = {coords.x, coords.y};
-        emitter()->emit(event);
+        Event devent;
+        devent.type = "facility_changed";
+        devent.facility.room = {coords.x, coords.y};
+        emitter()->emit(devent);
     });
 }
 

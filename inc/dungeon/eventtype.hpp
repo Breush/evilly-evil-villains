@@ -1,6 +1,9 @@
 #pragma once
 
+#include "context/event.hpp"
 #include "tools/int.hpp"
+
+// TODO Rename this file dungeon/event.hpp
 
 namespace dungeon
 {
@@ -8,24 +11,6 @@ namespace dungeon
 
     class Hero;
     class Monster;
-
-    //! All the possible dungeon events.
-    enum class EventType
-    {
-        ROOM_DESTROYED,             //!< A room was destroyed.
-        ROOM_CONSTRUCTED,           //!< A rom was constructed.
-        DOSH_CHANGED,               //!< Dosh value changed, delta is set.
-        FAME_CHANGED,               //!< Fame value changed, delta is set.
-        MODE_CHANGED,               //!< Mode (design/invasion) changed.
-        FACILITY_CHANGED,           //!< Room facility changed.
-        TRAP_CHANGED,               //!< Room trap changed.
-        MONSTER_ADDED,              //!< A monster has been added to the dungeon.
-        MONSTER_EXPLODES_ROOM,      //!< A monster exploded in the dungeon.
-        HARVESTABLE_DOSH_CHANGED,   //!< The harvestable dosh in a room changed.
-        HERO_ENTERED_ROOM,          //!< A hero entered a room.
-        HERO_LEFT_ROOM,             //!< A hero left a room.
-        ERROR,                      //!< Whenever something cannot be done.
-    };
 
     //! The possible modes.
     enum class Mode
@@ -42,10 +27,8 @@ namespace dungeon
     };
 
     //! A dungeon event.
-    struct Event
+    struct Event : public context::Event
     {
-        EventType type; //!< The type of event which is sent.
-
         union
         {
             int delta;  //!< The difference between previous and current value of resources.

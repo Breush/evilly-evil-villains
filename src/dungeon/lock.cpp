@@ -60,9 +60,9 @@ void Lock::handleMouseLeft()
 //-----------------------//
 //----- Data events -----//
 
-void Lock::receive(const Event& event)
+void Lock::receive(const context::Event& event)
 {
-    if (event.type == EventType::MODE_CHANGED)
+    if (event.type == "mode_changed")
         updateMode();
 }
 

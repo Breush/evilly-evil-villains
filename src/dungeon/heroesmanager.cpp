@@ -44,31 +44,26 @@ void HeroesManager::update(const sf::Time& dt)
 //------------------//
 //----- Events -----//
 
-void HeroesManager::receive(const Event& event)
+void HeroesManager::receive(const context::Event& event)
 {
+    const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
     sf::Vector2u coords;
 
-    switch (event.type) {
-    case EventType::MODE_CHANGED:
-        setActive(event.mode == Mode::INVASION);
-        break;
-
-    case EventType::MONSTER_EXPLODES_ROOM:
+    if (event.type == "mode_changed") {
+        setActive(devent.mode == Mode::INVASION);
+    }
+    else if (event.type == "room_exploded") {
         // Remove all heroes in that room
         for (auto& heroInfo : m_heroesInfo) {
             auto& hero = heroInfo.hero;
             if (hero == nullptr) continue;
 
-            coords = {event.action.room.x, event.action.room.y};
+            coords = {devent.action.room.x, devent.action.room.y};
             if (m_inter.tileFromLocalPosition(hero->localPosition()) == coords
                 || hero->currentNode()->coords == coords) {
                 heroInfo.status = HeroStatus::TO_BE_REMOVED;
             }
         }
-        break;
-
-    default:
-        break;
     }
 }
 
@@ -143,20 +138,20 @@ void HeroesManager::heroGetsOut(Hero* hero)
 
 void HeroesManager::heroLeftRoom(Hero* hero, const sf::Vector2u& coords)
 {
-    Event event;
-    event.type = EventType::HERO_LEFT_ROOM;
-    event.action.room = {coords.x, coords.y};
-    event.action.hero = hero;
-    emitter()->emit(event);
+    Event devent;
+    devent.type = "hero_left";
+    devent.action.room = {coords.x, coords.y};
+    devent.action.hero = hero;
+    emitter()->emit(devent);
 }
 
 void HeroesManager::heroEnteredRoom(Hero* hero, const sf::Vector2u& coords)
 {
-    Event event;
-    event.type = EventType::HERO_ENTERED_ROOM;
-    event.action.room = {coords.x, coords.y};
-    event.action.hero = hero;
-    emitter()->emit(event);
+    Event devent;
+    devent.type = "hero_entered";
+    devent.action.room = {coords.x, coords.y};
+    devent.action.hero = hero;
+    emitter()->emit(devent);
 }
 
 void HeroesManager::heroStealsTreasure(Hero* hero, const sf::Vector2u& coords, const uint stolenDosh)

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "scene/entity.hpp"
-#include "dungeon/event.hpp"
+#include "context/event.hpp"
 #include "dungeon/data.hpp"
 #include "dungeon/traps.hpp"
 #include "dungeon/monsters.hpp"
@@ -19,7 +19,7 @@ namespace dungeon
 {
     //! The dungeon itself, handling user interactions.
 
-    class Inter final : public scene::Entity, private EventReceiver
+    class Inter final : public scene::Entity, private context::EventReceiver
     {
         using baseClass = scene::Entity;
 
@@ -152,7 +152,7 @@ namespace dungeon
         bool handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
         void handleMouseLeft() final;
 
-        void receive(const Event& event) final;
+        void receive(const context::Event& event) final;
 
         //! @}
 

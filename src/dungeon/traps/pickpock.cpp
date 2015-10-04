@@ -25,18 +25,19 @@ PickPock::PickPock(const sf::Vector2u& coords, ElementData& elementdata, dungeon
 //-------------------------//
 //---- Dungeon events -----//
 
-void PickPock::receive(const Event& event)
+void PickPock::receive(const context::Event& event)
 {
-    returnif (event.type != EventType::HERO_ENTERED_ROOM);
+    const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
+    returnif (devent.type != "hero_entered");
 
     // Ensures that event occured in the same room than us
-    sf::Vector2u coords(event.action.room.x, event.action.room.y);
+    sf::Vector2u coords(devent.action.room.x, devent.action.room.y);
     if (coords != m_coords) {
         m_sprite.select(L"idle");
         m_sprite.setLooping(true);
     }
     else {
-        stealFromHero(event.action.hero);
+        stealFromHero(devent.action.hero);
     }
 
     // TODO That select "idle" is a bit heavy,
@@ -51,10 +52,10 @@ void PickPock::setDosh(uint32 value)
 {
     m_elementdata[L"dosh"].as_uint32() = value;
 
-    Event event;
-    event.type = EventType::HARVESTABLE_DOSH_CHANGED;
-    event.room = {m_coords.x, m_coords.y};
-    emitter()->emit(event);
+    Event devent;
+    devent.type = "harvestable_dosh_changed";
+    devent.room = {m_coords.x, m_coords.y};
+    emitter()->emit(devent);
 }
 
 //--------------------//

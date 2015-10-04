@@ -68,19 +68,20 @@ void Creepim::setCurrentNode(const Graph::Node* node)
 //-------------------------//
 //---- Dungeon events -----//
 
-void Creepim::receive(const Event& event)
+void Creepim::receive(const context::Event& event)
 {
-    returnif (event.type != EventType::HERO_ENTERED_ROOM);
+    const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
+    returnif (devent.type != "hero_entered_room");
 
     // If the hero is near us
-    sf::Vector2u coords(event.action.room.x, event.action.room.y);
+    sf::Vector2u coords(devent.action.room.x, devent.action.room.y);
     if (m_inter.tileFromLocalPosition(localPosition()) == coords) {
-        dungeon::Event event;
-        event.type = dungeon::EventType::MONSTER_EXPLODES_ROOM;
-        event.action.monster = this;
-        event.action.room.x = coords.x;
-        event.action.room.y = coords.y;
-        emitter()->emit(event);
+        dungeon::Event devent;
+        devent.type = "room_exploded";
+        devent.action.monster = this;
+        devent.action.room.x = coords.x;
+        devent.action.room.y = coords.y;
+        emitter()->emit(devent);
     }
 }
 

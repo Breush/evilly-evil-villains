@@ -1,7 +1,7 @@
 #pragma once
 
 #include "tools/vector.hpp"
-#include "dungeon/event.hpp"
+#include "context/event.hpp"
 
 #include <vector>
 #include <unordered_map>
@@ -14,7 +14,7 @@ namespace dungeon
 
     //! The abstract structure of a dungeon.
 
-    class Graph final : public EventReceiver
+    class Graph final : public context::EventReceiver
     {
     public:
 
@@ -87,7 +87,7 @@ namespace dungeon
         //! @name Events
         //! @{
 
-        void receive(const Event& event) final;
+        void receive(const context::Event& event) final;
 
         //! @}
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "scene/entity.hpp"
-#include "dungeon/event.hpp"
+#include "context/event.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -24,7 +24,7 @@ namespace dungeon
 
     //! A small window with main dungeon information.
 
-    class Summary final : public scene::Entity, private EventReceiver
+    class Summary final : public scene::Entity, private context::EventReceiver
     {
         using baseClass = scene::Entity;
 
@@ -70,7 +70,7 @@ namespace dungeon
         //! @name Dungeon events
         //! @{
 
-        void receive(const Event& event) final;
+        void receive(const context::Event& event) final;
 
         //! @}
 

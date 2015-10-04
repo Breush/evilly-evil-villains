@@ -55,7 +55,7 @@ namespace traps
         //! @name Events
         //! @{
 
-        void receive(const Event& event) final;
+        void receive(const context::Event& event) final;
 
         //! @}
 

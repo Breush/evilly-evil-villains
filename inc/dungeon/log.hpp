@@ -1,7 +1,7 @@
 #pragma once
 
 #include "scene/entity.hpp"
-#include "dungeon/event.hpp"
+#include "context/event.hpp"
 #include "sfe/twraptext.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -14,7 +14,7 @@ namespace dungeon
     //! A logging window for dungeons events.
     //! The events are faded to only keep recent ones.
 
-    class Log final : public scene::Entity, public EventReceiver
+    class Log final : public scene::Entity, public context::EventReceiver
     {
         using baseClass = scene::Entity;
 
@@ -72,7 +72,7 @@ namespace dungeon
         //! @name Events
         //! @{
 
-        void receive(const Event& event) final;
+        void receive(const context::Event& event) final;
 
         //! @}
 

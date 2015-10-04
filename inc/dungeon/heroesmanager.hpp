@@ -2,8 +2,8 @@
 
 #include "scene/entity.hpp"
 #include "dungeon/graph.hpp"
-#include "dungeon/event.hpp"
 #include "dungeon/hero.hpp"
+#include "context/event.hpp"
 #include "scene/wrappers/label.hpp"
 #include "scene/wrappers/animatedsprite.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
@@ -20,7 +20,7 @@ namespace dungeon
 
     //! A hero invading the dungeon.
 
-    class HeroesManager final : public EventReceiver
+    class HeroesManager final : public context::EventReceiver
     {
     public:
 
@@ -75,7 +75,7 @@ namespace dungeon
         //! @name Events
         //! @{
 
-        void receive(const Event& event) final;
+        void receive(const context::Event& event) final;
 
         //! @}
 

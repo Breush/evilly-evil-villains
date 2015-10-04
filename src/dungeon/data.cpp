@@ -20,7 +20,7 @@ Data::Data()
     : m_floorsCount(0)
     , m_roomsByFloor(0)
 {
-    m_fameWallet.setEvents(this, EventType::FAME_CHANGED);
+    m_fameWallet.setEvents(this, "fame_changed");
 }
 
 //---------------------------//
@@ -40,7 +40,7 @@ std::wstring Data::load(const std::wstring& folder)
         std::wcout << L" |  If you are running a test file, no problem here." << std::endl;
     }
     else {
-        m_villain->doshWallet.setEvents(this, EventType::DOSH_CHANGED);
+        m_villain->doshWallet.setEvents(this, "dosh_changed");
     }
 
     std::wstring mainDungeonFilename = L"saves/" + folder + L"dungeon.xml";
@@ -245,7 +245,7 @@ void Data::constructRoom(const sf::Vector2u& coords)
     room(coords).state = RoomState::CONSTRUCTED;
 
     Event event;
-    event.type = EventType::ROOM_CONSTRUCTED;
+    event.type = "room_constructed";
     event.room = {coords.x, coords.y};
     EventEmitter::emit(event);
 }
@@ -270,7 +270,7 @@ void Data::destroyRoom(const sf::Vector2u& coords, bool hard)
     }
 
     Event event;
-    event.type = EventType::ROOM_DESTROYED;
+    event.type = "room_destroyed";
     event.room = {coords.x, coords.y};
     EventEmitter::emit(event);
 }
@@ -331,7 +331,7 @@ void Data::stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh
     hero.addDosh(stolenDosh);
 
     Event event;
-    event.type = EventType::FACILITY_CHANGED;
+    event.type = "facility_changed";
     event.facility.room = {coords.x, coords.y};
     EventEmitter::emit(event);
 }
@@ -351,7 +351,7 @@ void Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     facility.create(facilityID);
 
     Event event;
-    event.type = EventType::FACILITY_CHANGED;
+    event.type = "facility_changed";
     event.facility.room = {coords.x, coords.y};
     EventEmitter::emit(event);
 }
@@ -367,7 +367,7 @@ void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     roomInfo.facilities.erase(found);
 
     Event event;
-    event.type = EventType::FACILITY_CHANGED;
+    event.type = "facility_changed";
     event.facility.room = {coords.x, coords.y};
     EventEmitter::emit(event);
 }
@@ -382,7 +382,7 @@ void Data::removeRoomFacilities(const sf::Vector2u& coords)
     roomInfo.facilities.clear();
 
     Event event;
-    event.type = EventType::FACILITY_CHANGED;
+    event.type = "facility_changed";
     event.facility.room = {coords.x, coords.y};
     EventEmitter::emit(event);
 }
@@ -406,7 +406,7 @@ void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
 
     // Emit event
     Event event;
-    event.type = EventType::TRAP_CHANGED;
+    event.type = "trap_changed";
     event.room = {coords.x, coords.y};
     EventEmitter::emit(event);
 }
@@ -421,7 +421,7 @@ void Data::removeRoomTrap(const sf::Vector2u& coords)
 
     // Emit event
     Event event;
-    event.type = EventType::TRAP_CHANGED;
+    event.type = "trap_changed";
     event.room = {coords.x, coords.y};
     EventEmitter::emit(event);
 }
@@ -441,7 +441,7 @@ void Data::addMonster(const sf::Vector2u& coords, const std::wstring& monsterID)
     monsterInfo.coords = coords;
 
     Event event;
-    event.type = EventType::MONSTER_ADDED;
+    event.type = "monster_added";
     EventEmitter::emit(event);
 }
 
@@ -457,7 +457,7 @@ void Data::setMode(Mode mode)
     // Switch too design mode, no problem.
     if (mode == Mode::DESIGN) {
         m_mode = mode;
-        event.type = EventType::MODE_CHANGED;
+        event.type = "mode_changed";
         event.mode = mode;
     }
 
@@ -466,32 +466,22 @@ void Data::setMode(Mode mode)
         switch (m_graph->reconstructFromData()) {
         case Graph::ConstructError::NONE:
             m_mode = mode;
-            event.type = EventType::MODE_CHANGED;
+            event.type = "mode_changed";
             event.mode = mode;
             break;
 
         case Graph::ConstructError::NO_DOOR:
-            event.type = EventType::ERROR;
+            event.type = "error";
             event.message = L"No door in the dungeon. How are heroes supposed to enter?";
             break;
 
         case Graph::ConstructError::TOO_MANY_DOORS:
-            event.type = EventType::ERROR;
+            event.type = "error";
             event.message = L"Too many doors. Only one door in the dungeon is supported.";
             break;
         };
     }
 
-    EventEmitter::emit(event);
-}
-
-//-------------------------//
-//----- Event emitter -----//
-
-void Data::emit(EventType eventType)
-{
-    Event event;
-    event.type = eventType;
     EventEmitter::emit(event);
 }
 

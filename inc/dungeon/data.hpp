@@ -2,7 +2,7 @@
 
 #include "tools/param.hpp"
 #include "tools/int.hpp"
-#include "dungeon/event.hpp"
+#include "context/event.hpp"
 #include "dungeon/eventtype.hpp"
 #include "dungeon/elementdata.hpp"
 #include "context/wallet.hpp"
@@ -35,7 +35,7 @@ namespace dungeon
      *  Can import and export dungeon and resources data to file.
      */
 
-    class Data final : public EventEmitter
+    class Data final : public context::EventEmitter
     {
         friend class Graph;
 
@@ -244,15 +244,6 @@ namespace dungeon
         //! @}
 
     protected:
-
-        //----------------------//
-        //! @name Event emitter
-        //! @{
-
-        //! Emits a default event type through all receivers.
-        void emit(EventType eventType) final;
-
-        //! @}
 
         //---------------------//
         //! @name Dungeon data

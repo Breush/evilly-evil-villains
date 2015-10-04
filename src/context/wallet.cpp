@@ -1,6 +1,6 @@
 #include "context/wallet.hpp"
 
-#include "dungeon/event.hpp"
+#include "context/event.hpp"
 #include "tools/tools.hpp"
 
 using namespace context;
@@ -61,8 +61,8 @@ bool Wallet::addsub(const uint addValue, const uint subValue)
 //-----------------------------//
 //----- Events management -----//
 
-void Wallet::setEvents(dungeon::EventEmitter* emitter, dungeon::EventType eventType)
+void Wallet::setEvents(context::EventEmitter* emitter, std::string eventType)
 {
     m_emitter = emitter;
-    m_eventType = eventType;
+    m_eventType = std::move(eventType);
 }

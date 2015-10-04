@@ -3,7 +3,7 @@
 #include "scene/entity.hpp"
 #include "scene/grabbable.hpp"
 #include "dungeon/elementdata.hpp"
-#include "dungeon/event.hpp"
+#include "context/event.hpp"
 #include "ai/dumbpuppet.hpp"
 #include "tools/param.hpp"
 
@@ -17,7 +17,7 @@ namespace dungeon
     class Graph;
 
     //! A generic monster interface.
-    class Monster : public scene::Entity, public EventReceiver
+    class Monster : public scene::Entity, public context::EventReceiver
     {
         using baseClass = scene::Entity;
 
@@ -62,7 +62,7 @@ namespace dungeon
         //! @name Events
         //! @{
 
-        virtual void receive(const Event& event) override = 0;
+        virtual void receive(const context::Event& event) override = 0;
 
         //! @}
 

@@ -4,17 +4,20 @@
 
 #include <vector>
 
-// TODO Move that file to context.
-
-namespace dungeon
+namespace context
 {
     // Forward declarations
 
     class EventReceiver;
-    enum class EventType; // TODO Make that a abstract class inherited in dungeon::EventType
-    struct Event;
 
-    //! Base class for those who want to be able to emit a dungeon event.
+    //! Base class for event.
+
+    struct Event
+    {
+        std::string type;   //!< The type of event which is sent.
+    };
+
+    //! Base class to be able to emit an event.
 
     class EventEmitter
     {
@@ -33,7 +36,7 @@ namespace dungeon
         void emit(const Event& event) const;
 
         //! Emits a default event type through all receivers.
-        virtual void emit(EventType eventType) = 0;
+        void emit(std::string eventType) const;
 
         //! @}
 
@@ -97,7 +100,7 @@ namespace dungeon
         EventEmitter* m_emitter = nullptr;
 
 #if DEBUG_GLOBAL > 0
-        //! In debug mode, be sure that the receiver is not detroyed during emit.
+        //! In debug mode, assert that the receiver is not detroyed during emit.
         bool m_lock = false;
 #endif
     };

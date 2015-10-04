@@ -1,10 +1,10 @@
-#include "dungeon/event.hpp"
+#include "context/event.hpp"
 
 #include "tools/platform-fixes.hpp" // erase_if
 
 #include <stdexcept>
 
-using namespace dungeon;
+using namespace context;
 
 //--------------------------//
 //----- Event receiver -----//
@@ -33,8 +33,6 @@ void EventReceiver::setEmitter(EventEmitter* emitter)
 //-------------------------//
 //----- Event emitter -----//
 
-#include <iostream>
-
 void EventEmitter::emit(const Event& event) const
 {
     // Make a copy of the current list
@@ -53,6 +51,12 @@ void EventEmitter::emit(const Event& event) const
     for (auto& receiver : receivers)
         receiver->m_lock = false;
 #endif
+}
+
+void EventEmitter::emit(std::string eventType) const
+{
+    Event event{std::move(eventType)};
+    emit(event);
 }
 
 //-------------------------------//

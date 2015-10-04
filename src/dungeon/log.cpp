@@ -2,6 +2,7 @@
 
 #include "core/application.hpp"
 #include "dungeon/data.hpp"
+#include "dungeon/eventtype.hpp"
 #include "config/nuiguides.hpp"
 #include "tools/tools.hpp"
 #include "tools/platform-fixes.hpp" // reverse()
@@ -60,27 +61,28 @@ void Log::refreshNUI(const config::NUIGuides& cNUI)
 //------------------//
 //----- Events -----//
 
-void Log::receive(const Event& event)
+void Log::receive(const context::Event& event)
 {
+    const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
     bool eventConsidered = true;
     std::wstringstream str;
 
     // Create text from event
-    if (event.type == EventType::ROOM_CONSTRUCTED)
-        str << L"CONSTRUCTED room " << event.room.x << L"/" << event.room.y;
-    else if (event.type == EventType::ROOM_DESTROYED)
-        str << L"DESTROYED room " << event.room.x << L"/" << event.room.y;
-    else if (event.type == EventType::MONSTER_EXPLODES_ROOM)
-        str << L"MONSTER explodes in room " << event.action.room.x << L"/" << event.action.room.y;
-    else if (event.type == EventType::ERROR)
-        str << L"[!] " << event.message;
+    if (devent.type == "room_constructed")
+        str << L"CONSTRUCTED room " << devent.room.x << L"/" << devent.room.y;
+    else if (devent.type == "room_destroyed")
+        str << L"DESTROYED room " << devent.room.x << L"/" << devent.room.y;
+    else if (devent.type == "room_exploded")
+        str << L"Room EXPLODED " << devent.action.room.x << L"/" << devent.action.room.y;
+    else if (devent.type == "error")
+        str << L"[!] " << devent.message;
     else
         eventConsidered = false;
 
     returnif (!eventConsidered);
 
     // Add message
-    sf::Color color = (event.type == EventType::ERROR)? sf::Color::Red : sf::Color::Black;
+    sf::Color color = (devent.type == "error")? sf::Color::Red : sf::Color::Black;
     addMessage(std::move(str.str()), color);
 }
 

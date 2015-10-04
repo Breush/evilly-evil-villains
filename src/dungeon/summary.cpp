@@ -95,10 +95,10 @@ void Summary::useData(Data& data)
 //--------------------------//
 //----- Dungeon events -----//
 
-void Summary::receive(const Event& event)
+void Summary::receive(const context::Event& event)
 {
-    if (event.type == EventType::DOSH_CHANGED
-        || event.type == EventType::FAME_CHANGED)
+    const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
+    if (devent.type == "dosh_changed" || devent.type == "fame_changed")
         refreshFromData();
 }
 

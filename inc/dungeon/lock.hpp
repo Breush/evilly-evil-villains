@@ -1,7 +1,7 @@
 #pragma once
 
 #include "scene/entity.hpp"
-#include "dungeon/event.hpp"
+#include "context/event.hpp"
 
 #include <SFML/Graphics/Sprite.hpp>
 
@@ -13,7 +13,7 @@ namespace dungeon
 
     //! A button-like lock which controls the invasion/design state of the dungeon.
 
-    class Lock final : public scene::Entity, private EventReceiver
+    class Lock final : public scene::Entity, private context::EventReceiver
     {
         using baseClass = scene::Entity;
 
@@ -65,7 +65,7 @@ namespace dungeon
         bool handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
         void handleMouseLeft() final;
 
-        void receive(const Event& event) final;
+        void receive(const context::Event& event) final;
 
         //! @}
 

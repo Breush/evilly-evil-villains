@@ -2,7 +2,7 @@
 
 #include "scene/entity.hpp"
 #include "dungeon/elementdata.hpp"
-#include "dungeon/event.hpp"
+#include "context/event.hpp"
 #include "nui/grabbutton.hpp"
 #include "tools/int.hpp"
 
@@ -15,7 +15,7 @@ namespace dungeon
     class Inter;
 
     //! A generic trap interface.
-    class Trap : public scene::Entity, public EventReceiver
+    class Trap : public scene::Entity, public context::EventReceiver
     {
     public:
 
@@ -50,7 +50,7 @@ namespace dungeon
         //! @name Events
         //! @{
 
-        virtual void receive(const Event& event) override = 0;
+        virtual void receive(const context::Event& event) override = 0;
 
         //! @}
 
