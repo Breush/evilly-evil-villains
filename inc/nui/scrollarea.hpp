@@ -40,6 +40,7 @@ namespace nui
 
         void onSizeChanges() final;
         void onChildSizeChanges(scene::Entity& child) final;
+        void refreshNUI(const config::NUIGuides& cNUI) final;
 
         //! @}
 
@@ -83,6 +84,9 @@ namespace nui
         bool m_hBarGrabbed = false;         //!< True if grabbing the horizontal bar.
         sf::Vector2f m_mouseStartGrabbing;  //!< Position of mouse when start grabbing.
         sf::Vector2f m_offsetStartGrabbing; //!< Position of content offset when start grabbing.
+
+        // Decorum
+        float m_barThick = 0.f; //!< The bar size.
     };
 }
 

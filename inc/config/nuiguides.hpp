@@ -15,7 +15,8 @@ namespace config
         float hPadding;     //!< Horizontal padding.
         float vPadding;     //!< Vertical padding.
 
-        float borderThick;  //!< Thickness of borders.
+        float borderThick;      //!< Thickness of borders.
+        float largeBorderThick; //!< Thickness of large borders.
 
         float fontSize;     //!< Size of the font.
         float fontVSpace;   //!< The space to reserve for a correct display of a font at fontSize.

@@ -30,6 +30,15 @@ void ScrollArea::onChildSizeChanges(scene::Entity&)
     refreshContentStatus();
 }
 
+void ScrollArea::refreshNUI(const config::NUIGuides& cNUI)
+{
+    baseClass::refreshNUI(cNUI);
+
+    m_barThick = cNUI.largeBorderThick;
+
+    refreshBars();
+}
+
 //------------------//
 //----- Events -----//
 
@@ -131,10 +140,9 @@ void ScrollArea::refreshBars()
     }
 
     // Bar offsets
-    // TODO Use cNUI for this 10.f
-    m_hBar.setSize({m_barsLength.x, 10.f});
-    m_vBar.setSize({10.f, m_barsLength.y});
-    m_barsOffset = {size().y - 10.f, size().x - 10.f};
+    m_hBar.setSize({m_barsLength.x, m_barThick});
+    m_vBar.setSize({m_barThick, m_barsLength.y});
+    m_barsOffset = {size().y - m_barThick, size().x - m_barThick};
 }
 
 void ScrollArea::refreshContentStatus()
