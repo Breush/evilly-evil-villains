@@ -2,6 +2,7 @@
 
 #include "core/gettext.hpp"
 #include "dungeon/sidebar.hpp"
+#include "config/nuiguides.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
@@ -27,16 +28,24 @@ TabHolder::TabHolder()
 
 void TabHolder::onSizeChanges()
 {
-    // Background
-    // The -2.f are for the outline of the background.
-    m_background.setSize({size().x - 2.f, size().y - headerSize().y - 1.f});
-    m_background.setPosition({0.f, headerSize().y - 1.f});
+    refreshBackground();
 }
 
 void TabHolder::onChildSizeChanges(scene::Entity& child)
 {
     // Whenever the global stacker size changes, we update ours
     setSize(child.size());
+}
+
+void TabHolder::refreshNUI(const config::NUIGuides& cNUI)
+{
+    baseClass::refreshNUI(cNUI);
+
+    m_borderThick = cNUI.borderThick;
+    m_vPadding = cNUI.vPadding;
+
+    refreshBackground();
+    refreshTabBackground();
 }
 
 //------------------//
@@ -112,15 +121,22 @@ sf::Vector2f TabHolder::headerSize() const
     oHeaderSize.x = size().x;
 
     // Height
-    oHeaderSize.y = 0.f;
+    oHeaderSize.y = m_vPadding;
     for (auto& tab : m_tabs)
-        oHeaderSize.y = std::max(oHeaderSize.y, tab.image->size().y);
+        oHeaderSize.y = std::max(oHeaderSize.y, m_vPadding + tab.image->size().y);
 
     return oHeaderSize;
 }
 
 //-----------------------------------//
 //----- Internal change updates -----//
+
+void TabHolder::refreshBackground()
+{
+    auto headerHeight = headerSize().y;
+    m_background.setSize({size().x - 2.f * m_borderThick, size().y - headerHeight + m_borderThick});
+    m_background.setPosition({0.f, headerHeight - m_borderThick});
+}
 
 void TabHolder::refreshSelectedTab()
 {

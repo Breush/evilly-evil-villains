@@ -68,6 +68,7 @@ namespace dungeon
         void onTransformChanges() final;
         void onSizeChanges() final;
         void refreshNUI(const config::NUIGuides& cNUI) final;
+        void refreshWindow(const config::WindowInfo& cWindow) final;
 
         //! @}
 
@@ -97,6 +98,9 @@ namespace dungeon
 
         //! Refresh the from the layer size.
         void refreshSize();
+
+        //! Refresh the position of the viewport.
+        void refreshViewport();
 
         //! Refresh the representation of the view rectangle.
         void refreshViewIndicator();

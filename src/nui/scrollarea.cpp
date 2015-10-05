@@ -34,7 +34,7 @@ void ScrollArea::refreshNUI(const config::NUIGuides& cNUI)
 {
     baseClass::refreshNUI(cNUI);
 
-    m_barThick = cNUI.largeBorderThick;
+    m_barThick = 2.f * cNUI.largeBorderThick;
 
     refreshBars();
 }

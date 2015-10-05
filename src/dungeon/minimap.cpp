@@ -30,11 +30,7 @@ void Minimap::init()
 
 void Minimap::onTransformChanges()
 {
-    const auto& window = Application::context().window;
-    const auto& screenSize = Application::context().windowInfo.screenSize;
-    sf::FloatRect rect{getPosition().x, getPosition().y, size().x, size().y};
-    rect = tools::mapRectCoordsToPixel(window, rect);
-    m_view.setViewport(rect / screenSize);
+    refreshViewport();
 }
 
 void Minimap::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -60,6 +56,13 @@ void Minimap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 void Minimap::onSizeChanges()
 {
     m_background.setSize(size());
+}
+
+void Minimap::refreshWindow(const config::WindowInfo& cWindow)
+{
+    baseClass::refreshWindow(cWindow);
+
+    refreshViewport();
 }
 
 void Minimap::refreshNUI(const config::NUIGuides& cNUI)
@@ -139,6 +142,15 @@ void Minimap::refreshSize()
     m_view.setCenter(m_layer->size() / 2.f);
 
     refreshViewIndicator();
+}
+
+void Minimap::refreshViewport()
+{
+    const auto& window = Application::context().window;
+    const auto& screenSize = Application::context().windowInfo.screenSize;
+    sf::FloatRect rect{getPosition().x, getPosition().y, size().x, size().y};
+    rect = tools::mapRectCoordsToPixel(window, rect);
+    m_view.setViewport(rect / screenSize);
 }
 
 void Minimap::refreshViewIndicator()

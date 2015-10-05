@@ -61,6 +61,7 @@ namespace nui
 
         void onSizeChanges() final;
         void onChildSizeChanges(scene::Entity& child) final;
+        void refreshNUI(const config::NUIGuides& cNUI) final;
 
         //! @}
 
@@ -80,6 +81,9 @@ namespace nui
 
         //! Called to recompute the size.
         void refreshSize();
+
+        //! Refresh the global background.
+        void refreshBackground();
 
         //! Refresh the selected tab content.
         void refreshContent();
@@ -118,5 +122,8 @@ namespace nui
         // Decorum
         sf::RectangleShape m_background;                    //!< The global background.
         std::vector<sf::RectangleShape> m_tabsBackgrounds;  //!< The background for the tabs.
+
+        float m_borderThick = 0.f;  //!< Border thickness.
+        float m_vPadding = 0.f;     //!< Vertical padding.
     };
 }
