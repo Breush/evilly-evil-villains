@@ -39,6 +39,7 @@
 #include FT_BITMAP_H
 #include <cstdlib>
 #include <cstring>
+#include <stdexcept>
 
 
 namespace
@@ -641,8 +642,7 @@ IntRect Font::findGlyphRect(Page& page, unsigned int width, unsigned int height)
             else
             {
                 // Oops, we've reached the maximum texture size...
-                err() << "Failed to add a new character to the font: the maximum texture size has been reached" << std::endl;
-                return IntRect(0, 0, 2, 2);
+                throw std::runtime_error("Failed to add a new character to the font: the maximum texture size has been reached.");
             }
         }
 
