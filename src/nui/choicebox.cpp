@@ -319,7 +319,9 @@ void ChoiceBox::refreshText()
         m_text.setColor(sf::Color::White);
 
     // Position
-    m_text.setOrigin(boundsSize(m_text) / 2.f);
+    // Note: baseline of text is set to characterSize.y.
+    sf::Vector2f textOrigin(boundsSize(m_text).x / 2.f, m_text.getCharacterSize());
+    m_text.setOrigin(textOrigin);
 }
 
 void ChoiceBox::refreshLines()
@@ -375,7 +377,7 @@ void ChoiceBox::updateButtonSize()
         m_buttonSize.x += 2 * (m_arrowOffset + m_arrowSize);
 
     // Reposition text
-    m_text.setPosition(m_buttonSize / 2.f);
+    m_text.setPosition(m_buttonSize.x * 0.5f, m_buttonSize.y * 0.66f);
 }
 
 void ChoiceBox::updateSize()
