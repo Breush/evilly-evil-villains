@@ -90,7 +90,7 @@ namespace scene
         Text_t m_text;                          //!< The text.
 
         // Parameters
-        float m_fontSize;   //!< Reference font size.
+        float m_fontSize = 0.f; //!< Reference font size.
     };
 }
 
