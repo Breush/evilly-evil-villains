@@ -40,7 +40,7 @@ void Summary::init()
 
 void Summary::onSizeChanges()
 {
-    m_dungeonName.setPosition((size().x - boundsSize(m_dungeonName).x) / 2.f, m_vPadding);
+    m_dungeonName.setPosition(size().x / 2.f, m_vPadding);
 }
 
 void Summary::updateSize()
@@ -106,6 +106,7 @@ void Summary::receive(const context::Event& event)
 void Summary::refreshFromData()
 {
     m_dungeonName.setString(m_data->name());
+    m_dungeonName.setOrigin(boundsSize(m_dungeonName).x / 2.f, 0.f);
 
     m_bars[BAR_DOSH].text.setString(toWString(m_data->villain().doshWallet.value()));
     m_bars[BAR_FAME].text.setString(toWString(m_data->fame()));
