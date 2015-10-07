@@ -274,7 +274,8 @@ void Shader::setParameter(const std::string& name, float x)
         ensureGlContext();
 
         // Enable program
-        GLEXT_GLhandle program = glCheck(GLEXT_glGetHandle(GLEXT_GL_PROGRAM_OBJECT));
+        GLEXT_GLhandle program;
+        glCheck(program = GLEXT_glGetHandle(GLEXT_GL_PROGRAM_OBJECT));
         glCheck(GLEXT_glUseProgramObject(castToGlHandle(m_shaderProgram)));
 
         // Get parameter location and assign it new values
@@ -298,7 +299,8 @@ void Shader::setParameter(const std::string& name, float x, float y)
         ensureGlContext();
 
         // Enable program
-        GLEXT_GLhandle program = glCheck(GLEXT_glGetHandle(GLEXT_GL_PROGRAM_OBJECT));
+        GLEXT_GLhandle program;
+        glCheck(program = GLEXT_glGetHandle(GLEXT_GL_PROGRAM_OBJECT));
         glCheck(GLEXT_glUseProgramObject(castToGlHandle(m_shaderProgram)));
 
         // Get parameter location and assign it new values
@@ -322,7 +324,8 @@ void Shader::setParameter(const std::string& name, float x, float y, float z)
         ensureGlContext();
 
         // Enable program
-        GLEXT_GLhandle program = glCheck(GLEXT_glGetHandle(GLEXT_GL_PROGRAM_OBJECT));
+        GLEXT_GLhandle program;
+        glCheck(program = GLEXT_glGetHandle(GLEXT_GL_PROGRAM_OBJECT));
         glCheck(GLEXT_glUseProgramObject(castToGlHandle(m_shaderProgram)));
 
         // Get parameter location and assign it new values
@@ -346,7 +349,8 @@ void Shader::setParameter(const std::string& name, float x, float y, float z, fl
         ensureGlContext();
 
         // Enable program
-        GLEXT_GLhandle program = glCheck(GLEXT_glGetHandle(GLEXT_GL_PROGRAM_OBJECT));
+        GLEXT_GLhandle program;
+        glCheck(program = GLEXT_glGetHandle(GLEXT_GL_PROGRAM_OBJECT));
         glCheck(GLEXT_glUseProgramObject(castToGlHandle(m_shaderProgram)));
 
         // Get parameter location and assign it new values
@@ -391,7 +395,8 @@ void Shader::setParameter(const std::string& name, const Transform& transform)
         ensureGlContext();
 
         // Enable program
-        GLEXT_GLhandle program = glCheck(GLEXT_glGetHandle(GLEXT_GL_PROGRAM_OBJECT));
+        GLEXT_GLhandle program;
+        glCheck(program = GLEXT_glGetHandle(GLEXT_GL_PROGRAM_OBJECT));
         glCheck(GLEXT_glUseProgramObject(castToGlHandle(m_shaderProgram)));
 
         // Get parameter location and assign it new values
@@ -532,13 +537,15 @@ bool Shader::compile(const char* vertexShaderCode, const char* fragmentShaderCod
     m_params.clear();
 
     // Create the program
-    GLEXT_GLhandle shaderProgram = glCheck(GLEXT_glCreateProgramObject());
+    GLEXT_GLhandle shaderProgram;
+    glCheck(shaderProgram = GLEXT_glCreateProgramObject());
 
     // Create the vertex shader if needed
     if (vertexShaderCode)
     {
         // Create and compile the shader
-        GLEXT_GLhandle vertexShader = glCheck(GLEXT_glCreateShaderObject(GLEXT_GL_VERTEX_SHADER));
+        GLEXT_GLhandle vertexShader;
+        glCheck(vertexShader = GLEXT_glCreateShaderObject(GLEXT_GL_VERTEX_SHADER));
         glCheck(GLEXT_glShaderSource(vertexShader, 1, &vertexShaderCode, NULL));
         glCheck(GLEXT_glCompileShader(vertexShader));
 
@@ -565,7 +572,8 @@ bool Shader::compile(const char* vertexShaderCode, const char* fragmentShaderCod
     if (fragmentShaderCode)
     {
         // Create and compile the shader
-        GLEXT_GLhandle fragmentShader = glCheck(GLEXT_glCreateShaderObject(GLEXT_GL_FRAGMENT_SHADER));
+        GLEXT_GLhandle fragmentShader;
+        glCheck(fragmentShader = GLEXT_glCreateShaderObject(GLEXT_GL_FRAGMENT_SHADER));
         glCheck(GLEXT_glShaderSource(fragmentShader, 1, &fragmentShaderCode, NULL));
         glCheck(GLEXT_glCompileShader(fragmentShader));
 

@@ -30,7 +30,6 @@
 #include <SFML/Graphics/RenderTextureImplDefault.hpp>
 #include <SFML/System/Err.hpp>
 
-#include <stdexcept>
 
 namespace sf
 {
@@ -55,7 +54,8 @@ bool RenderTexture::create(unsigned int width, unsigned int height, bool depthBu
     // Create the texture
     if (!m_texture.create(width, height))
     {
-        throw std::runtime_error("Impossible to create render texture (failed to create the target texture)");
+        err() << "Impossible to create render texture (failed to create the target texture)" << std::endl;
+        return false;
     }
 
     // We disable smoothing by default for render textures
@@ -67,6 +67,9 @@ bool RenderTexture::create(unsigned int width, unsigned int height, bool depthBu
     {
         // Use frame-buffer object (FBO)
         m_impl = new priv::RenderTextureImplFBO;
+
+        // Mark the texture as being a framebuffer object attachment
+        m_texture.m_fboAttachment = true;
     }
     else
     {
