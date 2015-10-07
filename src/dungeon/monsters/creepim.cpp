@@ -51,6 +51,22 @@ void Creepim::updateAI(const sf::Time& dt)
     setCurrentNode(m_luaActor.findNextNode(m_currentNode));
 }
 
+void Creepim::updateRoutine(const sf::Time& dt)
+{
+    returnif (!active());
+
+    // Explode after fusing time
+    if (m_fusing && !m_sprite.started()) {
+        dungeon::Event devent;
+        devent.type = "room_exploded";
+        devent.action.monster = this;
+        devent.action.room.x = m_explodingCoords.x;
+        devent.action.room.y = m_explodingCoords.y;
+        emitter()->emit(devent);
+        m_fusing = false;
+    }
+}
+
 //---------------------------//
 //----- Node management -----//
 
@@ -71,17 +87,15 @@ void Creepim::setCurrentNode(const Graph::Node* node)
 void Creepim::receive(const context::Event& event)
 {
     const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
-    returnif (devent.type != "hero_entered_room");
+    returnif (devent.type != "hero_entered");
 
     // If the hero is near us
     sf::Vector2u coords(devent.action.room.x, devent.action.room.y);
     if (m_inter.tileFromLocalPosition(localPosition()) == coords) {
-        dungeon::Event devent;
-        devent.type = "room_exploded";
-        devent.action.monster = this;
-        devent.action.room.x = coords.x;
-        devent.action.room.y = coords.y;
-        emitter()->emit(devent);
+        m_sprite.select((m_left)? L"lexplode" : L"rexplode");
+        m_sprite.setLooping(false);
+        m_explodingCoords = coords;
+        m_fusing = true;
     }
 }
 
@@ -122,4 +136,14 @@ void Creepim::refreshPositionFromNode(bool teleport)
 
     // TODO Changing room, we need to check if there is some hero in it
     // and explode if so.
+
+    // TODO See Hero, same problem
+    if (lerpable()->targetPosition().x > localPosition().x) {
+        m_sprite.select(L"rwalk");
+        m_left = false;
+    }
+    else if (lerpable()->targetPosition().x < localPosition().x) {
+        m_sprite.select(L"lwalk");
+        m_left = true;
+    }
 }
