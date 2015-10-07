@@ -94,8 +94,9 @@ void Data::loadDungeon(const std::wstring& file)
     m_floorsCount = dungeon.attribute(L"floorsCount").as_uint();
     m_roomsByFloor = dungeon.attribute(L"roomsByFloor").as_uint();
     setFame(dungeon.attribute(L"fame").as_uint());
-
-    wdebug_dungeon_1(L"Dungeon is " << m_name << L" of size " << m_floorsCount << "x" << m_roomsByFloor);
+    // FIXME Printing m_name to the console when name contains Unicode characters (i.e. 'â') makes a seg fault.
+    // wdebug_dungeon_1(L"Dungeon is " << m_name << L" of size " << m_floorsCount << L"x" << m_roomsByFloor << L".");
+    wdebug_dungeon_1(L"Dungeon is "<< m_floorsCount << L"x" << m_roomsByFloor << L".");
 
     // Monsters
     for (auto& monsterNode : dungeon.child(L"monsters").children(L"monster")) {

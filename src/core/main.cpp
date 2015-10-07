@@ -39,7 +39,10 @@ int main(int argc, char *argv[])
     // Disable synchronisation
     // Note: Remove the safety of using printf/scanf (so don't use them)
     // but this makes the streams faster.
+    // Forcing wide/narrow encodings.
     std::ios_base::sync_with_stdio(false);
+    std::wcout << L"";
+    std::cerr << "";
 
     // Handle arguments
     for (int i = 1; i < argc; ++i)

@@ -12,6 +12,8 @@ int main(void)
         return EXIT_FAILURE;
     }
 
+    internationalization::close();
+
     return EXIT_SUCCESS;
 }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <dungeon name="Château d'eau" floorsCount="17" roomsByFloor="2" fame="23">
+    <monsters />
 	<floor pos="0">
 		<room pos="0" state="constructed" />
 		<room pos="1" state="constructed" />

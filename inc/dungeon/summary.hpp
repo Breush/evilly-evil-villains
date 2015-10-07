@@ -97,11 +97,11 @@ namespace dungeon
         //! The bars containing elements.
         std::array<Bar, BAR_COUNT> m_bars;
 
-        float m_fontSize;       //!< The character size of texts.
-        float m_barWidth;       //!< The estimated width of an info bar.
-        float m_barHeight;      //!< The estimated height of an info bar.
-        float m_hPadding;       //!< The horizontal padding.
-        float m_vPadding;       //!< The vertical padding.
-        float m_barImageSide;   //!< The size of the image in a bar.
+        float m_fontSize = 0.f;     //!< The character size of texts.
+        float m_barWidth = 0.f;     //!< The estimated width of an info bar.
+        float m_barHeight = 0.f;    //!< The estimated height of an info bar.
+        float m_hPadding = 0.f;     //!< The horizontal padding.
+        float m_vPadding = 0.f;     //!< The vertical padding.
+        float m_barImageSide = 0.f; //!< The size of the image in a bar.
     };
 }

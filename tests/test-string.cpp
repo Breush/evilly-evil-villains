@@ -85,6 +85,8 @@ int main(void)
         std::wcout << wstr << L" != FÜn_NY____S_TrîNG_" << std::endl;
         return EXIT_FAILURE;
     }
+    
+    internationalization::close();
 
     return EXIT_SUCCESS;
 }

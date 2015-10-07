@@ -3,6 +3,7 @@
 #include "core/application.hpp"
 #include "context/villains.hpp"
 #include "dungeon/data.hpp"
+#include "tools/string.hpp"
 
 using namespace dungeon;
 
@@ -39,15 +40,12 @@ void Summary::init()
 
 void Summary::onSizeChanges()
 {
-    const auto& nameBounds = m_dungeonName.getLocalBounds();
-    m_dungeonName.setPosition((size().x - (nameBounds.left + nameBounds.width)) / 2.f, m_vPadding);
+    m_dungeonName.setPosition((size().x - boundsSize(m_dungeonName).x) / 2.f, m_vPadding);
 }
 
 void Summary::updateSize()
 {
-    const auto& nameBounds = m_dungeonName.getLocalBounds();
-    auto maxWidth = std::max(m_barWidth, 2.f * m_hPadding + nameBounds.left + nameBounds.width);
-
+    auto maxWidth = std::max(m_barWidth, 2.f * m_hPadding + boundsSize(m_dungeonName).x);
     setSize({maxWidth, m_vPadding + (BAR_COUNT + 1.f) * m_barHeight});
 }
 

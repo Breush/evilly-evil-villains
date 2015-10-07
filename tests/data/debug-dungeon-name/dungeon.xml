@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<dungeon name="¥£€$¢₡₢₣₤₥₦₧₨₩₪₫₭₮₯₹" floorsCount="1" roomsByFloor="1" fame="0">
+	<monsters />
+	<floor pos="0">
+		<room pos="0" state="constructed" />
+	</floor>
+</dungeon>

@@ -76,8 +76,8 @@ Application::Application()
     // Context - create window
     s_context.windowInfo.title = "Evilly Evil Villains";
     s_context.windowInfo.style = sf::Style::Default;
-    if (s_context.display.window.fullscreen) switchFullscreenMode();
-    else s_context.recreateWindow();
+    if (s_context.display.window.fullscreen) s_context.windowInfo.style |= sf::Style::Fullscreen;
+    s_context.recreateWindow();
 
     // Initialize language
     internationalization::init(toString(s_context.display.global.language));

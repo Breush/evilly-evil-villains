@@ -138,11 +138,11 @@ bool Data::load(pugi::xml_node& elem)
 
 void Data::log() const
 {
-    std::wcout << "# Document >> ";
-    std::wcout << "scml_version=" << scml_version << L" | ";
-    std::wcout << "generator=" << generator << L" | ";
-    std::wcout << "generator_version=" << generator_version << L" | ";
-    std::wcout << "pixel_art_mode=" << pixel_art_mode << std::endl;
+    std::wcout << L"# Document >> ";
+    std::wcout << L"scml_version=" << scml_version << L" | ";
+    std::wcout << L"generator=" << generator << L" | ";
+    std::wcout << L"generator_version=" << generator_version << L" | ";
+    std::wcout << L"pixel_art_mode=" << pixel_art_mode << std::endl;
 }
 
 void Data::clear()

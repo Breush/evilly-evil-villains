@@ -35,7 +35,7 @@ endmacro()
 #=====
 # All tests
 
-file(GLOB TEST_FILES RELATIVE ${CMAKE_BINARY_DIR}/tests test-*.cpp)
+file(GLOB TEST_FILES RELATIVE ${CMAKE_BINARY_DIR}/tests test-*.cpp debug-*.cpp)
 foreach (TEST_FILE ${TEST_FILES})
     eev_add_test(${TEST_FILE})
 endforeach ()
