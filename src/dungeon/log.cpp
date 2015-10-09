@@ -11,12 +11,18 @@ using namespace dungeon;
 
 Log::Log()
     : m_width(-1.f)
+    , m_direction(Direction::NEW_BELOW)
 {
     setDetectable(false);
 
     // Background
     m_background.setFillColor({255u, 255u, 255u, 192u});
     addPart(&m_background);
+
+    // Entry
+    attachChild(m_commandEntry);
+    m_commandEntry.setRelativeOrigin({0.f, 1.f});
+    m_commandEntry.setOnValidateCallback([this] { onCommandValidated(); });
 }
 
 //-------------------//
@@ -104,6 +110,25 @@ void Log::addMessage(std::wstring text, sf::Color color)
     refreshMessages();
 }
 
+//--------------------//
+//----- Commands -----//
+
+void Log::onCommandValidated()
+{
+    auto command = m_commandEntry.text();
+    m_commandEntry.setText(L"");
+
+    addMessage(command, sf::Color::Blue);
+    interpretCommand(command);
+}
+
+void Log::interpretCommand(const std::wstring& command)
+{
+    // TODO Interpret and broadcast command
+
+    addMessage(L"> Unknown command", {50u, 50u, 50u, 255u});
+}
+
 //------------------------------------//
 //----- Internal changes updates -----//
 
@@ -126,6 +151,7 @@ void Log::refreshMessages()
         }
     }
 
+    m_currentHeight += m_commandEntry.size().y + 5.f;
     refreshHeight();
 }
 
@@ -139,10 +165,12 @@ void Log::refreshTextsWrap()
 void Log::refreshSize()
 {
     setSize({m_width, m_currentHeight});
+    m_commandEntry.setWidth(m_width);
     refreshTextsWrap();
 }
 
 void Log::refreshHeight()
 {
+    m_commandEntry.setLocalPosition({0.f, m_currentHeight});
     setSize({m_width, m_currentHeight});
 }

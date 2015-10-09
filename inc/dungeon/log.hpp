@@ -3,6 +3,7 @@
 #include "scene/entity.hpp"
 #include "context/event.hpp"
 #include "sfe/twraptext.hpp"
+#include "nui/textentry.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
@@ -76,6 +77,19 @@ namespace dungeon
 
         //! @}
 
+        //-----------------//
+        //! @name Commands
+        //! @{
+
+        //! Callback when command entry is validated.
+        void onCommandValidated();
+
+        // TODO Move that to another class?
+        //! Interpret a specific command.
+        void interpretCommand(const std::wstring& command);
+
+        //! @}
+
         //--------------------------------//
         //! @name Internal change updates
         //! @{
@@ -103,13 +117,18 @@ namespace dungeon
 
     private:
 
+        // Messages
         std::deque<Message> m_messages; //!< The currently alive messages.
-
         float m_aliveTime = 5.f;        //!< How long to keep a message alive, in seconds.
         float m_currentHeight = 0.f;    //!< The current height of the displayed messages.
 
+        // Command
+        nui::TextEntry m_commandEntry;  //!< The command entry.
+
+        // Decorum
         sf::RectangleShape m_background;    //!< The soft background, fitting the current size.
 
-        float m_characterSize = 0.f;    //!< The font size.
+        // TODO Make a flyweight with all these
+        float m_characterSize = 0.f;        //!< The font size.
     };
 }

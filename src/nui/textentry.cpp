@@ -8,7 +8,7 @@
 using namespace nui;
 
 TextEntry::TextEntry()
-    : m_length(0u)
+    : m_length(-1u)
     , m_maxCharacters(40u)
 {
     setFocusable(true);
@@ -48,7 +48,10 @@ void TextEntry::onSizeChanges()
 
 void TextEntry::updateSize()
 {
-    setSize({m_length * m_fontHSpace + 2.f * m_textPadding, m_fontVSpace + 2.f * m_textPadding});
+    if (m_length != -1u)
+        m_width = m_length * m_fontHSpace + 2.f * m_textPadding;
+
+    setSize({m_width, m_fontVSpace + 2.f * m_textPadding});
 }
 
 void TextEntry::updateRoutine(const sf::Time& dt)

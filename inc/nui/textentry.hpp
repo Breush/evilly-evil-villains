@@ -50,6 +50,9 @@ namespace nui
         //! @name Public properties
         //! @{
 
+        //! Size override, control only the width.
+        PARAMGSU(float, m_width, width, setWidth, updateSize)
+
         //! Size override, length is an estimated number of characters visible.
         PARAMGSU(uint, m_length, length, setLength, updateSize)
 

@@ -57,7 +57,6 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 
     // Dungeon log
     nuiRoot.attachChild(m_dungeonLog);
-    m_dungeonLog.setDirection(dungeon::Log::Direction::OLD_BELOW);
     m_dungeonLog.setRelativePosition({0.f, 1.f});
     m_dungeonLog.setRelativeOrigin({0.f, 1.f});
     m_dungeonLog.setEmitter(&m_dungeonData);
