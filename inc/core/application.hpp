@@ -5,6 +5,7 @@
 #include "resources/musicplayer.hpp"
 #include "resources/soundplayer.hpp"
 #include "resources/animationholder.hpp"
+#include "context/commander.hpp"
 #include "states/statestack.hpp"
 #include "config/windowinfo.hpp"
 #include "config/nuiguides.hpp"
@@ -42,7 +43,8 @@ public:
         //! Recreates the window from current config::WindowInfo.
         void recreateWindow();
 
-        sf::RenderWindow window;    //!< The window, final destination of all draws.
+        sf::RenderWindow window;        //!< The window, final destination of all draws.
+        context::Commander commander;   //!< The commands manager.
 
         resources::TextureHolder    textures;   //!< The textures.
         resources::ShaderHolder     shaders;    //!< The shaders.

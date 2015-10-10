@@ -243,9 +243,10 @@ void Application::update(const sf::Time& dt)
     m_gameTime += dt.asSeconds();
 
     // Game logic
-    updateShaders(dt);
-    updateAnimations(dt);
+    s_context.commander.update(dt);
     m_stateStack.update(dt);
+    updateAnimations(dt);
+    updateShaders(dt);
 }
 
 void Application::render()

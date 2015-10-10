@@ -1,0 +1,15 @@
+#include "context/command.hpp"
+
+#include "core/application.hpp"
+
+using namespace context;
+
+Commandable::Commandable()
+{
+    Application::context().commander.add(this);
+}
+
+Commandable::~Commandable()
+{
+    Application::context().commander.remove(this);
+}

@@ -2,6 +2,7 @@
 
 #include "scene/entity.hpp"
 #include "context/event.hpp"
+#include "context/logger.hpp"
 #include "sfe/twraptext.hpp"
 #include "nui/textentry.hpp"
 
@@ -15,7 +16,7 @@ namespace dungeon
     //! A logging window for dungeons events.
     //! The events are faded to only keep recent ones.
 
-    class Log final : public scene::Entity, public context::EventReceiver
+    class Log final : public scene::Entity, public context::EventReceiver, public context::Logger
     {
         using baseClass = scene::Entity;
 
@@ -81,12 +82,11 @@ namespace dungeon
         //! @name Commands
         //! @{
 
-        //! Callback when command entry is validated.
-        void onCommandValidated();
+        inline context::Command::Category category() const final { return context::Command::Category::LOG; }
+        void commandLog(const std::wstring& message) final;
 
-        // TODO Move that to another class?
-        //! Interpret a specific command.
-        void interpretCommand(const std::wstring& command);
+        //! Callback when command entry is validated.
+        void onCommandEntryValidated();
 
         //! @}
 

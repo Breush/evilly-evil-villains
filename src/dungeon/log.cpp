@@ -22,7 +22,7 @@ Log::Log()
     // Entry
     attachChild(m_commandEntry);
     m_commandEntry.setRelativeOrigin({0.f, 1.f});
-    m_commandEntry.setOnValidateCallback([this] { onCommandValidated(); });
+    m_commandEntry.setOnValidateCallback([this] { onCommandEntryValidated(); });
 }
 
 //-------------------//
@@ -113,20 +113,19 @@ void Log::addMessage(std::wstring text, sf::Color color)
 //--------------------//
 //----- Commands -----//
 
-void Log::onCommandValidated()
+void Log::commandLog(const std::wstring& message)
 {
-    auto command = m_commandEntry.text();
-    m_commandEntry.setText(L"");
-
-    addMessage(command, sf::Color::Blue);
-    interpretCommand(command);
+    addMessage(message, {50u, 50u, 50u, 255u});
 }
 
-void Log::interpretCommand(const std::wstring& command)
+void Log::onCommandEntryValidated()
 {
-    // TODO Interpret and broadcast command
+    auto commandLine = m_commandEntry.text();
+    m_commandEntry.setText(L"");
 
-    addMessage(L"> Unknown command", {50u, 50u, 50u, 255u});
+    addMessage(commandLine, sf::Color::Blue);
+    auto commands = Application::context().commander.interpret(commandLine);
+    Application::context().commander.push(commands);
 }
 
 //------------------------------------//
