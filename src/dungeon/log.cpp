@@ -20,7 +20,6 @@ Log::Log()
     addPart(&m_background);
 
     // Entry
-    attachChild(m_commandEntry);
     m_commandEntry.setRelativeOrigin({0.f, 1.f});
     m_commandEntry.setOnValidateCallback([this] { onCommandEntryValidated(); });
 }
@@ -66,6 +65,18 @@ void Log::refreshNUI(const config::NUIGuides& cNUI)
 
 //------------------//
 //----- Events -----//
+
+void Log::handleGlobalEvent(const sf::Event& event)
+{
+    returnif (event.type != sf::Event::KeyPressed);
+
+    // Switch ON/OFF command entry on SHIFT + F2
+    if (event.key.shift && event.key.code == sf::Keyboard::F2) {
+        if (hasChild(m_commandEntry)) detachChild(m_commandEntry);
+        else attachChild(m_commandEntry);
+        refreshMessages();
+    }
+}
 
 void Log::receive(const context::Event& event)
 {
@@ -150,7 +161,9 @@ void Log::refreshMessages()
         }
     }
 
-    m_currentHeight += m_commandEntry.size().y + 5.f;
+    if (hasChild(m_commandEntry))
+        m_currentHeight += m_commandEntry.size().y + 5.f;
+
     refreshHeight();
 }
 

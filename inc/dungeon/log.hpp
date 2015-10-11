@@ -46,6 +46,15 @@ namespace dungeon
 
         //! @}
 
+        //---------------//
+        //! @name Events
+        //! @{
+
+        //! Should be called whenever an event occurs.
+        void handleGlobalEvent(const sf::Event& event);
+
+        //! @}
+
         //--------------------------//
         //! @name Public properties
         //! @{

@@ -163,6 +163,7 @@ void GameDungeonDesign::handleEvent(const sf::Event& event)
     // Global events
     m_dungeonInter.handleGlobalEvent(event);
     m_contextMenu.handleGlobalEvent(event);
+    m_dungeonLog.handleGlobalEvent(event);
 
     if (event.type == sf::Event::KeyPressed
         && event.key.code == sf::Keyboard::Escape) {
