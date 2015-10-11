@@ -2,6 +2,8 @@
 
 #include <SFML/System/Time.hpp>
 
+#include <string>
+#include <vector>
 #include <functional>
 
 namespace context
@@ -44,6 +46,9 @@ namespace context
         //! Set the category.
         virtual Command::Category category() const = 0;
 
+        //! Set the interpreter type.
+        virtual std::wstring interpreterType() const { return L""; }
+
         //! @}
 
         //---------------//
@@ -52,6 +57,31 @@ namespace context
 
         //! Downcast to a specific type.
         template<class T> T& as() { return *dynamic_cast<T*>(this); }
+
+        //! @}
+    };
+
+    //! An object able to interpret a command line.
+
+    class Interpreter
+    {
+    public:
+
+        //! Constructor.
+        Interpreter();
+
+        //! Destructor.
+        virtual ~Interpreter();
+
+        //--------------------//
+        //! @name Interpreter
+        //! @{
+
+        //! Set the interpreter key.
+        virtual std::wstring interpreterKey() const = 0;
+
+        //! Interpret a specific command.
+        virtual Command interpret(const std::vector<std::wstring>& cmdTokens) = 0;
 
         //! @}
     };

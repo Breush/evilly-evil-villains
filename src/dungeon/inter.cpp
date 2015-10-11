@@ -3,6 +3,7 @@
 #include "core/gettext.hpp"
 #include "core/application.hpp"
 #include "context/villains.hpp"
+#include "context/logger.hpp"
 #include "dungeon/traps/maker.hpp"
 #include "dungeon/monsters/maker.hpp"
 #include "dungeon/facilities/maker.hpp"
@@ -145,9 +146,6 @@ void Inter::handleMouseLeft()
     resetHoveredTile();
 }
 
-//--------------------------//
-//----- Dungeon events -----//
-
 void Inter::receive(const context::Event& event)
 {
     const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
@@ -189,6 +187,27 @@ void Inter::receive(const context::Event& event)
         refreshMonstersActivity();
         deselectTile();
     }
+}
+
+//-----------------------//
+//----- Interpreter -----//
+
+context::Command Inter::interpret(const std::vector<std::wstring>& cmdTokens)
+{
+    std::wstring logMessage = L"> [dungeon] Unable to interpret command";
+
+    if (cmdTokens.size() >= 4u) {
+        // Construct room
+        if (cmdTokens[0u] == L"construct" && cmdTokens[1u] == L"room") {
+            logMessage = L"> [dungeon] Constructing room " + cmdTokens[2u] + L"/" + cmdTokens[3u];
+            bool hard = (cmdTokens.size() >= 5u) && (cmdTokens[4u] == L"hard");
+            m_data->constructRoom({to<uint>(cmdTokens[2u]), to<uint>(cmdTokens[3u])}, hard);
+        }
+    }
+
+    // Generate log
+    context::Command command;
+    return context::setCommandLog(command, logMessage);
 }
 
 //------------------------//

@@ -8,12 +8,17 @@ template<typename T> inline std::string toString(const T& t);
 template<> inline std::string toString(const std::wstring& ws);
 template<typename T> inline std::wstring toWString(const T& t);
 template<> inline std::wstring toWString(const std::string& s);
+template<typename T> inline T to(const std::string& s);
+template<typename T> inline T to(const std::wstring& ws);
 
 // To lowercase/uppercase
 inline std::string& toLowercase(std::string& str);
 inline std::wstring& toLowercase(std::wstring& str);
 inline std::string& toUppercase(std::string& str);
 inline std::wstring& toUppercase(std::wstring& str);
+
+// Splitting
+inline std::vector<std::wstring> split(const std::wstring& str, const wchar_t delim = L' ');
 
 // Replace all non-alphanum character by an underscore
 // and make the string to lowercase if lower is set to true

@@ -127,10 +127,11 @@ namespace dungeon
         bool isRoomConstructed(const sf::Vector2u& coords);
 
         //! Construct a room.
-        void constructRoom(const sf::Vector2u& coords);
+        //! @param hard Do not check for money.
+        void constructRoom(const sf::Vector2u& coords, bool hard = false);
 
         //! Destroy a room.
-        //! @param hard destroy monsters inside.
+        //! @param hard Destroy monsters inside.
         void destroyRoom(const sf::Vector2u& coords, bool hard = false);
 
         //! Return true if you can access the next room from the specified one.

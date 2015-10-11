@@ -2,6 +2,7 @@
 
 #include "scene/entity.hpp"
 #include "context/event.hpp"
+#include "context/command.hpp"
 #include "dungeon/data.hpp"
 #include "dungeon/traps.hpp"
 #include "dungeon/monsters.hpp"
@@ -19,7 +20,7 @@ namespace dungeon
 {
     //! The dungeon itself, handling user interactions.
 
-    class Inter final : public scene::Entity, private context::EventReceiver
+    class Inter final : public scene::Entity, private context::EventReceiver, private context::Interpreter
     {
         using baseClass = scene::Entity;
 
@@ -153,6 +154,15 @@ namespace dungeon
         void handleMouseLeft() final;
 
         void receive(const context::Event& event) final;
+
+        //! @}
+
+        //--------------------//
+        //! @name Interpreter
+        //! @{
+
+        std::wstring interpreterKey() const final { return L"dungeon"; }
+        context::Command interpret(const std::vector<std::wstring>& cmdTokens) final;
 
         //! @}
 

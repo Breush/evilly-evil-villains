@@ -234,13 +234,13 @@ bool Data::isRoomConstructed(const sf::Vector2u& coords)
     return room(coords).state != RoomState::VOID;
 }
 
-void Data::constructRoom(const sf::Vector2u& coords)
+void Data::constructRoom(const sf::Vector2u& coords, bool hard)
 {
     returnif (coords.x >= m_floorsCount);
     returnif (coords.y >= m_roomsByFloor);
     returnif (room(coords).state != RoomState::VOID);
 
-    returnif (!m_villain->doshWallet.sub(onConstructRoomCost));
+    returnif (!hard && !m_villain->doshWallet.sub(onConstructRoomCost));
     room(coords).state = RoomState::CONSTRUCTED;
 
     Event event;

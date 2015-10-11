@@ -82,7 +82,6 @@ namespace dungeon
         //! @name Commands
         //! @{
 
-        inline context::Command::Category category() const final { return context::Command::Category::LOG; }
         void commandLog(const std::wstring& message) final;
 
         //! Callback when command entry is validated.

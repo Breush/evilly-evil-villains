@@ -1,12 +1,10 @@
 #pragma once
 
 #include "context/command.hpp"
-#include "tools/string.hpp"
 
 #include <SFML/System/NonCopyable.hpp>
 
 #include <queue>
-#include <vector>
 
 namespace context
 {
@@ -15,6 +13,7 @@ namespace context
     class Commander final : private sf::NonCopyable
     {
         friend class Commandable;
+        friend class Interpreter;
 
     public:
 
@@ -60,6 +59,12 @@ namespace context
         //! Remove the commandable from the update list, called directly by the commandable.
         void remove(Commandable* pCommandable);
 
+        //! Add the interpreter to the list, called directly by the interpreter.
+        void add(Interpreter* pInterpreter);
+
+        //! Remove the interpreter from the list, called directly by the interpreter.
+        void remove(Interpreter* pInterpreter);
+
         //! @}
 
     private:
@@ -68,5 +73,7 @@ namespace context
 
         // TODO Better have separate lists of commandables, given their category.
         std::vector<Commandable*> m_commandables;   //!< The commandables to call on update.
+
+        std::vector<Interpreter*> m_interpreters;   //!< The interpreter to call when a command line comes.
     };
 }

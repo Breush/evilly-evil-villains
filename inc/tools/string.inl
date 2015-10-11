@@ -53,6 +53,24 @@ inline std::wstring toWString(const std::string& s)
     return std::wstring(vws.data(), wn);
 }
 
+template<typename T>
+inline T to(const std::string& s)
+{
+    std::stringstream ss(s);
+    T t;
+    ss >> t;
+    return t;
+}
+
+template<typename T>
+inline T to(const std::wstring& ws)
+{
+    std::wstringstream ss(ws);
+    T t;
+    ss >> t;
+    return t;
+}
+
 //-----------------------//
 //----- lower/upper -----//
 
@@ -78,6 +96,21 @@ inline std::wstring& toUppercase(std::wstring& str)
 {
     std::transform(str.begin(), str.end(), str.begin(), towupper);
     return str;
+}
+
+//---------------------//
+//----- Splitting -----//
+
+inline std::vector<std::wstring> split(const std::wstring& str, const wchar_t delim)
+{
+    std::wstringstream ss(str);
+    std::vector<std::wstring> items;
+    std::wstring item;
+
+    while (std::getline(ss, item, delim))
+        items.emplace_back(std::move(item));
+
+    return items;
 }
 
 //-----------------------------//

@@ -1,8 +1,10 @@
 #include "context/commander.hpp"
 
 #include "context/logger.hpp"
-#include "tools/debug.hpp"
 #include "tools/platform-fixes.hpp" // erase_if
+#include "tools/string.hpp"
+#include "tools/debug.hpp"
+#include "tools/tools.hpp"
 
 using namespace context;
 
@@ -15,9 +17,9 @@ void Commander::update(const sf::Time& dt)
     while (!m_commandQueue.empty()) {
         // TODO OPTIM Is that doing a useless copy?
         auto command = pop();
-        for (auto commandable : m_commandables)
-            if (commandable->category() == command.category)
-                command.action(*commandable, dt);
+        for (auto pCommandable : m_commandables)
+            if (pCommandable->category() == command.category)
+                command.action(*pCommandable, dt);
     }
 }
 
@@ -39,16 +41,37 @@ Command Commander::pop()
 //-----------------------//
 //----- Interpreter -----//
 
+// TODO We should return a vector of commands, right?
 Command Commander::interpret(const std::wstring& commandLine)
 {
-    // TODO Interpret!
+    returnif (commandLine.empty()) Command();
+
+    // Get tokens
+    auto tokens = split(commandLine);
+    auto key = tokens.front();
+    tokens.erase(std::begin(tokens));
+
+    // Help - list possibilities
+    if (key == L"help") {
+        std::wstring knownKeys;
+        for (auto pInterpreter : m_interpreters)
+            knownKeys += pInterpreter->interpreterKey() + L", ";
+
+        Command command;
+        command.category = Command::Category::LOG;
+        command.action = [knownKeys] (Commandable& commandable, const sf::Time&)
+            { commandable.as<Logger>().commandLog(L"> Available command keys: " + knownKeys); };
+        return command;
+    }
+
+    // Forward to interpreters
+    for (auto pInterpreter : m_interpreters)
+        if (pInterpreter->interpreterKey() == key)
+            return pInterpreter->interpret(tokens);
 
     // Unknown command
     Command command;
-    command.category = Command::Category::LOG;
-    command.action = [commandLine] (Commandable& commandable, const sf::Time&)
-        { commandable.as<Logger>().commandLog(L"> Unknown command: " + commandLine); };
-    return command;
+    return setCommandLog(command, L"> Unknown command key: " + commandLine);
 }
 
 //--------------------//
@@ -62,4 +85,14 @@ void Commander::add(Commandable* pCommandable)
 void Commander::remove(Commandable* pCommandable)
 {
     std::erase_if(m_commandables, [pCommandable] (Commandable* pElement) { return pElement == pCommandable; } );
+}
+
+void Commander::add(Interpreter* pInterpreter)
+{
+    m_interpreters.emplace_back(pInterpreter);
+}
+
+void Commander::remove(Interpreter* pInterpreter)
+{
+    std::erase_if(m_interpreters, [pInterpreter] (Interpreter* pElement) { return pElement == pInterpreter; } );
 }
