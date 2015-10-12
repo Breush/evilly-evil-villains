@@ -55,12 +55,6 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     m_contextMenu.setRelativeOrigin({0.5f, 0.05f});
     m_contextMenu.setDepth(-1.f);
 
-    // Dungeon log
-    nuiRoot.attachChild(m_dungeonLog);
-    m_dungeonLog.setRelativePosition({0.f, 1.f});
-    m_dungeonLog.setRelativeOrigin({0.f, 1.f});
-    m_dungeonLog.setEmitter(&m_dungeonData);
-
     // Dungeon sidebar
     nuiRoot.attachChild(m_dungeonSidebar);
     m_dungeonSidebar.setRelativeOrigin({1.f, 0.f});
@@ -131,9 +125,6 @@ void GameDungeonDesign::refreshWindow(const config::WindowInfo& cWindow)
     // TODO Have relativeKeepInside?
     m_contextMenu.setKeepInsideLocalRect({0.f, 0.f, resolution.x, resolution.y});
 
-    // Log
-    m_dungeonLog.setWidth(resolution.x / 4.f);
-
     // Sidebar
     const float sidebarWidth = 200.f;
     m_dungeonSidebar.setSize({sidebarWidth, resolution.y});
@@ -163,7 +154,6 @@ void GameDungeonDesign::handleEvent(const sf::Event& event)
     // Global events
     m_dungeonInter.handleGlobalEvent(event);
     m_contextMenu.handleGlobalEvent(event);
-    m_dungeonLog.handleGlobalEvent(event);
 
     if (event.type == sf::Event::KeyPressed
         && event.key.code == sf::Keyboard::Escape) {

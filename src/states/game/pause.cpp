@@ -45,6 +45,12 @@ GamePause::GamePause(StateStack& stack)
 //-------------------//
 //----- Routine -----//
 
+bool GamePause::update(const sf::Time& dt)
+{
+    baseClass::update(dt);
+    return false;
+}
+
 void GamePause::handleEvent(const sf::Event& event)
 {
     // Back to previous state on Escape

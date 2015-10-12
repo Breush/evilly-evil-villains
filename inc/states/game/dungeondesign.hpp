@@ -6,7 +6,6 @@
 #include "dungeon/graph.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/sidebar.hpp"
-#include "dungeon/log.hpp"
 #include "dungeon/heroesmanager.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
 
@@ -52,7 +51,6 @@ namespace states
         dungeon::Graph m_dungeonGraph;
         dungeon::Inter m_dungeonInter;
         dungeon::Sidebar m_dungeonSidebar;
-        dungeon::Log m_dungeonLog;
         dungeon::HeroesManager m_heroesManager;
 
         // NUI

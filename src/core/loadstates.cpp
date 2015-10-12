@@ -1,6 +1,7 @@
 #include "core/application.hpp"
 
 #include "states/quit.hpp"
+#include "states/terminal.hpp"
 #include "states/splashscreen.hpp"
 #include "states/menu/main.hpp"
 #include "states/menu/selectworld.hpp"
@@ -14,6 +15,7 @@
 void Application::loadStates()
 {
     m_stateStack.registerState<states::Quit>(StateID::QUIT);
+    m_stateStack.registerState<states::Terminal>(StateID::TERMINAL);
     m_stateStack.registerState<states::SplashScreen>(StateID::SPLASHSCREEN);
 
     m_stateStack.registerState<states::MenuMain>(StateID::MENU_MAIN);

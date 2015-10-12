@@ -117,8 +117,7 @@ void Application::run()
 
             // Game logic core
             processInput();
-            m_visualDebug.update(m_timePerFrame);
-            update(m_gameTimeFactor * m_timePerFrame);
+            update(m_timePerFrame);
 
             // Quit if no more states
             if (m_stateStack.isEmpty())
@@ -175,6 +174,13 @@ void Application::processInput()
                 break;
             }
 
+            // Show terminal
+            if (event.key.shift && event.key.code == sf::Keyboard::F2) {
+                if (!m_stateStack.isStateVisible(StateID::TERMINAL))
+                    m_stateStack.pushState(StateID::TERMINAL);
+                continue;
+            }
+
 #if DEBUG_GLOBAL > 0
             // Hard reset on debug mode
             if (event.key.code == sf::Keyboard::BackSlash) {
@@ -186,7 +192,7 @@ void Application::processInput()
             }
 
             // NUI quick size change
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+            if (event.key.control) {
                 if (event.key.code == sf::Keyboard::Numpad8) {
                     s_context.display.nui.size += 1u;
                     std::cerr << "NUI size: " << s_context.display.nui.size << std::endl;
@@ -242,11 +248,15 @@ void Application::update(const sf::Time& dt)
     // Shaders can be animated
     m_gameTime += dt.asSeconds();
 
+    // Overall elements
+    m_visualDebug.update(dt);
+
     // Game logic
-    s_context.commander.update(dt);
-    m_stateStack.update(dt);
-    updateAnimations(dt);
-    updateShaders(dt);
+    sf::Time dtGame = dt * m_gameTimeFactor;
+    s_context.commander.update(dtGame);
+    m_stateStack.update(dtGame);
+    updateAnimations(dtGame);
+    updateShaders(dtGame);
 }
 
 void Application::render()

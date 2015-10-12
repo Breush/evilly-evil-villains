@@ -6,6 +6,7 @@ enum class StateID : uint8
 {
     NONE,
     QUIT,
+    TERMINAL,
     SPLASHSCREEN,
     MENU_MAIN,
     MENU_SELECTWORLD,
