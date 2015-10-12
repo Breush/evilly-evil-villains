@@ -22,6 +22,13 @@
 #include <assert.h>
 #include <limits.h>
 
+// Fix for mingw, even if it should be in limits.h
+#ifndef LLONG_MIN
+#define LLONG_MIN  (-9223372036854775807LL - 1)
+#define LLONG_MAX  9223372036854775807LL
+#define ULLONG_MAX 18446744073709551615ULL
+#endif
+
 #ifdef PUGIXML_WCHAR_MODE
 #	include <wchar.h>
 #endif

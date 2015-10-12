@@ -1,5 +1,7 @@
 #pragma once
 
+#include "tools/int.hpp"
+
 #include <string>
 
 // Forward declarations
