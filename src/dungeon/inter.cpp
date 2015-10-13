@@ -262,36 +262,23 @@ sf::Vector2u Inter::tileFromLocalPosition(const sf::Vector2f& pos)
     return coords;
 }
 
-void Inter::addLayer(const sf::Vector2u& coords, const std::string& textureID)
+void Inter::addLayer(const sf::Vector2u& coords, const std::string& textureID, float depth)
 {
     auto& tile = m_tiles.at(coords);
 
-    // We don't know how the std::vector will act
-    // when increasing its capacity, so it is better to remove
-    // all pending references and pointers before
-    for (auto& layer : tile.layers)
-        removePart(&layer);
+    auto layer = std::make_unique<scene::RectangleShape>();
+    layer->setTexture(textureID);
+    layer->setLocalPosition(tileLocalPosition(coords));
+    layer->setSize(tileSize());
+    layer->setDepth(depth);
 
-    tile.layers.emplace_back();
-
-    auto& layer = tile.layers.back();
-    layer.setTexture(&Application::context().textures.get(textureID));
-    layer.setPosition(tileLocalPosition(coords));
-    layer.setSize(tileSize());
-
-    // And afterward, re-add all references/pointers
-    // TODO Layers should be children, for easy z-depth.
-    for (auto& layer : tile.layers)
-        addPart(&layer);
+    tile.layers.emplace_back(std::move(layer));
+    attachChild(*tile.layers.back());
 }
 
 void Inter::clearLayers(const sf::Vector2u& coords)
 {
     auto& tile = m_tiles.at(coords);
-
-    for (auto& layer : tile.layers)
-        removePart(&layer);
-
     tile.layers.clear();
 }
 
@@ -319,7 +306,7 @@ void Inter::selectTile(const sf::Vector2u& coords)
     m_selectedTile = &m_tiles.at(coords);
 
     for (auto& layer : m_selectedTile->layers)
-        setPartShader(&layer, "nui/select");
+        layer->setShader("nui/select");
 }
 
 void Inter::deselectTile()
@@ -327,7 +314,7 @@ void Inter::deselectTile()
     returnif(m_selectedTile == nullptr);
 
     for (auto& layer : m_selectedTile->layers)
-        resetPartShader(&layer);
+        layer->setShader("");
 
     m_selectedTile = nullptr;
 }
@@ -343,7 +330,7 @@ void Inter::setHoveredTile(const sf::Vector2u& coords)
     returnif(m_hoveredTile == m_selectedTile);
 
     for (auto& layer : m_hoveredTile->layers)
-        setPartShader(&layer, "nui/hover");
+        layer->setShader("nui/hover");
 }
 
 void Inter::resetHoveredTile()
@@ -352,7 +339,7 @@ void Inter::resetHoveredTile()
     returnif(m_hoveredTile == m_selectedTile);
 
     for (auto& layer : m_hoveredTile->layers)
-        resetPartShader(&layer);
+        layer->setShader("");
 
     m_hoveredTile = nullptr;
 }
@@ -689,11 +676,11 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
     }
 
     // Add room textures
-    addLayer(coords, "dungeon/inter/inner_wall");
-    addLayer(coords, "dungeon/inter/floor");
+    addLayer(coords, "dungeon/inter/inner_wall", 100.f);
+    addLayer(coords, "dungeon/inter/floor", 75.f);
 
     if (!m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, Data::EAST)))
-        addLayer(coords, "dungeon/inter/right_wall");
+        addLayer(coords, "dungeon/inter/right_wall", 75.f);
 }
 
 void Inter::refreshTileFacilities(const sf::Vector2u& coords)

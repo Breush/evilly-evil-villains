@@ -15,11 +15,11 @@ void Commander::update(const sf::Time& dt)
 {
     // For each command, test each commandable
     while (!m_commandQueue.empty()) {
-        // TODO OPTIM Is that doing a useless copy?
-        auto command = pop();
+        const auto& command = m_commandQueue.front();
         for (auto pCommandable : m_commandables)
             if (pCommandable->category() == command.category)
                 command.action(*pCommandable, dt);
+        m_commandQueue.pop();
     }
 }
 

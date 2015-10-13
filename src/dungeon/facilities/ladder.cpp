@@ -7,8 +7,8 @@ using namespace dungeon::facilities;
 Ladder::Ladder(const sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter)
     : baseClass(coords, elementdata, inter)
 {
-    // Is behind almost everything
-    setDepth(500.f);
+    // Is behind almost everything, but still in front of dungeon back wall
+    setDepth(99.f);
 
     // Decorum
     attachChild(m_sprite);

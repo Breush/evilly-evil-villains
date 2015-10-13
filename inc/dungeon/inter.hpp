@@ -11,6 +11,7 @@
 #include "nui/spinbox.hpp"
 #include "sfe/grid.hpp"
 #include "scene/wrappers/label.hpp"
+#include "scene/wrappers/rectangleshape.hpp"
 #include "tools/vector.hpp"
 
 #include <array>
@@ -174,7 +175,7 @@ namespace dungeon
         void clearLayers(const sf::Vector2u& coords);
 
         //! Add a layer to the tile.
-        void addLayer(const sf::Vector2u& coords,  const std::string& textureID);
+        void addLayer(const sf::Vector2u& coords,  const std::string& textureID, float depth = 50.f);
 
         //! Remove all tiles.
         void clearTiles();
@@ -278,13 +279,13 @@ namespace dungeon
         //! A tile of the dungeon.
         struct Tile
         {
-            sf::Vector2u coords;                                //!< The coordinates of the tile (floor/room).
-            Data::Room* room = nullptr;                         //!< The corresponding room within data.
-            std::vector<sf::RectangleShape> layers;             //!< All sprites to draw, from furthest to nearest.
-            std::vector<std::unique_ptr<Facility>> facilities;  //!< The facilities in the tile.
-            std::unique_ptr<Trap> trap = nullptr;               //!< The trap, protecting the tile.
-            std::unique_ptr<scene::Label> totalDoshLabel;         //!< The total dosh inside the room.
-            std::unique_ptr<scene::Label> harvestableDoshLabel;   //!< The harvestable dosh.
+            sf::Vector2u coords;                                        //!< The coordinates of the tile (floor/room).
+            Data::Room* room = nullptr;                                 //!< The corresponding room within data.
+            std::vector<std::unique_ptr<scene::RectangleShape>> layers; //!< All sprites to draw, from furthest to nearest.
+            std::vector<std::unique_ptr<Facility>> facilities;          //!< The facilities in the tile.
+            std::unique_ptr<Trap> trap = nullptr;                       //!< The trap, protecting the tile.
+            std::unique_ptr<scene::Label> totalDoshLabel;               //!< The total dosh inside the room.
+            std::unique_ptr<scene::Label> harvestableDoshLabel;         //!< The harvestable dosh.
         };
 
     private:

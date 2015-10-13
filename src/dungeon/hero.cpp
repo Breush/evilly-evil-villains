@@ -145,17 +145,28 @@ void Hero::refreshPositionFromNode(bool firstNode)
     returnif (m_currentNode == nullptr);
 
     const auto tileLocalPosition = m_inter.tileLocalPosition(m_currentNode->coords);
-    const auto heroTilePosition = sf::Vector2f{m_inter.tileSize().x / 2.f, m_inter.tileSize().y * 0.8f};
-    lerpable()->setTargetPosition(tileLocalPosition + heroTilePosition);
+    lerpable()->setTargetPosition(tileLocalPosition + m_inter.tileSize() / 2.f);
     if (firstNode) setLocalPosition(lerpable()->targetPosition());
 
     // Select correct animation (right/left)
     // TODO Have a state machine and interface with physics module
     // Maybe the state machine animated sprite makes its own class
-    if (lerpable()->targetPosition().x > localPosition().x)
+    if (lerpable()->targetPosition().x > localPosition().x) {
         m_sprite.select(L"rwalk");
-    else if (lerpable()->targetPosition().x < localPosition().x)
+        setDepth(50.f); // Doing this every time is not efficient...
+    }
+    else if (lerpable()->targetPosition().x < localPosition().x) {
         m_sprite.select(L"lwalk");
+        setDepth(50.f);
+    }
+
+    // FIXME Here, we know it's ladder, so we change depth,
+    // but this is still not a good design,
+    // a state machine with depth memory would be useful
+    if (lerpable()->targetPosition().y != localPosition().y) {
+        m_sprite.select(L"climb");
+        setDepth(90.f);
+    }
 }
 
 #if DEBUG_AI > 0
