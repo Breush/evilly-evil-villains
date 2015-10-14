@@ -81,6 +81,10 @@ public:
      */
     void run();
 
+    //! Pause all the updates for animations and shaders.
+    //! The state stack will still be updated.
+    static void setPaused(bool paused);
+
     //! @}
 
     //--------------------------------------//
@@ -165,6 +169,7 @@ protected:
     void refreshMusics();   //!< Adapt all musics volume to current settings.
     void refreshSounds();   //!< Adapt all sounds position/volume to current settings.
 
+    void updateSounds(const sf::Time& dt);      //!< Manage the sounds.
     void updateShaders(const sf::Time& dt);     //!< Animate the shaders.
     void updateAnimations(const sf::Time& dt);  //!< Animate the currently played animations.
 
@@ -174,9 +179,13 @@ private:
 
     //! The main global variable (and almost the only one).
     static Context s_context;
+    static bool s_paused;
 
     //! Fixed timestep to update game logic.
     const sf::Time m_updateTime = sf::seconds(1.f/71.f);
+
+    //! Fixed timestep to clean sounds.
+    const sf::Time m_soundsRefreshTime = sf::seconds(5.f);
 
     float m_gameTimeFactor = 1.f;   //!< Modifying the speed of the whole game.
     float m_gameTime = 0.f;         //!< The game time since game loop is running.

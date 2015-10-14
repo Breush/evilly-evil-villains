@@ -45,6 +45,9 @@ namespace resources
         //! Play a sound, from specified position.
         void play(const std::string& id, sf::Vector2f position);
 
+        //! Pause or resume all sounds.
+        void setPaused(bool paused);
+
         //! Stop all sounds.
         //! Note: not removing them from list.
         void stopAll();

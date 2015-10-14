@@ -18,7 +18,7 @@ namespace states
         GamePause(StateStack& stack);
 
         //! Default destructor.
-        ~GamePause() = default;
+        ~GamePause();
 
         //----------------------//
         //! @name State control

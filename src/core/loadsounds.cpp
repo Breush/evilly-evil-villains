@@ -31,3 +31,15 @@ void Application::refreshSounds()
     s_context.sounds.setListenerPosition(resolution / 2.f);
     s_context.sounds.setVolume(effectiveSoundVolume);
 }
+
+void Application::updateSounds(const sf::Time& dt)
+{
+    static sf::Time soundsTime; // Set to zero according to SFML API
+    soundsTime += dt;
+
+    // Clean all sounds regularly
+    if (soundsTime >= m_soundsRefreshTime) {
+        s_context.sounds.removeStoppedSounds();
+        soundsTime -= m_soundsRefreshTime;
+    }
+}

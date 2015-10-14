@@ -40,6 +40,13 @@ GamePause::GamePause(StateStack& stack)
     m_mainMenuButton.setAction(_("Save and return to main menu"), [this]() { stackClear(StateID::MENU_MAIN); });
     m_mainMenuButton.setRelativePosition({0.5f, 0.6f});
     m_mainMenuButton.centerOrigin();
+
+    Application::setPaused(true);
+}
+
+GamePause::~GamePause()
+{
+    Application::setPaused(false);
 }
 
 //-------------------//

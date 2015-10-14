@@ -23,7 +23,7 @@ namespace states
         Terminal(StateStack& stack);
 
         //! Default destructor.
-        ~Terminal() = default;
+        ~Terminal();
 
         //----------------------//
         //! @name State control
@@ -91,15 +91,17 @@ namespace states
     private:
 
         // Messages
-        std::deque<Message> m_messages; //!< The currently alive messages.
-        float m_aliveTime = 7.f;        //!< How long to keep a message alive, in seconds.
+        static std::list<std::wstring> s_historic;  //!< All the commands.
+        std::deque<Message> m_messages;             //!< The currently alive messages.
+        float m_aliveTime = 7.f;                    //!< How long to keep a message alive, in seconds.
 
         // Decorum
-        scene::RectangleShape m_background; //!< Background.
-        nui::TextEntry m_entry;             //!< The command entry.
-        float m_width = 0.f;                //!< The width.
-        float m_currentHeight = 0.f;        //!< The height.
-        float m_characterSize = 0.f;        //!< The font size.
+        scene::RectangleShape m_background;         //!< Background.
+        scene::RectangleShape m_messagesBackground; //!< Background for the messages.
+        nui::TextEntry m_entry;                     //!< The command entry.
+        float m_width = 0.f;                        //!< The width.
+        float m_currentHeight = 0.f;                //!< The height.
+        float m_characterSize = 0.f;                //!< The font size.
     };
 }
 

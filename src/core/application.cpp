@@ -13,6 +13,7 @@
 //----- Static variables -----//
 
 Application::Context Application::s_context;
+bool Application::s_paused = false;
 
 //-------------------//
 //----- Context -----//
@@ -137,6 +138,13 @@ void Application::run()
         s_context.window.close();
 }
 
+void Application::setPaused(bool paused)
+{
+    s_paused = paused;
+    s_context.sounds.setPaused(s_paused);
+    s_context.musics.setPaused(s_paused);
+}
+
 //-------------------------------//
 //----- Logic and rendering -----//
 
@@ -256,8 +264,13 @@ void Application::update(const sf::Time& dt)
     sf::Time dtGame = dt * m_gameTimeFactor;
     s_context.commander.update(dtGame);
     m_stateStack.update(dtGame);
-    updateAnimations(dtGame);
-    updateShaders(dtGame);
+
+    // Update the visual effects
+    if (!s_paused) {
+        updateSounds(dtGame);
+        updateAnimations(dtGame);
+        updateShaders(dtGame);
+    }
 }
 
 void Application::render()

@@ -6,7 +6,13 @@
 
 using namespace states;
 
-// TODO How to conserve historic?
+//----------------------------//
+//----- Static variables -----//
+
+std::list<std::wstring> Terminal::s_historic;
+
+//--------------------//
+//----- Terminal -----//
 
 Terminal::Terminal(StateStack& stack)
     : State(stack)
@@ -16,14 +22,25 @@ Terminal::Terminal(StateStack& stack)
 
     // Background
     nuiRoot.attachChild(m_background);
-    m_background.setFillColor({255u, 255u, 255u, 192u});
-    m_background.setRelativeOrigin({0.f, 1.f});
+    m_background.setFillColor({0u, 0u, 0u, 192u});
+
+    // Background for messages
+    nuiRoot.attachChild(m_messagesBackground);
+    m_messagesBackground.setFillColor({255u, 255u, 255u, 192u});
+    m_messagesBackground.setRelativeOrigin({0.f, 1.f});
 
     // Command entry
     nuiRoot.attachChild(m_entry);
     m_entry.setRelativeOrigin({0.f, 1.f});
     m_entry.setRelativePosition({0.f, 1.f});
     m_entry.setOnValidateCallback([this] { onEntryValidated(); });
+
+    Application::setPaused(true);
+}
+
+Terminal::~Terminal()
+{
+    Application::setPaused(false);
 }
 
 //-------------------//
@@ -72,15 +89,19 @@ void Terminal::refreshWindow(const config::WindowInfo& cWindow)
 
     m_width = resolution.x / 2.f;
     m_entry.setWidth(resolution.x / 2.f);
+    m_background.setSize(resolution);
 }
 
 void Terminal::handleEvent(const sf::Event& event)
 {
-    // Back to previous state on Escape
-    if (event.type == sf::Event::KeyPressed
-        && event.key.code == sf::Keyboard::Escape) {
-        stackPop();
-        return;
+    if (event.type == sf::Event::KeyPressed) {
+        // Back to previous state on Escape
+        if (event.key.code == sf::Keyboard::Escape) {
+            stackPop();
+            return;
+        }
+
+        // TODO tab complete
     }
 
     State::handleEvent(event);
@@ -91,6 +112,8 @@ void Terminal::handleEvent(const sf::Event& event)
 
 void Terminal::addMessage(std::wstring text, sf::Color color)
 {
+    s_historic.emplace_front(text);
+
     Message message;
 
     message.label = std::make_unique<scene::WrapLabel<sf::Text>>();
@@ -155,5 +178,5 @@ void Terminal::refreshFromWidth()
 
 void Terminal::refreshSize()
 {
-    m_background.setSize({m_width, m_currentHeight});
+    m_messagesBackground.setSize({m_width, m_currentHeight});
 }

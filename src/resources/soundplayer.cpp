@@ -51,6 +51,14 @@ void SoundPlayer::play(const std::string& id, sf::Vector2f position)
     sound.play();
 }
 
+void SoundPlayer::setPaused(bool paused)
+{
+    // Do not change stopped sounds
+    for (auto& sound : m_sounds)
+        if (sound.getStatus() != sf::Sound::Stopped)
+            (paused)? sound.pause() : sound.play();
+}
+
 void SoundPlayer::stopAll()
 {
     for (auto& sound : m_sounds)
