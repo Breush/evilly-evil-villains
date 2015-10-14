@@ -53,14 +53,12 @@ Command Commander::interpret(const std::wstring& commandLine)
 
     // Help - list possibilities
     if (key == L"help") {
-        std::wstring knownKeys;
-        for (auto pInterpreter : m_interpreters)
-            knownKeys += pInterpreter->interpreterKey() + L", ";
+        std::vector<std::wstring> keys;
+        for (const auto& interpreter : m_interpreters)
+            keys.emplace_back(interpreter->interpreterKey());
 
         Command command;
-        command.category = Command::Category::LOG;
-        command.action = [knownKeys] (Commandable& commandable, const sf::Time&)
-            { commandable.as<Logger>().commandLog(L"> Available command keys: " + knownKeys); };
+        setCommandLog(command, L"> Available command keys: " + join(keys, std::wstring(L", ")));
         return command;
     }
 
@@ -72,6 +70,54 @@ Command Commander::interpret(const std::wstring& commandLine)
     // Unknown command
     Command command;
     return setCommandLog(command, L"> Unknown command key: " + commandLine);
+}
+
+std::wstring Commander::autoComplete(std::wstring commandLine)
+{
+    // Get tokens
+    bool isTokenStart = commandLine.empty() || iswblank(commandLine.back());
+    auto tokens = split(commandLine);
+
+    std::wstring lastToken;
+    if (!isTokenStart) lastToken = tokens.back();
+
+    // Check if it is the key to autocomplete
+    std::vector<std::wstring> possibilities;
+    if (tokens.empty() || (tokens.size() == 1u && !isTokenStart)) {
+        // Find all interpreter keys starting with the last token
+        for (auto pInterpreter : m_interpreters) {
+            auto key = pInterpreter->interpreterKey();
+            if (key.find(lastToken) == 0u)
+                possibilities.emplace_back(std::move(key));
+        }
+    }
+
+    // TODO Else, broadcast autoComplete to interpreters
+
+    // No possibility, keep previous
+    returnif (possibilities.size() == 0u) commandLine;
+
+    std::wstring newToken = possibilities.front() + L' ';
+
+    // If more than one possibilities, log them
+    if (possibilities.size() > 1u) {
+        // Find common denominator and construct list
+        for (const auto& possibility : possibilities)
+            newToken = prefix(newToken, possibility);
+
+        // Log them
+        Command command;
+        setCommandLog(command, join(possibilities));
+        push(command);
+    }
+
+    // No new token to set
+    returnif (newToken.empty()) commandLine;
+
+    // Affect new token
+    commandLine = commandLine.substr(0u, commandLine.size() - lastToken.size());
+    commandLine += newToken;
+    return commandLine;
 }
 
 //--------------------//

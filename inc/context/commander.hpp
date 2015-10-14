@@ -45,6 +45,9 @@ namespace context
         //! Interpret the command line into commands.
         Command interpret(const std::wstring& commandLine);
 
+        //! Attempt to auto-complete the command line.
+        //! @return The command line completed or the original one.
+        std::wstring autoComplete(std::wstring commandLine);
         //! @}
 
     protected:

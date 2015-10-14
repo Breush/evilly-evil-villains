@@ -85,7 +85,18 @@ int main(void)
         std::wcout << wstr << L" != FÜn_NY____S_TrîNG_" << std::endl;
         return EXIT_FAILURE;
     }
-    
+
+    //--------------//
+    // Manipulation //
+
+    if (join({"a","b","c"},std::string(",")) != "a,b,c")    return EXIT_FAILURE;
+    if (join({""},std::string(",")) != "")                  return EXIT_FAILURE;
+
+    std::cerr << prefix(std::string("aaa"), std::string("aab")) << std::endl;
+
+    if (prefix(std::string("aaa"), std::string("aab")) != "aa") return EXIT_FAILURE;
+    if (prefix(std::string("aaa"), std::string("bab")) != "")   return EXIT_FAILURE;
+
     internationalization::close();
 
     return EXIT_SUCCESS;

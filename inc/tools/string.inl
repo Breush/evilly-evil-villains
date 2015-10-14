@@ -98,8 +98,8 @@ inline std::wstring& toUppercase(std::wstring& str)
     return str;
 }
 
-//---------------------//
-//----- Splitting -----//
+//-------------------------//
+//----- Manipulations -----//
 
 inline std::vector<std::wstring> split(const std::wstring& str, const wchar_t delim)
 {
@@ -108,9 +108,30 @@ inline std::vector<std::wstring> split(const std::wstring& str, const wchar_t de
     std::wstring item;
 
     while (std::getline(ss, item, delim))
-        items.emplace_back(std::move(item));
+        if (!item.empty())
+            items.emplace_back(std::move(item));
 
     return items;
+}
+
+template<typename String_t>
+inline String_t join(const std::vector<String_t>& v, const String_t& glue)
+{
+    if (v.empty()) return String_t();
+
+    String_t s(v.front());
+    for (auto it = std::begin(v) + 1u; it != std::end(v); ++it)
+        s += glue + *it;
+
+    return s;
+}
+
+template<typename String_t>
+inline String_t prefix(const String_t& s1, const String_t& s2)
+{
+    auto len = std::min(s1.size(), s2.size());
+    auto its = std::mismatch(std::begin(s1), std::begin(s1) + len, std::begin(s2));
+    return String_t(std::begin(s1), its.first);
 }
 
 //-----------------------------//

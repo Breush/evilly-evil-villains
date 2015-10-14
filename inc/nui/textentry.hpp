@@ -33,7 +33,16 @@ namespace nui
         //! @{
 
         //! The current string.
-        std::wstring text() const { return m_textString.toWideString(); };
+        inline std::wstring text() const { return m_textString.toWideString(); };
+
+        //! The current string before the cursor position.
+        inline std::wstring textBeforeCursor() const { return m_cursorString.toWideString(); };
+
+        //! The current string after the cursor position.
+        inline std::wstring textAfterCursor() const { return m_textString.substring(m_cursorString.getSize()); };
+
+        //! Set the cursor to an absolute position.
+        void setCursorPosition(uint position);
 
         //! Set the current string and update, if sendCallback is false a callback will not be sent.
         void setText(const std::wstring& str, bool sendCallback = true);

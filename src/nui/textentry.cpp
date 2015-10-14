@@ -184,6 +184,18 @@ void TextEntry::setOnValidateCallback(const ValidateCallback& callback)
     m_onValidateCallback = callback;
 }
 
+void TextEntry::setCursorPosition(uint position)
+{
+    returnif (position > m_textString.getSize());
+
+    // Deselect if any
+    deselect();
+
+    // Reset to 0 and move
+    m_cursorString = L"";
+    moveCursor(position);
+}
+
 //------------------//
 //----- Delete -----//
 

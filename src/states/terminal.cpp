@@ -101,7 +101,21 @@ void Terminal::handleEvent(const sf::Event& event)
             return;
         }
 
-        // TODO tab complete
+        // Auto-complete
+        if (event.key.code == sf::Keyboard::Tab) {
+            auto commandLine = m_entry.textBeforeCursor();
+            commandLine = Application::context().commander.autoComplete(std::move(commandLine));
+            m_entry.setText(commandLine + m_entry.textAfterCursor());
+            m_entry.setCursorPosition(commandLine.size());
+            return;
+        }
+
+        // TODO Up/Down for historic
+    }
+
+    // Intercept some signals
+    if (event.type == sf::Event::TextEntered) {
+        returnif (event.text.unicode == 9); // TAB
     }
 
     State::handleEvent(event);
@@ -141,7 +155,10 @@ void Terminal::onEntryValidated()
     auto commandLine = m_entry.text();
     m_entry.setText(L"");
 
+    // Print command line
     addMessage(commandLine, sf::Color::Blue);
+
+    // Interpret it via the commander
     auto commands = Application::context().commander.interpret(commandLine);
     Application::context().commander.push(commands);
 }
