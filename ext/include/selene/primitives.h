@@ -2,6 +2,7 @@
 
 #include <string>
 #include "traits.h"
+#include <type_traits>
 #include "MetatableRegistry.h"
 
 extern "C" {
@@ -42,6 +43,14 @@ struct is_primitive<std::string> {
     static constexpr bool value = true;
 };
 
+template<typename T>
+using decay_primitive =
+    typename std::conditional<
+        is_primitive<typename std::decay<T>::type>::value,
+        typename std::decay<T>::type,
+        T
+    >::type;
+
 /* getters */
 template <typename T>
 inline T* _get(_id<T*>, lua_State *l, const int index) {
@@ -54,11 +63,11 @@ inline bool _get(_id<bool>, lua_State *l, const int index) {
 }
 
 inline int _get(_id<int>, lua_State *l, const int index) {
-    return lua_tointeger(l, index);
+    return static_cast<int>(lua_tointeger(l, index));
 }
 
 inline unsigned int _get(_id<unsigned int>, lua_State *l, const int index) {
-#if LUA_VERSION_NUM >= 502
+#if LUA_VERSION_NUM >= 502 && LUA_VERSION_NUM < 503
     return lua_tounsigned(l, index);
 #else
     return static_cast<unsigned>(lua_tointeger(l, index));
@@ -94,11 +103,17 @@ inline T _check_get(_id<T&&>, lua_State *l, const int index) {
 
 
 inline int _check_get(_id<int>, lua_State *l, const int index) {
+#if LUA_VERSION_NUM >= 503
+    return static_cast<int>(luaL_checkinteger(l, index));
+#else
     return luaL_checkint(l, index);
+#endif
 };
 
 inline unsigned int _check_get(_id<unsigned int>, lua_State *l, const int index) {
-#if LUA_VERSION_NUM >= 502
+#if LUA_VERSION_NUM >= 503
+    return static_cast<unsigned>(luaL_checkinteger(l, index));
+#elif LUA_VERSION_NUM >= 502
     return luaL_checkunsigned(l, index);
 #else
     return static_cast<unsigned>(luaL_checkint(l, index));
@@ -214,19 +229,19 @@ T _pop(_id<T> t, lua_State *l) {
 
 /* Setters */
 
-inline void _push(lua_State *l) {}
+inline void _push(lua_State *) {}
 
 template <typename T>
 inline void _push(lua_State *l, MetatableRegistry &m, T* t) {
-	if(t == nullptr) {
-		lua_pushnil(l);
-	}
-	else {
-		lua_pushlightuserdata(l, t);
-		if (const std::string* metatable = m.Find(typeid(T))) {
-			luaL_setmetatable(l, metatable->c_str());
-		}
-	}
+  if(t == nullptr) {
+    lua_pushnil(l);
+  }
+  else {
+    lua_pushlightuserdata(l, t);
+    if (const std::string* metatable = m.Find(typeid(T))) {
+      luaL_setmetatable(l, metatable->c_str());
+    }
+  }
 }
 
 template <typename T>
@@ -246,7 +261,9 @@ inline void _push(lua_State *l, MetatableRegistry &, int i) {
 }
 
 inline void _push(lua_State *l, MetatableRegistry &, unsigned int u) {
-#if LUA_VERSION_NUM >= 502
+#if LUA_VERSION_NUM >= 503
+  lua_pushinteger(l, (lua_Integer)u);
+#elif LUA_VERSION_NUM >= 502
     lua_pushunsigned(l, u);
 #else
     lua_pushinteger(l, static_cast<int>(u));
@@ -267,12 +284,12 @@ inline void _push(lua_State *l, MetatableRegistry &, const char *s) {
 
 template <typename T>
 inline void _push(lua_State *l, T* t) {
-	if(t == nullptr) {
-		lua_pushnil(l);
-	}
-	else {
-		lua_pushlightuserdata(l, t);
-	}
+  if(t == nullptr) {
+    lua_pushnil(l);
+  }
+  else {
+    lua_pushlightuserdata(l, t);
+  }
 }
 
 template <typename T>
@@ -289,7 +306,9 @@ inline void _push(lua_State *l, int i) {
 }
 
 inline void _push(lua_State *l, unsigned int u) {
-#if LUA_VERSION_NUM >= 502
+#if LUA_VERSION_NUM >= 503
+  lua_pushinteger(l, (lua_Integer)u);
+#elif LUA_VERSION_NUM >= 502
     lua_pushunsigned(l, u);
 #else
     lua_pushinteger(l, static_cast<int>(u));
@@ -330,7 +349,7 @@ inline void _push_dispatcher(lua_State *l,
     _push_n(l, m, std::get<N>(values)...);
 }
 
-inline void _push(lua_State *l, MetatableRegistry &, std::tuple<>) {}
+inline void _push(lua_State *, MetatableRegistry &, std::tuple<>) {}
 
 template <typename... T>
 inline void _push(lua_State *l, MetatableRegistry &m, const std::tuple<T...> &values) {
@@ -354,7 +373,7 @@ inline void _push_dispatcher(lua_State *l,
     _push_n(l, std::get<N>(values)...);
 }
 
-inline void _push(lua_State *l, std::tuple<>) {}
+inline void _push(lua_State *, std::tuple<>) {}
 
 template <typename... T>
 inline void _push(lua_State *l, const std::tuple<T...> &values) {
