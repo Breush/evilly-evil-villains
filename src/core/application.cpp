@@ -108,16 +108,17 @@ void Application::run()
     m_running = true;
     while (m_running) {
         // Getting time
-        sf::Time dt(clock.restart());
-        lag += dt;
+        lag += clock.restart();
+
+        // Inputs
+        processInput();
 
         // Update until frame limit is hit
-        while (lag >= m_timePerFrame) {
-            lag -= m_timePerFrame;
+        while (lag >= m_updateTime) {
+            lag -= m_updateTime;
 
             // Game logic core
-            processInput();
-            update(m_timePerFrame);
+            update(m_updateTime);
 
             // Quit if no more states
             if (m_stateStack.isEmpty())
@@ -125,7 +126,7 @@ void Application::run()
         }
 
         // Rendering
-        // TODO render(lag/m_timePerFrame);
+        // TODO render(lag/m_updateTime);
         // So that physics can interpolate the effective display
         // See http://gameprogrammingpatterns.com/game-loop.html
         render();
