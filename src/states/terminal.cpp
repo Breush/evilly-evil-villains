@@ -192,7 +192,7 @@ void Terminal::navigateHistoric(const int relPos)
     returnif ((m_historicPos + relPos) >= s_historic.size());
 
     m_historicPos += relPos;
-    m_entry.setText(s_historic[m_historicPos], false);
+    m_entry.setText(s_historic.at(m_historicPos), false);
 }
 
 //------------------------------------//

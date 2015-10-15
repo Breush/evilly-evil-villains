@@ -92,8 +92,6 @@ int main(void)
     if (join({"a","b","c"},std::string(",")) != "a,b,c")    return EXIT_FAILURE;
     if (join({""},std::string(",")) != "")                  return EXIT_FAILURE;
 
-    std::cerr << prefix(std::string("aaa"), std::string("aab")) << std::endl;
-
     if (prefix(std::string("aaa"), std::string("aab")) != "aa") return EXIT_FAILURE;
     if (prefix(std::string("aaa"), std::string("bab")) != "")   return EXIT_FAILURE;
 
