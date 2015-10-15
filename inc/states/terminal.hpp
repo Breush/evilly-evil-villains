@@ -7,6 +7,7 @@
 #include "scene/wrappers/wraplabel.hpp"
 #include "nui/textentry.hpp"
 
+#include <deque>
 #include <memory>
 
 namespace states
@@ -64,6 +65,9 @@ namespace states
         //! Callback when command entry is validated.
         void onEntryValidated();
 
+        //! Set the command entry to an historic value if possible.
+        void navigateHistoric(const int relPos);
+
         //! @}
 
         //--------------------------------//
@@ -91,9 +95,12 @@ namespace states
     private:
 
         // Messages
-        static std::list<std::wstring> s_historic;  //!< All the commands.
         std::deque<Message> m_messages;             //!< The currently alive messages.
         float m_aliveTime = 7.f;                    //!< How long to keep a message alive, in seconds.
+
+        // Historic
+        static std::deque<std::wstring> s_historic; //!< All the commands entered.
+        uint m_historicPos = -1u;                   //!< The command to show.
 
         // Decorum
         scene::RectangleShape m_background;         //!< Background.

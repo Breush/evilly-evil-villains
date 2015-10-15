@@ -9,7 +9,7 @@ using namespace states;
 //----------------------------//
 //----- Static variables -----//
 
-std::list<std::wstring> Terminal::s_historic;
+std::deque<std::wstring> Terminal::s_historic;
 
 //--------------------//
 //----- Terminal -----//
@@ -23,6 +23,7 @@ Terminal::Terminal(StateStack& stack)
     // Background
     nuiRoot.attachChild(m_background);
     m_background.setFillColor({0u, 0u, 0u, 192u});
+    m_background.setDepth(500.f);
 
     // Background for messages
     nuiRoot.attachChild(m_messagesBackground);
@@ -34,6 +35,11 @@ Terminal::Terminal(StateStack& stack)
     m_entry.setRelativeOrigin({0.f, 1.f});
     m_entry.setRelativePosition({0.f, 1.f});
     m_entry.setOnValidateCallback([this] { onEntryValidated(); });
+
+    // Initialize historic
+    m_historicPos = 0u;
+    if (s_historic.empty())
+        s_historic.emplace_front();
 
     Application::setPaused(true);
 }
@@ -105,12 +111,21 @@ void Terminal::handleEvent(const sf::Event& event)
         if (event.key.code == sf::Keyboard::Tab) {
             auto commandLine = m_entry.textBeforeCursor();
             commandLine = Application::context().commander.autoComplete(std::move(commandLine));
-            m_entry.setText(commandLine + m_entry.textAfterCursor());
+            m_entry.setText(commandLine + m_entry.textAfterCursor(), false);
             m_entry.setCursorPosition(commandLine.size());
             return;
         }
 
-        // TODO Up/Down for historic
+        // Up/down for historic
+        if (event.key.code == sf::Keyboard::Up) {
+            navigateHistoric(1);
+            return;
+        }
+
+        if (event.key.code == sf::Keyboard::Down) {
+            navigateHistoric(-1);
+            return;
+        }
     }
 
     // Intercept some signals
@@ -126,8 +141,6 @@ void Terminal::handleEvent(const sf::Event& event)
 
 void Terminal::addMessage(std::wstring text, sf::Color color)
 {
-    s_historic.emplace_front(text);
-
     Message message;
 
     message.label = std::make_unique<scene::WrapLabel<sf::Text>>();
@@ -153,6 +166,13 @@ void Terminal::commandLog(const std::wstring& message)
 void Terminal::onEntryValidated()
 {
     auto commandLine = m_entry.text();
+
+    // Historic reset
+    s_historic.front() = commandLine;
+    s_historic.emplace_front();
+    m_historicPos = 0u;
+
+    returnif (commandLine.empty());
     m_entry.setText(L"");
 
     // Print command line
@@ -161,6 +181,18 @@ void Terminal::onEntryValidated()
     // Interpret it via the commander
     auto commands = Application::context().commander.interpret(commandLine);
     Application::context().commander.push(commands);
+}
+
+void Terminal::navigateHistoric(const int relPos)
+{
+    // Remember current new, just in case
+    if (m_historicPos == 0u)
+        s_historic.front() = m_entry.text();
+
+    returnif ((m_historicPos + relPos) >= s_historic.size());
+
+    m_historicPos += relPos;
+    m_entry.setText(s_historic[m_historicPos], false);
 }
 
 //------------------------------------//
@@ -178,7 +210,7 @@ void Terminal::refreshMessagesPositions()
     }
 
     // Refreshing background
-    m_background.setLocalPosition({0.f, lastPosition});
+    m_messagesBackground.setLocalPosition({0.f, lastPosition});
     refreshSize();
 }
 
