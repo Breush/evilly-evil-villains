@@ -80,8 +80,13 @@ namespace context
         //! Set the interpreter key.
         virtual std::wstring interpreterKey() const = 0;
 
-        //! Interpret a specific command.
-        virtual Command interpret(const std::vector<std::wstring>& cmdTokens) = 0;
+        //! Interpret a specific command line.
+        virtual Command interpret(const std::vector<std::wstring>& tokens) = 0;
+
+        //! Attempt to autocomplete the command line.
+        //! The possibilities to complete the last token will be added at the back of the vector.
+        virtual void autoComplete(std::vector<std::wstring>& possibilities,
+                                  const std::vector<std::wstring>& tokens, const std::wstring& lastToken) {}
 
         //! @}
     };

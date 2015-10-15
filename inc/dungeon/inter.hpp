@@ -163,7 +163,9 @@ namespace dungeon
         //! @{
 
         std::wstring interpreterKey() const final { return L"dungeon"; }
-        context::Command interpret(const std::vector<std::wstring>& cmdTokens) final;
+        context::Command interpret(const std::vector<std::wstring>& tokens) final;
+        void autoComplete(std::vector<std::wstring>& possibilities,
+                          const std::vector<std::wstring>& tokens, const std::wstring& lastToken) final;
 
         //! @}
 
@@ -230,6 +232,8 @@ namespace dungeon
 
         //! Set the dosh label to a specific value.
         void configureDoshLabel(std::unique_ptr<scene::Label>& doshLabel, const uint dosh, const sf::Color& color);
+
+        //! @}
 
         //--------------------------------//
         //! @name Internal change updates

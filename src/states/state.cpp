@@ -37,6 +37,11 @@ void State::handleEvent(const sf::Event& event)
 //----------------------------//
 //----- Stack operations -----//
 
+void State::stackReplace(StateID stateID)
+{
+    m_stack.replaceState(*this, stateID);
+}
+
 void State::stackPopPush(StateID stateID)
 {
     m_stack.popState();

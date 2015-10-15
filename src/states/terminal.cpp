@@ -36,6 +36,14 @@ Terminal::Terminal(StateStack& stack)
     m_entry.setRelativePosition({0.f, 1.f});
     m_entry.setOnValidateCallback([this] { onEntryValidated(); });
 
+    // Pause/unpause button
+    nuiRoot.attachChild(m_pauseButton);
+    m_pauseButton.setRelativeOrigin({1.f, 0.f});
+    m_pauseButton.setRelativePosition({0.99f, 0.02f});
+    m_pauseButton.setText(L"Pause/Unpause");
+    m_pauseButton.setFocusable(false);
+    m_pauseButton.setCallback([this] { onPauseButtonPressed(); });
+
     // Initialize historic
     m_historicPos = 0u;
     if (s_historic.empty())
@@ -77,7 +85,7 @@ bool Terminal::update(const sf::Time& dt)
         refreshMessagesPositions();
 
     baseClass::update(dt);
-    return false;
+    return !Application::paused();
 }
 
 void Terminal::refreshNUI(const config::NUIGuides& cNUI)
@@ -193,6 +201,17 @@ void Terminal::navigateHistoric(const int relPos)
 
     m_historicPos += relPos;
     m_entry.setText(s_historic.at(m_historicPos), false);
+}
+
+//-------------------//
+//----- Control -----//
+
+void Terminal::onPauseButtonPressed()
+{
+    Application::setPaused(!Application::paused());
+
+    if (Application::paused()) m_background.setFillColor({0u, 0u, 0u, 192u});
+    else m_background.setFillColor({0u, 0u, 0u, 126u});
 }
 
 //------------------------------------//

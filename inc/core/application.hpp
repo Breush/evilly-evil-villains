@@ -85,6 +85,9 @@ public:
     //! The state stack will still be updated.
     static void setPaused(bool paused);
 
+    //! Whether or not the application updates are paused.
+    static inline bool paused() { return s_paused; }
+
     //! @}
 
     //--------------------------------------//

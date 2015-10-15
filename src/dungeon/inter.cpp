@@ -192,22 +192,41 @@ void Inter::receive(const context::Event& event)
 //-----------------------//
 //----- Interpreter -----//
 
-context::Command Inter::interpret(const std::vector<std::wstring>& cmdTokens)
+context::Command Inter::interpret(const std::vector<std::wstring>& tokens)
 {
     std::wstring logMessage = L"> [dungeon] Unable to interpret command";
+    auto nTokens = tokens.size();
 
-    if (cmdTokens.size() >= 4u) {
+    if (nTokens >= 4u) {
         // Construct room
-        if (cmdTokens[0u] == L"construct" && cmdTokens[1u] == L"room") {
-            logMessage = L"> [dungeon] Constructing room " + cmdTokens[2u] + L"/" + cmdTokens[3u];
-            bool hard = (cmdTokens.size() >= 5u) && (cmdTokens[4u] == L"hard");
-            m_data->constructRoom({to<uint>(cmdTokens[2u]), to<uint>(cmdTokens[3u])}, hard);
+        if (tokens[0u] == L"construct" && tokens[1u] == L"room") {
+            logMessage = L"> [dungeon] Constructing room " + tokens[2u] + L"/" + tokens[3u];
+            bool hard = (nTokens >= 5u) && (tokens[4u] == L"hard");
+            m_data->constructRoom({to<uint>(tokens[2u]), to<uint>(tokens[3u])}, hard);
         }
     }
 
     // Generate log
     context::Command command;
     return context::setCommandLog(command, logMessage);
+}
+
+void Inter::autoComplete(std::vector<std::wstring>& possibilities,
+                         const std::vector<std::wstring>& tokens, const std::wstring& lastToken)
+{
+    // TODO How to automatize that?
+    // Have a tree of tokens?
+
+    auto nTokens = tokens.size();
+
+    if (nTokens == 0u) {
+        if (std::wstring(L"construct").find(lastToken) == 0u)
+            possibilities.emplace_back(L"construct");
+    }
+    else if (nTokens == 1u && tokens[0u] == L"construct") {
+        if (std::wstring(L"room").find(lastToken) == 0u)
+            possibilities.emplace_back(L"room");
+    }
 }
 
 //------------------------//

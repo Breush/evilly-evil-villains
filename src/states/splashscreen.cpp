@@ -53,18 +53,18 @@ bool SplashScreen::update(const sf::Time& dt)
 {
     // Check on animated entities
     if (!m_logo.started())
-        stackPopPush(StateID::MENU_MAIN);
+        stackReplace(StateID::MENU_MAIN);
 
     return State::update(dt);
 }
 
 void SplashScreen::handleEvent(const sf::Event& event)
 {
-    // Back to previous state on Escape
+    // Skip splashscreen on Escape
     if (event.type == sf::Event::KeyPressed
         && event.key.code == sf::Keyboard::Escape) {
         Application::context().sounds.stopAll();
-        stackPopPush(StateID::MENU_MAIN);
+        stackReplace(StateID::MENU_MAIN);
         return;
     }
 

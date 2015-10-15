@@ -23,9 +23,6 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     Application::context().textures.get("dungeon/inter/outer_wall_west").setRepeated(true);
     Application::context().textures.get("dungeon/inter/outer_wall_east").setRepeated(true);
 
-    // During game, disable key repeat
-    Application::context().window.setKeyRepeatEnabled(false);
-
     // Stop music if any
     Application::context().musics.stop();
 

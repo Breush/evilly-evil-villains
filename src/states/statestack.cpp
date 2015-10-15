@@ -99,7 +99,15 @@ void StateStack::applyPendingChanges()
             m_stack.clear();
             break;
 
-        default:
+        case Action::REPLACE:
+            for (auto& state : m_stack)
+            if (change.pState == state.get()) {
+                state->onQuit();
+                state = std::move(createState(change.stateID));
+                state->refreshWindow(Application::context().windowInfo);
+                state->refreshNUI(Application::context().nuiGuides);
+                break;
+            }
             break;
         }
     }
@@ -111,17 +119,35 @@ void StateStack::applyPendingChanges()
 //--------------------------//
 //----- States control -----//
 
+void StateStack::replaceState(const State& state, StateID stateID)
+{
+    PendingChange change;
+    change.action = Action::REPLACE;
+    change.stateID = stateID;
+    change.pState = &state;
+    m_pendingChanges.emplace_back(std::move(change));
+}
+
 void StateStack::pushState(StateID stateID)
 {
-    m_pendingChanges.push_back({Action::PUSH, stateID});
+    PendingChange change;
+    change.action = Action::PUSH;
+    change.stateID = stateID;
+    m_pendingChanges.emplace_back(std::move(change));
 }
 
 void StateStack::popState()
 {
-    m_pendingChanges.push_back({Action::POP, StateID::NONE});
+    PendingChange change;
+    change.action = Action::POP;
+    change.stateID = StateID::NONE;
+    m_pendingChanges.emplace_back(std::move(change));
 }
 
 void StateStack::clearStates()
 {
-    m_pendingChanges.push_back({Action::CLEAR, StateID::NONE});
+    PendingChange change;
+    change.action = Action::CLEAR;
+    change.stateID = StateID::NONE;
+    m_pendingChanges.emplace_back(std::move(change));
 }

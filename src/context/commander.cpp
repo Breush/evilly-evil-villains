@@ -79,7 +79,10 @@ std::wstring Commander::autoComplete(std::wstring commandLine)
     auto tokens = split(commandLine);
 
     std::wstring lastToken;
-    if (!isTokenStart) lastToken = tokens.back();
+    if (!isTokenStart) {
+        lastToken = tokens.back();
+        tokens.erase(std::end(tokens));
+    }
 
     // Check if it is the key to autocomplete
     std::vector<std::wstring> possibilities;
@@ -92,7 +95,15 @@ std::wstring Commander::autoComplete(std::wstring commandLine)
         }
     }
 
-    // TODO Else, broadcast autoComplete to interpreters
+    // Else, broadcast auto-complete to interpreters
+    else {
+        auto key = tokens.front();
+        tokens.erase(std::begin(tokens));
+
+        for (auto pInterpreter : m_interpreters)
+            if (pInterpreter->interpreterKey() == key)
+                pInterpreter->autoComplete(possibilities, tokens, lastToken);
+    }
 
     // No possibility, keep previous
     returnif (possibilities.size() == 0u) commandLine;
@@ -107,8 +118,7 @@ std::wstring Commander::autoComplete(std::wstring commandLine)
 
         // Log them
         Command command;
-        setCommandLog(command, join(possibilities));
-        push(command);
+        push(setCommandLog(command, join(possibilities)));
     }
 
     // No new token to set

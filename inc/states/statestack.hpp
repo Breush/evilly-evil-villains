@@ -76,6 +76,9 @@ namespace states
         //! Pop front-most state.
         void popState();
 
+        //! Replace the specified state with a new one.
+        void replaceState(const State& state, StateID stateID);
+
         //! Pops all states.
         void clearStates();
 
@@ -107,16 +110,18 @@ namespace states
         //! Possible actions to do with states.
         enum class Action
         {
-            PUSH,   //!< Add a state on top.
-            POP,    //!< Remove the state on top.
-            CLEAR,  //!< Remove all states.
+            PUSH,       //!< Add a state on top.
+            POP,        //!< Remove the state on top.
+            CLEAR,      //!< Remove all states.
+            REPLACE,    //!< Replace a state with another one.
         };
 
         //! An action to do on a state.
         struct PendingChange
         {
-            Action action;      //!< The action.
-            StateID stateID;    //!< The state.
+            Action action;                  //!< The action.
+            StateID stateID;                //!< The new state.
+            const State* pState = nullptr;  //!< The state reference.
         };
 
     private:
