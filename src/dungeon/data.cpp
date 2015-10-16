@@ -17,8 +17,8 @@
 using namespace dungeon;
 
 Data::Data()
-    : m_floorsCount(0)
-    , m_roomsByFloor(0)
+    : m_floorsCount(0u)
+    , m_roomsByFloor(0u)
 {
     m_fameWallet.setEvents(this, "fame_changed");
 }
@@ -255,6 +255,8 @@ void Data::destroyRoom(const sf::Vector2u& coords, bool hard)
     returnif (coords.y >= m_roomsByFloor);
     returnif (room(coords).state == RoomState::VOID);
 
+    // TODO Hard should not retrieve money from facilities/traps.
+
     m_villain->doshWallet.add(onDestroyRoomGain);
     room(coords).state = RoomState::VOID;
 
@@ -262,11 +264,10 @@ void Data::destroyRoom(const sf::Vector2u& coords, bool hard)
     removeRoomFacilities(coords);
     removeRoomTrap(coords);
 
-    // Hard mode: destroy monsters inside.
-    // TODO Hard should not retrieve money from facilities/traps.
-    if (hard) {
-        std::erase_if(m_monstersInfo, [coords] (const MonsterInfo& monsterInfo) { return monsterInfo.coords == coords; });
-    }
+    // Destroy monsters inside
+    std::erase_if(m_monstersInfo, [coords] (const MonsterInfo& monsterInfo) {
+        return monsterInfo.coords == coords;
+    });
 
     Event event;
     event.type = "room_destroyed";

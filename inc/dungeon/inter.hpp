@@ -19,6 +19,10 @@
 
 namespace dungeon
 {
+    // Forward declarations
+
+    class HeroesManager;
+
     //! The dungeon itself, handling user interactions.
 
     class Inter final : public scene::Entity, private context::EventReceiver, private context::Interpreter
@@ -28,7 +32,7 @@ namespace dungeon
     public:
 
         //! Constructor.
-        Inter(nui::ContextMenu& contextMenu);
+        Inter(nui::ContextMenu& contextMenu, const HeroesManager& heroesManager);
 
         //! Default destructor.
         virtual ~Inter() = default;
@@ -123,6 +127,16 @@ namespace dungeon
 
         //! The size in pixels of the tiles.
         sf::Vector2f tileSize() const { return m_grid.cellSize(); }
+
+        //! @}
+
+        //--------------//
+        //! @name Tools
+        //! @{
+
+        //! Detect if a hero is nearby the position.
+        //! @param relRange is expressed relatively to room width.
+        bool isHeroNearby(const sf::Vector2f& position, float relRange) const;
 
         //! @}
 
@@ -294,7 +308,8 @@ namespace dungeon
 
     private:
 
-        Data* m_data = nullptr; //!< Dungeon data.
+        Data* m_data = nullptr;                 //!< Dungeon data.
+        const HeroesManager& m_heroesManager;   //!< Heroes manager reference.
 
         // Display
         sfe::Grid m_grid;                                   //!< The internal grid for overlay display.

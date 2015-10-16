@@ -18,7 +18,7 @@ namespace monsters
     public:
 
         //! Constructor.
-        Creepim(const sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter);
+        Creepim(sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter);
 
         //! Default destructor.
         ~Creepim() = default;
@@ -47,7 +47,7 @@ namespace monsters
         //! @name Events
         //! @{
 
-        void receive(const context::Event& event) final;
+        inline void receive(const context::Event& event) final {}
 
         //! @}
 
@@ -83,10 +83,9 @@ namespace monsters
         // Artificial intelligence
         ai::LuaActor m_luaActor;                    //!< Loads lua file and move into the graph.
         const Graph::Node* m_currentNode = nullptr; //!< The current room where is this monster.
-        bool m_left = false;            //!< Is the creepim looking left?
+        bool m_left = false;                        //!< Is the creepim looking left?
 
         // Exploding
-        sf::Vector2u m_explodingCoords; //!< The room to explode if fusing.
         bool m_fusing = false;          //!< Is the creepim going to explode?
     };
 }

@@ -11,7 +11,7 @@ using namespace states;
 
 GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     : State(stack)
-    , m_dungeonInter(m_contextMenu)
+    , m_dungeonInter(m_contextMenu, m_heroesManager)
     , m_dungeonSidebar(scene())
     , m_heroesManager(m_dungeonInter)
 {

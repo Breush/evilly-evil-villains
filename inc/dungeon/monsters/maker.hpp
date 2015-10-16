@@ -15,7 +15,7 @@ namespace dungeon
 namespace monsters
 {
     //! Create and initialize the corresponding Monster from a ElementData.
-    inline std::unique_ptr<Monster> make(const sf::Vector2u& coords, ElementData& eData, dungeon::Inter& inter)
+    inline std::unique_ptr<Monster> make(sf::Vector2u& coords, ElementData& eData, dungeon::Inter& inter)
     {
         const auto& type = eData.type();
         if (type == L"creepim") return std::make_unique<Creepim>(coords, eData, inter);

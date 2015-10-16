@@ -7,6 +7,7 @@
 #include "dungeon/traps/maker.hpp"
 #include "dungeon/monsters/maker.hpp"
 #include "dungeon/facilities/maker.hpp"
+#include "dungeon/heroesmanager.hpp"
 #include "tools/debug.hpp"
 #include "tools/event.hpp"
 #include "tools/tools.hpp"
@@ -17,8 +18,9 @@
 
 using namespace dungeon;
 
-Inter::Inter(nui::ContextMenu& contextMenu)
-    : m_contextMenu(contextMenu)
+Inter::Inter(nui::ContextMenu& contextMenu, const HeroesManager& heroesManager)
+    : m_heroesManager(heroesManager)
+    , m_contextMenu(contextMenu)
 {
     // Grid
     m_grid.setVisible(false);
@@ -516,6 +518,12 @@ void Inter::setRoomsByFloor(uint value)
 {
     m_data->setRoomsByFloor(value);
     refreshFromData();
+}
+
+bool Inter::isHeroNearby(const sf::Vector2f& position, float relRange) const
+{
+    auto range = tileSize().x * relRange;
+    return m_heroesManager.isHeroNearby(position, range);
 }
 
 //----------------//

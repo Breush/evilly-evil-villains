@@ -51,6 +51,15 @@ namespace dungeon
 
         //! @}
 
+        //--------------------//
+        //! @name Interaction
+        //! @{
+
+        //! Detect if a hero is nearby the position.
+        bool isHeroNearby(const sf::Vector2f& position, float range) const;
+
+        //! @}
+
         //------------------------//
         //! @name Heroes feedback
         //! @{
