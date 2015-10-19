@@ -5,6 +5,7 @@
 #include <functional>
 #include "Registry.h"
 #include <string>
+#include <sstream>
 #include <tuple>
 #include "util.h"
 #include <vector>
@@ -425,7 +426,9 @@ public:
         return std::move(*this)[std::string{name}];
     }
     Selector&& operator[](const int index) && {
-        _name += std::string(".") + std::to_string(index);
+		std::stringstream ss;
+        ss << '.' << index;
+		_name += ss.str();
         _check_create_table();
         _traversal.push_back(_get);
         const auto state = _state; // gcc-5.1 doesn't support implicit member capturing
@@ -463,7 +466,9 @@ public:
         return (*this)[std::string{name}];
     }
     Selector operator[](const int index) const REF_QUAL_LVALUE {
-        auto name = _name + "." + std::to_string(index);
+		std::stringstream ss;
+		ss << _name << '.' << index;
+        auto name = ss.str();
         _check_create_table();
         auto traversal = _traversal;
         traversal.push_back(_get);
