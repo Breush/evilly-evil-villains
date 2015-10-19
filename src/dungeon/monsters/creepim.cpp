@@ -3,6 +3,7 @@
 #include "dungeon/inter.hpp"
 
 using namespace dungeon::monsters;
+using namespace std::placeholders;
 
 // TODO Remove coords and use only rx/ry
 
@@ -30,6 +31,11 @@ Creepim::Creepim(sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter&
 
     // Lua
     m_luaActor.loadFile("res/ai/monsters/creepim.lua");
+    // All moving elements inside dungeon should become dungeon::DetectEntity
+    // Register through the dungeon detecter (function inherited from dungeon::DetectEntity)
+    /* std::function<void(const std::string&, const std::string&)> eev_addCallback = std::bind(&DetectEntity::addCallback, this, _1, _2);
+    m_luaActor.state()["eev_addCallback"] = eev_addCallback;
+    m_luaActor.state()["register"]();*/
 
     refreshFromActivity();
 }
@@ -45,10 +51,11 @@ void Creepim::onTransformChanges()
 
 void Creepim::updateAI(const sf::Time& dt)
 {
-    // Get next room if not already moving
     returnif (m_fusing);
     returnif (!active());
     returnif (lerpable()->positionLerping());
+
+    // Get next room if not already moving
     setCurrentNode(m_luaActor.findNextNode(m_currentNode));
 }
 
@@ -101,6 +108,16 @@ void Creepim::useGraph(Graph& graph)
     m_graph = &graph;
     m_luaActor.useGraph(graph);
 }
+
+//-------------------//
+//---- Detecter -----//
+
+/*
+void Creepim::onDetecterCallback(const std::string& key)
+{
+    m_luaActor.state()[key]();
+}
+*/
 
 //----------------------------------//
 //---- Internal changes update -----//

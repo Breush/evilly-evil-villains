@@ -8,6 +8,21 @@
 -- who will just explode himself and the room he's in
 -- if a hero comes too close. 
 
+---------------
+-- Callbacks --
+
+-- Called once on object creation
+function register()
+    eev_addCallback("heroClose", "entity.type == hero && entity.distance <= 0.5");
+end
+
+-- Whenever a hero comes to close
+function heroClose()
+end
+
+----------------------
+-- Graph navigation --
+
 -- The reference altitude
 local altitude_ref
 

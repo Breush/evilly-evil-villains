@@ -51,6 +51,14 @@ namespace monsters
 
         //! @}
 
+        //------------------//
+        //! @name Detecter
+        //! @{
+
+        /* void onDetecterCallback(const std::string& key) final; */
+
+        //! @}
+
         //------------------------//
         //! @name Node management
         //! @{
