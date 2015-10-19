@@ -47,6 +47,9 @@ namespace dungeon
         //! The graph of the dungeon to be read from.
         void useGraph(Graph& graph);
 
+        //! Convert a node to a node data.
+        const Graph::NodeData* toNodeData(const ai::Node* node);
+
         //! @}
 
         //----------------//
@@ -54,7 +57,7 @@ namespace dungeon
         //! @{
 
         //! The graph of the dungeon to be read from.
-        inline const Graph::Node* currentNode() const { return m_currentNode; }
+        inline const ai::Node* currentNode() const { return m_currentNode; }
 
         //! @}
 
@@ -96,7 +99,7 @@ namespace dungeon
         //! @{
 
         //! Select the node to move the hero to.
-        void setCurrentNode(const Graph::Node* node);
+        void setCurrentNode(const ai::Node* node);
 
         //! @}
 
@@ -113,7 +116,7 @@ namespace dungeon
 
         #if DEBUG_AI > 0
         //! Refresh an overlay position and content.
-        void refreshDebugOverlay(uint index, const Graph::Node* node);
+        void refreshDebugOverlay(uint index, const ai::Node* node);
 
         //! Refresh the overlay to current node and nearby ones.
         void refreshDebugOverlays();
@@ -125,7 +128,7 @@ namespace dungeon
 
         // The graph
         HeroesManager& m_manager;                   //!< The heroes manager for feedback.
-        const Graph::Node* m_currentNode = nullptr; //!< The current room where is our hero.
+        const ai::Node* m_currentNode = nullptr;    //!< The current room where is our hero.
         Inter& m_inter;                             //!< The dungeon inter, to get cellsize and position.
 
         // Artificial intelligence

@@ -4,6 +4,7 @@
 #include "dungeon/inter.hpp"
 #include "dungeon/data.hpp"
 #include "tools/tools.hpp"
+#include "ai/node.hpp"
 
 #include <stdexcept> // runtime_error
 
@@ -64,13 +65,13 @@ void Hero::updateAI(const sf::Time& dt)
 {
     // Get next room if not already moving
     returnif (lerpable()->positionLerping());
-    setCurrentNode(m_luaActor.findNextNode(m_currentNode));
+    setCurrentNode(m_luaActor.findNextNode(toNodeData(m_currentNode))->node);
 }
 
 //---------------------------//
 //----- Node management -----//
 
-void Hero::setCurrentNode(const Graph::Node* node)
+void Hero::setCurrentNode(const ai::Node* node)
 {
     returnif (m_currentNode == node);
 
@@ -81,7 +82,7 @@ void Hero::setCurrentNode(const Graph::Node* node)
 
     // Emit signal when getting out
     if (m_currentNode != nullptr)
-        m_manager.heroLeftRoom(this, m_currentNode->coords);
+        m_manager.heroLeftRoom(this, toNodeData(m_currentNode)->coords);
 
     bool firstNode = (m_currentNode == nullptr);
     m_currentNode = node;
@@ -94,7 +95,7 @@ void Hero::setCurrentNode(const Graph::Node* node)
 
     if (m_currentNode != nullptr) {
         refreshPositionFromNode(firstNode);
-        m_manager.heroEnteredRoom(this, m_currentNode->coords);
+        m_manager.heroEnteredRoom(this, toNodeData(m_currentNode)->coords);
     }
 }
 
@@ -103,15 +104,15 @@ void Hero::setCurrentNode(const Graph::Node* node)
 
 void Hero::AIGetOut()
 {
-    returnif (!m_currentNode->entrance);
+    returnif (!toNodeData(m_currentNode)->entrance);
     m_manager.heroGetsOut(this);
 }
 
 void Hero::AIStealTreasure()
 {
-    auto maxStolenDosh = std::min(100u, m_currentNode->treasure);
+    auto maxStolenDosh = std::min(100u, toNodeData(m_currentNode)->treasure);
     auto stolenDosh = 1u + rand() % maxStolenDosh;
-    m_manager.heroStealsTreasure(this, m_currentNode->coords, stolenDosh);
+    m_manager.heroStealsTreasure(this, toNodeData(m_currentNode)->coords, stolenDosh);
 }
 
 //-------------------------//
@@ -120,7 +121,13 @@ void Hero::AIStealTreasure()
 void Hero::useGraph(Graph& graph)
 {
     m_luaActor.useGraph(graph);
-    setCurrentNode(&graph.startingNode());
+    setCurrentNode(graph.startingNode());
+}
+
+const Graph::NodeData* Hero::toNodeData(const ai::Node* node)
+{
+    returnif (node == nullptr) nullptr;
+    return reinterpret_cast<const Graph::NodeData*>(node->data);
 }
 
 //-----------------------------------//
@@ -144,7 +151,8 @@ void Hero::refreshPositionFromNode(bool firstNode)
 {
     returnif (m_currentNode == nullptr);
 
-    const auto tileLocalPosition = m_inter.tileLocalPosition(m_currentNode->coords);
+    const auto& targetCoords = toNodeData(m_currentNode)->coords;
+    const auto tileLocalPosition = m_inter.tileLocalPosition(targetCoords);
     lerpable()->setTargetPosition(tileLocalPosition + m_inter.tileSize() / 2.f);
     if (firstNode) setLocalPosition(lerpable()->targetPosition());
 
@@ -184,19 +192,19 @@ std::wstring stringFromWeight(const ai::LuaActor::Weight& weight, const int eval
     return std::move(str.str());
 }
 
-void Hero::refreshDebugOverlay(uint index, const Graph::Node* node)
+void Hero::refreshDebugOverlay(uint index, const ai::Node* node)
 {
     // Make it visible
     m_overlays[index].setVisible(true);
     m_overlayLabels[index].setVisible(true);
 
     // Reposition
-    const auto position = m_inter.tileLocalPosition(node->coords);
+    const auto position = m_inter.tileLocalPosition(toNodeData(node).coords);
     m_overlays[index].setLocalPosition(position);
     m_overlayLabels[index].setLocalPosition(position);
 
     // Text content
-    m_overlayLabels[index].setText(stringFromWeight(m_luaActor.getWeight(node), m_luaActor.evaluation(index)));
+    m_overlayLabels[index].setText(stringFromWeight(m_luaActor.getWeight(&toNodeData(node)), m_luaActor.evaluation(index)));
 }
 
 void Hero::refreshDebugOverlays()

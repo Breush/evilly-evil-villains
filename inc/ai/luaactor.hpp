@@ -4,32 +4,31 @@
 
 #include <selene/selene.hpp>
 
-// TODO Move dungeon/graph to ai/graph (and to ai/node to be able to forward declare)
-// Well, dungeon graph should inherits from ai graph.
-// Weight info should be dynamically set.
+// TODO This LUA Actor can not exist... or should be in dungeon.
 
 namespace ai
 {
     //! Actor that interfaces with Lua.
     /*!
-     *  Lua file will have to features init(), evaluate_reference()
+     *  Lua file will have to feature init(), evaluate_reference()
      *  and evaluate() procedures.
      */
 
     class LuaActor
     {
         using Graph = dungeon::Graph;
-        using Node = dungeon::Graph::Node;
+        using Node = dungeon::Graph::NodeData;
 
     public:
 
         //! All the weights used by Lua algorithms.
         struct Weight
         {
-            // The following are specific to the current IA.
+            // The following are specific to the current AI.
             uint visited = 0u;      //!< How often the node has been visited.
             uint lastVisit = 0u;    //!< The tick of the last time the node has been visited.
 
+            // TODO How can this be defined inside AI? Should be dynamically set somehow.
             // The following are coming from the graph information.
             uint altitude = 0u;     //!< How high is the node.
             uint treasure = 0u;     //!< How many money there is stored in this node.

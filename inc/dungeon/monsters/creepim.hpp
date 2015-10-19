@@ -29,6 +29,9 @@ namespace monsters
 
         void useGraph(Graph& graph) final;
 
+        //! Convert a node to a node data.
+        const Graph::NodeData* toNodeData(const ai::Node* node);
+
         //! @}
 
     protected:
@@ -64,7 +67,7 @@ namespace monsters
         //! @{
 
         //! Select the node to move the hero to.
-        void setCurrentNode(const Graph::Node* node);
+        void setCurrentNode(const ai::Node* node);
 
         //! @}
 
@@ -90,7 +93,7 @@ namespace monsters
 
         // Artificial intelligence
         ai::LuaActor m_luaActor;                    //!< Loads lua file and move into the graph.
-        const Graph::Node* m_currentNode = nullptr; //!< The current room where is this monster.
+        const ai::Node* m_currentNode = nullptr;    //!< The current room where is this monster.
         bool m_left = false;                        //!< Is the creepim looking left?
 
         // Exploding

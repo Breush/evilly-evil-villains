@@ -1,6 +1,7 @@
 #include "dungeon/monsters/creepim.hpp"
 
 #include "dungeon/inter.hpp"
+#include "ai/node.hpp"
 
 using namespace dungeon::monsters;
 using namespace std::placeholders;
@@ -56,7 +57,7 @@ void Creepim::updateAI(const sf::Time& dt)
     returnif (lerpable()->positionLerping());
 
     // Get next room if not already moving
-    setCurrentNode(m_luaActor.findNextNode(m_currentNode));
+    setCurrentNode(m_luaActor.findNextNode(toNodeData(m_currentNode))->node);
 }
 
 void Creepim::updateRoutine(const sf::Time& dt)
@@ -89,7 +90,7 @@ void Creepim::updateRoutine(const sf::Time& dt)
 //---------------------------//
 //----- Node management -----//
 
-void Creepim::setCurrentNode(const Graph::Node* node)
+void Creepim::setCurrentNode(const ai::Node* node)
 {
     returnif (m_currentNode == node);
 
@@ -107,6 +108,12 @@ void Creepim::useGraph(Graph& graph)
 {
     m_graph = &graph;
     m_luaActor.useGraph(graph);
+}
+
+const dungeon::Graph::NodeData* Creepim::toNodeData(const ai::Node* node)
+{
+    returnif (node == nullptr) nullptr;
+    return reinterpret_cast<const Graph::NodeData*>(node->data);
 }
 
 //-------------------//
@@ -132,6 +139,7 @@ void Creepim::refreshFromActivity()
     else {
         setCurrentNode(nullptr);
         m_sprite.setStarted(false);
+        lerpable()->setTargetPosition(localPosition());
     }
 }
 
@@ -139,7 +147,7 @@ void Creepim::refreshPositionFromNode(bool teleport)
 {
     returnif (m_currentNode == nullptr);
 
-    const auto& targetCoords = m_currentNode->coords;
+    const auto& targetCoords = toNodeData(m_currentNode)->coords;
     const auto tileLocalPosition = m_inter.tileLocalPosition(targetCoords);
     const auto monsterTilePosition = sf::Vector2f{m_inter.tileSize().x / 2.f, m_inter.tileSize().y * 0.62f};
     lerpable()->setTargetPosition(tileLocalPosition + monsterTilePosition);

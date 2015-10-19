@@ -8,7 +8,7 @@ using namespace ai;
 //-------------------//
 //----- Control -----//
 
-const dungeon::Graph::Node* LuaActor::findNextNode(const Node* currentNode)
+const LuaActor::Node* LuaActor::findNextNode(const Node* currentNode)
 {
     // That's not a node...
     returnif (currentNode == nullptr) nullptr;
@@ -21,10 +21,10 @@ const dungeon::Graph::Node* LuaActor::findNextNode(const Node* currentNode)
     m_nodeInfos[currentNode->coords].lastVisit = m_tick++;
 
     // No neighbours
-    returnif (currentNode->neighbours.size() == 0u) currentNode;
+    returnif (currentNode->node->neighbours.size() == 0u) currentNode;
 
     // Consider that the current room might be the best node
-    std::vector<const Graph::Node*> bestNodes;
+    std::vector<const Node*> bestNodes;
     bestNodes.push_back(currentNode);
     int maxEvaluation = call("evaluate_reference", currentNode);
 
@@ -37,8 +37,9 @@ const dungeon::Graph::Node* LuaActor::findNextNode(const Node* currentNode)
     returnif (currentNode == nullptr) nullptr;
 
     // Get the evaluation from lua
-    for (const auto& neighbour : currentNode->neighbours) {
-        int evaluation = call("evaluate", neighbour);
+    for (const auto& neighbour : currentNode->node->neighbours) {
+        auto neighbourData = reinterpret_cast<const Graph::NodeData*>(neighbour->data);
+        int evaluation = call("evaluate", neighbourData);
         m_evaluations.emplace_back(evaluation);
 
         // Found a new limit for the best nodes
@@ -49,7 +50,7 @@ const dungeon::Graph::Node* LuaActor::findNextNode(const Node* currentNode)
 
         // This node is among the best ones
         if (evaluation == maxEvaluation)
-            bestNodes.emplace_back(neighbour);
+            bestNodes.emplace_back(neighbourData);
     }
 
     // Return a new node randomly from the best ones
@@ -81,7 +82,7 @@ void LuaActor::useGraph(Graph& graph)
 //-----------------------------------//
 //----- Artificial intelligence -----//
 
-LuaActor::Weight LuaActor::getWeight(const dungeon::Graph::Node* node)
+LuaActor::Weight LuaActor::getWeight(const Node* node)
 {
     Weight weight;
     weight.visited =    m_nodeInfos[node->coords].visits;
@@ -92,7 +93,7 @@ LuaActor::Weight LuaActor::getWeight(const dungeon::Graph::Node* node)
     return weight;
 }
 
-uint LuaActor::call(const char* function, const dungeon::Graph::Node* node)
+uint LuaActor::call(const char* function, const Node* node)
 {
     Weight weight = getWeight(node);
 

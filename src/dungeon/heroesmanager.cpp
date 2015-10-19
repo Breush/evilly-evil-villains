@@ -60,7 +60,7 @@ void HeroesManager::receive(const context::Event& event)
 
             coords = {devent.action.room.x, devent.action.room.y};
             if (m_inter.tileFromLocalPosition(hero->localPosition()) == coords
-                || hero->currentNode()->coords == coords) {
+                || reinterpret_cast<const Graph::NodeData*>(hero->currentNode()->data)->coords == coords) {
                 heroInfo.status = HeroStatus::TO_BE_REMOVED;
             }
         }
