@@ -16,7 +16,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     , m_heroesManager(m_dungeonInter)
 {
     // Loading resources
-    Application::loadTextures({"dungeon", "elements", "heroes"});
+    Application::loadTextures({"dungeon", "elements", "heroes", "effects"});
     Application::loadAnimations({"dungeon", "heroes"});
 
     Application::context().textures.get("dungeon/sidebar/tab/monsters/cage").setRepeated(true);
@@ -97,7 +97,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 GameDungeonDesign::~GameDungeonDesign()
 {
     // Freeing resources
-    Application::freeTextures({"dungeon", "elements", "heroes"});
+    Application::freeTextures({"dungeon", "elements", "heroes", "effects"});
     Application::freeAnimations({"dungeon", "heroes"});
 }
 
