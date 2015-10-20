@@ -40,6 +40,8 @@ namespace nui
         //! Default destructor.
         ~ContextMenu() = default;
 
+        std::string _name() const final { return "nui::ContextMenu"; }
+
         //----------------//
         //! @name Choices
         //! @{

@@ -40,6 +40,8 @@ namespace dcb
         //! Default destructor.
         ~GaugesManager() = default;
 
+        std::string _name() const final { return "dcb::GaugesManager"; }
+
         //-----------------------//
         //! @name Gauges control
         //! @{

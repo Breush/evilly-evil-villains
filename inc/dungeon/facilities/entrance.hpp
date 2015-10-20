@@ -21,6 +21,8 @@ namespace facilities
         //! Default destructor.
         ~Entrance() = default;
 
+        std::string _name() const final { return "dungeon::facilities::Entrance"; }
+
     protected:
 
         //---------------//

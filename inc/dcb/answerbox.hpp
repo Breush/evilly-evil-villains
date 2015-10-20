@@ -30,6 +30,8 @@ namespace dcb
         //! Default destructor.
         ~AnswerBox() = default;
 
+        std::string _name() const final { return "dcb::AnswerBox"; }
+
         //------------------------//
         //! @name Answers control
         //! @{

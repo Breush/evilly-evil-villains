@@ -21,6 +21,8 @@ namespace nui
         //! Default destructor.
         ~Gauge() final = default;
 
+        std::string _name() const final { return "nui::Gauge"; }
+
         //----------------------//
         //! @name Configuration
         //! @{

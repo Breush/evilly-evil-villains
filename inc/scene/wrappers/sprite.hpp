@@ -21,6 +21,8 @@ namespace scene
         //! Default destructor.
         ~Sprite() = default;
 
+        std::string _name() const final { return "Sprite"; }
+
         //-----------------//
         //! @name Wrappers
         //! @{

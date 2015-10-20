@@ -33,6 +33,8 @@ namespace dungeon
         //! Default destructor.
         virtual ~Facility() = default;
 
+        virtual std::string _name() const override = 0;
+
     protected:
 
         //---------------//

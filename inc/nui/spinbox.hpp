@@ -30,6 +30,8 @@ namespace nui
         //! Default destructor.
         ~SpinBox() = default;
 
+        std::string _name() const final { return "nui::SpinBox"; }
+
         //-------------------------//
         //! @name Value management
         //! @{

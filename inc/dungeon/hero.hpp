@@ -28,6 +28,8 @@ namespace dungeon
         //! Default destructor.
         ~Hero() = default;
 
+        std::string _name() const final { return "dungeon::Hero"; }
+
         //------------------//
         //! @name Resources
         //! @{

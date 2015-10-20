@@ -23,6 +23,8 @@ namespace nui
         //! Default destructor.
         ~VStacker() = default;
 
+        std::string _name() const final { return "nui::VStacker"; }
+
     protected:
 
         //----------------//

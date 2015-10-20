@@ -22,7 +22,7 @@ namespace scene
      *  Just load it and you are set.
      */
 
-    class AnimatedSprite : public Entity
+    class AnimatedSprite final : public Entity
     {
         friend class resources::AnimationHolder;
         using baseClass = Entity;
@@ -34,6 +34,8 @@ namespace scene
 
         //! Destructor, will unregister this animated sprite from the context.
         virtual ~AnimatedSprite();
+
+        std::string _name() const final { return "AnimatedSprite"; }
 
         //------------------//
         //! @name Animation

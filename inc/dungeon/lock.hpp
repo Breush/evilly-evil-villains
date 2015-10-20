@@ -25,6 +25,8 @@ namespace dungeon
         //! Default destructor.
         ~Lock() = default;
 
+        std::string _name() const final { return "dungeon::Lock"; }
+
         //! Initialize after textures are loaded.
         void init();
 

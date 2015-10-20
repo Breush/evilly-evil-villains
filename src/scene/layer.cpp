@@ -8,12 +8,16 @@
 
 using namespace scene;
 
+LayerRoot::LayerRoot()
+{
+    setDetectable(false);
+    setFocusable(false);
+    setTransparent(true);
+}
+
 Layer::Layer(Graph* graph)
 {
     m_root.setGraph(graph);
-    m_root.setDetectable(false);
-    m_root.setFocusable(false);
-    m_root.setTransparent(true);
 }
 
 //-------------------//

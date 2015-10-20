@@ -25,6 +25,8 @@ namespace traps
         //! Default destructor.
         ~PickPock() = default;
 
+        std::string _name() const final { return "dungeon::traps::PickPock"; }
+
         //------------------//
         //! @name Resources
         //! @{

@@ -31,6 +31,8 @@ namespace facilities
         //! Default destructor.
         ~Ladder() = default;
 
+        std::string _name() const final { return "dungeon::facilities::Ladder"; }
+
         //---------------//
         //! @name Design
         //! @{

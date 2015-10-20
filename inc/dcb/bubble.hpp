@@ -25,6 +25,8 @@ namespace dcb
         //! Default destructor.
         ~Bubble() = default;
 
+        std::string _name() const final { return "dcb::Bubble"; }
+
         //--------------------------//
         //! @name Text manipulation
         //! @{

@@ -25,6 +25,8 @@ namespace nui
         //! Default destructor.
         virtual ~Stacker() = default;
 
+        virtual std::string _name() const override = 0;
+
         //----------------------------//
         //! @name Children management
         //! @{

@@ -30,6 +30,8 @@ namespace nui
         //! Default destructor.
         ~List() = default;
 
+        std::string _name() const final { return "nui::List"; }
+
         //----------------//
         //! @name Columns
         //! @{

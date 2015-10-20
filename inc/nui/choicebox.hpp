@@ -43,6 +43,8 @@ namespace nui
         //! Default destructor.
         virtual ~ChoiceBox() = default;
 
+        virtual std::string _name() const override { return "nui::ChoiceBox"; }
+
         //----------------//
         //! @name Choices
         //! @{

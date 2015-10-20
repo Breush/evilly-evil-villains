@@ -26,6 +26,8 @@ namespace nui
         //! Default destructor.
         virtual ~GrabButton() = default;
 
+        std::string _name() const final { return "nui::GrabButton"; }
+
     protected:
 
         //---------------//

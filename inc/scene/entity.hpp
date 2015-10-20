@@ -55,6 +55,9 @@ namespace scene
         //! The entity will detach itself if still attached to a parent.
         virtual ~Entity();
 
+        //! Entity unique qualifier, mostly for debugging.
+        virtual std::string _name() const = 0;
+
         //-------------------//
         //! @name Components
         //! @{

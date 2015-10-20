@@ -23,6 +23,8 @@ namespace nui
         //! Default destructor.
         ~ScrollArea() = default;
 
+        std::string _name() const final { return "nui::ScrollArea"; }
+
         //---------------------------//
         //! @name Content management
         //! @{

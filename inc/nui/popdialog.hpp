@@ -31,6 +31,8 @@ namespace nui
         //! Destructor.
         ~PopDialog();
 
+        std::string _name() const final { return "nui::PopDialog"; }
+
         //----------------//
         //! @name Control
         //! @{

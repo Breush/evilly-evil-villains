@@ -33,6 +33,8 @@ namespace nui
         //! Default destructor.
         ~ReactImage() = default;
 
+        std::string _name() const final { return "nui::ReactImage"; }
+
         //--------------//
         //! @name Control
         //! @{

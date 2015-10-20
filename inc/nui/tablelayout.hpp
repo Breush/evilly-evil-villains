@@ -23,6 +23,8 @@ namespace nui
         //! Default destructor.
         ~TableLayout() = default;
 
+        std::string _name() const final { return "nui::TableLayout"; }
+
         //------------------//
         //! @name Structure
         //! @{

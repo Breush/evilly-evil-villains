@@ -24,6 +24,8 @@ namespace nui
         //! Default destructor.
         ~NumberEntry() = default;
 
+        std::string _name() const final { return "nui::NumberEntry"; }
+
         //---------------//
         //! @name Value
         //! @{

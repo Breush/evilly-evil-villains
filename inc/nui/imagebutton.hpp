@@ -23,6 +23,8 @@ namespace nui
         //! Default destructor.
         virtual ~ImageButton() = default;
 
+        virtual std::string _name() const override { return "nui::ImageButton"; }
+
         //----------------//
         //! @name Visuals
         //! @{

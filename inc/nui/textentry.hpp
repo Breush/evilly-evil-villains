@@ -28,6 +28,8 @@ namespace nui
         //! Default destructor.
         virtual ~TextEntry() = default;
 
+        virtual std::string _name() const override { return "nui::TextEntry"; }
+
         //--------------------------//
         //! @name Getter and setter
         //! @{

@@ -22,6 +22,8 @@ namespace nui
         //! Default destructor.
         ~Form() = default;
 
+        std::string _name() const final { return "nui::Form"; }
+
         //-----------------//
         //! @name Children
         //! @{

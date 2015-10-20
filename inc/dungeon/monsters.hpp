@@ -38,6 +38,8 @@ namespace dungeon
         //! Default destructor.
         virtual ~Monster() = default;
 
+        virtual std::string _name() const override = 0;
+
         //--------------------------//
         //! @name Public properties
         //! @{
@@ -109,6 +111,8 @@ namespace dungeon
 
         //! Default destructor.
         ~MonsterCage() = default;
+
+        std::string _name() const final { return "dungeon::MonsterCage"; }
 
     protected:
 

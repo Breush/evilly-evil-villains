@@ -32,6 +32,8 @@ namespace dungeon
         //! Default destructor.
         virtual ~Trap() = default;
 
+        virtual std::string _name() const override = 0;
+
         //------------------//
         //! @name Resources
         //! @{

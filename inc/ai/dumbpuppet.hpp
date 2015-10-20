@@ -22,6 +22,8 @@ namespace ai
         //! Default destructor.
         ~DumbPuppet() = default;
 
+        std::string _name() const final { return "ai::DumbPuppet"; }
+
         //----------------//
         //! @name Control
         //! @{

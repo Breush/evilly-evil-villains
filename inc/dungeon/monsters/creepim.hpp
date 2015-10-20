@@ -23,6 +23,8 @@ namespace monsters
         //! Default destructor.
         ~Creepim() = default;
 
+        std::string _name() const final { return "dungeon::monsters::Creepim"; }
+
         //--------------//
         //! @name Graph
         //! @{

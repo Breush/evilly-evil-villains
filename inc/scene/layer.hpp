@@ -16,6 +16,18 @@ namespace config
 
 namespace scene
 {
+    //! A layer root entity.
+
+    class LayerRoot final : public Entity
+    {
+    public:
+
+        //! Constructor.
+        LayerRoot();
+
+        std::string _name() const final { return "LayerRoot"; }
+    };
+
     //! A layer within the Graph.
     /*!
      *  A layer has a fixed size and acts on a view.
@@ -139,7 +151,7 @@ namespace scene
     private:
 
         //! The entity, as a layer holds the first node.
-        Entity m_root;
+        LayerRoot m_root;
 
         //! The view, as the layer controls its the displayed region.
         sf::View m_view;

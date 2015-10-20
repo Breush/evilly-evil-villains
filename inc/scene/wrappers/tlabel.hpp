@@ -37,6 +37,8 @@ namespace scene
         //! Default destructor.
         ~TLabel() = default;
 
+        std::string _name() const final { return "Label"; }
+
         //---------------//
         //! @name Visual
         //! @{

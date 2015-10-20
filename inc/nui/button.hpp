@@ -22,6 +22,8 @@ namespace nui
         //! Default destructor.
         virtual ~Button() = default;
 
+        virtual std::string _name() const override { return "nui::Button"; }
+
         //----------------//
         //! @name Actions
         //! @{

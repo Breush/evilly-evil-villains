@@ -39,6 +39,8 @@ namespace dungeon
         //! Initialize after textures are loaded.
         void init();
 
+        std::string _name() const final { return "dungeon::Minimap"; }
+
         //--------------//
         //! @name Layer
         //! @{

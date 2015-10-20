@@ -20,6 +20,8 @@ namespace scene
         //! Default destructor.
         ~RectangleShape() = default;
 
+        std::string _name() const final { return "RectangleShape"; }
+
         //-----------------//
         //! @name Wrappers
         //! @{

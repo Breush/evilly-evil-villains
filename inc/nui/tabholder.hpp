@@ -32,6 +32,8 @@ namespace nui
         //! Default destructor.
         ~TabHolder() = default;
 
+        std::string _name() const final { return "nui::TabHolder"; }
+
         //------------------------//
         //! @name Tabs management
         //! @{

@@ -21,6 +21,8 @@ namespace facilities
         //! Default destructor.
         ~Treasure() = default;
 
+        std::string _name() const final { return "dungeon::facilities::Treasure"; }
+
         //------------------//
         //! @name Resources
         //! @{
