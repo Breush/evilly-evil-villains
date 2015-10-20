@@ -160,7 +160,7 @@ void ScrollArea::refreshContentStatus()
     m_content->setClipArea({-m_offset.x, -m_offset.y, size().x, size().y});
 
     // Recompute bars position
-    auto barsPosition = -(size() - m_barsLength) * m_offset / freeContentSize;
+    auto barsPosition = - (size() - m_barsLength) * m_offset / freeContentSize;
     m_hBar.setPosition({barsPosition.x, m_barsOffset.x});
     m_vBar.setPosition({m_barsOffset.y, barsPosition.y});
 }

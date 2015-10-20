@@ -90,8 +90,8 @@ namespace nui
         //! Refresh the selected tab content.
         void refreshContent();
 
-        //! Refresh tab background image.
-        void refreshTabBackground();
+        //! Refresh tabs position and background image.
+        void refreshTabs();
 
         //! The selected tab has changed.
         void refreshSelectedTab();
@@ -103,29 +103,29 @@ namespace nui
         //! Contains a tab information.
         struct Tab
         {
-            std::unique_ptr<scene::RectangleShape> image; //!< The image.
-            std::wstring tooltipString;                 //!< The string to print for tooltip.
-            scene::Entity& content;                     //!< The entity to show when tab selected.
+            std::unique_ptr<sf::RectangleShape> image;      //!< The image.
+            std::unique_ptr<sf::RectangleShape> background; //!< Its background.
+            scene::Entity& content;                         //!< The entity to show when tab selected.
         };
 
     private:
 
         // Tabs
-        nui::HStacker m_tabsStacker;    //!< The stacker containing the tabs.
         std::vector<Tab> m_tabs;        //!< The tabs.
         uint m_selectedTab = -1u;       //!< The currently selected tab.
 
         // Content
-        nui::VStacker m_globalStacker;  //!< Contains tab head + content.
+        nui::VStacker m_globalStacker;  //!< Contains content.
 
-        // Control over size.
+        // Control over size
         float m_height; //!< Size override.
 
         // Decorum
-        sf::RectangleShape m_background;                    //!< The global background.
-        std::vector<sf::RectangleShape> m_tabsBackgrounds;  //!< The background for the tabs.
+        sf::RectangleShape m_background;    //!< The global background.
 
         float m_borderThick = 0.f;  //!< Border thickness.
         float m_vPadding = 0.f;     //!< Vertical padding.
+        float m_tabSpacing = 0.f;   //!< Space between two tabs.
+        float m_tabSize = 0.f;      //!< The forced size for a tab.
     };
 }

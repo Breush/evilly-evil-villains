@@ -53,6 +53,11 @@ namespace sf
         return Vector2<T>(v.x - z, v.y - z);
     }
 
+    template<typename T> Vector2<T> operator+(const Vector2<T>& v, const T& z)
+    {
+        return Vector2<T>(v.x + z, v.y + z);
+    }
+
     template<typename T> Vector2<T> operator/(const T& z, const Vector2<T>& v)
     {
         return Vector2<T>(z / v.x, z / v.y);

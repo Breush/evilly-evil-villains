@@ -1,6 +1,7 @@
 #include "nui/tabholder.hpp"
 
 #include "core/gettext.hpp"
+#include "core/application.hpp"
 #include "dungeon/sidebar.hpp"
 #include "config/nuiguides.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
@@ -15,8 +16,6 @@ TabHolder::TabHolder()
     attachChild(m_globalStacker);
 
     // Decorum
-    addPart(&m_background);
-    m_background.setOutlineThickness(1.f);
     m_background.setOutlineColor(sf::Color::White);
     m_background.setFillColor({255u, 255u, 255u, 25u});
 
@@ -33,8 +32,10 @@ void TabHolder::onSizeChanges()
 
 void TabHolder::onChildSizeChanges(scene::Entity& child)
 {
-    // Whenever the global stacker size changes, we update ours
-    setSize(child.size());
+    // Newly computed headerSize, taking new child size in account for width
+    auto newSize = headerSize();
+    newSize.y += child.size().y + m_borderThick;
+    setSize(newSize);
 }
 
 void TabHolder::refreshNUI(const config::NUIGuides& cNUI)
@@ -43,9 +44,14 @@ void TabHolder::refreshNUI(const config::NUIGuides& cNUI)
 
     m_borderThick = cNUI.borderThick;
     m_vPadding = cNUI.vPadding;
+    m_tabSpacing = std::floor(cNUI.hPadding / 2.f);
+    m_tabSize = std::floor(cNUI.hintImageSide * 0.75f);
+
+    // Refresh content position
+    m_globalStacker.setLocalPosition({m_borderThick, m_tabSize});
 
     refreshBackground();
-    refreshTabBackground();
+    refreshTabs();
 }
 
 //------------------//
@@ -58,8 +64,8 @@ bool TabHolder::handleMouseButtonPressed(const sf::Mouse::Button button, const s
     uint tabNumber = 0u;
     for (auto& tab : m_tabs) {
         // Find tab bounds
-        const auto& tabPosition = m_tabsStacker.localPosition() + tab.image->localPosition();
-        const auto& tabSize = tab.image->size();
+        const auto& tabPosition = tab.image->getPosition();
+        const auto& tabSize = tab.image->getSize();
         sf::FloatRect tabBounds{tabPosition.x, tabPosition.y, tabSize.x, tabSize.y};
 
         // If click happened over the tab, select it
@@ -88,14 +94,17 @@ void TabHolder::handleMouseLeft()
 
 void TabHolder::stackBack(std::wstring tooltipString, const std::string& textureID, scene::Entity& content)
 {
-    auto image = std::make_unique<scene::RectangleShape>();
-    image->setTexture(textureID);
-    image->setSize({40.f, 40.f});
+    // TODO Make sfe::RectangleShape so that this file does not know about Application?
+    auto image = std::make_unique<sf::RectangleShape>();
+    image->setTexture(&Application::context().textures.get(textureID));
+    // TODO Use Tooltip from somewhere: image.setTooltip(std::move(tooltipString));
 
-    m_tabs.push_back({std::move(image), std::move(tooltipString), content});
-    m_tabsStacker.stackBack(*m_tabs.back().image, nui::Align::CENTER);
+    // Tab background
+    auto background = std::make_unique<sf::RectangleShape>();
+    background->setOutlineColor(sf::Color::White);
 
-    refreshTabBackground();
+    m_tabs.push_back({std::move(image), std::move(background), content});
+    refreshTabs();
 
     // Select first tab on add
     if (m_tabs.size() == 1u)
@@ -115,17 +124,13 @@ void TabHolder::select(uint tabNumber)
 
 sf::Vector2f TabHolder::headerSize() const
 {
-    sf::Vector2f oHeaderSize;
+    sf::Vector2f headerSize;
 
-    // Width
-    oHeaderSize.x = size().x;
+    float tabsWidth = (m_tabSize + m_tabSpacing) * m_tabs.size() - m_tabSpacing;
+    headerSize.x = std::max(m_globalStacker.size().x, tabsWidth);
+    headerSize.y = m_tabSize;
 
-    // Height
-    oHeaderSize.y = m_vPadding;
-    for (auto& tab : m_tabs)
-        oHeaderSize.y = std::max(oHeaderSize.y, m_vPadding + tab.image->size().y);
-
-    return oHeaderSize;
+    return headerSize;
 }
 
 //-----------------------------------//
@@ -133,38 +138,47 @@ sf::Vector2f TabHolder::headerSize() const
 
 void TabHolder::refreshBackground()
 {
-    auto headerHeight = headerSize().y;
-    m_background.setSize({size().x - 2.f * m_borderThick, size().y - headerHeight + m_borderThick});
-    m_background.setPosition({0.f, headerHeight - m_borderThick});
+    m_background.setSize({size().x - 2.f * m_borderThick, m_globalStacker.size().y});
+    m_background.setPosition({m_borderThick, m_tabSize});
+    m_background.setOutlineThickness(m_borderThick);
 }
 
 void TabHolder::refreshSelectedTab()
 {
     for (uint tabNumber = 0u; tabNumber < m_tabs.size(); ++tabNumber) {
-        auto& tabBackground = m_tabsBackgrounds[tabNumber];
+        auto& tabBackground = *m_tabs.at(tabNumber).background;
         if (m_selectedTab == tabNumber) tabBackground.setFillColor(sf::Color::White);
-        else                            tabBackground.setFillColor(sf::Color::Black);
+        else                            tabBackground.setFillColor({255u, 255u, 255u, 84u});
     }
 }
 
-void TabHolder::refreshTabBackground()
+void TabHolder::refreshTabs()
 {
-    // Remove all previous
-    for (auto& tabBackground : m_tabsBackgrounds)
-        removePart(&tabBackground);
-    m_tabsBackgrounds.clear();
-    m_tabsBackgrounds.resize(m_tabs.size());
+    float imageSide = m_tabSize - 2.f * m_borderThick;
 
-    // Add all and position
-    float headerHeight = headerSize().y;
+    // Remove all previous
+    clearParts();
+    addPart(&m_background);
+
+    // Reparameter all and position them
+    sf::Vector2f tabPosition(m_borderThick, m_borderThick);
     for (uint tabNumber = 0u; tabNumber < m_tabs.size(); ++tabNumber) {
-        const auto& tab = m_tabs[tabNumber];
-        auto& tabBackground = m_tabsBackgrounds[tabNumber];
-        tabBackground.setOutlineColor(sf::Color::White);
-        tabBackground.setOutlineThickness(1.f);
-        tabBackground.setSize({tab.image->size().x - 2.f, headerHeight - 2.f});
-        tabBackground.setPosition(tab.image->localPosition());
+        const auto& tab = m_tabs.at(tabNumber);
+
+        // Background
+        auto& tabBackground = *tab.background;
+        tabBackground.setOutlineThickness(m_borderThick);
+        tabBackground.setSize({imageSide, imageSide});
+        tabBackground.setPosition(tabPosition);
         addPart(&tabBackground);
+
+        // Image
+        auto& tabImage = *tab.image;
+        tabImage.setSize({imageSide, imageSide});
+        tabImage.setPosition(tabPosition);
+        addPart(&tabImage);
+
+        tabPosition.x += m_tabSize + m_tabSpacing;
     }
 
     refreshSelectedTab();
@@ -173,8 +187,7 @@ void TabHolder::refreshTabBackground()
 void TabHolder::refreshContent()
 {
     m_globalStacker.unstackAll();
-    m_globalStacker.stackBack(m_tabsStacker);
 
     if (m_selectedTab < m_tabs.size())
-        m_globalStacker.stackBack(m_tabs[m_selectedTab].content, nui::Align::CENTER);
+        m_globalStacker.stackBack(m_tabs.at(m_selectedTab).content, nui::Align::CENTER);
 }

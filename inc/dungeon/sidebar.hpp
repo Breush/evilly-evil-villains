@@ -121,6 +121,7 @@ namespace dungeon
         dungeon::Lock m_lock;       //!< Button to control invasion mode.
 
         // Decorum
-        float m_vPadding;   //!< Vertical padding.
+        float m_vPadding = 0.f;     //!< Vertical padding.
+        float m_borderThick = 0.f;  //!< Border thickness.
     };
 }

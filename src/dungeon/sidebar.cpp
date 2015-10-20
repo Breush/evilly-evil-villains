@@ -60,6 +60,7 @@ void Sidebar::refreshNUI(const config::NUIGuides& cNUI)
     baseClass::refreshNUI(cNUI);
 
     m_vPadding = cNUI.vPadding;
+    m_borderThick = cNUI.borderThick;
 
     refreshScrollAreasSize();
 }
@@ -118,7 +119,7 @@ void Sidebar::refreshTabContents()
     monstersCages.emplace_back(std::make_unique<MonsterCage>(L"creepim"));
 
     for (auto& monsterCage : monstersCages) {
-        monsterCage->setSize({size().x, 80.f});
+        monsterCage->setSize({size().x - 2.f * m_borderThick, 80.f});
         monstersStacker.stackBack(*monsterCage, nui::Align::CENTER);
     }
 

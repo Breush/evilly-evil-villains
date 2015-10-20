@@ -27,6 +27,7 @@ namespace sf
 
     // Operators vector-constant
     template<typename T> Vector2<T> operator-(const Vector2<T>& v, const T& z);
+    template<typename T> Vector2<T> operator+(const Vector2<T>& v, const T& z);
     template<typename T> Vector2<T> operator/(const T& z, const Vector2<T>& v);
 
     // Operators rect-vector

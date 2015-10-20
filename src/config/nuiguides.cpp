@@ -1,5 +1,7 @@
 #include "config/nuiguides.hpp"
 
+#include <cmath>
+
 using namespace config;
 
 void NUIGuides::recompute(const Display::NUI& cDisplayNUI)
@@ -14,8 +16,8 @@ void NUIGuides::recompute(const Display::NUI& cDisplayNUI)
     largeBorderThick = 2.f * nuiSize;
 
     fontSize = 10.f + fontFactor * nuiSize;
-    fontVSpace = 1.2f * fontSize;
-    fontHSpace = 0.6f * fontSize;
+    fontVSpace = std::floor(1.2f * fontSize);
+    fontHSpace = std::floor(0.6f * fontSize);
 
     hintSize = 9.f + 2.f * nuiSize;
     hintImageSide = 30.f + 2.f * hintSize;
