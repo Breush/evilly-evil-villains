@@ -7,6 +7,8 @@ using namespace dungeon::facilities;
 Entrance::Entrance(const sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter)
     : baseClass(coords, elementdata, inter)
 {
+    setDepth(-1.f);
+
     // Decorum
     attachChild(m_sprite);
     m_sprite.load("dungeon/facilities/entrance");
