@@ -3,7 +3,7 @@
 #include "scene/entity.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/vstacker.hpp"
-#include "scene/wrappers/rectangleshape.hpp"
+#include "nui/rectangleshape.hpp"
 #include "tools/param.hpp"
 
 #include <vector>
@@ -103,7 +103,7 @@ namespace nui
         //! Contains a tab information.
         struct Tab
         {
-            std::unique_ptr<sf::RectangleShape> image;      //!< The image.
+            std::unique_ptr<nui::RectangleShape> image;     //!< The image.
             std::unique_ptr<sf::RectangleShape> background; //!< Its background.
             scene::Entity& content;                         //!< The entity to show when tab selected.
         };

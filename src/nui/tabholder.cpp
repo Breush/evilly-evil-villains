@@ -1,7 +1,6 @@
 #include "nui/tabholder.hpp"
 
 #include "core/gettext.hpp"
-#include "core/application.hpp"
 #include "dungeon/sidebar.hpp"
 #include "config/nuiguides.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
@@ -12,7 +11,6 @@ using namespace nui;
 
 TabHolder::TabHolder()
 {
-    // General
     attachChild(m_globalStacker);
 
     // Decorum
@@ -64,8 +62,8 @@ bool TabHolder::handleMouseButtonPressed(const sf::Mouse::Button button, const s
     uint tabNumber = 0u;
     for (auto& tab : m_tabs) {
         // Find tab bounds
-        const auto& tabPosition = tab.image->getPosition();
-        const auto& tabSize = tab.image->getSize();
+        const auto& tabPosition = tab.image->localPosition();
+        const auto& tabSize = tab.image->size();
         sf::FloatRect tabBounds{tabPosition.x, tabPosition.y, tabSize.x, tabSize.y};
 
         // If click happened over the tab, select it
@@ -94,10 +92,10 @@ void TabHolder::handleMouseLeft()
 
 void TabHolder::stackBack(std::wstring tooltipString, const std::string& textureID, scene::Entity& content)
 {
-    // TODO Make sfe::RectangleShape so that this file does not know about Application?
-    auto image = std::make_unique<sf::RectangleShape>();
-    image->setTexture(&Application::context().textures.get(textureID));
-    // TODO Use Tooltip from somewhere: image.setTooltip(std::move(tooltipString));
+    auto image = std::make_unique<nui::RectangleShape>();
+    image->setTooltip(std::move(tooltipString));
+    image->setTexture(textureID);
+    attachChild(*image);
 
     // Tab background
     auto background = std::make_unique<sf::RectangleShape>();
@@ -175,8 +173,7 @@ void TabHolder::refreshTabs()
         // Image
         auto& tabImage = *tab.image;
         tabImage.setSize({imageSide, imageSide});
-        tabImage.setPosition(tabPosition);
-        addPart(&tabImage);
+        tabImage.setLocalPosition(tabPosition);
 
         tabPosition.x += m_tabSize + m_tabSpacing;
     }
