@@ -48,10 +48,10 @@ void Application::Context::recreateWindow()
     windowInfo.recompute();
 
     // Global log
-    debug_core_1(const auto& settings = window.getSettings());
-    mdebug_core_1("OpenGL version used: " << settings.majorVersion << "." << settings.minorVersion);
-    mdebug_core_1("Depth bits: " << settings.depthBits << " | Stencil bits: " << settings.stencilBits);
-    mdebug_core_1("Antialiasing level: " << settings.antialiasingLevel);
+    debug_core_2(const auto& settings = window.getSettings());
+    mdebug_core_2("OpenGL version used: " << settings.majorVersion << "." << settings.minorVersion);
+    mdebug_core_2("Depth bits: " << settings.depthBits << " | Stencil bits: " << settings.stencilBits);
+    mdebug_core_2("Antialiasing level: " << settings.antialiasingLevel);
 }
 
 //-----------------//

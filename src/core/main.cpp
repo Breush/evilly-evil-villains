@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     // No need to try: there nothing to activate unless we get an appID,
     // which supposed to have been greenlit.
     // steamActivated = steam::SteamAPI_Init();
-    mdebug_core_1("Steam interfacing: " << (steamActivated? "Enabled" : "Disabled"));
+    mdebug_core_2("Steam interfacing: " << (steamActivated? "Enabled" : "Disabled"));
 
     // Running application
     try {
