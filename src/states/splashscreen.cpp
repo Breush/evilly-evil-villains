@@ -15,7 +15,6 @@ SplashScreen::SplashScreen(StateStack& stack)
     Application::loadTextures({"jumping-toasts"});
     Application::loadAnimations({"jumping-toasts"});
     Application::context().textures.get("jumping-toasts/background").setRepeated(true);
-    Application::context().textures.get("jumping-toasts/toast-cut").setSmooth(false);
 
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
@@ -30,6 +29,12 @@ SplashScreen::SplashScreen(StateStack& stack)
     m_background.setShader("menu/splashscreen");
     m_background.setLocalScale(maxSide / sf::v2f(textureSize));
     m_background.setLocalPosition((nuiSize - maxSide) / 2.f);
+
+    // Fading sprite
+    nuiRoot.attachChild(m_fadingRectangle);
+    m_fadingRectangle.setFillColor(sf::Color::Transparent);
+    m_fadingRectangle.setDepth(-100.f);
+    m_fadingRectangle.setSize(nuiSize);
 
     // Animation
     nuiRoot.attachChild(m_logo);
@@ -52,8 +57,17 @@ SplashScreen::~SplashScreen()
 bool SplashScreen::update(const sf::Time& dt)
 {
     // Check on animated entities
-    if (!m_logo.started())
-        stackReplace(StateID::MENU_MAIN);
+    if (!m_logo.started()) {
+        // If the animation is over, the fading out black screen goes on
+        if (m_fadingTime >= m_fadingDelay) {
+            stackReplace(StateID::MENU_MAIN);
+            return false;
+        }
+
+        uint8 opacity = static_cast<uint8>(255.f * m_fadingTime / m_fadingDelay);
+        m_fadingRectangle.setFillColor({0u, 0u, 0u, opacity});
+        m_fadingTime += dt;
+    }
 
     return State::update(dt);
 }

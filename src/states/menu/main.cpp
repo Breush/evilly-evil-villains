@@ -59,7 +59,7 @@ MenuMain::MenuMain(StateStack& stack)
     auto singlePlayer = [this]() { stackPush(StateID::MENU_SELECTWORLD); };
     auto multiPlayer = nullptr;
     auto villains = [this]() { stackPush(StateID::MENU_MANAGEVILLAINS); };
-    auto configuration = nullptr;
+    auto configuration = [this]() { stackPush(StateID::MENU_CONFIG); };
     auto quitGame = [this]() { stackClear(); };
 
     // Menu choice box (be sure not to mess with order)
