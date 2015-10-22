@@ -14,7 +14,7 @@ void Application::loadTextures(const std::initializer_list<std::string>& folders
             if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "png")
                 continue;
 
-            s_context.textures.load(fileInfo.fullName);
+            s_context.textures.load(fileInfo.fullName).setSmooth(true);
 
             ++texturesCount;
         }
