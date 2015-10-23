@@ -97,6 +97,9 @@ MenuMain::MenuMain(StateStack& stack)
 
 MenuMain::~MenuMain()
 {
+    // Musics
+    Application::context().musics.stop("pippin_the_hunchback");
+
     // Freeing resources
     Application::freeTextures({"menu"});
 }

@@ -15,14 +15,18 @@ void MusicPlayer::play(const std::string& id)
     if (!m_music.openFromFile("res/mus/" + id + ".ogg"))
         throw std::runtime_error("Music '" + id + "' could not be loaded.");
 
+    m_currentID = id;
     m_music.setVolume(m_volume);
     m_music.setLoop(true);
     m_music.play();
 }
 
-void MusicPlayer::stop()
+void MusicPlayer::stop(const std::string& id)
 {
-    m_music.stop();
+    if (id.empty() || m_currentID == id) {
+        m_currentID = "";
+        m_music.stop();
+    }
 }
 
 void MusicPlayer::setVolume(float volume)

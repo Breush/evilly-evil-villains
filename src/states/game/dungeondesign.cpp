@@ -23,8 +23,8 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     Application::context().textures.get("dungeon/inter/outer_wall_west").setRepeated(true);
     Application::context().textures.get("dungeon/inter/outer_wall_east").setRepeated(true);
 
-    // Stop music if any
-    Application::context().musics.stop();
+    // Music
+    Application::context().musics.play("angevin_70");
 
     // Inits
     m_dungeonInter.init();
@@ -96,6 +96,9 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 
 GameDungeonDesign::~GameDungeonDesign()
 {
+    // Musics
+    Application::context().musics.stop("angevin_70");
+
     // Freeing resources
     Application::freeTextures({"dungeon", "elements", "heroes", "effects"});
     Application::freeAnimations({"dungeon", "heroes"});

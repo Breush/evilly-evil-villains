@@ -28,8 +28,8 @@ namespace resources
         //! Start a specific music stored in res/mus/ folder.
         void play(const std::string& id);
 
-        //! Stop streaming the current music if any, and free the memory.
-        void stop();
+        //! Stop streaming the current music if matching the id, and free the memory.
+        void stop(const std::string& id = "");
 
         //! Pause or unpause the current music if any.
         void setPaused(bool paused);
@@ -42,8 +42,8 @@ namespace resources
 
     private:
 
-        //! The music.
-        sf::Music m_music;
+        sf::Music m_music;          //!< The music played.
+        std::string m_currentID;    //!< The ID of the music played.
 
         //! The volume.
         float m_volume;

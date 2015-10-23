@@ -17,6 +17,9 @@ GameDCB::GameDCB(StateStack& stack)
     Application::loadTextures({"dcb"});
     Application::loadAnimations({"dcb"});
 
+    // Music
+    Application::context().musics.play("moorland");
+
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
     const auto& nuiSize = nuiLayer().size();
@@ -86,6 +89,9 @@ GameDCB::GameDCB(StateStack& stack)
 
 GameDCB::~GameDCB()
 {
+    // Musics
+    Application::context().musics.stop("moorland");
+
     // Freeing resources
     Application::freeTextures({"dcb"});
     Application::freeAnimations({"dcb"});
