@@ -11,12 +11,22 @@ Entity::Entity(bool isLerpable)
     : baseClass(isLerpable)
 {
     // Tooltip
-    m_tooltipBackground.setFillColor({0u, 0u, 0u, 192u});
+    m_tooltipTime = sf::Time::Zero;
+    m_tooltipBackground.setFillColor({0u, 0u, 0u, 222u});
     m_tooltipBackground.setOutlineColor(sf::Color::White);
     m_tooltipBackground.setOutlineThickness(1.f);
 }
 //-------------------//
 //----- Routine -----//
+
+void Entity::update(const sf::Time& dt)
+{
+    // Tooltip
+    if (m_showTooltip)
+        m_tooltipTime += dt;
+
+    baseClass::update(dt);
+}
 
 void Entity::refreshNUI(const config::NUIGuides& cNUI)
 {
@@ -29,7 +39,7 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
     baseClass::draw(target, states);
 
     // Tooltip
-    if (m_showTooltip) {
+    if (m_showTooltip && m_tooltipTime >= m_tooltipDelay) {
         states.transform = getTransform();
         target.draw(m_tooltipBackground, states);
         target.draw(m_tooltipText, states);
@@ -42,11 +52,13 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
 bool Entity::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
     // Position and show tooltip
-    m_showTooltip = true;
-    auto textSize = boundsSize(m_tooltipText);
-    auto backgroundSize = m_tooltipBackground.getSize();
-    m_tooltipText.setPosition(mousePos.x - textSize.x / 2.f, mousePos.y - textSize.y - 8.f);
-    m_tooltipBackground.setPosition(mousePos.x - backgroundSize.x / 2.f, mousePos.y - backgroundSize.y);
+    if (!m_showTooltip) {
+        m_showTooltip = true;
+        auto textSize = boundsSize(m_tooltipText);
+        auto backgroundSize = m_tooltipBackground.getSize();
+        m_tooltipText.setPosition(mousePos.x - textSize.x / 2.f, mousePos.y - textSize.y - 8.f);
+        m_tooltipBackground.setPosition(mousePos.x - backgroundSize.x / 2.f, mousePos.y - backgroundSize.y);
+    }
 
     return false;
 }
@@ -54,6 +66,7 @@ bool Entity::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& 
 void Entity::handleMouseLeft()
 {
     m_showTooltip = false;
+    m_tooltipTime = sf::Time::Zero;
 }
 
 //-------------------//

@@ -219,8 +219,10 @@ namespace scene
         /*!
          *  Calls the updateRoutine() first and update lerpable before
          *  updating its children.
+         *  Direct override is not encouraged, one should use updateRoutine().
+         *  This is made virtual for nui::Entity to add specific extra steps.
          */
-        void update(const sf::Time& dt);
+        virtual void update(const sf::Time& dt);
 
         //! Update state at each frame given a time-step.
         /*!

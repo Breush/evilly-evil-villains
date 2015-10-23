@@ -79,6 +79,12 @@ MenuMain::MenuMain(StateStack& stack)
     m_reactImage.setShader("menu/name");
     m_reactImage.setMouseLeftDeselect(false);
 
+    // Fading sprite
+    nuiRoot.attachChild(m_fadingRectangle);
+    m_fadingRectangle.setFillColor(sf::Color::Black);
+    m_fadingRectangle.setDepth(-100.f);
+    m_fadingRectangle.setSize(nuiSize);
+
     // Setting callbacks
     m_reactImage.loadFromFile("res/tex/menu/main/logo.xml");
     m_reactImage.setReactCallback(m_choices[0], singlePlayer);
@@ -86,6 +92,7 @@ MenuMain::MenuMain(StateStack& stack)
     m_reactImage.setReactCallback(m_choices[2], villains);
     m_reactImage.setReactCallback(m_choices[3], configuration);
     m_reactImage.setReactCallback(m_choices[4], quitGame);
+    m_reactImage.setActiveReact(L"V", false);
 }
 
 MenuMain::~MenuMain()
@@ -99,6 +106,14 @@ MenuMain::~MenuMain()
 
 bool MenuMain::update(const sf::Time& dt)
 {
+    // The fading in black screen goes on
+    if (m_fadingTime <= m_fadingDelay) {
+        uint8 opacity = static_cast<uint8>(255.f * (1.f - m_fadingTime / m_fadingDelay));
+        m_fadingRectangle.setFillColor({0u, 0u, 0u, opacity});
+        m_fadingTime += dt;
+        return false;
+    }
+
     // Checking if choiceBox changed
     if (m_choiceBox.choiceChanged()) {
         m_reactImage.setActiveReact(m_choices[m_choiceBox.selectedChoice()]);

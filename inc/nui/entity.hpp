@@ -40,6 +40,7 @@ namespace nui
         //! @name Routine
         //! @{
 
+        void update(const sf::Time& dt) final;
         void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
         virtual void refreshNUI(const config::NUIGuides& cNUI) override;
 
@@ -66,8 +67,10 @@ namespace nui
     private:
 
         // Tooltip
-        sfe::RichText m_tooltipText;            //!< The tooltip label.
-        sf::RectangleShape m_tooltipBackground; //!< The tooltip background.
-        bool m_showTooltip = false;             //!< Whether the tooltip is currently shown.
+        sfe::RichText m_tooltipText;                        //!< The tooltip label.
+        sf::RectangleShape m_tooltipBackground;             //!< The tooltip background.
+        bool m_showTooltip = false;                         //!< Whether the tooltip is currently shown.
+        sf::Time m_tooltipTime;                             //!< Current time before showing tooltip.
+        const sf::Time m_tooltipDelay = sf::seconds(0.9f);  //!< How much time to wait before showing tooltip.
     };
 }

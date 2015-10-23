@@ -148,7 +148,7 @@ void ReactImage::setReactCallback(const std::wstring& key, Callback callback)
     found->callback = callback;
 }
 
-void ReactImage::setActiveReact(const std::wstring& key)
+void ReactImage::setActiveReact(const std::wstring& key, bool sensitive)
 {
     // Do not change if already set
     returnif (m_activeReact != nullptr && m_activeReact->key == key);
@@ -159,10 +159,13 @@ void ReactImage::setActiveReact(const std::wstring& key)
 
     // Set and refresh
     m_activeReact = &(*found);
-    m_activeReactChanged = true;
     refreshBuffer();
 
-    Application::context().sounds.play("select");
+    // Indicate the selected react changed
+    if (sensitive) {
+        m_activeReactChanged = true;
+        Application::context().sounds.play("select");
+    }
 }
 
 //--------------------------------//

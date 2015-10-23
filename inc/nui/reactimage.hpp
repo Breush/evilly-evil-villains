@@ -67,7 +67,8 @@ namespace nui
         void setReactCallback(const std::wstring& key, const Callback callback);
 
         //! Select a react to be active.
-        void setActiveReact(const std::wstring& key);
+        //! @param sensitive To be false for no sound and no changed flag.
+        void setActiveReact(const std::wstring& key, bool sensitive = true);
 
         //! Get the key of the currently active react.
         inline const std::wstring* activeReactKey() const { return (m_activeReact != nullptr)? &m_activeReact->key : nullptr; }

@@ -6,6 +6,7 @@
 #include "nui/reactimage.hpp"
 #include "scene/wrappers/label.hpp"
 #include "scene/wrappers/sprite.hpp"
+#include "scene/wrappers/rectangleshape.hpp"
 
 #include <SFML/Graphics/Text.hpp>
 
@@ -45,6 +46,11 @@ namespace states
         //! @}
 
     private:
+
+        // Fading
+        scene::RectangleShape m_fadingRectangle;            //!< Smooth transition to the next state.
+        sf::Time m_fadingTime = sf::Time::Zero;             //!< Current time for fading effect.
+        const sf::Time m_fadingDelay = sf::seconds(1.75f);  //!< How much time to wait for fading.
 
         // NUI
         nui::ChoiceBox m_choiceBox;             //!< The box containing choices.
