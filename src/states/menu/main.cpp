@@ -21,7 +21,7 @@ MenuMain::MenuMain(StateStack& stack)
     Application::context().window.setKeyRepeatEnabled(true);
 
     // Menu theme
-    Application::context().musics.play("menu_theme");
+    Application::context().musics.play("pippin_the_hunchback");
 
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
