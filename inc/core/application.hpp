@@ -90,6 +90,15 @@ public:
 
     //! @}
 
+    //---------------//
+    //! @name Config
+    //! @{
+
+    //! Refresh the window/display/sound from the current config.
+    static void refreshFromConfig();
+
+    //! @}
+
     //--------------------------------------//
     //! @name Loading and freeing resources
     //! @{
@@ -169,8 +178,8 @@ protected:
     void refreshNUI();      //!< Adapt all NUI elements.
     void refreshWindow();   //!< Adapt all views to current window settings.
     void refreshShaders();  //!< Adapt all shaders to current window settings.
-    void refreshMusics();   //!< Adapt all musics volume to current settings.
-    void refreshSounds();   //!< Adapt all sounds position/volume to current settings.
+    static void refreshMusics();    //!< Adapt all musics volume to current settings.
+    static void refreshSounds();    //!< Adapt all sounds position/volume to current settings.
 
     void updateSounds(const sf::Time& dt);      //!< Manage the sounds.
     void updateShaders(const sf::Time& dt);     //!< Animate the shaders.
@@ -199,4 +208,3 @@ private:
     states::StateStack m_stateStack;    //!< The stack of states.
     VisualDebug m_visualDebug;          //!< The debug information.
 };
-

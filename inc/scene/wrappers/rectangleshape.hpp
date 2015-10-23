@@ -30,10 +30,13 @@ namespace scene
         void setTexture(const std::string& textureID);
 
         //! Wrapper to set the fill color.
-        inline void setFillColor(const sf::Color& color)
-        {
-            m_rectangleShape.setFillColor(color);
-        }
+        inline void setFillColor(const sf::Color& color) { m_rectangleShape.setFillColor(color); }
+
+        //! Wrapper to set the outline color.
+        inline void setOutlineColor(const sf::Color& color) { m_rectangleShape.setOutlineColor(color); }
+
+        //! Wrapper to set the outline thickness.
+        inline void setOutlineThickness(const float outlineThickness) { m_rectangleShape.setOutlineThickness(outlineThickness); }
 
         //! @}
 

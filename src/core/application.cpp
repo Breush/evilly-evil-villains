@@ -74,11 +74,9 @@ Application::Application()
     cleanExtraFiles();
 #endif
 
-    // Context - create window
+    // Context
     s_context.windowInfo.title = "Evilly Evil Villains";
-    s_context.windowInfo.style = sf::Style::Default;
-    if (s_context.display.window.fullscreen) s_context.windowInfo.style |= sf::Style::Fullscreen;
-    s_context.recreateWindow();
+    refreshFromConfig();
 
     // Initialize language
     internationalization::init(toString(s_context.display.global.language));
@@ -153,7 +151,6 @@ void Application::processInput()
     sf::Event event;
 
     while (s_context.window.pollEvent(event)) {
-
         // Keyboard
         if (event.type == sf::Event::KeyPressed) {
             // Switch visual debug mode
@@ -269,7 +266,7 @@ void Application::update(const sf::Time& dt)
     m_visualDebug.update(dt);
 
     // Game logic
-    sf::Time dtGame = dt * m_gameTimeFactor;
+    const sf::Time dtGame = dt * m_gameTimeFactor;
     s_context.commander.update(dtGame);
     m_stateStack.update(dtGame);
 
@@ -292,6 +289,18 @@ void Application::render()
 //-----------------------------//
 //----- Window management -----//
 
+void Application::refreshFromConfig()
+{
+    // Graphics
+    s_context.windowInfo.style = sf::Style::Default;
+    if (s_context.display.window.fullscreen) s_context.windowInfo.style |= sf::Style::Fullscreen;
+    s_context.recreateWindow();
+
+    // Audio
+    refreshSounds();
+    refreshMusics();
+}
+
 void Application::refreshNUI()
 {
     s_context.nuiGuides.recompute(s_context.display.nui);
@@ -308,7 +317,6 @@ void Application::refreshWindow()
 
     // Refresh shaders
     refreshShaders();
-    refreshSounds();
 }
 
 void Application::clearWindowEvents()

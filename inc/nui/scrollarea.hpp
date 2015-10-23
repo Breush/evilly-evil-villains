@@ -8,7 +8,7 @@ namespace nui
 {
     //! An area with scroll-bars (if needed) that keeps its specific size.
     /*!
-     *  One usally affects a stacker with unknown or variable size as content.
+     *  One usually affects a stacker with unknown or variable size as content.
      */
 
     class ScrollArea final : public scene::Entity

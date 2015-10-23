@@ -45,7 +45,7 @@ namespace nui
 
     private:
 
-        nui::TableLayout m_table;                           //!< The layout.
+        nui::TableLayout m_table;                             //!< The layout.
         std::vector<std::unique_ptr<scene::Label>> m_labels;  //!< The labels.
     };
 }

@@ -57,7 +57,7 @@ namespace states
         // NUI
         nui::List m_list;                       //!< List of worlds.
         nui::HStacker m_stacker;                //!< Stacker for buttons.
-        std::array<nui::Button, 3> m_buttons;   //!< Buttons Create/Back/Play
+        std::array<nui::Button, 3u> m_buttons;  //!< Buttons Create/Back/Play.
 
         // Decorum
         scene::Label m_title;                 //!< Title.
