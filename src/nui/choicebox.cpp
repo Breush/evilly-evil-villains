@@ -107,6 +107,12 @@ void ChoiceBox::showLines(bool enabled)
 //-----------------------------//
 //----- Choice management -----//
 
+void ChoiceBox::add(const std::initializer_list<std::wstring>& texts)
+{
+    for (const auto& text : texts)
+        add(text);
+}
+
 void ChoiceBox::add(const std::wstring& text, const Callback callback)
 {
     m_choices.push_back({text, callback});

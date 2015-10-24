@@ -18,6 +18,7 @@ namespace config
         //! Window specific parameters.
         struct Window
         {
+            bool vsync;                 //!< Whether the V-sync is enabled.
             bool fullscreen;            //!< Whether the fullscreen is enabled.
             sf::Vector2f resolution;    //!< The resolution used to play the game.
             uint antialiasingLevel;     //!< The antialiasing level.

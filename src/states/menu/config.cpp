@@ -60,9 +60,12 @@ MenuConfig::MenuConfig(StateStack& stack)
 
     // Graphics
     m_areas[AreaID::GRAPHICS].form.add(_("Fullscreen"), m_fullscreenBox);
+    m_fullscreenBox.add({_("ON"), _("OFF")});
     m_fullscreenBox.showArrows(false);
-    m_fullscreenBox.add(_("ON"));
-    m_fullscreenBox.add(_("OFF"));
+
+    m_areas[AreaID::GRAPHICS].form.add(_("V-sync"), m_vsyncBox);
+    m_vsyncBox.add({_("ON"), _("OFF")});
+    m_vsyncBox.showArrows(false);
 
     // Stacker for buttons
     nuiRoot.attachChild(m_buttonsStacker);
@@ -84,9 +87,8 @@ MenuConfig::MenuConfig(StateStack& stack)
     //      - UI Size
     //      - Font size factor
     // - Graphics:
-    //      - FULLSCREEN ON/OFF
-    //      - VSync ON / OFF
     //      - Resolutions (between those available for full-screen)
+    //      - Antiliasing level
     // - Audio:
     //      - General volume
     //      - Volume musics
@@ -169,6 +171,7 @@ void MenuConfig::refreshFormsFromConfig()
 
     // Graphics
     m_fullscreenBox.selectChoice(display.window.fullscreen? 0u : 1u);
+    m_vsyncBox.selectChoice(display.window.vsync? 0u : 1u);
 }
 
 void MenuConfig::applyChanges()
@@ -178,6 +181,7 @@ void MenuConfig::applyChanges()
 
     // Graphics
     display.window.fullscreen = (m_fullscreenBox.selectedChoice() == 0u);
+    display.window.vsync = (m_vsyncBox.selectedChoice() == 0u);
 
     sound.save();
     display.save();

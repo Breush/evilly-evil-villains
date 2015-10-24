@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <config type="display">
 	<group type="window">
+		<param name="vsync" enabled="true" />
 		<param name="fullscreen" enabled="false" />
 		<param name="resolution" width="1360" height="768" />
 		<param name="antialiasing" level="0" />

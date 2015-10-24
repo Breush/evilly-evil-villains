@@ -49,6 +49,9 @@ namespace nui
         //! @name Choices
         //! @{
 
+        //! Push back various choices.
+        void add(const std::initializer_list<std::wstring>& texts);
+
         //! Push back a choice in the list, optionnally give it a callback.
         void add(const std::wstring& text, const Callback callback = nullptr);
 

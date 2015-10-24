@@ -10,7 +10,7 @@
 using namespace config;
 
 Display::Display()
-    : window({false, {1360.f, 768.f}})
+    : window({true, false, {1360.f, 768.f}})
     , nui({2u, 3.f})
     , global({L"en_EN", 20.f, 0.05f})
 {
@@ -46,7 +46,10 @@ Display::Display()
         std::wstring name = param.attribute(L"name").as_string();
 
         // Window
-        if (name == L"fullscreen") {
+        if (name == L"vsync") {
+            window.vsync = param.attribute(L"enabled").as_bool();
+        }
+        else if (name == L"fullscreen") {
             window.fullscreen = param.attribute(L"enabled").as_bool();
         }
         else if (name == L"resolution") {
@@ -90,6 +93,10 @@ void Display::save()
     // Window
     group = config.append_child(L"group");
     param.append_attribute(L"name") = L"window";
+
+    param = group.append_child(L"param");
+    param.append_attribute(L"name") = L"vsync";
+    param.append_attribute(L"enabled") = window.vsync;
 
     param = group.append_child(L"param");
     param.append_attribute(L"name") = L"fullscreen";

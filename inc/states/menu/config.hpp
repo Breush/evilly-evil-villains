@@ -87,7 +87,8 @@ namespace states
         std::array<nui::Button, 2u> m_buttons;      //!< Buttons.
 
         // Graphics
-        nui::ChoiceBox m_fullscreenBox; //!< Fullscreen enabler.
+        nui::ChoiceBox m_fullscreenBox; //!< Fullscreen switch.
+        nui::ChoiceBox m_vsyncBox;      //!< VSync switch.
 
         // Dirty flags
         bool m_refreshBackgrounds = false;  //!< Should we refresh the background of areas?
