@@ -67,6 +67,9 @@ MenuConfig::MenuConfig(StateStack& stack)
     m_vsyncBox.add({_("ON"), _("OFF")});
     m_vsyncBox.showArrows(false);
 
+    m_areas[AreaID::GRAPHICS].form.add(_("Antialiasing level"), m_antialiasingSelector);
+    m_antialiasingSelector.setRange(0u, 4u);
+
     // Stacker for buttons
     nuiRoot.attachChild(m_buttonsStacker);
     m_buttonsStacker.setRelativeOrigin({0.5f, 1.f});
@@ -88,7 +91,6 @@ MenuConfig::MenuConfig(StateStack& stack)
     //      - Font size factor
     // - Graphics:
     //      - Resolutions (between those available for full-screen)
-    //      - Antiliasing level
     // - Audio:
     //      - General volume
     //      - Volume musics
@@ -172,6 +174,7 @@ void MenuConfig::refreshFormsFromConfig()
     // Graphics
     m_fullscreenBox.selectChoice(display.window.fullscreen? 0u : 1u);
     m_vsyncBox.selectChoice(display.window.vsync? 0u : 1u);
+    m_antialiasingSelector.setValue(display.window.antialiasingLevel);
 }
 
 void MenuConfig::applyChanges()
@@ -182,6 +185,7 @@ void MenuConfig::applyChanges()
     // Graphics
     display.window.fullscreen = (m_fullscreenBox.selectedChoice() == 0u);
     display.window.vsync = (m_vsyncBox.selectedChoice() == 0u);
+    display.window.antialiasingLevel = m_antialiasingSelector.value();
 
     sound.save();
     display.save();

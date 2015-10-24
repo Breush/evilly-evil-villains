@@ -2,6 +2,7 @@
 
 #include "states/state.hpp"
 #include "states/identifiers.hpp"
+#include "nui/rangeselector.hpp"
 #include "nui/scrollarea.hpp"
 #include "nui/choicebox.hpp"
 #include "nui/vstacker.hpp"
@@ -87,8 +88,9 @@ namespace states
         std::array<nui::Button, 2u> m_buttons;      //!< Buttons.
 
         // Graphics
-        nui::ChoiceBox m_fullscreenBox; //!< Fullscreen switch.
-        nui::ChoiceBox m_vsyncBox;      //!< VSync switch.
+        nui::ChoiceBox m_fullscreenBox;             //!< Fullscreen switch.
+        nui::ChoiceBox m_vsyncBox;                  //!< VSync switch.
+        nui::RangeSelector m_antialiasingSelector;  //!< Antialiasing level selector.
 
         // Dirty flags
         bool m_refreshBackgrounds = false;  //!< Should we refresh the background of areas?

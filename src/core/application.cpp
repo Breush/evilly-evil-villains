@@ -22,6 +22,7 @@ void Application::Context::recreateWindow()
 {
     const auto& title = windowInfo.title;
     const auto& style = windowInfo.style;
+    const auto& vsync = display.window.vsync;
     const auto& resolution = display.window.resolution;
     const auto& antialiasingLevel = display.window.antialiasingLevel;
 
@@ -41,7 +42,7 @@ void Application::Context::recreateWindow()
     sf::Image icon;
     if (icon.loadFromFile("res/tex/global/icon.png"))
         window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-    window.setVerticalSyncEnabled(true);
+    window.setVerticalSyncEnabled(vsync);
 
     // Window info
     windowInfo.screenSize = sf::v2f(window.getSize());

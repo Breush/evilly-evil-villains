@@ -52,7 +52,7 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
 bool Entity::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
     // Position and show tooltip
-    if (!m_showTooltip) {
+    if (!m_showTooltip && !m_tooltipText.getString().isEmpty()) {
         m_showTooltip = true;
         auto textSize = boundsSize(m_tooltipText);
         auto backgroundSize = m_tooltipBackground.getSize();
