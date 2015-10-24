@@ -337,7 +337,7 @@ void Application::clearWindowEvents(sf::Event& event, sf::Event::EventType type)
 void Application::switchFullscreenMode()
 {
     // Switching fullscreen flag
-    s_context.windowInfo.style ^= sf::Style::Fullscreen;
-    s_context.recreateWindow();
+    s_context.display.window.fullscreen = !s_context.display.window.fullscreen;
+    refreshFromConfig();
     refreshWindow();
 }
