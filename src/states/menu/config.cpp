@@ -7,6 +7,24 @@
 
 using namespace states;
 
+// TODO Move these somewhere else to their own file
+
+uint gcd(uint a, uint b)
+{
+    return (b == 0u)? a : gcd(b, a % b);
+}
+
+std::wstring aspectRatio(uint w, uint h)
+{
+    auto g = gcd(w, h);
+    std::wstringstream s;
+    s << (w/g) << L':' << (h/g);
+    return s.str();
+}
+
+//----------------------//
+//----- MenuConfig -----//
+
 MenuConfig::MenuConfig(StateStack& stack)
     : baseClass(stack)
 {
@@ -14,13 +32,11 @@ MenuConfig::MenuConfig(StateStack& stack)
 
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
-    const auto& nuiSize = nuiLayer().size();
 
     // Background
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
     m_background.setFillColor(sf::Color(0, 0, 0, 230));
-    m_background.setSize(nuiSize);
 
     // Title
     nuiRoot.attachChild(m_title);
@@ -59,6 +75,15 @@ MenuConfig::MenuConfig(StateStack& stack)
     m_areas[AreaID::AUDIO].stacker.setRelativePosition({0.75f, 0.85f});
 
     // Graphics
+    m_areas[AreaID::GRAPHICS].form.add(_("Resolution"), m_resolutionBox);
+    auto refBitsPerPixel = sf::VideoMode::getFullscreenModes().at(0u).bitsPerPixel;
+    for (const auto& videoMode : sf::VideoMode::getFullscreenModes()) {
+        if (refBitsPerPixel != videoMode.bitsPerPixel) break;
+        std::wstring sResolution = toWString(videoMode.width) + L'x' + toWString(videoMode.height);
+        sResolution += L" (" + aspectRatio(videoMode.width, videoMode.height) + L')';
+        m_resolutionBox.add(sResolution);
+    }
+
     m_areas[AreaID::GRAPHICS].form.add(_("Fullscreen"), m_fullscreenBox);
     m_fullscreenBox.add({_("ON"), _("OFF")});
     m_fullscreenBox.showArrows(false);
@@ -132,7 +157,10 @@ void MenuConfig::refreshNUI(const config::NUIGuides& cNUI)
 
 void MenuConfig::refreshWindow(const config::WindowInfo& cWindow)
 {
-    auto& resolution = cWindow.resolution;
+    const auto& resolution = cWindow.resolution;
+
+    // Background
+    m_background.setSize(resolution);
 
     // Repositioning stackers and resizing elements
     m_areas[AreaID::GENERAL].scrollArea.setSize({0.48f * resolution.x, 0.66f * resolution.y});
@@ -172,6 +200,10 @@ void MenuConfig::refreshFormsFromConfig()
     // auto& sound = Application::context().sound;
 
     // Graphics
+    auto resolution = sf::v2u(display.window.resolution);
+    std::wstring sResolution = toWString(resolution.x) + L'x' + toWString(resolution.y);
+    sResolution += L" (" + aspectRatio(resolution.x, resolution.y) + L')';
+    m_resolutionBox.selectChoice(sResolution);
     m_fullscreenBox.selectChoice(display.window.fullscreen? 0u : 1u);
     m_vsyncBox.selectChoice(display.window.vsync? 0u : 1u);
     m_antialiasingSelector.setValue(display.window.antialiasingLevel);
@@ -183,6 +215,9 @@ void MenuConfig::applyChanges()
     auto& sound = Application::context().sound;
 
     // Graphics
+    const auto& selectedVideoMode = sf::VideoMode::getFullscreenModes().at(m_resolutionBox.selectedChoice());
+    display.window.resolution.x = selectedVideoMode.width;
+    display.window.resolution.y = selectedVideoMode.height;
     display.window.fullscreen = (m_fullscreenBox.selectedChoice() == 0u);
     display.window.vsync = (m_vsyncBox.selectedChoice() == 0u);
     display.window.antialiasingLevel = m_antialiasingSelector.value();

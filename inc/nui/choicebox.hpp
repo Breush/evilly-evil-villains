@@ -28,13 +28,6 @@ namespace nui
         //! Type for function callback when button is clicked.
         using Callback = std::function<void()>;
 
-        //! A choice is a wide string and a function callback.
-        struct ChoiceInfo
-        {
-            std::wstring text;  //!< The text to display when choice is selected.
-            Callback callback;  //!< The callback function to call when choice accepted.
-        };
-
     public:
 
         //! Constructor.
@@ -75,6 +68,10 @@ namespace nui
         //! Select a specific choice.
         //! The first choice added has ID 0, then ID is increased by one.
         void selectChoice(uint choice);
+
+        //! Select a choice from its text.
+        //! Does nothing if unable to find a matching one.
+        void selectChoice(const std::wstring& choiceText);
 
         //! Get the selected choice ID.
         inline uint selectedChoice() const { return m_selectedChoice; }
@@ -194,6 +191,13 @@ namespace nui
         const sf::Vector2f& buttonSize() const { return m_buttonSize; }
 
         //! @}
+
+        //! A choice is a wide string and a function callback.
+        struct ChoiceInfo
+        {
+            std::wstring text;  //!< The text to display when choice is selected.
+            Callback callback;  //!< The callback function to call when choice accepted.
+        };
 
     private:
 

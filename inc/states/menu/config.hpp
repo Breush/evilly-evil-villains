@@ -43,9 +43,9 @@ namespace states
         //! @{
 
         bool update(const sf::Time& dt) final;
+        void handleEvent(const sf::Event& event) final;
         void refreshNUI(const config::NUIGuides& cNUI) final;
         void refreshWindow(const config::WindowInfo& cWindow) final;
-        void handleEvent(const sf::Event& event) final;
 
         //! @}
 
@@ -88,6 +88,7 @@ namespace states
         std::array<nui::Button, 2u> m_buttons;      //!< Buttons.
 
         // Graphics
+        nui::ChoiceBox m_resolutionBox;             //!< Screen resolutions.
         nui::ChoiceBox m_fullscreenBox;             //!< Fullscreen switch.
         nui::ChoiceBox m_vsyncBox;                  //!< VSync switch.
         nui::RangeSelector m_antialiasingSelector;  //!< Antialiasing level selector.

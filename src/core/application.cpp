@@ -13,6 +13,7 @@
 //----- Static variables -----//
 
 Application::Context Application::s_context;
+bool Application::s_needRefresh = false;
 bool Application::s_paused = false;
 
 //-------------------//
@@ -260,6 +261,13 @@ void Application::processInput()
 
 void Application::update(const sf::Time& dt)
 {
+    // Refresh asked
+    if (s_needRefresh) {
+        refreshNUI();
+        refreshWindow();
+        s_needRefresh = false;
+    }
+
     // Shaders can be animated
     m_gameTime += dt.asSeconds();
 
@@ -300,6 +308,9 @@ void Application::refreshFromConfig()
     // Audio
     refreshSounds();
     refreshMusics();
+
+    // Marking the need for future refresh of NUI/Window
+    s_needRefresh = true;
 }
 
 void Application::refreshNUI()

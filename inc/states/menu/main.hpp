@@ -42,6 +42,7 @@ namespace states
 
         bool update(const sf::Time& dt) final;
         void handleEvent(const sf::Event& event) final;
+        void refreshWindow(const config::WindowInfo& cWindow) final;
 
         //! @}
 

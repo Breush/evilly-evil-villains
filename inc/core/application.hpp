@@ -189,9 +189,9 @@ protected:
 
 private:
 
-    //! The main global variable (and almost the only one).
-    static Context s_context;
-    static bool s_paused;
+    static Context s_context;   //!< The main global variable.
+    static bool s_needRefresh;  //!< Mark for the need to refresh NUI and window.
+    static bool s_paused;       //!< Is the game paused?
 
     //! Fixed timestep to update game logic.
     const sf::Time m_updateTime = sf::seconds(1.f/71.f);

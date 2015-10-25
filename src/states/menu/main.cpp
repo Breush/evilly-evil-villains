@@ -25,26 +25,19 @@ MenuMain::MenuMain(StateStack& stack)
 
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
-    const auto& nuiSize = nuiLayer().size();
-    float maxSide = std::max(nuiSize.x, nuiSize.y);
 
     // Background
-    auto textureSize = sf::v2f(Application::context().textures.get("menu/main/background").getSize());
-    auto scaleFactor = maxSide / textureSize.x;
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
     m_background.setTexture("menu/main/background");
     m_background.setShader("menu/background");
-    m_background.setLocalScale({scaleFactor, scaleFactor});
-
-    if (sf::Shader::isAvailable())
-        Application::context().shaders.get("menu/background").setParameter("textureSize", scaleFactor * textureSize);
 
     // Copyright label
     nuiRoot.attachChild(m_copyrightLabel);
     m_copyrightLabel.setText(EEV_COPYRIGHT_SHORT_WS);
     m_copyrightLabel.setPrestyle(scene::Label::Prestyle::MENU_SOBER_LIGHT);
-    m_copyrightLabel.setLocalPosition({0.f, nuiSize.y - m_copyrightLabel.size().y});
+    m_copyrightLabel.setRelativePosition({0.f, 1.f});
+    m_copyrightLabel.setRelativeOrigin({0.f, 1.f});
 
     // Version label
     nuiRoot.attachChild(m_versionLabel);
@@ -53,7 +46,8 @@ MenuMain::MenuMain(StateStack& stack)
     versionString << EEV_VERSION_MAJ << L"." << EEV_VERSION_MIN << L"-" << EEV_VERSION_REV_WS;
     m_versionLabel.setText(versionString.str());
     m_versionLabel.setPrestyle(scene::Label::Prestyle::MENU_SOBER);
-    m_versionLabel.setLocalPosition(nuiSize - m_versionLabel.size());
+    m_versionLabel.setRelativePosition({1.f, 1.f});
+    m_versionLabel.setRelativeOrigin({1.f, 1.f});
 
     // Functors
     auto singlePlayer = [this]() { stackPush(StateID::MENU_SELECTWORLD); };
@@ -83,7 +77,6 @@ MenuMain::MenuMain(StateStack& stack)
     nuiRoot.attachChild(m_fadingRectangle);
     m_fadingRectangle.setFillColor(sf::Color::Black);
     m_fadingRectangle.setDepth(-100.f);
-    m_fadingRectangle.setSize(nuiSize);
 
     // Setting callbacks
     m_reactImage.loadFromFile("res/tex/menu/main/logo.xml");
@@ -114,7 +107,6 @@ bool MenuMain::update(const sf::Time& dt)
         uint8 opacity = static_cast<uint8>(255.f * (1.f - m_fadingTime / m_fadingDelay));
         m_fadingRectangle.setFillColor({0u, 0u, 0u, opacity});
         m_fadingTime += dt;
-        return false;
     }
 
     // Checking if choiceBox changed
@@ -148,4 +140,22 @@ void MenuMain::handleEvent(const sf::Event& event)
     }
 
     State::handleEvent(event);
+}
+
+void MenuMain::refreshWindow(const config::WindowInfo& cWindow)
+{
+    const auto& resolution = cWindow.resolution;
+    float maxSide = std::max(resolution.x, resolution.y);
+
+    // Fading
+    m_fadingRectangle.setSize(resolution);
+
+    // Background
+    auto textureSize = sf::v2f(Application::context().textures.get("menu/main/background").getSize());
+    auto scaleFactor = maxSide / textureSize.x;
+    m_background.setLocalScale({scaleFactor, scaleFactor});
+    if (sf::Shader::isAvailable())
+        Application::context().shaders.get("menu/background").setParameter("textureSize", scaleFactor * textureSize);
+
+    baseClass::refreshWindow(cWindow);
 }

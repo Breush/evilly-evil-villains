@@ -163,6 +163,18 @@ void ChoiceBox::switchChoiceRight()
     else selectChoice(m_selectedChoice + 1u);
 }
 
+void ChoiceBox::selectChoice(const std::wstring& choiceText)
+{
+    for (uint i = 0u; i < m_choices.size(); ++i) {
+        if (m_choices[i].text == choiceText) {
+            m_selectedChoice = i;
+            m_choiceChanged = true;
+            refreshText();
+            break;
+        }
+    }
+}
+
 void ChoiceBox::selectChoice(uint choice)
 {
     returnif (m_selectedChoice == choice);
