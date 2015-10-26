@@ -78,5 +78,9 @@ void Sound::save()
     #else
         doc.save_file("config/sound.xml");
     #endif
+
+    // Compute new effective values
+    effectiveMusicVolume = globalRelVolume * musicVolume;
+    effectiveSoundVolume = globalRelVolume * soundVolume;
 }
 

@@ -40,6 +40,10 @@ namespace nui
         //! Set the value to the closest one near the relative x position.
         void setClosestValue(const float relX);
 
+        //! How many indicators are shown.
+        //! Set it to -1u to make it show all.
+        void setVisibleSteps(uint visibleSteps);
+
         //! @}
 
         //--------------------------//
@@ -99,6 +103,8 @@ namespace nui
         uint m_value = 0u;  //!< The current value.
         uint m_min = 0u;    //!< The min for the range.
         uint m_max = 0u;    //!< The max for the range.
+
+        uint m_visibleSteps = -1u;  //!< How many step to show.
 
         bool m_grabbing = false;    //!< Whether we are currently grabbing the indicator.
 

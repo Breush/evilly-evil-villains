@@ -93,6 +93,11 @@ namespace states
         nui::ChoiceBox m_vsyncBox;                  //!< VSync switch.
         nui::RangeSelector m_antialiasingSelector;  //!< Antialiasing level selector.
 
+        // Audio
+        nui::RangeSelector m_globalVolumeSelector;  //!< Relative global volume selector.
+        nui::RangeSelector m_musicVolumeSelector;   //!< Music volume selector.
+        nui::RangeSelector m_soundVolumeSelector;   //!< Sound volume selector.
+
         // Dirty flags
         bool m_refreshBackgrounds = false;  //!< Should we refresh the background of areas?
 

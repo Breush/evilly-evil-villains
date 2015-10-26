@@ -95,6 +95,19 @@ MenuConfig::MenuConfig(StateStack& stack)
     m_areas[AreaID::GRAPHICS].form.add(_("Antialiasing level"), m_antialiasingSelector);
     m_antialiasingSelector.setRange(0u, 4u);
 
+    // Audio
+    m_areas[AreaID::AUDIO].form.add(_("Global volume"), m_globalVolumeSelector);
+    m_globalVolumeSelector.setVisibleSteps(4u);
+    m_globalVolumeSelector.setRange(0u, 100u);
+
+    m_areas[AreaID::AUDIO].form.add(_("Music volume"), m_musicVolumeSelector);
+    m_musicVolumeSelector.setVisibleSteps(4u);
+    m_musicVolumeSelector.setRange(0u, 100u);
+
+    m_areas[AreaID::AUDIO].form.add(_("Sounds volume"), m_soundVolumeSelector);
+    m_soundVolumeSelector.setVisibleSteps(4u);
+    m_soundVolumeSelector.setRange(0u, 100u);
+
     // Stacker for buttons
     nuiRoot.attachChild(m_buttonsStacker);
     m_buttonsStacker.setRelativeOrigin({0.5f, 1.f});
@@ -114,10 +127,6 @@ MenuConfig::MenuConfig(StateStack& stack)
     //      - Zoom speed
     //      - UI Size
     //      - Font size factor
-    // - Audio:
-    //      - General volume
-    //      - Volume musics
-    //      - Volume sounds
 
     refreshFormsFromConfig();
 }
@@ -189,7 +198,7 @@ void MenuConfig::handleEvent(const sf::Event& event)
 void MenuConfig::refreshFormsFromConfig()
 {
     auto& display = Application::context().display;
-    // auto& sound = Application::context().sound;
+    auto& audio = Application::context().sound;
 
     // Graphics
     auto resolution = sf::v2u(display.window.resolution);
@@ -199,12 +208,17 @@ void MenuConfig::refreshFormsFromConfig()
     m_fullscreenBox.selectChoice(display.window.fullscreen? 0u : 1u);
     m_vsyncBox.selectChoice(display.window.vsync? 0u : 1u);
     m_antialiasingSelector.setValue(display.window.antialiasingLevel);
+
+    // Audio
+    m_globalVolumeSelector.setValue(static_cast<uint>(audio.globalRelVolume * 100.f));
+    m_musicVolumeSelector.setValue(static_cast<uint>(audio.musicVolume));
+    m_soundVolumeSelector.setValue(static_cast<uint>(audio.soundVolume));
 }
 
 void MenuConfig::applyChanges()
 {
     auto& display = Application::context().display;
-    auto& sound = Application::context().sound;
+    auto& audio = Application::context().sound;
 
     // Graphics
     const auto& selectedVideoMode = sf::VideoMode::getFullscreenModes().at(m_resolutionBox.selectedChoice());
@@ -214,7 +228,12 @@ void MenuConfig::applyChanges()
     display.window.vsync = (m_vsyncBox.selectedChoice() == 0u);
     display.window.antialiasingLevel = m_antialiasingSelector.value();
 
-    sound.save();
+    // Audio
+    audio.globalRelVolume = m_globalVolumeSelector.value() / 100.f;
+    audio.musicVolume = m_musicVolumeSelector.value();
+    audio.soundVolume = m_soundVolumeSelector.value();
+
+    audio.save();
     display.save();
     Application::refreshFromConfig();
 }

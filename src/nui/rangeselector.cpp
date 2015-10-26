@@ -89,6 +89,12 @@ void RangeSelector::setRange(uint min, float max)
     refreshElements();
 }
 
+void RangeSelector::setVisibleSteps(uint visibleSteps)
+{
+    m_visibleSteps = visibleSteps;
+    refreshElements();
+}
+
 //-------------------//
 //----- Changes -----//
 
@@ -111,8 +117,6 @@ void RangeSelector::refreshIndicator()
 
 void RangeSelector::refreshElements()
 {
-    const float distance = size().x / (m_max - m_min);
-
     clearParts();
 
     // Main line
@@ -125,7 +129,16 @@ void RangeSelector::refreshElements()
     float offset = 0.f;
     uint traceValue = m_min;
 
-    m_traces.resize(m_max - m_min + 1u);
+    uint steps = m_max - m_min;
+    if (m_visibleSteps < steps)
+        steps = m_visibleSteps;
+
+    returnif (steps == 0u);
+
+    const float stepDistance = size().x / steps;
+    const uint traceStep = (m_max - m_min + 1u) / steps;
+
+    m_traces.resize(steps + 1u);
     for (auto& trace : m_traces) {
         addPart(&trace.line);
         trace.line.setSize({2.f, 0.25f * size().y});
@@ -141,8 +154,8 @@ void RangeSelector::refreshElements()
         trace.text.setPosition({offset, 0.f});
         trace.text.setOrigin({0.5f * textSize.x, 0.f});
 
-        offset += distance;
-        traceValue += 1u;
+        offset += stepDistance;
+        traceValue += traceStep;
     }
 
     refreshIndicator();
