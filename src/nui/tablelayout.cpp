@@ -66,6 +66,9 @@ void TableLayout::setRowAdapt(uint row, Adapt adapt, float param)
 {
     assert(row < m_rows.size());
 
+    if (m_autoSize && adapt != Adapt::FIT)
+        throw std::logic_error("AutoSize forces all adapt to be FIT.");
+
     m_rows[row].adapt = adapt;
     if (adapt == Adapt::FIXED) m_rows[row].height = param;
 
@@ -75,6 +78,9 @@ void TableLayout::setRowAdapt(uint row, Adapt adapt, float param)
 void TableLayout::setColAdapt(uint col, Adapt adapt, float param)
 {
     assert(col < m_cols.size());
+
+    if (m_autoSize && adapt != Adapt::FIT)
+        throw std::logic_error("AutoSize forces all adapt to be FIT.");
 
     m_cols[col].adapt = adapt;
     if (adapt == Adapt::FIXED) m_cols[col].width = param;
@@ -168,6 +174,12 @@ void TableLayout::positionChild(uint row, uint col, float x, float y)
     child.entity.setClipArea(clipArea);
 }
 
+void TableLayout::setAutoSize(bool autoSize)
+{
+    m_autoSize = autoSize;
+    updateSize();
+}
+
 //--------------------//
 //----- Children -----//
 
@@ -220,6 +232,20 @@ void TableLayout::removeChild(uint row, uint col)
 //-----------------------------------//
 //----- Internal change updates -----//
 
+void TableLayout::updateSize()
+{
+    returnif (!m_autoSize);
+    sf::Vector2f currentSize;
+
+    for (const auto& col : m_cols)
+        currentSize.x += col.width;
+
+    for (const auto& row : m_rows)
+        currentSize.y += row.height;
+
+    setSize(currentSize);
+}
+
 void TableLayout::refreshChildrenPosition()
 {
     returnif (m_rowsDimension == 0u && m_rowsStep < 0.f);
@@ -271,6 +297,8 @@ void TableLayout::refreshRowsSize()
     for (auto& row : m_rows)
         if (row.adapt == Adapt::FILL)
             row.height = heightHint;
+
+    updateSize();
 }
 
 void TableLayout::refreshColsSize()
@@ -303,6 +331,8 @@ void TableLayout::refreshColsSize()
     for (auto& col : m_cols)
         if (col.adapt == Adapt::FILL)
             col.width = widthHint;
+
+    updateSize();
 }
 
 void TableLayout::refreshDimensions()
@@ -313,6 +343,9 @@ void TableLayout::refreshDimensions()
         m_cols.clear();
         return;
     }
+
+    if (m_autoSize && (m_rowsDimension == 0u || m_colsDimension == 0u))
+        throw std::logic_error("AutoSize demands precise table dimensions.");
 
     // Estimating from step
     uint rows = (m_rowsDimension == 0u)? size().y / m_rowsStep : m_rowsDimension;
@@ -340,6 +373,15 @@ void TableLayout::refreshDimensions()
             col.adapt = Adapt::FIXED;
             col.width = m_colsStep;
         }
+    }
+
+    // Remove Adapt::FILL if auto-size
+    if (m_autoSize) {
+        for (auto& row : m_rows)
+            row.adapt = Adapt::FIT;
+
+        for (auto& col : m_cols)
+            col.adapt = Adapt::FIT;
     }
 }
 

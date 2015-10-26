@@ -32,7 +32,6 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     // Form
     nuiRoot.attachChild(m_form);
     m_form.setRelativeOrigin({0.5f, 0.f});
-    m_form.setSize({1000.f, 1000.f}); // Auto compute size
     m_form.setRelativePosition({0.5f, 0.2f});
 
     // World name

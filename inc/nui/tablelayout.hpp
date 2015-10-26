@@ -58,6 +58,10 @@ namespace nui
         //! If col is set to the total of columns or -1, then it returns the end of the table.
         float colOffset(uint col);
 
+        //! Whether or not the table adapt its whole size to its content.
+        //! Row or col adapt cannot be set to FILL.
+        void setAutoSize(bool autoSize);
+
         //! @}
 
         //-----------------//
@@ -115,6 +119,9 @@ namespace nui
         //! @name Internal change updates
         //! @{
 
+        //! Refresh the current size.
+        void updateSize();
+
         //! Refresh the dimensions given the current size.
         void refreshDimensions();
 
@@ -156,17 +163,19 @@ namespace nui
         struct RowInfo
         {
             Adapt adapt = Adapt::FILL;  //!< How the row computes it size.
-            float height;               //!< The size of the row.
+            float height = 0.f;         //!< The size of the row.
         };
 
         //! How a column acts.
         struct ColInfo
         {
             Adapt adapt = Adapt::FILL;  //!< How the column computes it size.
-            float width;                //!< The size of the column.
+            float width = 0.f;          //!< The size of the column.
         };
 
     private:
+
+        bool m_autoSize = false;    //!< Whether or not the table adapt its whole size to its content.
 
         uint m_colsDimension = 0u;  //!< The number of rows.
         uint m_rowsDimension = 0u;  //!< The number of columns.

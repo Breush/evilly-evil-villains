@@ -39,7 +39,7 @@ namespace nui
         //! @name Routine
         //! @{
 
-        void onSizeChanges() final;
+        void onChildSizeChanges(scene::Entity& child) final;
 
         //! @}
 

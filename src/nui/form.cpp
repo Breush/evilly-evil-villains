@@ -8,14 +8,15 @@ Form::Form()
 {
     // Table
     attachChild(m_table);
+    m_table.setAutoSize(true);
 }
 
 //-------------------//
 //----- Routine -----//
 
-void Form::onSizeChanges()
+void Form::onChildSizeChanges(scene::Entity& child)
 {
-    m_table.setSize(size());
+    setSize(m_table.size());
 }
 
 //--------------------//
@@ -30,7 +31,6 @@ void Form::add(std::wstring text, scene::Entity& child)
     m_labels[line]->setPrestyle(scene::Label::Prestyle::NUI);
 
     m_table.setDimensions(m_labels.size(), 2u);
-    m_table.setRowAdapt(line, Adapt::FIT);
     m_table.setChild(line, 0u, *m_labels[line], Align::OPPOSITE);
     m_table.setChild(line, 1u, child);
 }

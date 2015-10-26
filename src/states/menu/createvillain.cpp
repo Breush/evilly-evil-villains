@@ -33,7 +33,6 @@ MenuCreateVillain::MenuCreateVillain(StateStack& stack)
     // Form
     nuiRoot.attachChild(m_form);
     m_form.centerOrigin();
-    m_form.setSize({500.f, 500.f});
     m_form.setRelativePosition({0.5f, 0.5f});
 
     // World name

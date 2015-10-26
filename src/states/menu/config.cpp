@@ -114,8 +114,6 @@ MenuConfig::MenuConfig(StateStack& stack)
     //      - Zoom speed
     //      - UI Size
     //      - Font size factor
-    // - Graphics:
-    //      - Resolutions (between those available for full-screen)
     // - Audio:
     //      - General volume
     //      - Volume musics
@@ -166,12 +164,6 @@ void MenuConfig::refreshWindow(const config::WindowInfo& cWindow)
     m_areas[AreaID::GENERAL].scrollArea.setSize({0.48f * resolution.x, 0.66f * resolution.y});
     m_areas[AreaID::GRAPHICS].scrollArea.setSize({0.48f * resolution.x, 0.28f * resolution.y});
     m_areas[AreaID::AUDIO].scrollArea.setSize({0.48f * resolution.x, 0.28f * resolution.y});
-
-    // TODO The current form implementation asks for size, that's not what we want here...
-    // We want a dynamic height.
-    m_areas[AreaID::GENERAL].form.setSize({0.48f * resolution.x, 0.80f * resolution.y});
-    m_areas[AreaID::GRAPHICS].form.setSize({0.48f * resolution.x, 0.40f * resolution.y});
-    m_areas[AreaID::AUDIO].form.setSize({0.48f * resolution.x, 0.40f * resolution.y});
 
     // Area size might have change
     m_refreshBackgrounds = true;
