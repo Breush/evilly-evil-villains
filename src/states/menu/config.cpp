@@ -36,7 +36,7 @@ MenuConfig::MenuConfig(StateStack& stack)
     // Background
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
-    m_background.setFillColor(sf::Color(0, 0, 0, 230));
+    m_background.setFillColor(sf::Color(0, 0, 0, 200));
 
     // Title
     nuiRoot.attachChild(m_title);
@@ -53,7 +53,7 @@ MenuConfig::MenuConfig(StateStack& stack)
 
         nuiRoot.attachChild(area.background);
         area.background.setDepth(100.f);
-        area.background.setFillColor(sf::Color::Black);
+        area.background.setFillColor({0u, 0u, 0u, 128u});
         area.background.setOutlineColor(sf::Color::White);
 
         area.scrollArea.setContent(area.form);

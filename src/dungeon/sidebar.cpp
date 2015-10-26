@@ -14,6 +14,12 @@ using namespace dungeon;
 Sidebar::Sidebar(scene::Scene& inScene)
     : m_scene(inScene)
 {
+    // Background
+    attachChild(m_background);
+    m_background.setLocalPosition({1.f, 0.f});
+    m_background.setOutlineColor(sf::Color::White);
+    m_background.setOutlineThickness(1.f);
+
     // Global stacker
     attachChild(m_globalStacker);
     m_globalStacker.setRelativePosition({0.5f, 0.f});
@@ -45,6 +51,9 @@ void Sidebar::init()
     m_summary.init();
     m_lock.init();
 
+    // Background
+    m_background.setTexture("dungeon/sidebar/background");
+
     // Tabs
     m_tabHolder.stackBack(_("Monsters"),    "dungeon/sidebar/tab/monsters",    m_tabContents[TabsID::MONSTERS].scrollArea);
     m_tabHolder.stackBack(_("Traps"),       "dungeon/sidebar/tab/traps",       m_tabContents[TabsID::TRAPS].scrollArea);
@@ -67,6 +76,10 @@ void Sidebar::refreshNUI(const config::NUIGuides& cNUI)
 
 void Sidebar::onSizeChanges()
 {
+    // TODO Correctly adapt the background to the size
+    // So that there is no streching
+    m_background.setSize({size().x - 2.f, size().y});
+
     refreshScrollAreasSize();
     refreshTabContents();
 }

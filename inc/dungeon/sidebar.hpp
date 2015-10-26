@@ -9,6 +9,7 @@
 #include "dungeon/summary.hpp"
 #include "dungeon/minimap.hpp"
 #include "dungeon/monsters.hpp"
+#include "scene/wrappers/rectangleshape.hpp"
 #include "tools/param.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -121,7 +122,8 @@ namespace dungeon
         dungeon::Lock m_lock;       //!< Button to control invasion mode.
 
         // Decorum
-        float m_vPadding = 0.f;     //!< Vertical padding.
-        float m_borderThick = 0.f;  //!< Border thickness.
+        scene::RectangleShape m_background; //!< The background.
+        float m_vPadding = 0.f;             //!< Vertical padding.
+        float m_borderThick = 0.f;          //!< Border thickness.
     };
 }

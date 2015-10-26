@@ -22,12 +22,12 @@ Terminal::Terminal(StateStack& stack)
 
     // Background
     nuiRoot.attachChild(m_background);
-    m_background.setFillColor({0u, 0u, 0u, 192u});
+    m_background.setFillColor({0u, 0u, 0u, 200u});
     m_background.setDepth(500.f);
 
     // Background for messages
     nuiRoot.attachChild(m_messagesBackground);
-    m_messagesBackground.setFillColor({255u, 255u, 255u, 192u});
+    m_messagesBackground.setFillColor({255u, 255u, 255u, 200u});
     m_messagesBackground.setRelativeOrigin({0.f, 1.f});
 
     // Command entry
@@ -210,8 +210,8 @@ void Terminal::onPauseButtonPressed()
 {
     Application::setPaused(!Application::paused());
 
-    if (Application::paused()) m_background.setFillColor({0u, 0u, 0u, 192u});
-    else m_background.setFillColor({0u, 0u, 0u, 126u});
+    if (Application::paused()) m_background.setFillColor({0u, 0u, 0u, 200u});
+    else m_background.setFillColor({0u, 0u, 0u, 128u});
 }
 
 //------------------------------------//

@@ -16,7 +16,7 @@ MenuCreateVillain::MenuCreateVillain(StateStack& stack)
     // Background
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
-    m_background.setFillColor(sf::Color(0, 0, 0, 230));
+    m_background.setFillColor(sf::Color(0, 0, 0, 200));
     m_background.setSize(nuiSize);
 
     // Title

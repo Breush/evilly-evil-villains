@@ -19,8 +19,6 @@ MenuMain::MenuMain(StateStack& stack)
 
     // During menus, enable key repeat
     Application::context().window.setKeyRepeatEnabled(true);
-
-    // Menu theme
     Application::context().musics.play("pippin_the_hunchback");
 
     // Creating scene
@@ -30,7 +28,7 @@ MenuMain::MenuMain(StateStack& stack)
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
     m_background.setTexture("menu/main/background");
-    m_background.setShader("menu/background");
+    // m_background.setShader("menu/background");
 
     // Copyright label
     nuiRoot.attachChild(m_copyrightLabel);
