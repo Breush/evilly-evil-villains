@@ -5,7 +5,7 @@
 #include "nui/list.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/button.hpp"
-#include "scene/wrappers/rectangleshape.hpp"
+#include "scene/wrappers/rectanglegradient.hpp"
 #include "scene/wrappers/label.hpp"
 
 #include <array>
@@ -60,7 +60,7 @@ namespace states
         std::array<nui::Button, 3u> m_buttons;  //!< Buttons Create/Back/Play.
 
         // Decorum
-        scene::Label m_title;                 //!< Title.
-        scene::RectangleShape m_background;   //!< Background.
+        scene::Label m_title;                   //!< Title.
+        scene::RectangleGradient m_background;  //!< Background.
     };
 }

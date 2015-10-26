@@ -8,7 +8,7 @@
 #include "nui/textentry.hpp"
 #include "nui/popdialog.hpp"
 #include "scene/wrappers/label.hpp"
-#include "scene/wrappers/rectangleshape.hpp"
+#include "scene/wrappers/rectanglegradient.hpp"
 
 #include <array>
 
@@ -66,7 +66,7 @@ namespace states
         std::array<nui::Button, 2> m_buttons;   //!< Create / Back
 
         // Background and title
-        scene::Label m_title;                 //!< The title of the menu page.
-        scene::RectangleShape m_background;   //!< The background of the menu page.
+        scene::Label m_title;                   //!< The title of the menu page.
+        scene::RectangleGradient m_background;  //!< The background of the menu page.
     };
 }

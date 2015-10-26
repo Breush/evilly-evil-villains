@@ -2,7 +2,7 @@
 
 #include "states/state.hpp"
 #include "states/identifiers.hpp"
-#include "scene/wrappers/rectangleshape.hpp"
+#include "scene/wrappers/rectanglegradient.hpp"
 #include "scene/wrappers/label.hpp"
 #include "nui/form.hpp"
 #include "nui/textentry.hpp"
@@ -72,8 +72,8 @@ namespace states
     private:
 
         // Background and title
-        scene::Label m_title;                 //!< The title.
-        scene::RectangleShape m_background;   //!< The background.
+        scene::Label m_title;                   //!< The title.
+        scene::RectangleGradient m_background;  //!< The background.
 
         // Form
         nui::Form m_form;                   //!< The form containing the following items.

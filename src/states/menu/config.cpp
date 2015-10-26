@@ -36,7 +36,7 @@ MenuConfig::MenuConfig(StateStack& stack)
     // Background
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
-    m_background.setFillColor(sf::Color(0, 0, 0, 200));
+    m_background.setPointsColors({0u, 0u, 0u, 210u}, {0u, 0u, 0u, 255u});
 
     // Title
     nuiRoot.attachChild(m_title);

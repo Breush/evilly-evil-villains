@@ -19,7 +19,7 @@ MenuCreateWorld::MenuCreateWorld(StateStack& stack)
     // Background
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
-    m_background.setFillColor({0, 0, 0, 200});
+    m_background.setPointsColors({0u, 0u, 0u, 210u}, {0u, 0u, 0u, 255u});
     m_background.setSize(nuiSize);
 
     // Title
