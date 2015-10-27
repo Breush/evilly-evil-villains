@@ -15,7 +15,7 @@ void NUIGuides::recompute(const Display::NUI& cDisplayNUI)
     borderThick = 1.f;
     largeBorderThick = 2.f * nuiSize;
 
-    fontSize = 10.f + fontFactor * nuiSize;
+    fontSize = 10.f + 3.f * fontFactor * nuiSize;
     fontVSpace = std::floor(1.2f * fontSize);
     fontHSpace = std::floor(0.6f * fontSize);
 

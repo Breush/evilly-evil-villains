@@ -30,7 +30,7 @@ void RangeSelector::refreshNUI(const config::NUIGuides& cNUI)
     m_heightHint = cNUI.hintSize * 3.f;
     m_fontSize = std::floor(0.9f * cNUI.fontSize);
 
-    updateSize();
+    refreshElements();
 }
 
 //------------------//
@@ -70,7 +70,7 @@ void RangeSelector::setClosestValue(const float relX)
 {
     const float distance = size().x / (m_max - m_min);
     auto closestValue = std::round(relX / distance);
-    setValue(static_cast<uint>(closestValue));
+    setValue(m_min + static_cast<uint>(closestValue));
 }
 
 void RangeSelector::setValue(uint inValue)
@@ -159,4 +159,5 @@ void RangeSelector::refreshElements()
     }
 
     refreshIndicator();
+    updateSize();
 }

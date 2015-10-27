@@ -75,6 +75,21 @@ MenuConfig::MenuConfig(StateStack& stack)
         if (fileInfo.isDirectory)
             m_languageBox.add(toWString(replace(fileInfo.name, std::string("_"), std::string("\\_"))));
 
+    m_areas[AreaID::GENERAL].form.add(m_uiSizeSelector);
+    m_uiSizeSelector.setRange(1u, 4u);
+
+    m_areas[AreaID::GENERAL].form.add(m_uiFontFactorSelector);
+    m_uiFontFactorSelector.setVisibleSteps(2u);
+    m_uiFontFactorSelector.setRange(50u, 150u);
+
+    m_areas[AreaID::GENERAL].form.add(m_scrollingFactorSelector);
+    m_scrollingFactorSelector.setVisibleSteps(3u);
+    m_scrollingFactorSelector.setRange(5u, 50u);
+
+    m_areas[AreaID::GENERAL].form.add(m_zoomSpeedSelector);
+    m_zoomSpeedSelector.setVisibleSteps(2u);
+    m_zoomSpeedSelector.setRange(1u, 9u);
+
     // Graphics
     m_areas[AreaID::GRAPHICS].form.add(m_resolutionBox);
     auto refBitsPerPixel = sf::VideoMode::getFullscreenModes().at(0u).bitsPerPixel;
@@ -120,13 +135,6 @@ MenuConfig::MenuConfig(StateStack& stack)
 
     m_buttons[0u].setCallback([this] { stackPop(); });
     m_buttons[1u].setCallback([this] { applyChanges(); });
-
-    // TODO Config content:
-    // - General/UI:
-    //      - Scrolling factor
-    //      - Zoom speed
-    //      - UI Size
-    //      - Font size factor
 
     refreshFormsFromConfig();
 }
@@ -174,6 +182,10 @@ void MenuConfig::refreshWindow(const config::WindowInfo& cWindow)
     m_areas[AreaID::AUDIO].title.setText(_("Audio"));
 
     m_areas[AreaID::GENERAL].form.setText(0u, _("Language"));
+    m_areas[AreaID::GENERAL].form.setText(1u, _("Interface size"));
+    m_areas[AreaID::GENERAL].form.setText(2u, _("Font size (%)"));
+    m_areas[AreaID::GENERAL].form.setText(3u, _("Scrolling speed"));
+    m_areas[AreaID::GENERAL].form.setText(4u, _("Zoom speed"));
 
     m_areas[AreaID::GRAPHICS].form.setText(0u, _("Resolution"));
     m_areas[AreaID::GRAPHICS].form.setText(1u, _("Fullscreen"));
@@ -229,6 +241,10 @@ void MenuConfig::refreshFormsFromConfig()
 
     // General
     m_languageBox.selectChoice(replace(display.global.language, std::wstring(L"_"), std::wstring(L"\\_")));
+    m_uiSizeSelector.setValue(display.nui.size);
+    m_uiFontFactorSelector.setValue(static_cast<uint>(display.nui.fontFactor * 100.f));
+    m_scrollingFactorSelector.setValue(static_cast<uint>(display.global.scrollingFactor));
+    m_zoomSpeedSelector.setValue(static_cast<uint>(display.global.zoomSpeed * 100.f));
 
     // Graphics
     auto resolution = sf::v2u(display.window.resolution);
@@ -252,6 +268,10 @@ void MenuConfig::applyChanges()
 
     // General
     display.global.language = replace(m_languageBox.selectedChoiceText(), std::wstring(L"\\_"), std::wstring(L"_"));
+    display.nui.size = m_uiSizeSelector.value();
+    display.nui.fontFactor = m_uiFontFactorSelector.value() / 100.f;
+    display.global.scrollingFactor = m_scrollingFactorSelector.value();
+    display.global.zoomSpeed = m_zoomSpeedSelector.value() / 100.f;
 
     // Graphics
     const auto& selectedVideoMode = sf::VideoMode::getFullscreenModes().at(m_resolutionBox.selectedChoice());

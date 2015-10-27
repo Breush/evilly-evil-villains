@@ -89,7 +89,11 @@ namespace states
         std::array<nui::Button, 2u> m_buttons;      //!< Buttons.
 
         // General
-        nui::ChoiceBox m_languageBox;               //!< Select the language.
+        nui::ChoiceBox m_languageBox;                   //!< Select the language.
+        nui::RangeSelector m_uiSizeSelector;            //!< Size of the interface.
+        nui::RangeSelector m_uiFontFactorSelector;      //!< Font factor of the interface.
+        nui::RangeSelector m_scrollingFactorSelector;   //!< Scrolling speed.
+        nui::RangeSelector m_zoomSpeedSelector;         //!< Zoom speed.
 
         // Graphics
         nui::ChoiceBox m_resolutionBox;             //!< Screen resolutions.

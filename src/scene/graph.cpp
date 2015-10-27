@@ -114,6 +114,7 @@ void Graph::refreshWindow(const config::WindowInfo& cWindow)
 
 void Graph::refreshNUI(const config::NUIGuides& cNUI)
 {
+    m_nuiLayer.refreshNUI(cNUI);
     m_scene.refreshNUI(cNUI);
 }
 

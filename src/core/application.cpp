@@ -195,35 +195,6 @@ void Application::processInput()
                 m_stateStack.pushState(StateID::SPLASHSCREEN);
                 continue;
             }
-
-            // NUI quick size change
-            if (event.key.control) {
-                if (event.key.code == sf::Keyboard::Numpad8) {
-                    s_context.display.nui.size += 1u;
-                    std::cerr << "NUI size: " << s_context.display.nui.size << std::endl;
-                    refreshNUI();
-                    continue;
-                }
-
-                if (event.key.code == sf::Keyboard::Numpad2) {
-                    if (s_context.display.nui.size != 0u) s_context.display.nui.size -= 1u;
-                    std::cerr << "NUI size: " << s_context.display.nui.size << std::endl;
-                    refreshNUI();
-                    continue;
-                }
-
-                if (event.key.code == sf::Keyboard::Numpad7) {
-                    std::cerr << "Forcing refreshNUI()" << std::endl;
-                    refreshNUI();
-                    continue;
-                }
-
-                if (event.key.code == sf::Keyboard::Numpad9) {
-                    std::cerr << "Forcing refreshWindow()" << std::endl;
-                    refreshWindow();
-                    continue;
-                }
-            }
 #endif
         }
 
