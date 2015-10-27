@@ -3,6 +3,7 @@
 #include "states/state.hpp"
 #include "states/identifiers.hpp"
 #include "nui/button.hpp"
+#include "nui/vstacker.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
 #include "scene/wrappers/label.hpp"
 
@@ -36,6 +37,7 @@ namespace states
 
         bool update(const sf::Time& dt) final;
         void handleEvent(const sf::Event& event) final;
+        void refreshWindow(const config::WindowInfo& cWindow) final;
 
         //! @}
 
@@ -46,7 +48,9 @@ namespace states
         scene::Label m_title;                 //!< Title.
 
         // NUI
+        nui::VStacker m_stacker;        //!< Stacker for the buttons.
         nui::Button m_continueButton;   //!< Continue button.
+        nui::Button m_configButton;     //!< Config button.
         nui::Button m_mainMenuButton;   //!< Go back to main menu.
     };
 }

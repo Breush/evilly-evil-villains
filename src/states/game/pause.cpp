@@ -7,8 +7,6 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
 
-// TODO What to do with this state? Open config menu?
-
 using namespace states;
 
 GamePause::GamePause(StateStack& stack)
@@ -25,21 +23,21 @@ GamePause::GamePause(StateStack& stack)
 
     // Title
     nuiRoot.attachChild(m_title);
-    m_title.setText(_("Game paused"));
     m_title.setPrestyle(scene::Label::Prestyle::MENU_POPUP_TITLE);
     m_title.setRelativePosition({0.5f, 0.35f});
     m_title.centerOrigin();
 
     // Buttons
-    nuiRoot.attachChild(m_continueButton);
-    m_continueButton.setAction(_("Continue, continue, continue"), [this]() { stackPop(); });
-    m_continueButton.setRelativePosition({0.5f, 0.5f});
-    m_continueButton.centerOrigin();
+    nuiRoot.attachChild(m_stacker);
+    m_stacker.stackBack(m_continueButton, nui::Align::CENTER);
+    m_stacker.stackBack(m_configButton,   nui::Align::CENTER);
+    m_stacker.stackBack(m_mainMenuButton, nui::Align::CENTER);
+    m_stacker.setRelativePosition({0.5f, 0.5f});
+    m_stacker.centerOrigin();
 
-    nuiRoot.attachChild(m_mainMenuButton);
-    m_mainMenuButton.setAction(_("Save and return to main menu"), [this]() { stackClear(StateID::MENU_MAIN); });
-    m_mainMenuButton.setRelativePosition({0.5f, 0.6f});
-    m_mainMenuButton.centerOrigin();
+    m_continueButton.setCallback([this]() { stackPop(); });
+    m_mainMenuButton.setCallback([this]() { stackClear(StateID::MENU_MAIN); });
+    m_configButton.setCallback  ([this]() { stackPush(StateID::MENU_CONFIG); });
 
     Application::setPaused(true);
 }
@@ -68,4 +66,16 @@ void GamePause::handleEvent(const sf::Event& event)
     }
 
     State::handleEvent(event);
+}
+
+void GamePause::refreshWindow(const config::WindowInfo& cWindow)
+{
+    baseClass::refreshWindow(cWindow);
+
+    // Translated strings
+    m_title.setText(_("Game paused"));
+
+    m_continueButton.setText(_("Continue, continue, continue"));
+    m_configButton.setText  (_("Options"));
+    m_mainMenuButton.setText(_("Save and return to main menu"));
 }
