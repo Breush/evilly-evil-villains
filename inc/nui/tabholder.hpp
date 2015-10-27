@@ -82,7 +82,7 @@ namespace nui
         //! @{
 
         //! Called to recompute the size.
-        void refreshSize();
+        void updateSize();
 
         //! Refresh the global background.
         void refreshBackground();

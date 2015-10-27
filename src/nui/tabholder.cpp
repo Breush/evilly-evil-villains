@@ -30,10 +30,7 @@ void TabHolder::onSizeChanges()
 
 void TabHolder::onChildSizeChanges(scene::Entity& child)
 {
-    // Newly computed headerSize, taking new child size in account for width
-    auto newSize = headerSize();
-    newSize.y += child.size().y + m_borderThick;
-    setSize(newSize);
+    updateSize();
 }
 
 void TabHolder::refreshNUI(const config::NUIGuides& cNUI)
@@ -179,6 +176,7 @@ void TabHolder::refreshTabs()
     }
 
     refreshSelectedTab();
+    updateSize();
 }
 
 void TabHolder::refreshContent()
@@ -187,4 +185,13 @@ void TabHolder::refreshContent()
 
     if (m_selectedTab < m_tabs.size())
         m_globalStacker.stackBack(m_tabs.at(m_selectedTab).content, nui::Align::CENTER);
+
+    updateSize();
+}
+
+void TabHolder::updateSize()
+{
+    auto newSize = headerSize();
+    newSize.y += m_globalStacker.size().y + m_borderThick;
+    setSize(newSize);
 }

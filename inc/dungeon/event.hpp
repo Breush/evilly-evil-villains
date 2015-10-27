@@ -3,8 +3,6 @@
 #include "context/event.hpp"
 #include "tools/int.hpp"
 
-// TODO Rename this file dungeon/event.hpp
-
 namespace dungeon
 {
     // Forward declarations

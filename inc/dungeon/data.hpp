@@ -2,8 +2,7 @@
 
 #include "tools/param.hpp"
 #include "tools/int.hpp"
-#include "context/event.hpp"
-#include "dungeon/eventtype.hpp"
+#include "dungeon/event.hpp"
 #include "dungeon/elementdata.hpp"
 #include "context/wallet.hpp"
 

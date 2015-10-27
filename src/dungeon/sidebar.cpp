@@ -2,7 +2,7 @@
 
 #include "core/application.hpp"
 #include "core/gettext.hpp"
-#include "dungeon/eventtype.hpp"
+#include "dungeon/event.hpp"
 #include "dungeon/facilities.hpp"
 #include "dungeon/traps.hpp"
 #include "dungeon/tools.hpp"
