@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/cursor.hpp"
 #include "core/visualdebug.hpp"
 #include "resources/holder.hpp"
 #include "resources/musicplayer.hpp"
@@ -207,4 +208,5 @@ private:
     // Visual part
     states::StateStack m_stateStack;    //!< The stack of states.
     VisualDebug m_visualDebug;          //!< The debug information.
+    Cursor m_cursor;                    //!< A personnal cursor.
 };

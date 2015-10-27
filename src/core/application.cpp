@@ -44,6 +44,7 @@ void Application::Context::recreateWindow()
     if (icon.loadFromFile("res/tex/global/icon.png"))
         window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
     window.setVerticalSyncEnabled(vsync);
+    window.setMouseCursorVisible(false);
 
     // Window info
     windowInfo.screenSize = sf::v2f(window.getSize());
@@ -92,6 +93,7 @@ Application::Application()
     // All is ready, go for it
     m_stateStack.pushState(m_initialState);
     m_visualDebug.init();
+    m_cursor.init();
 
     // Full refresh on start
     refreshWindow();
@@ -218,7 +220,6 @@ void Application::processInput()
 
             clearWindowEvents(event, sf::Event::Resized);
             s_context.windowInfo.screenSize = sf::v2f(newSize);
-            s_context.windowInfo.recompute();
             refreshWindow();
             break;
         }
@@ -241,6 +242,7 @@ void Application::update(const sf::Time& dt)
 
     // Overall elements
     m_visualDebug.update(dt);
+    m_cursor.update(dt);
 
     // Game logic
     const sf::Time dtGame = dt * m_gameTimeFactor;
@@ -260,6 +262,7 @@ void Application::render()
     s_context.window.clear();
     s_context.window.draw(m_stateStack);
     s_context.window.draw(m_visualDebug);
+    s_context.window.draw(m_cursor);
     s_context.window.display();
 }
 
@@ -294,9 +297,12 @@ void Application::refreshNUI()
 
 void Application::refreshWindow()
 {
+    s_context.windowInfo.recompute();
+
     // Refresh all views
     m_stateStack.refreshWindow(s_context.windowInfo);
     m_visualDebug.refreshWindow(s_context.windowInfo);
+    m_cursor.refreshWindow(s_context.windowInfo);
 
     // Refresh shaders
     refreshShaders();
