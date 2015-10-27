@@ -55,6 +55,9 @@ namespace dcb
         //! Add values to all gauges.
         void addToGauges(const std::array<float, GaugeID::COUNT>& gaugesValues);
 
+        //! Whether or not the conviction condition is met.
+        bool enoughConviction() const { return m_gauges.at(CONVICTION).value() >= m_convictionIndicator; }
+
         //! @}
 
     protected:
@@ -69,9 +72,10 @@ namespace dcb
 
     private:
 
-        nui::HStacker m_globalStacker;  //!< Main stacker containing other stackers.
+        float m_convictionIndicator;                            //!< The value to consider conviction has been reached.
+        nui::HStacker m_globalStacker;                          //!< Main stacker containing other stackers.
         std::array<nui::VStacker, GaugeID::COUNT> m_stackers;   //!< The stackers, one for each pair gauge/label.
         std::array<nui::Gauge, GaugeID::COUNT> m_gauges;        //!< The gauges.
-        std::array<scene::Label, GaugeID::COUNT> m_labels;        //!< The labels.
+        std::array<scene::Label, GaugeID::COUNT> m_labels;      //!< The labels.
     };
 }

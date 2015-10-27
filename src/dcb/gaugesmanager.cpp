@@ -5,6 +5,7 @@
 using namespace dcb;
 
 GaugesManager::GaugesManager()
+    : m_convictionIndicator(60.f)
 {
     setDetectable(false);
 
@@ -27,7 +28,7 @@ GaugesManager::GaugesManager()
     m_gauges[GaugeID::CONFUSION].setFillColor({119u, 190u, 119u});
     m_gauges[GaugeID::TRUST].setFillColor({119u, 158u, 203u});
     m_gauges[GaugeID::CONVICTION].setFillColor({225u, 105u, 97u});
-    m_gauges[GaugeID::CONVICTION].addIndicator(60.f, {194u, 59u, 34u});
+    m_gauges[GaugeID::CONVICTION].addIndicator(m_convictionIndicator, {194u, 59u, 34u});
 
     // Labels
     m_labels[GaugeID::APPRECIATION].setText(_("Appreciation"));

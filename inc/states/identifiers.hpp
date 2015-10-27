@@ -16,5 +16,6 @@ enum class StateID : uint8
     MENU_CREATEVILLAIN,
     GAME_DCB,
     GAME_DUNGEON_DESIGN,
-    GAME_PAUSE
+    GAME_PAUSE,
+    GAME_OVER,
 };

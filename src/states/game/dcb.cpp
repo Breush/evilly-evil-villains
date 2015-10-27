@@ -114,7 +114,11 @@ void GameDCB::onNameValidate()
 
 void GameDCB::confirmDungeonCreation()
 {
-    // TODO State GAMEOVER if conviction gauge has not enough
+    // State GAMEOVER if conviction gauge has not enough
+    if (!m_gaugesManager.enoughConviction()) {
+        stackClear(StateID::GAME_OVER);
+        return;
+    }
 
     // Affects different creation
     auto appreciation = m_gaugesManager.gaugeValue(dcb::GaugesManager::GaugeID::APPRECIATION);
@@ -125,7 +129,7 @@ void GameDCB::confirmDungeonCreation()
     const auto& name = m_nameEntry.text();
     uint loanValue = static_cast<uint>(1024.f + 2.f * appreciation * appreciation);
     //float interestRate = 1.05f + 1.f / static_cast<float>(1u + confusion);
-    uint floorsCount = static_cast<uint>(17.f * (trust + conviction) / 200.f);
+    uint floorsCount = static_cast<uint>(1.f + 16.f * (trust + conviction) / 200.f);
     uint roomsByFloor = static_cast<uint>(2.f + 6.f * (trust * conviction) / 10000.f);
 
     // Create dungeon with these values
