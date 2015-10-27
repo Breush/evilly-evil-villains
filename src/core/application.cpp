@@ -80,9 +80,6 @@ Application::Application()
     s_context.windowInfo.title = "Evilly Evil Villains";
     refreshFromConfig();
 
-    // Initialize language
-    internationalization::init(toString(s_context.display.global.language));
-
     // Load all on start (except textures)
     preloadTextures();
     loadShaders();
@@ -300,6 +297,9 @@ void Application::render()
 
 void Application::refreshFromConfig()
 {
+    // Language
+    i18n::init(toString(s_context.display.global.language));
+
     // Graphics
     s_context.windowInfo.style = sf::Style::Default;
     if (s_context.display.window.fullscreen) s_context.windowInfo.style |= sf::Style::Fullscreen;

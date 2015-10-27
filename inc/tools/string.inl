@@ -114,7 +114,7 @@ inline std::vector<std::wstring> split(const std::wstring& str, const wchar_t de
     return items;
 }
 
-template<typename String_t>
+template<class String_t>
 inline String_t join(const std::vector<String_t>& v, const String_t& glue)
 {
     if (v.empty()) return String_t();
@@ -126,12 +126,23 @@ inline String_t join(const std::vector<String_t>& v, const String_t& glue)
     return s;
 }
 
-template<typename String_t>
+template<class String_t>
 inline String_t prefix(const String_t& s1, const String_t& s2)
 {
     auto len = std::min(s1.size(), s2.size());
     auto its = std::mismatch(std::begin(s1), std::begin(s1) + len, std::begin(s2));
     return String_t(std::begin(s1), its.first);
+}
+
+template<class String_t>
+inline String_t replace(String_t str, const String_t& s1, const String_t& s2)
+{
+    auto startPos = str.find(s1, 0u);
+    while (startPos != std::string::npos) {
+        str.replace(startPos, s1.length(), s2);
+        startPos = str.find(s1, startPos + s2.length());
+    }
+    return str;
 }
 
 //-----------------------------//

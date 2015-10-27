@@ -4,6 +4,7 @@
 #include "context/villains.hpp"
 #include "tools/tools.hpp"
 #include "tools/string.hpp"
+#include "tools/filesystem.hpp"
 
 using namespace states;
 
@@ -40,7 +41,6 @@ MenuConfig::MenuConfig(StateStack& stack)
 
     // Title
     nuiRoot.attachChild(m_title);
-    m_title.setText(_("Configuration"));
     m_title.setPrestyle(scene::Label::Prestyle::MENU_TITLE);
     m_title.setRelativePosition({0.5f, 0.05f});
     m_title.centerOrigin();
@@ -60,11 +60,6 @@ MenuConfig::MenuConfig(StateStack& stack)
         area.title.setPrestyle(scene::Label::Prestyle::NUI_TITLE);
     }
 
-    // Titles
-    m_areas[AreaID::GENERAL].title.setText(_("General"));
-    m_areas[AreaID::GRAPHICS].title.setText(_("Graphics"));
-    m_areas[AreaID::AUDIO].title.setText(_("Audio"));
-
     // Stackers
     m_areas[AreaID::GENERAL].stacker.setRelativeOrigin({0.5f, 0.f});
     m_areas[AreaID::GRAPHICS].stacker.setRelativeOrigin({0.5f, 0.f});
@@ -74,8 +69,14 @@ MenuConfig::MenuConfig(StateStack& stack)
     m_areas[AreaID::GRAPHICS].stacker.setRelativePosition({0.75f, 0.15f});
     m_areas[AreaID::AUDIO].stacker.setRelativePosition({0.75f, 0.85f});
 
+    // General
+    m_areas[AreaID::GENERAL].form.add(m_languageBox);
+    for (auto& fileInfo : listFiles("res/po"))
+        if (fileInfo.isDirectory)
+            m_languageBox.add(toWString(replace(fileInfo.name, std::string("_"), std::string("\\_"))));
+
     // Graphics
-    m_areas[AreaID::GRAPHICS].form.add(_("Resolution"), m_resolutionBox);
+    m_areas[AreaID::GRAPHICS].form.add(m_resolutionBox);
     auto refBitsPerPixel = sf::VideoMode::getFullscreenModes().at(0u).bitsPerPixel;
     for (const auto& videoMode : sf::VideoMode::getFullscreenModes()) {
         if (refBitsPerPixel != videoMode.bitsPerPixel) break;
@@ -84,27 +85,27 @@ MenuConfig::MenuConfig(StateStack& stack)
         m_resolutionBox.add(sResolution);
     }
 
-    m_areas[AreaID::GRAPHICS].form.add(_("Fullscreen"), m_fullscreenBox);
-    m_fullscreenBox.add({_("ON"), _("OFF")});
+    m_areas[AreaID::GRAPHICS].form.add(m_fullscreenBox);
     m_fullscreenBox.showArrows(false);
+    m_fullscreenBox.add({L"", L""});
 
-    m_areas[AreaID::GRAPHICS].form.add(_("V-sync"), m_vsyncBox);
-    m_vsyncBox.add({_("ON"), _("OFF")});
+    m_areas[AreaID::GRAPHICS].form.add(m_vsyncBox);
     m_vsyncBox.showArrows(false);
+    m_vsyncBox.add({L"", L""});
 
-    m_areas[AreaID::GRAPHICS].form.add(_("Antialiasing level"), m_antialiasingSelector);
+    m_areas[AreaID::GRAPHICS].form.add(m_antialiasingSelector);
     m_antialiasingSelector.setRange(0u, 4u);
 
     // Audio
-    m_areas[AreaID::AUDIO].form.add(_("Global volume"), m_globalVolumeSelector);
+    m_areas[AreaID::AUDIO].form.add(m_globalVolumeSelector);
     m_globalVolumeSelector.setVisibleSteps(4u);
     m_globalVolumeSelector.setRange(0u, 100u);
 
-    m_areas[AreaID::AUDIO].form.add(_("Music volume"), m_musicVolumeSelector);
+    m_areas[AreaID::AUDIO].form.add(m_musicVolumeSelector);
     m_musicVolumeSelector.setVisibleSteps(4u);
     m_musicVolumeSelector.setRange(0u, 100u);
 
-    m_areas[AreaID::AUDIO].form.add(_("Sounds volume"), m_soundVolumeSelector);
+    m_areas[AreaID::AUDIO].form.add(m_soundVolumeSelector);
     m_soundVolumeSelector.setVisibleSteps(4u);
     m_soundVolumeSelector.setRange(0u, 100u);
 
@@ -117,12 +118,11 @@ MenuConfig::MenuConfig(StateStack& stack)
     for (auto& button : m_buttons)
         m_buttonsStacker.stackBack(button, nui::Align::OPPOSITE);
 
-    m_buttons[0u].setAction(_("Back"), [this] { stackPop(); });
-    m_buttons[1u].setAction(_("Apply changes"), [this] { applyChanges(); });
+    m_buttons[0u].setCallback([this] { stackPop(); });
+    m_buttons[1u].setCallback([this] { applyChanges(); });
 
     // TODO Config content:
     // - General/UI:
-    //      - Language
     //      - Scrolling factor
     //      - Zoom speed
     //      - UI Size
@@ -166,6 +166,33 @@ void MenuConfig::refreshWindow(const config::WindowInfo& cWindow)
 {
     const auto& resolution = cWindow.resolution;
 
+    // Translated strings
+    m_title.setText(_("Configuration"));
+
+    m_areas[AreaID::GENERAL].title.setText(_("General"));
+    m_areas[AreaID::GRAPHICS].title.setText(_("Graphics"));
+    m_areas[AreaID::AUDIO].title.setText(_("Audio"));
+
+    m_areas[AreaID::GENERAL].form.setText(0u, _("Language"));
+
+    m_areas[AreaID::GRAPHICS].form.setText(0u, _("Resolution"));
+    m_areas[AreaID::GRAPHICS].form.setText(1u, _("Fullscreen"));
+    m_areas[AreaID::GRAPHICS].form.setText(2u, _("V-sync"));
+    m_areas[AreaID::GRAPHICS].form.setText(3u, _("Antialiasing level"));
+
+    m_areas[AreaID::AUDIO].form.setText(0u, _("Global volume"));
+    m_areas[AreaID::AUDIO].form.setText(1u, _("Music volume"));
+    m_areas[AreaID::AUDIO].form.setText(2u, _("Sounds volume"));
+
+    m_fullscreenBox.setChoiceText(0u, _("ON"));
+    m_fullscreenBox.setChoiceText(1u, _("OFF"));
+
+    m_vsyncBox.setChoiceText(0u, _("ON"));
+    m_vsyncBox.setChoiceText(1u, _("OFF"));
+
+    m_buttons[0u].setText(_("Back"));
+    m_buttons[1u].setText(_("Apply changes"));
+
     // Background
     m_background.setSize(resolution);
 
@@ -200,6 +227,9 @@ void MenuConfig::refreshFormsFromConfig()
     auto& display = Application::context().display;
     auto& audio = Application::context().sound;
 
+    // General
+    m_languageBox.selectChoice(replace(display.global.language, std::wstring(L"_"), std::wstring(L"\\_")));
+
     // Graphics
     auto resolution = sf::v2u(display.window.resolution);
     std::wstring sResolution = toWString(resolution.x) + L'x' + toWString(resolution.y);
@@ -219,6 +249,9 @@ void MenuConfig::applyChanges()
 {
     auto& display = Application::context().display;
     auto& audio = Application::context().sound;
+
+    // General
+    display.global.language = replace(m_languageBox.selectedChoiceText(), std::wstring(L"\\_"), std::wstring(L"_"));
 
     // Graphics
     const auto& selectedVideoMode = sf::VideoMode::getFullscreenModes().at(m_resolutionBox.selectedChoice());

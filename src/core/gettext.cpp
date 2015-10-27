@@ -21,7 +21,7 @@ static char* s_language = nullptr;
 //---------------------------//
 //----- Internalization -----//
 
-void internationalization::init(const std::string& language)
+void i18n::init(const std::string& language)
 {
     mdebug_core_1("Setting language to " << language);
 
@@ -29,8 +29,8 @@ void internationalization::init(const std::string& language)
     close();
 
     // Force a specific language to the environment
-    std::string sLang("LANG=" + language);
-    std::string sLanguage("LANGUAGE=" + language);
+    auto sLang = "LANG=" + language;
+    auto sLanguage = "LANGUAGE=" + language;
 
     s_lang = new char[sLang.size() + 1u];
     s_language = new char[sLanguage.size() + 1u];
@@ -57,7 +57,7 @@ void internationalization::init(const std::string& language)
     textdomain("eev");
 }
 
-void internationalization::close()
+void i18n::close()
 {
     // Free memory
     if (s_lang != nullptr) delete[] s_lang;

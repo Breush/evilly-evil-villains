@@ -5,7 +5,7 @@
 #include <libintl.h>
 #include <cstdlib>
 
-namespace internationalization
+namespace i18n
 {
     //! To be called when changing language.
     void init(const std::string& language);

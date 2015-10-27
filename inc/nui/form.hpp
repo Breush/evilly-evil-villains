@@ -24,12 +24,18 @@ namespace nui
 
         std::string _name() const final { return "nui::Form"; }
 
-        //-----------------//
-        //! @name Children
+        //----------------//
+        //! @name Control
         //! @{
 
         //! Add a new line to the form.
         void add(std::wstring text, scene::Entity& child);
+
+        //! Add a new line to the form, with empty label.
+        void add(scene::Entity& child);
+
+        //! Set the label of a line.
+        void setText(uint line, std::wstring text);
 
         //! @}
 

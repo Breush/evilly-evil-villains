@@ -19,8 +19,8 @@ void Form::onChildSizeChanges(scene::Entity& child)
     setSize(m_table.size());
 }
 
-//--------------------//
-//----- Children -----//
+//-------------------//
+//----- Control -----//
 
 void Form::add(std::wstring text, scene::Entity& child)
 {
@@ -33,4 +33,14 @@ void Form::add(std::wstring text, scene::Entity& child)
     m_table.setDimensions(m_labels.size(), 2u);
     m_table.setChild(line, 0u, *m_labels[line], Align::OPPOSITE);
     m_table.setChild(line, 1u, child);
+}
+
+void Form::add(scene::Entity& child)
+{
+    add(L"", child);
+}
+
+void Form::setText(uint line, std::wstring text)
+{
+    m_labels[line]->setText(text);
 }

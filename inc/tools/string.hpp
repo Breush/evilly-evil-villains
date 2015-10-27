@@ -19,13 +19,16 @@ inline std::wstring& toUppercase(std::wstring& str);
 
 // Manipulations
 inline std::vector<std::wstring> split(const std::wstring& str, const wchar_t delim = L' ');
-template<typename String_t> inline String_t join(const std::vector<String_t>& v, const String_t& glue = L" ");
-template<typename String_t> inline String_t prefix(const String_t& s1, const String_t& s2);
+template<class  String_t> inline String_t join(const std::vector<String_t>& v, const String_t& glue = L" ");
+template<class  String_t> inline String_t prefix(const String_t& s1, const String_t& s2);
 
 // Replace all non-alphanum character by an underscore
 // and make the string to lowercase if lower is set to true
 inline std::string& filterSpecial(std::string& str, bool lower = true);
 inline std::wstring& filterSpecial(std::wstring& str, bool lower = true);
+
+// Replace all occurences of a substring with another one
+template<class String_t> inline String_t replace(String_t str, const String_t& s1, const String_t& s2);
 
 // Return the local bounds of a element (i.e. a text)
 template <class Bounded_t> inline sf::Vector2f boundsSize(const Bounded_t& bounded);

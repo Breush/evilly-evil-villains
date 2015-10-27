@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
         steam::SteamAPI_Shutdown();
 
     // Free internationalization
-    internationalization::close();
+    i18n::close();
 
     return returnStatus;
 }

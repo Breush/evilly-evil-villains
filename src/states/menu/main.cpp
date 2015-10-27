@@ -48,21 +48,21 @@ MenuMain::MenuMain(StateStack& stack)
     m_versionLabel.setRelativeOrigin({1.f, 1.f});
 
     // Functors
-    auto singlePlayer = [this]() { stackPush(StateID::MENU_SELECTWORLD); };
-    auto multiPlayer = nullptr;
-    auto villains = [this]() { stackPush(StateID::MENU_MANAGEVILLAINS); };
+    auto singlePlayer  = [this]() { stackPush(StateID::MENU_SELECTWORLD); };
+    auto multiPlayer   = nullptr;
+    auto villains      = [this]() { stackPush(StateID::MENU_MANAGEVILLAINS); };
     auto configuration = [this]() { stackPush(StateID::MENU_CONFIG); };
-    auto quitGame = [this]() { stackClear(); };
+    auto quitGame      = [this]() { stackClear(); };
 
     // Menu choice box (be sure not to mess with order)
     nuiRoot.attachChild(m_choiceBox);
     m_choiceBox.centerOrigin();
     m_choiceBox.setRelativePosition({0.5f, 0.9f});
-    m_choiceBox.add(_("Victim and alone"), singlePlayer);
-    m_choiceBox.add(_("I sometimes have friends"), multiPlayer);
-    m_choiceBox.add(_("Looking at who I am"), villains);
-    m_choiceBox.add(_("Yet I want to choose"), configuration);
-    m_choiceBox.add(_("Someone who runs away"), quitGame);
+    m_choiceBox.add(L"", singlePlayer);
+    m_choiceBox.add(L"", multiPlayer);
+    m_choiceBox.add(L"", villains);
+    m_choiceBox.add(L"", configuration);
+    m_choiceBox.add(L"", quitGame);
 
     // Menu react image
     nuiRoot.attachChild(m_reactImage);
@@ -144,6 +144,13 @@ void MenuMain::refreshWindow(const config::WindowInfo& cWindow)
 {
     const auto& resolution = cWindow.resolution;
     float maxSide = std::max(resolution.x, resolution.y);
+
+    // Translated strings
+    m_choiceBox.setChoiceText(0u, _("Victim and alone"));
+    m_choiceBox.setChoiceText(1u, _("I sometimes have friends"));
+    m_choiceBox.setChoiceText(2u, _("Looking at who I am"));
+    m_choiceBox.setChoiceText(3u, _("Yet I want to choose"));
+    m_choiceBox.setChoiceText(4u, _("Someone who runs away"));
 
     // Fading
     m_fadingRectangle.setSize(resolution);

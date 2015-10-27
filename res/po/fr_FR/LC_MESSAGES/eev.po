@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: EEV\n"
-"Report-Msgid-Bugs-To: sherlock.breust@gmail.com\n"
-"POT-Creation-Date: 2015-07-13 10:19+0200\n"
-"PO-Revision-Date: 2015-07-13 10:21+0100\n"
+"Report-Msgid-Bugs-To: alexis.breust@jumpingtoasts.com\n"
+"POT-Creation-Date: 2015-10-27 09:33+0100\n"
+"PO-Revision-Date: 2015-10-27 09:38+0100\n"
 "Last-Translator: Alexis Breust <alexis.breust@gmail.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -17,6 +17,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.4\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+
+msgid "Monsters"
+msgstr "Monstres"
+
+msgid "Traps"
+msgstr "Pièges"
+
+msgid "Facilities"
+msgstr "Aménagements"
+
+msgid "Tools"
+msgstr "Outils"
 
 msgid "Pick-pock"
 msgstr "Pick-pock"
@@ -30,14 +42,17 @@ msgstr "Entrée"
 msgid "Ladder"
 msgstr "Échelle"
 
-msgid "Monsters"
-msgstr "Monstres"
+msgid "Rooms builder"
+msgstr "Constructeur de Salles"
 
-msgid "Traps"
-msgstr "Pièges"
+msgid "Rooms destroyer"
+msgstr "Destructeur de Salles"
 
-msgid "Facilities"
-msgstr "Outils"
+msgid "Traps remover"
+msgstr "Enleveur de Pièges"
+
+msgid "Facilities remover"
+msgstr "Enleveur d'Aménagements"
 
 msgid "Remove"
 msgstr "Retirer"
@@ -48,8 +63,8 @@ msgstr "Ajouter"
 msgid "Room"
 msgstr "Salle"
 
-msgid "Construct room"
-msgstr "Construire salle"
+msgid "Build room"
+msgstr "Construire la salle"
 
 msgid "Destroy room"
 msgstr "Détruire salle"
@@ -60,6 +75,21 @@ msgstr "échelle"
 msgid "entrance"
 msgstr "entrée"
 
+msgid "Edit treasure dosh"
+msgstr "Modifier Trésor"
+
+msgid "Appreciation"
+msgstr "Appréciation"
+
+msgid "Confusion"
+msgstr "Confusion"
+
+msgid "Trust"
+msgstr "Confiance"
+
+msgid "Conviction"
+msgstr "Conviction"
+
 msgid "Do you really want to quit?"
 msgstr "Vous souhaitez vraiment partir ?"
 
@@ -69,8 +99,15 @@ msgstr "Non, désolé, c'est une erreur."
 msgid "Yes, I will lose everything not saved."
 msgstr "Oui, je vais perdre tout ce qui n'est pas sauvegardé."
 
-msgid "Create dungeon"
-msgstr "Créer le Donjon"
+msgid ""
+"Welcome to the Dungeon Community Bank (DCB). I heard that you wanted to open "
+"your own dungeon, this is the kind of operation we like to support here.\n"
+"\n"
+"Let me just ask you: *How do you want to name your tower of death?*"
+msgstr ""
+
+msgid "OK"
+msgstr "D'accord"
 
 msgid "Game paused"
 msgstr "Pause"
@@ -137,9 +174,6 @@ msgstr ""
 "Un Méchant avec ce nom existe déjà,\n"
 "et il est certainement plus diabolique que vous."
 
-msgid "OK"
-msgstr "D'accord"
-
 msgid "Create a new world"
 msgstr "Créer un nouveau Monde"
 
@@ -151,6 +185,51 @@ msgstr "(Gérer)"
 
 msgid "Create and start playing"
 msgstr "Créer et commencer à jouer"
+
+msgid "Configuration"
+msgstr "Configuration"
+
+msgid "General"
+msgstr "Générale"
+
+msgid "Graphics"
+msgstr "Graphique"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "Language"
+msgstr "Langue"
+
+msgid "Resolution"
+msgstr "Résolution"
+
+msgid "Fullscreen"
+msgstr "Plein écran"
+
+msgid "ON"
+msgstr "ON"
+
+msgid "OFF"
+msgstr "OFF"
+
+msgid "V-sync"
+msgstr "V-sync"
+
+msgid "Antialiasing level"
+msgstr "Niveau anti-crénelage"
+
+msgid "Music volume"
+msgstr "Volume musique"
+
+msgid "Sounds volume"
+msgstr "Volume sons"
+
+msgid "Global volume"
+msgstr "Volume global"
+
+msgid "Apply changes"
+msgstr "Appliquer"
 
 msgid "Victim and alone"
 msgstr "Victime solitaire"
@@ -176,8 +255,17 @@ msgstr "Donjon principal"
 msgid "Last played"
 msgstr "Dernière fois joué"
 
+msgid "%Y-%m-%d"
+msgstr "%d/%m/%Y"
+
 msgid "Play"
 msgstr "Jouer"
 
 msgid "Create new world"
 msgstr "Créer un nouveau monde"
+
+#~ msgid "Construct room"
+#~ msgstr "Construire salle"
+
+#~ msgid "Create dungeon"
+#~ msgstr "Créer le Donjon"

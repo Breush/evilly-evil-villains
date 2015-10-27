@@ -88,6 +88,9 @@ namespace states
         nui::HStacker m_buttonsStacker;             //!< Stacker for buttons.
         std::array<nui::Button, 2u> m_buttons;      //!< Buttons.
 
+        // General
+        nui::ChoiceBox m_languageBox;               //!< Select the language.
+
         // Graphics
         nui::ChoiceBox m_resolutionBox;             //!< Screen resolutions.
         nui::ChoiceBox m_fullscreenBox;             //!< Fullscreen switch.
