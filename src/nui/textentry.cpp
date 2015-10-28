@@ -143,6 +143,7 @@ bool TextEntry::handleKeyboardEvent(const sf::Event& event)
     // Edit the text entry
     else if (event.type == sf::Event::TextEntered) {
         returnif (event.text.unicode == 1) false;           // Error
+        returnif (event.text.unicode == 27) false;          // Escape
         if (event.text.unicode == 13) {                     // Return
             if (m_onValidateCallback != nullptr)
                 m_onValidateCallback();

@@ -225,6 +225,7 @@ void Application::processInput()
         }
 
         m_stateStack.handleEvent(event);
+        m_cursor.handleEvent(event);
     }
 }
 

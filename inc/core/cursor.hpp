@@ -5,6 +5,9 @@
 #include <SFML/Graphics/View.hpp>
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/System/Time.hpp>
+#include <SFML/Window/Event.hpp>
+
+#include <string>
 
 // Forward declarations
 
@@ -29,14 +32,26 @@ public:
     //! @name Routine
     //! @{
 
+    //! Basic drawing to the main window.
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
+
     //! Used to update sprite position to the mouse one.
     void update(const sf::Time& dt);
 
     //! Reset the views to current screen status.
     void refreshWindow(const config::WindowInfo& cWindow);
 
-    //! Basic drawing to the main window.
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
+    //! Handle event.
+    void handleEvent(const sf::Event& event);
+
+    //! @}
+
+    //----------------//
+    //! @name Control
+    //! @{
+
+    //! Override for the texture.
+    void setMode(const std::string& mode);
 
     //! @}
 
