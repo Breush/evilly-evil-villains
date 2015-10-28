@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<monster id="creepim">
+    <data name="baseCost" dosh="150" soul="1" />
+    <data name="monthlyCost" dosh="25" />
+</monster>
+

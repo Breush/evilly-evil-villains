@@ -22,15 +22,6 @@ namespace monsters
         else throw std::runtime_error("Unknown ElementData type for Monster.");
     }
 
-    //! Returns the cost for creating a monster.
-    inline uint onCreateCost(const std::wstring& type)
-    {
-        if (type == L"creepim") return 550u;
-        else throw std::logic_error("Some monster has not been registered for onCreateDosh().");
-
-        return 0u;
-    }
-
     //! Returns the gain for destroying a monster.
     inline uint onDestroyGain(const ElementData&)
     {

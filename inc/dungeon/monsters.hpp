@@ -2,6 +2,7 @@
 
 #include "scene/entity.hpp"
 #include "scene/grabbable.hpp"
+#include "scene/wrappers/richlabel.hpp"
 #include "dungeon/elementdata.hpp"
 #include "context/event.hpp"
 #include "ai/dumbpuppet.hpp"
@@ -13,6 +14,7 @@ namespace dungeon
 {
     // Forward declarations
 
+    class Data;
     class Inter;
     class Graph;
 
@@ -107,7 +109,7 @@ namespace dungeon
     public:
 
         //! Constructor, affecting texture and look.
-        MonsterCage(std::wstring monsterID);
+        MonsterCage(std::wstring monsterID, const Data& data);
 
         //! Default destructor.
         ~MonsterCage() = default;
@@ -143,11 +145,13 @@ namespace dungeon
 
     private:
 
+        const Data& m_data;         //!< Reference to the whole data.
         std::wstring m_monsterID;   //!< The monster to be moved into the dungeon inter.
 
         // Decorum
         sf::RectangleShape m_background;    //!< Background.
         ai::DumbPuppet m_monsterPuppet;     //!< Puppet that moves from left to right.
+        scene::RichLabel m_baseCostLabel;   //!< Text for base cost.
     };
 
     //! A monster temporary object.

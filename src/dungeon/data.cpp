@@ -97,7 +97,7 @@ void Data::loadDungeon(const std::wstring& file)
     wdebug_dungeon_1(L"Dungeon is " << m_name << L" of size " << m_floorsCount << L"x" << m_roomsByFloor << L".");
 
     // Monsters
-    for (auto& monsterNode : dungeon.child(L"monsters").children(L"monster")) {
+    for (const auto& monsterNode : dungeon.child(L"monsters").children(L"monster")) {
         MonsterInfo monsterInfo;
         monsterInfo.data.loadXML(monsterNode);
         monsterInfo.coords.x = monsterNode.attribute(L"floor").as_uint();
@@ -107,7 +107,7 @@ void Data::loadDungeon(const std::wstring& file)
 
     // Floors
     m_floors.reserve(m_floorsCount);
-    for (auto& floor : dungeon.children(L"floor")) {
+    for (const auto& floor : dungeon.children(L"floor")) {
         auto floorPos = floor.attribute(L"pos").as_uint();
 
         m_floors.push_back({floorPos});
@@ -115,7 +115,7 @@ void Data::loadDungeon(const std::wstring& file)
 
         // Rooms
         m_floors[floorPos].rooms.reserve(m_roomsByFloor);
-        for (auto& roomNode : floor.children(L"room")) {
+        for (const auto& roomNode : floor.children(L"room")) {
             Room room;
             room.coords.x = floorPos;
             room.coords.y = roomNode.attribute(L"pos").as_uint();
@@ -432,7 +432,8 @@ void Data::addMonster(const sf::Vector2u& coords, const std::wstring& monsterID)
     returnif (roomInfo.state != RoomState::CONSTRUCTED);
 
     // Continue if and only if wallet authorize us
-    returnif (!m_villain->doshWallet.sub(monsters::onCreateCost(monsterID)));
+    // TODO Have a dungeon::Wallet that can handle full price (dosh/soul/fame)
+    returnif (!m_villain->doshWallet.sub(m_monstersDB.get(monsterID).baseCost.dosh));
 
     m_monstersInfo.emplace_back();
     auto& monsterInfo = m_monstersInfo.back();

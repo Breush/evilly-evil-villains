@@ -4,6 +4,7 @@
 #include "tools/int.hpp"
 #include "dungeon/event.hpp"
 #include "dungeon/elementdata.hpp"
+#include "dungeon/monstersdb.hpp"
 #include "context/wallet.hpp"
 
 #include <SFML/System/Vector2.hpp>
@@ -214,14 +215,17 @@ namespace dungeon
         //! @name Getters
         //! @{
 
-        //! Access the monsters list.
-        std::vector<MonsterInfo>& monstersInfo() { return m_monstersInfo; }
+        //! Access the list of all monsters inside.
+        inline std::vector<MonsterInfo>& monstersInfo() { return m_monstersInfo; }
+
+        //! Acces the monsters data base.
+        inline const MonstersDB& monstersDB() const { return m_monstersDB; }
 
         //! Access the associated villain.
-        context::Villain& villain() { return *m_villain; }
+        inline context::Villain& villain() { return *m_villain; }
 
         //! Access the associated graph.
-        Graph& graph() { return *m_graph; }
+        inline Graph& graph() { return *m_graph; }
 
         //! @}
 
@@ -316,6 +320,9 @@ namespace dungeon
 
         context::Villain* m_villain = nullptr;  //!< The villain reference.
         context::Wallet m_fameWallet;           //!< The resource fame value.
+
+        // Databases
+        MonstersDB m_monstersDB;    //!< All monsters infos.
     };
 }
 

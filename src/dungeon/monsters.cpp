@@ -2,6 +2,7 @@
 
 #include "core/application.hpp"
 #include "dungeon/inter.hpp"
+#include "dungeon/data.hpp"
 #include "tools/vector.hpp"
 
 using namespace dungeon;
@@ -17,18 +18,25 @@ bool Monster::isHeroNearby(float relRange) const
 //-----------------------//
 //----- MonsterCage -----//
 
-MonsterCage::MonsterCage(std::wstring monsterID)
-    : m_monsterID(std::move(monsterID))
+MonsterCage::MonsterCage(std::wstring monsterID, const Data& data)
+    : m_data(data)
+    , m_monsterID(std::move(monsterID))
 {
     // Background
     addPart(&m_background);
     m_background.setTexture(&Application::context().textures.get("dungeon/sidebar/tab/monsters/cage"));
 
-    // Puppets
+    // Reserve
     // TODO Have X puppets because there is X monsters in the reserve
     attachChild(m_monsterPuppet);
     m_monsterPuppet.setSource(toString(L"dungeon/monsters/" + m_monsterID));
     m_monsterPuppet.lerpable()->setPositionSpeed({100.f, 100.f});
+
+    // Cost box
+    attachChild(m_baseCostLabel);
+    const auto& monsterData = m_data.monstersDB().get(m_monsterID);
+    m_baseCostLabel.setPrestyle(scene::RichLabel::Prestyle::NUI);
+    m_baseCostLabel.setText(toWString(monsterData.baseCost.dosh));
 }
 
 void MonsterCage::onSizeChanges()

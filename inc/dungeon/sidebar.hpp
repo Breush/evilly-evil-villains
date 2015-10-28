@@ -23,6 +23,8 @@ namespace scene
 
 namespace dungeon
 {
+    class Data;
+
     //! The sidebar shown in Dungeon Design state.
 
     class Sidebar final : public scene::Entity
@@ -32,7 +34,7 @@ namespace dungeon
     public:
 
         //! Constructor.
-        Sidebar(scene::Scene& inScene);
+        Sidebar(scene::Scene& inScene, const Data& data);
 
         //! Destructor.
         ~Sidebar();
@@ -107,6 +109,7 @@ namespace dungeon
 
     private:
 
+        const Data& m_data;     //!< Reference to the whole data.
         scene::Scene& m_scene;  //!< The main scene, reference here for minimap interaction.
 
         // Stacker
