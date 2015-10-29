@@ -42,11 +42,11 @@ namespace scene
 
     public:
 
-        //! Deleted default constructor.
-        Layer() = delete;
+        //! Default constructor.
+        Layer() = default;
 
-        //! Constructor with original graph.
-        Layer(Graph* graph);
+        //! Initialization.
+        void init(Graph* graph);
 
         //----------------//
         //! @name Routine

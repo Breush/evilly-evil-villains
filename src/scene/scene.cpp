@@ -71,7 +71,8 @@ void Scene::refreshNUI(const config::NUIGuides& cNUI)
 Layer& Scene::addLayer(const std::string& key, float depth)
 {
     // Create a layer and set default parameters
-    auto layer = std::make_shared<Layer>(m_graph);
+    auto layer = std::make_shared<Layer>();
+    layer->init(m_graph);
 
     layer->setManipulable(true);
     layer->setSize(m_size);
@@ -162,6 +163,7 @@ void Scene::moveGrabbing(const sf::Vector2i& mousePos, const sf::Time& dt)
 
 void Scene::moveView(const sf::Vector2f& offset)
 {
+    // This coefficient is an experimental value.
     m_moveVelocity += 0.5f * offset;
 }
 

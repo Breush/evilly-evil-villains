@@ -15,7 +15,7 @@ LayerRoot::LayerRoot()
     setTransparent(true);
 }
 
-Layer::Layer(Graph* graph)
+void Layer::init(Graph* graph)
 {
     m_root.setGraph(graph);
 }

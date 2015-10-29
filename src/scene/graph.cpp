@@ -14,7 +14,6 @@ using namespace scene;
 
 Graph::Graph()
     : m_scene(this)
-    , m_nuiLayer(this)
 {
     // Focusing
     if (sf::Shader::isAvailable())
@@ -23,6 +22,7 @@ Graph::Graph()
     m_focusShape.setFillColor({255, 255, 255, 100});
 
     // NUI layer
+    m_nuiLayer.init(this);
     m_nuiLayer.setManipulable(false);
 }
 
