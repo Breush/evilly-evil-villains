@@ -582,6 +582,8 @@ void Inter::refreshMonsters()
 
     for (auto& monsterInfo : m_data->monstersInfo()) {
         auto monster = monsters::make(monsterInfo.coords, monsterInfo.data, *this);
+        if (monster == nullptr) continue;
+
         monster->setEmitter(m_data);
         monster->useGraph(m_data->graph());
         m_monsters.emplace_back(std::move(monster));

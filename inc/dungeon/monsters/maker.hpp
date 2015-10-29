@@ -15,11 +15,13 @@ namespace dungeon
 namespace monsters
 {
     //! Create and initialize the corresponding Monster from a ElementData.
+    // FIXME This maker function should disappear once everything is externalized
     inline std::unique_ptr<Monster> make(sf::Vector2u& coords, ElementData& eData, dungeon::Inter& inter)
     {
         const auto& type = eData.type();
         if (type == L"creepim") return std::make_unique<Creepim>(coords, eData, inter);
-        else throw std::runtime_error("Unknown ElementData type for Monster.");
+        else mdebug_generic("ERROR: ", "Unknown ElementData type for Monster.");
+        return nullptr;
     }
 
     //! Returns the gain for destroying a monster.

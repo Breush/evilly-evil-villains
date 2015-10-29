@@ -102,14 +102,14 @@ namespace dungeon
      *  The player gabbs and moves the monster into the dungeon.
      */
 
-    class MonsterCage final : public scene::Entity, public scene::GrabbableSpawner
+    class MonsterCage final : public scene::Entity, public scene::GrabbableSpawner, public context::EventReceiver
     {
         using baseClass = scene::Entity;
 
     public:
 
         //! Constructor, affecting texture and look.
-        MonsterCage(std::wstring monsterID, const Data& data);
+        MonsterCage(std::wstring monsterID, Data& data);
 
         //! Default destructor.
         ~MonsterCage() = default;
@@ -123,6 +123,7 @@ namespace dungeon
         //! @{
 
         void onSizeChanges() final;
+        void refreshNUI(const config::NUIGuides& cNUI) override;
 
         //! @}
 
@@ -130,6 +131,7 @@ namespace dungeon
         //! @name Events
         //! @{
 
+        void receive(const context::Event& event) final;
         bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
 
         //! @}
@@ -143,9 +145,18 @@ namespace dungeon
 
         //! @}
 
+        //------------------------//
+        //! @name Spawn and react
+        //! @{
+
+        //! Refresh the cost labels colors given the current dosh held by the player.
+        void refreshCostLabelsColor();
+
+        //! @}
+
     private:
 
-        const Data& m_data;         //!< Reference to the whole data.
+        Data& m_data;               //!< Reference to the whole data.
         std::wstring m_monsterID;   //!< The monster to be moved into the dungeon inter.
 
         // Decorum

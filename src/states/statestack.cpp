@@ -65,6 +65,10 @@ bool StateStack::isStateVisible(StateID stateID) const
         if (state->id() == stateID)
             return true;
 
+    for (PendingChange change : m_pendingChanges)
+        if (change.action == Action::PUSH && change.stateID == stateID)
+            return true;
+
     return false;
 }
 

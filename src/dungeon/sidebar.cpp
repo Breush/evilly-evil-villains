@@ -6,12 +6,13 @@
 #include "dungeon/facilities.hpp"
 #include "dungeon/traps.hpp"
 #include "dungeon/tools.hpp"
+#include "dungeon/data.hpp"
 #include "scene/scene.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 
 using namespace dungeon;
 
-Sidebar::Sidebar(scene::Scene& inScene, const Data& data)
+Sidebar::Sidebar(scene::Scene& inScene, Data& data)
     : m_data(data)
     , m_scene(inScene)
 {
@@ -130,11 +131,18 @@ void Sidebar::refreshTabContents()
     monstersStacker.unstackAll();
     monstersCages.clear();
 
-    monstersCages.emplace_back(std::make_unique<MonsterCage>(L"creepim", m_data));
+    const auto& monstersList = m_data.monstersDB().get();
+    auto monstersCount = monstersList.size();
+    monstersCages.reserve(monstersCount);
 
-    for (auto& monsterCage : monstersCages) {
-        monsterCage->setSize({size().x - 2.f * m_borderThick, 80.f});
-        monstersStacker.stackBack(*monsterCage, nui::Align::CENTER);
+    for (const auto& monsterPair : monstersList) {
+        const auto& monsterID = monsterPair.first;
+
+        monstersCages.emplace_back(std::make_unique<MonsterCage>(monsterID, m_data));
+        auto& monsterCage = *monstersCages.back();
+
+        monsterCage.setSize({size().x - 2.f * m_borderThick, 80.f});
+        monstersStacker.stackBack(monsterCage, nui::Align::CENTER);
     }
 
     // Traps

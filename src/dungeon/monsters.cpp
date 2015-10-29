@@ -1,6 +1,7 @@
 #include "dungeon/monsters.hpp"
 
 #include "core/application.hpp"
+#include "context/villains.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/data.hpp"
 #include "tools/vector.hpp"
@@ -18,10 +19,13 @@ bool Monster::isHeroNearby(float relRange) const
 //-----------------------//
 //----- MonsterCage -----//
 
-MonsterCage::MonsterCage(std::wstring monsterID, const Data& data)
+MonsterCage::MonsterCage(std::wstring monsterID, Data& data)
     : m_data(data)
     , m_monsterID(std::move(monsterID))
 {
+    // Events
+    setEmitter(&data);
+
     // Background
     addPart(&m_background);
     m_background.setTexture(&Application::context().textures.get("dungeon/sidebar/tab/monsters/cage"));
@@ -37,6 +41,7 @@ MonsterCage::MonsterCage(std::wstring monsterID, const Data& data)
     const auto& monsterData = m_data.monstersDB().get(m_monsterID);
     m_baseCostLabel.setPrestyle(scene::RichLabel::Prestyle::NUI);
     m_baseCostLabel.setText(toWString(monsterData.baseCost.dosh));
+    refreshCostLabelsColor();
 }
 
 void MonsterCage::onSizeChanges()
@@ -55,6 +60,22 @@ void MonsterCage::onSizeChanges()
     m_monsterPuppet.setInitialLocalPosition({25.f, 0.62f * size().y});
     m_monsterPuppet.setHorizontalRange(25.f, size().x - 25.f);
     m_monsterPuppet.setLocalScale({scaleFactor, scaleFactor});
+}
+
+void MonsterCage::refreshNUI(const config::NUIGuides& cNUI)
+{
+    baseClass::refreshNUI(cNUI);
+
+    // We need to update the color as the label prestyle might override it
+    refreshCostLabelsColor();
+}
+
+void MonsterCage::receive(const context::Event& event)
+{
+    const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
+    returnif (devent.type != "dosh_changed");
+
+    refreshCostLabelsColor();
 }
 
 bool MonsterCage::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
@@ -78,6 +99,14 @@ void MonsterCage::grabbableButtonReleased(Entity* entity, const sf::Mouse::Butto
 std::unique_ptr<scene::Grabbable> MonsterCage::spawnGrabbable()
 {
     return std::make_unique<MonsterGrabbable>(*this, m_monsterID);
+}
+
+void MonsterCage::refreshCostLabelsColor()
+{
+    const auto& monsterData = m_data.monstersDB().get(m_monsterID);
+    const auto& heldDosh = m_data.villain().doshWallet.value();
+
+    m_baseCostLabel.setColor((heldDosh >= monsterData.baseCost.dosh)? sf::Color::White : sf::Color::Red);
 }
 
 //----------------------------//

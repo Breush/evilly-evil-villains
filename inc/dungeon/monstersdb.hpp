@@ -49,6 +49,9 @@ namespace dungeon
         //! Get the data associated to a monster.
         inline const MonsterData& get(const std::wstring& id) const { return m_monstersData.at(id); }
 
+        //! Get all the possible monsters.
+        inline const std::unordered_map<std::wstring, MonsterData>& get() const { return m_monstersData; }
+
         //! @}
 
     protected:

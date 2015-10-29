@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<monster id="sand_spirit">
+    <data name="baseCost" dosh="1050" soul="2" />
+    <data name="monthlyCost" dosh="90" />
+</monster>
+
