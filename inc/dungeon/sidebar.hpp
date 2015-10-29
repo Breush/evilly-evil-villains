@@ -8,7 +8,6 @@
 #include "dungeon/lock.hpp"
 #include "dungeon/summary.hpp"
 #include "dungeon/minimap.hpp"
-#include "dungeon/monsters.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
 #include "tools/param.hpp"
 
@@ -24,6 +23,7 @@ namespace scene
 namespace dungeon
 {
     class Data;
+    class MonsterCage;
 
     //! The sidebar shown in Dungeon Design state.
 

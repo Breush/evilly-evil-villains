@@ -3,6 +3,7 @@
 #include "core/application.hpp"
 #include "core/gettext.hpp"
 #include "dungeon/event.hpp"
+#include "dungeon/monstercage.hpp"
 #include "dungeon/facilities.hpp"
 #include "dungeon/traps.hpp"
 #include "dungeon/tools.hpp"
@@ -123,8 +124,6 @@ void Sidebar::refreshScrollAreasSize()
 
 void Sidebar::refreshTabContents()
 {
-    // TODO Use data info: what is accessible, at what price?
-
     // Monsters
     auto& monstersStacker = m_tabContents[TabsID::MONSTERS].stacker;
     auto& monstersCages = m_tabContents[TabsID::MONSTERS].monsterCage;
