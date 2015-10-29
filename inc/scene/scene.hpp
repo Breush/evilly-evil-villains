@@ -182,6 +182,10 @@ namespace scene
 
         sf::Vector2f m_relativeCenter;  //!< The relative center.
 
+        // Smooth moving
+        sf::Vector2f m_moveVelocity;    //!< The force to move the view.
+        const float m_moveFriction;     //!< Resistance of moving the view.
+
         // Viewports
         bool m_ownViewport = false; //!< Whether or not we use a provided viewport.
         sf::FloatRect m_viewport;   //!< The provided viewport if any.

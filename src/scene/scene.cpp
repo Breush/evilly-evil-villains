@@ -15,6 +15,7 @@ Scene::Scene(Graph* graph)
     , m_maxZoom(1.f)
     , m_graph(graph)
     , m_relativeCenter(0.5f, 0.5f)
+    , m_moveFriction(0.2f)
 {
 }
 
@@ -25,6 +26,18 @@ void Scene::update(const sf::Time& dt)
 {
     for (auto& layer : m_layers)
         layer->update(dt);
+
+    // Smooth moving
+    if (std::abs(m_moveVelocity.x) >= 0.01f || std::abs(m_moveVelocity.y) >= 0.01f) {
+        sf::Vector2f offset;
+
+        // Note: scrolling is game factor independent, so we don't use dt here (supposed to be 1.f)
+        offset += m_moveVelocity;
+        m_moveVelocity -= m_moveFriction * m_moveVelocity;
+
+        m_refView.move(offset);
+        adaptViewPosition();
+    }
 }
 
 void Scene::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -149,8 +162,7 @@ void Scene::moveGrabbing(const sf::Vector2i& mousePos, const sf::Time& dt)
 
 void Scene::moveView(const sf::Vector2f& offset)
 {
-    m_refView.move(offset);
-    adaptViewPosition();
+    m_moveVelocity += 0.5f * offset;
 }
 
 void Scene::setViewCenter(const sf::Vector2f& position)
