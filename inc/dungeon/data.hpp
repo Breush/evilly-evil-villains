@@ -7,7 +7,8 @@
 #include "dungeon/monstersdb.hpp"
 #include "context/wallet.hpp"
 
-#include <SFML/System/Vector2.hpp>
+#include <SFML/System/Time.hpp>
+
 #include <string>
 #include <vector>
 #include <array>
@@ -97,6 +98,15 @@ namespace dungeon
 
         //! Default destructor.
         ~Data() = default;
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        //! Routine call for time update.
+        void update(const sf::Time& dt);
+
+        //! @}
 
         //------------------------//
         //! @name File management
@@ -196,6 +206,8 @@ namespace dungeon
         inline void setFame(uint value) { m_fameWallet.set(value); }        //!< Set the fame to a specific value.
         inline bool addFame(uint value) { return m_fameWallet.add(value); } //! Add fame to current value.
         inline bool subFame(uint value) { return m_fameWallet.sub(value); } //! Substract fame from current value.
+
+        inline uint time() const { return m_time; } //!< Access the time.
 
         //! @}
 
@@ -320,6 +332,11 @@ namespace dungeon
 
         context::Villain* m_villain = nullptr;  //!< The villain reference.
         context::Wallet m_fameWallet;           //!< The resource fame value.
+
+        // Time
+        uint m_time = 0u;           //!< How much time the dungeon has been constructed, in in-game hours.
+        float m_timeBuffer = 0.f;   //!< Time buffer, waiting for an in-game hour before increasing time.
+        const float m_timeGameHour; //!< Constant time: howmany real seconds equals an in-game hour.
 
         // Databases
         MonstersDB m_monstersDB;    //!< All monsters infos.

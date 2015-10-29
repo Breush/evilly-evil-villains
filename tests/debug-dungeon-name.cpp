@@ -10,7 +10,7 @@
 
 int main(void)
 {
-    internationalization::init("en_EN");
+    i18n::init("en_EN");
     
     dungeon::Data data;
     data.load(L"../tests/data/debug-dungeon-name/");
@@ -20,7 +20,7 @@ int main(void)
     if (data.name() != L"¥£€$¢₡₢₣₤₥₦₧₨₩₪₫₭₮₯₹")
         return EXIT_FAILURE;
         
-    internationalization::close();
+    i18n::close();
 
     return EXIT_SUCCESS;
 }

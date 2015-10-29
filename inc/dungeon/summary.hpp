@@ -17,6 +17,7 @@ namespace dungeon
     //! The different bars in the summary.
     enum SummaryBarID : uint8
     {
+        BAR_TIME,
         BAR_DOSH,
         BAR_FAME,
         BAR_COUNT,  //!< Keep last.
@@ -85,6 +86,15 @@ namespace dungeon
 
         //! To be called whenever the dungeon data changed.
         void refreshFromData();
+
+        //! To be called whenever time changed.
+        void refreshTimeBar();
+
+        //! To be called whenever dosh changed.
+        void refreshDoshBar();
+
+        //! To be called whenever fame changed.
+        void refreshFameBar();
 
         //! @}
 

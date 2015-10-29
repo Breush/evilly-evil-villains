@@ -19,8 +19,24 @@ using namespace dungeon;
 Data::Data()
     : m_floorsCount(0u)
     , m_roomsByFloor(0u)
+    , m_timeGameHour(1.f)
 {
     m_fameWallet.setEvents(this, "fame_changed");
+}
+
+//-------------------//
+//----- Routine -----//
+
+void Data::update(const sf::Time& dt)
+{
+    m_timeBuffer += dt.asSeconds();
+
+    while (m_timeBuffer >= m_timeGameHour) {
+        m_timeBuffer -= m_timeGameHour;
+        m_time += 1u;
+
+        emit("time_changed");
+    }
 }
 
 //---------------------------//
@@ -77,6 +93,7 @@ void Data::createFiles(const std::wstring& folder)
 
 void Data::loadDungeon(const std::wstring& file)
 {
+    m_timeBuffer = 0.f;
     m_floors.clear();
 
     // Parsing XML
@@ -91,6 +108,7 @@ void Data::loadDungeon(const std::wstring& file)
     //---- Dungeon
 
     m_name = dungeon.attribute(L"name").as_string();
+    m_time = dungeon.attribute(L"time").as_uint();
     m_floorsCount = dungeon.attribute(L"floorsCount").as_uint();
     m_roomsByFloor = dungeon.attribute(L"roomsByFloor").as_uint();
     setFame(dungeon.attribute(L"fame").as_uint());
@@ -149,6 +167,7 @@ void Data::saveDungeon(const std::wstring& file)
     //---- Dungeon
 
     dungeon.append_attribute(L"name") = m_name.c_str();
+    dungeon.append_attribute(L"time") = m_time;
     dungeon.append_attribute(L"floorsCount") = m_floorsCount;
     dungeon.append_attribute(L"roomsByFloor") = m_roomsByFloor;
     dungeon.append_attribute(L"fame") = fame();

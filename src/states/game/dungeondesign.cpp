@@ -109,6 +109,7 @@ GameDungeonDesign::~GameDungeonDesign()
 
 bool GameDungeonDesign::update(const sf::Time& dt)
 {
+    m_dungeonData.update(dt);
     m_heroesManager.update(dt);
     return baseClass::update(dt);
 }

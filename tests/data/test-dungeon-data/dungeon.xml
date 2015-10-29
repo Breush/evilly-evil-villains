@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<dungeon name="Dungeon" floorsCount="3" roomsByFloor="4" fame="0">
+<dungeon name="Dungeon" time="23" floorsCount="3" roomsByFloor="4" fame="0">
 	<monsters>
 		<monster type="creepim" floor="1" room="4" />
 	</monsters>

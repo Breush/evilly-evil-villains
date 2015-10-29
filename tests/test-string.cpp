@@ -8,7 +8,7 @@ int main(void)
     std::wstring wstr;
 
     // French, to check that characters like 'É' are considered alphanum
-    internationalization::init("fr_FR");
+    i18n::init("fr_FR");
 
     //-------------------------//
     // String <-> WSide string //
@@ -95,7 +95,7 @@ int main(void)
     if (prefix(std::string("aaa"), std::string("aab")) != "aa") return EXIT_FAILURE;
     if (prefix(std::string("aaa"), std::string("bab")) != "")   return EXIT_FAILURE;
 
-    internationalization::close();
+    i18n::close();
 
     return EXIT_SUCCESS;
 }

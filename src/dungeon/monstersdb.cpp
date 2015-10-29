@@ -18,9 +18,6 @@ MonstersDB::MonstersDB()
         // Add its content to the map
         add(fileInfo.fullName);
     }
-
-    // FIXME
-    m_monstersData[L"creepim"];
 }
 
 //------------------------//

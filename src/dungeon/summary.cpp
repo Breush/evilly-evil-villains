@@ -1,9 +1,12 @@
 #include "dungeon/summary.hpp"
 
+#include "core/gettext.hpp"
 #include "core/application.hpp"
 #include "context/villains.hpp"
 #include "dungeon/data.hpp"
 #include "tools/string.hpp"
+
+#include <iomanip>
 
 using namespace dungeon;
 
@@ -96,8 +99,13 @@ void Summary::useData(Data& data)
 void Summary::receive(const context::Event& event)
 {
     const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
-    if (devent.type == "dosh_changed" || devent.type == "fame_changed")
-        refreshFromData();
+
+    if (devent.type == "time_changed")
+        refreshTimeBar();
+    else if (devent.type == "dosh_changed")
+        refreshDoshBar();
+    else if (devent.type == "fame_changed")
+        refreshFameBar();
 }
 
 //-----------------------------------//
@@ -108,8 +116,39 @@ void Summary::refreshFromData()
     m_dungeonName.setString(m_data->name());
     m_dungeonName.setOrigin(boundsSize(m_dungeonName).x / 2.f, 0.f);
 
-    m_bars[BAR_DOSH].text.setString(toWString(m_data->villain().doshWallet.value()));
-    m_bars[BAR_FAME].text.setString(toWString(m_data->fame()));
+    refreshTimeBar();
+    refreshDoshBar();
+    refreshFameBar();
 
     updateSize();
+}
+
+void Summary::refreshTimeBar()
+{
+    auto time = m_data->time();
+
+    static std::vector<std::wstring> months = {_("January"),    _("February"),  _("March"),     _("April"),
+                                               _("May"),        _("June"),      _("July"),      _("August"),
+                                               _("September"),  _("October"),   _("November"),  _("December")};
+
+    auto day = (time / 24u) % 28u + 1u;
+    auto month = (time / 672u) % 12u;
+    auto year = (time / 8064u) + 7201u;
+
+    std::wstringstream str;
+    str << std::setfill(L'0') << std::setw(2) << day << L' ' << months[month] << L' ' << year;
+
+    m_bars[BAR_TIME].text.setString(str.str());
+}
+
+void Summary::refreshDoshBar()
+{
+    auto dosh = m_data->villain().doshWallet.value();
+    m_bars[BAR_DOSH].text.setString(toWString(dosh));
+}
+
+void Summary::refreshFameBar()
+{
+    auto fame = m_data->fame();
+    m_bars[BAR_FAME].text.setString(toWString(fame));
 }
