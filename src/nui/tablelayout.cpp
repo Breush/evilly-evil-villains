@@ -149,7 +149,7 @@ void TableLayout::positionChild(uint row, uint col, float x, float y)
 {
     returnif (m_children.count({row, col}) == 0u);
     auto& child = m_children.at({row, col});
-    float ox, oy;
+    float ox = 0.f, oy = 0.f;
 
     // x coordinates
     float dx = m_cols[col].width - child.entity.size().x;

@@ -4,45 +4,72 @@
 -- by A. Breust --
 
 ---- Description:
--- A creepim is a easy monster,
+-- A creepim is an simple monster,
 -- who will just explode himself and the room he's in
 -- if a hero comes too close. 
+
+------------
+-- Locals --
+
+local altitude_ref      -- The reference altitude
+
+local fusing = false    -- Whether the Creepim is exploding
 
 ---------------
 -- Callbacks --
 
 -- Called once on object creation
-function register()
-    eev_addCallback("heroClose", "entity.type == hero && entity.distance <= 0.5");
+function _register()
+    eev_addCallback("cbHeroClose", "hero", "distance <= 0.5")
 end
 
--- Whenever a hero comes to close
-function heroClose()
+-- Whenever a hero comes too close
+function cbHeroClose()
+    if not fusing then
+        -- Stop doing anything else
+        fusing = true
+        eev_stopMoving()
+
+        -- Select correct way to explode
+        eev_setAnimationLooping(false)
+        if eev_isLookingDirection("left") then
+            eev_selectAnimation("lexplode")
+        else
+            eev_selectAnimation("rexplode")
+        end
+    end
+end
+
+-------------
+-- Routine --
+
+-- Regular call
+function _update(dt)
+    if fusing and eev_isAnimationStopped() then
+        eev_dungeonExplodeRoom(eev_getCurrentRoomX(), eev_getCurrentRoomY())
+        fusing = false;
+    end
 end
 
 ----------------------
 -- Graph navigation --
 
--- The reference altitude
-local altitude_ref
-
 -- Called on initialization, dungeon invasion restarts
-function init()
+function _init()
 end
 
 -- Called with the current node information
-function evaluate_reference()
+function _evaluateReference()
     -- Save current altitude
-    altitude_ref = weight.altitude()
+    altitude_ref = eev_weight.altitude()
 
     -- Evaluate the current room
-    -- Its possible to stay in the same room
+    -- It's possible to stay in the same room
     return 0
 end
 
 -- Called with one of the neighbours of the current node
 -- Just stay in the same floor
-function evaluate()
-    return - (weight.altitude() - altitude_ref)^2
+function _evaluate()
+    return - (eev_weight.altitude() - altitude_ref)^2
 end
-
