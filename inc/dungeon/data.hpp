@@ -88,7 +88,6 @@ namespace dungeon
         struct MonsterInfo
         {
             ElementData data;       //!< Type of monster, plus individual information.
-            sf::Vector2u coords;    //!< Floor/room coordinates of where the monster is.
         };
 
     public:

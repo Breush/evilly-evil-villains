@@ -5,6 +5,7 @@
 #include "states/identifiers.hpp"
 #include "tools/vector.hpp"
 #include "tools/string.hpp"
+#include "tools/filesystem.hpp"
 
 #include <SFML/Window/Event.hpp>
 #include <string>
@@ -65,6 +66,10 @@ void cleanExtraFiles()
 {
     std::remove("saves/villains_saved.xml");
     std::remove("saves/worlds_saved.xml");
+
+    for (const auto& fileInfo : listFiles("saves/", true))
+        if (fileInfo.name == "dungeon_saved.xml")
+            std::remove(fileInfo.fullName.c_str());
 }
 
 //-----------------------//

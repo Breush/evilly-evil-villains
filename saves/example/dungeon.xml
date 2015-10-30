@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <dungeon name="The Mighty Example" floorsCount="7" roomsByFloor="5" fame="41">
     <monsters>
-        <monster type="creepim" floor="1" room="4" />
+        <monster type="creepim">
+            <rx type="float" value="1.5" />
+            <ry type="float" value="4.62" />
+        </monster>
     </monsters>
 	<floor pos="0">
 		<room pos="0" state="constructed" />

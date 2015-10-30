@@ -34,7 +34,7 @@ namespace monsters
     public:
 
         //! Constructor.
-        Creepim(sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter);
+        Creepim(ElementData& elementdata, dungeon::Inter& inter);
 
         //! Default destructor.
         ~Creepim() = default;
@@ -141,7 +141,7 @@ namespace monsters
 
         //! Recompute the local position.
         //! Setting teleport to true will reset the lerpable.
-        void refreshPositionFromNode(bool teleport = false);
+        void refreshPositionFromNode();
 
         //! Refresh the monster status whenever activity changes.
         void refreshFromActivity() final;

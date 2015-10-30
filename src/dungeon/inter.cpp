@@ -581,7 +581,7 @@ void Inter::refreshMonsters()
     m_monsters.clear();
 
     for (auto& monsterInfo : m_data->monstersInfo()) {
-        auto monster = monsters::make(monsterInfo.coords, monsterInfo.data, *this);
+        auto monster = monsters::make(monsterInfo.data, *this);
         if (monster == nullptr) continue;
 
         monster->setEmitter(m_data);

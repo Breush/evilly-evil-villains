@@ -7,21 +7,18 @@
 using namespace dungeon::monsters;
 using namespace std::placeholders;
 
-Creepim::Creepim(sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter)
-    : baseClass(coords, elementdata, inter)
+Creepim::Creepim(ElementData& elementdata, dungeon::Inter& inter)
+    : baseClass(elementdata, inter)
 {
+    // TODO Where to get speed from? (Maybe MonstersDB)
     lerpable()->setPositionSpeed({50.f, 25.f});
 
     // Initial position
-    if (m_elementdata.empty()) {
-        m_elementdata[L"rx"].init_float(0.f);
-        m_elementdata[L"ry"].init_float(0.f);
-    }
-
-    const auto tileLocalPosition = m_inter.tileLocalPosition(m_coords);
-    const auto monsterTilePosition = sf::Vector2f{m_inter.tileSize().x / 2.f, m_inter.tileSize().y * 0.62f};
-    lerpable()->setTargetPosition(tileLocalPosition + monsterTilePosition);
-    setLocalPosition(lerpable()->targetPosition());
+    sf::Vector2f monsterPosition;
+    monsterPosition.x = m_elementdata[L"ry"].as_float() * m_inter.tileSize().x;
+    monsterPosition.y = m_inter.size().y - m_elementdata[L"rx"].as_float() * m_inter.tileSize().y;
+    lerpable()->setTargetPosition(monsterPosition);
+    setLocalPosition(monsterPosition);
 
     // Decorum
     attachChild(m_sprite);
@@ -39,7 +36,7 @@ Creepim::Creepim(sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter&
     std::function<void(const std::string&, const std::string&, const std::string&)> eev_addCallback = std::bind(&Creepim::lua_addCallback, this, _1, _2, _3);
     m_lua["eev_addCallback"] = eev_addCallback;
 
-    // LUA API
+    // Lua API
     m_lua["eev_stopMoving"] = [this] { lua_stopMoving(); };
     m_lua["eev_setAnimationLooping"] = [this] (const bool looping) { lua_setAnimationLooping(looping); };
     m_lua["eev_selectAnimation"] = [this] (const std::string& animationKey) { lua_selectAnimation(animationKey); };
@@ -61,9 +58,9 @@ Creepim::Creepim(sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter&
 
 void Creepim::onTransformChanges()
 {
-    // TODO Divide by m_inter roomSize
-    m_elementdata[L"rx"].as_float() = localPosition().x / m_inter.size().x;
-    m_elementdata[L"ry"].as_float() = localPosition().y / m_inter.size().y;
+    // Note: Room coordinates convention is inverted because the floor appears first
+    m_elementdata[L"rx"].as_float() = (m_inter.size().y - localPosition().y) / m_inter.tileSize().y;
+    m_elementdata[L"ry"].as_float() = localPosition().x / m_inter.tileSize().x;
 }
 
 void Creepim::updateAI(const sf::Time& dt)
@@ -79,10 +76,6 @@ void Creepim::updateAI(const sf::Time& dt)
 void Creepim::updateRoutine(const sf::Time& dt)
 {
     returnif (!active());
-
-    // Update coords
-    // TODO Should be removed as rx/ry contain this info
-    m_coords = m_inter.tileFromLocalPosition(localPosition());
 
     // TODO We're currently simulating the callback registered
     if (isHeroNearby(0.5f))
@@ -118,10 +111,6 @@ const dungeon::Graph::NodeData* Creepim::findNextNode(const dungeon::Graph::Node
     // Register evaluations
     m_evaluations.clear();
     m_evaluations.emplace_back(maxEvaluation);
-
-    // If the hero escaped during evaluation, stop it here
-    // TODO This should be a pending state in Hero code... nothing to check here!
-    returnif (currentNode == nullptr) nullptr;
 
     // Get the evaluation from lua
     for (const auto& neighbour : currentNode->node->neighbours) {
@@ -183,12 +172,12 @@ bool Creepim::lua_isAnimationStopped() const
 
 uint Creepim::lua_getCurrentRoomX() const
 {
-    return m_coords.x;
+    return static_cast<uint>(m_elementdata[L"rx"].as_float());
 }
 
 uint Creepim::lua_getCurrentRoomY() const
 {
-    return m_coords.y;
+    return static_cast<uint>(m_elementdata[L"ry"].as_float());
 }
 
 void Creepim::lua_log(const std::string& str) const
@@ -216,8 +205,8 @@ void Creepim::setCurrentNode(const ai::Node* node)
     bool firstNode = (m_currentNode == nullptr);
     m_currentNode = node;
 
-    if (m_currentNode != nullptr)
-        refreshPositionFromNode(firstNode);
+    if (!firstNode && m_currentNode != nullptr)
+        refreshPositionFromNode();
 }
 
 //-------------------------//
@@ -287,15 +276,14 @@ void Creepim::refreshFromActivity()
     }
 }
 
-void Creepim::refreshPositionFromNode(bool teleport)
+void Creepim::refreshPositionFromNode()
 {
     returnif (m_currentNode == nullptr);
 
     const auto& targetCoords = toNodeData(m_currentNode)->coords;
     const auto tileLocalPosition = m_inter.tileLocalPosition(targetCoords);
-    const auto monsterTilePosition = sf::Vector2f{m_inter.tileSize().x / 2.f, m_inter.tileSize().y * 0.62f};
+    const auto monsterTilePosition = 0.5f * m_inter.tileSize();
     lerpable()->setTargetPosition(tileLocalPosition + monsterTilePosition);
-    if (teleport) setLocalPosition(lerpable()->targetPosition());
 
     // TODO See Hero, same problem
     if (lerpable()->targetPosition().x > localPosition().x) {

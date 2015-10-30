@@ -10,6 +10,7 @@
 #include "context/villains.hpp"
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
+#include "tools/filesystem.hpp"
 
 #include <pugixml/pugixml.hpp>
 #include <stdexcept>
@@ -59,7 +60,14 @@ std::wstring Data::load(const std::wstring& folder)
         m_villain->doshWallet.setEvents(this, "dosh_changed");
     }
 
-    std::wstring mainDungeonFilename = L"saves/" + folder + L"dungeon.xml";
+    #if DEBUG_GLOBAL > 0
+        std::wstring mainDungeonFilename = L"saves/" + folder + L"dungeon_saved.xml";
+        if (!fileExists(mainDungeonFilename))
+            mainDungeonFilename = L"saves/" + folder + L"dungeon.xml";
+    #else
+        std::wstring mainDungeonFilename = L"saves/" + folder + L"dungeon.xml";
+    #endif
+
     loadDungeon(mainDungeonFilename);
     return mainDungeonFilename;
 }
@@ -118,8 +126,6 @@ void Data::loadDungeon(const std::wstring& file)
     for (const auto& monsterNode : dungeon.child(L"monsters").children(L"monster")) {
         MonsterInfo monsterInfo;
         monsterInfo.data.loadXML(monsterNode);
-        monsterInfo.coords.x = monsterNode.attribute(L"floor").as_uint();
-        monsterInfo.coords.y = monsterNode.attribute(L"room").as_uint();
         m_monstersInfo.emplace_back(std::move(monsterInfo));
     }
 
@@ -177,8 +183,6 @@ void Data::saveDungeon(const std::wstring& file)
     for (const auto& monsterInfo : m_monstersInfo) {
         auto monsterNode = monstersNode.append_child(L"monster");
         monsterInfo.data.saveXML(monsterNode);
-        monsterNode.append_attribute(L"floor") = monsterInfo.coords.x;
-        monsterNode.append_attribute(L"room") = monsterInfo.coords.y;
     }
 
     // Floors
@@ -285,7 +289,10 @@ void Data::destroyRoom(const sf::Vector2u& coords, bool hard)
 
     // Destroy monsters inside
     std::erase_if(m_monstersInfo, [coords] (const MonsterInfo& monsterInfo) {
-        return monsterInfo.coords == coords;
+        sf::Vector2u monsterCoords;
+        monsterCoords.x = static_cast<uint>(monsterInfo.data.at(L"rx").as_float());
+        monsterCoords.y = static_cast<uint>(monsterInfo.data.at(L"ry").as_float());
+        return monsterCoords == coords;
     });
 
     Event event;
@@ -457,8 +464,10 @@ void Data::addMonster(const sf::Vector2u& coords, const std::wstring& monsterID)
     m_monstersInfo.emplace_back();
     auto& monsterInfo = m_monstersInfo.back();
 
+    // Create and initialize position
     monsterInfo.data.create(monsterID);
-    monsterInfo.coords = coords;
+    monsterInfo.data[L"rx"].init_float(coords.x + 0.5f);
+    monsterInfo.data[L"ry"].init_float(coords.y + 0.5f);
 
     Event event;
     event.type = "monster_added";

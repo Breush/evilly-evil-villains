@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <dungeon name="Dungeon" time="23" floorsCount="3" roomsByFloor="4" fame="0">
 	<monsters>
-		<monster type="creepim" floor="1" room="4" />
+		<monster type="creepim">
+			<rx type="float" value="1.5" />
+		</monster>
 	</monsters>
 	<floor pos="0">
 		<room pos="0" state="constructed" />

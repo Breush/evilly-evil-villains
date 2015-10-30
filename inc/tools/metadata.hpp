@@ -77,8 +77,8 @@ public:
     inline void init_uint32(uint32 value) { m_type = L"uint32"; m_data.as_uint32 = value; }
     inline void init_uint64(uint64 value) { m_type = L"uint64"; m_data.as_uint64 = value; }
 
-    inline void init_float (float value)  { m_type = L"float"; m_data.as_uint32 = value; }
-    inline void init_double(double value) { m_type = L"double"; m_data.as_uint64 = value; }
+    inline void init_float (float value)  { m_type = L"float"; m_data.as_float = value; }
+    inline void init_double(double value) { m_type = L"double"; m_data.as_double = value; }
 
 private:
 
