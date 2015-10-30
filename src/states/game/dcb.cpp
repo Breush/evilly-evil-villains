@@ -23,11 +23,15 @@ GameDCB::GameDCB(StateStack& stack)
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
     const auto& nuiSize = nuiLayer().size();
+    const auto nuiRatio = nuiSize.x / nuiSize.y;
 
     // Background
-    // TODO Currently only OK for 16:9 resolutions
-    const auto& backgroundSize = Application::context().textures.get("dcb/scene/stage").getSize();
-    auto backgroundScale = nuiSize / sf::v2f(backgroundSize);
+    const auto backgroundSize = sf::v2f(Application::context().textures.get("dcb/scene/stage").getSize());
+    const auto backgroundRatio = backgroundSize.x / backgroundSize.y;
+    float backgroundScaleValue = 1.f;
+    if (nuiRatio > backgroundRatio) backgroundScaleValue *= nuiSize.x / backgroundSize.x;
+    else                            backgroundScaleValue *= nuiSize.y / backgroundSize.y;
+    const sf::Vector2f backgroundScale(backgroundScaleValue, backgroundScaleValue);
 
     nuiRoot.attachChild(m_trees);
     m_trees.load("dcb/scene/trees");

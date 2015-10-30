@@ -60,7 +60,6 @@ Terminal::~Terminal()
 //-------------------//
 //----- Routine -----//
 
-// FIXME These game pause don't stop animations or shaders...
 bool Terminal::update(const sf::Time& dt)
 {
     bool messagesChanged = false;
