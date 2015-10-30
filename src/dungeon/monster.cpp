@@ -37,12 +37,9 @@ Monster::Monster(ElementData &elementdata, Inter &inter)
     if (!m_lua.load(luaFilename))
         throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
 
-    // All moving elements inside dungeon should become dungeon::DetectEntity
-    // TODO Move to register through the dungeon detecter (function inherited from dungeon::DetectEntity)
+    // Lua API
     std::function<void(const std::string&, const std::string&, const std::string&)> eev_addCallback = std::bind(&Monster::lua_addCallback, this, _1, _2, _3);
     m_lua["eev_addCallback"] = eev_addCallback;
-
-    // Lua API
     m_lua["eev_stopMoving"] = [this] { lua_stopMoving(); };
     m_lua["eev_setAnimationLooping"] = [this] (const bool looping) { lua_setAnimationLooping(looping); };
     m_lua["eev_selectAnimation"] = [this] (const std::string& animationKey) { lua_selectAnimation(animationKey); };
@@ -84,19 +81,11 @@ void Monster::updateRoutine(const sf::Time& dt)
     returnif (!active());
 
     // TODO We're currently simulating the callback registered
-    if (isHeroNearby(0.5f))
+    if (isInRange("hero", m_inter.tileSize().x * 0.5f))
         m_lua["cbHeroClose"]();
 
     // Forward to lua
     m_lua["_update"](dt.asSeconds());
-}
-
-//-------------------//
-//---- Detecter -----//
-
-bool Monster::isHeroNearby(float relRange) const
-{
-    return m_inter.isHeroNearby(localPosition(), relRange);
 }
 
 //-------------------------------//

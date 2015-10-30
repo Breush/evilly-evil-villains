@@ -132,16 +132,6 @@ namespace dungeon
 
         //! @}
 
-        //--------------//
-        //! @name Tools
-        //! @{
-
-        //! Detect if a hero is nearby the position.
-        //! @param relRange is expressed relatively to room width.
-        bool isHeroNearby(const sf::Vector2f& position, float relRange) const;
-
-        //! @}
-
         //------------------------//
         //! @name Children access
         //! @{

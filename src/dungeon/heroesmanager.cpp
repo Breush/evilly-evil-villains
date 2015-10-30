@@ -81,26 +81,6 @@ void HeroesManager::useGraph(Graph& graph)
     m_graph = &graph;
 }
 
-//-----------------------//
-//----- Interaction -----//
-
-bool HeroesManager::isHeroNearby(const sf::Vector2f& position, float range) const
-{
-    // Range squared
-    range *= range;
-
-    for (const auto& heroInfo : m_heroesInfo)
-    if (heroInfo.hero != nullptr) {
-        auto distance = position - heroInfo.hero->localPosition();
-        distance *= distance;
-
-        if ((distance.x + distance.y) < range)
-            return true;
-    }
-
-    return false;
-}
-
 //--------------------//
 //----- Activity -----//
 

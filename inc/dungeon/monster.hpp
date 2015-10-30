@@ -1,9 +1,9 @@
 #pragma once
 
-#include "scene/entity.hpp"
 #include "context/event.hpp"
 #include "dungeon/graph.hpp"
 #include "dungeon/elementdata.hpp"
+#include "dungeon/detectentity.hpp"
 #include "scene/wrappers/animatedsprite.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
 
@@ -17,9 +17,9 @@ namespace dungeon
 
     //! A generic monster interface.
 
-    class Monster final : public scene::Entity, public context::EventReceiver
+    class Monster final : public DetectEntity, public context::EventReceiver
     {
-        using baseClass = scene::Entity;
+        using baseClass = DetectEntity;
 
         //! All the weights used by Lua algorithms.
         struct Weight
@@ -43,6 +43,7 @@ namespace dungeon
         //! Default destructor.
         ~Monster() = default;
 
+        std::string detectKey() const final { return "monster"; }
         std::string _name() const final { return "dungeon::Monster"; }
 
         //--------------//
@@ -86,21 +87,11 @@ namespace dungeon
 
         //! @}
 
-        //-----------------//
-        //! @name Detecter
-        //! @{
-
-        //! Detect if any hero is nearby this entity.
-        //! @param relRange is expressed relatively to room size.
-        bool isHeroNearby(float relRange) const;
-
-        //! @}
-
         //----------------//
         //! @name Lua API
         //! @{
 
-        // TODO Move to a generic Detecter from some GameEntity
+        //! Calling detector.
         void lua_addCallback(const std::string& luaKey, const std::string& entityType, const std::string& condition);
 
         //! Select an animation to play.

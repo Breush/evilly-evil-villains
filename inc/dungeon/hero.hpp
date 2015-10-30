@@ -1,6 +1,6 @@
 #pragma once
 
-#include "scene/entity.hpp"
+#include "dungeon/detectentity.hpp"
 #include "scene/wrappers/animatedsprite.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
 #include "scene/wrappers/label.hpp"
@@ -16,9 +16,9 @@ namespace dungeon
 
     //! A hero invading the dungeon.
 
-    class Hero final : public scene::Entity
+    class Hero final : public DetectEntity
     {
-        using baseClass = scene::Entity;
+        using baseClass = DetectEntity;
 
     public:
 
@@ -28,6 +28,7 @@ namespace dungeon
         //! Default destructor.
         ~Hero() = default;
 
+        std::string detectKey() const final { return "hero"; }
         std::string _name() const final { return "dungeon::Hero"; }
 
         //------------------//

@@ -520,12 +520,6 @@ void Inter::setRoomsByFloor(uint value)
     refreshFromData();
 }
 
-bool Inter::isHeroNearby(const sf::Vector2f& position, float relRange) const
-{
-    auto range = tileSize().x * relRange;
-    return m_heroesManager.isHeroNearby(position, range);
-}
-
 //----------------//
 //----- Dosh -----//
 
