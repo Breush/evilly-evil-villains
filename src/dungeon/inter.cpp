@@ -4,8 +4,8 @@
 #include "core/application.hpp"
 #include "context/villains.hpp"
 #include "context/logger.hpp"
+#include "dungeon/monster.hpp"
 #include "dungeon/traps/maker.hpp"
-#include "dungeon/monsters/maker.hpp"
 #include "dungeon/facilities/maker.hpp"
 #include "dungeon/heroesmanager.hpp"
 #include "tools/debug.hpp"
@@ -581,9 +581,7 @@ void Inter::refreshMonsters()
     m_monsters.clear();
 
     for (auto& monsterInfo : m_data->monstersInfo()) {
-        auto monster = monsters::make(monsterInfo.data, *this);
-        if (monster == nullptr) continue;
-
+        auto monster = std::make_unique<Monster>(monsterInfo.data, *this);
         monster->setEmitter(m_data);
         monster->useGraph(m_data->graph());
         m_monsters.emplace_back(std::move(monster));

@@ -1,15 +1,21 @@
-#include "dungeon/monsters/creepim.hpp"
+#include "dungeon/monster.hpp"
 
 #include "ai/node.hpp"
 #include "dungeon/inter.hpp"
 #include "tools/random.hpp"
 
-using namespace dungeon::monsters;
+using namespace dungeon;
 using namespace std::placeholders;
 
-Creepim::Creepim(ElementData& elementdata, dungeon::Inter& inter)
-    : baseClass(elementdata, inter)
+Monster::Monster(ElementData &elementdata, Inter &inter)
+    : baseClass(true)
+    , m_active(false)
+    , m_inter(inter)
+    , m_elementdata(elementdata)
 {
+    setDetectable(false);
+    auto monsterID = toString(elementdata.type());
+
     // TODO Where to get speed from? (Maybe MonstersDB)
     lerpable()->setPositionSpeed({50.f, 25.f});
 
@@ -22,18 +28,18 @@ Creepim::Creepim(ElementData& elementdata, dungeon::Inter& inter)
 
     // Decorum
     attachChild(m_sprite);
-    m_sprite.load("dungeon/monsters/creepim");
+    m_sprite.load("dungeon/monsters/" + monsterID);
     m_sprite.setStarted(false);
     m_sprite.setLocalScale(m_inter.roomScale());
 
     // Lua
-    std::string luaFilename = "res/ai/monsters/creepim.lua";
+    std::string luaFilename = "res/ai/monsters/" + monsterID + ".lua";
     if (!m_lua.load(luaFilename))
-        throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error.");
+        throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
 
     // All moving elements inside dungeon should become dungeon::DetectEntity
     // TODO Move to register through the dungeon detecter (function inherited from dungeon::DetectEntity)
-    std::function<void(const std::string&, const std::string&, const std::string&)> eev_addCallback = std::bind(&Creepim::lua_addCallback, this, _1, _2, _3);
+    std::function<void(const std::string&, const std::string&, const std::string&)> eev_addCallback = std::bind(&Monster::lua_addCallback, this, _1, _2, _3);
     m_lua["eev_addCallback"] = eev_addCallback;
 
     // Lua API
@@ -56,14 +62,14 @@ Creepim::Creepim(ElementData& elementdata, dungeon::Inter& inter)
 //------------------//
 //---- Routine -----//
 
-void Creepim::onTransformChanges()
+void Monster::onTransformChanges()
 {
     // Note: Room coordinates convention is inverted because the floor appears first
     m_elementdata[L"rx"].as_float() = (m_inter.size().y - localPosition().y) / m_inter.tileSize().y;
     m_elementdata[L"ry"].as_float() = localPosition().x / m_inter.tileSize().x;
 }
 
-void Creepim::updateAI(const sf::Time& dt)
+void Monster::updateAI(const sf::Time& dt)
 {
     returnif (!m_moving);
     returnif (!active());
@@ -73,7 +79,7 @@ void Creepim::updateAI(const sf::Time& dt)
     setCurrentNode(findNextNode(toNodeData(m_currentNode))->node);
 }
 
-void Creepim::updateRoutine(const sf::Time& dt)
+void Monster::updateRoutine(const sf::Time& dt)
 {
     returnif (!active());
 
@@ -85,10 +91,18 @@ void Creepim::updateRoutine(const sf::Time& dt)
     m_lua["_update"](dt.asSeconds());
 }
 
+//-------------------//
+//---- Detecter -----//
+
+bool Monster::isHeroNearby(float relRange) const
+{
+    return m_inter.isHeroNearby(localPosition(), relRange);
+}
+
 //-------------------------------//
 //----- Graph AI evaluation -----//
 
-const dungeon::Graph::NodeData* Creepim::findNextNode(const dungeon::Graph::NodeData* currentNode)
+const Graph::NodeData* Monster::findNextNode(const Graph::NodeData* currentNode)
 {
     // That's not a node...
     returnif (currentNode == nullptr) nullptr;
@@ -104,7 +118,7 @@ const dungeon::Graph::NodeData* Creepim::findNextNode(const dungeon::Graph::Node
     returnif (currentNode->node->neighbours.size() == 0u) currentNode;
 
     // Consider that the current room might be the best node
-    std::vector<const dungeon::Graph::NodeData*> bestNodes;
+    std::vector<const Graph::NodeData*> bestNodes;
     int maxEvaluation = call("_evaluateReference", currentNode);
     bestNodes.push_back(currentNode);
 
@@ -114,7 +128,7 @@ const dungeon::Graph::NodeData* Creepim::findNextNode(const dungeon::Graph::Node
 
     // Get the evaluation from lua
     for (const auto& neighbour : currentNode->node->neighbours) {
-        auto neighbourData = reinterpret_cast<const dungeon::Graph::NodeData*>(neighbour->data);
+        auto neighbourData = reinterpret_cast<const Graph::NodeData*>(neighbour->data);
         int evaluation = call("_evaluate", neighbourData);
         m_evaluations.emplace_back(evaluation);
 
@@ -136,56 +150,56 @@ const dungeon::Graph::NodeData* Creepim::findNextNode(const dungeon::Graph::Node
 //---------------------------//
 //----- LUA interaction -----//
 
-void Creepim::lua_addCallback(const std::string& luaKey, const std::string& entityType, const std::string& condition)
+void Monster::lua_addCallback(const std::string& luaKey, const std::string& entityType, const std::string& condition)
 {
     // TODO Have it analyzed etc.
     std::cerr << "TODO Should register: " << luaKey << " " << entityType << " " << condition << std::endl;
 }
 
-void Creepim::lua_selectAnimation(const std::string& animationKey)
+void Monster::lua_selectAnimation(const std::string& animationKey)
 {
     m_sprite.select(toWString(animationKey));
 }
 
-void Creepim::lua_setAnimationLooping(const bool looping)
+void Monster::lua_setAnimationLooping(const bool looping)
 {
     m_sprite.setLooping(looping);
 }
 
-void Creepim::lua_stopMoving()
+void Monster::lua_stopMoving()
 {
     m_moving = false;
     lerpable()->setTargetPosition(localPosition());
 }
 
-bool Creepim::lua_isLookingDirection(const std::string& direction) const
+bool Monster::lua_isLookingDirection(const std::string& direction) const
 {
     if (direction == "left")        return m_left;
     else if (direction == "right")  return !m_left;
     else throw std::runtime_error("Unknown direction '" + direction + "' from LUA isLookingDirection().");
 }
 
-bool Creepim::lua_isAnimationStopped() const
+bool Monster::lua_isAnimationStopped() const
 {
     return !m_sprite.started();
 }
 
-uint Creepim::lua_getCurrentRoomX() const
+uint Monster::lua_getCurrentRoomX() const
 {
     return static_cast<uint>(m_elementdata[L"rx"].as_float());
 }
 
-uint Creepim::lua_getCurrentRoomY() const
+uint Monster::lua_getCurrentRoomY() const
 {
     return static_cast<uint>(m_elementdata[L"ry"].as_float());
 }
 
-void Creepim::lua_log(const std::string& str) const
+void Monster::lua_log(const std::string& str) const
 {
     std::cerr << "LUA: " << str << std::endl;
 }
 
-void Creepim::lua_dungeonExplodeRoom(const uint x, const uint y)
+void Monster::lua_dungeonExplodeRoom(const uint x, const uint y)
 {
     dungeon::Event devent;
     devent.type = "room_exploded";
@@ -198,7 +212,7 @@ void Creepim::lua_dungeonExplodeRoom(const uint x, const uint y)
 //---------------------------//
 //----- Node management -----//
 
-void Creepim::setCurrentNode(const ai::Node* node)
+void Monster::setCurrentNode(const ai::Node* node)
 {
     returnif (m_currentNode == node);
 
@@ -212,12 +226,12 @@ void Creepim::setCurrentNode(const ai::Node* node)
 //-------------------------//
 //----- Dungeon graph -----//
 
-void Creepim::useGraph(Graph& graph)
+void Monster::useGraph(Graph& graph)
 {
     m_graph = &graph;
 }
 
-const dungeon::Graph::NodeData* Creepim::toNodeData(const ai::Node* node)
+const Graph::NodeData* Monster::toNodeData(const ai::Node* node)
 {
     returnif (node == nullptr) nullptr;
     return reinterpret_cast<const Graph::NodeData*>(node->data);
@@ -226,7 +240,7 @@ const dungeon::Graph::NodeData* Creepim::toNodeData(const ai::Node* node)
 //-----------------------------------//
 //----- Artificial intelligence -----//
 
-void Creepim::reinit()
+void Monster::reinit()
 {
     m_tick = 0u;
     m_lua["_init"]();
@@ -234,7 +248,7 @@ void Creepim::reinit()
     m_nodeInfos.clear();
 }
 
-Creepim::Weight Creepim::getWeight(const dungeon::Graph::NodeData* node)
+Monster::Weight Monster::getWeight(const Graph::NodeData* node)
 {
     Weight weight;
     weight.visited =    m_nodeInfos[node->coords].visits;
@@ -245,7 +259,7 @@ Creepim::Weight Creepim::getWeight(const dungeon::Graph::NodeData* node)
     return weight;
 }
 
-uint Creepim::call(const char* function, const dungeon::Graph::NodeData* node)
+uint Monster::call(const char* function, const Graph::NodeData* node)
 {
     Weight weight = getWeight(node);
 
@@ -262,7 +276,7 @@ uint Creepim::call(const char* function, const dungeon::Graph::NodeData* node)
 //----------------------------------//
 //---- Internal changes update -----//
 
-void Creepim::refreshFromActivity()
+void Monster::refreshFromActivity()
 {
     if (active()) {
         reinit();
@@ -276,7 +290,7 @@ void Creepim::refreshFromActivity()
     }
 }
 
-void Creepim::refreshPositionFromNode()
+void Monster::refreshPositionFromNode()
 {
     returnif (m_currentNode == nullptr);
 

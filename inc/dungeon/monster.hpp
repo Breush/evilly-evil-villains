@@ -1,7 +1,9 @@
 #pragma once
 
+#include "scene/entity.hpp"
+#include "context/event.hpp"
 #include "dungeon/graph.hpp"
-#include "dungeon/monsters.hpp"
+#include "dungeon/elementdata.hpp"
 #include "scene/wrappers/animatedsprite.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
 
@@ -9,14 +11,15 @@
 
 namespace dungeon
 {
-namespace monsters
-{
-    // TODO Transform it into a generic monster class
-    //!< A creepim explodes when there are nearby heroes.
+    // Forward declarations
 
-    class Creepim final : public Monster
+    class Inter;
+
+    //! A generic monster interface.
+
+    class Monster final : public scene::Entity, public context::EventReceiver
     {
-        using baseClass = Monster;
+        using baseClass = scene::Entity;
 
         //! All the weights used by Lua algorithms.
         struct Weight
@@ -25,7 +28,7 @@ namespace monsters
             uint visited = 0u;      //!< How often the node has been visited.
             uint lastVisit = 0u;    //!< The tick of the last time the node has been visited.
 
-            // TODO See LuaActor problem
+            // Those are monster-specific
             uint altitude = 0u;     //!< How high is the node.
             uint treasure = 0u;     //!< How many money there is stored in this node.
             bool exit = false;      //!< Whether the hero can exit the dungeon by this node or not.
@@ -34,21 +37,32 @@ namespace monsters
     public:
 
         //! Constructor.
-        Creepim(ElementData& elementdata, dungeon::Inter& inter);
+        //! Set the reference to the room in data.
+        Monster(ElementData& elementdata, dungeon::Inter& inter);
 
         //! Default destructor.
-        ~Creepim() = default;
+        ~Monster() = default;
 
-        std::string _name() const final { return "dungeon::monsters::Creepim"; }
+        std::string _name() const final { return "dungeon::Monster"; }
 
         //--------------//
         //! @name Graph
         //! @{
 
-        void useGraph(Graph& graph) final;
+        //! The graph of the dungeon to be read from.
+        void useGraph(Graph& graph);
 
         //! Convert a node to a node data.
         const Graph::NodeData* toNodeData(const ai::Node* node);
+
+        //! @}
+
+        //--------------------------//
+        //! @name Public properties
+        //! @{
+
+        //! To be set to false when monster should stop.
+        PARAMGSU(bool, m_active, active, setActive, refreshFromActivity)
 
         //! @}
 
@@ -68,12 +82,22 @@ namespace monsters
         //! @name Events
         //! @{
 
-        inline void receive(const context::Event& event) final {}
+        void receive(const context::Event& event) final {}
 
         //! @}
 
-        //------------------------//
-        //! @name LUA interaction
+        //-----------------//
+        //! @name Detecter
+        //! @{
+
+        //! Detect if any hero is nearby this entity.
+        //! @param relRange is expressed relatively to room size.
+        bool isHeroNearby(float relRange) const;
+
+        //! @}
+
+        //----------------//
+        //! @name Lua API
         //! @{
 
         // TODO Move to a generic Detecter from some GameEntity
@@ -108,18 +132,6 @@ namespace monsters
 
         //! @}
 
-        //------------------------//
-        //! @name Node management
-        //! @{
-
-        //! Updates the AI.
-        const dungeon::Graph::NodeData* findNextNode(const dungeon::Graph::NodeData* currentNode);
-
-        //! Select the node to move the hero to.
-        void setCurrentNode(const ai::Node* node);
-
-        //! @}
-
         //--------------------------------//
         //! @name Artificial intelligence
         //! @{
@@ -127,11 +139,17 @@ namespace monsters
         //! Reinits the state to start a fresh new run.
         void reinit();
 
+        //! Updates the AI.
+        const Graph::NodeData* findNextNode(const Graph::NodeData* currentNode);
+
+        //! Select the node to move the hero to.
+        void setCurrentNode(const ai::Node* node);
+
         //! Get all weight information from a node.
-        Weight getWeight(const dungeon::Graph::NodeData* node);
+        Weight getWeight(const Graph::NodeData* node);
 
         //! Returns the evaluation of a Lua function given a node.
-        uint call(const char* function, const dungeon::Graph::NodeData* node);
+        uint call(const char* function, const Graph::NodeData* node);
 
         //! @}
 
@@ -139,12 +157,11 @@ namespace monsters
         //! @name Internal changes update
         //! @{
 
-        //! Recompute the local position.
-        //! Setting teleport to true will reset the lerpable.
+        //! Recompute the target position.
         void refreshPositionFromNode();
 
         //! Refresh the monster status whenever activity changes.
-        void refreshFromActivity() final;
+        void refreshFromActivity();
 
         //! @}
 
@@ -155,15 +172,17 @@ namespace monsters
             uint16 lastVisit = 0x7FFF;  //!< The tick of the last time the node has been visited.
         };
 
-    private:
+    protected:
 
-        dungeon::Graph* m_graph = nullptr;  //!< Abstract dungeon graph.
+        Inter& m_inter;             //!< To be able to interact with nearby elements.
+        ElementData& m_elementdata; //!< The data corresponding to the monster.
+        Graph* m_graph = nullptr;   //!< Abstract dungeon graph.
 
         // Graph evaluation for AI
-        sel::State m_lua;               //!< The lua state.
-        uint m_tick = 0u;               //!< The current tick (how many nodes has been visited so far).
+        sel::State m_lua;                                       //!< The lua state.
+        uint m_tick = 0u;                                       //!< The current tick (how many nodes has been visited so far).
         std::unordered_map<sf::Vector2u, NodeInfo> m_nodeInfos; //!< Remembers the visits of a certain node.
-        std::vector<int> m_evaluations; //!< Stores the evaluations of the rooms, mainnly used for debug.
+        std::vector<int> m_evaluations;                         //!< Stores the evaluations of the rooms, mainly used for debug.
 
         // Decorum
         scene::AnimatedSprite m_sprite;   //!< The sprite.
@@ -173,5 +192,4 @@ namespace monsters
         bool m_left = false;                        //!< Is the creepim looking left?
         bool m_moving = true;                       //!< Is the monster still tries to evaluate next room?
     };
-}
 }

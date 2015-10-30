@@ -15,7 +15,7 @@ tools::CallStack callStack;
 #if not defined(__MINGW32__)
 extern "C"
 {
-    //! Inject the callstack generation each time a exception is launched.
+    //! Inject the callstack generation each time an exception is launched.
     void __cxa_throw(void* ex, void* info, void (*dest)(void*))
     {
         // Recompute the stack from here, skip this function.
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     }
     catch(std::exception& e) {
         std::cerr << std::endl << "[!] Exception caught: " << e.what() << std::endl;
-        std::cerr << "Here's the call stack when the exception occured:" << std::endl;
+        std::cerr << std::endl << "Here's the call stack when the exception occured:" << std::endl;
         std::cerr << callStack.toString();
         returnStatus = EXIT_FAILURE;
     }

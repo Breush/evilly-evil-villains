@@ -5,7 +5,6 @@
 #include "dungeon/hero.hpp"
 #include "dungeon/traps.hpp"
 #include "dungeon/facilities/maker.hpp"
-#include "dungeon/monsters/maker.hpp"
 #include "dungeon/traps/maker.hpp"
 #include "context/villains.hpp"
 #include "tools/string.hpp"
