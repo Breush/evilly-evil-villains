@@ -182,5 +182,7 @@ namespace dungeon
         const ai::Node* m_currentNode = nullptr;    //!< The current room where is this monster.
         bool m_left = false;                        //!< Is the creepim looking left?
         bool m_moving = true;                       //!< Is the monster still tries to evaluate next room?
+        float m_pauseTime = -1.f;                   //!< Current time waiting for delay.
+        float m_pauseDelay = 0.f;                   //!< How many seconds to stay still if not going to next node.
     };
 }

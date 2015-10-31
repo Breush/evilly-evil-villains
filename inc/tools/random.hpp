@@ -5,7 +5,7 @@
 
 namespace alea
 {
-    static std::mt19937 s_generator;
+    extern std::mt19937 s_generator;
 
     //! Returns a random element from within standard iterators.
     template<typename Iter>

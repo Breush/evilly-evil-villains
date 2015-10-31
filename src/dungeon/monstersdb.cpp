@@ -51,6 +51,7 @@ void MonstersDB::add(const std::string& filename)
         if (name == L"baseCost")            readCostNode(monsterData.baseCost, dataNode);
         else if (name == L"monthlyCost")    readCostNode(monsterData.monthlyCost, dataNode);
         else if (name == L"speed")          readSpeedNode(monsterData.speed, dataNode);
+        else if (name == L"pause")          monsterData.pauseDelay = dataNode.attribute(L"delay").as_float();
     }
 }
 

@@ -38,6 +38,7 @@ namespace dungeon
             Cost baseCost;      //!< Starting price.
             Cost monthlyCost;   //!< Salary.
             sf::Vector2f speed; //!< Speed relative to dungeon room size.
+            float pauseDelay;   //!< How many seconds to stay still if the monster stays in the room.
         };
 
     public:

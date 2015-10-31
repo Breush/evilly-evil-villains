@@ -2,6 +2,7 @@
 #include "core/gettext.hpp"
 #include "core/debug.hpp"
 #include "tools/stack.hpp"
+#include "tools/random.hpp"
 
 #include <steam/steam.hpp>
 
@@ -51,6 +52,9 @@ int main(int argc, char *argv[])
     // Handle arguments
     for (int i = 1; i < argc; ++i)
         mdebug_core_1("Argument " << i << " : " << argv[i]);
+
+    // Initialize randomness
+    alea::s_generator.seed(time(nullptr));
 
     // Start Steam
     bool steamActivated = false;

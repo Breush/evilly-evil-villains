@@ -17,10 +17,12 @@ Monster::Monster(ElementData &elementdata, Inter &inter)
     setDetectable(false);
     const auto& monsterID = elementdata.type();
     auto sMonsterID = toString(monsterID);
+    const auto& monsterData = m_inter.monstersDB().get(monsterID);
 
     // Initializing
-    lerpable()->setPositionSpeed(m_inter.tileSize() * m_inter.monstersDB().get(monsterID).speed);
+    lerpable()->setPositionSpeed(m_inter.tileSize() * monsterData.speed);
     setDetectRangeFactor(m_inter.tileSize().x);
+    m_pauseDelay = monsterData.pauseDelay;
 
     // Initial position
     sf::Vector2f monsterPosition;
@@ -73,7 +75,16 @@ void Monster::updateAI(const sf::Time& dt)
 {
     returnif (!m_moving);
     returnif (!active());
+
+    // Quit if still moving
     returnif (lerpable()->positionLerping());
+
+    // Quit if pause intended
+    if (m_pauseTime >= 0.f) {
+        m_pauseTime += dt.asSeconds();
+        returnif (m_pauseTime < m_pauseDelay);
+        m_pauseTime = -1.f;
+    }
 
     // Get next room if not already moving
     setCurrentNode(findNextNode(toNodeData(m_currentNode))->node);
@@ -201,9 +212,14 @@ void Monster::lua_dungeonExplodeRoom(const uint x, const uint y)
 
 void Monster::setCurrentNode(const ai::Node* node)
 {
-    returnif (m_currentNode == node);
-
     bool firstNode = (m_currentNode == nullptr);
+
+    // We're staying in the same room, pausing
+    if (!firstNode && m_currentNode == node) {
+        m_pauseTime = 0.f;
+        return;
+    }
+
     m_currentNode = node;
 
     if (!firstNode && m_currentNode != nullptr)

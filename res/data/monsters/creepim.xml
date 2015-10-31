@@ -3,4 +3,5 @@
     <data name="baseCost" dosh="150" soul="1" />
     <data name="monthlyCost" dosh="25" />
     <data name="speed" vx="0.31" vy="0." />
+    <data name="pause" delay="1." />
 </monster>
