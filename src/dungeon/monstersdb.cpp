@@ -50,6 +50,7 @@ void MonstersDB::add(const std::string& filename)
 
         if (name == L"baseCost")            readCostNode(monsterData.baseCost, dataNode);
         else if (name == L"monthlyCost")    readCostNode(monsterData.monthlyCost, dataNode);
+        else if (name == L"speed")          readSpeedNode(monsterData.speed, dataNode);
     }
 }
 
@@ -58,4 +59,10 @@ void MonstersDB::readCostNode(Cost& cost, const pugi::xml_node& node)
     cost.dosh = node.attribute(L"dosh").as_uint();
     cost.soul = node.attribute(L"soul").as_uint();
     cost.fame = node.attribute(L"fame").as_uint();
+}
+
+void MonstersDB::readSpeedNode(sf::Vector2f& speed, const pugi::xml_node& node)
+{
+    speed.x = node.attribute(L"vx").as_float();
+    speed.y = node.attribute(L"vy").as_float();
 }

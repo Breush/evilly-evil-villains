@@ -71,7 +71,7 @@ set(VERSION_OUTPUT_FILE inc/core/define.hpp)
 set(DEBUG_INPUT_FILE inc/tools/debug.hpp.in)
 set(DEBUG_OUTPUT_FILE inc/tools/debug.hpp)
 file(GLOB_RECURSE SOURCES_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*.cpp)
-file(GLOB_RECURSE CODE_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*.cpp inc/*.hpp inc/*.hpp.in inc/*.inl res/shd/*.vert res/shd/*.frag res/ai/*.lua)
+file(GLOB_RECURSE CODE_FILES RELATIVE ${CMAKE_BINARY_DIR} src/*.cpp inc/*.hpp inc/*.hpp.in inc/*.inl res/shd/*.vert res/shd/*.frag res/ai/*.lua res/data/*.xml)
 list(REMOVE_ITEM CODE_FILES ${CODE_MAIN_FILE} ${VERSION_OUTPUT_FILE} ${DEBUG_OUTPUT_FILE})
 
 #=====

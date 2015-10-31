@@ -2,6 +2,7 @@
 
 #include "ai/node.hpp"
 #include "dungeon/inter.hpp"
+#include "dungeon/monstersdb.hpp"
 #include "tools/random.hpp"
 
 using namespace dungeon;
@@ -14,10 +15,11 @@ Monster::Monster(ElementData &elementdata, Inter &inter)
     , m_elementdata(elementdata)
 {
     setDetectable(false);
-    auto monsterID = toString(elementdata.type());
+    const auto& monsterID = elementdata.type();
+    auto sMonsterID = toString(monsterID);
 
-    // TODO Where to get speed from? (Maybe MonstersDB)
-    lerpable()->setPositionSpeed({50.f, 25.f});
+    // Initializing
+    lerpable()->setPositionSpeed(m_inter.tileSize() * m_inter.monstersDB().get(monsterID).speed);
     setDetectRangeFactor(m_inter.tileSize().x);
 
     // Initial position
@@ -29,12 +31,12 @@ Monster::Monster(ElementData &elementdata, Inter &inter)
 
     // Decorum
     attachChild(m_sprite);
-    m_sprite.load("dungeon/monsters/" + monsterID);
+    m_sprite.load("dungeon/monsters/" + sMonsterID);
     m_sprite.setStarted(false);
     m_sprite.setLocalScale(m_inter.roomScale());
 
     // Lua
-    std::string luaFilename = "res/ai/monsters/" + monsterID + ".lua";
+    std::string luaFilename = "res/ai/monsters/" + sMonsterID + ".lua";
     if (!m_lua.load(luaFilename))
         throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
 

@@ -132,12 +132,15 @@ namespace dungeon
 
         //! @}
 
-        //------------------------//
-        //! @name Children access
+        //---------------//
+        //! @name Access
         //! @{
 
         //! Get the villain from data.
-        context::Villain& villain() { return m_data->villain(); }
+        inline context::Villain& villain() { return m_data->villain(); }
+
+        //! Get the monsters database from data.
+        inline const MonstersDB& monstersDB() const { return m_data->monstersDB(); }
 
         //! @}
 

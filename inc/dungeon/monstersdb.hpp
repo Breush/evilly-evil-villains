@@ -5,6 +5,8 @@
 #include <string>
 #include <unordered_map>
 
+#include <SFML/System/Vector2.hpp>
+
 // Forward declarations
 
 namespace pugi
@@ -35,6 +37,7 @@ namespace dungeon
         {
             Cost baseCost;      //!< Starting price.
             Cost monthlyCost;   //!< Salary.
+            sf::Vector2f speed; //!< Speed relative to dungeon room size.
         };
 
     public:
@@ -65,6 +68,9 @@ namespace dungeon
 
         //! Read node and affect it to a cost variable.
         void readCostNode(Cost& cost, const pugi::xml_node& node);
+
+        //! Read node and affect it to a speed variable.
+        void readSpeedNode(sf::Vector2f& speed, const pugi::xml_node& node);
 
         //! @}
 
