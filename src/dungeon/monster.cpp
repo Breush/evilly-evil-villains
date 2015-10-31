@@ -18,6 +18,7 @@ Monster::Monster(ElementData &elementdata, Inter &inter)
 
     // TODO Where to get speed from? (Maybe MonstersDB)
     lerpable()->setPositionSpeed({50.f, 25.f});
+    setDetectRangeFactor(m_inter.tileSize().x);
 
     // Initial position
     sf::Vector2f monsterPosition;
@@ -80,10 +81,6 @@ void Monster::updateRoutine(const sf::Time& dt)
 {
     returnif (!active());
 
-    // TODO We're currently simulating the callback registered
-    if (isInRange("hero", m_inter.tileSize().x * 0.5f))
-        m_lua["cbHeroClose"]();
-
     // Forward to lua
     m_lua["_update"](dt.asSeconds());
 }
@@ -141,8 +138,7 @@ const Graph::NodeData* Monster::findNextNode(const Graph::NodeData* currentNode)
 
 void Monster::lua_addCallback(const std::string& luaKey, const std::string& entityType, const std::string& condition)
 {
-    // TODO Have it analyzed etc.
-    std::cerr << "TODO Should register: " << luaKey << " " << entityType << " " << condition << std::endl;
+    addDetectSignal(entityType, condition, [this, luaKey] { m_lua[luaKey.c_str()](); });
 }
 
 void Monster::lua_selectAnimation(const std::string& animationKey)

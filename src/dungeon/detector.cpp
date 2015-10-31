@@ -10,16 +10,7 @@ using namespace dungeon;
 //----------------------------//
 //----- Static variables -----//
 
-// TODO This can cause issues with update(dt).
-// How can we be sure its run only once per frame?
 Detector dungeon::s_detector;
-
-//-------------------//
-//----- Routine -----//
-
-void Detector::update(const sf::Time& dt)
-{
-}
 
 //-----------------------//
 //----- Registering -----//
@@ -45,7 +36,7 @@ bool Detector::isInRange(const DetectEntity& entity, const std::string& key, con
     // Check if any in range for all corresponding key
     const auto& position = entity.localPosition();
     for (const auto& pEntity : m_entities) {
-        if (pEntity->detectKey() != key) continue;
+        if (pEntity->detectKey() != key || pEntity == &entity) continue;
 
         const auto distance = position - pEntity->localPosition();
         const auto sqDistance = distance * distance;

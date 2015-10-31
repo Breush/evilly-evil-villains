@@ -110,9 +110,6 @@ GameDungeonDesign::~GameDungeonDesign()
 
 bool GameDungeonDesign::update(const sf::Time& dt)
 {
-    // TODO It is strange to be updating a global variable...
-    dungeon::s_detector.update(dt);
-
     m_dungeonData.update(dt);
     m_heroesManager.update(dt);
     return baseClass::update(dt);

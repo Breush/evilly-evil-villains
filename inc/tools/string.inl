@@ -101,6 +101,19 @@ inline std::wstring& toUppercase(std::wstring& str)
 //-------------------------//
 //----- Manipulations -----//
 
+inline std::vector<std::string> split(const std::string& str, const char delim)
+{
+    std::stringstream ss(str);
+    std::vector<std::string> items;
+    std::string item;
+
+    while (std::getline(ss, item, delim))
+        if (!item.empty())
+            items.emplace_back(std::move(item));
+
+    return items;
+}
+
 inline std::vector<std::wstring> split(const std::wstring& str, const wchar_t delim)
 {
     std::wstringstream ss(str);

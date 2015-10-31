@@ -27,15 +27,6 @@ namespace dungeon
         // Default destructor.
         ~Detector() = default;
 
-        //----------------//
-        //! @name Routine
-        //! @{
-
-        //! Regular update.
-        void update(const sf::Time& dt);
-
-        //! @}
-
     protected:
 
         //------------------//

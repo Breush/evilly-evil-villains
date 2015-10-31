@@ -6,7 +6,7 @@
 ---- Description:
 -- A creepim is an simple monster,
 -- who will just explode himself and the room he's in
--- if a hero comes too close. 
+-- if a hero comes too close.
 
 ------------
 -- Locals --
@@ -20,7 +20,7 @@ local fusing = false    -- Whether the Creepim is exploding
 
 -- Called once on object creation
 function _register()
-    eev_addCallback("cbHeroClose", "hero", "distance <= 0.5")
+    eev_addCallback("cbHeroClose", "hero", "distance < 0.7")
 end
 
 -- Whenever a hero comes too close

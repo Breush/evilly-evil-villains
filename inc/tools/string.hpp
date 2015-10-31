@@ -18,6 +18,7 @@ inline std::string& toUppercase(std::string& str);
 inline std::wstring& toUppercase(std::wstring& str);
 
 // Manipulations
+inline std::vector<std::string> split(const std::string& str, const char delim = ' ');
 inline std::vector<std::wstring> split(const std::wstring& str, const wchar_t delim = L' ');
 template<class  String_t> inline String_t join(const std::vector<String_t>& v, const String_t& glue = L" ");
 template<class  String_t> inline String_t prefix(const String_t& s1, const String_t& s2);
