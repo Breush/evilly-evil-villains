@@ -38,6 +38,7 @@ public:
     Entity();
     Entity(scml::Data* data, int entity, int animation = 0, int key = 0);
 
+    void setTiltColor(const sf::Color& color) { m_tiltColor = color; }
     void setFileSystem(FileSystem* fileSystem) { m_fileSystem = fileSystem; }
     void setScreen(sf::RenderTarget* target) { m_target = target; }
 
@@ -52,6 +53,8 @@ private:
     sf::RenderTarget* m_target;
 
     sf::Sprite m_sprite;
+
+    sf::Color m_tiltColor = sf::Color::White;   //!< Extra coloring of the sprites.
 };
 
 }

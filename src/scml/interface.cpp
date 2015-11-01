@@ -107,7 +107,7 @@ void Entity::draw_internal(int folderID, int fileID, float x, float y, float ang
     m_sprite.setScale(scale_x, scale_y);
     m_sprite.setRotation(angle);
     m_sprite.setPosition(x, y);
-    m_sprite.setColor({255u, 255u, 255u, static_cast<uint8>(alpha * 255.f)});
+    m_sprite.setColor({m_tiltColor.r, m_tiltColor.g, m_tiltColor.b, static_cast<uint8>(alpha * m_tiltColor.a)});
 
     m_target->draw(m_sprite);
 }

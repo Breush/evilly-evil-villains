@@ -58,6 +58,15 @@ namespace scene
 
         //! @}
 
+        //----------------------//
+        //! @name Extra control
+        //! @{
+
+        //! Add a tilt color to all the sprite composing the animation.
+        void setTiltColor(const sf::Color& color);
+
+        //! @}
+
         //--------------------------//
         //! @name Public properties
         //! @{
@@ -88,10 +97,9 @@ namespace scene
         //! The SCML entity which composer the animation.
         std::list<std::unique_ptr<scml::Entity>> m_entities;
 
-        //! Whether the animation is started or not.
-        bool m_started;
 
-        //! The selected sub-animation.
-        int m_number;
+        bool m_started;                             //!< Whether the animation is started or not.
+        int m_number;                               //!< The selected sub-animation.
+        sf::Color m_tiltColor = sf::Color::White;   //!< Extra coloring of the sprites.
     };
 }

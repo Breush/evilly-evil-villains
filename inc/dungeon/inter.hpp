@@ -69,6 +69,18 @@ namespace dungeon
 
         //! @}
 
+        //-------------------//
+        //! @name Prediction
+        //! @{
+
+        //! Remove the current prediction overlay.
+        void resetPrediction();
+
+        //! Set the prediction overlay to a monster.
+        void setPredictionMonster(const sf::Vector2f& relPos, const std::wstring& monsterID);
+
+        //! @}
+
         //------------------//
         //! @name Structure
         //! @{
@@ -317,6 +329,10 @@ namespace dungeon
         // Delay
         std::vector<std::function<void()>> m_tileRefreshPending;    //! Pending list of tile refreshTileXXX.
         bool m_invasion = false;    //!< Whether or not we are in invasion mode.
+
+        // Prediction
+        std::wstring m_predictionID;                //!< The current ID of the element overlay.
+        scene::AnimatedSprite m_predictionSprite;   //!< The current sprite shown.
 
         // NUI
         nui::ContextMenu& m_contextMenu;            //!< The context menu, got from global state.

@@ -25,13 +25,15 @@ AnimatedSprite::~AnimatedSprite()
 
 void AnimatedSprite::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    // TODO This does not take states transform in account?
+    if (visible()) {
+        // TODO This does not take states transform in account?
 
-    // Drawing all parts of animation
-    // because scml::Entity can not be managed by scene::Graph
-    for (const auto& entity : m_entities) {
-        entity->setScreen(&target);
-        entity->draw(getPosition().x, getPosition().y, getRotation(), scale().x, scale().y);
+        // Drawing all parts of animation
+        // because scml::Entity can not be managed by scene::Graph
+        for (const auto& entity : m_entities) {
+            entity->setScreen(&target);
+            entity->draw(getPosition().x, getPosition().y, getRotation(), scale().x, scale().y);
+        }
     }
 
     baseClass::draw(target, states);
@@ -71,6 +73,7 @@ void AnimatedSprite::load(const std::string& id)
     for (const auto& entityInfo : data.entities) {
         auto entity = std::make_unique<scml::Entity>(&data, entityInfo.first);
         entity->setFileSystem(&fs);
+        entity->setTiltColor(m_tiltColor);
         m_entities.emplace_back(std::move(entity));
     }
 
@@ -96,4 +99,16 @@ void AnimatedSprite::restart()
 {
     for (const auto& entity : m_entities)
         entity->startAnimation(m_number);
+}
+
+//-------------------------//
+//----- Extra control -----//
+
+void AnimatedSprite::setTiltColor(const sf::Color& color)
+{
+    returnif (m_tiltColor == color);
+    m_tiltColor = color;
+
+    for (const auto& entity : m_entities)
+        entity->setTiltColor(m_tiltColor);
 }

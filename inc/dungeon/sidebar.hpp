@@ -23,6 +23,7 @@ namespace scene
 namespace dungeon
 {
     class Data;
+    class Inter;
     class MonsterCage;
 
     //! The sidebar shown in Dungeon Design state.
@@ -34,7 +35,7 @@ namespace dungeon
     public:
 
         //! Constructor.
-        Sidebar(scene::Scene& inScene, Data& data);
+        Sidebar(scene::Scene& inScene, Inter& inter, Data& data);
 
         //! Destructor.
         ~Sidebar();
@@ -109,6 +110,7 @@ namespace dungeon
 
     private:
 
+        Inter& m_inter;         //!< Reference to the dungeon inter.
         Data& m_data;           //!< Reference to the whole data.
         scene::Scene& m_scene;  //!< The main scene, reference here for minimap interaction.
 

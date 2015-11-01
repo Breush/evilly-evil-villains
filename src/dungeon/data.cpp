@@ -451,14 +451,25 @@ void Data::removeRoomTrap(const sf::Vector2u& coords)
     EventEmitter::emit(event);
 }
 
+bool Data::addMonsterValid(const sf::Vector2u& coords, const std::wstring& monsterID)
+{
+    // Does room exist?
+    auto& roomInfo = room(coords);
+    returnif (roomInfo.state != RoomState::CONSTRUCTED) false;
+
+    // Do we have enough in wallet?
+    // TODO See discussion in addMonster() about full wallet
+    returnif (m_villain->doshWallet.value() < m_monstersDB.get(monsterID).baseCost.dosh) false;
+
+    return true;
+}
+
 void Data::addMonster(const sf::Vector2u& coords, const std::wstring& monsterID)
 {
-    auto& roomInfo = room(coords);
-    returnif (roomInfo.state != RoomState::CONSTRUCTED);
+    returnif (!addMonsterValid(coords, monsterID));
 
-    // Continue if and only if wallet authorize us
     // TODO Have a dungeon::Wallet that can handle full price (dosh/soul/fame)
-    returnif (!m_villain->doshWallet.sub(m_monstersDB.get(monsterID).baseCost.dosh));
+    m_villain->doshWallet.sub(m_monstersDB.get(monsterID).baseCost.dosh);
 
     m_monstersInfo.emplace_back();
     auto& monsterInfo = m_monstersInfo.back();

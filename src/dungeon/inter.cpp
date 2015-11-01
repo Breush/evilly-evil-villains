@@ -33,6 +33,11 @@ Inter::Inter(nui::ContextMenu& contextMenu, const HeroesManager& heroesManager)
     m_treasureEditSpinBox.setStep(10u);
     m_treasureEditSpinBox.setOnValidateCallback([this]() { m_treasureEditSpinBox.markForVisible(false); });
 
+    // Prediction
+    attachChild(m_predictionSprite);
+    m_predictionSprite.setDepth(-1.f);
+    m_predictionSprite.setStarted(false);
+
     // Outer walls
     addPart(&m_outerWalls[0]);
     addPart(&m_outerWalls[1]);
@@ -452,6 +457,34 @@ void Inter::showEditTreasureDialog(const sf::Vector2u& coords)
     });
 }
 
+//----------------------//
+//----- Prediction -----//
+
+void Inter::resetPrediction()
+{
+    m_predictionID = L"";
+    m_predictionSprite.setVisible(false);
+}
+
+void Inter::setPredictionMonster(const sf::Vector2f& relPos, const std::wstring& monsterID)
+{
+    if (m_predictionID != monsterID) {
+        m_predictionID = monsterID;
+        m_predictionSprite.load(toString(L"dungeon/monsters/" + monsterID));
+        m_predictionSprite.setVisible(true);
+    }
+
+    auto rPosition = relPos / tileSize();
+    rPosition.x = std::floor(rPosition.x) + 0.5f;
+    rPosition.y = std::floor(rPosition.y) + 0.5f;
+    m_predictionSprite.setLocalPosition(rPosition * tileSize());
+
+    if (m_data->addMonsterValid(tileFromLocalPosition(relPos), monsterID))
+        m_predictionSprite.setTiltColor({119u, 192u, 119u, 200u});
+    else
+        m_predictionSprite.setTiltColor({192u, 119u, 119u, 200u});
+}
+
 //---------------------//
 //----- Structure -----//
 
@@ -460,6 +493,7 @@ void Inter::setRoomWidth(const float roomWidth)
     // Note: We want room to keep the same ratio as original image.
     const float scaleFactor = roomWidth / m_refRoomSize.x;
     m_roomScale = {scaleFactor, scaleFactor};
+    m_predictionSprite.setLocalScale(roomScale());
     refreshSize();
 }
 

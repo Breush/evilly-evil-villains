@@ -8,8 +8,9 @@
 
 using namespace dungeon;
 
-MonsterCage::MonsterCage(std::wstring monsterID, Data& data)
-    : m_data(data)
+MonsterCage::MonsterCage(std::wstring monsterID, Inter& inter, Data& data)
+    : m_inter(inter)
+    , m_data(data)
     , m_monsterID(std::move(monsterID))
 {
     // Events
@@ -83,15 +84,20 @@ bool MonsterCage::handleMouseButtonPressed(const sf::Mouse::Button button, const
 //---------------------//
 //----- Grabbable -----//
 
-void MonsterCage::grabbableButtonReleased(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos)
+void MonsterCage::grabbableMoved(Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f&)
+{
+    returnif (entity != &m_inter);
+    m_inter.setPredictionMonster(relPos, m_monsterID);
+}
+
+void MonsterCage::grabbableButtonReleased(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
 {
     returnif (button != sf::Mouse::Left);
     graph()->removeGrabbable();
+    m_inter.resetPrediction();
 
-    // Forward to dungeon::Inter if it is below
-    auto inter = dynamic_cast<Inter*>(entity);
-    returnif (inter == nullptr);
-    inter->addMonster(relPos, m_monsterID);
+    returnif (entity != &m_inter);
+    m_inter.addMonster(relPos, m_monsterID);
 }
 
 std::unique_ptr<scene::Grabbable> MonsterCage::spawnGrabbable()

@@ -13,6 +13,7 @@ namespace dungeon
     // Forward declarations
 
     class Data;
+    class Inter;
 
     //! A MonsterGrabbable spawner.
     /*!
@@ -27,7 +28,7 @@ namespace dungeon
     public:
 
         //! Constructor, affecting texture and look.
-        MonsterCage(std::wstring monsterID, Data& data);
+        MonsterCage(std::wstring monsterID, Inter& inter, Data& data);
 
         //! Default destructor.
         ~MonsterCage() = default;
@@ -58,6 +59,7 @@ namespace dungeon
         //! @name Grabbable
         //! @{
 
+        void grabbableMoved(Entity *entity, const sf::Vector2f &relPos, const sf::Vector2f &nuiPos) final;
         void grabbableButtonReleased(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
         std::unique_ptr<scene::Grabbable> spawnGrabbable() final;
 
@@ -74,6 +76,7 @@ namespace dungeon
 
     private:
 
+        Inter& m_inter;         //!< Reference to the dungeon inter.
         Data& m_data;               //!< Reference to the whole data.
         std::wstring m_monsterID;   //!< The monster to be moved into the dungeon inter.
 

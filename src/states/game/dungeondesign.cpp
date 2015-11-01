@@ -13,7 +13,7 @@ using namespace states;
 GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     : State(stack)
     , m_dungeonInter(m_contextMenu, m_heroesManager)
-    , m_dungeonSidebar(scene(), m_dungeonData)
+    , m_dungeonSidebar(scene(), m_dungeonInter, m_dungeonData)
     , m_heroesManager(m_dungeonInter)
 {
     // Loading resources

@@ -13,8 +13,9 @@
 
 using namespace dungeon;
 
-Sidebar::Sidebar(scene::Scene& inScene, Data& data)
-    : m_data(data)
+Sidebar::Sidebar(scene::Scene& inScene, Inter& inter, Data& data)
+    : m_inter(inter)
+    , m_data(data)
     , m_scene(inScene)
 {
     // Background
@@ -137,7 +138,7 @@ void Sidebar::refreshTabContents()
     for (const auto& monsterPair : monstersList) {
         const auto& monsterID = monsterPair.first;
 
-        monstersCages.emplace_back(std::make_unique<MonsterCage>(monsterID, m_data));
+        monstersCages.emplace_back(std::make_unique<MonsterCage>(monsterID, m_inter, m_data));
         auto& monsterCage = *monstersCages.back();
 
         monsterCage.setSize({size().x - 2.f * m_borderThick, 80.f});
