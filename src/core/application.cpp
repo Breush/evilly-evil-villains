@@ -131,9 +131,11 @@ void Application::run()
         }
 
         // Rendering
-        // TODO render(lag/m_updateTime);
+        // We might be doing render(lag/m_updateTime);
         // So that physics can interpolate the effective display
         // See http://gameprogrammingpatterns.com/game-loop.html
+        //  However, this seems a bit too much,
+        // and SFML would not let us do that easily.
         render();
     }
 

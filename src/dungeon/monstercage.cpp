@@ -128,9 +128,7 @@ MonsterGrabbable::MonsterGrabbable(scene::GrabbableSpawner& spawner, const std::
 
 void MonsterGrabbable::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    // FIXME This a trick because scene::AnimatedSprite does not consider states.transform
+    // scene::AnimatedSprite is not supposed to take states.transform in consideration, and does not
     const_cast<scene::AnimatedSprite&>(m_sprite).setLocalPosition(getPosition());
-
-    //states.transform *= getTransform();
     target.draw(m_sprite, states);
 }

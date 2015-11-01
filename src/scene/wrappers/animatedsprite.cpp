@@ -25,9 +25,9 @@ AnimatedSprite::~AnimatedSprite()
 
 void AnimatedSprite::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    if (visible()) {
-        // TODO This does not take states transform in account?
+    // TODO This does not take states shader in account?
 
+    if (visible()) {
         // Drawing all parts of animation
         // because scml::Entity can not be managed by scene::Graph
         for (const auto& entity : m_entities) {
