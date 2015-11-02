@@ -5,9 +5,9 @@
             <monsterCage type="creepim" countdown="132">
                 <monster type="creepim" />
                 <monster type="creepim" />
+                <monster type="creepim" />
             </monsterCage>
             <monsterCage type="sand_spirit" countdown="11">
-                <monster type="sand_spirit" />
                 <monster type="sand_spirit" />
             </monsterCage>
         </reserve>

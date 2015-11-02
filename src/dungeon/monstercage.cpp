@@ -5,6 +5,7 @@
 #include "dungeon/inter.hpp"
 #include "dungeon/data.hpp"
 #include "tools/vector.hpp"
+#include "tools/random.hpp"
 
 using namespace dungeon;
 
@@ -20,18 +21,14 @@ MonsterCage::MonsterCage(std::wstring monsterID, Inter& inter, Data& data)
     addPart(&m_background);
     m_background.setTexture(&Application::context().textures.get("dungeon/sidebar/tab/monsters/cage"));
 
-    // Reserve
-    // TODO Have X puppets because there is X monsters in the reserve
-    attachChild(m_monsterPuppet);
-    m_monsterPuppet.setSource(toString(L"dungeon/monsters/" + m_monsterID));
-    m_monsterPuppet.lerpable()->setPositionSpeed({100.f, 100.f});
-
     // Cost box
     attachChild(m_baseCostLabel);
     const auto& monsterData = m_data.monstersDB().get(m_monsterID);
     m_baseCostLabel.setPrestyle(scene::RichLabel::Prestyle::NUI);
     m_baseCostLabel.setText(toWString(monsterData.baseCost.dosh));
     refreshCostLabelsColor();
+
+    refreshReserve();
 }
 
 //-------------------//
@@ -42,17 +39,14 @@ void MonsterCage::onSizeChanges()
     // Background, fit texture to height
     m_background.setSize(size());
     const auto& textureSize = m_background.getTexture()->getSize();
-    float scaleFactor = size().y / textureSize.y;
+    m_scaleFactor = size().y / textureSize.y;
 
-    auto textureRectWidth  = static_cast<int>(size().x / scaleFactor);
+    auto textureRectWidth  = static_cast<int>(size().x / m_scaleFactor);
     auto textureRectHeight = static_cast<int>(textureSize.y);
     m_background.setTextureRect({0, 0, textureRectWidth, textureRectHeight});
 
-    // Puppets
-    // TODO Why 25.f? Use collision box, position 0.f means 0.f + colBox
-    m_monsterPuppet.setInitialLocalPosition({25.f, 0.62f * size().y});
-    m_monsterPuppet.setHorizontalRange(25.f, size().x - 25.f);
-    m_monsterPuppet.setLocalScale({scaleFactor, scaleFactor});
+    // Reserve
+    refreshReserve();
 }
 
 void MonsterCage::refreshNUI(const config::NUIGuides& cNUI)
@@ -93,6 +87,7 @@ void MonsterCage::grabbableMoved(Entity* entity, const sf::Vector2f& relPos, con
 void MonsterCage::grabbableButtonReleased(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
 {
     returnif (button != sf::Mouse::Left);
+    m_puppets.back()->setVisible(true);
     graph()->removeGrabbable();
     m_inter.resetPrediction();
 
@@ -102,11 +97,49 @@ void MonsterCage::grabbableButtonReleased(Entity* entity, const sf::Mouse::Butto
 
 std::unique_ptr<scene::Grabbable> MonsterCage::spawnGrabbable()
 {
+    // Grab if puppets available
+    returnif (m_puppets.size() == 0u) nullptr;
+
+    // And hide one puppet, as it is being grabbed
+    m_puppets.back()->setVisible(false);
     return std::make_unique<MonsterGrabbable>(*this, m_monsterID);
 }
 
 //-----------------------------------//
 //----- Internal change updates -----//
+
+void MonsterCage::refreshReserve()
+{
+    const auto& reserve = m_data.monstersInfo().reserve;
+    const auto& monsterData = m_data.monstersDB().get(m_monsterID);
+    auto pCage = std::find_if(reserve, [this] (const Data::MonsterCageInfo& monsterCage) { return monsterCage.type == m_monsterID; });
+    uint nMonsters = (pCage == std::end(reserve))? 0u : pCage->monsters.size();
+
+    // Set the correct number of puppets
+    if (m_puppets.size() != nMonsters) {
+        // Clear all previous
+        m_puppets.clear();
+
+        // Attach new ones
+        for (uint i = 0u; i < nMonsters; ++i) {
+            auto puppet = std::make_unique<ai::DumbPuppet>();
+            puppet->setSource(toString(L"dungeon/monsters/" + m_monsterID));
+            m_puppets.emplace_back(std::move(puppet));
+            attachChild(*m_puppets.back());
+        }
+    }
+
+    // Re-configure them
+    for (auto& puppet : m_puppets) {
+        puppet->lerpable()->setPositionSpeed(monsterData.speed * m_inter.tileSize());
+        puppet->setLocalScale({m_scaleFactor, m_scaleFactor});
+
+        // TODO Why 25.f? Use collision box, position 0.f means 0.f + colBox
+        float startOffset = alea::rand(25.f, size().x - 25.f);
+        puppet->setInitialLocalPosition({startOffset, 0.5f * size().y});
+        puppet->setHorizontalRange(25.f, size().x - 25.f);
+    }
+}
 
 void MonsterCage::refreshCostLabelsColor()
 {

@@ -9,7 +9,7 @@ namespace alea
 
     //! Returns a random element from within standard iterators.
     template<typename Iter>
-    inline Iter rand(Iter start, Iter end)
+    inline Iter randIt(Iter start, Iter end)
     {
         using difference_type = typename std::iterator_traits<Iter>::difference_type;
         std::uniform_int_distribution<difference_type>
@@ -23,6 +23,14 @@ namespace alea
     inline auto rand(const Container& container)
         -> decltype(*std::begin(container))
     {
-        return *rand(std::begin(container), std::end(container));
+        return *randIt(std::begin(container), std::end(container));
     }
-};
+
+    //! Returns a random element in the specified range.
+    template<typename T>
+    inline T rand(const T& start, const T& end)
+    {
+        std::uniform_real_distribution<T> distribution(start, end);
+        return distribution(s_generator);
+    }
+}

@@ -72,18 +72,24 @@ namespace dungeon
         //! Refresh the cost labels colors given the current dosh held by the player.
         void refreshCostLabelsColor();
 
+        //! Refresh the number of puppets in the reserve.
+        void refreshReserve();
+
         //! @}
 
     private:
 
-        Inter& m_inter;         //!< Reference to the dungeon inter.
+        Inter& m_inter;             //!< Reference to the dungeon inter.
         Data& m_data;               //!< Reference to the whole data.
-        std::wstring m_monsterID;   //!< The monster to be moved into the dungeon inter.
+        std::wstring m_monsterID;   //!< The monster to be managed in this cage.
+
+        // Reserve
+        std::vector<std::unique_ptr<ai::DumbPuppet>> m_puppets; //!< Puppet that moves from left to right.
 
         // Decorum
         sf::RectangleShape m_background;    //!< Background.
-        ai::DumbPuppet m_monsterPuppet;     //!< Puppet that moves from left to right.
         scene::RichLabel m_baseCostLabel;   //!< Text for base cost.
+        float m_scaleFactor = 1.f;          //!< Scaling for puppets.
     };
 
     //! A monster temporary object.
