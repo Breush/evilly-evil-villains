@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<trap id="pickpock" trName="Pick-pock">
+    <data name="baseCost" dosh="220" />
+    <data name="resistance" durability="10" />
+    <data name="repairCost" dosh="7" />
+</trap>

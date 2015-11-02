@@ -138,24 +138,30 @@ void Sidebar::refreshTabContents()
 
     for (const auto& monsterPair : monstersList) {
         const auto& monsterID = monsterPair.first;
-
         monstersCages.emplace_back(std::make_unique<MonsterCage>(monsterID, m_inter, m_data));
         auto& monsterCage = *monstersCages.back();
-
-        monsterCage.setSize({size().x - 2.f * m_borderThick, 80.f});
+        monsterCage.setSize({size().x - 2.f * m_borderThick, 80.f}); // TODO Where that 80 coming from?
         monstersStacker.stackBack(monsterCage, nui::Align::CENTER);
     }
 
     // Traps
     auto& trapsStacker = m_tabContents[TabsID::TRAPS].stacker;
+    // TODO Have something more expressive than a button (follow monsterCage guidelines)
     auto& trapsButtons = m_tabContents[TabsID::TRAPS].buttons;
     trapsStacker.unstackAll();
     trapsButtons.clear();
 
-    trapsButtons.emplace_back(std::make_unique<dungeon::TrapGrabButton>(_("Pick-pock"), "dungeon/traps/pickpock/icon", L"pickpock"));
+    const auto& trapsList = m_data.trapsDB().get();
+    auto trapsCount = trapsList.size();
+    trapsButtons.reserve(trapsCount);
 
-    for (auto& trapsButton : trapsButtons)
-        trapsStacker.stackBack(*trapsButton, nui::Align::CENTER);
+    for (const auto& trapPair : trapsList) {
+        const auto& trapID = trapPair.first;
+        // FIXME Cheating here... (should follow monster guidelines)
+        trapsButtons.emplace_back(std::make_unique<dungeon::TrapGrabButton>(trapPair.second.name, trapID));
+        auto& trapButton = *trapsButtons.back();
+        trapsStacker.stackBack(trapButton, nui::Align::CENTER);
+    }
 
     // Facilities
     auto& facilitiesStacker = m_tabContents[TabsID::FACILITIES].stacker;
@@ -170,7 +176,7 @@ void Sidebar::refreshTabContents()
     for (auto& facilitiesButton : facilitiesButtons)
         facilitiesStacker.stackBack(*facilitiesButton, nui::Align::CENTER);
 
-    // Toolss
+    // Tools
     auto& toolsStacker = m_tabContents[TabsID::TOOLS].stacker;
     auto& toolsButtons = m_tabContents[TabsID::TOOLS].buttons;
     toolsStacker.unstackAll();

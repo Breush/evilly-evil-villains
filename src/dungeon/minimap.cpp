@@ -139,8 +139,6 @@ void Minimap::refreshSize()
     refreshViewIndicator();
 }
 
-#include <iostream>
-
 void Minimap::refreshViewport()
 {
     const auto& window = Application::context().window;

@@ -10,8 +10,18 @@ using namespace dungeon;
 
 MonstersDB::MonstersDB()
 {
+    reload();
+}
+
+//------------------------//
+//----- Data control -----//
+
+void MonstersDB::reload()
+{
+    m_monstersData.clear();
+
     // Loading from XML files
-    for (const auto& fileInfo : listFiles("res/data", true)) {
+    for (const auto& fileInfo : listFiles("res/data/monsters", true)) {
         // Check the file extension
         if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "xml")
             continue;
@@ -20,9 +30,6 @@ MonstersDB::MonstersDB()
         add(fileInfo.fullName);
     }
 }
-
-//------------------------//
-//----- Data control -----//
 
 void MonstersDB::add(const std::string& filename)
 {

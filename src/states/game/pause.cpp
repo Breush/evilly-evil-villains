@@ -14,12 +14,10 @@ GamePause::GamePause(StateStack& stack)
 {
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
-    const auto& nuiSize = nuiLayer().size();
 
     // Background
     nuiRoot.attachChild(m_background);
     m_background.setFillColor(sf::Color(0, 0, 0, 230));
-    m_background.setSize(nuiSize);
 
     // Title
     nuiRoot.attachChild(m_title);
@@ -78,4 +76,7 @@ void GamePause::refreshWindow(const config::WindowInfo& cWindow)
     m_continueButton.setText(_("Continue, continue, continue"));
     m_configButton.setText  (_("Options"));
     m_mainMenuButton.setText(_("Save and return to main menu"));
+
+    // Background
+    m_background.setSize(cWindow.resolution);
 }

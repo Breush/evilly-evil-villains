@@ -3,6 +3,7 @@
 #include "core/application.hpp"
 #include "dungeon/inter.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
+#include "tools/string.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
@@ -11,11 +12,10 @@ using namespace dungeon;
 //----------------------//
 //----- GrabButton -----//
 
-TrapGrabButton::TrapGrabButton(const std::wstring& text, const std::string& textureID, std::wstring trapID)
-    : m_textureID(textureID)
-    , m_trapID(std::move(trapID))
+TrapGrabButton::TrapGrabButton(const std::wstring& text, std::wstring trapID)
+    : m_trapID(std::move(trapID))
 {
-    setVisual(text, textureID);
+    setVisual(text, toString(L"dungeon/traps/" + m_trapID + L"/icon"));
 }
 
 void TrapGrabButton::grabbableButtonReleased(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
@@ -31,16 +31,16 @@ void TrapGrabButton::grabbableButtonReleased(Entity* entity, const sf::Mouse::Bu
 
 std::unique_ptr<scene::Grabbable> TrapGrabButton::spawnGrabbable()
 {
-    return std::make_unique<TrapGrabbable>(*this, m_textureID);
+    return std::make_unique<TrapGrabbable>(*this, m_trapID);
 }
 
 //---------------------//
 //----- Grabbable -----//
 
-TrapGrabbable::TrapGrabbable(scene::GrabbableSpawner& spawner, const std::string& textureID)
+TrapGrabbable::TrapGrabbable(scene::GrabbableSpawner& spawner, const std::wstring& trapID)
     : baseClass(spawner)
 {
-    m_sprite.setTexture(&Application::context().textures.get(textureID));
+    m_sprite.setTexture(&Application::context().textures.get(toString(L"dungeon/traps/" + trapID + L"/icon")));
     m_sprite.setSize(sizeHint());
 
     setOrigin(sizeHint() / 2.f);

@@ -47,6 +47,15 @@ namespace dungeon
         //! Constructor.
         MonstersDB();
 
+        //---------------------//
+        //! @name Data control
+        //! @{
+
+        //! Force reload of data files.
+        void reload();
+
+        //! @}
+
         //------------------//
         //! @name Accessors
         //! @{

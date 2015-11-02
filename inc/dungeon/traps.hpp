@@ -76,7 +76,7 @@ namespace dungeon
     public:
 
         //! Constructor, affecting texture and look.
-        TrapGrabButton(const std::wstring& text, const std::string& textureID, std::wstring trapID);
+        TrapGrabButton(const std::wstring& text, std::wstring trapID);
 
         //! Default destructor.
         ~TrapGrabButton() = default;
@@ -110,7 +110,7 @@ namespace dungeon
     public:
 
         //! Constructor, affecting texture and look.
-        TrapGrabbable(scene::GrabbableSpawner& spawner, const std::string& textureID);
+        TrapGrabbable(scene::GrabbableSpawner& spawner, const std::wstring& trapID);
 
         //! Default destructor.
         ~TrapGrabbable() = default;

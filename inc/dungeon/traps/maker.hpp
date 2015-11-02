@@ -14,6 +14,8 @@ namespace dungeon
 
 namespace traps
 {
+    // FIXME This file should disappear
+
     //! Create and initialize the corresponding Trap from a ElementData.
     inline std::unique_ptr<Trap> make(const sf::Vector2u& coords, ElementData& eData, dungeon::Inter& inter)
     {

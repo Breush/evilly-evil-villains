@@ -5,6 +5,7 @@
 #include "dungeon/event.hpp"
 #include "dungeon/elementdata.hpp"
 #include "dungeon/monstersdb.hpp"
+#include "dungeon/trapsdb.hpp"
 #include "context/wallet.hpp"
 
 #include <SFML/System/Time.hpp>
@@ -253,6 +254,9 @@ namespace dungeon
         //! Acces the monsters data base.
         inline const MonstersDB& monstersDB() const { return m_monstersDB; }
 
+        //! Acces the traps data base.
+        inline const TrapsDB& trapsDB() const { return m_trapsDB; }
+
         //! Access the associated villain.
         inline context::Villain& villain() { return *m_villain; }
 
@@ -358,6 +362,7 @@ namespace dungeon
 
         // Databases
         MonstersDB m_monstersDB;    //!< All monsters infos.
+        TrapsDB m_trapsDB;          //!< All traps infos.
     };
 }
 
