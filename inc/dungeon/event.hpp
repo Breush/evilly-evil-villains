@@ -50,6 +50,12 @@ namespace dungeon
             {
                 RoomCoords room;    //!< The coordinates of the room.
             } facility;
+
+            //! When a monster changed.
+            struct
+            {
+                const wchar_t* id;  //!< The monster id.
+            } monster;
         };
     };
 }

@@ -94,6 +94,9 @@ namespace dungeon
         //! Find the room below the specified relative position and forward change to data.
         void setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID);
 
+        //! Move a monster from reserve into the dungeon.
+        void moveMonsterFromReserve(const sf::Vector2f& relPos, const std::wstring& monsterID);
+
         //! Add a monster to specified coordinates.
         void addMonster(const sf::Vector2f& relPos, const std::wstring& monsterID);
 

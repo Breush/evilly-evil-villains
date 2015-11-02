@@ -73,7 +73,10 @@ namespace dungeon
         void refreshCostLabelsColor();
 
         //! Refresh the number of puppets in the reserve.
-        void refreshReserve();
+        void refreshReservePuppetsCount();
+
+        //! Refresh the parameters of the puppets in the reserve.
+        void refreshReservePuppetsParameters(const uint monstersUpdateStart = 0u);
 
         //! @}
 

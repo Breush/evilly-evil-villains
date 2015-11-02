@@ -28,7 +28,7 @@ MonsterCage::MonsterCage(std::wstring monsterID, Inter& inter, Data& data)
     m_baseCostLabel.setText(toWString(monsterData.baseCost.dosh));
     refreshCostLabelsColor();
 
-    refreshReserve();
+    refreshReservePuppetsCount();
 }
 
 //-------------------//
@@ -46,7 +46,7 @@ void MonsterCage::onSizeChanges()
     m_background.setTextureRect({0, 0, textureRectWidth, textureRectHeight});
 
     // Reserve
-    refreshReserve();
+    refreshReservePuppetsParameters();
 }
 
 void MonsterCage::refreshNUI(const config::NUIGuides& cNUI)
@@ -63,9 +63,11 @@ void MonsterCage::refreshNUI(const config::NUIGuides& cNUI)
 void MonsterCage::receive(const context::Event& event)
 {
     const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
-    returnif (devent.type != "dosh_changed");
 
-    refreshCostLabelsColor();
+    if (devent.type == "dosh_changed")
+        refreshCostLabelsColor();
+    else if (devent.type == "monster_added" && devent.monster.id == m_monsterID)
+        refreshReservePuppetsCount();
 }
 
 bool MonsterCage::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
@@ -92,7 +94,7 @@ void MonsterCage::grabbableButtonReleased(Entity* entity, const sf::Mouse::Butto
     m_inter.resetPrediction();
 
     returnif (entity != &m_inter);
-    m_inter.addMonster(relPos, m_monsterID);
+    m_inter.moveMonsterFromReserve(relPos, m_monsterID);
 }
 
 std::unique_ptr<scene::Grabbable> MonsterCage::spawnGrabbable()
@@ -108,29 +110,35 @@ std::unique_ptr<scene::Grabbable> MonsterCage::spawnGrabbable()
 //-----------------------------------//
 //----- Internal change updates -----//
 
-void MonsterCage::refreshReserve()
+void MonsterCage::refreshReservePuppetsCount()
 {
     const auto& reserve = m_data.monstersInfo().reserve;
-    const auto& monsterData = m_data.monstersDB().get(m_monsterID);
     auto pCage = std::find_if(reserve, [this] (const Data::MonsterCageInfo& monsterCage) { return monsterCage.type == m_monsterID; });
-    uint nMonsters = (pCage == std::end(reserve))? 0u : pCage->monsters.size();
+    uint monstersCount = (pCage == std::end(reserve))? 0u : pCage->monsters.size();
+    uint monstersCountBefore = m_puppets.size();
 
-    // Set the correct number of puppets
-    if (m_puppets.size() != nMonsters) {
-        // Clear all previous
-        m_puppets.clear();
+    returnif (monstersCountBefore == monstersCount);
 
-        // Attach new ones
-        for (uint i = 0u; i < nMonsters; ++i) {
-            auto puppet = std::make_unique<ai::DumbPuppet>();
-            puppet->setSource(toString(L"dungeon/monsters/" + m_monsterID));
-            m_puppets.emplace_back(std::move(puppet));
-            attachChild(*m_puppets.back());
-        }
+    // Resize and configure new ones
+    m_puppets.resize(monstersCount);
+    for (uint i = monstersCountBefore; i < monstersCount; ++i) {
+        auto& puppet = m_puppets.at(i);
+        puppet = std::make_unique<ai::DumbPuppet>();
+        puppet->setSource(toString(L"dungeon/monsters/" + m_monsterID));
+        attachChild(*puppet);
     }
 
-    // Re-configure them
-    for (auto& puppet : m_puppets) {
+    // We're in this function because the number of monster changed,
+    // just update the parameters of the new ones
+    refreshReservePuppetsParameters(monstersCountBefore);
+}
+
+void MonsterCage::refreshReservePuppetsParameters(const uint monstersUpdateStart)
+{
+    const auto& monsterData = m_data.monstersDB().get(m_monsterID);
+
+    for (uint i = monstersUpdateStart; i < m_puppets.size(); ++i) {
+        auto& puppet = m_puppets.at(i);
         puppet->lerpable()->setPositionSpeed(monsterData.speed * m_inter.tileSize());
         puppet->setLocalScale({m_scaleFactor, m_scaleFactor});
 

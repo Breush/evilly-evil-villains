@@ -496,10 +496,6 @@ bool Data::addMonsterValid(const sf::Vector2u& coords, const std::wstring& monst
     auto& roomInfo = room(coords);
     returnif (roomInfo.state != RoomState::CONSTRUCTED) false;
 
-    // Do we have enough in wallet?
-    // TODO See discussion in addMonster() about full wallet
-    returnif (m_villain->doshWallet.value() < m_monstersDB.get(monsterID).baseCost.dosh) false;
-
     return true;
 }
 
@@ -508,10 +504,9 @@ void Data::addMonster(const sf::Vector2u& coords, const std::wstring& monsterID)
     returnif (!addMonsterValid(coords, monsterID));
 
     // TODO Have a dungeon::Wallet that can handle full price (dosh/soul/fame)
-    m_villain->doshWallet.sub(m_monstersDB.get(monsterID).baseCost.dosh);
+    // + Let Inter check for that.
+    returnif (!m_villain->doshWallet.sub(m_monstersDB.get(monsterID).baseCost.dosh));
 
-    // TODO Should move one from reserve to active
-    // And rename that function activateMonster()
     m_monstersInfo.active.emplace_back();
     auto& monsterInfo = m_monstersInfo.active.back();
 
@@ -522,6 +517,32 @@ void Data::addMonster(const sf::Vector2u& coords, const std::wstring& monsterID)
 
     Event event;
     event.type = "monster_added";
+    event.monster.id = monsterID.c_str();
+    EventEmitter::emit(event);
+}
+
+void Data::moveMonsterFromReserve(const sf::Vector2u& coords, const std::wstring& monsterID)
+{
+    auto& reserve = m_monstersInfo.reserve;
+    auto pMonsterCage = std::find_if(reserve, [&monsterID] (const MonsterCageInfo& monsterCage) { return monsterCage.type == monsterID; });
+
+    // No cage in reserve concerning this monster
+    returnif (pMonsterCage == std::end(reserve));
+
+    // Check if enough monsters in cage
+    auto monstersCount = pMonsterCage->monsters.size();
+    returnif (monstersCount == 0u);
+
+    // Now move
+    auto& monsterInfo = pMonsterCage->monsters.back();
+    monsterInfo.data[L"rx"].init_float(coords.x + 0.5f);
+    monsterInfo.data[L"ry"].init_float(coords.y + 0.5f);
+    m_monstersInfo.active.emplace_back(std::move(monsterInfo));
+    pMonsterCage->monsters.resize(monstersCount - 1u);
+
+    Event event;
+    event.type = "monster_added";
+    event.monster.id = monsterID.c_str();
     EventEmitter::emit(event);
 }
 
