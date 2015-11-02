@@ -1,10 +1,22 @@
 <?xml version="1.0"?>
-<dungeon name="The Mighty Example" floorsCount="7" roomsByFloor="5" fame="41">
+<dungeon name="The Mighty Example" time="4555" floorsCount="7" roomsByFloor="5" fame="41">
     <monsters>
-        <monster type="creepim">
-            <rx type="float" value="1.5" />
-            <ry type="float" value="4.62" />
-        </monster>
+        <reserve>
+            <monsterCage type="creepim" countdown="132">
+                <monster type="creepim" />
+                <monster type="creepim" />
+            </monsterCage>
+            <monsterCage type="sand_spirit" countdown="11">
+                <monster type="sand_spirit" />
+                <monster type="sand_spirit" />
+            </monsterCage>
+        </reserve>
+        <active>
+            <monster type="creepim">
+                <rx type="float" value="1.5" />
+                <ry type="float" value="4.62" />
+            </monster>
+        </active>
     </monsters>
 	<floor pos="0">
 		<room pos="0" state="constructed" />

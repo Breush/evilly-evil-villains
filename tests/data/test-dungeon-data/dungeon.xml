@@ -1,9 +1,17 @@
 <?xml version="1.0"?>
 <dungeon name="Dungeon" time="23" floorsCount="3" roomsByFloor="4" fame="0">
 	<monsters>
-		<monster type="creepim">
-			<rx type="float" value="1.5" />
-		</monster>
+		<reserve>
+			<monsterCage type="sand_spirit" countdown="44">
+				<monster type="sand_spirit" />
+				<monster type="sand_spirit" />
+			</monsterCage>
+		</reserve>
+		<active>
+			<monster type="creepim">
+				<rx type="float" value="1.5" />
+			</monster>
+		</active>
 	</monsters>
 	<floor pos="0">
 		<room pos="0" state="constructed" />

@@ -102,6 +102,8 @@ void Data::loadDungeon(const std::wstring& file)
 {
     m_timeBuffer = 0.f;
     m_floors.clear();
+    m_monstersInfo.active.clear();
+    m_monstersInfo.reserve.clear();
 
     // Parsing XML
     pugi::xml_document doc;
@@ -121,12 +123,32 @@ void Data::loadDungeon(const std::wstring& file)
     setFame(dungeon.attribute(L"fame").as_uint());
     wdebug_dungeon_1(L"Dungeon is " << m_name << L" of size " << m_floorsCount << L"x" << m_roomsByFloor << L".");
 
-    // Monsters
-    for (const auto& monsterNode : dungeon.child(L"monsters").children(L"monster")) {
+    //---- Monsters
+
+    // Reserve
+    const auto& monstersNode = dungeon.child(L"monsters");
+    const auto& reserveNode = monstersNode.child(L"reserve");
+    for (const auto& monsterCageNode : reserveNode.children(L"monsterCage")) {
+        MonsterCageInfo monsterCageInfo;
+        monsterCageInfo.type = monsterCageNode.attribute(L"type").as_string();
+        monsterCageInfo.countdown = monsterCageNode.attribute(L"countdown").as_uint();
+        for (const auto& monsterNode : monsterCageNode.children(L"monster")) {
+            MonsterInfo monsterInfo;
+            monsterInfo.data.loadXML(monsterNode);
+            monsterCageInfo.monsters.emplace_back(std::move(monsterInfo));
+        }
+        m_monstersInfo.reserve.emplace_back(std::move(monsterCageInfo));
+    }
+
+    // Active
+    const auto& activeNode = monstersNode.child(L"active");
+    for (const auto& monsterNode : activeNode.children(L"monster")) {
         MonsterInfo monsterInfo;
         monsterInfo.data.loadXML(monsterNode);
-        m_monstersInfo.emplace_back(std::move(monsterInfo));
+        m_monstersInfo.active.emplace_back(std::move(monsterInfo));
     }
+
+    //---- Structure
 
     // Floors
     m_floors.reserve(m_floorsCount);
@@ -177,12 +199,29 @@ void Data::saveDungeon(const std::wstring& file)
     dungeon.append_attribute(L"roomsByFloor") = m_roomsByFloor;
     dungeon.append_attribute(L"fame") = fame();
 
-    // Monsters
+    //---- Monsters
+
+    // Reserve
     auto monstersNode = dungeon.append_child(L"monsters");
-    for (const auto& monsterInfo : m_monstersInfo) {
-        auto monsterNode = monstersNode.append_child(L"monster");
+    auto reserveNode = monstersNode.append_child(L"reserve");
+    for (const auto& monsterCage : m_monstersInfo.reserve) {
+        auto monsterCageNode = reserveNode.append_child(L"monsterCage");
+        monsterCageNode.append_attribute(L"type") = monsterCage.type.c_str();
+        monsterCageNode.append_attribute(L"countdown") = monsterCage.countdown;
+        for (const auto& monsterInfo : monsterCage.monsters) {
+            auto monsterNode = monsterCageNode.append_child(L"monster");
+            monsterInfo.data.saveXML(monsterNode);
+        }
+    }
+
+    // Active
+    auto activeNode = monstersNode.append_child(L"active");
+    for (const auto& monsterInfo : m_monstersInfo.active) {
+        auto monsterNode = activeNode.append_child(L"monster");
         monsterInfo.data.saveXML(monsterNode);
     }
+
+    //---- Structure
 
     // Floors
     for (uint floorPos = 0; floorPos < m_floors.size(); ++floorPos) {
@@ -287,7 +326,7 @@ void Data::destroyRoom(const sf::Vector2u& coords, bool hard)
     removeRoomTrap(coords);
 
     // Destroy monsters inside
-    std::erase_if(m_monstersInfo, [coords] (const MonsterInfo& monsterInfo) {
+    std::erase_if(m_monstersInfo.active, [coords] (const MonsterInfo& monsterInfo) {
         sf::Vector2u monsterCoords;
         monsterCoords.x = static_cast<uint>(monsterInfo.data.at(L"rx").as_float());
         monsterCoords.y = static_cast<uint>(monsterInfo.data.at(L"ry").as_float());
@@ -471,8 +510,10 @@ void Data::addMonster(const sf::Vector2u& coords, const std::wstring& monsterID)
     // TODO Have a dungeon::Wallet that can handle full price (dosh/soul/fame)
     m_villain->doshWallet.sub(m_monstersDB.get(monsterID).baseCost.dosh);
 
-    m_monstersInfo.emplace_back();
-    auto& monsterInfo = m_monstersInfo.back();
+    // TODO Should move one from reserve to active
+    // And rename that function activateMonster()
+    m_monstersInfo.active.emplace_back();
+    auto& monsterInfo = m_monstersInfo.active.back();
 
     // Create and initialize position
     monsterInfo.data.create(monsterID);

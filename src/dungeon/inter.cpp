@@ -608,7 +608,7 @@ void Inter::refreshMonsters()
 {
     m_monsters.clear();
 
-    for (auto& monsterInfo : m_data->monstersInfo()) {
+    for (auto& monsterInfo : m_data->monstersInfo().active) {
         auto monster = std::make_unique<Monster>(monsterInfo.data, *this);
         monster->setEmitter(m_data);
         monster->useGraph(m_data->graph());
