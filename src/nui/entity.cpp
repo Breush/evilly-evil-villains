@@ -34,13 +34,15 @@ void Entity::refreshNUI(const config::NUIGuides& cNUI)
     refreshTooltipBackground();
 }
 
-void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Entity::drawInternal(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    baseClass::draw(target, states);
+    // FIXME Tooltip should become a invariant child of this entity
+    // Otherwise clipping/etc. will affect it
+    // But how to make it over all objects ?
+    // We might want to make it a child of the entity's parent
 
     // Tooltip
     if (m_showTooltip && m_tooltipTime >= m_tooltipDelay) {
-        states.transform = getTransform();
         target.draw(m_tooltipBackground, states);
         target.draw(m_tooltipText, states);
     }

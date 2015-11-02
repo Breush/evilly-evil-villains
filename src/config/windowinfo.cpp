@@ -11,8 +11,13 @@ void WindowInfo::recompute()
 {
     viewport = {0.f, 0.f, 1.f, 1.f};
 
+    // Update the reference view
+    referenceView.setSize(resolution);
+    referenceView.setCenter(resolution / 2.f);
+
     // Quick check
     if (screenSize == resolution) {
+        referenceView.setViewport(viewport);
         effectiveDisplay = resolution;
         return;
     };
@@ -31,6 +36,9 @@ void WindowInfo::recompute()
         viewport.top = (1.f - viewport.height) / 2.f;
     }
 
-    // Effective display is real dimension in pixels of the drawable area.
+    // Effective display is real dimension in pixels of the drawable area
     effectiveDisplay = {screenSize.x * viewport.width, screenSize.y * viewport.height};
+
+    // Update the reference view
+    referenceView.setViewport(viewport);
 }

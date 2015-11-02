@@ -35,10 +35,11 @@ namespace dungeon
         //! All infos that we can find in each monster.
         struct MonsterData
         {
-            Cost baseCost;      //!< Starting price.
-            Cost monthlyCost;   //!< Salary.
-            sf::Vector2f speed; //!< Speed relative to dungeon room size.
-            float pauseDelay;   //!< How many seconds to stay still if the monster stays in the room.
+            std::wstring name = L"(Unknown)";   //!< Translated name. TODO: How to get translation for this?
+            Cost baseCost;                      //!< Starting price.
+            Cost monthlyCost;                   //!< Salary.
+            sf::Vector2f speed;                 //!< Speed relative to dungeon room size.
+            float pauseDelay;                   //!< How many seconds to stay still if the monster stays in the room.
         };
 
     public:

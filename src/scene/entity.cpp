@@ -116,13 +116,16 @@ void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
             glScissor(r.left, r.top, r.width, r.height);
         }
 
-        // Effectively drawing this part
+        // Effectively drawing this object
         target.draw(*part.drawable, states);
 
         // Disable part clipping
         if (part.clipping && !m_globalClipping)
             glDisable(GL_SCISSOR_TEST);
     }
+
+    // Extra drawing hook
+    drawInternal(target, states);
 
     // End of clipping
     if (m_globalClipping)

@@ -1,5 +1,6 @@
 #include "nui/stacker.hpp"
 
+#include "core/application.hpp"
 #include "tools/debug.hpp"
 #include "tools/platform-fixes.hpp" // erase_if
 
@@ -17,6 +18,19 @@ void Stacker::onChildDetached(scene::Entity& child)
 {
     std::erase_if(m_children, [&](const Child& inChild) { return inChild.entity == &child; });
     updateSize();
+}
+
+//-------------------//
+//----- Display -----//
+
+void Stacker::setPadding(const float inPadding)
+{
+    m_paddingOverwritten = (inPadding >= 0.f);
+
+    if (m_paddingOverwritten)
+        m_padding = inPadding;
+    else
+        refreshNUI(Application::context().nuiGuides);
 }
 
 //-------------------------------//

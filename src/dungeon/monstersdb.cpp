@@ -1,5 +1,6 @@
 #include "dungeon/monstersdb.hpp"
 
+#include "core/gettext.hpp"
 #include "tools/filesystem.hpp"
 
 #include <pugixml/pugixml.hpp>
@@ -43,6 +44,8 @@ void MonstersDB::add(const std::string& filename)
 
     // Create the corresponding data
     auto& monsterData = m_monstersData[id];
+    std::wstring trName = monsterNode.attribute(L"trName").as_string();
+    monsterData.name = _(toString(std::wstring(trName)).c_str());
 
     // Adding data
     for (const auto& dataNode : monsterNode) {

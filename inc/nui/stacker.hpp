@@ -39,6 +39,16 @@ namespace nui
 
         //! @}
 
+        //----------------//
+        //! @name Display
+        //! @{
+
+        //! Overwrite the default padding.
+        //! Set to a negative value to reset to default.
+        void setPadding(const float inPadding);
+
+        //! @}
+
     protected:
 
         //----------------//
@@ -65,8 +75,9 @@ namespace nui
 
         std::list<Child> m_children;    //!< All stacked entities.
 
-        // Decorum
-        float m_padding = 0.f;  //!< The space between two stacked entities.
+        // Padding
+        float m_padding = -1.f;             //!< The space between two stacked entities.
+        bool m_paddingOverwritten = false;  //!< Decides if the padding is controlled externally.
     };
 }
 

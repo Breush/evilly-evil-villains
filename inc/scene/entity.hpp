@@ -190,11 +190,10 @@ namespace scene
         //! @{
 
         //! Draws the entity parts and recursively calls children draw functions.
-        /*!
-         *  It is virtual so that one can use external drawing functions such as
-         *  scene::AnimatedSprite handles.
-         */
-        virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
+
+        //! Extra hook for drawing something else than drawables.
+        virtual void drawInternal(sf::RenderTarget& target, sf::RenderStates states) const {}
 
         //! Draws all parts of the entity.
         void drawParts(sf::RenderTarget& target, sf::RenderStates states) const;

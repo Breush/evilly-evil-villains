@@ -17,7 +17,8 @@ void HStacker::refreshNUI(const config::NUIGuides& cNUI)
 {
     baseClass::refreshNUI(cNUI);
 
-    m_padding = cNUI.vPadding;
+    if (!m_paddingOverwritten)
+        m_padding = cNUI.hPadding;
 
     updateSize();
 }

@@ -2,7 +2,7 @@
 
 #include "scene/entity.hpp"
 #include "scene/grabbable.hpp"
-#include "scene/wrappers/richlabel.hpp"
+#include "scene/wrappers/label.hpp"
 #include "context/event.hpp"
 #include "ai/dumbpuppet.hpp"
 
@@ -15,7 +15,7 @@ namespace dungeon
     class Data;
     class Inter;
 
-    //! A MonsterGrabbable spawner.
+    //! Monster panel part.
     /*!
      *  Implements the scene::GrabbableSpawner for a monster reserve.
      *  The player grabs and moves the monster into the dungeon.
@@ -87,12 +87,13 @@ namespace dungeon
         std::wstring m_monsterID;   //!< The monster to be managed in this cage.
 
         // Reserve
+        sf::RectangleShape m_reserveBackground;                 //!< Background for the reserve part.
         std::vector<std::unique_ptr<ai::DumbPuppet>> m_puppets; //!< Puppet that moves from left to right.
-
-        // Decorum
-        sf::RectangleShape m_background;    //!< Background.
-        scene::RichLabel m_baseCostLabel;   //!< Text for base cost.
         float m_scaleFactor = 1.f;          //!< Scaling for puppets.
+
+        // Box
+        scene::Label m_nameLabel;       //!< Text for the monster's name.
+        scene::Label m_baseCostLabel;   //!< Text for base cost.
     };
 
     //! A monster temporary object.
@@ -107,7 +108,7 @@ namespace dungeon
     public:
 
         //! Constructor, affecting texture and look.
-        MonsterGrabbable(scene::GrabbableSpawner& spawner, const std::wstring& monsterID);
+        MonsterGrabbable(scene::GrabbableSpawner& spawner, const std::wstring& monsterID, const sf::Vector2f& scale);
 
         //! Default destructor.
         ~MonsterGrabbable() = default;

@@ -23,6 +23,8 @@ namespace scene
             NUI,
             NUI_SOBER,
             NUI_TITLE,
+            NUI_SMALL,
+            NUI_SMALL_TITLE,
             MENU_TITLE,
             MENU_POPUP_TITLE,
             MENU_SOBER,

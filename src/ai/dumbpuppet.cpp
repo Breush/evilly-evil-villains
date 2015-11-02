@@ -1,6 +1,7 @@
 #include "ai/dumbpuppet.hpp"
 
 #include "tools/tools.hpp"
+#include "tools/random.hpp"
 
 using namespace ai;
 
@@ -17,8 +18,8 @@ void DumbPuppet::updateAI(const sf::Time& dt)
 {
     returnif (lerpable()->positionLerping());
 
-    if (localPosition().x == m_minX)    lerpable()->setTargetPosition({m_maxX, localPosition().y});
-    else                                lerpable()->setTargetPosition({m_minX, localPosition().y});
+    // Go somethere randomly
+    lerpable()->setTargetPosition({alea::rand(m_minX, m_maxX), localPosition().y});
 }
 
 //-------------------//
@@ -39,6 +40,4 @@ void DumbPuppet::setHorizontalRange(float minX, float maxX)
 {
     m_minX = minX;
     m_maxX = maxX;
-
-    lerpable()->setTargetPosition({m_minX, localPosition().y});
 }

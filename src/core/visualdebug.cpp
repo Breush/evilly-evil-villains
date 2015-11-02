@@ -57,10 +57,7 @@ void VisualDebug::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void VisualDebug::refreshWindow(const config::WindowInfo& cWindow)
 {
-    // The view
-    m_view.setViewport(cWindow.viewport);
-    m_view.setSize(cWindow.resolution);
-    m_view.setCenter(cWindow.resolution / 2.f);
+    m_view = cWindow.referenceView;
 }
 
 void VisualDebug::refreshNUI(const config::NUIGuides& cNUI)

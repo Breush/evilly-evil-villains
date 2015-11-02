@@ -41,7 +41,7 @@ namespace nui
         //! @{
 
         void update(const sf::Time& dt) final;
-        void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
+        void drawInternal(sf::RenderTarget& target, sf::RenderStates states) const final;
         virtual void refreshNUI(const config::NUIGuides& cNUI) override;
 
         //! @}

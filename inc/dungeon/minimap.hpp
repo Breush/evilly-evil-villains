@@ -66,7 +66,7 @@ namespace dungeon
         //! @name Routine
         //! @{
 
-        void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
+        void drawInternal(sf::RenderTarget& target, sf::RenderStates states) const final;
         void onTransformChanges() final;
         void onSizeChanges() final;
         void refreshNUI(const config::NUIGuides& cNUI) final;

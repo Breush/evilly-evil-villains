@@ -23,20 +23,17 @@ AnimatedSprite::~AnimatedSprite()
 //-------------------//
 //----- Routine -----//
 
-void AnimatedSprite::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void AnimatedSprite::drawInternal(sf::RenderTarget& target, sf::RenderStates states) const
 {
     // TODO This does not take states shader in account?
+    // TODO This probably should use states.tranform info for position/rotation/scale.
 
-    if (visible()) {
-        // Drawing all parts of animation
-        // because scml::Entity can not be managed by scene::Graph
-        for (const auto& entity : m_entities) {
-            entity->setScreen(&target);
-            entity->draw(getPosition().x, getPosition().y, getRotation(), scale().x, scale().y);
-        }
+    // Drawing all parts of animation
+    // because scml::Entity can not be managed by scene::Graph
+    for (const auto& entity : m_entities) {
+        entity->setScreen(&target);
+        entity->draw(getPosition().x, getPosition().y, getRotation(), scale().x, scale().y);
     }
-
-    baseClass::draw(target, states);
 }
 
 void AnimatedSprite::updateAnimation(const sf::Time& dt)

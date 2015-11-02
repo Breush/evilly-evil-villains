@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<monster id="sand_spirit">
+<monster id="sand_spirit" trName="Sand spirit">
     <data name="baseCost" dosh="1050" soul="2" />
     <data name="monthlyCost" dosh="90" />
     <data name="speed" vx="0.11" vy="0.21" />

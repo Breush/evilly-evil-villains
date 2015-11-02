@@ -4,6 +4,8 @@
 #include "tools/vector.hpp"
 #include "tools/int.hpp"
 
+#include <SFML/Graphics/View.hpp>
+
 namespace config
 {
     //! Extra information for window.
@@ -25,5 +27,6 @@ namespace config
         // Computed
         sf::FloatRect viewport;         //!< The current viewport.
         sf::Vector2f effectiveDisplay;  //!< The dimensions of the viewport centered for the window, same ratio as resolution.
+        sf::View referenceView;         //!< The reference view, always OK for NUI.
     };
 }

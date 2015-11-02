@@ -33,12 +33,13 @@ Sidebar::Sidebar(scene::Scene& inScene, Inter& inter, Data& data)
     m_globalStacker.stackBack(m_minimap, nui::Align::CENTER);
     m_globalStacker.stackBack(m_lock, nui::Align::CENTER);
 
-    // Minimap
-    m_minimap.setCallbackAction([this] (const sf::Vector2f& position) { m_scene.setViewCenter(position); });
-
-    // Tabs content
+    // Tabs
+    m_tabContents[TabsID::MONSTERS].stacker.setPadding(0.f);
     for (auto& tabContent : m_tabContents)
         tabContent.scrollArea.setContent(tabContent.stacker);
+
+    // Minimap
+    m_minimap.setCallbackAction([this] (const sf::Vector2f& position) { m_scene.setViewCenter(position); });
 }
 
 Sidebar::~Sidebar()

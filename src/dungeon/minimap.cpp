@@ -10,12 +10,12 @@ using namespace dungeon;
 Minimap::Minimap()
 {
     // Background
+    addPart(&m_background);
     m_background.setOutlineThickness(1.f);
     m_background.setOutlineColor(sf::Color::White);
     m_background.setFillColor({255u, 255u, 255u, 150u});
 
     // Layer view indicator
-    addPart(&m_layerViewIndicator);
     m_layerViewIndicator.setFillColor({255u, 255u, 255u, 100u});
     m_layerViewIndicator.setOutlineColor(sf::Color::White);
     m_layerViewIndicator.setOutlineThickness(1.f);
@@ -33,15 +33,8 @@ void Minimap::onTransformChanges()
     refreshViewport();
 }
 
-void Minimap::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Minimap::drawInternal(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    // We manage drawing ourself because of the view thingy.
-    returnif (!visible());
-    states.transform = getTransform();
-
-    // Background
-    target.draw(m_background, states);
-
     // Draw the minimap
     if (m_layer != nullptr) {
         auto previousView = target.getView();
@@ -50,12 +43,14 @@ void Minimap::draw(sf::RenderTarget& target, sf::RenderStates states) const
         target.setView(previousView);
     }
 
-    baseClass::draw(target, states);
+    // Layer indicator overlay
+    target.draw(m_layerViewIndicator, states);
 }
 
 void Minimap::onSizeChanges()
 {
     m_background.setSize(size());
+    refreshViewport();
 }
 
 void Minimap::refreshWindow(const config::WindowInfo& cWindow)
@@ -144,12 +139,15 @@ void Minimap::refreshSize()
     refreshViewIndicator();
 }
 
+#include <iostream>
+
 void Minimap::refreshViewport()
 {
     const auto& window = Application::context().window;
     const auto& screenSize = Application::context().windowInfo.screenSize;
+    const auto& referenceView = Application::context().windowInfo.referenceView;
     sf::FloatRect rect{getPosition().x, getPosition().y, size().x, size().y};
-    rect = tools::mapRectCoordsToPixel(window, rect);
+    rect = tools::mapRectCoordsToPixel(window, rect, &referenceView);
     m_view.setViewport(rect / screenSize);
 }
 

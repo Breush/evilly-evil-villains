@@ -158,12 +158,20 @@ void GameDungeonDesign::handleEvent(const sf::Event& event)
     m_contextMenu.handleGlobalEvent(event);
 
     if ((event.type == sf::Event::KeyPressed
-        && event.key.code == sf::Keyboard::Escape)
-        || event.type == sf::Event::LostFocus) {
+        && event.key.code == sf::Keyboard::Escape)) {
         if (!isStateVisible(StateID::GAME_PAUSE))
             stackPush(StateID::GAME_PAUSE);
         return;
     }
+
+    // TODO Make it a config option?
+    #if DEBUG_GLOBAL == 0
+    if (event.type == sf::Event::LostFocus) {
+        if (!isStateVisible(StateID::GAME_PAUSE))
+            stackPush(StateID::GAME_PAUSE);
+        return;
+    }
+    #endif
 
     State::handleEvent(event);
 }
