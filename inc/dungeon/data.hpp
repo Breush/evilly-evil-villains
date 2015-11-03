@@ -202,8 +202,8 @@ namespace dungeon
         //! Is adding the monster a valid action? Checks against dungeon consistency.
         bool addMonsterValid(const sf::Vector2u& coords, const std::wstring& monsterID);
 
-        //! Add the specified type of monster to the dungeon.
-        void addMonster(const sf::Vector2u& coords, const std::wstring& monsterID);
+        //! Add the specified type of monster to the reserve.
+        void addMonsterToReserve(const std::wstring& monsterID);
 
         //! Move the specified type of monster from reserve into the dungeon.
         void moveMonsterFromReserve(const sf::Vector2u& coords, const std::wstring& monsterID);

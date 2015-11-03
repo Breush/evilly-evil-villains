@@ -126,6 +126,9 @@ namespace scene
         //! Expects inRelativePosition coordinates to be between 0.f and 1.f.
         void setRelativePosition(const sf::Vector2f& inRelativePosition);
 
+        //! Returns true if the global clipping is activated.
+        inline bool globalClipping() const { return m_globalClipping; }
+
         //! Returns the global clip area of the entity.
         inline sf::FloatRect globalClipArea() const { return m_globalClipArea; }
 

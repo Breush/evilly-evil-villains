@@ -160,6 +160,8 @@ void Entity::updateChanges()
 
     // Update internal state if local changes
     if (m_localChanges) {
+        refreshClipArea();
+
         if (m_focused)
             m_graph->updateFocusSprite();
 
@@ -512,8 +514,6 @@ void Entity::refreshFromLocalPosition()
         setPosition(m_localPosition);
     }
 
-    if (m_focused) m_graph->updateFocusSprite();
-
     for (auto& child : m_children)
         child->refreshFromLocalPosition();
 }
@@ -530,8 +530,6 @@ void Entity::refreshFromLocalRotation()
         setRotation(m_localRotation);
     }
 
-    if (m_focused) m_graph->updateFocusSprite();
-
     for (auto& child : m_children)
         child->refreshFromLocalRotation();
 }
@@ -546,8 +544,6 @@ void Entity::refreshFromLocalScale()
     } else {
         m_scale = m_localScale;
     }
-
-    if (m_focused) m_graph->updateFocusSprite();
 
     for (auto& child : m_children)
         child->refreshFromLocalScale();
@@ -660,6 +656,8 @@ void Entity::giveFocus()
 
 void Entity::setParent(Entity* inParent)
 {
+    returnif (m_parent == inParent);
+
     // If it has no parent before,
     // a refresh of NUI/Window is forced.
     if (m_parent == nullptr && inParent != nullptr)

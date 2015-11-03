@@ -124,7 +124,15 @@ void Graph::refreshNUI(const config::NUIGuides& cNUI)
 void Graph::updateFocusSprite()
 {
     returnif (m_focusedEntity == nullptr);
-    const sf::FloatRect& focusRect = m_focusedEntity->focusRect();
+    auto focusRect = m_focusedEntity->focusRect();
+    if (m_focusedEntity->globalClipping())
+        focusRect = tools::intersect(focusRect, m_focusedEntity->globalClipArea());
+
+    // Hide if focus rect invalid
+    if (focusRect.width < 0.f || focusRect.height < 0.f) {
+        m_focusShape.setSize({0.f, 0.f});
+        return;
+    }
 
     sf::Vector2f focusPosition(focusRect.left, focusRect.top);
     sf::Vector2f focusSize(focusRect.width, focusRect.height);
@@ -137,6 +145,7 @@ void Graph::updateFocusSprite()
         Application::context().shaders.get("nui/focus").setParameter("position", globalFocusPosition);
         Application::context().shaders.get("nui/focus").setParameter("textureSize", focusSize);
     }
+    // TODO Any back-up?
 }
 
 void Graph::setFocusedEntity(Entity* focusedEntity)

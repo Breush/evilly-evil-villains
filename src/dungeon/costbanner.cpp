@@ -9,7 +9,7 @@ using namespace dungeon;
 CostBanner::CostBanner()
 {
     // Text
-    m_text.setFont(Application::context().fonts.get("nui"));
+    m_text.setFont(Application::context().fonts.get("mono"));
 
     // Icons
     m_icons[IconID::DOSH].setTexture(&Application::context().textures.get("elements/dosh"));
@@ -45,7 +45,7 @@ void CostBanner::addString(std::wstring& str, bool& first, uint value, sf::Recta
 {
     returnif (value == 0u);
 
-    if (!first) str += L"     ";
+    if (!first) str += L"  ";
     str += toWString(value);
     m_text.setString(str);
     icon.setPosition(boundsSize(m_text).x + 0.1f * m_refSize, 0.f);

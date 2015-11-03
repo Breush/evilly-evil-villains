@@ -3,6 +3,8 @@
 #include "scene/entity.hpp"
 #include "scene/grabbable.hpp"
 #include "scene/wrappers/label.hpp"
+#include "scene/wrappers/richlabel.hpp"
+#include "scene/wrappers/rectangleshape.hpp"
 #include "dungeon/costbanner.hpp"
 #include "context/event.hpp"
 #include "ai/dumbpuppet.hpp"
@@ -60,6 +62,15 @@ namespace dungeon
         //! @name Grabbable
         //! @{
 
+        //! Tries to hire a new monster.
+        void hire();
+
+        //! @}
+
+        //------------------//
+        //! @name Grabbable
+        //! @{
+
         void grabbableMoved(Entity *entity, const sf::Vector2f &relPos, const sf::Vector2f &nuiPos) final;
         void grabbableButtonReleased(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
         std::unique_ptr<scene::Grabbable> spawnGrabbable() final;
@@ -69,6 +80,9 @@ namespace dungeon
         //--------------------------------//
         //! @name Internal change updates
         //! @{
+
+        //! Refresh the hire box text, position and size.
+        void refreshHireBox();
 
         //! Refresh the number of puppets in the reserve.
         void refreshReservePuppetsCount();
@@ -90,8 +104,13 @@ namespace dungeon
         float m_scaleFactor = 1.f;                              //!< Scaling for puppets.
 
         // Box
-        scene::Label m_nameLabel;       //!< Text for the monster's name.
-        CostBanner m_baseCostBanner;    //!< Text for base cost.
+        scene::Label m_nameLabel;                   //!< Text for the monster's name.
+        CostBanner m_baseCostBanner;                //!< Banner for base cost.
+        scene::RichLabel m_hireBoxLabel;            //!< Text for hire time.
+        scene::RectangleShape m_hireBoxBackground;  //!< The hire time background.
+
+        // Decorum
+        float m_padding = 0.f;  //!< The padding.
     };
 
     //! A monster temporary object.

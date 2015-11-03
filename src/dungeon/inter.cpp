@@ -512,9 +512,9 @@ void Inter::moveMonsterFromReserve(const sf::Vector2f& relPos, const std::wstrin
     m_data->moveMonsterFromReserve(tileFromLocalPosition(relPos), monsterID);
 }
 
-void Inter::addMonster(const sf::Vector2f& relPos, const std::wstring& monsterID)
+void Inter::addMonsterToReserve(const std::wstring& monsterID)
 {
-    m_data->addMonster(tileFromLocalPosition(relPos), monsterID);
+    m_data->addMonsterToReserve(monsterID);
 }
 
 void Inter::constructRoom(const sf::Vector2f& relPos)

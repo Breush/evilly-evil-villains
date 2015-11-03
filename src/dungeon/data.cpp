@@ -500,21 +500,22 @@ bool Data::addMonsterValid(const sf::Vector2u& coords, const std::wstring& monst
     return true;
 }
 
-void Data::addMonster(const sf::Vector2u& coords, const std::wstring& monsterID)
+void Data::addMonsterToReserve(const std::wstring& monsterID)
 {
-    returnif (!addMonsterValid(coords, monsterID));
+    auto& reserve = m_monstersInfo.reserve;
+    auto pMonsterCage = std::find_if(reserve, [&monsterID] (const MonsterCageInfo& monsterCage) { return monsterCage.type == monsterID; });
 
-    // TODO Have a dungeon::Wallet that can handle full price (dosh/soul/fame)
-    // + Let Inter check for that.
-    returnif (!m_villain->doshWallet.sub(m_monstersDB.get(monsterID).baseCost.dosh));
+    // No previous cage, create it
+    if (pMonsterCage == std::end(reserve)) {
+        m_monstersInfo.reserve.emplace_back();
+        pMonsterCage = std::prev(std::end(m_monstersInfo.reserve));
+        pMonsterCage->type = monsterID;
+    }
 
-    m_monstersInfo.active.emplace_back();
-    auto& monsterInfo = m_monstersInfo.active.back();
-
-    // Create and initialize position
+    // Add a monster in there
+    pMonsterCage->monsters.emplace_back();
+    auto& monsterInfo = pMonsterCage->monsters.back();
     monsterInfo.data.create(monsterID);
-    monsterInfo.data[L"rx"].init_float(coords.x + 0.5f);
-    monsterInfo.data[L"ry"].init_float(coords.y + 0.5f);
 
     Event event;
     event.type = "monster_added";
