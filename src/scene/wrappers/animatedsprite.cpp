@@ -94,6 +94,7 @@ void AnimatedSprite::select(const std::wstring& animationName)
 
 void AnimatedSprite::restart()
 {
+    m_started = true;
     for (const auto& entity : m_entities)
         entity->startAnimation(m_number);
 }

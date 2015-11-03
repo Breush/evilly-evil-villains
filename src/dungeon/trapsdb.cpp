@@ -52,7 +52,7 @@ void TrapsDB::add(const std::string& filename)
     // Create the corresponding data
     auto& trapData = m_trapsData[id];
     std::wstring trName = trapNode.attribute(L"trName").as_string();
-    trapData.name = _(toString(std::wstring(trName)).c_str());
+    trapData.name = _(toString(trName).c_str());
 
     // Adding data
     for (const auto& dataNode : trapNode) {

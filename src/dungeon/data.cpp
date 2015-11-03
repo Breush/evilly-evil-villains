@@ -5,7 +5,6 @@
 #include "dungeon/hero.hpp"
 #include "dungeon/traps.hpp"
 #include "dungeon/facilities/maker.hpp"
-#include "dungeon/traps/maker.hpp"
 #include "context/villains.hpp"
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
@@ -460,7 +459,8 @@ void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
     returnif (roomInfo.trap.exists() && roomInfo.trap.type() == trapID);
 
     // Continue if and only if wallet authorize us
-    returnif (!m_villain->doshWallet.addsub(traps::onDestroyGain(roomInfo.trap), traps::onCreateCost(trapID)));
+    // TODO Use trapsDB data (in Inter!)
+    // returnif (!m_villain->doshWallet.addsub(traps::onDestroyGain(roomInfo.trap), traps::onCreateCost(trapID)));
 
     // Destroy previous trap if any
     roomInfo.trap.clear();
@@ -480,7 +480,8 @@ void Data::removeRoomTrap(const sf::Vector2u& coords)
     auto& roomInfo = room(coords);
     returnif (!roomInfo.trap.exists());
 
-    m_villain->doshWallet.add(traps::onDestroyGain(roomInfo.trap));
+    // TODO Use trapsDB data (in Inter!)
+    // m_villain->doshWallet.add(traps::onDestroyGain(roomInfo.trap));
     roomInfo.trap.clear();
 
     // Emit event

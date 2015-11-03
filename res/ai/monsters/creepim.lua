@@ -24,7 +24,7 @@ function _register()
 end
 
 -- Whenever a hero comes too close
-function cbHeroClose()
+function cbHeroClose(heroUID)
     if not fusing then
         -- Stop doing anything else
         fusing = true
@@ -47,7 +47,7 @@ end
 function _update(dt)
     if fusing and eev_isAnimationStopped() then
         eev_dungeonExplodeRoom(eev_getCurrentRoomX(), eev_getCurrentRoomY())
-        fusing = false;
+        fusing = false
     end
 end
 

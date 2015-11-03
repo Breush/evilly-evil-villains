@@ -8,14 +8,14 @@
 using namespace dungeon;
 using namespace std::placeholders;
 
-Monster::Monster(ElementData &elementdata, Inter &inter)
+Monster::Monster(ElementData& edata, Inter& inter)
     : baseClass(true)
     , m_active(false)
     , m_inter(inter)
-    , m_elementdata(elementdata)
+    , m_edata(edata)
 {
     setDetectable(false);
-    const auto& monsterID = elementdata.type();
+    const auto& monsterID = m_edata.type();
     auto sMonsterID = toString(monsterID);
     const auto& monsterData = m_inter.monstersDB().get(monsterID);
 
@@ -26,10 +26,11 @@ Monster::Monster(ElementData &elementdata, Inter &inter)
 
     // Initial position
     sf::Vector2f monsterPosition;
-    monsterPosition.x = m_elementdata[L"ry"].as_float() * m_inter.tileSize().x;
-    monsterPosition.y = m_inter.size().y - m_elementdata[L"rx"].as_float() * m_inter.tileSize().y;
+    monsterPosition.x = m_edata[L"ry"].as_float() * m_inter.tileSize().x;
+    monsterPosition.y = m_inter.size().y - m_edata[L"rx"].as_float() * m_inter.tileSize().y;
     lerpable()->setTargetPosition(monsterPosition);
     setLocalPosition(monsterPosition);
+    centerOrigin();
 
     // Decorum
     attachChild(m_sprite);
@@ -67,8 +68,8 @@ Monster::Monster(ElementData &elementdata, Inter &inter)
 void Monster::onTransformChanges()
 {
     // Note: Room coordinates convention is inverted because the floor appears first
-    m_elementdata[L"rx"].as_float() = (m_inter.size().y - localPosition().y) / m_inter.tileSize().y;
-    m_elementdata[L"ry"].as_float() = localPosition().x / m_inter.tileSize().x;
+    m_edata[L"rx"].as_float() = (m_inter.size().y - localPosition().y) / m_inter.tileSize().y;
+    m_edata[L"ry"].as_float() = localPosition().x / m_inter.tileSize().x;
 }
 
 void Monster::updateAI(const sf::Time& dt)
@@ -151,7 +152,7 @@ const Graph::NodeData* Monster::findNextNode(const Graph::NodeData* currentNode)
 
 void Monster::lua_addCallback(const std::string& luaKey, const std::string& entityType, const std::string& condition)
 {
-    addDetectSignal(entityType, condition, [this, luaKey] { m_lua[luaKey.c_str()](); });
+    addDetectSignal(entityType, condition, [this, luaKey] (const uint32 UID) { m_lua[luaKey.c_str()](UID); });
 }
 
 void Monster::lua_selectAnimation(const std::string& animationKey)
@@ -184,17 +185,17 @@ bool Monster::lua_isAnimationStopped() const
 
 uint Monster::lua_getCurrentRoomX() const
 {
-    return static_cast<uint>(m_elementdata[L"rx"].as_float());
+    return static_cast<uint>(m_edata[L"rx"].as_float());
 }
 
 uint Monster::lua_getCurrentRoomY() const
 {
-    return static_cast<uint>(m_elementdata[L"ry"].as_float());
+    return static_cast<uint>(m_edata[L"ry"].as_float());
 }
 
 void Monster::lua_log(const std::string& str) const
 {
-    std::cerr << "LUA: " << str << std::endl;
+    std::cerr << "LUA [monster::" << toString(m_edata.type()) << "] " << str << std::endl;
 }
 
 void Monster::lua_dungeonExplodeRoom(const uint x, const uint y)

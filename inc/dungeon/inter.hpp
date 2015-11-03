@@ -4,7 +4,7 @@
 #include "context/event.hpp"
 #include "context/command.hpp"
 #include "dungeon/data.hpp"
-#include "dungeon/traps.hpp"
+#include "dungeon/trap.hpp"
 #include "dungeon/monster.hpp"
 #include "dungeon/facilities.hpp"
 #include "nui/contextmenu.hpp"

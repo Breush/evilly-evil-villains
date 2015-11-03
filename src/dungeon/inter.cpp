@@ -4,8 +4,8 @@
 #include "core/application.hpp"
 #include "context/villains.hpp"
 #include "context/logger.hpp"
+#include "dungeon/trap.hpp"
 #include "dungeon/monster.hpp"
-#include "dungeon/traps/maker.hpp"
 #include "dungeon/facilities/maker.hpp"
 #include "dungeon/heroesmanager.hpp"
 #include "tools/debug.hpp"
@@ -810,11 +810,8 @@ void Inter::refreshTileTraps(const sf::Vector2u& coords)
     returnif (!room.trap.exists());
 
     // Trap
-    tile.trap = traps::make(coords, room.trap, *this);
-    tile.trap->setLocalPosition(tileLocalPosition(coords) + tileSize() / 2.f);
-    tile.trap->setLocalScale(m_roomScale);
+    tile.trap = std::make_unique<Trap>(coords, room.trap, *this);
     tile.trap->setEmitter(m_data);
-    tile.trap->centerOrigin();
     attachChild(*tile.trap);
 }
 

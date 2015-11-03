@@ -8,61 +8,10 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
+// TODO Rename this file to something similar at MonsterCage
+
 namespace dungeon
 {
-    // Forward declarations
-
-    class Inter;
-
-    //! A generic trap interface.
-    class Trap : public scene::Entity, public context::EventReceiver
-    {
-    public:
-
-        //! Constructor.
-        //! Set the reference to the room in data.
-        Trap(const sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter)
-            : m_coords(coords)
-            , m_inter(inter)
-            , m_elementdata(elementdata)
-        {
-            setDetectable(false);
-        }
-
-        //! Default destructor.
-        virtual ~Trap() = default;
-
-        virtual std::string _name() const override = 0;
-
-        //------------------//
-        //! @name Resources
-        //! @{
-
-        //! Remove dosh from resources and return the value harvested.
-        virtual uint32 harvestDosh() = 0;
-
-        //! How much dosh is harvestable from this trap.
-        virtual uint32 harvestableDosh() const = 0;
-
-        //! @}
-
-    protected:
-
-        //---------------//
-        //! @name Events
-        //! @{
-
-        virtual void receive(const context::Event& event) override = 0;
-
-        //! @}
-
-    protected:
-
-        sf::Vector2u m_coords;          //!< The room in which the trap is set.
-        dungeon::Inter& m_inter;        //!< To be able to interact with nearby elements.
-        ElementData& m_elementdata;     //!< The data corresponding to the trap.
-    };
-
     //! A TrapGrabbable spawner.
     /*!
      *  Implements the scene::GrabbableSpawner for a dungeon trap.

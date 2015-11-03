@@ -30,13 +30,13 @@ namespace dungeon
         //! @name Manipulation
         //! @{
 
-        //! Remove all attributes and trap no longer exists.
+        //! Remove all attributes and data no longer exists.
         void clear();
 
         //! Initialize a empty ElementData of given type.
         void create(std::wstring type);
 
-        //! Returns true if the trap has no attributes.
+        //! Returns true if the data has no attributes.
         inline bool empty() const { return m_attributes.empty(); }
 
         //! @}
@@ -63,18 +63,21 @@ namespace dungeon
         //! Access an attribute.
         inline MetaData& operator[](const std::wstring& name) { return m_attributes[name]; }
 
-        //! Whether the trap exists (false if cleared or just created).
+        //! Whether an attribute exists or not.
+        inline bool exists(const std::wstring& name) const { return m_exists && (m_attributes.find(name) != std::end(m_attributes)); }
+
+        //! Whether the data exists (false if cleared or just created).
         inline bool exists() const { return m_exists; }
 
-        //! The type of trap.
+        //! The type of data.
         inline const std::wstring& type() const { return m_type; }
 
         //! @}
 
     private:
 
-        bool m_exists = false;  //!< Whether the trap exists or not.
-        std::wstring m_type;    //!< The type of trap.
+        bool m_exists = false;  //!< Whether the data exists or not.
+        std::wstring m_type;    //!< The type of data.
         std::unordered_map<std::wstring, MetaData> m_attributes; //!< The attributes.
     };
 

@@ -18,6 +18,7 @@ Detector dungeon::s_detector;
 void Detector::addEntity(DetectEntity& entity)
 {
     m_entities.emplace_back(&entity);
+    entity.setUID(m_UIDGenerator++);
 }
 
 void Detector::removeEntity(DetectEntity& entity)
@@ -28,7 +29,27 @@ void Detector::removeEntity(DetectEntity& entity)
 //---------------------//
 //----- Detection -----//
 
-bool Detector::isInRange(const DetectEntity& entity, const std::string& key, const float range) const
+DetectEntity* Detector::find(const uint32 UID)
+{
+    for (auto& pEntity : m_entities)
+        if (pEntity->UID() == UID)
+            return pEntity;
+
+    // Not found
+    return nullptr;
+}
+
+const DetectEntity* Detector::find(const uint32 UID) const
+{
+    for (const auto& pEntity : m_entities)
+        if (pEntity->UID() == UID)
+            return pEntity;
+
+    // Not found
+    return nullptr;
+}
+
+uint32 Detector::isInRange(const DetectEntity& entity, const std::string& key, const float range) const
 {
     // Range squared
     const auto sqRange = range * range;
@@ -41,8 +62,8 @@ bool Detector::isInRange(const DetectEntity& entity, const std::string& key, con
         const auto distance = position - pEntity->localPosition();
         const auto sqDistance = distance * distance;
         if ((sqDistance.x + sqDistance.y) < sqRange)
-            return true;
+            return pEntity->UID();
     }
 
-    return false;
+    return -1u;
 }

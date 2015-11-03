@@ -6,19 +6,25 @@
 
 namespace dungeon
 {
+    // Forward declarations
+
+    class Detector;
+
     //! Game entity that can fire callbacks on environment conditions.
 
     class DetectEntity : public scene::Entity
     {
         using baseClass = scene::Entity;
 
-        using DetectCondition = std::function<bool()>;
-        using DetectCallback = std::function<void()>;
+        friend class Detector;
+
+        using DetectCondition = std::function<uint32()>;
+        using DetectCallback = std::function<void(const uint32)>;
 
     public:
 
         //! Constructor.
-        DetectEntity(bool isLerpable);
+        DetectEntity(bool isLerpable = false);
 
         //! Default destructor.
         virtual ~DetectEntity();
@@ -49,10 +55,16 @@ namespace dungeon
         DetectCondition interpretDetectCondition(const std::string& key, const std::string& condition);
 
         //! Check if an entity with matching key is currently in range.
-        bool isInRange(const std::string& key, const float range) const;
+        uint32 isInRange(const std::string& key, const float range) const;
 
         //! Factor applied to all range checks.
         inline void setDetectRangeFactor(const float detectRangeFactor) { m_detectRangeFactor = detectRangeFactor; }
+
+        //! The UID of the entity.
+        inline uint32 UID() const { return m_UID; }
+
+        //! Set the UID of the entity, should be called by detector.
+        inline void setUID(uint32 inUID) { m_UID = inUID; }
 
         //! @}
 
@@ -64,6 +76,9 @@ namespace dungeon
         };
 
     private:
+
+        //! The UID of the entity, will be defined by the detector.
+        uint32 m_UID = -1u;
 
         //! Signals to activate regularly.
         std::vector<DetectSignal> m_detectSignals;

@@ -52,7 +52,7 @@ void MonstersDB::add(const std::string& filename)
     // Create the corresponding data
     auto& monsterData = m_monstersData[id];
     std::wstring trName = monsterNode.attribute(L"trName").as_string();
-    monsterData.name = _(toString(std::wstring(trName)).c_str());
+    monsterData.name = _(toString(trName).c_str());
 
     // Adding data
     for (const auto& dataNode : monsterNode) {

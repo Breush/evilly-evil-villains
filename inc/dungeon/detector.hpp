@@ -1,5 +1,7 @@
 #pragma once
 
+#include "tools/int.hpp"
+
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/System/Time.hpp>
 
@@ -27,6 +29,18 @@ namespace dungeon
         // Default destructor.
         ~Detector() = default;
 
+        //------------------//
+        //! @name Detection
+        //! @{
+
+        //! Find an entity with the corresponding UID.
+        DetectEntity* find(const uint32 UID);
+
+        //! Find an entity with the corresponding UID.
+        const DetectEntity* find(const uint32 UID) const;
+
+        //! @}
+
     protected:
 
         //------------------//
@@ -34,7 +48,8 @@ namespace dungeon
         //! @{
 
         //! Check if there is an entity with matching key in range of the one specified.
-        bool isInRange(const DetectEntity& entity, const std::string& key, const float range) const;
+        //! @return The UID of the entity detected, or -1u if none.
+        uint32 isInRange(const DetectEntity& entity, const std::string& key, const float range) const;
 
         //! @}
 
@@ -73,6 +88,9 @@ namespace dungeon
 
         //! Actions we delayed.
         std::vector<PendingAction> m_pendingActions;
+
+        //! Remember the next UID to be set.
+        uint32 m_UIDGenerator = 0u;
     };
 
     //! Global detector.

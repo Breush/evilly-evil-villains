@@ -37,8 +37,7 @@ namespace dungeon
     public:
 
         //! Constructor.
-        //! Set the reference to the room in data.
-        Monster(ElementData& elementdata, dungeon::Inter& inter);
+        Monster(ElementData& edata, dungeon::Inter& inter);
 
         //! Default destructor.
         ~Monster() = default;
@@ -166,7 +165,7 @@ namespace dungeon
     protected:
 
         Inter& m_inter;             //!< To be able to interact with nearby elements.
-        ElementData& m_elementdata; //!< The data corresponding to the monster.
+        ElementData& m_edata;       //!< The data corresponding to the monster.
         Graph* m_graph = nullptr;   //!< Abstract dungeon graph.
 
         // Graph evaluation for AI
