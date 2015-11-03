@@ -128,7 +128,7 @@ void GameDungeonDesign::refreshWindow(const config::WindowInfo& cWindow)
     m_contextMenu.setKeepInsideLocalRect({0.f, 0.f, resolution.x, resolution.y});
 
     // Sidebar
-    const float sidebarWidth = 200.f;
+    const float sidebarWidth = 250.f;
     m_dungeonSidebar.setSize({sidebarWidth, resolution.y});
     m_dungeonSidebar.setLocalPosition({resolution.x, 0.f});
 

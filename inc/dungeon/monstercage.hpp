@@ -3,6 +3,7 @@
 #include "scene/entity.hpp"
 #include "scene/grabbable.hpp"
 #include "scene/wrappers/label.hpp"
+#include "dungeon/costbanner.hpp"
 #include "context/event.hpp"
 #include "ai/dumbpuppet.hpp"
 
@@ -69,9 +70,6 @@ namespace dungeon
         //! @name Internal change updates
         //! @{
 
-        //! Refresh the cost labels colors given the current dosh held by the player.
-        void refreshCostLabelsColor();
-
         //! Refresh the number of puppets in the reserve.
         void refreshReservePuppetsCount();
 
@@ -89,11 +87,11 @@ namespace dungeon
         // Reserve
         sf::RectangleShape m_reserveBackground;                 //!< Background for the reserve part.
         std::vector<std::unique_ptr<ai::DumbPuppet>> m_puppets; //!< Puppet that moves from left to right.
-        float m_scaleFactor = 1.f;          //!< Scaling for puppets.
+        float m_scaleFactor = 1.f;                              //!< Scaling for puppets.
 
         // Box
         scene::Label m_nameLabel;       //!< Text for the monster's name.
-        scene::Label m_baseCostLabel;   //!< Text for base cost.
+        CostBanner m_baseCostBanner;    //!< Text for base cost.
     };
 
     //! A monster temporary object.

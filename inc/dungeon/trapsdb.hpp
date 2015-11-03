@@ -1,6 +1,6 @@
 #pragma once
 
-#include "tools/int.hpp"
+#include "dungeon/cost.hpp"
 
 #include <string>
 #include <unordered_map>
@@ -21,23 +21,6 @@ namespace dungeon
     class TrapsDB final
     {
     public:
-
-        //! What ressources a cost is equivalent.
-        // TODO Factor out with monstersDB  code (and make a readXML too)
-        struct Cost
-        {
-            uint dosh = 0u; //!< Dosh.
-            uint soul = 0u; //!< Soul.
-            uint fame = 0u; //!< Fame.
-        };
-
-        // TODO Make it a template thing?
-        struct RelCost
-        {
-            float dosh = 0.f; //!< Dosh.
-            float soul = 0.f; //!< Soul.
-            float fame = 0.f; //!< Fame.
-        };
 
         //! How strong an object is.
         struct Resistance

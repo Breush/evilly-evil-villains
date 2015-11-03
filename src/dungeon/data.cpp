@@ -524,6 +524,8 @@ void Data::addMonster(const sf::Vector2u& coords, const std::wstring& monsterID)
 
 void Data::moveMonsterFromReserve(const sf::Vector2u& coords, const std::wstring& monsterID)
 {
+    returnif (!addMonsterValid(coords, monsterID));
+
     auto& reserve = m_monstersInfo.reserve;
     auto pMonsterCage = std::find_if(reserve, [&monsterID] (const MonsterCageInfo& monsterCage) { return monsterCage.type == monsterID; });
 

@@ -32,12 +32,12 @@ MonsterCage::MonsterCage(std::wstring monsterID, Inter& inter, Data& data)
     m_nameLabel.setRelativeOrigin({0.5f, 0.f});
 
     // Cost box
-    attachChild(m_baseCostLabel);
-    m_baseCostLabel.setDepth(-1.f);
-    m_baseCostLabel.setPrestyle(scene::Label::Prestyle::NUI_SMALL);
-    m_baseCostLabel.setText(toWString(monsterData.baseCost.dosh));
+    attachChild(m_baseCostBanner);
+    m_baseCostBanner.setDepth(-1.f);
+    m_baseCostBanner.setCost(monsterData.baseCost);
+    m_baseCostBanner.setRelativePosition({0.85f, 0.25f});
+    m_baseCostBanner.setRelativeOrigin({0.5f, 0.f});
 
-    refreshCostLabelsColor();
     refreshReservePuppetsCount();
 }
 
@@ -62,9 +62,6 @@ void MonsterCage::onSizeChanges()
 void MonsterCage::refreshNUI(const config::NUIGuides& cNUI)
 {
     baseClass::refreshNUI(cNUI);
-
-    // We need to update the color as the label prestyle might override it
-    refreshCostLabelsColor();
 }
 
 //------------------//
@@ -74,9 +71,7 @@ void MonsterCage::receive(const context::Event& event)
 {
     const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
 
-    if (devent.type == "dosh_changed")
-        refreshCostLabelsColor();
-    else if (devent.type == "monster_added" && devent.monster.id == m_monsterID)
+    if (devent.type == "monster_added" && devent.monster.id == m_monsterID)
         refreshReservePuppetsCount();
 }
 
@@ -158,14 +153,6 @@ void MonsterCage::refreshReservePuppetsParameters(const uint monstersUpdateStart
         puppet->setInitialLocalPosition({startOffset, 0.5f * reserveSize.y});
         puppet->setHorizontalRange(25.f, reserveSize.x - 25.f);
     }
-}
-
-void MonsterCage::refreshCostLabelsColor()
-{
-    const auto& monsterData = m_data.monstersDB().get(m_monsterID);
-    const auto& heldDosh = m_data.villain().doshWallet.value();
-
-    m_baseCostLabel.setColor((heldDosh >= monsterData.baseCost.dosh)? sf::Color::White : sf::Color::Red);
 }
 
 //----------------------------//

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "tools/int.hpp"
+#include "dungeon/cost.hpp"
 
 #include <string>
 #include <unordered_map>
@@ -21,16 +22,6 @@ namespace dungeon
     class MonstersDB final
     {
     public:
-
-        // TODO That struct could be external and reused for TrapsDB.
-
-        //! What ressources a cost is equivalent.
-        struct Cost
-        {
-            uint dosh = 0u; //!< Dosh.
-            uint soul = 0u; //!< Soul.
-            uint fame = 0u; //!< Fame.
-        };
 
         //! All infos that we can find in each monster.
         struct MonsterData
