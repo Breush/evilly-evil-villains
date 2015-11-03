@@ -1,7 +1,8 @@
 #pragma once
 
 #include "scene/entity.hpp"
-#include "sfe/richtext.hpp"
+#include "scene/wrappers/rectangleshape.hpp"
+#include "scene/wrappers/richlabel.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
@@ -41,7 +42,6 @@ namespace nui
         //! @{
 
         void update(const sf::Time& dt) final;
-        void drawInternal(sf::RenderTarget& target, sf::RenderStates states) const final;
         virtual void refreshNUI(const config::NUIGuides& cNUI) override;
 
         //! @}
@@ -67,8 +67,9 @@ namespace nui
     private:
 
         // Tooltip
-        sfe::RichText m_tooltipText;                        //!< The tooltip label.
-        sf::RectangleShape m_tooltipBackground;             //!< The tooltip background.
+        scene::RichLabel m_tooltipText;                     //!< The tooltip label.
+        scene::RectangleShape m_tooltipBackground;          //!< The tooltip background.
+        bool m_tooltipEnabled = false;                      //!< Whether the tooltip is not empty.
         bool m_showTooltip = false;                         //!< Whether the tooltip is currently shown.
         sf::Time m_tooltipTime;                             //!< Current time before showing tooltip.
         const sf::Time m_tooltipDelay = sf::seconds(0.9f);  //!< How much time to wait before showing tooltip.

@@ -65,6 +65,15 @@ namespace scene
 
         //! @}
 
+        //----------------//
+        //! @name Getters
+        //! @{
+
+        //! Get the string.
+        std::wstring getString() const { return m_text.getString().toWideString(); }
+
+        //! @}
+
     protected:
 
         //----------------//

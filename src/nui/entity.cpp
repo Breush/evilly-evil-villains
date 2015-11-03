@@ -12,18 +12,31 @@ Entity::Entity(bool isLerpable)
 {
     // Tooltip
     m_tooltipTime = sf::Time::Zero;
+
     m_tooltipBackground.setFillColor({0u, 0u, 0u, 222u});
     m_tooltipBackground.setOutlineColor(sf::Color::White);
     m_tooltipBackground.setOutlineThickness(1.f);
+    m_tooltipBackground.setDepth(-998.f);
+
+    m_tooltipText.setFont("nui");
+    m_tooltipText.setColor(sf::Color::White);
+    m_tooltipText.setDepth(-999.f);
 }
+
 //-------------------//
 //----- Routine -----//
 
 void Entity::update(const sf::Time& dt)
 {
     // Tooltip
-    if (m_showTooltip)
+    if (m_showTooltip && m_tooltipTime < m_tooltipDelay) {
         m_tooltipTime += dt;
+
+        if (m_tooltipTime >= m_tooltipDelay) {
+            root()->attachChild(m_tooltipBackground);
+            root()->attachChild(m_tooltipText);
+        }
+    }
 
     baseClass::update(dt);
 }
@@ -34,32 +47,18 @@ void Entity::refreshNUI(const config::NUIGuides& cNUI)
     refreshTooltipBackground();
 }
 
-void Entity::drawInternal(sf::RenderTarget& target, sf::RenderStates states) const
-{
-    // FIXME Tooltip should become a invariant child of this entity
-    // Otherwise clipping/etc. will affect it
-    // But how to make it over all objects ?
-    // We might want to make it a child of the entity's parent
-
-    // Tooltip
-    if (m_showTooltip && m_tooltipTime >= m_tooltipDelay) {
-        target.draw(m_tooltipBackground, states);
-        target.draw(m_tooltipText, states);
-    }
-}
-
 //------------------//
 //----- Events -----//
 
-bool Entity::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
+bool Entity::handleMouseMoved(const sf::Vector2f&, const sf::Vector2f& nuiPos)
 {
-    // Position and show tooltip
-    if (!m_showTooltip && !m_tooltipText.getString().isEmpty()) {
+    // Reposition tooltip
+    if (m_tooltipEnabled) {
         m_showTooltip = true;
-        auto textSize = boundsSize(m_tooltipText);
-        auto backgroundSize = m_tooltipBackground.getSize();
-        m_tooltipText.setPosition(mousePos.x - textSize.x / 2.f, mousePos.y - textSize.y - 8.f);
-        m_tooltipBackground.setPosition(mousePos.x - backgroundSize.x / 2.f, mousePos.y - backgroundSize.y);
+        auto textSize = m_tooltipText.size();
+        auto backgroundSize = m_tooltipBackground.size();
+        m_tooltipText.setLocalPosition({nuiPos.x - textSize.x / 2.f, nuiPos.y - textSize.y - 13.f});
+        m_tooltipBackground.setLocalPosition({nuiPos.x - backgroundSize.x / 2.f, nuiPos.y - backgroundSize.y - 5.f});
     }
 
     return false;
@@ -67,8 +66,17 @@ bool Entity::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& 
 
 void Entity::handleMouseLeft()
 {
-    m_showTooltip = false;
-    m_tooltipTime = sf::Time::Zero;
+    if (m_showTooltip) {
+        // We were showing the tooltip...
+        if (m_tooltipTime >= m_tooltipDelay) {
+            root()->detachChild(m_tooltipBackground);
+            root()->detachChild(m_tooltipText);
+        }
+
+        // Reset
+        m_showTooltip = false;
+        m_tooltipTime = sf::Time::Zero;
+    }
 }
 
 //-------------------//
@@ -76,9 +84,8 @@ void Entity::handleMouseLeft()
 
 void Entity::setTooltip(std::wstring tooltipString)
 {
-    m_tooltipText.setString(tooltipString);
-    m_tooltipText.setFont(Application::context().fonts.get("nui"));
-    m_tooltipText.setColor(sf::Color::White);
+    m_tooltipEnabled = !tooltipString.empty();
+    m_tooltipText.setText(tooltipString);
     refreshTooltipBackground();
 }
 
@@ -87,6 +94,6 @@ void Entity::setTooltip(std::wstring tooltipString)
 
 void Entity::refreshTooltipBackground()
 {
-    auto tooltipSize = boundsSize(m_tooltipText);
+    auto tooltipSize = m_tooltipText.size();
     m_tooltipBackground.setSize({tooltipSize.x + 10.f, tooltipSize.y + 10.f});
 }
