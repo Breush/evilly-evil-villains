@@ -39,8 +39,8 @@ void SoundPlayer::play(const std::string& id)
 
 void SoundPlayer::play(const std::string& id, sf::Vector2f position)
 {
-    m_sounds.emplace_back();
-    sf::Sound& sound = m_sounds.back();
+    m_sounds.emplace_back(std::make_unique<sf::Sound>());
+    auto& sound = *m_sounds.back();
 
     sound.setBuffer(m_soundBuffers.get(id));
     sound.setPosition(position.x, -position.y, 0.f);
@@ -55,19 +55,21 @@ void SoundPlayer::setPaused(bool paused)
 {
     // Do not change stopped sounds
     for (auto& sound : m_sounds)
-        if (sound.getStatus() != sf::Sound::Stopped)
-            (paused)? sound.pause() : sound.play();
+        if (sound->getStatus() != sf::Sound::Stopped)
+            (paused)? sound->pause() : sound->play();
 }
 
 void SoundPlayer::stopAll()
 {
     for (auto& sound : m_sounds)
-        sound.stop();
+        sound->stop();
 }
 
 void SoundPlayer::removeStoppedSounds()
 {
-    std::erase_if(m_sounds, [](const sf::Sound& s) { return s.getStatus() == sf::Sound::Stopped; });
+    std::cerr << "Sounds: " << m_sounds.size();
+    std::erase_if(m_sounds, [](const std::unique_ptr<sf::Sound>& s) { return s->getStatus() == sf::Sound::Stopped; });
+    std::cerr << " Now: " << m_sounds.size() << std::endl;
 }
 
 void SoundPlayer::setVolume(float volume)

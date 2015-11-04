@@ -12,6 +12,7 @@
 namespace resources
 {
     //! Holder for sounds.
+    // TODO OPTIM Make a sound pool?
 
     class SoundPlayer final : private sf::NonCopyable
     {
@@ -74,9 +75,9 @@ namespace resources
 
     private:
 
-        SoundBufferHolder m_soundBuffers;   //!< Sound player.
-        std::list<sf::Sound> m_sounds;      //!< Sound list.
-        float m_volume = 100.f;             //!< Current volume for new sounds.
+        SoundBufferHolder m_soundBuffers;                   //!< Sound player.
+        std::list<std::unique_ptr<sf::Sound>> m_sounds;     //!< Sound list.
+        float m_volume = 100.f;                             //!< Current volume for new sounds.
 
 
         const float m_listenerZ = 300.f;        //!< Z-depth for listener.
