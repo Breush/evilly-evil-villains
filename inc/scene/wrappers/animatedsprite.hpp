@@ -1,13 +1,13 @@
 #pragma once
 
 #include "scene/entity.hpp"
-#include "scml/interface.hpp"
 #include "tools/param.hpp"
 #include "tools/int.hpp"
 
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Time.hpp>
+#include <Spriter/Engine.hpp>
 #include <memory> // unique_ptr
-#include <list>
 
 // Forward declarations
 
@@ -95,9 +95,8 @@ namespace scene
 
     private:
 
-        //! The SCML entity which composer the animation.
-        std::list<std::unique_ptr<scml::Entity>> m_entities;
-
+        //! The SCML entity of the animation.
+        // std::unique_ptr<SpriterEngine::EntityInstance> m_entity;
 
         bool m_started;                             //!< Whether the animation is started or not.
         int m_number;                               //!< The selected sub-animation.

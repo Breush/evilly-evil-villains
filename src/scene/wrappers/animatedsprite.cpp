@@ -12,12 +12,10 @@ AnimatedSprite::AnimatedSprite(bool isLerpable)
     , m_looping(true)
     , m_started(true)
 {
-    Application::context().animations.push(this);
 }
 
 AnimatedSprite::~AnimatedSprite()
 {
-    Application::context().animations.pop(this);
 }
 
 //-------------------//
@@ -25,6 +23,7 @@ AnimatedSprite::~AnimatedSprite()
 
 void AnimatedSprite::drawInternal(sf::RenderTarget& target, sf::RenderStates states) const
 {
+    /*
     // TODO This does not take states shader in account?
     // TODO This probably should use states.tranform info for position/rotation/scale.
 
@@ -33,7 +32,7 @@ void AnimatedSprite::drawInternal(sf::RenderTarget& target, sf::RenderStates sta
     for (const auto& entity : m_entities) {
         entity->setScreen(&target);
         entity->draw(getPosition().x, getPosition().y, getRotation(), scale().x, scale().y);
-    }
+    }*/
 }
 
 void AnimatedSprite::updateRoutine(const sf::Time& dt)
@@ -44,8 +43,9 @@ void AnimatedSprite::updateRoutine(const sf::Time& dt)
 
 void AnimatedSprite::refresh()
 {
+    /*
     for (const auto& entity : m_entities)
-        entity->getAnimation(m_number)->looping = (m_looping)? L"true" : L"false";
+        entity->getAnimation(m_number)->looping = (m_looping)? L"true" : L"false";*/
 }
 
 //---------------------//
@@ -53,6 +53,7 @@ void AnimatedSprite::refresh()
 
 void AnimatedSprite::load(const std::string& id)
 {
+    /*
     auto& data = Application::context().animations.getData(id);
     auto& fs = Application::context().animations.getFileSystem(id);
     m_number = 0;
@@ -69,11 +70,12 @@ void AnimatedSprite::load(const std::string& id)
     }
 
     // Refresh all entities
-    refresh();
+    refresh();*/
 }
 
 void AnimatedSprite::select(const std::wstring& animationName)
 {
+    /*
     returnif (m_entities.empty());
 
     const auto& firstEntity = *m_entities.front();
@@ -85,24 +87,26 @@ void AnimatedSprite::select(const std::wstring& animationName)
         m_number = animation->id;
         refresh();
         restart();
-    }
+    }*/
 }
 
 void AnimatedSprite::forward(const sf::Time& offset)
 {
+    /*
     for (const auto& entity : m_entities) {
         entity->updateAnimation(offset.asMilliseconds());
 
         if (!m_looping && entity->time >= entity->getAnimation(m_number)->length)
             m_started = false;
-    }
+    }*/
 }
 
 void AnimatedSprite::restart()
 {
+    /*
     m_started = true;
     for (const auto& entity : m_entities)
-        entity->startAnimation(m_number);
+        entity->startAnimation(m_number);*/
 }
 
 //-------------------------//
@@ -110,9 +114,10 @@ void AnimatedSprite::restart()
 
 void AnimatedSprite::setTiltColor(const sf::Color& color)
 {
+    /*
     returnif (m_tiltColor == color);
     m_tiltColor = color;
 
     for (const auto& entity : m_entities)
-        entity->setTiltColor(m_tiltColor);
+        entity->setTiltColor(m_tiltColor);*/
 }

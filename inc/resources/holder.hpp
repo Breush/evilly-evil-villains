@@ -89,18 +89,12 @@ namespace sf
     class SoundBuffer;
 }
 
-namespace scml
-{
-    class Data;
-}
-
 namespace resources
 {
     using TextureHolder =       Holder<sf::Texture>;
     using ShaderHolder =        Holder<sf::Shader>;
     using FontHolder =          Holder<sf::Font>;
     using SoundBufferHolder =   Holder<sf::SoundBuffer>;
-    using SCMLHolder =          Holder<scml::Data>;
 }
 
 #include "holder.inl"

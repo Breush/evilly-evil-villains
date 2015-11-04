@@ -1,6 +1,5 @@
 #include "resources/animationholder.hpp"
 
-#include "scml/data.hpp"
 #include "scene/wrappers/animatedsprite.hpp"
 #include "tools/platform-fixes.hpp"
 
@@ -11,24 +10,26 @@ using namespace resources;
 
 void AnimationHolder::load(const std::string& filename)
 {
-    // Data
+    /*// Data
     m_scmlHolder.load(filename);
     auto id = m_scmlHolder.getID(filename);
 
     // File system
     auto fs = std::make_unique<scml::FileSystem>();
     m_fsMap.insert(std::make_pair(id, std::move(fs)));
-    m_fsMap[id]->load(&getData(id));
+    m_fsMap[id]->load(&getData(id));*/
 }
 
 void AnimationHolder::free(const std::string& id)
 {
+    /*
     m_scmlHolder.free(id);
-    m_fsMap.erase(id);
+    m_fsMap.erase(id);*/
 }
 
 void AnimationHolder::freeMatchingPrefix(const std::string& prefix)
 {
+    /*
     // Find matching IDs
     std::vector<std::string> matchingIDs;
     for (const auto& fs : m_fsMap)
@@ -37,32 +38,5 @@ void AnimationHolder::freeMatchingPrefix(const std::string& prefix)
 
     // Remove them
     for (const auto& id : matchingIDs)
-        free(id);
-}
-
-//-------------------//
-//----- Getters -----//
-
-scml::Data& AnimationHolder::getData(const std::string& id)
-{
-    return m_scmlHolder.get(id);
-}
-
-scml::FileSystem& AnimationHolder::getFileSystem(const std::string& id)
-{
-    return (m_scmlHolder.stored(id))? *m_fsMap[id] : *m_fsMap["default"];
-}
-
-//----------------------------//
-//----- Animated sprites -----//
-
-void AnimationHolder::push(scene::AnimatedSprite* animatedSprite)
-{
-    m_animatedSprites.emplace_back(animatedSprite);
-}
-
-void AnimationHolder::pop(scene::AnimatedSprite* animatedSprite)
-{
-    auto found = std::find(m_animatedSprites.begin(), m_animatedSprites.end(), animatedSprite);
-    m_animatedSprites.erase(found);
+        free(id);*/
 }
