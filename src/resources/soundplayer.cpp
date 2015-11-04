@@ -67,9 +67,7 @@ void SoundPlayer::stopAll()
 
 void SoundPlayer::removeStoppedSounds()
 {
-    std::cerr << "Sounds: " << m_sounds.size();
     std::erase_if(m_sounds, [](const std::unique_ptr<sf::Sound>& s) { return s->getStatus() == sf::Sound::Stopped; });
-    std::cerr << " Now: " << m_sounds.size() << std::endl;
 }
 
 void SoundPlayer::setVolume(float volume)
