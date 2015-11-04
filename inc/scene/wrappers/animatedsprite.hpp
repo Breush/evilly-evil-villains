@@ -95,8 +95,7 @@ namespace scene
 
     private:
 
-        //! The SCML entity of the animation.
-        // std::unique_ptr<SpriterEngine::EntityInstance> m_entity;
+        SpriterEngine::EntityInstance* m_spriterEntity = nullptr;   //!< The entity itself.
 
         bool m_started;                             //!< Whether the animation is started or not.
         int m_number;                               //!< The selected sub-animation.

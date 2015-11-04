@@ -1,12 +1,15 @@
 #pragma once
 
 #include "resources/holder.hpp"
+#include "spriter/examplefilefactory.hpp"
+#include "spriter/exampleobjectfactory.hpp"
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/System/Time.hpp>
 #include <Spriter/Engine.hpp>
+
+#include <unordered_map>
 #include <list>
-#include <map>
 
 // Forward declarations
 
@@ -30,7 +33,7 @@ namespace resources
     public:
 
         //! Default constructor.
-        AnimationHolder() = default;
+        AnimationHolder();
 
         //! Default destructor.
         ~AnimationHolder() = default;
@@ -57,6 +60,21 @@ namespace resources
 
     protected:
 
+        //----------------------------//
+        //! @name Spriter interfacing
+        //! @{
+
+        //! Get the model from the id.
+        SpriterEngine::SpriterModel& getModel(const std::string& id);
+
+        //! @}
+
     private:
+
+        using SpriterModelPtr = std::unique_ptr<SpriterEngine::SpriterModel>;
+        std::unordered_map<std::string, SpriterModelPtr> m_models;  //!< All the models.
+
+        std::unique_ptr<SpriterEngine::ExampleFileFactory> m_fileFactory;       //!< Manage files.
+        std::unique_ptr<SpriterEngine::ExampleObjectFactory> m_objectFactory;   //!< Manage objects.
     };
 }

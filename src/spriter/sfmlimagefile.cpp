@@ -2,6 +2,9 @@
 
 #include <Spriter/objectinfo/universalobjectinterface.h>
 
+#include "tools/vector.hpp" // FIXME
+#include <iostream> // FIXME
+
 namespace SpriterEngine
 {
 
@@ -12,6 +15,7 @@ namespace SpriterEngine
         initializeFile();
     }
 
+    // TODO Here, use Application::context().textures
     void SfmlImageFile::initializeFile()
     {
         if (texture.loadFromFile(path()))
@@ -22,6 +26,9 @@ namespace SpriterEngine
         else
         {
             // error
+            std::cerr << "Error: cannot load " << path() << std::endl;
+            texture.loadFromFile("res/tex/default.png");
+            sprite.setTexture(texture);
         }
     }
 

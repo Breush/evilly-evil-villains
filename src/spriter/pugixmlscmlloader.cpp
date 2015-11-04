@@ -720,11 +720,11 @@ void PugiXmlScmlLoader::getRefsFromMainlineKeyElement(pugi::xml_node keyElement,
 
         TimelineKey *timelineKey = animation->getObjectTimelineKey(timelineIndex, keyIndex);
 
-        if (wcscmp(refElement.value(), L"bone_ref") == 0)
+        if (wcscmp(refElement.name(), L"bone_ref") == 0)
         {
             mainlineKey->pushBackBoneRef(new BoneRef(objectId, parentObjectId, timelineKey));
         }
-        else if (wcscmp(refElement.value(), L"object_ref") == 0)
+        else if (wcscmp(refElement.name(), L"object_ref") == 0)
         {
             auto it = spriteKeyFileInfoMap->find(objectId);
             if (it != spriteKeyFileInfoMap->end())

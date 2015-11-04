@@ -2612,8 +2612,10 @@ PUGI__NS_BEGIN
         case 5: return strconv_pcdata_impl<opt_true, opt_false, opt_true>::parse;
         case 6: return strconv_pcdata_impl<opt_true, opt_true, opt_false>::parse;
         case 7: return strconv_pcdata_impl<opt_true, opt_true, opt_true>::parse;
-
         }
+
+        // Note: Should never go there because of the mask
+        return strconv_pcdata_impl<opt_false, opt_false, opt_false>::parse;
     }
 
     typedef char_t* (*strconv_attribute_t)(char_t*, char_t);
@@ -2790,6 +2792,9 @@ PUGI__NS_BEGIN
         case 14: return strconv_attribute_impl<opt_false>::parse_wnorm;
         case 15: return strconv_attribute_impl<opt_true>::parse_wnorm;
         }
+
+        // Never going there because of the mask on the switch
+        return strconv_attribute_impl<opt_false>::parse_simple;
     }
 
     inline xml_parse_result make_parse_result(xml_parse_status status, ptrdiff_t offset = 0)

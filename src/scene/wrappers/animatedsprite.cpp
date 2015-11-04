@@ -16,6 +16,7 @@ AnimatedSprite::AnimatedSprite(bool isLerpable)
 
 AnimatedSprite::~AnimatedSprite()
 {
+    delete m_spriterEntity;
 }
 
 //-------------------//
@@ -23,6 +24,15 @@ AnimatedSprite::~AnimatedSprite()
 
 void AnimatedSprite::drawInternal(sf::RenderTarget& target, sf::RenderStates states) const
 {
+    returnif (m_spriterEntity == nullptr);
+
+    /*
+    m_spriterEntity->setScale(SpriterEngine::point(getScale(), getScale()));
+    inst->setPosition(SpriterEngine::point(rand() % window.getSize().x, rand() % window.getSize().y));
+    inst->setAngle(SpriterEngine::toRadians(rand() % 360));*/
+
+    m_spriterEntity->render();
+
     /*
     // TODO This does not take states shader in account?
     // TODO This probably should use states.tranform info for position/rotation/scale.
@@ -37,8 +47,11 @@ void AnimatedSprite::drawInternal(sf::RenderTarget& target, sf::RenderStates sta
 
 void AnimatedSprite::updateRoutine(const sf::Time& dt)
 {
-    returnif (!m_started);
+    // returnif (!m_started);
     forward(dt);
+
+    // TODO The others...
+    m_spriterEntity->setPosition({getPosition().x, getPosition().y});
 }
 
 void AnimatedSprite::refresh()
@@ -53,6 +66,12 @@ void AnimatedSprite::refresh()
 
 void AnimatedSprite::load(const std::string& id)
 {
+    // Note: we're currently using only one entity per model
+    auto& model = Application::context().animations.getModel(id);
+    // TODO Use smart pointer in the interface?
+    delete m_spriterEntity;
+    m_spriterEntity = model.getNewEntityInstance(0);
+
     /*
     auto& data = Application::context().animations.getData(id);
     auto& fs = Application::context().animations.getFileSystem(id);
@@ -92,6 +111,8 @@ void AnimatedSprite::select(const std::wstring& animationName)
 
 void AnimatedSprite::forward(const sf::Time& offset)
 {
+    m_spriterEntity->setTimeElapsed(offset.asMilliseconds());
+
     /*
     for (const auto& entity : m_entities) {
         entity->updateAnimation(offset.asMilliseconds());

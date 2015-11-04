@@ -42,10 +42,10 @@ EQUALS = =
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /media/fichiers/Programmation/evilly-evil-villains/trunk
+CMAKE_SOURCE_DIR = /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /media/fichiers/Programmation/evilly-evil-villains/trunk
+CMAKE_BINARY_DIR = /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -82,14 +82,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(CMAKE_COMMAND) -E cmake_progress_start /media/fichiers/Programmation/evilly-evil-villains/trunk/CMakeFiles /media/fichiers/Programmation/evilly-evil-villains/trunk/ext/spriter/CMakeFiles/progress.marks
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f CMakeFiles/Makefile2 ext/spriter/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /media/fichiers/Programmation/evilly-evil-villains/trunk/CMakeFiles 0
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(CMAKE_COMMAND) -E cmake_progress_start /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus/CMakeFiles /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus/ext/spriter/CMakeFiles/progress.marks
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f CMakeFiles/Makefile2 ext/spriter/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f CMakeFiles/Makefile2 ext/spriter/clean
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f CMakeFiles/Makefile2 ext/spriter/clean
 .PHONY : clean
 
 # The main clean target
@@ -98,22 +98,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f CMakeFiles/Makefile2 ext/spriter/preinstall
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f CMakeFiles/Makefile2 ext/spriter/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f CMakeFiles/Makefile2 ext/spriter/preinstall
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f CMakeFiles/Makefile2 ext/spriter/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 ext/spriter/CMakeFiles/spriterengine.dir/rule:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f CMakeFiles/Makefile2 ext/spriter/CMakeFiles/spriterengine.dir/rule
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f CMakeFiles/Makefile2 ext/spriter/CMakeFiles/spriterengine.dir/rule
 .PHONY : ext/spriter/CMakeFiles/spriterengine.dir/rule
 
 # Convenience name for target.
@@ -122,7 +122,7 @@ spriterengine: ext/spriter/CMakeFiles/spriterengine.dir/rule
 
 # fast build rule for target.
 spriterengine/fast:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/build
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/build
 .PHONY : spriterengine/fast
 
 animation/animation.o: animation/animation.cpp.o
@@ -130,7 +130,7 @@ animation/animation.o: animation/animation.cpp.o
 
 # target to build an object file
 animation/animation.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/animation.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/animation.cpp.o
 .PHONY : animation/animation.cpp.o
 
 animation/animation.i: animation/animation.cpp.i
@@ -138,7 +138,7 @@ animation/animation.i: animation/animation.cpp.i
 
 # target to preprocess a source file
 animation/animation.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/animation.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/animation.cpp.i
 .PHONY : animation/animation.cpp.i
 
 animation/animation.s: animation/animation.cpp.s
@@ -146,7 +146,7 @@ animation/animation.s: animation/animation.cpp.s
 
 # target to generate assembly for a file
 animation/animation.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/animation.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/animation.cpp.s
 .PHONY : animation/animation.cpp.s
 
 animation/animationinstance.o: animation/animationinstance.cpp.o
@@ -154,7 +154,7 @@ animation/animationinstance.o: animation/animationinstance.cpp.o
 
 # target to build an object file
 animation/animationinstance.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/animationinstance.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/animationinstance.cpp.o
 .PHONY : animation/animationinstance.cpp.o
 
 animation/animationinstance.i: animation/animationinstance.cpp.i
@@ -162,7 +162,7 @@ animation/animationinstance.i: animation/animationinstance.cpp.i
 
 # target to preprocess a source file
 animation/animationinstance.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/animationinstance.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/animationinstance.cpp.i
 .PHONY : animation/animationinstance.cpp.i
 
 animation/animationinstance.s: animation/animationinstance.cpp.s
@@ -170,7 +170,7 @@ animation/animationinstance.s: animation/animationinstance.cpp.s
 
 # target to generate assembly for a file
 animation/animationinstance.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/animationinstance.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/animationinstance.cpp.s
 .PHONY : animation/animationinstance.cpp.s
 
 animation/mainlinekey.o: animation/mainlinekey.cpp.o
@@ -178,7 +178,7 @@ animation/mainlinekey.o: animation/mainlinekey.cpp.o
 
 # target to build an object file
 animation/mainlinekey.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/mainlinekey.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/mainlinekey.cpp.o
 .PHONY : animation/mainlinekey.cpp.o
 
 animation/mainlinekey.i: animation/mainlinekey.cpp.i
@@ -186,7 +186,7 @@ animation/mainlinekey.i: animation/mainlinekey.cpp.i
 
 # target to preprocess a source file
 animation/mainlinekey.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/mainlinekey.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/mainlinekey.cpp.i
 .PHONY : animation/mainlinekey.cpp.i
 
 animation/mainlinekey.s: animation/mainlinekey.cpp.s
@@ -194,7 +194,7 @@ animation/mainlinekey.s: animation/mainlinekey.cpp.s
 
 # target to generate assembly for a file
 animation/mainlinekey.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/mainlinekey.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/mainlinekey.cpp.s
 .PHONY : animation/mainlinekey.cpp.s
 
 animation/mainlinekeyinstance.o: animation/mainlinekeyinstance.cpp.o
@@ -202,7 +202,7 @@ animation/mainlinekeyinstance.o: animation/mainlinekeyinstance.cpp.o
 
 # target to build an object file
 animation/mainlinekeyinstance.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/mainlinekeyinstance.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/mainlinekeyinstance.cpp.o
 .PHONY : animation/mainlinekeyinstance.cpp.o
 
 animation/mainlinekeyinstance.i: animation/mainlinekeyinstance.cpp.i
@@ -210,7 +210,7 @@ animation/mainlinekeyinstance.i: animation/mainlinekeyinstance.cpp.i
 
 # target to preprocess a source file
 animation/mainlinekeyinstance.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/mainlinekeyinstance.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/mainlinekeyinstance.cpp.i
 .PHONY : animation/mainlinekeyinstance.cpp.i
 
 animation/mainlinekeyinstance.s: animation/mainlinekeyinstance.cpp.s
@@ -218,7 +218,7 @@ animation/mainlinekeyinstance.s: animation/mainlinekeyinstance.cpp.s
 
 # target to generate assembly for a file
 animation/mainlinekeyinstance.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/mainlinekeyinstance.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/animation/mainlinekeyinstance.cpp.s
 .PHONY : animation/mainlinekeyinstance.cpp.s
 
 charactermap/charactermap.o: charactermap/charactermap.cpp.o
@@ -226,7 +226,7 @@ charactermap/charactermap.o: charactermap/charactermap.cpp.o
 
 # target to build an object file
 charactermap/charactermap.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/charactermap/charactermap.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/charactermap/charactermap.cpp.o
 .PHONY : charactermap/charactermap.cpp.o
 
 charactermap/charactermap.i: charactermap/charactermap.cpp.i
@@ -234,7 +234,7 @@ charactermap/charactermap.i: charactermap/charactermap.cpp.i
 
 # target to preprocess a source file
 charactermap/charactermap.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/charactermap/charactermap.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/charactermap/charactermap.cpp.i
 .PHONY : charactermap/charactermap.cpp.i
 
 charactermap/charactermap.s: charactermap/charactermap.cpp.s
@@ -242,7 +242,7 @@ charactermap/charactermap.s: charactermap/charactermap.cpp.s
 
 # target to generate assembly for a file
 charactermap/charactermap.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/charactermap/charactermap.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/charactermap/charactermap.cpp.s
 .PHONY : charactermap/charactermap.cpp.s
 
 charactermap/charactermapinstruction.o: charactermap/charactermapinstruction.cpp.o
@@ -250,7 +250,7 @@ charactermap/charactermapinstruction.o: charactermap/charactermapinstruction.cpp
 
 # target to build an object file
 charactermap/charactermapinstruction.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/charactermap/charactermapinstruction.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/charactermap/charactermapinstruction.cpp.o
 .PHONY : charactermap/charactermapinstruction.cpp.o
 
 charactermap/charactermapinstruction.i: charactermap/charactermapinstruction.cpp.i
@@ -258,7 +258,7 @@ charactermap/charactermapinstruction.i: charactermap/charactermapinstruction.cpp
 
 # target to preprocess a source file
 charactermap/charactermapinstruction.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/charactermap/charactermapinstruction.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/charactermap/charactermapinstruction.cpp.i
 .PHONY : charactermap/charactermapinstruction.cpp.i
 
 charactermap/charactermapinstruction.s: charactermap/charactermapinstruction.cpp.s
@@ -266,7 +266,7 @@ charactermap/charactermapinstruction.s: charactermap/charactermapinstruction.cpp
 
 # target to generate assembly for a file
 charactermap/charactermapinstruction.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/charactermap/charactermapinstruction.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/charactermap/charactermapinstruction.cpp.s
 .PHONY : charactermap/charactermapinstruction.cpp.s
 
 entity/entity.o: entity/entity.cpp.o
@@ -274,7 +274,7 @@ entity/entity.o: entity/entity.cpp.o
 
 # target to build an object file
 entity/entity.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/entity.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/entity.cpp.o
 .PHONY : entity/entity.cpp.o
 
 entity/entity.i: entity/entity.cpp.i
@@ -282,7 +282,7 @@ entity/entity.i: entity/entity.cpp.i
 
 # target to preprocess a source file
 entity/entity.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/entity.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/entity.cpp.i
 .PHONY : entity/entity.cpp.i
 
 entity/entity.s: entity/entity.cpp.s
@@ -290,7 +290,7 @@ entity/entity.s: entity/entity.cpp.s
 
 # target to generate assembly for a file
 entity/entity.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/entity.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/entity.cpp.s
 .PHONY : entity/entity.cpp.s
 
 entity/entityinstance.o: entity/entityinstance.cpp.o
@@ -298,7 +298,7 @@ entity/entityinstance.o: entity/entityinstance.cpp.o
 
 # target to build an object file
 entity/entityinstance.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/entityinstance.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/entityinstance.cpp.o
 .PHONY : entity/entityinstance.cpp.o
 
 entity/entityinstance.i: entity/entityinstance.cpp.i
@@ -306,7 +306,7 @@ entity/entityinstance.i: entity/entityinstance.cpp.i
 
 # target to preprocess a source file
 entity/entityinstance.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/entityinstance.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/entityinstance.cpp.i
 .PHONY : entity/entityinstance.cpp.i
 
 entity/entityinstance.s: entity/entityinstance.cpp.s
@@ -314,7 +314,7 @@ entity/entityinstance.s: entity/entityinstance.cpp.s
 
 # target to generate assembly for a file
 entity/entityinstance.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/entityinstance.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/entityinstance.cpp.s
 .PHONY : entity/entityinstance.cpp.s
 
 entity/entityinstancedata.o: entity/entityinstancedata.cpp.o
@@ -322,7 +322,7 @@ entity/entityinstancedata.o: entity/entityinstancedata.cpp.o
 
 # target to build an object file
 entity/entityinstancedata.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/entityinstancedata.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/entityinstancedata.cpp.o
 .PHONY : entity/entityinstancedata.cpp.o
 
 entity/entityinstancedata.i: entity/entityinstancedata.cpp.i
@@ -330,7 +330,7 @@ entity/entityinstancedata.i: entity/entityinstancedata.cpp.i
 
 # target to preprocess a source file
 entity/entityinstancedata.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/entityinstancedata.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/entityinstancedata.cpp.i
 .PHONY : entity/entityinstancedata.cpp.i
 
 entity/entityinstancedata.s: entity/entityinstancedata.cpp.s
@@ -338,7 +338,7 @@ entity/entityinstancedata.s: entity/entityinstancedata.cpp.s
 
 # target to generate assembly for a file
 entity/entityinstancedata.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/entityinstancedata.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/entityinstancedata.cpp.s
 .PHONY : entity/entityinstancedata.cpp.s
 
 entity/object.o: entity/object.cpp.o
@@ -346,7 +346,7 @@ entity/object.o: entity/object.cpp.o
 
 # target to build an object file
 entity/object.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/object.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/object.cpp.o
 .PHONY : entity/object.cpp.o
 
 entity/object.i: entity/object.cpp.i
@@ -354,7 +354,7 @@ entity/object.i: entity/object.cpp.i
 
 # target to preprocess a source file
 entity/object.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/object.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/object.cpp.i
 .PHONY : entity/object.cpp.i
 
 entity/object.s: entity/object.cpp.s
@@ -362,7 +362,7 @@ entity/object.s: entity/object.cpp.s
 
 # target to generate assembly for a file
 entity/object.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/object.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/entity/object.cpp.s
 .PHONY : entity/object.cpp.s
 
 file/file.o: file/file.cpp.o
@@ -370,7 +370,7 @@ file/file.o: file/file.cpp.o
 
 # target to build an object file
 file/file.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/file/file.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/file/file.cpp.o
 .PHONY : file/file.cpp.o
 
 file/file.i: file/file.cpp.i
@@ -378,7 +378,7 @@ file/file.i: file/file.cpp.i
 
 # target to preprocess a source file
 file/file.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/file/file.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/file/file.cpp.i
 .PHONY : file/file.cpp.i
 
 file/file.s: file/file.cpp.s
@@ -386,7 +386,7 @@ file/file.s: file/file.cpp.s
 
 # target to generate assembly for a file
 file/file.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/file/file.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/file/file.cpp.s
 .PHONY : file/file.cpp.s
 
 file/filereference.o: file/filereference.cpp.o
@@ -394,7 +394,7 @@ file/filereference.o: file/filereference.cpp.o
 
 # target to build an object file
 file/filereference.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/file/filereference.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/file/filereference.cpp.o
 .PHONY : file/filereference.cpp.o
 
 file/filereference.i: file/filereference.cpp.i
@@ -402,7 +402,7 @@ file/filereference.i: file/filereference.cpp.i
 
 # target to preprocess a source file
 file/filereference.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/file/filereference.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/file/filereference.cpp.i
 .PHONY : file/filereference.cpp.i
 
 file/filereference.s: file/filereference.cpp.s
@@ -410,7 +410,7 @@ file/filereference.s: file/filereference.cpp.s
 
 # target to generate assembly for a file
 file/filereference.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/file/filereference.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/file/filereference.cpp.s
 .PHONY : file/filereference.cpp.s
 
 loading/loader.o: loading/loader.cpp.o
@@ -418,7 +418,7 @@ loading/loader.o: loading/loader.cpp.o
 
 # target to build an object file
 loading/loader.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/loading/loader.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/loading/loader.cpp.o
 .PHONY : loading/loader.cpp.o
 
 loading/loader.i: loading/loader.cpp.i
@@ -426,7 +426,7 @@ loading/loader.i: loading/loader.cpp.i
 
 # target to preprocess a source file
 loading/loader.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/loading/loader.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/loading/loader.cpp.i
 .PHONY : loading/loader.cpp.i
 
 loading/loader.s: loading/loader.cpp.s
@@ -434,7 +434,7 @@ loading/loader.s: loading/loader.cpp.s
 
 # target to generate assembly for a file
 loading/loader.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/loading/loader.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/loading/loader.cpp.s
 .PHONY : loading/loader.cpp.s
 
 loading/loadinghelpers.o: loading/loadinghelpers.cpp.o
@@ -442,7 +442,7 @@ loading/loadinghelpers.o: loading/loadinghelpers.cpp.o
 
 # target to build an object file
 loading/loadinghelpers.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/loading/loadinghelpers.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/loading/loadinghelpers.cpp.o
 .PHONY : loading/loadinghelpers.cpp.o
 
 loading/loadinghelpers.i: loading/loadinghelpers.cpp.i
@@ -450,7 +450,7 @@ loading/loadinghelpers.i: loading/loadinghelpers.cpp.i
 
 # target to preprocess a source file
 loading/loadinghelpers.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/loading/loadinghelpers.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/loading/loadinghelpers.cpp.i
 .PHONY : loading/loadinghelpers.cpp.i
 
 loading/loadinghelpers.s: loading/loadinghelpers.cpp.s
@@ -458,7 +458,7 @@ loading/loadinghelpers.s: loading/loadinghelpers.cpp.s
 
 # target to generate assembly for a file
 loading/loadinghelpers.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/loading/loadinghelpers.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/loading/loadinghelpers.cpp.s
 .PHONY : loading/loadinghelpers.cpp.s
 
 model/spritermodel.o: model/spritermodel.cpp.o
@@ -466,7 +466,7 @@ model/spritermodel.o: model/spritermodel.cpp.o
 
 # target to build an object file
 model/spritermodel.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/model/spritermodel.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/model/spritermodel.cpp.o
 .PHONY : model/spritermodel.cpp.o
 
 model/spritermodel.i: model/spritermodel.cpp.i
@@ -474,7 +474,7 @@ model/spritermodel.i: model/spritermodel.cpp.i
 
 # target to preprocess a source file
 model/spritermodel.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/model/spritermodel.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/model/spritermodel.cpp.i
 .PHONY : model/spritermodel.cpp.i
 
 model/spritermodel.s: model/spritermodel.cpp.s
@@ -482,7 +482,7 @@ model/spritermodel.s: model/spritermodel.cpp.s
 
 # target to generate assembly for a file
 model/spritermodel.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/model/spritermodel.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/model/spritermodel.cpp.s
 .PHONY : model/spritermodel.cpp.s
 
 objectinfo/angleinfo.o: objectinfo/angleinfo.cpp.o
@@ -490,7 +490,7 @@ objectinfo/angleinfo.o: objectinfo/angleinfo.cpp.o
 
 # target to build an object file
 objectinfo/angleinfo.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/angleinfo.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/angleinfo.cpp.o
 .PHONY : objectinfo/angleinfo.cpp.o
 
 objectinfo/angleinfo.i: objectinfo/angleinfo.cpp.i
@@ -498,7 +498,7 @@ objectinfo/angleinfo.i: objectinfo/angleinfo.cpp.i
 
 # target to preprocess a source file
 objectinfo/angleinfo.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/angleinfo.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/angleinfo.cpp.i
 .PHONY : objectinfo/angleinfo.cpp.i
 
 objectinfo/angleinfo.s: objectinfo/angleinfo.cpp.s
@@ -506,7 +506,7 @@ objectinfo/angleinfo.s: objectinfo/angleinfo.cpp.s
 
 # target to generate assembly for a file
 objectinfo/angleinfo.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/angleinfo.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/angleinfo.cpp.s
 .PHONY : objectinfo/angleinfo.cpp.s
 
 objectinfo/boneinstanceinfo.o: objectinfo/boneinstanceinfo.cpp.o
@@ -514,7 +514,7 @@ objectinfo/boneinstanceinfo.o: objectinfo/boneinstanceinfo.cpp.o
 
 # target to build an object file
 objectinfo/boneinstanceinfo.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boneinstanceinfo.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boneinstanceinfo.cpp.o
 .PHONY : objectinfo/boneinstanceinfo.cpp.o
 
 objectinfo/boneinstanceinfo.i: objectinfo/boneinstanceinfo.cpp.i
@@ -522,7 +522,7 @@ objectinfo/boneinstanceinfo.i: objectinfo/boneinstanceinfo.cpp.i
 
 # target to preprocess a source file
 objectinfo/boneinstanceinfo.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boneinstanceinfo.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boneinstanceinfo.cpp.i
 .PHONY : objectinfo/boneinstanceinfo.cpp.i
 
 objectinfo/boneinstanceinfo.s: objectinfo/boneinstanceinfo.cpp.s
@@ -530,7 +530,7 @@ objectinfo/boneinstanceinfo.s: objectinfo/boneinstanceinfo.cpp.s
 
 # target to generate assembly for a file
 objectinfo/boneinstanceinfo.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boneinstanceinfo.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boneinstanceinfo.cpp.s
 .PHONY : objectinfo/boneinstanceinfo.cpp.s
 
 objectinfo/boneobjectinfo.o: objectinfo/boneobjectinfo.cpp.o
@@ -538,7 +538,7 @@ objectinfo/boneobjectinfo.o: objectinfo/boneobjectinfo.cpp.o
 
 # target to build an object file
 objectinfo/boneobjectinfo.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boneobjectinfo.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boneobjectinfo.cpp.o
 .PHONY : objectinfo/boneobjectinfo.cpp.o
 
 objectinfo/boneobjectinfo.i: objectinfo/boneobjectinfo.cpp.i
@@ -546,7 +546,7 @@ objectinfo/boneobjectinfo.i: objectinfo/boneobjectinfo.cpp.i
 
 # target to preprocess a source file
 objectinfo/boneobjectinfo.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boneobjectinfo.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boneobjectinfo.cpp.i
 .PHONY : objectinfo/boneobjectinfo.cpp.i
 
 objectinfo/boneobjectinfo.s: objectinfo/boneobjectinfo.cpp.s
@@ -554,7 +554,7 @@ objectinfo/boneobjectinfo.s: objectinfo/boneobjectinfo.cpp.s
 
 # target to generate assembly for a file
 objectinfo/boneobjectinfo.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boneobjectinfo.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boneobjectinfo.cpp.s
 .PHONY : objectinfo/boneobjectinfo.cpp.s
 
 objectinfo/boxinstanceinfo.o: objectinfo/boxinstanceinfo.cpp.o
@@ -562,7 +562,7 @@ objectinfo/boxinstanceinfo.o: objectinfo/boxinstanceinfo.cpp.o
 
 # target to build an object file
 objectinfo/boxinstanceinfo.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boxinstanceinfo.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boxinstanceinfo.cpp.o
 .PHONY : objectinfo/boxinstanceinfo.cpp.o
 
 objectinfo/boxinstanceinfo.i: objectinfo/boxinstanceinfo.cpp.i
@@ -570,7 +570,7 @@ objectinfo/boxinstanceinfo.i: objectinfo/boxinstanceinfo.cpp.i
 
 # target to preprocess a source file
 objectinfo/boxinstanceinfo.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boxinstanceinfo.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boxinstanceinfo.cpp.i
 .PHONY : objectinfo/boxinstanceinfo.cpp.i
 
 objectinfo/boxinstanceinfo.s: objectinfo/boxinstanceinfo.cpp.s
@@ -578,7 +578,7 @@ objectinfo/boxinstanceinfo.s: objectinfo/boxinstanceinfo.cpp.s
 
 # target to generate assembly for a file
 objectinfo/boxinstanceinfo.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boxinstanceinfo.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boxinstanceinfo.cpp.s
 .PHONY : objectinfo/boxinstanceinfo.cpp.s
 
 objectinfo/boxobjectinfo.o: objectinfo/boxobjectinfo.cpp.o
@@ -586,7 +586,7 @@ objectinfo/boxobjectinfo.o: objectinfo/boxobjectinfo.cpp.o
 
 # target to build an object file
 objectinfo/boxobjectinfo.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boxobjectinfo.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boxobjectinfo.cpp.o
 .PHONY : objectinfo/boxobjectinfo.cpp.o
 
 objectinfo/boxobjectinfo.i: objectinfo/boxobjectinfo.cpp.i
@@ -594,7 +594,7 @@ objectinfo/boxobjectinfo.i: objectinfo/boxobjectinfo.cpp.i
 
 # target to preprocess a source file
 objectinfo/boxobjectinfo.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boxobjectinfo.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boxobjectinfo.cpp.i
 .PHONY : objectinfo/boxobjectinfo.cpp.i
 
 objectinfo/boxobjectinfo.s: objectinfo/boxobjectinfo.cpp.s
@@ -602,7 +602,7 @@ objectinfo/boxobjectinfo.s: objectinfo/boxobjectinfo.cpp.s
 
 # target to generate assembly for a file
 objectinfo/boxobjectinfo.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boxobjectinfo.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/boxobjectinfo.cpp.s
 .PHONY : objectinfo/boxobjectinfo.cpp.s
 
 objectinfo/entityobjectinfo.o: objectinfo/entityobjectinfo.cpp.o
@@ -610,7 +610,7 @@ objectinfo/entityobjectinfo.o: objectinfo/entityobjectinfo.cpp.o
 
 # target to build an object file
 objectinfo/entityobjectinfo.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/entityobjectinfo.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/entityobjectinfo.cpp.o
 .PHONY : objectinfo/entityobjectinfo.cpp.o
 
 objectinfo/entityobjectinfo.i: objectinfo/entityobjectinfo.cpp.i
@@ -618,7 +618,7 @@ objectinfo/entityobjectinfo.i: objectinfo/entityobjectinfo.cpp.i
 
 # target to preprocess a source file
 objectinfo/entityobjectinfo.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/entityobjectinfo.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/entityobjectinfo.cpp.i
 .PHONY : objectinfo/entityobjectinfo.cpp.i
 
 objectinfo/entityobjectinfo.s: objectinfo/entityobjectinfo.cpp.s
@@ -626,7 +626,7 @@ objectinfo/entityobjectinfo.s: objectinfo/entityobjectinfo.cpp.s
 
 # target to generate assembly for a file
 objectinfo/entityobjectinfo.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/entityobjectinfo.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/entityobjectinfo.cpp.s
 .PHONY : objectinfo/entityobjectinfo.cpp.s
 
 objectinfo/eventobjectinfo.o: objectinfo/eventobjectinfo.cpp.o
@@ -634,7 +634,7 @@ objectinfo/eventobjectinfo.o: objectinfo/eventobjectinfo.cpp.o
 
 # target to build an object file
 objectinfo/eventobjectinfo.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/eventobjectinfo.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/eventobjectinfo.cpp.o
 .PHONY : objectinfo/eventobjectinfo.cpp.o
 
 objectinfo/eventobjectinfo.i: objectinfo/eventobjectinfo.cpp.i
@@ -642,7 +642,7 @@ objectinfo/eventobjectinfo.i: objectinfo/eventobjectinfo.cpp.i
 
 # target to preprocess a source file
 objectinfo/eventobjectinfo.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/eventobjectinfo.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/eventobjectinfo.cpp.i
 .PHONY : objectinfo/eventobjectinfo.cpp.i
 
 objectinfo/eventobjectinfo.s: objectinfo/eventobjectinfo.cpp.s
@@ -650,7 +650,7 @@ objectinfo/eventobjectinfo.s: objectinfo/eventobjectinfo.cpp.s
 
 # target to generate assembly for a file
 objectinfo/eventobjectinfo.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/eventobjectinfo.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/eventobjectinfo.cpp.s
 .PHONY : objectinfo/eventobjectinfo.cpp.s
 
 objectinfo/intvariableinfo.o: objectinfo/intvariableinfo.cpp.o
@@ -658,7 +658,7 @@ objectinfo/intvariableinfo.o: objectinfo/intvariableinfo.cpp.o
 
 # target to build an object file
 objectinfo/intvariableinfo.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/intvariableinfo.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/intvariableinfo.cpp.o
 .PHONY : objectinfo/intvariableinfo.cpp.o
 
 objectinfo/intvariableinfo.i: objectinfo/intvariableinfo.cpp.i
@@ -666,7 +666,7 @@ objectinfo/intvariableinfo.i: objectinfo/intvariableinfo.cpp.i
 
 # target to preprocess a source file
 objectinfo/intvariableinfo.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/intvariableinfo.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/intvariableinfo.cpp.i
 .PHONY : objectinfo/intvariableinfo.cpp.i
 
 objectinfo/intvariableinfo.s: objectinfo/intvariableinfo.cpp.s
@@ -674,7 +674,7 @@ objectinfo/intvariableinfo.s: objectinfo/intvariableinfo.cpp.s
 
 # target to generate assembly for a file
 objectinfo/intvariableinfo.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/intvariableinfo.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/intvariableinfo.cpp.s
 .PHONY : objectinfo/intvariableinfo.cpp.s
 
 objectinfo/pointobjectinfo.o: objectinfo/pointobjectinfo.cpp.o
@@ -682,7 +682,7 @@ objectinfo/pointobjectinfo.o: objectinfo/pointobjectinfo.cpp.o
 
 # target to build an object file
 objectinfo/pointobjectinfo.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/pointobjectinfo.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/pointobjectinfo.cpp.o
 .PHONY : objectinfo/pointobjectinfo.cpp.o
 
 objectinfo/pointobjectinfo.i: objectinfo/pointobjectinfo.cpp.i
@@ -690,7 +690,7 @@ objectinfo/pointobjectinfo.i: objectinfo/pointobjectinfo.cpp.i
 
 # target to preprocess a source file
 objectinfo/pointobjectinfo.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/pointobjectinfo.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/pointobjectinfo.cpp.i
 .PHONY : objectinfo/pointobjectinfo.cpp.i
 
 objectinfo/pointobjectinfo.s: objectinfo/pointobjectinfo.cpp.s
@@ -698,7 +698,7 @@ objectinfo/pointobjectinfo.s: objectinfo/pointobjectinfo.cpp.s
 
 # target to generate assembly for a file
 objectinfo/pointobjectinfo.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/pointobjectinfo.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/pointobjectinfo.cpp.s
 .PHONY : objectinfo/pointobjectinfo.cpp.s
 
 objectinfo/realvariableinfo.o: objectinfo/realvariableinfo.cpp.o
@@ -706,7 +706,7 @@ objectinfo/realvariableinfo.o: objectinfo/realvariableinfo.cpp.o
 
 # target to build an object file
 objectinfo/realvariableinfo.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/realvariableinfo.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/realvariableinfo.cpp.o
 .PHONY : objectinfo/realvariableinfo.cpp.o
 
 objectinfo/realvariableinfo.i: objectinfo/realvariableinfo.cpp.i
@@ -714,7 +714,7 @@ objectinfo/realvariableinfo.i: objectinfo/realvariableinfo.cpp.i
 
 # target to preprocess a source file
 objectinfo/realvariableinfo.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/realvariableinfo.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/realvariableinfo.cpp.i
 .PHONY : objectinfo/realvariableinfo.cpp.i
 
 objectinfo/realvariableinfo.s: objectinfo/realvariableinfo.cpp.s
@@ -722,7 +722,7 @@ objectinfo/realvariableinfo.s: objectinfo/realvariableinfo.cpp.s
 
 # target to generate assembly for a file
 objectinfo/realvariableinfo.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/realvariableinfo.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/realvariableinfo.cpp.s
 .PHONY : objectinfo/realvariableinfo.cpp.s
 
 objectinfo/soundobjectinfo.o: objectinfo/soundobjectinfo.cpp.o
@@ -730,7 +730,7 @@ objectinfo/soundobjectinfo.o: objectinfo/soundobjectinfo.cpp.o
 
 # target to build an object file
 objectinfo/soundobjectinfo.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/soundobjectinfo.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/soundobjectinfo.cpp.o
 .PHONY : objectinfo/soundobjectinfo.cpp.o
 
 objectinfo/soundobjectinfo.i: objectinfo/soundobjectinfo.cpp.i
@@ -738,7 +738,7 @@ objectinfo/soundobjectinfo.i: objectinfo/soundobjectinfo.cpp.i
 
 # target to preprocess a source file
 objectinfo/soundobjectinfo.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/soundobjectinfo.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/soundobjectinfo.cpp.i
 .PHONY : objectinfo/soundobjectinfo.cpp.i
 
 objectinfo/soundobjectinfo.s: objectinfo/soundobjectinfo.cpp.s
@@ -746,7 +746,7 @@ objectinfo/soundobjectinfo.s: objectinfo/soundobjectinfo.cpp.s
 
 # target to generate assembly for a file
 objectinfo/soundobjectinfo.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/soundobjectinfo.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/soundobjectinfo.cpp.s
 .PHONY : objectinfo/soundobjectinfo.cpp.s
 
 objectinfo/spriteobjectinfo.o: objectinfo/spriteobjectinfo.cpp.o
@@ -754,7 +754,7 @@ objectinfo/spriteobjectinfo.o: objectinfo/spriteobjectinfo.cpp.o
 
 # target to build an object file
 objectinfo/spriteobjectinfo.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/spriteobjectinfo.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/spriteobjectinfo.cpp.o
 .PHONY : objectinfo/spriteobjectinfo.cpp.o
 
 objectinfo/spriteobjectinfo.i: objectinfo/spriteobjectinfo.cpp.i
@@ -762,7 +762,7 @@ objectinfo/spriteobjectinfo.i: objectinfo/spriteobjectinfo.cpp.i
 
 # target to preprocess a source file
 objectinfo/spriteobjectinfo.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/spriteobjectinfo.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/spriteobjectinfo.cpp.i
 .PHONY : objectinfo/spriteobjectinfo.cpp.i
 
 objectinfo/spriteobjectinfo.s: objectinfo/spriteobjectinfo.cpp.s
@@ -770,7 +770,7 @@ objectinfo/spriteobjectinfo.s: objectinfo/spriteobjectinfo.cpp.s
 
 # target to generate assembly for a file
 objectinfo/spriteobjectinfo.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/spriteobjectinfo.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/spriteobjectinfo.cpp.s
 .PHONY : objectinfo/spriteobjectinfo.cpp.s
 
 objectinfo/stringvariableinfo.o: objectinfo/stringvariableinfo.cpp.o
@@ -778,7 +778,7 @@ objectinfo/stringvariableinfo.o: objectinfo/stringvariableinfo.cpp.o
 
 # target to build an object file
 objectinfo/stringvariableinfo.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/stringvariableinfo.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/stringvariableinfo.cpp.o
 .PHONY : objectinfo/stringvariableinfo.cpp.o
 
 objectinfo/stringvariableinfo.i: objectinfo/stringvariableinfo.cpp.i
@@ -786,7 +786,7 @@ objectinfo/stringvariableinfo.i: objectinfo/stringvariableinfo.cpp.i
 
 # target to preprocess a source file
 objectinfo/stringvariableinfo.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/stringvariableinfo.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/stringvariableinfo.cpp.i
 .PHONY : objectinfo/stringvariableinfo.cpp.i
 
 objectinfo/stringvariableinfo.s: objectinfo/stringvariableinfo.cpp.s
@@ -794,7 +794,7 @@ objectinfo/stringvariableinfo.s: objectinfo/stringvariableinfo.cpp.s
 
 # target to generate assembly for a file
 objectinfo/stringvariableinfo.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/stringvariableinfo.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/stringvariableinfo.cpp.s
 .PHONY : objectinfo/stringvariableinfo.cpp.s
 
 objectinfo/stringvariableinforeference.o: objectinfo/stringvariableinforeference.cpp.o
@@ -802,7 +802,7 @@ objectinfo/stringvariableinforeference.o: objectinfo/stringvariableinforeference
 
 # target to build an object file
 objectinfo/stringvariableinforeference.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/stringvariableinforeference.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/stringvariableinforeference.cpp.o
 .PHONY : objectinfo/stringvariableinforeference.cpp.o
 
 objectinfo/stringvariableinforeference.i: objectinfo/stringvariableinforeference.cpp.i
@@ -810,7 +810,7 @@ objectinfo/stringvariableinforeference.i: objectinfo/stringvariableinforeference
 
 # target to preprocess a source file
 objectinfo/stringvariableinforeference.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/stringvariableinforeference.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/stringvariableinforeference.cpp.i
 .PHONY : objectinfo/stringvariableinforeference.cpp.i
 
 objectinfo/stringvariableinforeference.s: objectinfo/stringvariableinforeference.cpp.s
@@ -818,7 +818,7 @@ objectinfo/stringvariableinforeference.s: objectinfo/stringvariableinforeference
 
 # target to generate assembly for a file
 objectinfo/stringvariableinforeference.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/stringvariableinforeference.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/stringvariableinforeference.cpp.s
 .PHONY : objectinfo/stringvariableinforeference.cpp.s
 
 objectinfo/taglist.o: objectinfo/taglist.cpp.o
@@ -826,7 +826,7 @@ objectinfo/taglist.o: objectinfo/taglist.cpp.o
 
 # target to build an object file
 objectinfo/taglist.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/taglist.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/taglist.cpp.o
 .PHONY : objectinfo/taglist.cpp.o
 
 objectinfo/taglist.i: objectinfo/taglist.cpp.i
@@ -834,7 +834,7 @@ objectinfo/taglist.i: objectinfo/taglist.cpp.i
 
 # target to preprocess a source file
 objectinfo/taglist.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/taglist.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/taglist.cpp.i
 .PHONY : objectinfo/taglist.cpp.i
 
 objectinfo/taglist.s: objectinfo/taglist.cpp.s
@@ -842,7 +842,7 @@ objectinfo/taglist.s: objectinfo/taglist.cpp.s
 
 # target to generate assembly for a file
 objectinfo/taglist.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/taglist.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/taglist.cpp.s
 .PHONY : objectinfo/taglist.cpp.s
 
 objectinfo/tagobjectinfo.o: objectinfo/tagobjectinfo.cpp.o
@@ -850,7 +850,7 @@ objectinfo/tagobjectinfo.o: objectinfo/tagobjectinfo.cpp.o
 
 # target to build an object file
 objectinfo/tagobjectinfo.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/tagobjectinfo.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/tagobjectinfo.cpp.o
 .PHONY : objectinfo/tagobjectinfo.cpp.o
 
 objectinfo/tagobjectinfo.i: objectinfo/tagobjectinfo.cpp.i
@@ -858,7 +858,7 @@ objectinfo/tagobjectinfo.i: objectinfo/tagobjectinfo.cpp.i
 
 # target to preprocess a source file
 objectinfo/tagobjectinfo.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/tagobjectinfo.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/tagobjectinfo.cpp.i
 .PHONY : objectinfo/tagobjectinfo.cpp.i
 
 objectinfo/tagobjectinfo.s: objectinfo/tagobjectinfo.cpp.s
@@ -866,7 +866,7 @@ objectinfo/tagobjectinfo.s: objectinfo/tagobjectinfo.cpp.s
 
 # target to generate assembly for a file
 objectinfo/tagobjectinfo.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/tagobjectinfo.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/tagobjectinfo.cpp.s
 .PHONY : objectinfo/tagobjectinfo.cpp.s
 
 objectinfo/tagobjectinforeference.o: objectinfo/tagobjectinforeference.cpp.o
@@ -874,7 +874,7 @@ objectinfo/tagobjectinforeference.o: objectinfo/tagobjectinforeference.cpp.o
 
 # target to build an object file
 objectinfo/tagobjectinforeference.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/tagobjectinforeference.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/tagobjectinforeference.cpp.o
 .PHONY : objectinfo/tagobjectinforeference.cpp.o
 
 objectinfo/tagobjectinforeference.i: objectinfo/tagobjectinforeference.cpp.i
@@ -882,7 +882,7 @@ objectinfo/tagobjectinforeference.i: objectinfo/tagobjectinforeference.cpp.i
 
 # target to preprocess a source file
 objectinfo/tagobjectinforeference.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/tagobjectinforeference.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/tagobjectinforeference.cpp.i
 .PHONY : objectinfo/tagobjectinforeference.cpp.i
 
 objectinfo/tagobjectinforeference.s: objectinfo/tagobjectinforeference.cpp.s
@@ -890,7 +890,7 @@ objectinfo/tagobjectinforeference.s: objectinfo/tagobjectinforeference.cpp.s
 
 # target to generate assembly for a file
 objectinfo/tagobjectinforeference.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/tagobjectinforeference.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/tagobjectinforeference.cpp.s
 .PHONY : objectinfo/tagobjectinforeference.cpp.s
 
 objectinfo/triggerobjectinfo.o: objectinfo/triggerobjectinfo.cpp.o
@@ -898,7 +898,7 @@ objectinfo/triggerobjectinfo.o: objectinfo/triggerobjectinfo.cpp.o
 
 # target to build an object file
 objectinfo/triggerobjectinfo.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/triggerobjectinfo.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/triggerobjectinfo.cpp.o
 .PHONY : objectinfo/triggerobjectinfo.cpp.o
 
 objectinfo/triggerobjectinfo.i: objectinfo/triggerobjectinfo.cpp.i
@@ -906,7 +906,7 @@ objectinfo/triggerobjectinfo.i: objectinfo/triggerobjectinfo.cpp.i
 
 # target to preprocess a source file
 objectinfo/triggerobjectinfo.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/triggerobjectinfo.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/triggerobjectinfo.cpp.i
 .PHONY : objectinfo/triggerobjectinfo.cpp.i
 
 objectinfo/triggerobjectinfo.s: objectinfo/triggerobjectinfo.cpp.s
@@ -914,7 +914,7 @@ objectinfo/triggerobjectinfo.s: objectinfo/triggerobjectinfo.cpp.s
 
 # target to generate assembly for a file
 objectinfo/triggerobjectinfo.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/triggerobjectinfo.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/triggerobjectinfo.cpp.s
 .PHONY : objectinfo/triggerobjectinfo.cpp.s
 
 objectinfo/universalobjectinterface.o: objectinfo/universalobjectinterface.cpp.o
@@ -922,7 +922,7 @@ objectinfo/universalobjectinterface.o: objectinfo/universalobjectinterface.cpp.o
 
 # target to build an object file
 objectinfo/universalobjectinterface.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/universalobjectinterface.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/universalobjectinterface.cpp.o
 .PHONY : objectinfo/universalobjectinterface.cpp.o
 
 objectinfo/universalobjectinterface.i: objectinfo/universalobjectinterface.cpp.i
@@ -930,7 +930,7 @@ objectinfo/universalobjectinterface.i: objectinfo/universalobjectinterface.cpp.i
 
 # target to preprocess a source file
 objectinfo/universalobjectinterface.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/universalobjectinterface.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/universalobjectinterface.cpp.i
 .PHONY : objectinfo/universalobjectinterface.cpp.i
 
 objectinfo/universalobjectinterface.s: objectinfo/universalobjectinterface.cpp.s
@@ -938,7 +938,7 @@ objectinfo/universalobjectinterface.s: objectinfo/universalobjectinterface.cpp.s
 
 # target to generate assembly for a file
 objectinfo/universalobjectinterface.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/universalobjectinterface.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectinfo/universalobjectinterface.cpp.s
 .PHONY : objectinfo/universalobjectinterface.cpp.s
 
 objectref/boneref.o: objectref/boneref.cpp.o
@@ -946,7 +946,7 @@ objectref/boneref.o: objectref/boneref.cpp.o
 
 # target to build an object file
 objectref/boneref.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/boneref.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/boneref.cpp.o
 .PHONY : objectref/boneref.cpp.o
 
 objectref/boneref.i: objectref/boneref.cpp.i
@@ -954,7 +954,7 @@ objectref/boneref.i: objectref/boneref.cpp.i
 
 # target to preprocess a source file
 objectref/boneref.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/boneref.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/boneref.cpp.i
 .PHONY : objectref/boneref.cpp.i
 
 objectref/boneref.s: objectref/boneref.cpp.s
@@ -962,7 +962,7 @@ objectref/boneref.s: objectref/boneref.cpp.s
 
 # target to generate assembly for a file
 objectref/boneref.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/boneref.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/boneref.cpp.s
 .PHONY : objectref/boneref.cpp.s
 
 objectref/bonerefinstance.o: objectref/bonerefinstance.cpp.o
@@ -970,7 +970,7 @@ objectref/bonerefinstance.o: objectref/bonerefinstance.cpp.o
 
 # target to build an object file
 objectref/bonerefinstance.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/bonerefinstance.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/bonerefinstance.cpp.o
 .PHONY : objectref/bonerefinstance.cpp.o
 
 objectref/bonerefinstance.i: objectref/bonerefinstance.cpp.i
@@ -978,7 +978,7 @@ objectref/bonerefinstance.i: objectref/bonerefinstance.cpp.i
 
 # target to preprocess a source file
 objectref/bonerefinstance.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/bonerefinstance.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/bonerefinstance.cpp.i
 .PHONY : objectref/bonerefinstance.cpp.i
 
 objectref/bonerefinstance.s: objectref/bonerefinstance.cpp.s
@@ -986,7 +986,7 @@ objectref/bonerefinstance.s: objectref/bonerefinstance.cpp.s
 
 # target to generate assembly for a file
 objectref/bonerefinstance.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/bonerefinstance.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/bonerefinstance.cpp.s
 .PHONY : objectref/bonerefinstance.cpp.s
 
 objectref/entityref.o: objectref/entityref.cpp.o
@@ -994,7 +994,7 @@ objectref/entityref.o: objectref/entityref.cpp.o
 
 # target to build an object file
 objectref/entityref.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/entityref.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/entityref.cpp.o
 .PHONY : objectref/entityref.cpp.o
 
 objectref/entityref.i: objectref/entityref.cpp.i
@@ -1002,7 +1002,7 @@ objectref/entityref.i: objectref/entityref.cpp.i
 
 # target to preprocess a source file
 objectref/entityref.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/entityref.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/entityref.cpp.i
 .PHONY : objectref/entityref.cpp.i
 
 objectref/entityref.s: objectref/entityref.cpp.s
@@ -1010,7 +1010,7 @@ objectref/entityref.s: objectref/entityref.cpp.s
 
 # target to generate assembly for a file
 objectref/entityref.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/entityref.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/entityref.cpp.s
 .PHONY : objectref/entityref.cpp.s
 
 objectref/entityrefinstance.o: objectref/entityrefinstance.cpp.o
@@ -1018,7 +1018,7 @@ objectref/entityrefinstance.o: objectref/entityrefinstance.cpp.o
 
 # target to build an object file
 objectref/entityrefinstance.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/entityrefinstance.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/entityrefinstance.cpp.o
 .PHONY : objectref/entityrefinstance.cpp.o
 
 objectref/entityrefinstance.i: objectref/entityrefinstance.cpp.i
@@ -1026,7 +1026,7 @@ objectref/entityrefinstance.i: objectref/entityrefinstance.cpp.i
 
 # target to preprocess a source file
 objectref/entityrefinstance.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/entityrefinstance.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/entityrefinstance.cpp.i
 .PHONY : objectref/entityrefinstance.cpp.i
 
 objectref/entityrefinstance.s: objectref/entityrefinstance.cpp.s
@@ -1034,7 +1034,7 @@ objectref/entityrefinstance.s: objectref/entityrefinstance.cpp.s
 
 # target to generate assembly for a file
 objectref/entityrefinstance.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/entityrefinstance.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/entityrefinstance.cpp.s
 .PHONY : objectref/entityrefinstance.cpp.s
 
 objectref/objectref.o: objectref/objectref.cpp.o
@@ -1042,7 +1042,7 @@ objectref/objectref.o: objectref/objectref.cpp.o
 
 # target to build an object file
 objectref/objectref.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/objectref.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/objectref.cpp.o
 .PHONY : objectref/objectref.cpp.o
 
 objectref/objectref.i: objectref/objectref.cpp.i
@@ -1050,7 +1050,7 @@ objectref/objectref.i: objectref/objectref.cpp.i
 
 # target to preprocess a source file
 objectref/objectref.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/objectref.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/objectref.cpp.i
 .PHONY : objectref/objectref.cpp.i
 
 objectref/objectref.s: objectref/objectref.cpp.s
@@ -1058,7 +1058,7 @@ objectref/objectref.s: objectref/objectref.cpp.s
 
 # target to generate assembly for a file
 objectref/objectref.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/objectref.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/objectref.cpp.s
 .PHONY : objectref/objectref.cpp.s
 
 objectref/objectrefinstance.o: objectref/objectrefinstance.cpp.o
@@ -1066,7 +1066,7 @@ objectref/objectrefinstance.o: objectref/objectrefinstance.cpp.o
 
 # target to build an object file
 objectref/objectrefinstance.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/objectrefinstance.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/objectrefinstance.cpp.o
 .PHONY : objectref/objectrefinstance.cpp.o
 
 objectref/objectrefinstance.i: objectref/objectrefinstance.cpp.i
@@ -1074,7 +1074,7 @@ objectref/objectrefinstance.i: objectref/objectrefinstance.cpp.i
 
 # target to preprocess a source file
 objectref/objectrefinstance.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/objectrefinstance.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/objectrefinstance.cpp.i
 .PHONY : objectref/objectrefinstance.cpp.i
 
 objectref/objectrefinstance.s: objectref/objectrefinstance.cpp.s
@@ -1082,7 +1082,7 @@ objectref/objectrefinstance.s: objectref/objectrefinstance.cpp.s
 
 # target to generate assembly for a file
 objectref/objectrefinstance.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/objectrefinstance.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/objectrefinstance.cpp.s
 .PHONY : objectref/objectrefinstance.cpp.s
 
 objectref/spriteref.o: objectref/spriteref.cpp.o
@@ -1090,7 +1090,7 @@ objectref/spriteref.o: objectref/spriteref.cpp.o
 
 # target to build an object file
 objectref/spriteref.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/spriteref.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/spriteref.cpp.o
 .PHONY : objectref/spriteref.cpp.o
 
 objectref/spriteref.i: objectref/spriteref.cpp.i
@@ -1098,7 +1098,7 @@ objectref/spriteref.i: objectref/spriteref.cpp.i
 
 # target to preprocess a source file
 objectref/spriteref.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/spriteref.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/spriteref.cpp.i
 .PHONY : objectref/spriteref.cpp.i
 
 objectref/spriteref.s: objectref/spriteref.cpp.s
@@ -1106,7 +1106,7 @@ objectref/spriteref.s: objectref/spriteref.cpp.s
 
 # target to generate assembly for a file
 objectref/spriteref.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/spriteref.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/spriteref.cpp.s
 .PHONY : objectref/spriteref.cpp.s
 
 objectref/spriterefinstance.o: objectref/spriterefinstance.cpp.o
@@ -1114,7 +1114,7 @@ objectref/spriterefinstance.o: objectref/spriterefinstance.cpp.o
 
 # target to build an object file
 objectref/spriterefinstance.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/spriterefinstance.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/spriterefinstance.cpp.o
 .PHONY : objectref/spriterefinstance.cpp.o
 
 objectref/spriterefinstance.i: objectref/spriterefinstance.cpp.i
@@ -1122,7 +1122,7 @@ objectref/spriterefinstance.i: objectref/spriterefinstance.cpp.i
 
 # target to preprocess a source file
 objectref/spriterefinstance.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/spriterefinstance.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/spriterefinstance.cpp.i
 .PHONY : objectref/spriterefinstance.cpp.i
 
 objectref/spriterefinstance.s: objectref/spriterefinstance.cpp.s
@@ -1130,7 +1130,7 @@ objectref/spriterefinstance.s: objectref/spriterefinstance.cpp.s
 
 # target to generate assembly for a file
 objectref/spriterefinstance.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/spriterefinstance.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/spriterefinstance.cpp.s
 .PHONY : objectref/spriterefinstance.cpp.s
 
 objectref/transformprocessor.o: objectref/transformprocessor.cpp.o
@@ -1138,7 +1138,7 @@ objectref/transformprocessor.o: objectref/transformprocessor.cpp.o
 
 # target to build an object file
 objectref/transformprocessor.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/transformprocessor.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/transformprocessor.cpp.o
 .PHONY : objectref/transformprocessor.cpp.o
 
 objectref/transformprocessor.i: objectref/transformprocessor.cpp.i
@@ -1146,7 +1146,7 @@ objectref/transformprocessor.i: objectref/transformprocessor.cpp.i
 
 # target to preprocess a source file
 objectref/transformprocessor.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/transformprocessor.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/transformprocessor.cpp.i
 .PHONY : objectref/transformprocessor.cpp.i
 
 objectref/transformprocessor.s: objectref/transformprocessor.cpp.s
@@ -1154,7 +1154,7 @@ objectref/transformprocessor.s: objectref/transformprocessor.cpp.s
 
 # target to generate assembly for a file
 objectref/transformprocessor.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/transformprocessor.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/objectref/transformprocessor.cpp.s
 .PHONY : objectref/transformprocessor.cpp.s
 
 override/filefactory.o: override/filefactory.cpp.o
@@ -1162,7 +1162,7 @@ override/filefactory.o: override/filefactory.cpp.o
 
 # target to build an object file
 override/filefactory.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/filefactory.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/filefactory.cpp.o
 .PHONY : override/filefactory.cpp.o
 
 override/filefactory.i: override/filefactory.cpp.i
@@ -1170,7 +1170,7 @@ override/filefactory.i: override/filefactory.cpp.i
 
 # target to preprocess a source file
 override/filefactory.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/filefactory.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/filefactory.cpp.i
 .PHONY : override/filefactory.cpp.i
 
 override/filefactory.s: override/filefactory.cpp.s
@@ -1178,7 +1178,7 @@ override/filefactory.s: override/filefactory.cpp.s
 
 # target to generate assembly for a file
 override/filefactory.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/filefactory.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/filefactory.cpp.s
 .PHONY : override/filefactory.cpp.s
 
 override/imagefile.o: override/imagefile.cpp.o
@@ -1186,7 +1186,7 @@ override/imagefile.o: override/imagefile.cpp.o
 
 # target to build an object file
 override/imagefile.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/imagefile.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/imagefile.cpp.o
 .PHONY : override/imagefile.cpp.o
 
 override/imagefile.i: override/imagefile.cpp.i
@@ -1194,7 +1194,7 @@ override/imagefile.i: override/imagefile.cpp.i
 
 # target to preprocess a source file
 override/imagefile.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/imagefile.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/imagefile.cpp.i
 .PHONY : override/imagefile.cpp.i
 
 override/imagefile.s: override/imagefile.cpp.s
@@ -1202,7 +1202,7 @@ override/imagefile.s: override/imagefile.cpp.s
 
 # target to generate assembly for a file
 override/imagefile.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/imagefile.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/imagefile.cpp.s
 .PHONY : override/imagefile.cpp.s
 
 override/objectfactory.o: override/objectfactory.cpp.o
@@ -1210,7 +1210,7 @@ override/objectfactory.o: override/objectfactory.cpp.o
 
 # target to build an object file
 override/objectfactory.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/objectfactory.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/objectfactory.cpp.o
 .PHONY : override/objectfactory.cpp.o
 
 override/objectfactory.i: override/objectfactory.cpp.i
@@ -1218,7 +1218,7 @@ override/objectfactory.i: override/objectfactory.cpp.i
 
 # target to preprocess a source file
 override/objectfactory.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/objectfactory.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/objectfactory.cpp.i
 .PHONY : override/objectfactory.cpp.i
 
 override/objectfactory.s: override/objectfactory.cpp.s
@@ -1226,7 +1226,7 @@ override/objectfactory.s: override/objectfactory.cpp.s
 
 # target to generate assembly for a file
 override/objectfactory.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/objectfactory.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/objectfactory.cpp.s
 .PHONY : override/objectfactory.cpp.s
 
 override/soundfile.o: override/soundfile.cpp.o
@@ -1234,7 +1234,7 @@ override/soundfile.o: override/soundfile.cpp.o
 
 # target to build an object file
 override/soundfile.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/soundfile.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/soundfile.cpp.o
 .PHONY : override/soundfile.cpp.o
 
 override/soundfile.i: override/soundfile.cpp.i
@@ -1242,7 +1242,7 @@ override/soundfile.i: override/soundfile.cpp.i
 
 # target to preprocess a source file
 override/soundfile.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/soundfile.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/soundfile.cpp.i
 .PHONY : override/soundfile.cpp.i
 
 override/soundfile.s: override/soundfile.cpp.s
@@ -1250,7 +1250,7 @@ override/soundfile.s: override/soundfile.cpp.s
 
 # target to generate assembly for a file
 override/soundfile.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/soundfile.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/soundfile.cpp.s
 .PHONY : override/soundfile.cpp.s
 
 override/soundobjectinforeference.o: override/soundobjectinforeference.cpp.o
@@ -1258,7 +1258,7 @@ override/soundobjectinforeference.o: override/soundobjectinforeference.cpp.o
 
 # target to build an object file
 override/soundobjectinforeference.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/soundobjectinforeference.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/soundobjectinforeference.cpp.o
 .PHONY : override/soundobjectinforeference.cpp.o
 
 override/soundobjectinforeference.i: override/soundobjectinforeference.cpp.i
@@ -1266,7 +1266,7 @@ override/soundobjectinforeference.i: override/soundobjectinforeference.cpp.i
 
 # target to preprocess a source file
 override/soundobjectinforeference.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/soundobjectinforeference.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/soundobjectinforeference.cpp.i
 .PHONY : override/soundobjectinforeference.cpp.i
 
 override/soundobjectinforeference.s: override/soundobjectinforeference.cpp.s
@@ -1274,7 +1274,7 @@ override/soundobjectinforeference.s: override/soundobjectinforeference.cpp.s
 
 # target to generate assembly for a file
 override/soundobjectinforeference.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/soundobjectinforeference.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/soundobjectinforeference.cpp.s
 .PHONY : override/soundobjectinforeference.cpp.s
 
 override/spriterfileloader.o: override/spriterfileloader.cpp.o
@@ -1282,7 +1282,7 @@ override/spriterfileloader.o: override/spriterfileloader.cpp.o
 
 # target to build an object file
 override/spriterfileloader.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/spriterfileloader.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/spriterfileloader.cpp.o
 .PHONY : override/spriterfileloader.cpp.o
 
 override/spriterfileloader.i: override/spriterfileloader.cpp.i
@@ -1290,7 +1290,7 @@ override/spriterfileloader.i: override/spriterfileloader.cpp.i
 
 # target to preprocess a source file
 override/spriterfileloader.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/spriterfileloader.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/spriterfileloader.cpp.i
 .PHONY : override/spriterfileloader.cpp.i
 
 override/spriterfileloader.s: override/spriterfileloader.cpp.s
@@ -1298,7 +1298,7 @@ override/spriterfileloader.s: override/spriterfileloader.cpp.s
 
 # target to generate assembly for a file
 override/spriterfileloader.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/spriterfileloader.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/override/spriterfileloader.cpp.s
 .PHONY : override/spriterfileloader.cpp.s
 
 timeinfo/beziereasingcurve.o: timeinfo/beziereasingcurve.cpp.o
@@ -1306,7 +1306,7 @@ timeinfo/beziereasingcurve.o: timeinfo/beziereasingcurve.cpp.o
 
 # target to build an object file
 timeinfo/beziereasingcurve.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/beziereasingcurve.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/beziereasingcurve.cpp.o
 .PHONY : timeinfo/beziereasingcurve.cpp.o
 
 timeinfo/beziereasingcurve.i: timeinfo/beziereasingcurve.cpp.i
@@ -1314,7 +1314,7 @@ timeinfo/beziereasingcurve.i: timeinfo/beziereasingcurve.cpp.i
 
 # target to preprocess a source file
 timeinfo/beziereasingcurve.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/beziereasingcurve.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/beziereasingcurve.cpp.i
 .PHONY : timeinfo/beziereasingcurve.cpp.i
 
 timeinfo/beziereasingcurve.s: timeinfo/beziereasingcurve.cpp.s
@@ -1322,7 +1322,7 @@ timeinfo/beziereasingcurve.s: timeinfo/beziereasingcurve.cpp.s
 
 # target to generate assembly for a file
 timeinfo/beziereasingcurve.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/beziereasingcurve.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/beziereasingcurve.cpp.s
 .PHONY : timeinfo/beziereasingcurve.cpp.s
 
 timeinfo/cubiceasingcurve.o: timeinfo/cubiceasingcurve.cpp.o
@@ -1330,7 +1330,7 @@ timeinfo/cubiceasingcurve.o: timeinfo/cubiceasingcurve.cpp.o
 
 # target to build an object file
 timeinfo/cubiceasingcurve.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/cubiceasingcurve.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/cubiceasingcurve.cpp.o
 .PHONY : timeinfo/cubiceasingcurve.cpp.o
 
 timeinfo/cubiceasingcurve.i: timeinfo/cubiceasingcurve.cpp.i
@@ -1338,7 +1338,7 @@ timeinfo/cubiceasingcurve.i: timeinfo/cubiceasingcurve.cpp.i
 
 # target to preprocess a source file
 timeinfo/cubiceasingcurve.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/cubiceasingcurve.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/cubiceasingcurve.cpp.i
 .PHONY : timeinfo/cubiceasingcurve.cpp.i
 
 timeinfo/cubiceasingcurve.s: timeinfo/cubiceasingcurve.cpp.s
@@ -1346,7 +1346,7 @@ timeinfo/cubiceasingcurve.s: timeinfo/cubiceasingcurve.cpp.s
 
 # target to generate assembly for a file
 timeinfo/cubiceasingcurve.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/cubiceasingcurve.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/cubiceasingcurve.cpp.s
 .PHONY : timeinfo/cubiceasingcurve.cpp.s
 
 timeinfo/easingcurveinterface.o: timeinfo/easingcurveinterface.cpp.o
@@ -1354,7 +1354,7 @@ timeinfo/easingcurveinterface.o: timeinfo/easingcurveinterface.cpp.o
 
 # target to build an object file
 timeinfo/easingcurveinterface.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/easingcurveinterface.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/easingcurveinterface.cpp.o
 .PHONY : timeinfo/easingcurveinterface.cpp.o
 
 timeinfo/easingcurveinterface.i: timeinfo/easingcurveinterface.cpp.i
@@ -1362,7 +1362,7 @@ timeinfo/easingcurveinterface.i: timeinfo/easingcurveinterface.cpp.i
 
 # target to preprocess a source file
 timeinfo/easingcurveinterface.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/easingcurveinterface.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/easingcurveinterface.cpp.i
 .PHONY : timeinfo/easingcurveinterface.cpp.i
 
 timeinfo/easingcurveinterface.s: timeinfo/easingcurveinterface.cpp.s
@@ -1370,7 +1370,7 @@ timeinfo/easingcurveinterface.s: timeinfo/easingcurveinterface.cpp.s
 
 # target to generate assembly for a file
 timeinfo/easingcurveinterface.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/easingcurveinterface.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/easingcurveinterface.cpp.s
 .PHONY : timeinfo/easingcurveinterface.cpp.s
 
 timeinfo/instanteasingcurve.o: timeinfo/instanteasingcurve.cpp.o
@@ -1378,7 +1378,7 @@ timeinfo/instanteasingcurve.o: timeinfo/instanteasingcurve.cpp.o
 
 # target to build an object file
 timeinfo/instanteasingcurve.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/instanteasingcurve.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/instanteasingcurve.cpp.o
 .PHONY : timeinfo/instanteasingcurve.cpp.o
 
 timeinfo/instanteasingcurve.i: timeinfo/instanteasingcurve.cpp.i
@@ -1386,7 +1386,7 @@ timeinfo/instanteasingcurve.i: timeinfo/instanteasingcurve.cpp.i
 
 # target to preprocess a source file
 timeinfo/instanteasingcurve.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/instanteasingcurve.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/instanteasingcurve.cpp.i
 .PHONY : timeinfo/instanteasingcurve.cpp.i
 
 timeinfo/instanteasingcurve.s: timeinfo/instanteasingcurve.cpp.s
@@ -1394,7 +1394,7 @@ timeinfo/instanteasingcurve.s: timeinfo/instanteasingcurve.cpp.s
 
 # target to generate assembly for a file
 timeinfo/instanteasingcurve.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/instanteasingcurve.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/instanteasingcurve.cpp.s
 .PHONY : timeinfo/instanteasingcurve.cpp.s
 
 timeinfo/lineareasingcurve.o: timeinfo/lineareasingcurve.cpp.o
@@ -1402,7 +1402,7 @@ timeinfo/lineareasingcurve.o: timeinfo/lineareasingcurve.cpp.o
 
 # target to build an object file
 timeinfo/lineareasingcurve.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/lineareasingcurve.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/lineareasingcurve.cpp.o
 .PHONY : timeinfo/lineareasingcurve.cpp.o
 
 timeinfo/lineareasingcurve.i: timeinfo/lineareasingcurve.cpp.i
@@ -1410,7 +1410,7 @@ timeinfo/lineareasingcurve.i: timeinfo/lineareasingcurve.cpp.i
 
 # target to preprocess a source file
 timeinfo/lineareasingcurve.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/lineareasingcurve.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/lineareasingcurve.cpp.i
 .PHONY : timeinfo/lineareasingcurve.cpp.i
 
 timeinfo/lineareasingcurve.s: timeinfo/lineareasingcurve.cpp.s
@@ -1418,7 +1418,7 @@ timeinfo/lineareasingcurve.s: timeinfo/lineareasingcurve.cpp.s
 
 # target to generate assembly for a file
 timeinfo/lineareasingcurve.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/lineareasingcurve.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/lineareasingcurve.cpp.s
 .PHONY : timeinfo/lineareasingcurve.cpp.s
 
 timeinfo/quadraticeasingcurve.o: timeinfo/quadraticeasingcurve.cpp.o
@@ -1426,7 +1426,7 @@ timeinfo/quadraticeasingcurve.o: timeinfo/quadraticeasingcurve.cpp.o
 
 # target to build an object file
 timeinfo/quadraticeasingcurve.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/quadraticeasingcurve.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/quadraticeasingcurve.cpp.o
 .PHONY : timeinfo/quadraticeasingcurve.cpp.o
 
 timeinfo/quadraticeasingcurve.i: timeinfo/quadraticeasingcurve.cpp.i
@@ -1434,7 +1434,7 @@ timeinfo/quadraticeasingcurve.i: timeinfo/quadraticeasingcurve.cpp.i
 
 # target to preprocess a source file
 timeinfo/quadraticeasingcurve.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/quadraticeasingcurve.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/quadraticeasingcurve.cpp.i
 .PHONY : timeinfo/quadraticeasingcurve.cpp.i
 
 timeinfo/quadraticeasingcurve.s: timeinfo/quadraticeasingcurve.cpp.s
@@ -1442,7 +1442,7 @@ timeinfo/quadraticeasingcurve.s: timeinfo/quadraticeasingcurve.cpp.s
 
 # target to generate assembly for a file
 timeinfo/quadraticeasingcurve.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/quadraticeasingcurve.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/quadraticeasingcurve.cpp.s
 .PHONY : timeinfo/quadraticeasingcurve.cpp.s
 
 timeinfo/quarticeasingcurve.o: timeinfo/quarticeasingcurve.cpp.o
@@ -1450,7 +1450,7 @@ timeinfo/quarticeasingcurve.o: timeinfo/quarticeasingcurve.cpp.o
 
 # target to build an object file
 timeinfo/quarticeasingcurve.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/quarticeasingcurve.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/quarticeasingcurve.cpp.o
 .PHONY : timeinfo/quarticeasingcurve.cpp.o
 
 timeinfo/quarticeasingcurve.i: timeinfo/quarticeasingcurve.cpp.i
@@ -1458,7 +1458,7 @@ timeinfo/quarticeasingcurve.i: timeinfo/quarticeasingcurve.cpp.i
 
 # target to preprocess a source file
 timeinfo/quarticeasingcurve.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/quarticeasingcurve.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/quarticeasingcurve.cpp.i
 .PHONY : timeinfo/quarticeasingcurve.cpp.i
 
 timeinfo/quarticeasingcurve.s: timeinfo/quarticeasingcurve.cpp.s
@@ -1466,7 +1466,7 @@ timeinfo/quarticeasingcurve.s: timeinfo/quarticeasingcurve.cpp.s
 
 # target to generate assembly for a file
 timeinfo/quarticeasingcurve.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/quarticeasingcurve.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/quarticeasingcurve.cpp.s
 .PHONY : timeinfo/quarticeasingcurve.cpp.s
 
 timeinfo/quinticeasingcurve.o: timeinfo/quinticeasingcurve.cpp.o
@@ -1474,7 +1474,7 @@ timeinfo/quinticeasingcurve.o: timeinfo/quinticeasingcurve.cpp.o
 
 # target to build an object file
 timeinfo/quinticeasingcurve.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/quinticeasingcurve.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/quinticeasingcurve.cpp.o
 .PHONY : timeinfo/quinticeasingcurve.cpp.o
 
 timeinfo/quinticeasingcurve.i: timeinfo/quinticeasingcurve.cpp.i
@@ -1482,7 +1482,7 @@ timeinfo/quinticeasingcurve.i: timeinfo/quinticeasingcurve.cpp.i
 
 # target to preprocess a source file
 timeinfo/quinticeasingcurve.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/quinticeasingcurve.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/quinticeasingcurve.cpp.i
 .PHONY : timeinfo/quinticeasingcurve.cpp.i
 
 timeinfo/quinticeasingcurve.s: timeinfo/quinticeasingcurve.cpp.s
@@ -1490,7 +1490,7 @@ timeinfo/quinticeasingcurve.s: timeinfo/quinticeasingcurve.cpp.s
 
 # target to generate assembly for a file
 timeinfo/quinticeasingcurve.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/quinticeasingcurve.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/quinticeasingcurve.cpp.s
 .PHONY : timeinfo/quinticeasingcurve.cpp.s
 
 timeinfo/timeinfo.o: timeinfo/timeinfo.cpp.o
@@ -1498,7 +1498,7 @@ timeinfo/timeinfo.o: timeinfo/timeinfo.cpp.o
 
 # target to build an object file
 timeinfo/timeinfo.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/timeinfo.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/timeinfo.cpp.o
 .PHONY : timeinfo/timeinfo.cpp.o
 
 timeinfo/timeinfo.i: timeinfo/timeinfo.cpp.i
@@ -1506,7 +1506,7 @@ timeinfo/timeinfo.i: timeinfo/timeinfo.cpp.i
 
 # target to preprocess a source file
 timeinfo/timeinfo.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/timeinfo.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/timeinfo.cpp.i
 .PHONY : timeinfo/timeinfo.cpp.i
 
 timeinfo/timeinfo.s: timeinfo/timeinfo.cpp.s
@@ -1514,7 +1514,7 @@ timeinfo/timeinfo.s: timeinfo/timeinfo.cpp.s
 
 # target to generate assembly for a file
 timeinfo/timeinfo.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/timeinfo.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeinfo/timeinfo.cpp.s
 .PHONY : timeinfo/timeinfo.cpp.s
 
 timeline/proxytimelinekey.o: timeline/proxytimelinekey.cpp.o
@@ -1522,7 +1522,7 @@ timeline/proxytimelinekey.o: timeline/proxytimelinekey.cpp.o
 
 # target to build an object file
 timeline/proxytimelinekey.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/proxytimelinekey.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/proxytimelinekey.cpp.o
 .PHONY : timeline/proxytimelinekey.cpp.o
 
 timeline/proxytimelinekey.i: timeline/proxytimelinekey.cpp.i
@@ -1530,7 +1530,7 @@ timeline/proxytimelinekey.i: timeline/proxytimelinekey.cpp.i
 
 # target to preprocess a source file
 timeline/proxytimelinekey.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/proxytimelinekey.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/proxytimelinekey.cpp.i
 .PHONY : timeline/proxytimelinekey.cpp.i
 
 timeline/proxytimelinekey.s: timeline/proxytimelinekey.cpp.s
@@ -1538,7 +1538,7 @@ timeline/proxytimelinekey.s: timeline/proxytimelinekey.cpp.s
 
 # target to generate assembly for a file
 timeline/proxytimelinekey.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/proxytimelinekey.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/proxytimelinekey.cpp.s
 .PHONY : timeline/proxytimelinekey.cpp.s
 
 timeline/soundtimelineinstance.o: timeline/soundtimelineinstance.cpp.o
@@ -1546,7 +1546,7 @@ timeline/soundtimelineinstance.o: timeline/soundtimelineinstance.cpp.o
 
 # target to build an object file
 timeline/soundtimelineinstance.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/soundtimelineinstance.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/soundtimelineinstance.cpp.o
 .PHONY : timeline/soundtimelineinstance.cpp.o
 
 timeline/soundtimelineinstance.i: timeline/soundtimelineinstance.cpp.i
@@ -1554,7 +1554,7 @@ timeline/soundtimelineinstance.i: timeline/soundtimelineinstance.cpp.i
 
 # target to preprocess a source file
 timeline/soundtimelineinstance.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/soundtimelineinstance.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/soundtimelineinstance.cpp.i
 .PHONY : timeline/soundtimelineinstance.cpp.i
 
 timeline/soundtimelineinstance.s: timeline/soundtimelineinstance.cpp.s
@@ -1562,7 +1562,7 @@ timeline/soundtimelineinstance.s: timeline/soundtimelineinstance.cpp.s
 
 # target to generate assembly for a file
 timeline/soundtimelineinstance.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/soundtimelineinstance.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/soundtimelineinstance.cpp.s
 .PHONY : timeline/soundtimelineinstance.cpp.s
 
 timeline/tagtimelineinstance.o: timeline/tagtimelineinstance.cpp.o
@@ -1570,7 +1570,7 @@ timeline/tagtimelineinstance.o: timeline/tagtimelineinstance.cpp.o
 
 # target to build an object file
 timeline/tagtimelineinstance.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/tagtimelineinstance.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/tagtimelineinstance.cpp.o
 .PHONY : timeline/tagtimelineinstance.cpp.o
 
 timeline/tagtimelineinstance.i: timeline/tagtimelineinstance.cpp.i
@@ -1578,7 +1578,7 @@ timeline/tagtimelineinstance.i: timeline/tagtimelineinstance.cpp.i
 
 # target to preprocess a source file
 timeline/tagtimelineinstance.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/tagtimelineinstance.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/tagtimelineinstance.cpp.i
 .PHONY : timeline/tagtimelineinstance.cpp.i
 
 timeline/tagtimelineinstance.s: timeline/tagtimelineinstance.cpp.s
@@ -1586,7 +1586,7 @@ timeline/tagtimelineinstance.s: timeline/tagtimelineinstance.cpp.s
 
 # target to generate assembly for a file
 timeline/tagtimelineinstance.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/tagtimelineinstance.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/tagtimelineinstance.cpp.s
 .PHONY : timeline/tagtimelineinstance.cpp.s
 
 timeline/timeline.o: timeline/timeline.cpp.o
@@ -1594,7 +1594,7 @@ timeline/timeline.o: timeline/timeline.cpp.o
 
 # target to build an object file
 timeline/timeline.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/timeline.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/timeline.cpp.o
 .PHONY : timeline/timeline.cpp.o
 
 timeline/timeline.i: timeline/timeline.cpp.i
@@ -1602,7 +1602,7 @@ timeline/timeline.i: timeline/timeline.cpp.i
 
 # target to preprocess a source file
 timeline/timeline.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/timeline.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/timeline.cpp.i
 .PHONY : timeline/timeline.cpp.i
 
 timeline/timeline.s: timeline/timeline.cpp.s
@@ -1610,7 +1610,7 @@ timeline/timeline.s: timeline/timeline.cpp.s
 
 # target to generate assembly for a file
 timeline/timeline.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/timeline.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/timeline.cpp.s
 .PHONY : timeline/timeline.cpp.s
 
 timeline/timelineinstance.o: timeline/timelineinstance.cpp.o
@@ -1618,7 +1618,7 @@ timeline/timelineinstance.o: timeline/timelineinstance.cpp.o
 
 # target to build an object file
 timeline/timelineinstance.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/timelineinstance.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/timelineinstance.cpp.o
 .PHONY : timeline/timelineinstance.cpp.o
 
 timeline/timelineinstance.i: timeline/timelineinstance.cpp.i
@@ -1626,7 +1626,7 @@ timeline/timelineinstance.i: timeline/timelineinstance.cpp.i
 
 # target to preprocess a source file
 timeline/timelineinstance.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/timelineinstance.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/timelineinstance.cpp.i
 .PHONY : timeline/timelineinstance.cpp.i
 
 timeline/timelineinstance.s: timeline/timelineinstance.cpp.s
@@ -1634,7 +1634,7 @@ timeline/timelineinstance.s: timeline/timelineinstance.cpp.s
 
 # target to generate assembly for a file
 timeline/timelineinstance.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/timelineinstance.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/timelineinstance.cpp.s
 .PHONY : timeline/timelineinstance.cpp.s
 
 timeline/timelinekey.o: timeline/timelinekey.cpp.o
@@ -1642,7 +1642,7 @@ timeline/timelinekey.o: timeline/timelinekey.cpp.o
 
 # target to build an object file
 timeline/timelinekey.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/timelinekey.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/timelinekey.cpp.o
 .PHONY : timeline/timelinekey.cpp.o
 
 timeline/timelinekey.i: timeline/timelinekey.cpp.i
@@ -1650,7 +1650,7 @@ timeline/timelinekey.i: timeline/timelinekey.cpp.i
 
 # target to preprocess a source file
 timeline/timelinekey.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/timelinekey.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/timelinekey.cpp.i
 .PHONY : timeline/timelinekey.cpp.i
 
 timeline/timelinekey.s: timeline/timelinekey.cpp.s
@@ -1658,7 +1658,7 @@ timeline/timelinekey.s: timeline/timelinekey.cpp.s
 
 # target to generate assembly for a file
 timeline/timelinekey.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/timelinekey.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/timelinekey.cpp.s
 .PHONY : timeline/timelinekey.cpp.s
 
 timeline/triggertimelineinstance.o: timeline/triggertimelineinstance.cpp.o
@@ -1666,7 +1666,7 @@ timeline/triggertimelineinstance.o: timeline/triggertimelineinstance.cpp.o
 
 # target to build an object file
 timeline/triggertimelineinstance.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/triggertimelineinstance.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/triggertimelineinstance.cpp.o
 .PHONY : timeline/triggertimelineinstance.cpp.o
 
 timeline/triggertimelineinstance.i: timeline/triggertimelineinstance.cpp.i
@@ -1674,7 +1674,7 @@ timeline/triggertimelineinstance.i: timeline/triggertimelineinstance.cpp.i
 
 # target to preprocess a source file
 timeline/triggertimelineinstance.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/triggertimelineinstance.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/triggertimelineinstance.cpp.i
 .PHONY : timeline/triggertimelineinstance.cpp.i
 
 timeline/triggertimelineinstance.s: timeline/triggertimelineinstance.cpp.s
@@ -1682,7 +1682,7 @@ timeline/triggertimelineinstance.s: timeline/triggertimelineinstance.cpp.s
 
 # target to generate assembly for a file
 timeline/triggertimelineinstance.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/triggertimelineinstance.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/triggertimelineinstance.cpp.s
 .PHONY : timeline/triggertimelineinstance.cpp.s
 
 timeline/variabletimelineinstance.o: timeline/variabletimelineinstance.cpp.o
@@ -1690,7 +1690,7 @@ timeline/variabletimelineinstance.o: timeline/variabletimelineinstance.cpp.o
 
 # target to build an object file
 timeline/variabletimelineinstance.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/variabletimelineinstance.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/variabletimelineinstance.cpp.o
 .PHONY : timeline/variabletimelineinstance.cpp.o
 
 timeline/variabletimelineinstance.i: timeline/variabletimelineinstance.cpp.i
@@ -1698,7 +1698,7 @@ timeline/variabletimelineinstance.i: timeline/variabletimelineinstance.cpp.i
 
 # target to preprocess a source file
 timeline/variabletimelineinstance.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/variabletimelineinstance.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/variabletimelineinstance.cpp.i
 .PHONY : timeline/variabletimelineinstance.cpp.i
 
 timeline/variabletimelineinstance.s: timeline/variabletimelineinstance.cpp.s
@@ -1706,7 +1706,7 @@ timeline/variabletimelineinstance.s: timeline/variabletimelineinstance.cpp.s
 
 # target to generate assembly for a file
 timeline/variabletimelineinstance.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/variabletimelineinstance.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/timeline/variabletimelineinstance.cpp.s
 .PHONY : timeline/variabletimelineinstance.cpp.s
 
 variable/variable.o: variable/variable.cpp.o
@@ -1714,7 +1714,7 @@ variable/variable.o: variable/variable.cpp.o
 
 # target to build an object file
 variable/variable.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/variable/variable.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/variable/variable.cpp.o
 .PHONY : variable/variable.cpp.o
 
 variable/variable.i: variable/variable.cpp.i
@@ -1722,7 +1722,7 @@ variable/variable.i: variable/variable.cpp.i
 
 # target to preprocess a source file
 variable/variable.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/variable/variable.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/variable/variable.cpp.i
 .PHONY : variable/variable.cpp.i
 
 variable/variable.s: variable/variable.cpp.s
@@ -1730,7 +1730,7 @@ variable/variable.s: variable/variable.cpp.s
 
 # target to generate assembly for a file
 variable/variable.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/variable/variable.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/variable/variable.cpp.s
 .PHONY : variable/variable.cpp.s
 
 variable/variablecontainer.o: variable/variablecontainer.cpp.o
@@ -1738,7 +1738,7 @@ variable/variablecontainer.o: variable/variablecontainer.cpp.o
 
 # target to build an object file
 variable/variablecontainer.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/variable/variablecontainer.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/variable/variablecontainer.cpp.o
 .PHONY : variable/variablecontainer.cpp.o
 
 variable/variablecontainer.i: variable/variablecontainer.cpp.i
@@ -1746,7 +1746,7 @@ variable/variablecontainer.i: variable/variablecontainer.cpp.i
 
 # target to preprocess a source file
 variable/variablecontainer.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/variable/variablecontainer.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/variable/variablecontainer.cpp.i
 .PHONY : variable/variablecontainer.cpp.i
 
 variable/variablecontainer.s: variable/variablecontainer.cpp.s
@@ -1754,7 +1754,7 @@ variable/variablecontainer.s: variable/variablecontainer.cpp.s
 
 # target to generate assembly for a file
 variable/variablecontainer.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/variable/variablecontainer.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/variable/variablecontainer.cpp.s
 .PHONY : variable/variablecontainer.cpp.s
 
 variable/variableinstancenameandidmap.o: variable/variableinstancenameandidmap.cpp.o
@@ -1762,7 +1762,7 @@ variable/variableinstancenameandidmap.o: variable/variableinstancenameandidmap.c
 
 # target to build an object file
 variable/variableinstancenameandidmap.cpp.o:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/variable/variableinstancenameandidmap.cpp.o
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/variable/variableinstancenameandidmap.cpp.o
 .PHONY : variable/variableinstancenameandidmap.cpp.o
 
 variable/variableinstancenameandidmap.i: variable/variableinstancenameandidmap.cpp.i
@@ -1770,7 +1770,7 @@ variable/variableinstancenameandidmap.i: variable/variableinstancenameandidmap.c
 
 # target to preprocess a source file
 variable/variableinstancenameandidmap.cpp.i:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/variable/variableinstancenameandidmap.cpp.i
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/variable/variableinstancenameandidmap.cpp.i
 .PHONY : variable/variableinstancenameandidmap.cpp.i
 
 variable/variableinstancenameandidmap.s: variable/variableinstancenameandidmap.cpp.s
@@ -1778,7 +1778,7 @@ variable/variableinstancenameandidmap.s: variable/variableinstancenameandidmap.c
 
 # target to generate assembly for a file
 variable/variableinstancenameandidmap.cpp.s:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/variable/variableinstancenameandidmap.cpp.s
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(MAKE) -f ext/spriter/CMakeFiles/spriterengine.dir/build.make ext/spriter/CMakeFiles/spriterengine.dir/variable/variableinstancenameandidmap.cpp.s
 .PHONY : variable/variableinstancenameandidmap.cpp.s
 
 # Help Target
@@ -2009,6 +2009,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /media/fichiers/Programmation/evilly-evil-villains/trunk && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /media/fichiers/Programmation/evilly-evil-villains/branches/feature-spriterplusplus && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
