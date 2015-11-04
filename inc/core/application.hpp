@@ -98,6 +98,9 @@ public:
     //! Refresh the window/display/sound from the current config.
     static void refreshFromConfig();
 
+    //! Acces the visual debug informations.
+    static inline VisualDebug& visualDebug() { return s_visualDebug; }
+
     //! @}
 
     //--------------------------------------//
@@ -184,7 +187,6 @@ protected:
 
     void updateSounds(const sf::Time& dt);      //!< Manage the sounds.
     void updateShaders(const sf::Time& dt);     //!< Animate the shaders.
-    void updateAnimations(const sf::Time& dt);  //!< Animate the currently played animations.
 
     //! @}
 
@@ -200,13 +202,12 @@ private:
     //! Fixed timestep to clean sounds.
     const sf::Time m_soundsRefreshTime = sf::seconds(5.f);
 
-    float m_gameTimeFactor = 1.f;   //!< Modifying the speed of the whole game.
     float m_gameTime = 0.f;         //!< The game time since game loop is running.
     bool m_running = false;         //!< Controls whether to continue game loop.
     StateID m_initialState;         //!< The initial state push into the stack (not fixed for easy debugging).
 
     // Visual part
+    static VisualDebug s_visualDebug;   //!< The debug information.
     states::StateStack m_stateStack;    //!< The stack of states.
-    VisualDebug m_visualDebug;          //!< The debug information.
     Cursor m_cursor;                    //!< A personnal cursor.
 };

@@ -41,15 +41,6 @@ namespace resources
         ~AnimationHolder() = default;
 
         //----------------//
-        //! @name Routine
-        //! @{
-
-        //! Updates animation of all animated sprites in the list.
-        void update(const sf::Time& dt);
-
-        //! @}
-
-        //----------------//
         //! @name Storage
         //! @{
 

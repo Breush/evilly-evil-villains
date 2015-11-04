@@ -83,9 +83,7 @@ namespace scene
         //! @{
 
         void drawInternal(sf::RenderTarget& target, sf::RenderStates states) const final;
-
-        //! Internally called to update the animation state.
-        void updateAnimation(const sf::Time& dt);
+        void updateRoutine(const sf::Time& dt);
 
         //! Refresh all entities.
         void refresh();

@@ -151,6 +151,7 @@ void MonsterCage::refreshHireBox()
 {
     const auto& reserve = m_data.monstersInfo().reserve;
     auto pCage = std::find_if(reserve, [this] (const Data::MonsterCageInfo& monsterCage) { return monsterCage.type == m_monsterID; });
+    returnif (pCage == std::end(reserve));
 
     // Text
     m_hireBoxLabel.setText(L"*Hire* " + toWString(pCage->countdown));

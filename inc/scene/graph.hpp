@@ -35,7 +35,7 @@ namespace scene
         void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
 
         //! Update the graph recursively.
-        void update(const sf::Time& dt);
+        void update(const sf::Time& dt, const float factor);
 
         //! Handle event recursively.
         void handleEvent(const sf::Event& event);

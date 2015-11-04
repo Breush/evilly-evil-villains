@@ -110,8 +110,9 @@ GameDungeonDesign::~GameDungeonDesign()
 
 bool GameDungeonDesign::update(const sf::Time& dt)
 {
-    m_dungeonData.update(dt);
-    m_heroesManager.update(dt);
+    auto dtFactored = timeFactor() * dt;
+    m_dungeonData.update(dtFactored);
+    m_heroesManager.update(dtFactored);
     return baseClass::update(dt);
 }
 
@@ -146,6 +147,7 @@ void GameDungeonDesign::onQuit() noexcept
     // Saving dungeon + villain info
     context::worlds.refreshLastPlayed();
     m_dungeonData.save(context::worlds.selected().folder);
+    Application::visualDebug().setDisplayedTimeFactor(1.f);
 }
 
 //------------------//
@@ -157,11 +159,27 @@ void GameDungeonDesign::handleEvent(const sf::Event& event)
     m_dungeonInter.handleGlobalEvent(event);
     m_contextMenu.handleGlobalEvent(event);
 
-    if ((event.type == sf::Event::KeyPressed
-        && event.key.code == sf::Keyboard::Escape)) {
-        if (!isStateVisible(StateID::GAME_PAUSE))
-            stackPush(StateID::GAME_PAUSE);
-        return;
+    if (event.type == sf::Event::KeyPressed) {
+        // Pause on escape
+        if (event.key.code == sf::Keyboard::Escape) {
+            if (!isStateVisible(StateID::GAME_PAUSE))
+                stackPush(StateID::GAME_PAUSE);
+            return;
+        }
+
+        // Decelerate time
+        if (event.key.code == sf::Keyboard::F8) {
+            setTimeFactor(timeFactor() / 2.f);
+            Application::visualDebug().setDisplayedTimeFactor(timeFactor());
+            return;
+        }
+
+        // Accelerate time
+        if (event.key.code == sf::Keyboard::F9) {
+            setTimeFactor(timeFactor() * 2.f);
+            Application::visualDebug().setDisplayedTimeFactor(timeFactor());
+            return;
+        }
     }
 
     // TODO Make it a config option?

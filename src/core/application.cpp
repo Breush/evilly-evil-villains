@@ -14,6 +14,7 @@
 //----- Static variables -----//
 
 Application::Context Application::s_context;
+VisualDebug Application::s_visualDebug;
 bool Application::s_needRefresh = false;
 bool Application::s_paused = false;
 
@@ -97,7 +98,7 @@ Application::Application()
 
     // All is ready, go for it
     m_stateStack.pushState(m_initialState);
-    m_visualDebug.init();
+    s_visualDebug.init();
     m_cursor.init();
 
     // Full refresh on start
@@ -163,21 +164,7 @@ void Application::processInput()
         if (event.type == sf::Event::KeyPressed) {
             // Switch visual debug mode
             if (event.key.code == sf::Keyboard::F3) {
-                m_visualDebug.switchVisible();
-                continue;
-            }
-
-            // Decelerate time
-            if (event.key.code == sf::Keyboard::F8) {
-                m_gameTimeFactor /= 2.f;
-                m_visualDebug.setDisplayedTimeFactor(m_gameTimeFactor);
-                continue;
-            }
-
-            // Accelerate time
-            if (event.key.code == sf::Keyboard::F9) {
-                m_gameTimeFactor *= 2.f;
-                m_visualDebug.setDisplayedTimeFactor(m_gameTimeFactor);
+                s_visualDebug.switchVisible();
                 continue;
             }
 
@@ -199,7 +186,6 @@ void Application::processInput()
             // Hard reset on debug mode
             if (event.key.code == sf::Keyboard::BackSlash) {
                 m_gameTime = 0.f;
-                m_gameTimeFactor = 1.f;
                 m_stateStack.clearStates();
                 m_stateStack.pushState(StateID::SPLASHSCREEN);
                 continue;
@@ -249,19 +235,18 @@ void Application::update(const sf::Time& dt)
     m_gameTime += dt.asSeconds();
 
     // Overall elements
-    m_visualDebug.update(dt);
+    s_visualDebug.update(dt);
     m_cursor.update(dt);
 
     // Game logic
-    const sf::Time dtGame = dt * m_gameTimeFactor;
-    s_context.commander.update(dtGame);
-    m_stateStack.update(dtGame);
+    s_context.commander.update(dt);
+    m_stateStack.update(dt);
 
     // Update the visual effects
+    // FIXME Sounds and shaders are not affected by States's timefactor
     if (!s_paused) {
-        updateSounds(dtGame);
-        updateAnimations(dtGame);
-        updateShaders(dtGame);
+        updateSounds(dt);
+        updateShaders(dt);
     }
 }
 
@@ -269,7 +254,7 @@ void Application::render()
 {
     s_context.window.clear();
     s_context.window.draw(m_stateStack);
-    s_context.window.draw(m_visualDebug);
+    s_context.window.draw(s_visualDebug);
     s_context.window.draw(m_cursor);
     s_context.window.display();
 }
@@ -300,7 +285,7 @@ void Application::refreshNUI()
     s_context.nuiGuides.recompute(s_context.display.nui);
 
     m_stateStack.refreshNUI(s_context.nuiGuides);
-    m_visualDebug.refreshNUI(s_context.nuiGuides);
+    s_visualDebug.refreshNUI(s_context.nuiGuides);
 }
 
 void Application::refreshWindow()
@@ -309,7 +294,7 @@ void Application::refreshWindow()
 
     // Refresh all views
     m_stateStack.refreshWindow(s_context.windowInfo);
-    m_visualDebug.refreshWindow(s_context.windowInfo);
+    s_visualDebug.refreshWindow(s_context.windowInfo);
     m_cursor.refreshWindow(s_context.windowInfo);
 
     // Refresh shaders

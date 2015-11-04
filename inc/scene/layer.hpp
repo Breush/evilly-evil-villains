@@ -53,7 +53,7 @@ namespace scene
         //! @{
 
         //! Recursively update on all entities of the layer.
-        void update(const sf::Time& dt);
+        void update(const sf::Time& dt, const float factor);
 
         //! Set target to layer view and draw layer recursively.
         void draw(sf::RenderTarget& target, sf::RenderStates states) const final;

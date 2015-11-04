@@ -7,15 +7,6 @@
 using namespace resources;
 
 //-------------------//
-//----- Routine -----//
-
-void AnimationHolder::update(const sf::Time& dt)
-{
-    for (auto& animatedSprite : m_animatedSprites)
-        animatedSprite->updateAnimation(dt);
-}
-
-//-------------------//
 //----- Storage -----//
 
 void AnimationHolder::load(const std::string& filename)

@@ -44,15 +44,15 @@ void Graph::draw(sf::RenderTarget& target, sf::RenderStates states) const
     debug_nui_1(drawMouseDetector(target, states));
 }
 
-void Graph::update(const sf::Time& dt)
+void Graph::update(const sf::Time& dt, const float factor)
 {
     // Grabbing
     if (m_grabbing)
         m_scene.moveGrabbing(m_grabbingPosition, dt);
 
     // Update recursively all the entities
-    m_scene.update(dt);
-    m_nuiLayer.update(dt);
+    m_scene.update(dt, factor);
+    m_nuiLayer.update(dt, factor);
 
     // Focusing system - animation
     if (m_focusedEntity != nullptr) {

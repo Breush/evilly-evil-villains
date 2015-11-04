@@ -38,8 +38,3 @@ void Application::preloadAnimations()
     s_context.animations.load("res/scml/default.scml");
     s_context.animations.setDefault("default");
 }
-
-void Application::updateAnimations(const sf::Time& dt)
-{
-    s_context.animations.update(dt);
-}

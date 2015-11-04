@@ -45,7 +45,7 @@ namespace scene
         //! @{
 
         //! Recursively updates all layers.
-        void update(const sf::Time& dt);
+        void update(const sf::Time& dt, const float factor);
 
         //! Recursively draw all layers.
         void draw(sf::RenderTarget& target, sf::RenderStates states) const final;

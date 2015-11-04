@@ -36,7 +36,7 @@ void AnimatedSprite::drawInternal(sf::RenderTarget& target, sf::RenderStates sta
     }
 }
 
-void AnimatedSprite::updateAnimation(const sf::Time& dt)
+void AnimatedSprite::updateRoutine(const sf::Time& dt)
 {
     returnif (!m_started);
 

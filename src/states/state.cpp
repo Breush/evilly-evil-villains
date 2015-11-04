@@ -25,7 +25,7 @@ void State::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 bool State::update(const sf::Time& dt)
 {
-    m_sceneGraph.update(dt);
+    m_sceneGraph.update(dt, m_timeFactor);
     return true;
 }
 

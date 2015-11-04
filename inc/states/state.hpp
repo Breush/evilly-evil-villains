@@ -85,6 +85,18 @@ namespace states
 
         //! @}
 
+        //---------------------//
+        //! @name Time control
+        //! @{
+
+        //! Set the time factor.
+        inline void setTimeFactor(const float inTimeFactor) { m_timeFactor = inTimeFactor; }
+
+        //! The time factor.
+        inline float timeFactor() const { return m_timeFactor; }
+
+        //! @}
+
         //-------------------------//
         //! @name Stack operations
         //! @{
@@ -116,5 +128,7 @@ namespace states
 
         StateStack& m_stack;        //!< Referenced stack.
         scene::Graph m_sceneGraph;  //!< State graph.
+
+        float m_timeFactor = 1.f;   //!< Modifying the speed of the entities.
     };
 }

@@ -22,10 +22,10 @@ Scene::Scene(Graph* graph)
 //-------------------//
 //----- Routine -----//
 
-void Scene::update(const sf::Time& dt)
+void Scene::update(const sf::Time& dt, const float factor)
 {
     for (auto& layer : m_layers)
-        layer->update(dt);
+        layer->update(dt, factor);
 
     // Smooth moving
     if (std::abs(m_moveVelocity.x) >= 0.01f || std::abs(m_moveVelocity.y) >= 0.01f) {
