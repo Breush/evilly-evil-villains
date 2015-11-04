@@ -11,32 +11,54 @@
 ------------
 -- Locals --
 
-local altitude_ref      -- The reference altitude
+local altitude_ref  -- The reference altitude
 
-local fusing = false    -- Whether the Creepim is exploding
+local fusing        -- Whether the Creepim is exploding
 
 ---------------
 -- Callbacks --
 
 -- Called once on object creation
 function _register()
+    -- Register callbacks
     eev_addCallback("cbHeroClose", "hero", "distance < 0.7")
+
+    -- Register data
+    eev_initEmptyDataFloat("fusingTime", 0)
+
+    -- Was I fusing?
+    local fusingTime = eev_getDataFloat("fusingTime")
+    if fusingTime ~= 0 then
+        startFusing(fusingTime)
+    end
 end
 
 -- Whenever a hero comes too close
 function cbHeroClose(heroUID)
     if not fusing then
-        -- Stop doing anything else
-        fusing = true
-        eev_stopMoving()
+        startFusing(0)
+    end
+end
 
-        -- Select correct way to explode
-        eev_setAnimationLooping(false)
-        if eev_isLookingDirection("left") then
-            eev_selectAnimation("lexplode")
-        else
-            eev_selectAnimation("rexplode")
-        end
+-- Fusing mode
+-- One can specify an time offset to apply to the animation
+-- which is used to get back into fusing if it was paused
+function startFusing(timeOffset)
+    -- Stop doing anything else
+    fusing = true
+    eev_stopMoving()
+
+    -- Select correct way to explode
+    eev_setAnimationLooping(false)
+    if eev_isLookingDirection("left") then
+        eev_selectAnimation("lexplode")
+    else
+        eev_selectAnimation("rexplode")
+    end
+
+    -- Apply offset
+    if timeOffset ~= 0 then
+        eev_forwardAnimation(timeOffset)
     end
 end
 
@@ -45,9 +67,20 @@ end
 
 -- Regular call
 function _update(dt)
-    if fusing and eev_isAnimationStopped() then
-        eev_dungeonExplodeRoom(eev_getCurrentRoomX(), eev_getCurrentRoomY())
-        fusing = false
+    -- Check if in fusing mode
+    if fusing then
+        -- The animation stopped, here we really explode
+        if eev_isAnimationStopped() then
+            eev_dungeonExplodeRoom(eev_getCurrentRoomX(), eev_getCurrentRoomY())
+            fusingTime = 0
+            fusing = false
+
+        -- Else, just saved how far we got into the animation
+        else
+            local fusingTime = eev_getDataFloat("fusingTime")
+            fusingTime = fusingTime + dt
+            eev_setDataFloat("fusingTime", fusingTime)
+        end
     end
 end
 

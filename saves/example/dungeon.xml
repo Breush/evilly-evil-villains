@@ -16,6 +16,17 @@
                 <rx type="float" value="1.5" />
                 <ry type="float" value="4.62" />
             </monster>
+            <monster type="creepim">
+                <rx type="float" value="0.5" />
+                <ry type="float" value="2.5" />
+                <tx type="float" value="0.5" />
+                <ty type="float" value="4.5" />
+            </monster>
+            <monster type="creepim">
+                <rx type="float" value="2.5" />
+                <ry type="float" value="3.2" />
+                <fusingTime type="float" value="1.4" />
+            </monster>
         </active>
     </monsters>
 	<floor pos="0">
@@ -35,9 +46,7 @@
 		<room pos="2" state="constructed">
 			<facility type="ladder" />
 		</room>
-		<room pos="3" state="constructed">
-			<facility type="ladder" />
-		</room>
+		<room pos="3" state="constructed" />
 		<room pos="4" state="constructed" />
 	</floor>
 	<floor pos="2">
@@ -46,7 +55,7 @@
 			<facility type="ladder" />
 		</room>
 		<room pos="2" state="constructed" />
-		<room pos="3" state="void" />
+		<room pos="3" state="constructed" />
 		<room pos="4" state="void" />
 	</floor>
 	<floor pos="3">

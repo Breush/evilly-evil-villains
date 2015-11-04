@@ -281,11 +281,27 @@ sf::Vector2f Inter::tileLocalPosition(const sf::Vector2u& coords) const
     return m_grid.cellPosition(m_data->floorsCount() - coords.x - 1u, coords.y);
 }
 
-sf::Vector2u Inter::tileFromLocalPosition(const sf::Vector2f& pos)
+sf::Vector2u Inter::tileFromLocalPosition(const sf::Vector2f& pos) const
 {
     auto coords = m_grid.rowColumnFromCoords(pos);
     coords.x = m_data->floorsCount() - coords.x - 1u;
     return coords;
+}
+
+sf::Vector2f Inter::relTileLocalPosition(const sf::Vector2f& relCoords) const
+{
+    sf::Vector2f pos;
+    pos.x = relCoords.y * tileSize().x;
+    pos.y = size().y - relCoords.x * tileSize().y;
+    return pos;
+}
+
+sf::Vector2f Inter::relTileFromLocalPosition(const sf::Vector2f& pos) const
+{
+    sf::Vector2f relCoords;
+    relCoords.x = (size().y - pos.y) / tileSize().y;
+    relCoords.y = pos.x / tileSize().x;
+    return relCoords;
 }
 
 void Inter::addLayer(const sf::Vector2u& coords, const std::string& textureID, float depth)
@@ -611,14 +627,22 @@ void Inter::refreshSize()
 
 void Inter::refreshMonsters()
 {
-    m_monsters.clear();
+    auto& activeMonsters = m_data->monstersInfo().active;
+    uint monstersCount = activeMonsters.size();
 
-    for (auto& monsterInfo : m_data->monstersInfo().active) {
-        auto monster = std::make_unique<Monster>(monsterInfo.data, *this);
+    // TODO OPTIM Have a refreshFromData only! (And a _refreshFromData() function in lua API)
+    // There is too much useless memory reallocation right now...
+    m_monsters.clear();
+    m_monsters.resize(monstersCount);
+
+    // Recreate them
+    for (uint i = 0u; i < monstersCount; ++i) {
+        auto& monster = m_monsters[i];
+        auto& monsterInfo = activeMonsters[i];
+        monster = std::make_unique<Monster>(monsterInfo.data, *this);
         monster->setEmitter(m_data);
         monster->useGraph(m_data->graph());
-        m_monsters.emplace_back(std::move(monster));
-        attachChild(*m_monsters.back());
+        attachChild(*monster);
     }
 
     refreshMonstersActivity();

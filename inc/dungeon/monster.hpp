@@ -93,6 +93,15 @@ namespace dungeon
         //! Calling detector.
         void lua_addCallback(const std::string& luaKey, const std::string& entityType, const std::string& condition);
 
+        //! Init the eData with the value if empty.
+        void lua_initEmptyDataFloat(const std::string& s, const lua_Number value);
+
+        //! Set the eData with the value specified.
+        void lua_setDataFloat(const std::string& s, const lua_Number value);
+
+        //! Get the correponding eData.
+        lua_Number lua_getDataFloat(const std::string& s) const;
+
         //! Select an animation to play.
         void lua_selectAnimation(const std::string& animationKey);
 
@@ -107,6 +116,9 @@ namespace dungeon
 
         //! Returns true if the current animation has stopped (looping has to be false).
         bool lua_isAnimationStopped() const;
+
+        //! Advance the current animation from a certain offset.
+        void lua_forwardAnimation(const lua_Number offset);
 
         // TODO Find a better way to get those?
         // Note: sel::Tuple<uint, uint> fail, struct personnel fail, (uint&, uint&) fail
@@ -152,6 +164,9 @@ namespace dungeon
 
         //! Refresh the monster status whenever activity changes.
         void refreshFromActivity();
+
+        //! Refresh the state of the walk animation.
+        void refreshAnimation();
 
         //! @}
 

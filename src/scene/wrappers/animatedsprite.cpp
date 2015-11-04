@@ -39,13 +39,7 @@ void AnimatedSprite::drawInternal(sf::RenderTarget& target, sf::RenderStates sta
 void AnimatedSprite::updateRoutine(const sf::Time& dt)
 {
     returnif (!m_started);
-
-    for (const auto& entity : m_entities) {
-        entity->updateAnimation(dt.asMilliseconds());
-
-        if (!m_looping && entity->time >= entity->getAnimation(m_number)->length)
-            m_started = false;
-    }
+    forward(dt);
 }
 
 void AnimatedSprite::refresh()
@@ -80,6 +74,8 @@ void AnimatedSprite::load(const std::string& id)
 
 void AnimatedSprite::select(const std::wstring& animationName)
 {
+    returnif (m_entities.empty());
+
     const auto& firstEntity = *m_entities.front();
     auto animation = firstEntity.getAnimation(animationName);
     wassert(animation != nullptr, L"Requested animation '" << animationName
@@ -89,6 +85,16 @@ void AnimatedSprite::select(const std::wstring& animationName)
         m_number = animation->id;
         refresh();
         restart();
+    }
+}
+
+void AnimatedSprite::forward(const sf::Time& offset)
+{
+    for (const auto& entity : m_entities) {
+        entity->updateAnimation(offset.asMilliseconds());
+
+        if (!m_looping && entity->time >= entity->getAnimation(m_number)->length)
+            m_started = false;
     }
 }
 

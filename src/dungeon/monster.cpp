@@ -24,19 +24,25 @@ Monster::Monster(ElementData& edata, Inter& inter)
     setDetectRangeFactor(m_inter.tileSize().x);
     m_pauseDelay = monsterData.pauseDelay;
 
-    // Initial position
-    sf::Vector2f monsterPosition;
-    monsterPosition.x = m_edata[L"ry"].as_float() * m_inter.tileSize().x;
-    monsterPosition.y = m_inter.size().y - m_edata[L"rx"].as_float() * m_inter.tileSize().y;
-    lerpable()->setTargetPosition(monsterPosition);
-    setLocalPosition(monsterPosition);
-    centerOrigin();
-
     // Decorum
     attachChild(m_sprite);
     m_sprite.load("dungeon/monsters/" + sMonsterID);
     m_sprite.setStarted(false);
     m_sprite.setLocalScale(m_inter.roomScale());
+
+    // Was there a target position saved?
+    if (!m_edata.exists(L"tx")) {
+        m_edata[L"tx"].init_float(m_edata[L"rx"].as_float());
+        m_edata[L"ty"].init_float(m_edata[L"ry"].as_float());
+    }
+
+    // Initial position
+    sf::Vector2f monsterPosition = m_inter.relTileLocalPosition({m_edata[L"rx"].as_float(), m_edata[L"ry"].as_float()});
+    sf::Vector2f targetPosition = m_inter.relTileLocalPosition({m_edata[L"tx"].as_float(), m_edata[L"ty"].as_float()});
+    lerpable()->setTargetPosition(targetPosition);
+    setLocalPosition(monsterPosition);
+    refreshAnimation();
+    centerOrigin();
 
     // Lua
     std::string luaFilename = "res/ai/monsters/" + sMonsterID + ".lua";
@@ -51,10 +57,15 @@ Monster::Monster(ElementData& edata, Inter& inter)
     m_lua["eev_selectAnimation"] = [this] (const std::string& animationKey) { lua_selectAnimation(animationKey); };
     m_lua["eev_isLookingDirection"] = [this] (const std::string& direction) { return lua_isLookingDirection(direction); };
     m_lua["eev_isAnimationStopped"] = [this] { return lua_isAnimationStopped(); };
+    m_lua["eev_forwardAnimation"] = [this] (const lua_Number offset) { lua_forwardAnimation(offset); };
     m_lua["eev_getCurrentRoomX"] = [this] { return lua_getCurrentRoomX(); };
     m_lua["eev_getCurrentRoomY"] = [this] { return lua_getCurrentRoomY(); };
     m_lua["eev_log"] = [this] (const std::string& str) { lua_log(str); };
     m_lua["eev_dungeonExplodeRoom"] = [this] (const uint x, const uint y) { lua_dungeonExplodeRoom(x, y); };
+
+    m_lua["eev_setDataFloat"] = [this] (const std::string& s, const lua_Number value) { lua_setDataFloat(s, value); };
+    m_lua["eev_getDataFloat"] = [this] (const std::string& s) { return lua_getDataFloat(s); };
+    m_lua["eev_initEmptyDataFloat"] = [this] (const std::string& s, const lua_Number value) { lua_initEmptyDataFloat(s, value); };
 
     // Call for all things to register
     m_lua["_register"]();
@@ -67,9 +78,9 @@ Monster::Monster(ElementData& edata, Inter& inter)
 
 void Monster::onTransformChanges()
 {
-    // Note: Room coordinates convention is inverted because the floor appears first
-    m_edata[L"rx"].as_float() = (m_inter.size().y - localPosition().y) / m_inter.tileSize().y;
-    m_edata[L"ry"].as_float() = localPosition().x / m_inter.tileSize().x;
+    auto relPosition = m_inter.relTileFromLocalPosition(localPosition());
+    m_edata[L"rx"].as_float() = relPosition.x;
+    m_edata[L"ry"].as_float() = relPosition.y;
 }
 
 void Monster::updateAI(const sf::Time& dt)
@@ -155,6 +166,25 @@ void Monster::lua_addCallback(const std::string& luaKey, const std::string& enti
     addDetectSignal(entityType, condition, [this, luaKey] (const uint32 UID) { m_lua[luaKey.c_str()](UID); });
 }
 
+void Monster::lua_initEmptyDataFloat(const std::string& s, const lua_Number value)
+{
+    auto ws = toWString(s);
+    if (!m_edata.exists(ws))
+        m_edata[ws].init_float(static_cast<float>(value));
+}
+
+void Monster::lua_setDataFloat(const std::string& s, const lua_Number value)
+{
+    auto ws = toWString(s);
+    m_edata[ws].as_float() = static_cast<float>(value);
+}
+
+lua_Number Monster::lua_getDataFloat(const std::string& s) const
+{
+    auto ws = toWString(s);
+    return static_cast<lua_Number>(m_edata.at(ws).as_float());
+}
+
 void Monster::lua_selectAnimation(const std::string& animationKey)
 {
     m_sprite.select(toWString(animationKey));
@@ -163,6 +193,11 @@ void Monster::lua_selectAnimation(const std::string& animationKey)
 void Monster::lua_setAnimationLooping(const bool looping)
 {
     m_sprite.setLooping(looping);
+}
+
+void Monster::lua_forwardAnimation(const lua_Number offset)
+{
+    m_sprite.forward(sf::seconds(static_cast<float>(offset)));
 }
 
 void Monster::lua_stopMoving()
@@ -284,8 +319,11 @@ void Monster::refreshFromActivity()
 {
     if (active()) {
         reinit();
-        setCurrentNode(&m_graph->node(m_inter.tileFromLocalPosition(localPosition())));
         m_sprite.setStarted(true);
+        sf::Vector2f relCoords(m_edata[L"tx"].as_float(), m_edata[L"ty"].as_float());
+        auto targetPosition = m_inter.relTileLocalPosition(relCoords);
+        lerpable()->setTargetPosition(targetPosition);
+        m_currentNode = &m_graph->node(sf::v2u(relCoords));
     }
     else {
         setCurrentNode(nullptr);
@@ -301,8 +339,18 @@ void Monster::refreshPositionFromNode()
     const auto& targetCoords = toNodeData(m_currentNode)->coords;
     const auto tileLocalPosition = m_inter.tileLocalPosition(targetCoords);
     const auto monsterTilePosition = 0.5f * m_inter.tileSize();
-    lerpable()->setTargetPosition(tileLocalPosition + monsterTilePosition);
+    const auto targetPosition = tileLocalPosition + monsterTilePosition;
+    lerpable()->setTargetPosition(targetPosition);
 
+    auto relTargetPosition = m_inter.relTileFromLocalPosition(targetPosition);
+    m_edata[L"tx"].as_float() = relTargetPosition.x;
+    m_edata[L"ty"].as_float() = relTargetPosition.y;
+
+    refreshAnimation();
+}
+
+void Monster::refreshAnimation()
+{
     // TODO See Hero, same problem
     if (lerpable()->targetPosition().x > localPosition().x) {
         m_sprite.select(L"rwalk");

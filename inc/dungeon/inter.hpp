@@ -137,10 +137,16 @@ namespace dungeon
         //! @{
 
         //! Return the coordinates (floor/room) of the room below.
-        sf::Vector2u tileFromLocalPosition(const sf::Vector2f& pos);
+        sf::Vector2u tileFromLocalPosition(const sf::Vector2f& pos) const;
 
         //! Returns the top-left coordinates in pixels of the tile situated at these coordinates.
         sf::Vector2f tileLocalPosition(const sf::Vector2u& coords) const;
+
+        //! Return the relative coordinates (floor/room) of the room below.
+        sf::Vector2f relTileFromLocalPosition(const sf::Vector2f& pos) const;
+
+        //! Returns the top-left coordinates in pixels of the tile situated at these relative coordinates.
+        sf::Vector2f relTileLocalPosition(const sf::Vector2f& relCoords) const;
 
         //! The size in pixels of the tiles.
         sf::Vector2f tileSize() const { return m_grid.cellSize(); }

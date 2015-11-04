@@ -47,6 +47,9 @@ namespace scene
         //! Selects the animation to be played.
         void select(const std::wstring& animationName);
 
+        //! Advance the animation of a certain time.
+        void forward(const sf::Time& offset);
+
         //! Restart the current animation.
         void restart();
 
@@ -83,7 +86,7 @@ namespace scene
         //! @{
 
         void drawInternal(sf::RenderTarget& target, sf::RenderStates states) const final;
-        void updateRoutine(const sf::Time& dt);
+        void updateRoutine(const sf::Time& dt) final;
 
         //! Refresh all entities.
         void refresh();
