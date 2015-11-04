@@ -61,11 +61,14 @@ namespace context
         //! @return The index of the new world.
         uint add(std::wstring name, std::wstring villain);
 
+        //! Find and the world of the specified folder.
+        void removeFromFolder(const std::wstring& folder);
+
         //! Find and remove all worlds associated with a villain.
-        void remove(const std::wstring& villain);
+        void removeFromVillain(const std::wstring& villain);
 
         //! Find how many worlds are associated with the specified villain.
-        uint count(const std::wstring& villain);
+        uint countFromVillain(const std::wstring& villain);
 
         //! Refresh the lastPlayer attribute to current time of the selected world.
         void refreshLastPlayed();

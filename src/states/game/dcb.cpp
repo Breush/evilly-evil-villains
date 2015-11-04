@@ -118,8 +118,12 @@ void GameDCB::onNameValidate()
 
 void GameDCB::confirmDungeonCreation()
 {
+    const auto& worldInfo = context::worlds.selected();
+
     // State GAMEOVER if conviction gauge has not enough
     if (!m_gaugesManager.enoughConviction()) {
+        context::worlds.removeFromFolder(worldInfo.folder);
+        context::worlds.save();
         stackClear(StateID::GAME_OVER);
         return;
     }
@@ -138,8 +142,6 @@ void GameDCB::confirmDungeonCreation()
 
     // Create dungeon with these values
     dungeon::Data dungeonData;
-    const auto& worldInfo = context::worlds.selected();
-
     dungeonData.setName(name);
     dungeonData.setFloorsCount(floorsCount);
     dungeonData.setRoomsByFloor(roomsByFloor);

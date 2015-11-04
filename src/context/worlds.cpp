@@ -4,6 +4,7 @@
 #include "tools/string.hpp"
 #include "tools/time.hpp"
 #include "tools/filesystem.hpp"
+#include "tools/platform-fixes.hpp" // erase_if
 
 #include <pugixml/pugixml.hpp>
 #include <stdexcept>
@@ -142,16 +143,17 @@ uint Worlds::add(std::wstring name, std::wstring villain)
     m_worlds.emplace_back(std::move(world));
     return m_worlds.size() - 1u;
 }
-
-void Worlds::remove(const std::wstring& villain)
+void Worlds::removeFromFolder(const std::wstring& folder)
 {
-    for (auto it = m_worlds.begin(); it != m_worlds.end();) {
-        if (it->villain == villain) it = m_worlds.erase(it);
-        else ++it;
-    }
+    std::erase_if(m_worlds, [&folder] (const World& world) { return world.folder == folder; });
 }
 
-uint Worlds::count(const std::wstring& villain)
+void Worlds::removeFromVillain(const std::wstring& villain)
+{
+    std::erase_if(m_worlds, [&villain] (const World& world) { return world.villain == villain; });
+}
+
+uint Worlds::countFromVillain(const std::wstring& villain)
 {
     uint worldsCount = 0u;
 

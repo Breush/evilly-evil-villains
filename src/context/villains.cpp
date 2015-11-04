@@ -22,7 +22,7 @@ Villains context::villains;
 
 uint Villain::worldsCount() const
 {
-    return worlds.count(name);
+    return worlds.countFromVillain(name);
 }
 
 //---------------------------//
@@ -124,7 +124,7 @@ void Villains::remove(uint index)
 
 void Villains::removeWorlds(uint index)
 {
-    worlds.remove(m_villains[index].name);
+    worlds.removeFromVillain(m_villains[index].name);
 }
 
 Villain* Villains::getFromVillainName(const std::wstring& villainName)
