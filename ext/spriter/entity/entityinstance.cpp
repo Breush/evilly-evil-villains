@@ -89,6 +89,7 @@ namespace SpriterEngine
         else
         {
             // error
+            std::cerr << "[Spriter++] Unknown file ID " << fileId << std::endl;
             return 0;
         }
     }

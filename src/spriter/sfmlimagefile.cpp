@@ -2,8 +2,7 @@
 
 #include <Spriter/objectinfo/universalobjectinterface.h>
 
-#include "tools/vector.hpp" // FIXME
-#include <iostream> // FIXME
+#include <iostream>
 
 namespace SpriterEngine
 {

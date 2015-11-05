@@ -2,6 +2,7 @@
 
 #include "core/application.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
+#include "tools/string.hpp"
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
 
@@ -21,6 +22,15 @@ AnimatedSprite::~AnimatedSprite()
 
 //-------------------//
 //----- Routine -----//
+
+void AnimatedSprite::onTransformChanges()
+{
+    returnif (m_spriterEntity == nullptr);
+
+    m_spriterEntity->setPosition({getPosition().x, getPosition().y});
+    m_spriterEntity->setScale({getScale().x, getScale().y});
+    m_spriterEntity->setAngle(getRotation());
+}
 
 void AnimatedSprite::drawInternal(sf::RenderTarget& target, sf::RenderStates states) const
 {
@@ -47,18 +57,10 @@ void AnimatedSprite::drawInternal(sf::RenderTarget& target, sf::RenderStates sta
 
 void AnimatedSprite::updateRoutine(const sf::Time& dt)
 {
+    returnif (m_spriterEntity == nullptr);
+
     // returnif (!m_started);
     forward(dt);
-
-    // TODO The others...
-    m_spriterEntity->setPosition({getPosition().x, getPosition().y});
-}
-
-void AnimatedSprite::refresh()
-{
-    /*
-    for (const auto& entity : m_entities)
-        entity->getAnimation(m_number)->looping = (m_looping)? L"true" : L"false";*/
 }
 
 //---------------------//
@@ -72,28 +74,22 @@ void AnimatedSprite::load(const std::string& id)
     delete m_spriterEntity;
     m_spriterEntity = model.getNewEntityInstance(0);
 
+    // Reaffects values
+    // TODO Factor with onTransformChanges()
+    m_spriterEntity->setPosition({getPosition().x, getPosition().y});
+    m_spriterEntity->setScale({getScale().x, getScale().y});
+    m_spriterEntity->setAngle(getRotation());
+
     /*
-    auto& data = Application::context().animations.getData(id);
-    auto& fs = Application::context().animations.getFileSystem(id);
-    m_number = 0;
-
-    // Removing if previous animation
-    m_entities.clear();
-
-    // Loading entities
-    for (const auto& entityInfo : data.entities) {
-        auto entity = std::make_unique<scml::Entity>(&data, entityInfo.first);
-        entity->setFileSystem(&fs);
         entity->setTiltColor(m_tiltColor);
-        m_entities.emplace_back(std::move(entity));
-    }
-
-    // Refresh all entities
     refresh();*/
 }
 
 void AnimatedSprite::select(const std::wstring& animationName)
 {
+    returnif (m_spriterEntity == nullptr);
+
+    m_spriterEntity->setCurrentAnimation(toString(animationName));
     /*
     returnif (m_entities.empty());
 
@@ -111,6 +107,7 @@ void AnimatedSprite::select(const std::wstring& animationName)
 
 void AnimatedSprite::forward(const sf::Time& offset)
 {
+    returnif (m_spriterEntity == nullptr);
     m_spriterEntity->setTimeElapsed(offset.asMilliseconds());
 
     /*
@@ -141,4 +138,18 @@ void AnimatedSprite::setTiltColor(const sf::Color& color)
 
     for (const auto& entity : m_entities)
         entity->setTiltColor(m_tiltColor);*/
+}
+
+//-----------------------------------//
+//----- Internal change updates -----//
+
+void AnimatedSprite::refresh()
+{
+    returnif (m_spriterEntity == nullptr);
+
+    // Can't I override setLooping ?
+    //m_spriterEntity->getEntity(0)->getAnimation(m_number)->
+    /*
+    for (const auto& entity : m_entities)
+        entity->getAnimation(m_number)->looping = (m_looping)? L"true" : L"false";*/
 }

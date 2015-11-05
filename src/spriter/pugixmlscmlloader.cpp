@@ -26,6 +26,8 @@ using namespace SpriterEngine;
 
 void PugiXmlScmlLoader::loadFile(SpriterModel *model, const std::string &fileName)
 {
+    std::cerr << "[Spriter++] Loading file " << fileName << std::endl;
+
     pugi::xml_document doc;
     doc.load_file(fileName.c_str());
 
@@ -62,7 +64,9 @@ void PugiXmlScmlLoader::getFolderFileStructureFromElement(pugi::xml_node spriter
             fileFlattener->appendFile();
 
             std::wstring fileName = fileElement.attribute(L"name").as_string();
-            auto fileFullName = filePath + toString(fileName);
+            // We keep it relative to the program
+            // auto fileFullName = filePath + toString(fileName);
+            auto fileFullName = toString(fileName);
 
             if (auto att = fileElement.attribute(L"type"))
             {
@@ -101,8 +105,10 @@ void PugiXmlScmlLoader::getFolderFileStructureFromElement(pugi::xml_node spriter
 void PugiXmlScmlLoader::getTagListFromElement(pugi::xml_node spriterDataElement, SpriterModel *model)
 {
     if (auto tagListElement = spriterDataElement.child(L"tag-list"))
-        for (auto tagElement : tagListElement.children())
-            model->pushBackTag(toString(tagElement.attribute(L"name").as_string()));
+        for (auto tagElement : tagListElement.children()) {
+            std::wstring name = tagElement.attribute(L"name").as_string();
+            model->pushBackTag(toString(name));
+        }
 }
 
 void PugiXmlScmlLoader::getEntitiesFromElement(pugi::xml_node spriterDataElement, SpriterModel *model, FileFlattener *fileFlattener)
@@ -122,19 +128,22 @@ void PugiXmlScmlLoader::getEntitiesFromElement(pugi::xml_node spriterDataElement
 
 Entity *PugiXmlScmlLoader::getNewEntityFromEntityElement(pugi::xml_node entityElement, SpriterModel *model)
 {
-    return model->pushBackEntity(toString(entityElement.attribute(L"name").as_string()));
+    std::wstring name = entityElement.attribute(L"name").as_string();
+    return model->pushBackEntity(toString(name));
 }
 
 void PugiXmlScmlLoader::getObjectInfoFromEntityElement(pugi::xml_node entityElement, Entity *entity, PointMap *defaultBoxPivotMap)
 {
     for (auto objInfoElement : entityElement.children(L"obj_info"))
     {
-        std::string objectName = toString(objInfoElement.attribute(L"name").as_string());
+        std::wstring name = objInfoElement.attribute(L"name").as_string();
+        std::string objectName = toString(name);
         Object::ObjectType objectType = Object::OBJECTTYPE_SPRITE;
 
         if (auto att = objInfoElement.attribute(L"type"))
         {
-            objectType = objectTypeNameToType(toString(att.as_string()));
+            std::wstring type = att.as_string();
+            objectType = objectTypeNameToType(toString(type));
         }
 
         Object* newObject = entity->setObject(objectName, objectType);
@@ -173,8 +182,10 @@ void PugiXmlScmlLoader::getVarDefArrayFromElement(pugi::xml_node parentObjectEle
     {
         for (auto varDefElement : varDefArrayElement.children(L"i"))
         {
-            std::string varName = toString(varDefElement.attribute(L"name").as_string());
-            std::string varType = toString(varDefElement.attribute(L"type").as_string());
+            std::wstring name = varDefElement.attribute(L"name").as_string();
+            std::wstring type = varDefElement.attribute(L"type").as_string();
+            std::string varName = toString(name);
+            std::string varType = toString(type);
 
             if (auto att = varDefElement.attribute(L"default"))
             {
@@ -184,7 +195,8 @@ void PugiXmlScmlLoader::getVarDefArrayFromElement(pugi::xml_node parentObjectEle
                 }
                 else if (varType == "string")
                 {
-                    parentObjectAsVariableContainer->addStringVariable(varName, toString(att.as_string()));
+                    std::wstring string = att.as_string();
+                    parentObjectAsVariableContainer->addStringVariable(varName, toString(string));
                 }
                 else
                 {
@@ -199,7 +211,8 @@ void PugiXmlScmlLoader::getCharacterMapsFromEntityElement(pugi::xml_node entityE
 {
     for (auto characterMapElement : entityElement.children(L"character_map"))
     {
-        CharacterMap* newCharacterMap = entity->addCharacterMap(toString(characterMapElement.attribute(L"name").as_string()));
+        std::wstring name = characterMapElement.attribute(L"name").as_string();
+        CharacterMap* newCharacterMap = entity->addCharacterMap(toString(name));
 
         for (auto mapElement : characterMapElement.children())
         {
@@ -238,7 +251,8 @@ void PugiXmlScmlLoader::getAnimationsFromEntityElement(pugi::xml_node entityElem
 
 Animation *PugiXmlScmlLoader::getNewAnimationFromAnimationElement(pugi::xml_node animationElement, Entity *entity)
 {
-    std::string animationName = toString(animationElement.attribute(L"name").as_string());
+    std::wstring name = animationElement.attribute(L"name").as_string();
+    std::string animationName = toString(name);
     real animationLength = animationElement.attribute(L"length").as_double();
 
     bool animationLooping = true;
@@ -421,7 +435,8 @@ UniversalObjectInterface *PugiXmlScmlLoader::getObjectInfoFromVariableKeyElement
         break;
 
     case Variable::VARIABLETYPE_STRING:
-        objectInfo->setStringValue(toString(valAtt.as_string()));
+        std::wstring stringValue = valAtt.as_string();
+        objectInfo->setStringValue(toString(stringValue));
         break;
     }
 
@@ -469,12 +484,14 @@ Object *PugiXmlScmlLoader::getObjectFromTimelineElement(pugi::xml_node timelineE
 {
     if (auto att = timelineElement.attribute(L"name"))
     {
-        std::string timelineName = toString(att.as_string());
+        std::wstring name = att.as_string();
+        std::string timelineName = toString(name);
         Object::ObjectType timelineType = Object::OBJECTTYPE_SPRITE;
 
         if (auto att = timelineElement.attribute(L"object_type"))
         {
-            timelineType = objectTypeNameToType(toString(att.as_string()));
+            std::wstring object_type = att.as_string();
+            timelineType = objectTypeNameToType(toString(object_type));
         }
 
         return entity->setObject(timelineName, timelineType);
@@ -538,7 +555,8 @@ EasingCurveInterface *PugiXmlScmlLoader::getEasingCurveFromAttributes(pugi::xml_
 {
     CurveType curveType = CURVETYPE_NONE;
     ControlPointArray controlPoints = { 0 };
-    curveType = curveTypeNameToType(toString(att.as_string()));
+    std::wstring type = att.as_string();
+    curveType = curveTypeNameToType(toString(type));
 
     if (curveType > CURVETYPE_LINEAR)
     {
@@ -755,7 +773,8 @@ void PugiXmlScmlLoader::getEventlinesFromAnimationElement(pugi::xml_node animati
 {
     for (auto eventlineElement : animationElement.children(L"eventline"))
     {
-        auto timelineName = toString(eventlineElement.attribute(L"name").as_string());
+        std::wstring name = eventlineElement.attribute(L"name").as_string();
+        auto timelineName = toString(name);
 
         Object *object = entity->setObject(timelineName, Object::OBJECTTYPE_TRIGGER);
         Timeline *newTimeline = animation->pushBackTriggerTimeline(object->getId());
@@ -780,7 +799,8 @@ void PugiXmlScmlLoader::getSoundlinesFromAnimationElement(pugi::xml_node animati
 {
     for (auto soundlineElement : animationElement.children(L"soundline"))
     {
-        auto timelineName = toString(soundlineElement.attribute(L"name").as_string());
+        std::wstring name = soundlineElement.attribute(L"name").as_string();
+        auto timelineName = toString(name);
 
         Object *object = entity->setObject(timelineName, Object::OBJECTTYPE_SOUND);
         Timeline *newTimeline = animation->pushBackSoundTimeline(object->getId());

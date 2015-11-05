@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r4.1">
     <folder id="1" name="res/tex">
-        <file id="0" name="../tex/default.png" width="256" height="256" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="0" name="res/tex/default.png" width="256" height="256" pivot_x="0.5" pivot_y="0.5"/>
     </folder>
     <entity id="0" name="Default">
         <obj_info name="Default_default" realname="default" type="sprite">

@@ -4,6 +4,8 @@
 #include "scene/wrappers/animatedsprite.hpp"
 #include "tools/platform-fixes.hpp"
 
+#include <iostream>
+
 using namespace resources;
 
 AnimationHolder::AnimationHolder()
@@ -58,8 +60,12 @@ void AnimationHolder::freeMatchingPrefix(const std::string& prefix)
 //-------------------------------//
 //----- Spriter interfacing -----//
 
-
 SpriterEngine::SpriterModel& AnimationHolder::getModel(const std::string& id)
 {
-    return *m_models.at(id);
+    auto found = m_models.find(id);
+    if (found == std::end(m_models)) {
+        std::cerr << "Animation id '" << id << "' was not found, using default." << std::endl;
+        return *m_models.at("default");
+    }
+    return *found->second;
 }

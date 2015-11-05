@@ -85,10 +85,17 @@ namespace scene
         //! @name Routine
         //! @{
 
+        void onTransformChanges() final;
         void drawInternal(sf::RenderTarget& target, sf::RenderStates states) const final;
         void updateRoutine(const sf::Time& dt) final;
 
-        //! Refresh all entities.
+        //! @}
+
+        //--------------------------------//
+        //! @name Internal change updates
+        //! @{
+
+        //! Refresh all parameters.
         void refresh();
 
         //! @}
