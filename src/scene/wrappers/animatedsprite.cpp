@@ -110,5 +110,6 @@ void AnimatedSprite::setTiltColor(const sf::Color& color)
     returnif (m_tiltColor == color);
     m_tiltColor = color;
 
+    returnif (m_spriterEntity == nullptr);
     /* m_spriterEntity->setTiltColor(m_tiltColor); */
 }

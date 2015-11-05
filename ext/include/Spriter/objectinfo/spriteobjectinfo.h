@@ -11,38 +11,38 @@
 namespace SpriterEngine
 {
 
-	class SpriteObjectInfo : public UniversalObjectInterface
-	{
-	public:
-		SpriteObjectInfo();
+    class SpriteObjectInfo : public UniversalObjectInterface
+    {
+    public:
+        SpriteObjectInfo();
 
-		point getPosition() override;
-		real getAngle() override;
-		point getScale() override;
-		real getAlpha() override;
-		point getPivot() override;
-		ImageFile *getImage() override;
+        point getPosition() override;
+        real getAngle() override;
+        point getScale() override;
+        real getAlpha() override;
+        point getPivot() override;
+        ImageFile *getImage() override;
 
-		void setPosition(const point &newPosition) override;
-		void setAngle(real newAngle) override;
-		void setScale(const point &newScale) override;
-		void setAlpha(real newAlpha) override;
-		void setPivot(const point &newPivot) override;
-		void setImage(ImageFile *newImageFile) override;
-		void setSpin(int newSpin) override;
+        void setPosition(const point &newPosition) override;
+        void setAngle(real newAngle) override;
+        void setScale(const point &newScale) override;
+        void setAlpha(real newAlpha) override;
+        void setPivot(const point &newPivot) override;
+        void setImage(ImageFile *newImageFile) override;
+        void setSpin(int newSpin) override;
 
-		void setObjectTolinear(UniversalObjectInterface *bObject, real t, UniversalObjectInterface *resultObject) override;
+        void setObjectTolinear(UniversalObjectInterface *bObject, real t, UniversalObjectInterface *resultObject) override;
 
-		void render() override;
+        void render() override;
 
-	private:
-		point position;
-		AngleInfo angle;
-		point scale;
-		real alpha;
-		point pivot;
-		ImageFile *imageFile;
-	};
+    private:
+        point position;
+        AngleInfo angle;
+        point scale;
+        real alpha;
+        point pivot;
+        ImageFile *imageFile;
+    };
 
 }
 
