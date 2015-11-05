@@ -1,23 +1,21 @@
 #pragma once
 
-#include "scml/interface.hpp"
 #include "resources/holder.hpp"
+#include "spriter/examplefilefactory.hpp"
+#include "spriter/exampleobjectfactory.hpp"
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/System/Time.hpp>
+#include <Spriter/Engine.hpp>
+
+#include <unordered_map>
 #include <list>
-#include <map>
 
 // Forward declarations
 
 namespace scene
 {
     class AnimatedSprite;
-}
-
-namespace scml
-{
-    class Data;
 }
 
 namespace resources
@@ -35,7 +33,7 @@ namespace resources
     public:
 
         //! Default constructor.
-        AnimationHolder() = default;
+        AnimationHolder();
 
         //! Default destructor.
         ~AnimationHolder() = default;
@@ -55,45 +53,28 @@ namespace resources
 
         //! Sets the backup resource to use when id does not exists.
         //! Provided id should exists.
-        inline void setDefault(const std::string& id) { m_scmlHolder.setDefault(id); }
+        // TODO
+        void setDefault(const std::string& id) {}
 
         //! @}
 
     protected:
 
-        //-------------------------//
-        //! @name Animated sprites
+        //----------------------------//
+        //! @name Spriter interfacing
         //! @{
 
-        //! Register an animated sprite in the list.
-        void push(scene::AnimatedSprite* animatedSprite);
-
-        //! Unregister an animated sprite.
-        void pop(scene::AnimatedSprite* animatedSprite);
-
-        //! @}
-
-        //----------------//
-        //! @name Getters
-        //! @{
-
-        //! Get the scml data.
-        scml::Data& getData(const std::string& id);
-
-        //! Get the scml file system.
-        scml::FileSystem& getFileSystem(const std::string& id);
+        //! Get the model from the id.
+        SpriterEngine::SpriterModel& getModel(const std::string& id);
 
         //! @}
 
     private:
 
-        //! The SCML files.
-        SCMLHolder m_scmlHolder;
+        using SpriterModelPtr = std::unique_ptr<SpriterEngine::SpriterModel>;
+        std::unordered_map<std::string, SpriterModelPtr> m_models;  //!< All the models.
 
-        //! Associated file systems.
-        std::map<std::string, std::unique_ptr<scml::FileSystem>> m_fsMap;
-
-        //! The animated sprites list.
-        std::list<scene::AnimatedSprite*> m_animatedSprites;
+        std::unique_ptr<SpriterEngine::ExampleFileFactory> m_fileFactory;       //!< Manage files.
+        std::unique_ptr<SpriterEngine::ExampleObjectFactory> m_objectFactory;   //!< Manage objects.
     };
 }

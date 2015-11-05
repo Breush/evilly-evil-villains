@@ -2,6 +2,7 @@
 
 #include "core/application.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
+#include "tools/string.hpp"
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
 
@@ -12,12 +13,12 @@ AnimatedSprite::AnimatedSprite(bool isLerpable)
     , m_looping(true)
     , m_started(true)
 {
-    Application::context().animations.push(this);
 }
 
 AnimatedSprite::~AnimatedSprite()
 {
-    Application::context().animations.pop(this);
+    if (m_spriterEntity != nullptr)
+        delete m_spriterEntity;
 }
 
 //-------------------//
@@ -25,27 +26,29 @@ AnimatedSprite::~AnimatedSprite()
 
 void AnimatedSprite::drawInternal(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    // TODO This does not take states shader in account?
-    // TODO This probably should use states.tranform info for position/rotation/scale.
+    returnif (m_spriterEntity == nullptr);
 
-    // Drawing all parts of animation
-    // because scml::Entity can not be managed by scene::Graph
-    for (const auto& entity : m_entities) {
-        entity->setScreen(&target);
-        entity->draw(getPosition().x, getPosition().y, getRotation(), scale().x, scale().y);
-    }
+    m_spriterEntity->setPosition({getPosition().x, getPosition().y});
+    m_spriterEntity->setScale({scale().x, scale().y});
+    m_spriterEntity->setAngle(getRotation());
+
+    // TODO This does not take states shader in account?
+    // And we might want to pass the target here.
+    m_spriterEntity->render();
 }
 
 void AnimatedSprite::updateRoutine(const sf::Time& dt)
 {
-    returnif (!m_started);
-    forward(dt);
-}
+    returnif (m_spriterEntity == nullptr);
 
-void AnimatedSprite::refresh()
-{
-    for (const auto& entity : m_entities)
-        entity->getAnimation(m_number)->looping = (m_looping)? L"true" : L"false";
+    if (m_started) {
+        forward(dt);
+        m_spriterEntity->playAllTriggers();
+    }
+    // FIXME This is a strange thing to do...
+    else {
+        forward(sf::Time::Zero);
+    }
 }
 
 //---------------------//
@@ -53,56 +56,54 @@ void AnimatedSprite::refresh()
 
 void AnimatedSprite::load(const std::string& id)
 {
-    auto& data = Application::context().animations.getData(id);
-    auto& fs = Application::context().animations.getFileSystem(id);
-    m_number = 0;
+    // Note: we're currently using only one entity per model
+    auto& model = Application::context().animations.getModel(id);
+    if (m_spriterEntity != nullptr) delete m_spriterEntity;
+    m_spriterEntity = model.getNewEntityInstance(0);
 
-    // Removing if previous animation
-    m_entities.clear();
+    // The first animation is loaded
+    m_length = m_spriterEntity->getCurrentAnimationLength();
+    restart();
 
-    // Loading entities
-    for (const auto& entityInfo : data.entities) {
-        auto entity = std::make_unique<scml::Entity>(&data, entityInfo.first);
-        entity->setFileSystem(&fs);
-        entity->setTiltColor(m_tiltColor);
-        m_entities.emplace_back(std::move(entity));
-    }
-
-    // Refresh all entities
-    refresh();
+    /* m_spriterEntity->setTiltColor(m_tiltColor); */
 }
 
 void AnimatedSprite::select(const std::wstring& animationName)
 {
-    returnif (m_entities.empty());
+    returnif (m_spriterEntity == nullptr);
 
+    m_spriterEntity->setCurrentAnimation(toString(animationName));
+
+    m_length = m_spriterEntity->getCurrentAnimationLength();
+    restart();
+
+    // TODO What happens if the animation does not exists in this model?
+
+    /*
     const auto& firstEntity = *m_entities.front();
     auto animation = firstEntity.getAnimation(animationName);
     wassert(animation != nullptr, L"Requested animation '" << animationName
-                                  << "' not found in entity '" << firstEntity.name << L"'.");
-
-    if (animation->id != m_number) {
-        m_number = animation->id;
-        refresh();
-        restart();
-    }
+                                  << "' not found in entity '" << firstEntity.name << L"'.");*/
 }
 
 void AnimatedSprite::forward(const sf::Time& offset)
 {
-    for (const auto& entity : m_entities) {
-        entity->updateAnimation(offset.asMilliseconds());
+    returnif (m_spriterEntity == nullptr);
 
-        if (!m_looping && entity->time >= entity->getAnimation(m_number)->length)
-            m_started = false;
-    }
+    auto timeElapsed = offset.asMilliseconds();
+    m_spriterEntity->setTimeElapsed(timeElapsed);
+
+    returnif (timeElapsed == 0);
+
+    if (!m_looping && m_spriterEntity->getCurrentTime() >= m_length - timeElapsed)
+        m_started = false;
 }
 
 void AnimatedSprite::restart()
 {
     m_started = true;
-    for (const auto& entity : m_entities)
-        entity->startAnimation(m_number);
+    m_spriterEntity->setCurrentTime(0.);
+    m_spriterEntity->setTimeElapsed(0.);
 }
 
 //-------------------------//
@@ -113,6 +114,5 @@ void AnimatedSprite::setTiltColor(const sf::Color& color)
     returnif (m_tiltColor == color);
     m_tiltColor = color;
 
-    for (const auto& entity : m_entities)
-        entity->setTiltColor(m_tiltColor);
+    /* m_spriterEntity->setTiltColor(m_tiltColor); */
 }

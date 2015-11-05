@@ -41,9 +41,10 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
     set(EEV_DEBUG_MODE ON)
-    
+
     # Warnings flags
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmax-errors=2 -Wall")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-function")
 
 elseif (CMAKE_BUILD_TYPE MATCHES "Release")
     set(EEV_DEBUG_MODE OFF)
@@ -94,6 +95,16 @@ add_subdirectory(${BOX2D_ROOT_DIR})
 get_directory_property(BOX2D_LIBRARIES DIRECTORY ${BOX2D_ROOT_DIR} DEFINITION BOX2D_LIBRARIES)
 
 #=====
+# Create Spriter libraries
+
+set(SPRITER_ROOT_DIR ${CMAKE_SOURCE_DIR}/ext/spriter)
+set(SPRITER_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/ext/include/Spriter)
+
+add_subdirectory(${SPRITER_ROOT_DIR})
+
+get_directory_property(SPRITER_LIBRARIES DIRECTORY ${SPRITER_ROOT_DIR} DEFINITION SPRITER_LIBRARIES)
+
+#=====
 # Create SFML libraries
 
 set(SFML_ROOT_DIR ${CMAKE_SOURCE_DIR}/ext/sfml)
@@ -114,6 +125,8 @@ add_library(${EEV_LIBRARIES} ${CODE_FILES})
 
 target_link_libraries(${EEV_LIBRARIES} ${SFML_LIBRARIES})
 target_link_libraries(${EEV_LIBRARIES} ${STEAM_LIBRARIES})
+target_link_libraries(${EEV_LIBRARIES} ${BOX2D_LIBRARIES})
+target_link_libraries(${EEV_LIBRARIES} ${SPRITER_LIBRARIES})
 
 #=====
 # Create game executable
@@ -187,7 +200,7 @@ add_subdirectory(tests EXCLUDE_FROM_ALL)
 # Generate the POT
 find_program(XGETTEXT_EXECUTABLE xgettext)
 if (NOT XGETTEXT_EXECUTABLE)
-	message("Warning: xgettext not found, you won't be able to extract translatable strings from source code.")
+    message("Warning: xgettext not found, you won't be able to extract translatable strings from source code.")
 endif ()
 
 set(POT_FILE res/po/eev.pot)
@@ -198,18 +211,18 @@ add_custom_command(OUTPUT ${POT_FILE} COMMAND ${XGETTEXT_COMMAND} DEPENDS ${SOUR
 # Generate the MOs
 find_program(MSGFMT_EXECUTABLE msgfmt)
 if (NOT MSGFMT_EXECUTABLE)
-	message("Warning: msgfmt not found, you won't be able to generate translations binaries.")
+    message("Warning: msgfmt not found, you won't be able to generate translations binaries.")
 endif ()
 
 set(MO_FILES)
 file(GLOB_RECURSE PO_FILES RELATIVE ${CMAKE_BINARY_DIR} res/po/*.po)
 foreach (po IN LISTS PO_FILES)
-	get_filename_component(po_name_we ${po} NAME_WE)
-	get_filename_component(po_directory ${po} PATH)
-	set(mo ${po_directory}/${po_name_we}.mo)
-	set(MSGFMT_COMMAND ${MSGFMT_EXECUTABLE} -o ${mo} ${po})
-	add_custom_command(OUTPUT ${mo} COMMAND ${MSGFMT_COMMAND} DEPENDS ${po})
-	list(APPEND MO_FILES ${mo})
+    get_filename_component(po_name_we ${po} NAME_WE)
+    get_filename_component(po_directory ${po} PATH)
+    set(mo ${po_directory}/${po_name_we}.mo)
+    set(MSGFMT_COMMAND ${MSGFMT_EXECUTABLE} -o ${mo} ${po})
+    add_custom_command(OUTPUT ${mo} COMMAND ${MSGFMT_COMMAND} DEPENDS ${po})
+    list(APPEND MO_FILES ${mo})
 endforeach ()
 
 # New target

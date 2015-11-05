@@ -1,13 +1,13 @@
 #pragma once
 
 #include "scene/entity.hpp"
-#include "scml/interface.hpp"
 #include "tools/param.hpp"
 #include "tools/int.hpp"
 
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Time.hpp>
+#include <Spriter/Engine.hpp>
 #include <memory> // unique_ptr
-#include <list>
 
 // Forward declarations
 
@@ -53,12 +53,6 @@ namespace scene
         //! Restart the current animation.
         void restart();
 
-        //! Start or stop the current animation.
-        inline void setStarted(bool iStarted) { m_started = iStarted; }
-
-        //! Whether the animation is started (running).
-        inline bool started() const { return m_started; }
-
         //! @}
 
         //----------------------//
@@ -75,7 +69,10 @@ namespace scene
         //! @{
 
         //! Whether the animation should loop or just freeze at the end.
-        PARAMGSU(bool, m_looping, looping, setLooping, refresh)
+        PARAMGS(bool, m_looping, looping, setLooping)
+
+        //! Start or stop the current animation.
+        PARAMGS(bool, m_started, started, setStarted)
 
         //! @}
 
@@ -88,19 +85,13 @@ namespace scene
         void drawInternal(sf::RenderTarget& target, sf::RenderStates states) const final;
         void updateRoutine(const sf::Time& dt) final;
 
-        //! Refresh all entities.
-        void refresh();
-
         //! @}
 
     private:
 
-        //! The SCML entity which composer the animation.
-        std::list<std::unique_ptr<scml::Entity>> m_entities;
+        SpriterEngine::EntityInstance* m_spriterEntity = nullptr;   //!< The entity itself.
 
-
-        bool m_started;                             //!< Whether the animation is started or not.
-        int m_number;                               //!< The selected sub-animation.
+        SpriterEngine::real m_length = 0.;          //!< Current animation length.
         sf::Color m_tiltColor = sf::Color::White;   //!< Extra coloring of the sprites.
     };
 }
