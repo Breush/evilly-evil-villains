@@ -68,15 +68,7 @@ namespace dungeon
         //! Default destructor.
         ~ToolGrabbable() = default;
 
-    protected:
-
-        //----------------//
-        //! @name Routine
-        //! @{
-
-        void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
-
-        //! @}
+        std::string _name() const final { return "dungeon::ToolGrabbable"; }
 
     private:
 

@@ -10,32 +10,27 @@ using namespace resources;
 
 AnimationHolder::AnimationHolder()
 {
+    // Note: We only care about
+    auto& window = Application::context().window;
+    m_fileFactory = std::make_unique<SpriterEngine::ExampleFileFactory>(&window);
+    m_objectFactory = std::make_unique<SpriterEngine::ExampleObjectFactory>(&window);
 }
 
 //-------------------//
 //----- Storage -----//
 
-void AnimationHolder::load(const std::string& filename)
+std::string AnimationHolder::getID(const std::string& filename)
 {
-    // Remove res/xxx/ and file extension
     std::string id = filename.substr(0u, filename.find_last_of("."));
     id = id.substr(id.find_first_of("/") + 1u);
-    id = id.substr(id.find_first_of("/") + 1u);
+    return id.substr(id.find_first_of("/") + 1u);
+}
 
-    // FIXME Use the ones in the class...
-    // FIXME They might not ask for object.
-    auto& window = Application::context().window;
-    auto model = std::make_unique<SpriterEngine::SpriterModel>(filename, new SpriterEngine::ExampleFileFactory(&window), new SpriterEngine::ExampleObjectFactory(&window));
+void AnimationHolder::load(const std::string& filename)
+{
+    auto id = getID(filename);
+    auto model = std::make_unique<SpriterEngine::SpriterModel>(filename, m_fileFactory.get(), m_objectFactory.get());
     m_models.emplace(id, std::move(model));
-
-    /*// Data
-    m_scmlHolder.load(filename);
-    auto id = m_scmlHolder.getID(filename);
-
-    // File system
-    auto fs = std::make_unique<scml::FileSystem>();
-    m_fsMap.insert(std::make_pair(id, std::move(fs)));
-    m_fsMap[id]->load(&getData(id));*/
 }
 
 void AnimationHolder::free(const std::string& id)
@@ -45,16 +40,15 @@ void AnimationHolder::free(const std::string& id)
 
 void AnimationHolder::freeMatchingPrefix(const std::string& prefix)
 {
-    /*
     // Find matching IDs
     std::vector<std::string> matchingIDs;
-    for (const auto& fs : m_fsMap)
-        if (std::mismatch(std::begin(prefix), std::end(prefix), std::begin(fs.first)).first == std::end(prefix))
-            matchingIDs.emplace_back(fs.first);
+    for (const auto& model : m_models)
+        if (std::mismatch(std::begin(prefix), std::end(prefix), std::begin(model.first)).first == std::end(prefix))
+            matchingIDs.emplace_back(model.first);
 
     // Remove them
     for (const auto& id : matchingIDs)
-        free(id);*/
+        free(id);
 }
 
 //-------------------------------//
@@ -63,9 +57,12 @@ void AnimationHolder::freeMatchingPrefix(const std::string& prefix)
 SpriterEngine::SpriterModel& AnimationHolder::getModel(const std::string& id)
 {
     auto found = m_models.find(id);
+
+    // If ID doesn't exist, try to use the default back-up
     if (found == std::end(m_models)) {
-        std::cerr << "Animation id '" << id << "' was not found, using default." << std::endl;
-        return *m_models.at("default");
+        found = m_models.find(m_defaultID);
+        if (found == std::end(m_models))
+            throw std::runtime_error("Animation id '" + id + "' was not found and there's no default back-up. Ouch.");
     }
     return *found->second;
 }

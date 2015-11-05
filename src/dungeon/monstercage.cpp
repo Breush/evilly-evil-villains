@@ -218,13 +218,7 @@ void MonsterCage::refreshReservePuppetsParameters(const uint monstersUpdateStart
 MonsterGrabbable::MonsterGrabbable(scene::GrabbableSpawner& spawner, const std::wstring& monsterID, const sf::Vector2f& scale)
     : baseClass(spawner)
 {
+    attachChild(m_sprite);
     m_sprite.load(toString(L"dungeon/monsters/" + monsterID));
     m_sprite.setLocalScale(scale);
-}
-
-void MonsterGrabbable::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-    // scene::AnimatedSprite is not supposed to take states.transform in consideration, and does not
-    const_cast<scene::AnimatedSprite&>(m_sprite).setLocalPosition(getPosition());
-    target.draw(m_sprite, states);
 }

@@ -54,6 +54,10 @@ void Graph::update(const sf::Time& dt, const float factor)
     m_scene.update(dt, factor);
     m_nuiLayer.update(dt, factor);
 
+    // The grabbable
+    if (m_grabbable != nullptr)
+        m_grabbable->update(dt);
+
     // Focusing system - animation
     if (m_focusedEntity != nullptr) {
         m_focusAnimation += 60.f * dt.asSeconds();
@@ -254,7 +258,7 @@ void Graph::grabbableHandleMouseEvent(const sf::Event& event)
 
     switch (event.type) {
     case sf::Event::MouseMoved:
-        m_grabbable->setPosition(nuiPos);
+        m_grabbable->setLocalPosition(nuiPos);
         m_grabbable->spawner().grabbableMoved(entity, relPos, nuiPos);
         break;
 
@@ -276,7 +280,7 @@ void Graph::setGrabbable(std::unique_ptr<Grabbable> grabbable)
     returnif (grabbable == nullptr);
 
     m_grabbable = std::move(grabbable);
-    m_grabbable->setPosition(nuiPosition());
+    m_grabbable->setLocalPosition(nuiPosition());
 }
 
 void Graph::removeGrabbable()

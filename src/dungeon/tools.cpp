@@ -78,14 +78,8 @@ std::unique_ptr<scene::Grabbable> ToolGrabButton::spawnGrabbable()
 ToolGrabbable::ToolGrabbable(scene::GrabbableSpawner& spawner, const std::string& textureID)
     : baseClass(spawner)
 {
+    addPart(&m_sprite);
     m_sprite.setTexture(&Application::context().textures.get(textureID));
     m_sprite.setSize(sizeHint());
-
-    setOrigin(sizeHint() / 2.f);
-}
-
-void ToolGrabbable::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-    states.transform *= getTransform();
-    target.draw(m_sprite, states);
+    m_sprite.setOrigin(sizeHint() / 2.f);
 }

@@ -17,7 +17,8 @@ namespace SpriterEngine
     {
         if (getTriggerCount())
         {
-            std::cerr << "Play " << m_soundID << std::endl;
+            // FIXME Too much sounds!
+            // std::cerr << "Play " << m_soundID << std::endl;
             //sound.play();
 
             // TODO Use volume

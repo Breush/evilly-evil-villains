@@ -40,14 +40,10 @@ std::unique_ptr<scene::Grabbable> TrapGrabButton::spawnGrabbable()
 TrapGrabbable::TrapGrabbable(scene::GrabbableSpawner& spawner, const std::wstring& trapID)
     : baseClass(spawner)
 {
-    m_sprite.setTexture(&Application::context().textures.get(toString(L"dungeon/traps/" + trapID + L"/icon")));
+    auto textureID = "dungeon/traps/" + toString(trapID) + "/icon";
+
+    addPart(&m_sprite);
+    m_sprite.setTexture(&Application::context().textures.get(textureID));
     m_sprite.setSize(sizeHint());
-
-    setOrigin(sizeHint() / 2.f);
-}
-
-void TrapGrabbable::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-    states.transform *= getTransform();
-    target.draw(m_sprite, states);
+    m_sprite.setOrigin(sizeHint() / 2.f);
 }

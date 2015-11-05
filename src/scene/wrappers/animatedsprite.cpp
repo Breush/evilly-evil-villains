@@ -65,6 +65,7 @@ void AnimatedSprite::load(const std::string& id)
     m_length = m_spriterEntity->getCurrentAnimationLength();
     restart();
 
+    // TODO
     /* m_spriterEntity->setTiltColor(m_tiltColor); */
 }
 
@@ -78,12 +79,7 @@ void AnimatedSprite::select(const std::wstring& animationName)
     restart();
 
     // TODO What happens if the animation does not exists in this model?
-
-    /*
-    const auto& firstEntity = *m_entities.front();
-    auto animation = firstEntity.getAnimation(animationName);
-    wassert(animation != nullptr, L"Requested animation '" << animationName
-                                  << "' not found in entity '" << firstEntity.name << L"'.");*/
+    // And how to detect it?
 }
 
 void AnimatedSprite::forward(const sf::Time& offset)

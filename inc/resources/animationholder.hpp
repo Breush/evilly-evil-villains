@@ -42,6 +42,9 @@ namespace resources
         //! @name Storage
         //! @{
 
+        //! Returns the id from the filename.
+        std::string getID(const std::string& filename);
+
         //! Load animation resource into memory.
         void load(const std::string& filename);
 
@@ -53,8 +56,7 @@ namespace resources
 
         //! Sets the backup resource to use when id does not exists.
         //! Provided id should exists.
-        // TODO
-        void setDefault(const std::string& id) {}
+        void setDefault(const std::string& id) { m_defaultID = id; }
 
         //! @}
 
@@ -76,5 +78,7 @@ namespace resources
 
         std::unique_ptr<SpriterEngine::ExampleFileFactory> m_fileFactory;       //!< Manage files.
         std::unique_ptr<SpriterEngine::ExampleObjectFactory> m_objectFactory;   //!< Manage objects.
+
+        std::string m_defaultID;    //!< The backup solution when an animation model is not found.
     };
 }

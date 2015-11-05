@@ -1,5 +1,7 @@
 #pragma once
 
+#include "scene/entity.hpp"
+
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
@@ -10,7 +12,6 @@ namespace scene
     // Forward declarations
 
     class Graph;
-    class Entity;
     class Grabbable;
 
     //! An abstract class to spawn a Grabbable.
@@ -77,12 +78,9 @@ namespace scene
      *  destroyed. Derived classes specify which Grabbable to spawn (so that
      *  it can have any appearance you want) and decide what happens you
      *  Grabbable is released.
-     *
-     *  All derived class need to implement the draw() function as
-     *  defined in sf::Drawable.
      */
 
-    class Grabbable : public sf::Drawable, public sf::Transformable
+    class Grabbable : public scene::Entity
     {
     public:
 

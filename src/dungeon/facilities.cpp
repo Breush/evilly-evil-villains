@@ -40,14 +40,8 @@ std::unique_ptr<scene::Grabbable> FacilityGrabButton::spawnGrabbable()
 FacilityGrabbable::FacilityGrabbable(scene::GrabbableSpawner& spawner, const std::string& textureID)
     : baseClass(spawner)
 {
+    addPart(&m_sprite);
     m_sprite.setTexture(&Application::context().textures.get(textureID));
     m_sprite.setSize(sizeHint());
-
-    setOrigin(sizeHint() / 2.f);
-}
-
-void FacilityGrabbable::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-    states.transform *= getTransform();
-    target.draw(m_sprite, states);
+    m_sprite.setOrigin(sizeHint() / 2.f);
 }

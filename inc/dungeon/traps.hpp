@@ -64,15 +64,7 @@ namespace dungeon
         //! Default destructor.
         ~TrapGrabbable() = default;
 
-    protected:
-
-        //----------------//
-        //! @name Routine
-        //! @{
-
-        void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
-
-        //! @}
+        std::string _name() const final { return "dungeon::TrapGrabbable"; }
 
     private:
 
