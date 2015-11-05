@@ -6,23 +6,24 @@
 namespace SpriterEngine
 {
 
-	class ImageFile;
-	class SoundFile;
+    class ImageFile;
+    class SoundFile;
 
-	class File
-	{
-	public:
-		File(std::string initialFilePath);
+    class File
+    {
+    public:
+        File(std::string initialFilePath);
+        virtual ~File() = default;
 
-		virtual ImageFile *imageFile();
-		virtual SoundFile *soundFile();
+        virtual ImageFile *imageFile();
+        virtual SoundFile *soundFile();
 
-	protected:
-		std::string path();
+    protected:
+        std::string path();
 
-	private:
-		std::string filePath;
-	};
+    private:
+        std::string filePath;
+    };
 
 }
 

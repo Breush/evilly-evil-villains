@@ -4,8 +4,6 @@
 #include "objectref/objectref.h"
 #include "entity/entityinstance.h"
 
-#include <iostream> // FIXME
-
 namespace SpriterEngine
 {
 

@@ -11,7 +11,7 @@
 #include "entity/entity.h"
 #include "entity/entityinstancedata.h"
 
-#include <iostream> // FIXME
+#include <iostream>
 
 namespace SpriterEngine
 {
@@ -82,7 +82,7 @@ namespace SpriterEngine
 
     FileReference *EntityInstance::getFile(int fileId)
     {
-        if (fileId < files.size())
+        if (unsigned(fileId) < files.size())
         {
             return files.at(fileId);
         }

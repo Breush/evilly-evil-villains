@@ -5,15 +5,15 @@
 
 namespace SpriterEngine
 {
-	class SpriterModel;
+    class SpriterModel;
 
-	class SpriterFileLoader
-	{
-	public:
-		SpriterFileLoader();
+    class SpriterFileLoader
+    {
+    public:
+        SpriterFileLoader();
 
-		virtual void loadFile(SpriterModel *model, const std::string &fileName);
-	};
+        virtual void loadFile(SpriterModel *model, const std::string &fileName);
+    };
 }
 
 #endif // SPRITERFILELOADER_H

@@ -6,28 +6,29 @@
 namespace SpriterEngine
 {
 
-	class EntityInstance;
-	class UniversalObjectInterface;
-	class TransformProcessor;
-	class TimelineKey;
+    class EntityInstance;
+    class UniversalObjectInterface;
+    class TransformProcessor;
+    class TimelineKey;
 
-	class ObjectRefInstance
-	{
-	public:
-		ObjectRefInstance(UniversalObjectInterface *initialResultObject,
-			TransformProcessor *initialParentTransformer,
-			TimelineKey *initialKey);
+    class ObjectRefInstance
+    {
+    public:
+        ObjectRefInstance(UniversalObjectInterface *initialResultObject,
+            TransformProcessor *initialParentTransformer,
+            TimelineKey *initialKey);
+        virtual ~ObjectRefInstance() = default;
 
-		virtual void process(real currentTime);
+        virtual void process(real currentTime);
 
-	protected:
-		UniversalObjectInterface *resultObject() const;
+    protected:
+        UniversalObjectInterface *resultObject() const;
 
-	private:
-		UniversalObjectInterface *resultObjectInterface;
-		TransformProcessor *parentTransformer;
-		TimelineKey *key;
-	};
+    private:
+        UniversalObjectInterface *resultObjectInterface;
+        TransformProcessor *parentTransformer;
+        TimelineKey *key;
+    };
 
 }
 

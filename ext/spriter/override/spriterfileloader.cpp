@@ -5,14 +5,14 @@
 namespace SpriterEngine
 {
 
-	SpriterFileLoader::SpriterFileLoader()
-	{
-	}
+    SpriterFileLoader::SpriterFileLoader()
+    {
+    }
 
-	void SpriterFileLoader::loadFile(SpriterModel * model, const std::string &fileName)
-	{
-		// TODO: add code to load scon (json) or scml (xml) files into the model
-		// and return with inherited FileFactory
-	}
+    void SpriterFileLoader::loadFile(SpriterModel * model, const std::string &fileName)
+    {
+        // Add code to load scon (json) or scml (xml) files into the model
+        // and return with inherited FileFactory
+    }
 
 }
