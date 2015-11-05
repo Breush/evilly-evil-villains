@@ -162,23 +162,22 @@ void Entity::updateChanges()
     if (m_localChanges) {
         refreshClipArea();
 
-        if (m_focused)
-            m_graph->updateFocusSprite();
-
         onTransformChanges();
         m_localChanges = false;
     }
 
     // Propagate to parent
     if (m_sizeChanges) {
-        if (m_focused)
-            m_graph->updateFocusSprite();
-
         if (m_parent != nullptr)
             m_parent->onChildSizeChanges(*this);
 
+        // TODO Why not onSizeChanges() here?
         m_sizeChanges = false;
     }
+
+    // Update focus sprite
+    if (m_focused && (m_localChanges || m_sizeChanges))
+        m_graph->updateFocusSprite();
 }
 
 void Entity::refreshWindow(const config::WindowInfo& cWindow)

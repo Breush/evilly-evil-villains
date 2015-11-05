@@ -6,6 +6,9 @@
 void Cursor::init()
 {
     setMode("normal");
+
+    // Just hiding the shape on window creation
+    m_shape.setPosition(-100.f, -100.f);
 }
 
 //-------------------//

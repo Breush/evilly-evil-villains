@@ -32,6 +32,9 @@ void AnimatedSprite::drawInternal(sf::RenderTarget& target, sf::RenderStates sta
     m_spriterEntity->setScale({scale().x, scale().y});
     m_spriterEntity->setAngle(getRotation());
 
+    // Forcing immediate refresh to current parameters
+    m_spriterEntity->reprocessCurrentTime();
+
     // TODO This does not take states shader in account?
     // And we might want to pass the target here.
     m_spriterEntity->render();
@@ -44,10 +47,6 @@ void AnimatedSprite::updateRoutine(const sf::Time& dt)
     if (m_started) {
         forward(dt);
         m_spriterEntity->playAllTriggers();
-    }
-    // FIXME This is a strange thing to do...
-    else {
-        forward(sf::Time::Zero);
     }
 }
 
@@ -88,8 +87,6 @@ void AnimatedSprite::forward(const sf::Time& offset)
 
     auto timeElapsed = offset.asMilliseconds();
     m_spriterEntity->setTimeElapsed(timeElapsed);
-
-    returnif (timeElapsed == 0);
 
     if (!m_looping && m_spriterEntity->getCurrentTime() >= m_length - timeElapsed)
         m_started = false;

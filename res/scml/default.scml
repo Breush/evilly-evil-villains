@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r4.1">
-    <folder id="1" name="res/tex">
+    <folder id="0" name="res/tex">
         <file id="0" name="res/tex/default.png" width="256" height="256" pivot_x="0.5" pivot_y="0.5"/>
     </folder>
     <entity id="0" name="Default">
@@ -9,13 +9,13 @@
         </obj_info>
         <obj_info name="Default_default_000" realname="default_000" type="sprite">
             <frames>
-                <i folder="1" file="0"/>
+                <i folder="0" file="0"/>
             </frames>
         </obj_info>
         <animation id="0" name="idle" length="1000" interval="100">
             <mainline>
                 <key id="0">
-                    <object_ref id="0" name="default_000" folder="1" file="0" abs_x="-128" abs_y="128" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="0" name="default_000" folder="0" file="0" abs_x="-128" abs_y="128" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
                 </key>
                 <key id="1" time="500">
                     <object_ref id="0" timeline="0" key="1" z_index="0"/>
@@ -26,13 +26,13 @@
             </mainline>
             <timeline id="0" obj="1" name="default_000">
                 <key id="0">
-                    <object folder="1" file="0"/>
+                    <object folder="0" file="0"/>
                 </key>
                 <key id="1" time="500">
-                    <object folder="1" file="0" angle="90" scale_x="1" scale_y="1"/>
+                    <object folder="0" file="0" angle="90" scale_x="1" scale_y="1"/>
                 </key>
                 <key id="2" time="750">
-                    <object folder="1" file="0" angle="270" scale_x="1"/>
+                    <object folder="0" file="0" angle="270" scale_x="1"/>
                 </key>
             </timeline>
         </animation>
