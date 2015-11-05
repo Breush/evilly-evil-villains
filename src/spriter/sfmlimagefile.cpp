@@ -1,5 +1,7 @@
 #include "spriter/sfmlimagefile.hpp"
 
+#include "core/application.hpp"
+
 #include <Spriter/objectinfo/universalobjectinterface.h>
 
 #include <iostream>
@@ -14,21 +16,12 @@ namespace SpriterEngine
         initializeFile();
     }
 
-    // TODO Here, use Application::context().textures
     void SfmlImageFile::initializeFile()
     {
-        if (texture.loadFromFile(path()))
-        {
-            // texture.setSmooth(true);
-            sprite.setTexture(texture);
-        }
-        else
-        {
-            // error
-            std::cerr << "Error: cannot load " << path() << std::endl;
-            texture.loadFromFile("res/tex/default.png");
-            sprite.setTexture(texture);
-        }
+        std::string fileID = Application::context().textures.getID(path());
+        auto& texture = Application::context().textures.get(fileID);
+        sprite.setTexture(texture);
+        m_textureSize = texture.getSize();
     }
 
     void SfmlImageFile::renderSprite(UniversalObjectInterface * spriteInfo)
@@ -37,7 +30,7 @@ namespace SpriterEngine
         sprite.setPosition(spriteInfo->getPosition().x, spriteInfo->getPosition().y);
         sprite.setRotation(toDegrees(spriteInfo->getAngle()));
         sprite.setScale(spriteInfo->getScale().x, spriteInfo->getScale().y);
-        sprite.setOrigin(spriteInfo->getPivot().x*texture.getSize().x, spriteInfo->getPivot().y*texture.getSize().y);
+        sprite.setOrigin(spriteInfo->getPivot().x*m_textureSize.x, spriteInfo->getPivot().y*m_textureSize.y);
         renderWindow->draw(sprite);
     }
 

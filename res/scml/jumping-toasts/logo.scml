@@ -727,7 +727,7 @@
                 </key>
             </timeline>
             <soundline id="-1" name="jumping-toasts">
-                <key id="0">
+                <key id="0" time="0">
                     <object folder="1" file="0"/>
                 </key>
             </soundline>

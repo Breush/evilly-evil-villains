@@ -18,10 +18,9 @@ namespace SpriterEngine
 
     private:
 
-        sf::Texture texture;
         sf::Sprite sprite;
-
         sf::RenderWindow *renderWindow;
+        sf::Vector2u m_textureSize;
 
         void initializeFile();
     };

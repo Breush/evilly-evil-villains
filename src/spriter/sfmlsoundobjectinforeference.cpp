@@ -1,33 +1,30 @@
 #include "spriter/sfmlsoundobjectinforeference.hpp"
 
+#include "core/application.hpp"
+
 #include <iostream>
 
 namespace SpriterEngine
 {
+    // TODO Use Application holders
 
-    SfmlSoundObjectInfoReference::SfmlSoundObjectInfoReference(sf::SoundBuffer &buffer)
+    SfmlSoundObjectInfoReference::SfmlSoundObjectInfoReference(std::string soundID)
+        : m_soundID(soundID)
     {
-        sound.setBuffer(buffer);
     }
 
     void SfmlSoundObjectInfoReference::playTrigger()
     {
         if (getTriggerCount())
         {
-            sound.play();
+            std::cerr << "Play " << m_soundID << std::endl;
+            //sound.play();
+
+            // TODO Use volume
         }
     }
 
     void SfmlSoundObjectInfoReference::setPlaybackVolume()
     {
-        std::cerr << "V " << getVolume() << std::endl;
-        sound.setVolume(100 * getVolume());
     }
-
-    void SfmlSoundObjectInfoReference::setPlaybackPanning()
-    {
-        std::cerr << "P " << getPanning() << std::endl;
-        sound.setPosition(100 * getPanning(), 0, 0);
-    }
-
 }

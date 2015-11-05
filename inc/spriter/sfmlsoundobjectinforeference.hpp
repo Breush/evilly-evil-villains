@@ -1,5 +1,4 @@
-#ifndef SFMLSOUNDOBJECTINFOREFERENCE_H
-#define SFMLSOUNDOBJECTINFOREFERENCE_H
+#pragma once
 
 #include <Spriter/override/soundobjectinforeference.h>
 
@@ -7,22 +6,20 @@
 
 namespace SpriterEngine
 {
-
-
-    class SfmlSoundObjectInfoReference : public SoundObjectInfoReference
+    class SfmlSoundObjectInfoReference final : public SoundObjectInfoReference
     {
     public:
-        SfmlSoundObjectInfoReference(sf::SoundBuffer &buffer);
 
-        void playTrigger() override;
+        SfmlSoundObjectInfoReference(std::string soundID);
+
+        void playTrigger() final;
 
     private:
-        void setPlaybackVolume() override;
-        void setPlaybackPanning() override;
 
-        sf::Sound sound;
+        void setPlaybackVolume() final;
+
+    private:
+
+        std::string m_soundID;
     };
-
 }
-
-#endif // SFMLSOUNDOBJECTINFOREFERENCE_H

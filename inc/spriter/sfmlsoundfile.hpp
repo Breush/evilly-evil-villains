@@ -1,5 +1,4 @@
-#ifndef SFMLSOUNDFILE_H
-#define SFMLSOUNDFILE_H
+#pragma once
 
 #include <Spriter/override/soundfile.h>
 
@@ -15,12 +14,14 @@ namespace SpriterEngine
 
         SoundObjectInfoReference * newSoundInfoReference();
 
-    private:
-        sf::SoundBuffer buffer;
+    protected:
 
         void initializeFile();
+
+    private:
+
+        std::string m_soundID;
     };
 
 }
 
-#endif // SFMLSOUNDFILE_H

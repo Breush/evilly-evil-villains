@@ -1,5 +1,4 @@
-#ifndef EXAMPLEFILEFACTORY_H
-#define EXAMPLEFILEFACTORY_H
+#pragma once
 
 #include <Spriter/override/filefactory.h>
 
@@ -27,5 +26,3 @@ namespace SpriterEngine
     };
 
 }
-
-#endif // EXAMPLEFILEFACTORY_H

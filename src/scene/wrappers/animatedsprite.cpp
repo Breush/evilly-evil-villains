@@ -41,11 +41,14 @@ void AnimatedSprite::updateRoutine(const sf::Time& dt)
 {
     returnif (m_spriterEntity == nullptr);
 
-    if (m_started)  forward(dt);
-    else            forward(sf::Time::Zero);
-
-    // Sounds etc.
-    m_spriterEntity->playAllTriggers();
+    if (m_started) {
+        forward(dt);
+        m_spriterEntity->playAllTriggers();
+    }
+    // FIXME This is a strange thing to do...
+    else {
+        forward(sf::Time::Zero);
+    }
 }
 
 //---------------------//
@@ -90,6 +93,8 @@ void AnimatedSprite::forward(const sf::Time& offset)
     auto timeElapsed = offset.asMilliseconds();
     m_spriterEntity->setTimeElapsed(timeElapsed);
 
+    returnif (timeElapsed == 0);
+
     if (!m_looping && m_spriterEntity->getCurrentTime() >= m_length - timeElapsed)
         m_started = false;
 }
@@ -98,6 +103,7 @@ void AnimatedSprite::restart()
 {
     m_started = true;
     m_spriterEntity->setCurrentTime(0.);
+    m_spriterEntity->setTimeElapsed(0.);
 }
 
 //-------------------------//

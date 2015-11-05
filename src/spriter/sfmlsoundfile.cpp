@@ -1,5 +1,6 @@
 #include "spriter/sfmlsoundfile.hpp"
 
+#include "core/application.hpp"
 #include "spriter/sfmlsoundobjectinforeference.hpp"
 
 #include <iostream>
@@ -14,16 +15,13 @@ namespace SpriterEngine
 
     void SfmlSoundFile::initializeFile()
     {
-        if (!buffer.loadFromFile(path()))
-        {
-            std::cerr << "Error: cannot load " << path() << std::endl;
-            // error
-        }
+        m_soundID = Application::context().sounds.getID(path());
     }
 
     SoundObjectInfoReference * SfmlSoundFile::newSoundInfoReference()
     {
-        return new SfmlSoundObjectInfoReference(buffer);
+        // FIXME Who the fu** delete this?
+        return new SfmlSoundObjectInfoReference(m_soundID);
     }
 
 }
