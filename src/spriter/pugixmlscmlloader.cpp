@@ -586,13 +586,13 @@ UniversalObjectInterface *PugiXmlScmlLoader::getObjectInfoFromTimelineKeyElement
         {
             if (objectInfoElement.attribute(L"pivot_x"))
             {
-                spriteKeyFileInfo->useDefaultPivot = true;
-                objectInfo = new BoneObjectInfo();
+                spriteKeyFileInfo->useDefaultPivot = false;
+                objectInfo = new BoxObjectInfo();
             }
             else
             {
-                spriteKeyFileInfo->useDefaultPivot = false;
-                objectInfo = new BoxObjectInfo();
+                spriteKeyFileInfo->useDefaultPivot = true;
+                objectInfo = new BoneObjectInfo();
             }
         }
         else if (object->getType() == Object::OBJECTTYPE_ENTITY)

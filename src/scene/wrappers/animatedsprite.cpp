@@ -61,6 +61,9 @@ void AnimatedSprite::updateRoutine(const sf::Time& dt)
 
     // returnif (!m_started);
     forward(dt);
+
+    // Sounds etc.
+    m_spriterEntity->playAllTriggers();
 }
 
 //---------------------//

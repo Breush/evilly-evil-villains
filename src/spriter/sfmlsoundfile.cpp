@@ -2,6 +2,8 @@
 
 #include "spriter/sfmlsoundobjectinforeference.hpp"
 
+#include <iostream>
+
 namespace SpriterEngine
 {
     SfmlSoundFile::SfmlSoundFile(std::string initialFilePath) :
@@ -14,6 +16,7 @@ namespace SpriterEngine
     {
         if (!buffer.loadFromFile(path()))
         {
+            std::cerr << "Error: cannot load " << path() << std::endl;
             // error
         }
     }
