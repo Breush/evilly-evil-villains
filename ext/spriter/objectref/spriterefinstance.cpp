@@ -18,8 +18,8 @@ namespace SpriterEngine
         imageRef(initialImageRef),
         useDefaultPivot(initialUseDefaultPivotPoint)
     {
-        if (imageRef == nullptr)
-            std::cerr << "[Spriter++] Initializing with nullptr imageRef, that's suspicious" << std::endl;
+        // if (imageRef == nullptr)
+        //    std::cerr << "[Spriter++] Initializing with nullptr imageRef, that's suspicious" << std::endl;
     }
 
     void SpriteRefInstance::process(real currentTime)

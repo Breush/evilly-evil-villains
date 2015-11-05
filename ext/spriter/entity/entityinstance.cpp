@@ -89,7 +89,7 @@ namespace SpriterEngine
         else
         {
             // error
-            std::cerr << "[Spriter++] Unknown file ID " << fileId << std::endl;
+            // std::cerr << "[Spriter++] Unknown file ID " << fileId << std::endl;
             return 0;
         }
     }
@@ -265,6 +265,14 @@ namespace SpriterEngine
     void EntityInstance::setCurrentAnimation(AnimationInstance * newCurrentAnimation)
     {
         currentAnimation = newCurrentAnimation;
+    }
+
+    real EntityInstance::getCurrentAnimationLength()
+    {
+        if (currentAnimation)
+            return currentAnimation->length();
+        else
+            return 0.;
     }
 
     void EntityInstance::setCurrentTime(real newCurrentTime)
