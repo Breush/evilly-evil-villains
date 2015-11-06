@@ -70,6 +70,13 @@ namespace scene
     }
 
     template<class Text_t>
+    void TLabel<Text_t>::setCustomPrestyle(float fontSizeFactor)
+    {
+        m_fontSizeFactor = fontSizeFactor;
+        setPrestyle(Prestyle::CUSTOM);
+    }
+
+    template<class Text_t>
     void TLabel<Text_t>::setPrestyle(Prestyle prestyle)
     {
         m_prestyle = prestyle;
@@ -77,6 +84,10 @@ namespace scene
         switch (m_prestyle)
         {
         case Prestyle::NONE:
+            break;
+
+        case Prestyle::CUSTOM:
+            m_text.setCharacterSize(m_fontSizeFactor * m_fontSize);
             break;
 
         case Prestyle::NUI:
@@ -108,6 +119,12 @@ namespace scene
             m_text.setFont(Application::context().fonts.get("nui"));
             m_text.setColor(sf::Color::White);
             m_text.setStyle(sf::Text::Bold);
+            m_text.setCharacterSize(0.7f * m_fontSize);
+            break;
+
+        case Prestyle::NUI_SMALL_SOBER:
+            m_text.setFont(Application::context().fonts.get("mono"));
+            m_text.setColor(sf::Color::White);
             m_text.setCharacterSize(0.7f * m_fontSize);
             break;
 

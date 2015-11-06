@@ -530,7 +530,9 @@ void Inter::moveMonsterFromReserve(const sf::Vector2f& relPos, const std::wstrin
 
 void Inter::addMonsterToReserve(const std::wstring& monsterID)
 {
-    m_data->addMonsterToReserve(monsterID);
+    // Increase countdown
+    const auto& hireCountdown = monstersDB().get(monsterID).hireCountdown;
+    m_data->addMonsterToReserve(monsterID, hireCountdown);
 }
 
 void Inter::constructRoom(const sf::Vector2f& relPos)

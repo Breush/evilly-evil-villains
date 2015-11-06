@@ -2,8 +2,8 @@
 
 #include "dungeon/cost.hpp"
 #include "nui/entity.hpp"
+#include "sfe/richtext.hpp"
 
-#include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
 #include <array>
@@ -40,12 +40,15 @@ namespace dungeon
         //! Adapt the display to the current cost.
         void setCost(const Cost& cost);
 
+        //! Set a title for this banner.
+        void setTitle(std::wstring title);
+
         //! @}
 
     protected:
 
-        //--------------------------------//
-        //! @name Internal changes update
+        //----------------//
+        //! @name Routine
         //! @{
 
         void refreshNUI(const config::NUIGuides& cNUI) final;
@@ -66,10 +69,11 @@ namespace dungeon
 
     private:
 
-        Cost m_cost;    //!< The cost to display.
+        std::wstring m_title;   //!< The banner's title.
+        Cost m_cost;            //!< The cost to display.
 
         // Decorum
-        sf::Text m_text;                                        //!< The text.
+        sfe::RichText m_text;                                   //!< The text.
         float m_refSize = 0.f;                                  //!< The reference size.
         std::array<sf::RectangleShape, IconID::COUNT> m_icons;  //!< The icons.
     };

@@ -55,6 +55,8 @@ namespace dungeon
 
         void receive(const context::Event& event) final;
         bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        bool handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseLeft() final;
 
         //! @}
 
@@ -84,6 +86,9 @@ namespace dungeon
         //! Refresh the hire box text, position and size.
         void refreshHireBox();
 
+        //! Refresh the color of the hire box.
+        void refreshHireBoxVisualLock();
+
         //! Refresh the number of puppets in the reserve.
         void refreshReservePuppetsCount();
 
@@ -106,8 +111,12 @@ namespace dungeon
         // Box
         scene::Label m_nameLabel;                   //!< Text for the monster's name.
         CostBanner m_baseCostBanner;                //!< Banner for base cost.
+        CostBanner m_weeklyCostBanner;              //!< Banner for weekly cost.
         scene::RichLabel m_hireBoxLabel;            //!< Text for hire time.
         scene::RectangleShape m_hireBoxBackground;  //!< The hire time background.
+
+        bool m_hireBoxLocked = false;   //!< Is the box countdown still counting?
+        bool m_hireBoxSelected = false; //!< Is the box hovered?
 
         // Decorum
         float m_padding = 0.f;  //!< The padding.

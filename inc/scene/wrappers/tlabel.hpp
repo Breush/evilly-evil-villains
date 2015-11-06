@@ -20,10 +20,12 @@ namespace scene
         enum class Prestyle
         {
             NONE,
+            CUSTOM,
             NUI,
             NUI_SOBER,
             NUI_TITLE,
             NUI_SMALL,
+            NUI_SMALL_SOBER,
             NUI_SMALL_TITLE,
             MENU_TITLE,
             MENU_POPUP_TITLE,
@@ -62,6 +64,9 @@ namespace scene
 
         //! Set a prestyle.
         void setPrestyle(Prestyle prestyle);
+
+        //! Auto-update the font size to current config.
+        void setCustomPrestyle(float fontSizeFactor);
 
         //! @}
 
@@ -103,7 +108,8 @@ namespace scene
         Text_t m_text;                          //!< The text.
 
         // Parameters
-        float m_fontSize = 0.f; //!< Reference font size.
+        float m_fontSize = 0.f;         //!< Reference font size.
+        float m_fontSizeFactor = 1.f;   //!< The factor to apply to the font size.
     };
 }
 

@@ -203,7 +203,7 @@ namespace dungeon
         bool addMonsterValid(const sf::Vector2u& coords, const std::wstring& monsterID);
 
         //! Add the specified type of monster to the reserve.
-        void addMonsterToReserve(const std::wstring& monsterID);
+        void addMonsterToReserve(const std::wstring& monsterID, const uint countdownIncrease = 0u);
 
         //! Move the specified type of monster from reserve into the dungeon.
         void moveMonsterFromReserve(const sf::Vector2u& coords, const std::wstring& monsterID);
@@ -357,7 +357,6 @@ namespace dungeon
 
         // Time
         uint m_time = 0u;           //!< How much time the dungeon has been constructed, in in-game hours.
-        float m_timeBuffer = 0.f;   //!< Time buffer, waiting for an in-game hour before increasing time.
         const float m_timeGameHour; //!< Constant time: howmany real seconds equals an in-game hour.
 
         // Databases

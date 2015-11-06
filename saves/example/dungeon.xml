@@ -2,12 +2,12 @@
 <dungeon name="The Mighty Example" time="4555" floorsCount="7" roomsByFloor="5" fame="41">
     <monsters>
         <reserve>
-            <monsterCage type="creepim" countdown="132">
+            <monsterCage type="creepim" countdown="0">
                 <monster type="creepim" />
                 <monster type="creepim" />
                 <monster type="creepim" />
             </monsterCage>
-            <monsterCage type="sand_spirit" countdown="11">
+            <monsterCage type="sand_spirit" countdown="5">
                 <monster type="sand_spirit" />
             </monsterCage>
         </reserve>

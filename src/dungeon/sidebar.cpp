@@ -136,11 +136,13 @@ void Sidebar::refreshTabContents()
     auto monstersCount = monstersList.size();
     monstersCages.reserve(monstersCount);
 
+    // TODO Where that 90 coming from?
+    const float monsterCageHeight = 90.f;
     for (const auto& monsterPair : monstersList) {
         const auto& monsterID = monsterPair.first;
         monstersCages.emplace_back(std::make_unique<MonsterCage>(monsterID, m_inter, m_data));
         auto& monsterCage = *monstersCages.back();
-        monsterCage.setSize({size().x - 2.f * m_borderThick, 80.f}); // TODO Where that 80 coming from?
+        monsterCage.setSize({size().x - 2.f * m_borderThick, monsterCageHeight});
         monstersStacker.stackBack(monsterCage, nui::Align::CENTER);
     }
 

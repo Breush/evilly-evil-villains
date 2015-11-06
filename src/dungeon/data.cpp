@@ -28,16 +28,32 @@ Data::Data()
 
 void Data::update(const sf::Time& dt)
 {
-    m_timeBuffer += dt.asSeconds();
-
-    while (m_timeBuffer >= m_timeGameHour) {
-        m_timeBuffer -= m_timeGameHour;
+    // Game time
+    static float gameTimeBuffer = 0.f;
+    gameTimeBuffer += dt.asSeconds();
+    while (gameTimeBuffer >= m_timeGameHour) {
+        gameTimeBuffer -= m_timeGameHour;
         m_time += 1u;
 
         emit("time_changed");
     }
 
-    // TODO Decrease monsterCage countdowns
+    // Monster reserve countdowns
+    static float reserveTimeBuffer = 0.f;
+    reserveTimeBuffer += dt.asSeconds();
+    while (reserveTimeBuffer >= 1.f) {
+        reserveTimeBuffer -= 1.f;
+
+        for (auto& reserveInfo : m_monstersInfo.reserve) {
+            if (reserveInfo.countdown == 0u) continue;
+            reserveInfo.countdown -= 1u;
+
+            Event event;
+            event.type = "reserve_countdown_changed";
+            event.monster.id = reserveInfo.type.c_str();
+            EventEmitter::emit(event);
+        }
+    }
 }
 
 //---------------------------//
@@ -101,7 +117,6 @@ void Data::createFiles(const std::wstring& folder)
 
 void Data::loadDungeon(const std::wstring& file)
 {
-    m_timeBuffer = 0.f;
     m_floors.clear();
     m_monstersInfo.active.clear();
     m_monstersInfo.reserve.clear();
@@ -502,8 +517,9 @@ bool Data::addMonsterValid(const sf::Vector2u& coords, const std::wstring& monst
     return true;
 }
 
-void Data::addMonsterToReserve(const std::wstring& monsterID)
+void Data::addMonsterToReserve(const std::wstring& monsterID, const uint countdownIncrease)
 {
+    Event event;
     auto& reserve = m_monstersInfo.reserve;
     auto pMonsterCage = std::find_if(reserve, [&monsterID] (const MonsterCageInfo& monsterCage) { return monsterCage.type == monsterID; });
 
@@ -519,8 +535,14 @@ void Data::addMonsterToReserve(const std::wstring& monsterID)
     auto& monsterInfo = pMonsterCage->monsters.back();
     monsterInfo.data.create(monsterID);
 
-    Event event;
     event.type = "monster_added";
+    event.monster.id = monsterID.c_str();
+    EventEmitter::emit(event);
+
+    // Increase the countdown
+    pMonsterCage->countdown += countdownIncrease;
+
+    event.type = "reserve_countdown_changed";
     event.monster.id = monsterID.c_str();
     EventEmitter::emit(event);
 }

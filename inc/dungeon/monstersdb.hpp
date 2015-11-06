@@ -28,9 +28,10 @@ namespace dungeon
         {
             std::wstring name = L"(Unknown)";   //!< Translated name. TODO: How to get translation for this?
             Cost baseCost;                      //!< Starting price.
-            Cost monthlyCost;                   //!< Salary.
+            Cost weeklyCost;                    //!< Salary.
             sf::Vector2f speed;                 //!< Speed relative to dungeon room size.
-            float pauseDelay;                   //!< How many seconds to stay still if the monster stays in the room.
+            float pauseDelay = 0.f;             //!< How many seconds to stay still if the monster stays in the room.
+            uint hireCountdown = 0u;            //!< How many seconds to wait after an hire occurs.
         };
 
     public:
