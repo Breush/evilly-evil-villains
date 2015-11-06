@@ -41,6 +41,9 @@ public:
     //! Used to recompute time-dependent information, such as FPS.
     void update(const sf::Time& dt);
 
+    //! Used to precisely inform how much time the whole logic update took.
+    void setLogicTickTime(const sf::Time& t);
+
     //! Basic drawing to the main window.
     void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
 
@@ -94,5 +97,6 @@ private:
 
     // Time factor
     float m_timeFactor = 1.f;       //!< The estimated time factor.
+    int64 m_logicTickTimeSum = 0;   //!< Cummulated time for update().
 };
 

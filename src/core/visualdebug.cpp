@@ -31,7 +31,8 @@ void VisualDebug::update(const sf::Time& dt)
         // Update text each second
         std::wstringstream str;
         str << L"FPS: " << m_renderedFrames << L" [" << m_renderedUpdates << L"]" << std::endl;
-        str << L"Time factor: " << m_timeFactor;
+        str << L"Time factor: " << m_timeFactor << std::endl;
+        str << L"Average LTT (µs): " << m_logicTickTimeSum / m_renderedUpdates;
         m_text.setString(str.str());
         updateBackgroundSize();
 
@@ -39,7 +40,17 @@ void VisualDebug::update(const sf::Time& dt)
         m_time -= 1.f;
         m_renderedFrames = 0;
         m_renderedUpdates = 0;
+        m_logicTickTimeSum = 0;
     }
+}
+
+#include <iostream>
+
+void VisualDebug::setLogicTickTime(const sf::Time& t)
+{
+    returnif (!m_visible);
+
+    m_logicTickTimeSum += t.asMicroseconds();
 }
 
 void VisualDebug::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -89,5 +100,6 @@ void VisualDebug::switchVisible()
         m_time = 0.f;
         m_renderedFrames = 0;
         m_renderedUpdates = 0;
+        m_logicTickTimeSum = 0;
     }
 }

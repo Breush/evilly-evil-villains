@@ -109,6 +109,7 @@ Application::Application()
 void Application::run()
 {
     sf::Clock clock;
+    sf::Clock debugClock;
     sf::Time lag(sf::Time::Zero);
 
     m_running = true;
@@ -124,7 +125,9 @@ void Application::run()
             lag -= m_updateTime;
 
             // Game logic core
+            debugClock.restart();
             update(m_updateTime);
+            s_visualDebug.setLogicTickTime(debugClock.getElapsedTime());
 
             // Quit if no more states
             if (m_stateStack.isEmpty())
