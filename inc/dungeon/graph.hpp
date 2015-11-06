@@ -16,14 +16,6 @@ namespace dungeon
     {
     public:
 
-        //! The type of error when constructing from data.
-        enum ConstructError
-        {
-            NONE,           //! No error so far.
-            NO_DOOR,        //! No door was found.
-            TOO_MANY_DOORS, //! Too many doors were found.
-        };
-
         //! The abstraction of a room in a dungeon.
         /*!
          *  It only sees which rooms are accessible from a certain point.
@@ -57,10 +49,10 @@ namespace dungeon
         void useData(Data& data);
 
         //! Reconstruct size of graph (and update it) to the current data.
-        ConstructError reconstructFromData();
+        void reconstructFromData();
 
         //! Updates the graph to the current data.
-        ConstructError updateFromData();
+        void updateFromData();
 
         //! @}
 
@@ -69,7 +61,7 @@ namespace dungeon
         //! @{
 
         //! Simple getter to access nodes.
-        const ai::Node& node(const sf::Vector2u& coords) const;
+        const ai::Node* node(const sf::Vector2u& coords) const;
 
         //! @}
 
@@ -99,5 +91,8 @@ namespace dungeon
 
         //! The references to nodes, convert coords to nodes.
         std::vector<std::vector<NodeData>> m_nodes;
+
+        uint m_floorsCount = 0u;    //!< Number of nodes.
+        uint m_roomsByFloor = 0u;   //!< Number of nodes.
     };
 }

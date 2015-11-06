@@ -86,9 +86,6 @@ namespace dungeon
         //! Spawns a new random group of heroes.
         void spawnHeroesGroup();
 
-        //! Whether the new heroes are sent and dungeon active.
-        void setActive(bool inActive);
-
         //! @}
 
     private:
@@ -119,8 +116,5 @@ namespace dungeon
         // Heroes
         std::vector<HeroInfo> m_heroesInfo; //!< All the heroes currently in the dungeon.
         float m_nextGroupDelay = -1.f;
-
-        // Activity
-        bool m_active = false;  //!< Whether the new heroes are sent and dungeon active.
     };
 }

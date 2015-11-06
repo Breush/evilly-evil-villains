@@ -5,7 +5,6 @@
 #include "nui/grabbutton.hpp"
 #include "nui/tabholder.hpp"
 #include "scene/entity.hpp"
-#include "dungeon/lock.hpp"
 #include "dungeon/summary.hpp"
 #include "dungeon/minimap.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
@@ -124,7 +123,6 @@ namespace dungeon
         // Elements
         dungeon::Minimap m_minimap; //!< Shows the minimap of the dungeon.
         dungeon::Summary m_summary; //!< Shows the ressources.
-        dungeon::Lock m_lock;       //!< Button to control invasion mode.
 
         // Decorum
         scene::RectangleShape m_background; //!< The background.

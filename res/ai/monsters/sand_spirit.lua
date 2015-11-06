@@ -25,10 +25,6 @@ end
 ----------------------
 -- Graph navigation --
 
--- Called on initialization, dungeon invasion restarts
-function _init()
-end
-
 -- Called with the current node information
 function _evaluateReference()
     return 0

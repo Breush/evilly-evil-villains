@@ -10,7 +10,6 @@ using namespace std::placeholders;
 
 Monster::Monster(ElementData& edata, Inter& inter)
     : baseClass(true)
-    , m_active(false)
     , m_inter(inter)
     , m_edata(edata)
 {
@@ -27,7 +26,6 @@ Monster::Monster(ElementData& edata, Inter& inter)
     // Decorum
     attachChild(m_sprite);
     m_sprite.load("dungeon/monsters/" + sMonsterID);
-    m_sprite.setStarted(false);
     m_sprite.setLocalScale(m_inter.roomScale());
 
     // Was there a target position saved?
@@ -69,24 +67,14 @@ Monster::Monster(ElementData& edata, Inter& inter)
 
     // Call for all things to register
     m_lua["_register"]();
-
-    refreshFromActivity();
 }
 
 //------------------//
 //---- Routine -----//
 
-void Monster::onTransformChanges()
-{
-    auto relPosition = m_inter.relTileFromLocalPosition(localPosition());
-    m_edata[L"rx"].as_float() = relPosition.x;
-    m_edata[L"ry"].as_float() = relPosition.y;
-}
-
 void Monster::updateAI(const sf::Time& dt)
 {
     returnif (!m_moving);
-    returnif (!active());
 
     // Quit if still moving
     returnif (lerpable()->positionLerping());
@@ -98,13 +86,19 @@ void Monster::updateAI(const sf::Time& dt)
         m_pauseTime = -1.f;
     }
 
-    // Get next room if not already moving
-    setCurrentNode(findNextNode(toNodeData(m_currentNode))->node);
+    // Get next room
+    if (m_currentNode != nullptr) {
+        const auto& nodeData = toNodeData(m_currentNode);
+        setCurrentNode(findNextNode(nodeData)->node);
+    }
 }
 
 void Monster::updateRoutine(const sf::Time& dt)
 {
-    returnif (!active());
+    // Update to current position
+    auto relPosition = m_inter.relTileFromLocalPosition(localPosition());
+    m_edata[L"rx"].as_float() = relPosition.x;
+    m_edata[L"ry"].as_float() = relPosition.y;
 
     // Forward to lua
     m_lua["_update"](dt.asSeconds());
@@ -235,12 +229,7 @@ void Monster::lua_log(const std::string& str) const
 
 void Monster::lua_dungeonExplodeRoom(const uint x, const uint y)
 {
-    dungeon::Event devent;
-    devent.type = "room_exploded";
-    devent.action.monster = this;
-    devent.action.room.x = x;
-    devent.action.room.y = y;
-    emitter()->emit(devent);
+    m_inter.destroyRoom(sf::Vector2u(x, y));
 }
 
 //---------------------------//
@@ -268,6 +257,26 @@ void Monster::setCurrentNode(const ai::Node* node)
 void Monster::useGraph(Graph& graph)
 {
     m_graph = &graph;
+    updateFromGraph();
+}
+
+void Monster::updateFromGraph()
+{
+    sf::Vector2f relCoords(m_edata[L"tx"].as_float(), m_edata[L"ty"].as_float());
+    auto coords = sf::v2u(relCoords);
+    auto node = m_graph->node(coords);
+
+    // If the target is no more valid, find new one
+    // by resetting the current node to the current position
+    if (node == nullptr || toNodeData(node)->constructed == false) {
+        setNewTargetPosition(localPosition());
+        relCoords.x = m_edata[L"tx"].as_float();
+        relCoords.x = m_edata[L"ty"].as_float();
+        coords = sf::v2u(relCoords);
+    }
+
+    // Refresh the target position
+    m_currentNode = m_graph->node(coords);
 }
 
 const Graph::NodeData* Monster::toNodeData(const ai::Node* node)
@@ -315,21 +324,13 @@ uint Monster::call(const char* function, const Graph::NodeData* node)
 //----------------------------------//
 //---- Internal changes update -----//
 
-void Monster::refreshFromActivity()
+void Monster::setNewTargetPosition(const sf::Vector2f& targetPosition)
 {
-    if (active()) {
-        reinit();
-        m_sprite.setStarted(true);
-        sf::Vector2f relCoords(m_edata[L"tx"].as_float(), m_edata[L"ty"].as_float());
-        auto targetPosition = m_inter.relTileLocalPosition(relCoords);
-        lerpable()->setTargetPosition(targetPosition);
-        m_currentNode = &m_graph->node(sf::v2u(relCoords));
-    }
-    else {
-        setCurrentNode(nullptr);
-        m_sprite.setStarted(false);
-        lerpable()->setTargetPosition(localPosition());
-    }
+    lerpable()->setTargetPosition(targetPosition);
+
+    auto relTargetPosition = m_inter.relTileFromLocalPosition(targetPosition);
+    m_edata[L"tx"].as_float() = relTargetPosition.x;
+    m_edata[L"ty"].as_float() = relTargetPosition.y;
 }
 
 void Monster::refreshPositionFromNode()
@@ -339,12 +340,7 @@ void Monster::refreshPositionFromNode()
     const auto& targetCoords = toNodeData(m_currentNode)->coords;
     const auto tileLocalPosition = m_inter.tileLocalPosition(targetCoords);
     const auto monsterTilePosition = 0.5f * m_inter.tileSize();
-    const auto targetPosition = tileLocalPosition + monsterTilePosition;
-    lerpable()->setTargetPosition(targetPosition);
-
-    auto relTargetPosition = m_inter.relTileFromLocalPosition(targetPosition);
-    m_edata[L"tx"].as_float() = relTargetPosition.x;
-    m_edata[L"ty"].as_float() = relTargetPosition.y;
+    setNewTargetPosition(tileLocalPosition + monsterTilePosition);
 
     refreshAnimation();
 }

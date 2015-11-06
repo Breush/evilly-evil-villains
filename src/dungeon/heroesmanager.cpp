@@ -17,7 +17,7 @@ void HeroesManager::update(const sf::Time& dt)
     // Remove dead/out heroes
     std::erase_if(m_heroesInfo, [](const HeroInfo& heroInfo) { return heroInfo.status == HeroStatus::TO_BE_REMOVED; });
 
-    returnif (!m_active);
+    returnif (m_graph == nullptr);
 
     // Consider other updates
     for (auto& heroInfo : m_heroesInfo) {
@@ -47,22 +47,28 @@ void HeroesManager::update(const sf::Time& dt)
 void HeroesManager::receive(const context::Event& event)
 {
     const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
-    sf::Vector2u coords;
 
-    if (event.type == "mode_changed") {
-        setActive(devent.mode == Mode::INVASION);
-    }
-    else if (event.type == "room_exploded") {
+    if (devent.type == "room_destroyed") {
+        std::cerr << "Should kill heroes" << std::endl;
         // Remove all heroes in that room
+        // FIXME Ultimately, this should be part of dungeon::Data
+        // (Well, all that HeroesManager should)
         for (auto& heroInfo : m_heroesInfo) {
             auto& hero = heroInfo.hero;
             if (hero == nullptr) continue;
 
-            coords = {devent.action.room.x, devent.action.room.y};
-            if (m_inter.tileFromLocalPosition(hero->localPosition()) == coords
-                || reinterpret_cast<const Graph::NodeData*>(hero->currentNode()->data)->coords == coords) {
+            sf::Vector2u coords = {devent.room.x, devent.room.y};
+            if (m_inter.tileFromLocalPosition(hero->localPosition()) == coords) {
+                std::cerr << "Found one" << std::endl;
                 heroInfo.status = HeroStatus::TO_BE_REMOVED;
             }
+        }
+    }
+    else if (devent.type == "dungeon_graph_changed") {
+        for (auto& heroInfo : m_heroesInfo) {
+            // TODO Do something cleverer
+            if (heroInfo.status == HeroStatus::RUNNING)
+                heroInfo.hero->useGraph(*m_graph);
         }
     }
 }
@@ -79,6 +85,7 @@ void HeroesManager::useData(Data& data)
 void HeroesManager::useGraph(Graph& graph)
 {
     m_graph = &graph;
+    spawnHeroesGroup();
 }
 
 //--------------------//
@@ -96,25 +103,6 @@ void HeroesManager::spawnHeroesGroup()
     }
 
     m_nextGroupDelay = 37.f + static_cast<float>(rand() % 120u);
-}
-
-void HeroesManager::setActive(bool inActive)
-{
-    returnif (m_graph == nullptr || m_data == nullptr);
-    returnif (m_active == inActive);
-    m_active = inActive;
-
-    // Start first wave of heroes
-    if (m_active) {
-        spawnHeroesGroup();
-    }
-
-    // No more running, all heroes escaped
-    else {
-        std::erase_if(m_heroesInfo, [](const HeroInfo& heroInfo) { return heroInfo.hero == nullptr; });
-        for (auto& heroInfo : m_heroesInfo)
-            heroGetsOut(heroInfo.hero.get());
-    }
 }
 
 //---------------------------//

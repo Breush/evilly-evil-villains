@@ -9,9 +9,12 @@ using namespace dungeon;
 //-----------------------//
 //----- Interaction -----//
 
-const ai::Node& Graph::node(const sf::Vector2u& coords) const
+const ai::Node* Graph::node(const sf::Vector2u& coords) const
 {
-    return *m_nodes.at(coords.x).at(coords.y).node;
+    if (coords.x >= m_floorsCount || coords.y >= m_roomsByFloor)
+        return nullptr;
+
+    return m_nodes.at(coords.x).at(coords.y).node;
 }
 
 //------------------//
@@ -24,6 +27,8 @@ void Graph::receive(const context::Event& event)
     const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
     if (event.type == "facility_changed")
         refreshTreasure(m_nodes.at(devent.room.x).at(devent.room.y));
+    else if (event.type == "dungeon_changed")
+        reconstructFromData();
 }
 
 //------------------------//
@@ -33,38 +38,39 @@ void Graph::useData(Data& data)
 {
     m_data = &data;
     m_data->linkGraph(this);
+
     setEmitter(m_data);
+    reconstructFromData();
 }
 
-Graph::ConstructError Graph::reconstructFromData()
+void Graph::reconstructFromData()
 {
     massert(m_data != nullptr, "Reconstructing dungeon::Graph with dungeon::Data not set.");
 
-    const auto& floorsCount = m_data->floorsCount();
-    const auto& roomsByFloor = m_data->roomsByFloor();
-
+    m_floorsCount = m_data->floorsCount();
+    m_roomsByFloor = m_data->roomsByFloor();
 
     // Soft reset: will keep memory as it was if same dungeon size.
-    if (floorsCount != m_nodes.size() || roomsByFloor != m_nodes[0u].size()) {
-        reset(floorsCount * roomsByFloor);
-        m_nodes.resize(floorsCount);
+    if (m_floorsCount != m_nodes.size() || m_roomsByFloor != m_nodes[0u].size()) {
+        reset(m_floorsCount * m_roomsByFloor);
+        m_nodes.resize(m_floorsCount);
         for (auto& floorNodes : m_nodes)
-            floorNodes.resize(roomsByFloor);
+            floorNodes.resize(m_roomsByFloor);
     }
 
     // Affect invariable attributes
-    for (uint floorIndex = 0u; floorIndex < floorsCount; ++floorIndex)
-    for (uint roomIndex = 0u; roomIndex < roomsByFloor; ++roomIndex) {
+    for (uint floorIndex = 0u; floorIndex < m_floorsCount; ++floorIndex)
+    for (uint roomIndex = 0u; roomIndex < m_roomsByFloor; ++roomIndex) {
         auto& nodeData = m_nodes.at(floorIndex).at(roomIndex);
         nodeData.coords = {floorIndex, roomIndex};
         nodeData.altitude = floorIndex + 1u;
         nodeData.node = &addNode(&nodeData);
     }
 
-    return updateFromData();
+    updateFromData();
 }
 
-Graph::ConstructError Graph::updateFromData()
+void Graph::updateFromData()
 {
     setStartingNode(nullptr);
 
@@ -86,8 +92,8 @@ Graph::ConstructError Graph::updateFromData()
             // Entrance
             if (facilityData.type() == L"entrance") {
                 nodeData.entrance = true;
-                if (startingNode() == nullptr) setStartingNode(&node);
-                else return ConstructError::TOO_MANY_DOORS;
+                // TODO Have multiple starting nodes
+                setStartingNode(&node);
             }
 
             // Treasure
@@ -105,11 +111,9 @@ Graph::ConstructError Graph::updateFromData()
         }
     }
 
-    // Construction errors
-    if (startingNode() == nullptr)
-        return ConstructError::NO_DOOR;
-
-    return ConstructError::NONE;
+    Event event;
+    event.type = "dungeon_graph_changed";
+    emitter()->emit(event);
 }
 
 //-----------------------------------//

@@ -121,12 +121,6 @@ bool Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::V
     if (button == sf::Mouse::Left)
         harvestTileDosh(m_selectedTile->coords);
 
-    // Do nothing in invasion
-    if (m_invasion) {
-        deselectTile();
-        return true;
-    }
-
     // Remove spinbox interface if any
     m_treasureEditSpinBox.markForVisible(false);
 
@@ -139,8 +133,6 @@ bool Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::V
 
 bool Inter::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
-    returnif (m_invasion) false;
-
     auto coords = tileFromLocalPosition(mousePos);
     setHoveredTile(coords);
     return true;
@@ -148,8 +140,6 @@ bool Inter::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 
 void Inter::handleMouseLeft()
 {
-    returnif (m_invasion);
-
     resetHoveredTile();
 }
 
@@ -158,7 +148,12 @@ void Inter::receive(const context::Event& event)
     const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
     sf::Vector2u coords;
 
-    if (event.type == "room_destroyed" || event.type == "room_constructed") {
+    if (event.type == "room_destroyed") {
+        coords = {devent.room.x, devent.room.y};
+        m_tileRefreshPending.emplace_back([=]() { return refreshTile(coords); });
+        m_tileRefreshPending.emplace_back([=]() { return refreshNeighboursLayers(coords); });
+    }
+    else if (event.type == "room_constructed") {
         coords = {devent.room.x, devent.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTile(coords); });
         m_tileRefreshPending.emplace_back([=]() { return refreshNeighboursLayers(coords); });
@@ -177,22 +172,12 @@ void Inter::receive(const context::Event& event)
     else if (event.type == "monster_added") {
         m_tileRefreshPending.emplace_back([=]() { return refreshMonsters(); });
     }
-    else if (event.type == "room_exploded") {
-        coords = {devent.action.room.x, devent.action.room.y};
-        m_data->destroyRoom(coords, true);
-        m_data->graph().updateFromData();
-        // TODO What happens if we destroy entrance?
+    else if (event.type == "monster_removed") {
         m_tileRefreshPending.emplace_back([=]() { return refreshMonsters(); });
     }
     else if (event.type == "harvestable_dosh_changed") {
         coords = {devent.room.x, devent.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTileDoshLabel(coords); });
-    }
-    else if (event.type == "mode_changed") {
-        m_treasureEditSpinBox.markForVisible(false);
-        m_invasion = (devent.mode == Mode::INVASION);
-        refreshMonstersActivity();
-        deselectTile();
     }
 }
 
@@ -642,18 +627,9 @@ void Inter::refreshMonsters()
         auto& monster = m_monsters[i];
         auto& monsterInfo = activeMonsters[i];
         monster = std::make_unique<Monster>(monsterInfo.data, *this);
-        monster->setEmitter(m_data);
         monster->useGraph(m_data->graph());
         attachChild(*monster);
     }
-
-    refreshMonstersActivity();
-}
-
-void Inter::refreshMonstersActivity()
-{
-    for (auto& monster : m_monsters)
-        monster->setActive(m_invasion);
 }
 
 void Inter::refreshTiles()

@@ -157,7 +157,7 @@ namespace dungeon
 
         //! Destroy a room.
         //! @param hard Destroy monsters inside.
-        void destroyRoom(const sf::Vector2u& coords, bool hard = false);
+        void destroyRoom(const sf::Vector2u& coords);
 
         //! Return true if you can access the next room from the specified one.
         //! In the case of unexisting room, it returns false.
@@ -208,6 +208,10 @@ namespace dungeon
         //! Move the specified type of monster from reserve into the dungeon.
         void moveMonsterFromReserve(const sf::Vector2u& coords, const std::wstring& monsterID);
 
+        //! Remove all the monsters from the room specified.
+        //! Will emit an event if a change occured.
+        void removeRoomMonsters(const sf::Vector2u& coords);
+
         //! @}
 
         //-------------------------//
@@ -229,18 +233,6 @@ namespace dungeon
         inline bool subFame(uint value) { return m_fameWallet.sub(value); } //! Substract fame from current value.
 
         inline uint time() const { return m_time; } //!< Access the time.
-
-        //! @}
-
-        //-------------//
-        //! @name Mode
-        //! @{
-
-        //! Get the current mode.
-        inline Mode mode() const { return m_mode; }
-
-        //! Set the current mode.
-        void setMode(Mode mode);
 
         //! @}
 
@@ -352,8 +344,6 @@ namespace dungeon
 
         // Monsters
         MonstersInfo m_monstersInfo;    //!< A dungeon also has some list of monsters.
-
-        Mode m_mode = Mode::DESIGN; //!< The current mode.
 
         // Time
         uint m_time = 0u;           //!< How much time the dungeon has been constructed, in in-game hours.

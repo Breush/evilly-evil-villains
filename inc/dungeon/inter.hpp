@@ -278,9 +278,6 @@ namespace dungeon
         //! Refresh all monsters from current data.
         void refreshMonsters();
 
-        //! Refresh all monsters activity state.
-        void refreshMonstersActivity();
-
         //! Refresh all tiles, updating state from data.
         void refreshTiles();
 
@@ -337,7 +334,6 @@ namespace dungeon
 
         // Delay
         std::vector<std::function<void()>> m_tileRefreshPending;    //! Pending list of tile refreshTileXXX.
-        bool m_invasion = false;    //!< Whether or not we are in invasion mode.
 
         // Prediction
         std::wstring m_predictionID;                //!< The current ID of the element overlay.

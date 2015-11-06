@@ -7,12 +7,7 @@ local nonVisitedNodes
 local altitude_ref
 local visited_ref
 local lastVisit_ref
-local treasure_found
-
--- Called on initialization, dungeon invasion starts
-function init()
-    treasure_found = false
-end
+local treasure_found = false
 
 -- Called with the current node information
 function evaluate_reference()

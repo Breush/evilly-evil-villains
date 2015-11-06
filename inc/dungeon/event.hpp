@@ -10,13 +10,6 @@ namespace dungeon
     class Hero;
     class Monster;
 
-    //! The possible modes.
-    enum class Mode
-    {
-        DESIGN,     //!< Design.
-        INVASION,   //!< Invasion.
-    };
-
     //! The position of a room.
     struct RoomCoords
     {
@@ -30,7 +23,6 @@ namespace dungeon
         union
         {
             int delta;  //!< The difference between previous and current value of resources.
-            Mode mode;  //!< The new mode.
             RoomCoords room;        //!< The coordinates of a room whenever it is constructed/destroyed.
             const wchar_t* message; //!< An additional information.
 

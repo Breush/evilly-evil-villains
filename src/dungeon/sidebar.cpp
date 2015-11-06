@@ -31,7 +31,6 @@ Sidebar::Sidebar(scene::Scene& inScene, Inter& inter, Data& data)
     m_globalStacker.stackBack(m_summary, nui::Align::CENTER);
     m_globalStacker.stackBack(m_tabHolder, nui::Align::CENTER);
     m_globalStacker.stackBack(m_minimap, nui::Align::CENTER);
-    m_globalStacker.stackBack(m_lock, nui::Align::CENTER);
 
     // Tabs
     m_tabContents[TabsID::MONSTERS].stacker.setPadding(0.f);
@@ -54,7 +53,6 @@ void Sidebar::init()
 {
     m_minimap.init();
     m_summary.init();
-    m_lock.init();
 
     // Background
     m_background.setTexture("dungeon/sidebar/background");
@@ -101,7 +99,6 @@ void Sidebar::onChildSizeChanges(scene::Entity& child)
 void Sidebar::useData(Data& data)
 {
     m_summary.useData(data);
-    m_lock.useData(data);
     refreshTabContents();
 }
 
@@ -115,9 +112,8 @@ void Sidebar::refreshScrollAreasSize()
 
     height -= m_minimap.size().y;
     height -= m_summary.size().y;
-    height -= m_lock.size().y;
     height -= m_tabHolder.headerSize().y;
-    height -= 4.f * m_vPadding;
+    height -= 3.f * m_vPadding;
 
     // Affect new size to all scroll areas
     for (auto& tabContent : m_tabContents)

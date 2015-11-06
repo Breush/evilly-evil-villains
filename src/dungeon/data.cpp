@@ -199,6 +199,8 @@ void Data::loadDungeon(const std::wstring& file)
             m_floors[floorPos].rooms.emplace_back(std::move(room));
         }
     }
+
+    emit("dungeon_changed");
 }
 
 void Data::saveDungeon(const std::wstring& file)
@@ -299,6 +301,8 @@ void Data::correctFloorsRooms()
                 ownRoom.state = RoomState::VOID;
         }
     }
+
+    emit("dungeon_changed");
 }
 
 //-----------------//
@@ -324,9 +328,11 @@ void Data::constructRoom(const sf::Vector2u& coords, bool hard)
     event.type = "room_constructed";
     event.room = {coords.x, coords.y};
     EventEmitter::emit(event);
+
+    emit("dungeon_changed");
 }
 
-void Data::destroyRoom(const sf::Vector2u& coords, bool hard)
+void Data::destroyRoom(const sf::Vector2u& coords)
 {
     returnif (coords.x >= m_floorsCount);
     returnif (coords.y >= m_roomsByFloor);
@@ -340,19 +346,14 @@ void Data::destroyRoom(const sf::Vector2u& coords, bool hard)
     // Clear elements
     removeRoomFacilities(coords);
     removeRoomTrap(coords);
-
-    // Destroy monsters inside
-    std::erase_if(m_monstersInfo.active, [coords] (const MonsterInfo& monsterInfo) {
-        sf::Vector2u monsterCoords;
-        monsterCoords.x = static_cast<uint>(monsterInfo.data.at(L"rx").as_float());
-        monsterCoords.y = static_cast<uint>(monsterInfo.data.at(L"ry").as_float());
-        return monsterCoords == coords;
-    });
+    removeRoomMonsters(coords);
 
     Event event;
     event.type = "room_destroyed";
     event.room = {coords.x, coords.y};
     EventEmitter::emit(event);
+
+    emit("dungeon_changed");
 }
 
 bool Data::roomNeighbourAccessible(const sf::Vector2u& coords, Direction direction)
@@ -467,6 +468,22 @@ void Data::removeRoomFacilities(const sf::Vector2u& coords)
     EventEmitter::emit(event);
 }
 
+void Data::removeRoomMonsters(const sf::Vector2u& coords)
+{
+    std::erase_if(m_monstersInfo.active, [this, coords] (const MonsterInfo& monsterInfo) {
+        sf::Vector2u monsterCoords;
+        monsterCoords.x = static_cast<uint>(monsterInfo.data.at(L"rx").as_float());
+        monsterCoords.y = static_cast<uint>(monsterInfo.data.at(L"ry").as_float());
+
+        if (monsterCoords == coords) {
+            emit("monster_removed");
+            return true;
+        }
+
+        return false;
+    });
+}
+
 void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
 {
     // TODO Should the test be done in Inter and data just really sets the trap?
@@ -571,46 +588,6 @@ void Data::moveMonsterFromReserve(const sf::Vector2u& coords, const std::wstring
     Event event;
     event.type = "monster_added";
     event.monster.id = monsterID.c_str();
-    EventEmitter::emit(event);
-}
-
-//----------------//
-//----- Mode -----//
-
-void Data::setMode(Mode mode)
-{
-    returnif (m_mode == mode);
-    massert(m_graph != nullptr, "Graph not set before switching mode with dungeon::Data.");
-    Event event;
-
-    // Switch too design mode, no problem.
-    if (mode == Mode::DESIGN) {
-        m_mode = mode;
-        event.type = "mode_changed";
-        event.mode = mode;
-    }
-
-    // For invasion, check dungeon validity.
-    else if (mode == Mode::INVASION) {
-        switch (m_graph->reconstructFromData()) {
-        case Graph::ConstructError::NONE:
-            m_mode = mode;
-            event.type = "mode_changed";
-            event.mode = mode;
-            break;
-
-        case Graph::ConstructError::NO_DOOR:
-            event.type = "error";
-            event.message = L"No door in the dungeon. How are heroes supposed to enter?";
-            break;
-
-        case Graph::ConstructError::TOO_MANY_DOORS:
-            event.type = "error";
-            event.message = L"Too many doors. Only one door in the dungeon is supported.";
-            break;
-        };
-    }
-
     EventEmitter::emit(event);
 }
 

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "context/event.hpp"
 #include "dungeon/graph.hpp"
 #include "dungeon/elementdata.hpp"
 #include "dungeon/detectentity.hpp"
@@ -17,7 +16,7 @@ namespace dungeon
 
     //! A generic monster interface.
 
-    class Monster final : public DetectEntity, public context::EventReceiver
+    class Monster final : public DetectEntity
     {
         using baseClass = DetectEntity;
 
@@ -52,17 +51,11 @@ namespace dungeon
         //! The graph of the dungeon to be read from.
         void useGraph(Graph& graph);
 
+        //! Refresh the position from the graph.
+        void updateFromGraph();
+
         //! Convert a node to a node data.
         const Graph::NodeData* toNodeData(const ai::Node* node);
-
-        //! @}
-
-        //--------------------------//
-        //! @name Public properties
-        //! @{
-
-        //! To be set to false when monster should stop.
-        PARAMGSU(bool, m_active, active, setActive, refreshFromActivity)
 
         //! @}
 
@@ -74,15 +67,6 @@ namespace dungeon
 
         void updateAI(const sf::Time& dt) final;
         void updateRoutine(const sf::Time& dt) final;
-        void onTransformChanges() final;
-
-        //! @}
-
-        //---------------//
-        //! @name Events
-        //! @{
-
-        void receive(const context::Event& event) final {}
 
         //! @}
 
@@ -159,11 +143,11 @@ namespace dungeon
         //! @name Internal changes update
         //! @{
 
+        //! Set the target position and update the eData accordingly.
+        void setNewTargetPosition(const sf::Vector2f& targetPosition);
+
         //! Recompute the target position.
         void refreshPositionFromNode();
-
-        //! Refresh the monster status whenever activity changes.
-        void refreshFromActivity();
 
         //! Refresh the state of the walk animation.
         void refreshAnimation();

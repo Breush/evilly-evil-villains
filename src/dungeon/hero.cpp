@@ -65,7 +65,11 @@ void Hero::updateAI(const sf::Time& dt)
 {
     // Get next room if not already moving
     returnif (lerpable()->positionLerping());
-    setCurrentNode(m_luaActor.findNextNode(toNodeData(m_currentNode))->node);
+
+    if (m_currentNode != nullptr) {
+        const auto& nodeData = toNodeData(m_currentNode);
+        setCurrentNode(m_luaActor.findNextNode(nodeData)->node);
+    }
 }
 
 //---------------------------//
@@ -81,8 +85,11 @@ void Hero::setCurrentNode(const ai::Node* node)
     #endif
 
     // Emit signal when getting out
+    /* FIXME This can cause segfault because m_currentNode might not be a valid pointer anymore
+     * if the dungeon graph changed.
     if (m_currentNode != nullptr)
         m_manager.heroLeftRoom(this, toNodeData(m_currentNode)->coords);
+    */
 
     bool firstNode = (m_currentNode == nullptr);
     m_currentNode = node;
@@ -120,6 +127,7 @@ void Hero::AIStealTreasure()
 
 void Hero::useGraph(Graph& graph)
 {
+    // TODO Follow Monster guidelines to fix the "I keep going into a wall" issue.
     m_luaActor.useGraph(graph);
     setCurrentNode(graph.startingNode());
 }
