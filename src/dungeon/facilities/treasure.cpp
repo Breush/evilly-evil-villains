@@ -9,7 +9,8 @@ using namespace dungeon::facilities;
 Treasure::Treasure(const sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter)
     : baseClass(coords, elementdata, inter)
 {
-    setDepth(80.f);
+    // Behind hero (50.f) but in front of floor (75.f)
+    setDepth(60.f);
 
     // Initialize attributes if they do not exists yet,
     // i.e. we just constructed this, and not loaded it from XML.

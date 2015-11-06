@@ -1,38 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r4.1">
     <folder id="0" name="res/tex/dungeon/facilities/entrance">
-        <file id="1" name="res/tex/dungeon/facilities/entrance/frame.png" width="204" height="252" pivot_x="0" pivot_y="1"/>
-        <file id="2" name="res/tex/dungeon/facilities/entrance/door_close.png" width="152" height="212" pivot_x="0" pivot_y="1"/>
+        <file id="0" name="res/tex/dungeon/facilities/entrance/frame.png" width="204" height="252" pivot_x="0" pivot_y="1"/>
+        <file id="1" name="res/tex/dungeon/facilities/entrance/door_close.png" width="152" height="212" pivot_x="0" pivot_y="1"/>
     </folder>
     <entity id="0" name="entrance">
-        <obj_info name="entrance_model" realname="model" type="sprite">
-            <frames/>
-        </obj_info>
-        <obj_info name="entrance_frame" realname="frame" type="sprite">
+        <obj_info name="entrance_door_close" realname="door_close" type="sprite">
             <frames>
                 <i folder="0" file="1"/>
             </frames>
         </obj_info>
-        <obj_info name="entrance_door_close" realname="door_close" type="sprite">
+        <obj_info name="entrance_frame" realname="frame" type="sprite">
             <frames>
-                <i folder="0" file="2"/>
+                <i folder="0" file="0"/>
             </frames>
         </obj_info>
         <animation id="0" name="idle_close" length="1000" interval="100">
             <mainline>
                 <key id="0">
-                    <object_ref id="0" name="door_close" folder="0" file="2" abs_x="-70" abs_y="84" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="1" key="0" z_index="0"/>
-                    <object_ref id="1" name="frame" folder="0" file="1" abs_x="-101" abs_y="111" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="1"/>
+                    <object_ref id="0" name="door_close" folder="0" file="1" abs_x="-103" abs_y="94" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" name="frame" folder="0" file="0" abs_x="-126" abs_y="125" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="1" key="0" z_index="1"/>
                 </key>
             </mainline>
-            <timeline id="0" obj="1" name="frame">
+            <timeline id="0" obj="2" name="door_close">
                 <key id="0" spin="0">
-                    <object folder="0" file="1" x="-101" y="111"/>
+                    <object folder="0" file="1" x="-103" y="94" angle="0"/>
                 </key>
             </timeline>
-            <timeline id="1" obj="2" name="door_close">
+            <timeline id="1" obj="3" name="frame">
                 <key id="0" spin="0">
-                    <object folder="0" file="2" x="-70" y="84"/>
+                    <object folder="0" file="0" x="-126" y="125" angle="0"/>
                 </key>
             </timeline>
         </animation>

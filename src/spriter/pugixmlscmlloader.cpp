@@ -26,8 +26,6 @@ using namespace SpriterEngine;
 
 void PugiXmlScmlLoader::loadFile(SpriterModel *model, const std::string &fileName)
 {
-    std::cerr << "[Spriter++] Loading file " << fileName << std::endl;
-
     pugi::xml_document doc;
     doc.load_file(fileName.c_str());
 
