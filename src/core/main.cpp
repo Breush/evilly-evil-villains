@@ -8,12 +8,16 @@
 
 #include <stdexcept>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 //! The call stack.
 tools::CallStack callStack;
 
 #if defined(__GNUC__)
 #if not defined(__MINGW32__)
+#include <signal.h>
+
 extern "C"
 {
     //! Inject the callstack generation each time an exception is launched.
@@ -27,6 +31,12 @@ extern "C"
             = (void (*)(void*,void*,void(*)(void*)))dlsym(RTLD_NEXT, "__cxa_throw");
         rethrow(ex, info, dest);
     }
+
+    //! Inject the callstack generation each time a signal is lauched (SEGFAULT, etc.)
+    void handler(int sig)
+    {
+        throw std::runtime_error(strsignal(sig));
+    }
 }
 #endif
 #endif
@@ -36,6 +46,13 @@ int main(int argc, char *argv[])
 {
     Application app;
     int returnStatus = EXIT_SUCCESS;
+
+    // Catch GCC signals
+    #if defined(__GNUC__)
+    #if not defined(__MINGW32__)
+    signal(SIGSEGV, handler);
+    #endif
+    #endif
 
     // Disable synchronisation
     // Note: Remove the safety of using printf/scanf (so don't use them)
@@ -68,9 +85,18 @@ int main(int argc, char *argv[])
         app.run();
     }
     catch(std::exception& e) {
-        std::cerr << std::endl << "[!] Exception caught: " << e.what() << std::endl;
-        std::cerr << std::endl << "Here's the call stack when the exception occured:" << std::endl;
-        std::cerr << callStack.toString();
+        std::stringstream str;
+        str << std::endl << "[!] Exception caught: " << e.what() << std::endl;
+        str << std::endl << "Here's the call stack when the exception occured:" << std::endl;
+        str << callStack.toString();
+
+        // TODO Have a way to export all debug message to the file?
+        // Show message in the console and in a file
+        std::cerr << str.str() << std::endl;
+        std::ofstream ofs;
+        ofs.open("error.log");
+        ofs << str.str();
+
         returnStatus = EXIT_FAILURE;
     }
 
