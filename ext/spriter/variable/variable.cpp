@@ -13,82 +13,87 @@
 namespace SpriterEngine
 {
 
-	Variable::Variable(std::string initialName, VariableType initialVariableType) :
-		name(initialName),
-		variableType(initialVariableType),
-		defaultValue(getNewObjectInfoInstance())
-	{
-	}
+    Variable::Variable(std::string initialName, VariableType initialVariableType) :
+        name(initialName),
+        variableType(initialVariableType),
+        defaultValue(getNewObjectInfoInstance())
+    {
+    }
 
-	std::string Variable::getName() const
-	{
-		return name;
-	}
+    Variable::~Variable()
+    {
+        delete defaultValue;
+    }
 
-	UniversalObjectInterface *Variable::getNewObjectInfoInstance(bool forEntityInstance) const
-	{
-		switch (variableType)
-		{
-		case VARIABLETYPE_STRING:
-			if (forEntityInstance)
-			{
-				return new StringVariableInfoReference();
-			}
-			else
-			{
-				return new StringVariableInfo();
-			}
+    std::string Variable::getName() const
+    {
+        return name;
+    }
 
-		case VARIABLETYPE_INT:
-			return new IntVariableInfo();
+    UniversalObjectInterface *Variable::getNewObjectInfoInstance(bool forEntityInstance) const
+    {
+        switch (variableType)
+        {
+        case VARIABLETYPE_STRING:
+            if (forEntityInstance)
+            {
+                return new StringVariableInfoReference();
+            }
+            else
+            {
+                return new StringVariableInfo();
+            }
 
-		case VARIABLETYPE_REAL:
-			return new RealVariableInfo();
+        case VARIABLETYPE_INT:
+            return new IntVariableInfo();
 
-		default:
-			// error;
-			return 0;
-		}
-	}
+        case VARIABLETYPE_REAL:
+            return new RealVariableInfo();
 
-	UniversalObjectInterface *Variable::getDefaultValue() const
-	{
-		return defaultValue;
-	}
+        default:
+            // error;
+            return 0;
+        }
+    }
 
-	Variable::VariableType Variable::getType()
-	{
-		return variableType;
-	}
+    UniversalObjectInterface *Variable::getDefaultValue() const
+    {
+        return defaultValue;
+    }
 
-	void Variable::setupDefaultInAnimation(Animation * animation, int objectId, int variableId)
-	{
-		Timeline *newVariableTimeline = animation->setVariableTimeline(objectId, variableId);
-		if (newVariableTimeline)
-		{
-			UniversalObjectInterface *newObjectInfo = getNewObjectInfoInstance();
-			switch (variableType)
-			{
-			case VARIABLETYPE_STRING:
-				newObjectInfo->setStringValue(defaultValue->getStringValue());
-				break;
+    Variable::VariableType Variable::getType()
+    {
+        return variableType;
+    }
 
-			case VARIABLETYPE_INT:
-				newObjectInfo->setIntValue(defaultValue->getIntValue());
-				break;
+    void Variable::setupDefaultInAnimation(Animation * animation, int objectId, int variableId)
+    {
+        Timeline *newVariableTimeline = animation->setVariableTimeline(objectId, variableId);
+        if (newVariableTimeline)
+        {
+            UniversalObjectInterface *newObjectInfo = getNewObjectInfoInstance();
+            switch (variableType)
+            {
+            case VARIABLETYPE_STRING:
+                newObjectInfo->setStringValue(defaultValue->getStringValue());
+                break;
 
-			case VARIABLETYPE_REAL:
-				newObjectInfo->setRealValue(defaultValue->getRealValue());
-				break;
+            case VARIABLETYPE_INT:
+                newObjectInfo->setIntValue(defaultValue->getIntValue());
+                break;
 
-			default:
-				// error;
-				break;
-			}
+            case VARIABLETYPE_REAL:
+                newObjectInfo->setRealValue(defaultValue->getRealValue());
+                break;
 
-			TimelineKey *newTimelineKey = newVariableTimeline->pushBackKey(new TimeInfo(0, 0, new InstantEasingCurve()), newObjectInfo);
-			newTimelineKey->setNextObjectInfo(newObjectInfo);
-		}
-	}
+            default:
+                // error;
+                break;
+            }
+
+            TimelineKey *newTimelineKey = newVariableTimeline->pushBackKey(new TimeInfo(0, 0, new InstantEasingCurve()), newObjectInfo);
+            newTimelineKey->setNextObjectInfo(newObjectInfo);
+        }
+    }
 
 }

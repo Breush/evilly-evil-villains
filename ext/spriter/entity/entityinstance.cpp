@@ -37,7 +37,7 @@ namespace SpriterEngine
         playbackSpeedRatio(1)
     {
         model->setupFileReferences(&files);
-        currentEntity = &(*entities.insert(std::make_pair(entity->getId(), EntityInstanceData(model, this, entity, objectFactory))).first).second;
+        currentEntity = (*entities.insert(std::make_pair(entity->getId(), new EntityInstanceData(model, this, entity, objectFactory))).first).second;
         entity->setupInstance(model, this, currentEntity, objectFactory);
         setCurrentAnimation(0);
     }
@@ -48,6 +48,9 @@ namespace SpriterEngine
         {
             delete it;
         }
+
+        for (auto& it : entities)
+            delete it.second;
     }
 
     void EntityInstance::setTimeElapsed(real timeElapsed)
@@ -239,7 +242,7 @@ namespace SpriterEngine
         auto it = entities.find(newEntityId);
         if (it != entities.end())
         {
-            currentEntity = &(*it).second;
+            currentEntity = (*it).second;
         }
         else
         {
@@ -354,7 +357,7 @@ namespace SpriterEngine
     void EntityInstance::appendEntity(SpriterModel * model, Entity * entity, ObjectFactory * objectFactory)
     {
         model->setupFileReferences(&files);
-        EntityInstanceData *newEntityData = &(*entities.insert(std::make_pair(entity->getId(), EntityInstanceData(model, this, entity, objectFactory))).first).second;
+        EntityInstanceData *newEntityData = (*entities.insert(std::make_pair(entity->getId(), new EntityInstanceData(model, this, entity, objectFactory))).first).second;
         entity->setupInstance(model, this, newEntityData, objectFactory);
     }
 
@@ -363,7 +366,7 @@ namespace SpriterEngine
         auto it = entities.find(entityId);
         if (it != entities.end())
         {
-            return &(*it).second;
+            return (*it).second;
         }
         else
         {

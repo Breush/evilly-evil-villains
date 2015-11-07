@@ -26,16 +26,16 @@ namespace SpriterEngine
 
     SpriterModel::~SpriterModel()
     {
-        while (files.size())
+        for (auto& it : files)
         {
-            delete files.back();
-            files.pop_back();
+            delete it;
         }
-        while (entities.size())
+        for (auto& it : entities)
         {
-            delete entities.back();
-            entities.pop_back();
+            delete it;
         }
+
+        // We don't remove file or object factory in our working way
     }
 
     EntityInstance *SpriterModel::getNewEntityInstance(int entityId)

@@ -10,107 +10,108 @@
 
 namespace SpriterEngine
 {
-	class SpriterModel;
-	class Entity;
-	class ObjectFactory;
-	class TransformProcessor;
-	class AnimationInstance;
-	class TagObjectInfoReference;
-	class SoundObjectInfoReference;
-	class TriggerObjectInfo;
-	class FileReference;
-	class EntityInstance;
-	class Animation;
+    class SpriterModel;
+    class Entity;
+    class ObjectFactory;
+    class TransformProcessor;
+    class AnimationInstance;
+    class TagObjectInfoReference;
+    class SoundObjectInfoReference;
+    class TriggerObjectInfo;
+    class FileReference;
+    class EntityInstance;
+    class Animation;
 
-	typedef std::map<int, TransformProcessor> TransformProcessorMap;
+    typedef std::map<int, TransformProcessor> TransformProcessorMap;
 
-	typedef std::vector<AnimationInstance*> AnimationInstanceIdMap;
-	typedef std::map<std::string, AnimationInstance*> AnimationInstanceNameMap;
+    typedef std::vector<AnimationInstance*> AnimationInstanceIdMap;
+    typedef std::map<std::string, AnimationInstance*> AnimationInstanceNameMap;
 
-	typedef std::map<int, UniversalObjectInterface*> ObjectInterfaceIdMap;
-	typedef std::map<std::string, UniversalObjectInterface*> ObjectInterfaceNameMap;
+    typedef std::map<int, UniversalObjectInterface*> ObjectInterfaceIdMap;
+    typedef std::map<std::string, UniversalObjectInterface*> ObjectInterfaceNameMap;
 
-	typedef std::map<int, VariableInstanceNameAndIdMap> VariableInstanceObjectIdMap;
-	typedef std::map<std::string, VariableInstanceNameAndIdMap*> VariableInstanceObjectNameMap;
+    typedef std::map<int, VariableInstanceNameAndIdMap> VariableInstanceObjectIdMap;
+    typedef std::map<std::string, VariableInstanceNameAndIdMap*> VariableInstanceObjectNameMap;
 
-	typedef std::map<int, TagObjectInfoReference*> TagIdMap;
-	typedef std::map<std::string, TagObjectInfoReference*> TagNameMap;
+    typedef std::map<int, TagObjectInfoReference*> TagIdMap;
+    typedef std::map<std::string, TagObjectInfoReference*> TagNameMap;
 
-	typedef std::map<int, SoundObjectInfoReference*> SoundIdMap;
-	typedef std::map<std::string, SoundObjectInfoReference*> SoundNameMap;
+    typedef std::map<int, SoundObjectInfoReference*> SoundIdMap;
+    typedef std::map<std::string, SoundObjectInfoReference*> SoundNameMap;
 
-	typedef std::map<int, TriggerObjectInfo*> TriggerIdMap;
-	typedef std::map<std::string, TriggerObjectInfo*> TriggerNameMap;
+    typedef std::map<int, TriggerObjectInfo*> TriggerIdMap;
+    typedef std::map<std::string, TriggerObjectInfo*> TriggerNameMap;
 
-	class EntityInstanceData : UniversalObjectInterface
-	{
-	public:
-		EntityInstanceData(SpriterModel *model, EntityInstance *entityInstance, Entity *entity, ObjectFactory *objectFactory);
-		
-		UniversalObjectInterface *getObjectInstance(int objectId);
-		UniversalObjectInterface * getObjectInstance(std::string objectName);
+    class EntityInstanceData : UniversalObjectInterface
+    {
+    public:
+        EntityInstanceData(SpriterModel *model, EntityInstance *entityInstance, Entity *entity, ObjectFactory *objectFactory);
+        ~EntityInstanceData();
 
-		TransformProcessor *getTransformer(int id);
+        UniversalObjectInterface *getObjectInstance(int objectId);
+        UniversalObjectInterface * getObjectInstance(std::string objectName);
 
-		VariableInstanceNameAndIdMap *getVariables() override;
-		UniversalObjectInterface *getVariable(int variableId);
-		VariableInstanceNameAndIdMap *getVariables(int objectId);
-		UniversalObjectInterface *getVariable(int objectId, int variableId);
+        TransformProcessor *getTransformer(int id);
 
-		UniversalObjectInterface *getVariable(std::string variableName);
-		VariableInstanceNameAndIdMap *getVariables(std::string objectName);
-		UniversalObjectInterface *getVariable(std::string objectName, std::string variableName);
+        VariableInstanceNameAndIdMap *getVariables() override;
+        UniversalObjectInterface *getVariable(int variableId);
+        VariableInstanceNameAndIdMap *getVariables(int objectId);
+        UniversalObjectInterface *getVariable(int objectId, int variableId);
 
-		UniversalObjectInterface *getTags() const override;
-		UniversalObjectInterface *getTags(int objectId) const;
-		bool tagIsActive(int objectId, std::string tagToCheck) const;
+        UniversalObjectInterface *getVariable(std::string variableName);
+        VariableInstanceNameAndIdMap *getVariables(std::string objectName);
+        UniversalObjectInterface *getVariable(std::string objectName, std::string variableName);
 
-		bool tagIsActive(std::string tagToCheck) const override;
-		UniversalObjectInterface *getTags(std::string objectName) const;
-		bool tagIsActive(std::string objectName, std::string tagToCheck) const;
+        UniversalObjectInterface *getTags() const override;
+        UniversalObjectInterface *getTags(int objectId) const;
+        bool tagIsActive(int objectId, std::string tagToCheck) const;
 
-		UniversalObjectInterface *getTriggerObject(int triggerId);
-		UniversalObjectInterface *getTriggerObject(std::string triggerName);
+        bool tagIsActive(std::string tagToCheck) const override;
+        UniversalObjectInterface *getTags(std::string objectName) const;
+        bool tagIsActive(std::string objectName, std::string tagToCheck) const;
 
-		UniversalObjectInterface *getSoundObject(int soundId);
-		UniversalObjectInterface *getSoundObject(std::string soundName);
+        UniversalObjectInterface *getTriggerObject(int triggerId);
+        UniversalObjectInterface *getTriggerObject(std::string triggerName);
 
-		void setCurrentAnimation(int newAnimationIndex, AnimationInstance **currentAnimation);
-		void setCurrentAnimation(const std::string &animationName, AnimationInstance **currentAnimation);
+        UniversalObjectInterface *getSoundObject(int soundId);
+        UniversalObjectInterface *getSoundObject(std::string soundName);
 
-		void pushBackAnimationInstance(std::string name, AnimationInstance *newAnimationInstance);
-		void setObjectInstance(int id, std::string name, UniversalObjectInterface *newObjectInstance);
-		VariableInstanceNameAndIdMap *getVariableInstanceMap(int objectId, std::string objectName);
-		void setTagInstance(int objectId, std::string objectName);
-		void setSoundInstance(int id, std::string name, FileReference * soundRef);
-		void setTriggerInstance(int id, std::string name, TriggerObjectInfo *newCustomTriggerObject = 0);
+        void setCurrentAnimation(int newAnimationIndex, AnimationInstance **currentAnimation);
+        void setCurrentAnimation(const std::string &animationName, AnimationInstance **currentAnimation);
 
-		AnimationInstance *getAnimation(int animationIndex);
+        void pushBackAnimationInstance(std::string name, AnimationInstance *newAnimationInstance);
+        void setObjectInstance(int id, std::string name, UniversalObjectInterface *newObjectInstance);
+        VariableInstanceNameAndIdMap *getVariableInstanceMap(int objectId, std::string objectName);
+        void setTagInstance(int objectId, std::string objectName);
+        void setSoundInstance(int id, std::string name, FileReference * soundRef);
+        void setTriggerInstance(int id, std::string name, TriggerObjectInfo *newCustomTriggerObject = 0);
 
-		void playSoundTriggers();
-		void playEventTriggers();
+        AnimationInstance *getAnimation(int animationIndex);
 
-	protected:
-		AnimationInstanceIdMap animations;
-		AnimationInstanceNameMap animationNameMap;
+        void playSoundTriggers();
+        void playEventTriggers();
 
-		ObjectInterfaceIdMap objects;
-		ObjectInterfaceNameMap objectNameMap;
+    protected:
+        AnimationInstanceIdMap animations;
+        AnimationInstanceNameMap animationNameMap;
 
-		TransformProcessorMap transformers;
+        ObjectInterfaceIdMap objects;
+        ObjectInterfaceNameMap objectNameMap;
 
-		VariableInstanceObjectIdMap variables;
-		VariableInstanceObjectNameMap variableObjectNameMap;
+        TransformProcessorMap transformers;
 
-		TagIdMap tags;
-		TagNameMap tagObjectNameMap;
+        VariableInstanceObjectIdMap variables;
+        VariableInstanceObjectNameMap variableObjectNameMap;
 
-		SoundIdMap sounds;
-		SoundNameMap soundNameMap;
+        TagIdMap tags;
+        TagNameMap tagObjectNameMap;
 
-		TriggerIdMap triggers;
-		TriggerNameMap triggerNameMap;
-	};
+        SoundIdMap sounds;
+        SoundNameMap soundNameMap;
+
+        TriggerIdMap triggers;
+        TriggerNameMap triggerNameMap;
+    };
 
 }
 

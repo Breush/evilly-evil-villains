@@ -49,7 +49,6 @@ void HeroesManager::receive(const context::Event& event)
     const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
 
     if (devent.type == "room_destroyed") {
-        std::cerr << "Should kill heroes" << std::endl;
         // Remove all heroes in that room
         // FIXME Ultimately, this should be part of dungeon::Data
         // (Well, all that HeroesManager should)
@@ -58,10 +57,8 @@ void HeroesManager::receive(const context::Event& event)
             if (hero == nullptr) continue;
 
             sf::Vector2u coords = {devent.room.x, devent.room.y};
-            if (m_inter.tileFromLocalPosition(hero->localPosition()) == coords) {
-                std::cerr << "Found one" << std::endl;
+            if (m_inter.tileFromLocalPosition(hero->localPosition()) == coords)
                 heroInfo.status = HeroStatus::TO_BE_REMOVED;
-            }
         }
     }
     else if (devent.type == "dungeon_graph_changed") {
