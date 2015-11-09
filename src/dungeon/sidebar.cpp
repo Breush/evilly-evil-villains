@@ -84,7 +84,7 @@ void Sidebar::onSizeChanges()
     m_background.setSize({size().x - 2.f, size().y});
 
     refreshScrollAreasSize();
-    refreshTabContents();
+    refreshTabParameters();
 }
 
 void Sidebar::onChildSizeChanges(scene::Entity& child)
@@ -124,7 +124,7 @@ void Sidebar::refreshTabContents()
 {
     // Monsters
     auto& monstersStacker = m_tabContents[TabsID::MONSTERS].stacker;
-    auto& monstersCages = m_tabContents[TabsID::MONSTERS].monsterCage;
+    auto& monstersCages = m_tabContents[TabsID::MONSTERS].monsterCages;
     monstersStacker.unstackAll();
     monstersCages.clear();
 
@@ -132,14 +132,11 @@ void Sidebar::refreshTabContents()
     auto monstersCount = monstersList.size();
     monstersCages.reserve(monstersCount);
 
-    // TODO Where that 90 coming from?
-    const float monsterCageHeight = 90.f;
     for (const auto& monsterPair : monstersList) {
         const auto& monsterID = monsterPair.first;
         monstersCages.emplace_back(std::make_unique<MonsterCage>(monsterID, m_inter, m_data));
         auto& monsterCage = *monstersCages.back();
-        monsterCage.setSize({size().x - 2.f * m_borderThick, monsterCageHeight});
-        monstersStacker.stackBack(monsterCage, nui::Align::CENTER);
+        monstersStacker.stackBack(monsterCage);
     }
 
     // Traps
@@ -187,4 +184,17 @@ void Sidebar::refreshTabContents()
 
     for (auto& toolsButton : toolsButtons)
         toolsStacker.stackBack(*toolsButton, nui::Align::CENTER);
+
+    refreshTabParameters();
+}
+
+void Sidebar::refreshTabParameters()
+{
+    auto& monstersCages = m_tabContents[TabsID::MONSTERS].monsterCages;
+
+    // Monsters
+    // TODO Where that 90 coming from?
+    const float monsterCageHeight = 90.f;
+    for (auto& monsterCage : monstersCages)
+        monsterCage->setSize({size().x - 2.f * m_borderThick, monsterCageHeight});
 }

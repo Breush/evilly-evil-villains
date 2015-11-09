@@ -81,6 +81,9 @@ namespace dungeon
         //! Refresh the tabs contents.
         void refreshTabContents();
 
+        //! Refresh the tab content size.
+        void refreshTabParameters();
+
         //! Refreh the scroll areas size.
         void refreshScrollAreasSize();
 
@@ -93,8 +96,8 @@ namespace dungeon
         {
             nui::ScrollArea scrollArea; //!< The scrollable area.
             nui::VStacker stacker;      //!< The stacker containing the tab content.
-            std::vector<std::unique_ptr<nui::GrabButton>> buttons;  //!< The dynamic content for the tab.
-            std::vector<std::unique_ptr<MonsterCage>> monsterCage;  //!< The dynamic content for monsters.
+            std::vector<std::unique_ptr<nui::GrabButton>> buttons;  //!< The dynamic content for the traps and facilities.
+            std::vector<std::unique_ptr<MonsterCage>> monsterCages; //!< The dynamic content for monsters.
         };
 
         //! The different tabs.

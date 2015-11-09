@@ -175,13 +175,13 @@ void GameDungeonDesign::updateLoading(const sf::Time& dt)
     LOAD(18u, m_dungeonInter.init());
     LOAD(19u, m_dungeonSidebar.init());
 
-    // Dungeon sidebar
-    LOAD(20u, m_dungeonSidebar.useData(m_dungeonData));
-    LOAD(21u, m_dungeonSidebar.setMinimapLayer(scene().layer("DUNGEON")));
-
     // Dungeon inter
-    LOAD(22u, m_dungeonInter.useData(m_dungeonData));
-    LOAD(23u, m_dungeonInter.setRoomWidth(128.f));
+    LOAD(20u, m_dungeonInter.useData(m_dungeonData));
+    LOAD(21u, m_dungeonInter.setRoomWidth(128.f));
+
+    // Dungeon sidebar
+    LOAD(22u, m_dungeonSidebar.useData(m_dungeonData));
+    LOAD(23u, m_dungeonSidebar.setMinimapLayer(scene().layer("DUNGEON")));
 
     // Dungeon hero
     LOAD(24u, m_heroesManager.useGraph(m_dungeonGraph));
@@ -210,6 +210,7 @@ void GameDungeonDesign::updateLoading(const sf::Time& dt)
 
     // Click to start screen
     m_loadingText.setText(_("Loading is done.\nClick to start the game."));
+    m_loadingBackground.setFillColor({0, 0, 0, 10}); // TODO
 }
 
 //------------------//

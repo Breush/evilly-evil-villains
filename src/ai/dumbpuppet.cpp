@@ -14,7 +14,7 @@ DumbPuppet::DumbPuppet()
 //-------------------//
 //----- Routine -----//
 
-void DumbPuppet::updateAI(const sf::Time& dt)
+void DumbPuppet::updateAI(const sf::Time&)
 {
     returnif (lerpable()->positionLerping());
 

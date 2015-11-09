@@ -664,9 +664,13 @@ void Entity::setParent(Entity* inParent)
 
     // Affect new parent
     m_parent = inParent;
-    refreshFromLocal();
-    refreshRelativePosition();
-    refreshClipArea();
+
+    // Refresh on attach
+    if (m_parent != nullptr) {
+        refreshFromLocal();
+        refreshRelativePosition();
+        refreshClipArea();
+    }
 }
 
 //-----------------//

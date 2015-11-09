@@ -14,7 +14,7 @@
         <file id="0" name="res/snd/jumping-toasts.wav" type="sound"/>
     </folder>
     <entity id="0" name="Toaster">
-        <animation id="0" name="Jumping" length="7000" interval="100">
+        <animation id="0" name="Jumping" length="7000" interval="100" looping="false">
             <mainline>
                 <key id="0">
                     <object_ref id="0" timeline="5" key="0" z_index="0"/>

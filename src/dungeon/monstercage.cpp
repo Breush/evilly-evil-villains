@@ -34,6 +34,7 @@ MonsterCage::MonsterCage(std::wstring monsterID, Inter& inter, Data& data)
 
     // Hire box
     attachChild(m_hireBoxBackground);
+    m_hireBoxBackground.setDepth(100.f);
     m_hireBoxBackground.setOutlineThickness(1.f);
     m_hireBoxBackground.setOutlineColor(sf::Color::White);
     m_hireBoxBackground.setFillColor({0u, 0u, 0u, 185u});
@@ -47,20 +48,17 @@ MonsterCage::MonsterCage(std::wstring monsterID, Inter& inter, Data& data)
 
     // Cost banners
     m_hireBoxBackground.attachChild(m_baseCostBanner);
-    m_baseCostBanner.setDepth(-1.f);
     m_baseCostBanner.setTitle(_("Hire"));
     m_baseCostBanner.setCost(monsterData.baseCost);
     m_baseCostBanner.setRelativePosition({0.1f, 0.25f});
 
     m_hireBoxBackground.attachChild(m_weeklyCostBanner);
-    m_weeklyCostBanner.setDepth(-1.f);
     m_weeklyCostBanner.setTitle(_("Weekly"));
     m_weeklyCostBanner.setCost(monsterData.weeklyCost);
     m_weeklyCostBanner.setRelativePosition({0.99f, 0.25f});
     m_weeklyCostBanner.setRelativeOrigin({1.f, 0.f});
 
     refreshReservePuppetsCount();
-    refreshHireBoxVisualLock();
 }
 
 //-------------------//

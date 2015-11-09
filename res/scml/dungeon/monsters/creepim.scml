@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r4.1">
-    <folder id="0" name="res/tex/dungeon/monsters/creepim">
-        <file id="0" name="res/tex/dungeon/monsters/creepim/model.png" width="255" height="384" pivot_x="0" pivot_y="1"/>
-    </folder>
+    <folder id="0" name=".">
+	</folder>
     <folder id="1" name="res/tex/dungeon/monsters/creepim/left">
         <file id="0" name="res/tex/dungeon/monsters/creepim/left/head.png" width="180" height="103" pivot_x="0" pivot_y="1"/>
         <file id="1" name="res/tex/dungeon/monsters/creepim/left/body.png" width="54" height="164" pivot_x="0" pivot_y="1"/>
@@ -258,7 +257,7 @@
                 </key>
             </timeline>
         </animation>
-        <animation id="1" name="lexplode" length="2276" interval="100">
+        <animation id="1" name="lexplode" length="2276" interval="100" looping="false">
             <mainline>
                 <key id="0">
                     <bone_ref id="0" timeline="12" key="0"/>
@@ -1121,7 +1120,7 @@
                 </key>
             </soundline>
         </animation>
-        <animation id="2" name="rexplode" length="2276" interval="100">
+        <animation id="2" name="rexplode" length="2276" interval="100" looping="false">
             <mainline>
                 <key id="0">
                     <bone_ref id="0" timeline="12" key="0"/>
