@@ -121,24 +121,6 @@ void HeroesManager::heroGetsOut(Hero* hero)
     }
 }
 
-void HeroesManager::heroLeftRoom(Hero* hero, const sf::Vector2u& coords)
-{
-    Event devent;
-    devent.type = "hero_left";
-    devent.action.room = {coords.x, coords.y};
-    devent.action.hero = hero;
-    emitter()->emit(devent);
-}
-
-void HeroesManager::heroEnteredRoom(Hero* hero, const sf::Vector2u& coords)
-{
-    Event devent;
-    devent.type = "hero_entered";
-    devent.action.room = {coords.x, coords.y};
-    devent.action.hero = hero;
-    emitter()->emit(devent);
-}
-
 void HeroesManager::heroStealsTreasure(Hero* hero, const sf::Vector2u& coords, const uint stolenDosh)
 {
     m_data->stealTreasure(coords, *hero, stolenDosh);

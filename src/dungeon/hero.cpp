@@ -41,11 +41,11 @@ Hero::Hero(HeroesManager& manager, Inter& inter)
         m_inter.attachChild(m_overlays[i]);
         m_overlays[i].setFillColor((i == 0u)? colorMain : colorSecondary);
         m_overlays[i].setVisible(false);
-        m_overlays[i].setDepth(1.f);
+        m_overlays[i].setDepth(-500.f);
 
         m_inter.attachChild(m_overlayLabels[i]);
         m_overlayLabels[i].setPrestyle(scene::Label::Prestyle::NUI_SOBER);
-        m_overlayLabels[i].setDepth(0.5f);
+        m_overlayLabels[i].setDepth(-550.f);
     }
     #endif
 }
@@ -84,13 +84,6 @@ void Hero::setCurrentNode(const ai::Node* node)
     refreshDebugOverlays();
     #endif
 
-    // Emit signal when getting out
-    /* FIXME This can cause segfault because m_currentNode might not be a valid pointer anymore
-     * if the dungeon graph changed.
-    if (m_currentNode != nullptr)
-        m_manager.heroLeftRoom(this, toNodeData(m_currentNode)->coords);
-    */
-
     bool firstNode = (m_currentNode == nullptr);
     m_currentNode = node;
 
@@ -100,10 +93,8 @@ void Hero::setCurrentNode(const ai::Node* node)
         refreshDebugOverlays();
     #endif
 
-    if (m_currentNode != nullptr) {
+    if (m_currentNode != nullptr)
         refreshPositionFromNode(firstNode);
-        m_manager.heroEnteredRoom(this, toNodeData(m_currentNode)->coords);
-    }
 }
 
 //-----------------------------------//
@@ -207,12 +198,12 @@ void Hero::refreshDebugOverlay(uint index, const ai::Node* node)
     m_overlayLabels[index].setVisible(true);
 
     // Reposition
-    const auto position = m_inter.tileLocalPosition(toNodeData(node).coords);
+    const auto position = m_inter.tileLocalPosition(toNodeData(node)->coords);
     m_overlays[index].setLocalPosition(position);
     m_overlayLabels[index].setLocalPosition(position);
 
     // Text content
-    m_overlayLabels[index].setText(stringFromWeight(m_luaActor.getWeight(&toNodeData(node)), m_luaActor.evaluation(index)));
+    m_overlayLabels[index].setText(stringFromWeight(m_luaActor.getWeight(toNodeData(node)), m_luaActor.evaluation(index)));
 }
 
 void Hero::refreshDebugOverlays()

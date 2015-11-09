@@ -210,7 +210,6 @@ void GameDungeonDesign::updateLoading(const sf::Time& dt)
 
     // Click to start screen
     m_loadingText.setText(_("Loading is done.\nClick to start the game."));
-    m_loadingBackground.setFillColor({0, 0, 0, 10}); // TODO
 }
 
 //------------------//

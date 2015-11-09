@@ -58,12 +58,6 @@ namespace dungeon
         //! Feedback from Hero when he gets out of the dungeon.
         void heroGetsOut(Hero* hero);
 
-        //! Feedback from Hero when he leaves a room.
-        void heroLeftRoom(Hero* hero, const sf::Vector2u& coords);
-
-        //! Feedback from Hero when he enters a room.
-        void heroEnteredRoom(Hero* hero, const sf::Vector2u& coords);
-
         //! Feedback from Hero when he tries to steal a treasure.
         void heroStealsTreasure(Hero* hero, const sf::Vector2u& coords, const uint stolenDosh);
 

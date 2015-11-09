@@ -67,8 +67,7 @@ void AnimatedSprite::load(const std::string& id)
     m_length = m_spriterEntity->getCurrentAnimationLength();
     restart();
 
-    // TODO
-    /* m_spriterEntity->setTiltColor(m_tiltColor); */
+    // TODO m_spriterEntity->setTiltColor(m_tiltColor);
 }
 
 void AnimatedSprite::select(const std::wstring& animationName)
