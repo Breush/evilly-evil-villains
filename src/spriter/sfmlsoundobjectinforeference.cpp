@@ -6,8 +6,6 @@
 
 namespace SpriterEngine
 {
-    // TODO Use Application holders
-
     SfmlSoundObjectInfoReference::SfmlSoundObjectInfoReference(std::string soundID)
         : m_soundID(soundID)
     {
@@ -19,7 +17,7 @@ namespace SpriterEngine
         {
             // FIXME Too much sounds!
             // std::cerr << "Play " << m_soundID << std::endl;
-            Application::context().sounds.play(m_soundID);
+            // Application::context().sounds.play(m_soundID);
 
             // TODO Use volume
         }

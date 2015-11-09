@@ -16,21 +16,6 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     , m_dungeonSidebar(scene(), m_dungeonInter, m_dungeonData)
     , m_heroesManager(m_dungeonInter)
 {
-    // Loading resources
-    Application::loadTextures({"dungeon", "elements", "heroes", "effects"});
-    Application::loadAnimations({"dungeon", "heroes"});
-
-    Application::context().textures.get("dungeon/sidebar/tab/monsters/cage").setRepeated(true);
-    Application::context().textures.get("dungeon/inter/outer_wall_west").setRepeated(true);
-    Application::context().textures.get("dungeon/inter/outer_wall_east").setRepeated(true);
-
-    // Music
-    Application::context().musics.play("angevin_70");
-
-    // Inits
-    m_dungeonInter.init();
-    m_dungeonSidebar.init();
-
     // Creating scene
     sf::Vector2f sceneSize(1200.f, 2700.f);
     scene().setSize(sceneSize);
@@ -44,7 +29,6 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     auto& skyRoot =     scene().addLayer("SKY",     m_depthSky).root();
 
     // Dungeon data
-    massert(!context::worlds.selected().folder.empty(), "Selected world is in an empty folder.");
     m_dungeonData.load(context::worlds.selected().folder);
     m_dungeonGraph.useData(m_dungeonData);
 
@@ -56,19 +40,11 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     // Dungeon sidebar
     nuiRoot.attachChild(m_dungeonSidebar);
     m_dungeonSidebar.setRelativeOrigin({1.f, 0.f});
-    m_dungeonSidebar.useData(m_dungeonData);
-    m_dungeonSidebar.setMinimapLayer(scene().layer("DUNGEON"));
 
     // Dungeon inter
     dungeonRoot.attachChild(m_dungeonInter);
-    m_dungeonInter.useData(m_dungeonData);
-    m_dungeonInter.setRoomWidth(128.f);
     m_dungeonInter.setLocalPosition({120.f, sceneSize.y - 50.f});
     m_dungeonInter.setRelativeOrigin({0.f, 1.f});
-
-    // Dungeon hero
-    m_heroesManager.useGraph(m_dungeonGraph);
-    m_heroesManager.useData(m_dungeonData);
 
     // Decorum
     frontRoot.attachChild(m_sceneFront);
@@ -77,22 +53,6 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     farRoot.attachChild(m_sceneFar);
     horizonRoot.attachChild(m_sceneHorizon);
     skyRoot.attachChild(m_sceneSky);
-
-    m_sceneFront.setTexture("dungeon/scene/front");
-    m_sceneClose.setTexture("dungeon/scene/close");
-    m_sceneMiddle.setTexture("dungeon/scene/middle");
-    m_sceneFar.setTexture("dungeon/scene/far");
-    m_sceneHorizon.setTexture("dungeon/scene/horizon");
-    m_sceneSky.setTexture("dungeon/scene/sky");
-
-    // Adjust images to new maxZoom
-    // TODO Sky is streched, use a setScale instead of setSize inside that function?
-    scene().layer("FRONT").fitToVisibleRect(m_sceneFront);
-    scene().layer("CLOSE").fitToVisibleRect(m_sceneClose);
-    scene().layer("MIDDLE").fitToVisibleRect(m_sceneMiddle);
-    scene().layer("FAR").fitToVisibleRect(m_sceneFar);
-    scene().layer("HORIZON").fitToVisibleRect(m_sceneHorizon);
-    scene().layer("SKY").fitToVisibleRect(m_sceneSky);
 }
 
 GameDungeonDesign::~GameDungeonDesign()
@@ -110,6 +70,13 @@ GameDungeonDesign::~GameDungeonDesign()
 
 bool GameDungeonDesign::update(const sf::Time& dt)
 {
+    // Continue loading the state if still in this phase
+    if (m_loading) {
+        updateLoading(dt);
+        return true;
+    }
+
+    // Loading is over, we're just updating the whole thing
     auto dtFactored = timeFactor() * dt;
     m_dungeonData.update(dtFactored);
     m_heroesManager.update(dtFactored);
@@ -148,6 +115,87 @@ void GameDungeonDesign::onQuit() noexcept
     context::worlds.refreshLastPlayed();
     m_dungeonData.save(context::worlds.selected().folder);
     Application::visualDebug().setDisplayedTimeFactor(1.f);
+}
+
+//-------------------//
+//----- Loading -----//
+
+void GameDungeonDesign::updateLoading(const sf::Time& dt)
+{
+    // TODO Update a loading text percent
+    // and have an overlay image during that loading process
+    #define LOAD(STEP, ...)             \
+    if (m_loadingStep == STEP) {        \
+        ++m_loadingStep;                \
+        __VA_ARGS__;                    \
+        return;                         \
+    }
+
+    // Music
+    LOAD( 0u, Application::context().musics.play("angevin_70"));
+
+    // Loading resources
+    LOAD( 1u, Application::loadTextures({"dungeon/facilities"}));
+    LOAD( 2u, Application::loadTextures({"dungeon/inter"}));
+    LOAD( 3u, Application::loadTextures({"dungeon/monsters"}));
+    LOAD( 4u, Application::loadTextures({"dungeon/panel"}));
+    LOAD( 5u, Application::loadTextures({"dungeon/scene"}));
+    LOAD( 6u, Application::loadTextures({"dungeon/sidebar"}));
+    LOAD( 7u, Application::loadTextures({"dungeon/tools"}));
+    LOAD( 8u, Application::loadTextures({"dungeon/traps"}));
+    LOAD( 9u, Application::loadTextures({"elements"}));
+    LOAD(10u, Application::loadTextures({"heroes"}));
+    LOAD(11u, Application::loadTextures({"effects"}));
+
+    LOAD(12u, Application::loadAnimations({"dungeon/facilities"}));
+    LOAD(13u, Application::loadAnimations({"dungeon/monsters"}));
+    LOAD(14u, Application::loadAnimations({"dungeon/traps"}));
+    LOAD(15u, Application::loadAnimations({"heroes"}));
+
+    LOAD(16u, Application::context().textures.get("dungeon/sidebar/tab/monsters/cage").setRepeated(true));
+    LOAD(17u, Application::context().textures.get("dungeon/inter/outer_wall_west").setRepeated(true));
+    LOAD(18u, Application::context().textures.get("dungeon/inter/outer_wall_east").setRepeated(true));
+
+    // Inits
+    LOAD(19u, m_dungeonInter.init());
+    LOAD(20u, m_dungeonSidebar.init());
+
+    // Dungeon sidebar
+    LOAD(21u, m_dungeonSidebar.useData(m_dungeonData));
+    LOAD(22u, m_dungeonSidebar.setMinimapLayer(scene().layer("DUNGEON")));
+
+    // Dungeon inter
+    LOAD(23u, m_dungeonInter.useData(m_dungeonData));
+    LOAD(24u, m_dungeonInter.setRoomWidth(128.f));
+
+    // Dungeon hero
+    LOAD(25u, m_heroesManager.useGraph(m_dungeonGraph));
+    LOAD(26u, m_heroesManager.useData(m_dungeonData));
+
+    // Decorum
+    LOAD(27u, m_sceneFront.setTexture("dungeon/scene/front"));
+    LOAD(28u, m_sceneClose.setTexture("dungeon/scene/close"));
+    LOAD(29u, m_sceneMiddle.setTexture("dungeon/scene/middle"));
+    LOAD(30u, m_sceneFar.setTexture("dungeon/scene/far"));
+    LOAD(31u, m_sceneHorizon.setTexture("dungeon/scene/horizon"));
+    LOAD(32u, m_sceneSky.setTexture("dungeon/scene/sky"));
+
+    // Adjust images to new maxZoom
+    // TODO Sky is streched, use a setScale instead of setSize inside that function?
+    LOAD(33u, scene().layer("FRONT").fitToVisibleRect(m_sceneFront));
+    LOAD(34u, scene().layer("CLOSE").fitToVisibleRect(m_sceneClose));
+    LOAD(35u, scene().layer("MIDDLE").fitToVisibleRect(m_sceneMiddle));
+    LOAD(36u, scene().layer("FAR").fitToVisibleRect(m_sceneFar));
+    LOAD(37u, scene().layer("HORIZON").fitToVisibleRect(m_sceneHorizon));
+    LOAD(38u, scene().layer("SKY").fitToVisibleRect(m_sceneSky));
+
+    // TODO Have a "Click to start" screen.
+    // That could replace that extra delay
+
+    // Padding an extra delay to absorb possible dt rush
+    m_loadingTime += dt.asSeconds();
+    if (m_loadingTime > 2.f)
+        m_loading = false;
 }
 
 //------------------//

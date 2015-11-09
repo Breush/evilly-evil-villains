@@ -44,6 +44,15 @@ namespace states
 
         //! @}
 
+        //----------------//
+        //! @name Loading
+        //! @{
+
+        //! Progressively load resources in memory.
+        void updateLoading(const sf::Time& dt);
+
+        //! @}
+
     private:
 
         // Dungeon
@@ -52,6 +61,11 @@ namespace states
         dungeon::Inter m_dungeonInter;
         dungeon::Sidebar m_dungeonSidebar;
         dungeon::HeroesManager m_heroesManager;
+
+        // Loading
+        bool m_loading = true;
+        uint m_loadingStep = 0u;
+        float m_loadingTime = 0.f;
 
         // NUI
         nui::ContextMenu m_contextMenu;

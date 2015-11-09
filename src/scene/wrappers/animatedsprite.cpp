@@ -47,6 +47,9 @@ void AnimatedSprite::updateRoutine(const sf::Time& dt)
     if (m_started) {
         forward(dt);
         m_spriterEntity->playAllTriggers();
+
+        if (!m_looping && m_spriterEntity->getCurrentTime() >= m_length - dt.asMilliseconds())
+            m_started = false;
     }
 }
 
@@ -87,20 +90,23 @@ void AnimatedSprite::forward(const sf::Time& offset)
 
     auto timeElapsed = offset.asMilliseconds();
     m_spriterEntity->setTimeElapsed(timeElapsed);
-
-    if (!m_looping && m_spriterEntity->getCurrentTime() >= m_length - timeElapsed)
-        m_started = false;
 }
 
 void AnimatedSprite::restart()
 {
     m_started = true;
     m_spriterEntity->setCurrentTime(0.);
-    m_spriterEntity->setTimeElapsed(0.);
+    refreshFromLooping();
 }
 
 //-------------------------//
 //----- Extra control -----//
+
+void AnimatedSprite::refreshFromLooping()
+{
+    // TODO This does not work
+    // m_spriterEntity->setCurrentAnimationLooping(m_looping);
+}
 
 void AnimatedSprite::setTiltColor(const sf::Color& color)
 {

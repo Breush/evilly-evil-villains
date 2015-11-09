@@ -87,6 +87,15 @@ namespace scene
 
         //! @}
 
+        //------------//
+        //! @name ICU
+        //! @{
+
+        //! Refresh the current animation from looping value.
+        void refreshFromLooping();
+
+        //! @}
+
     private:
 
         SpriterEngine::EntityInstance* m_spriterEntity = nullptr;   //!< The entity itself.

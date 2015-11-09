@@ -127,6 +127,11 @@ namespace SpriterEngine
         return getCurrentTime() / currentAnimation->length();
     }
 
+    void EntityInstance::setCurrentAnimationLooping(bool inLooping)
+    {
+        currentAnimation->setLooping(inLooping);
+    }
+
     VariableInstanceNameAndIdMap *EntityInstance::getVariables()
     {
         return getVariables(THIS_ENTITY);

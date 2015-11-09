@@ -85,6 +85,7 @@ namespace SpriterEngine
         void setCurrentAnimation(const std::string &animationName);
         void setCurrentAnimation(AnimationInstance *newCurrentAnimation) override;
         real getCurrentAnimationLength();
+        void setCurrentAnimationLooping(bool inLooping);
         void setCurrentTime(real newCurrentTime);
         void setTimeRatio(real newCurrentTimeRatio) override;
 
