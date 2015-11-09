@@ -3,7 +3,7 @@
 #include <Spriter/override/imagefile.h>
 #include <Spriter/override/soundfile.h>
 
-#include "spriter/pugixmlscmlloader.hpp"
+#include "spriter/pugixmlspriterfiledocumentwrapper.hpp"
 #include "spriter/sfmlimagefile.hpp"
 #include "spriter/sfmlsoundfile.hpp"
 
@@ -25,8 +25,8 @@ namespace SpriterEngine
         return new SfmlSoundFile(initialFilePath);
     }
 
-    SpriterFileLoader * ExampleFileFactory::newScmlLoader()
+    SpriterFileDocumentWrapper * ExampleFileFactory::newScmlDocumentWrapper()
     {
-        return new PugiXmlScmlLoader();
+        return new PugiXmlSpriterFileDocumentWrapper();
     }
 }

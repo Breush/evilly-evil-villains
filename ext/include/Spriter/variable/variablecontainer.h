@@ -10,28 +10,29 @@
 namespace SpriterEngine
 {
 
-	class VariableInstanceNameAndIdMap;
+    class VariableInstanceNameAndIdMap;
 
-	typedef std::vector<Variable> VariableVector;
+    typedef std::vector<Variable*> VariableVector;
 
-	class VariableContainer
-	{
-	public:
-		VariableContainer();
+    class VariableContainer
+    {
+    public:
+        VariableContainer();
+        virtual ~VariableContainer();
 
-		Variable *getVariable(int variableIndex);
+        Variable *getVariable(int variableIndex);
 
-		void addStringVariable(std::string variableName, std::string defaultValue);
-		void addIntVariable(std::string variableName, int defaultValue);
-		void addRealVariable(std::string variableName, real defaultValue);
+        void addStringVariable(std::string variableName, std::string defaultValue);
+        void addIntVariable(std::string variableName, int defaultValue);
+        void addRealVariable(std::string variableName, real defaultValue);
 
-		void setupVariableInstances(VariableInstanceNameAndIdMap *variableMap);
+        void setupVariableInstances(VariableInstanceNameAndIdMap *variableMap);
 
-		void setupDefaultVariableTimelines(Animation * animation, int objectId);
+        void setupDefaultVariableTimelines(Animation * animation, int objectId);
 
-	private:
-		VariableVector variables;
-	};
+    private:
+        VariableVector variables;
+    };
 
 }
 

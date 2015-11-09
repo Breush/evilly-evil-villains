@@ -3,33 +3,35 @@
 #include "override/imagefile.h"
 #include "override/soundfile.h"
 
-#include "override/spriterfileloader.h"
-
 namespace SpriterEngine
 {
 
-	FileFactory::FileFactory()
-	{
-	}
+    FileFactory::FileFactory()
+    {
+    }
 
-	ImageFile * FileFactory::newImageFile(const std::string &initialFilePath, point initialDefaultPivot)
-	{
-		return new ImageFile(initialFilePath, initialDefaultPivot);
-	}
+    FileFactory::~FileFactory()
+    {
+    }
 
-	SoundFile * FileFactory::newSoundFile(const std::string &initialFilePath)
-	{
-		return new SoundFile(initialFilePath);
-	}
+    ImageFile * FileFactory::newImageFile(const std::string &initialFilePath, point initialDefaultPivot)
+    {
+        return new ImageFile(initialFilePath, initialDefaultPivot);
+    }
 
-	SpriterFileLoader * FileFactory::newScmlLoader()
-	{
-		return new SpriterFileLoader();
-	}
+    SoundFile * FileFactory::newSoundFile(const std::string &initialFilePath)
+    {
+        return new SoundFile(initialFilePath);
+    }
 
-	SpriterFileLoader * FileFactory::newSconLoader()
-	{
-		return new SpriterFileLoader();
-	}
+    SpriterFileDocumentWrapper * FileFactory::newScmlDocumentWrapper()
+    {
+        return nullptr;
+    }
+
+    SpriterFileDocumentWrapper * FileFactory::newSconDocumentWrapper()
+    {
+        return nullptr;
+    }
 
 }

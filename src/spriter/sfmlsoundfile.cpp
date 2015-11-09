@@ -20,7 +20,7 @@ namespace SpriterEngine
 
     SoundObjectInfoReference * SfmlSoundFile::newSoundInfoReference()
     {
-        // FIXME Who the fu** delete this?
+        // Note: Should be deleted by whoever calls it
         return new SfmlSoundObjectInfoReference(m_soundID);
     }
 

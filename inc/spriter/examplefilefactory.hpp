@@ -6,10 +6,6 @@
 
 namespace SpriterEngine
 {
-
-    class ImageFile;
-    class SoundFile;
-    class SpriterFileLoader;
     class ExampleFileFactory : public FileFactory
     {
     public:
@@ -19,7 +15,7 @@ namespace SpriterEngine
 
         SoundFile *newSoundFile(const std::string &initialFilePath) override;
 
-        SpriterFileLoader *newScmlLoader() override;
+        SpriterFileDocumentWrapper *newScmlDocumentWrapper() override;
 
     private:
         sf::RenderWindow *renderWindow;

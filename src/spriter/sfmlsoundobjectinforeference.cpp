@@ -19,7 +19,7 @@ namespace SpriterEngine
         {
             // FIXME Too much sounds!
             // std::cerr << "Play " << m_soundID << std::endl;
-            //sound.play();
+            Application::context().sounds.play(m_soundID);
 
             // TODO Use volume
         }

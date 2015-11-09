@@ -5,6 +5,7 @@
 #include "override/imagefile.h"
 #include "override/soundfile.h"
 #include "override/filefactory.h"
+#include "override/objectfactory.h"
 
 #include "file/filereference.h"
 
@@ -18,7 +19,7 @@ namespace SpriterEngine
     }
 
     SpriterModel::SpriterModel(FileFactory * newFileFactory, ObjectFactory * newObjectFactory) :
-        loader(newFileFactory->newScmlLoader(), newFileFactory->newSconLoader()),
+        loader(newFileFactory->newScmlDocumentWrapper(), newFileFactory->newSconDocumentWrapper()),
         fileFactory(newFileFactory),
         objectFactory(newObjectFactory)
     {
