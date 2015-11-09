@@ -63,9 +63,11 @@ namespace states
         dungeon::HeroesManager m_heroesManager;
 
         // Loading
+        scene::Label m_loadingText;
+        scene::RectangleShape m_loadingBackground;
         bool m_loading = true;
         uint m_loadingStep = 0u;
-        float m_loadingTime = 0.f;
+        uint m_loadingPercent = 0u;
 
         // NUI
         nui::ContextMenu m_contextMenu;
