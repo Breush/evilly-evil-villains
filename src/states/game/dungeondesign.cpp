@@ -58,7 +58,6 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     // Loading
     nuiRoot.attachChild(m_loadingBackground);
     m_loadingBackground.setDepth(-500.f);
-    m_loadingBackground.setFillColor(sf::Color::Black);
 
     nuiRoot.attachChild(m_loadingText);
     m_loadingText.setDepth(-510.f);
@@ -137,7 +136,7 @@ void GameDungeonDesign::onQuit() noexcept
 void GameDungeonDesign::updateLoading(const sf::Time& dt)
 {
     // Think to update this...
-    const uint stepsCount = 39u;
+    const uint stepsCount = 40u;
 
     // Recurrent thingy
     #define LOAD(STEP, ...)                                                                 \
@@ -149,64 +148,66 @@ void GameDungeonDesign::updateLoading(const sf::Time& dt)
         return;                                                                             \
     }
 
+    LOAD( 0u, m_loadingBackground.setTexture("menu/loading/background"));
+
     // Loading resources
-    LOAD( 0u, Application::loadTextures({"dungeon/facilities"}));
-    LOAD( 1u, Application::loadTextures({"dungeon/inter"}));
-    LOAD( 2u, Application::loadTextures({"dungeon/monsters"}));
-    LOAD( 3u, Application::loadTextures({"dungeon/panel"}));
-    LOAD( 4u, Application::loadTextures({"dungeon/scene"}));
-    LOAD( 5u, Application::loadTextures({"dungeon/sidebar"}));
-    LOAD( 6u, Application::loadTextures({"dungeon/tools"}));
-    LOAD( 7u, Application::loadTextures({"dungeon/traps"}));
-    LOAD( 8u, Application::loadTextures({"elements"}));
-    LOAD( 9u, Application::loadTextures({"heroes"}));
-    LOAD(10u, Application::loadTextures({"effects"}));
+    LOAD( 1u, Application::loadTextures({"dungeon/facilities"}));
+    LOAD( 2u, Application::loadTextures({"dungeon/inter"}));
+    LOAD( 3u, Application::loadTextures({"dungeon/monsters"}));
+    LOAD( 4u, Application::loadTextures({"dungeon/panel"}));
+    LOAD( 5u, Application::loadTextures({"dungeon/scene"}));
+    LOAD( 6u, Application::loadTextures({"dungeon/sidebar"}));
+    LOAD( 7u, Application::loadTextures({"dungeon/tools"}));
+    LOAD( 8u, Application::loadTextures({"dungeon/traps"}));
+    LOAD( 9u, Application::loadTextures({"elements"}));
+    LOAD(10u, Application::loadTextures({"heroes"}));
+    LOAD(11u, Application::loadTextures({"effects"}));
 
-    LOAD(11u, Application::loadAnimations({"dungeon/facilities"}));
-    LOAD(12u, Application::loadAnimations({"dungeon/monsters"}));
-    LOAD(13u, Application::loadAnimations({"dungeon/traps"}));
-    LOAD(14u, Application::loadAnimations({"heroes"}));
+    LOAD(12u, Application::loadAnimations({"dungeon/facilities"}));
+    LOAD(13u, Application::loadAnimations({"dungeon/monsters"}));
+    LOAD(14u, Application::loadAnimations({"dungeon/traps"}));
+    LOAD(15u, Application::loadAnimations({"heroes"}));
 
-    LOAD(15u, Application::context().textures.get("dungeon/sidebar/tab/monsters/cage").setRepeated(true));
-    LOAD(16u, Application::context().textures.get("dungeon/inter/outer_wall_west").setRepeated(true));
-    LOAD(17u, Application::context().textures.get("dungeon/inter/outer_wall_east").setRepeated(true));
+    LOAD(16u, Application::context().textures.get("dungeon/sidebar/tab/monsters/cage").setRepeated(true));
+    LOAD(17u, Application::context().textures.get("dungeon/inter/outer_wall_west").setRepeated(true));
+    LOAD(18u, Application::context().textures.get("dungeon/inter/outer_wall_east").setRepeated(true));
 
     // Inits
-    LOAD(18u, m_dungeonInter.init());
-    LOAD(19u, m_dungeonSidebar.init());
+    LOAD(19u, m_dungeonInter.init());
+    LOAD(20u, m_dungeonSidebar.init());
 
     // Dungeon inter
-    LOAD(20u, m_dungeonInter.useData(m_dungeonData));
-    LOAD(21u, m_dungeonInter.setRoomWidth(128.f));
+    LOAD(21u, m_dungeonInter.useData(m_dungeonData));
+    LOAD(22u, m_dungeonInter.setRoomWidth(128.f));
 
     // Dungeon sidebar
-    LOAD(22u, m_dungeonSidebar.useData(m_dungeonData));
-    LOAD(23u, m_dungeonSidebar.setMinimapLayer(scene().layer("DUNGEON")));
+    LOAD(23u, m_dungeonSidebar.useData(m_dungeonData));
+    LOAD(24u, m_dungeonSidebar.setMinimapLayer(scene().layer("DUNGEON")));
 
     // Dungeon hero
-    LOAD(24u, m_heroesManager.useGraph(m_dungeonGraph));
-    LOAD(25u, m_heroesManager.useData(m_dungeonData));
+    LOAD(25u, m_heroesManager.useGraph(m_dungeonGraph));
+    LOAD(26u, m_heroesManager.useData(m_dungeonData));
 
     // Decorum
-    LOAD(26u, m_sceneFront.setTexture("dungeon/scene/front"));
-    LOAD(27u, m_sceneClose.setTexture("dungeon/scene/close"));
-    LOAD(28u, m_sceneMiddle.setTexture("dungeon/scene/middle"));
-    LOAD(29u, m_sceneFar.setTexture("dungeon/scene/far"));
-    LOAD(30u, m_sceneHorizon.setTexture("dungeon/scene/horizon"));
-    LOAD(31u, m_sceneSky.setTexture("dungeon/scene/sky"));
+    LOAD(27u, m_sceneFront.setTexture("dungeon/scene/front"));
+    LOAD(28u, m_sceneClose.setTexture("dungeon/scene/close"));
+    LOAD(29u, m_sceneMiddle.setTexture("dungeon/scene/middle"));
+    LOAD(30u, m_sceneFar.setTexture("dungeon/scene/far"));
+    LOAD(31u, m_sceneHorizon.setTexture("dungeon/scene/horizon"));
+    LOAD(32u, m_sceneSky.setTexture("dungeon/scene/sky"));
 
     // Adjust images to new maxZoom
     // TODO Sky is streched, use a setScale instead of setSize inside that function?
-    LOAD(32u, scene().layer("FRONT").fitToVisibleRect(m_sceneFront));
-    LOAD(33u, scene().layer("CLOSE").fitToVisibleRect(m_sceneClose));
-    LOAD(34u, scene().layer("MIDDLE").fitToVisibleRect(m_sceneMiddle));
-    LOAD(35u, scene().layer("FAR").fitToVisibleRect(m_sceneFar));
-    LOAD(36u, scene().layer("HORIZON").fitToVisibleRect(m_sceneHorizon));
-    LOAD(37u, scene().layer("SKY").fitToVisibleRect(m_sceneSky));
+    LOAD(33u, scene().layer("FRONT").fitToVisibleRect(m_sceneFront));
+    LOAD(34u, scene().layer("CLOSE").fitToVisibleRect(m_sceneClose));
+    LOAD(35u, scene().layer("MIDDLE").fitToVisibleRect(m_sceneMiddle));
+    LOAD(36u, scene().layer("FAR").fitToVisibleRect(m_sceneFar));
+    LOAD(37u, scene().layer("HORIZON").fitToVisibleRect(m_sceneHorizon));
+    LOAD(38u, scene().layer("SKY").fitToVisibleRect(m_sceneSky));
 
     // Music
     // Keep last, as it is a indicator for the player that everything is ready
-    LOAD(38u, Application::context().musics.play("angevin_70"));
+    LOAD(39u, Application::context().musics.play("angevin_70"));
 
     // Click to start screen
     m_loadingText.setText(_("Loading is done.\nClick to start the game."));

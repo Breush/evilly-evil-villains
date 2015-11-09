@@ -14,9 +14,6 @@ MenuMain::MenuMain(StateStack& stack)
     : baseClass(stack)
     , m_choices{L"V", L"I", L"L", L"Y", L"S"}
 {
-    // Loading resources
-    Application::loadTextures({"menu"});
-
     // During menus, enable key repeat
     Application::context().window.setKeyRepeatEnabled(true);
     Application::context().musics.play("pippin_the_hunchback");
@@ -90,9 +87,6 @@ MenuMain::~MenuMain()
 {
     // Musics
     Application::context().musics.stop("pippin_the_hunchback");
-
-    // Freeing resources
-    Application::freeTextures({"menu"});
 }
 
 //-------------------//

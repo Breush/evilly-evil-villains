@@ -27,7 +27,6 @@ void Application::freeTextures(const std::initializer_list<std::string>& folders
 {
     for (const auto& folder : folders) {
         s_context.textures.freeMatchingPrefix(folder);
-
         mdebug_core_2("Freed textures from " << folder << ".");
     }
 }
@@ -35,6 +34,7 @@ void Application::freeTextures(const std::initializer_list<std::string>& folders
 void Application::preloadTextures()
 {
     // Force default
+    loadTextures({"menu"});
     s_context.textures.load("res/tex/default.png");
     s_context.textures.get("default").setRepeated(true);
     s_context.textures.setDefault("default");
