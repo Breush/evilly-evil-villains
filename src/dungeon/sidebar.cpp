@@ -120,9 +120,8 @@ void Sidebar::refreshScrollAreasSize()
         tabContent.scrollArea.setSize({size().x, height});
 }
 
-void Sidebar::refreshTabContents()
+void Sidebar::refreshTabMonstersContent()
 {
-    // Monsters
     auto& monstersStacker = m_tabContents[TabsID::MONSTERS].stacker;
     auto& monstersCages = m_tabContents[TabsID::MONSTERS].monsterCages;
     monstersStacker.unstackAll();
@@ -138,10 +137,14 @@ void Sidebar::refreshTabContents()
         auto& monsterCage = *monstersCages.back();
         monstersStacker.stackBack(monsterCage);
     }
+}
 
-    // Traps
-    auto& trapsStacker = m_tabContents[TabsID::TRAPS].stacker;
+void Sidebar::refreshTabTrapsContent()
+{
     // TODO Have something more expressive than a button (follow monsterCage guidelines)
+    // Well, do that for facilities too
+
+    auto& trapsStacker = m_tabContents[TabsID::TRAPS].stacker;
     auto& trapsButtons = m_tabContents[TabsID::TRAPS].buttons;
     trapsStacker.unstackAll();
     trapsButtons.clear();
@@ -152,27 +155,35 @@ void Sidebar::refreshTabContents()
 
     for (const auto& trapPair : trapsList) {
         const auto& trapID = trapPair.first;
-        // FIXME Cheating here... (should follow monster guidelines)
-        trapsButtons.emplace_back(std::make_unique<dungeon::TrapGrabButton>(trapPair.second.name, trapID));
+        trapsButtons.emplace_back(std::make_unique<TrapGrabButton>(trapPair.second.name, trapID));
         auto& trapButton = *trapsButtons.back();
         trapsStacker.stackBack(trapButton, nui::Align::CENTER);
     }
+}
 
-    // Facilities
+void Sidebar::refreshTabFacilitiesContent()
+{
     auto& facilitiesStacker = m_tabContents[TabsID::FACILITIES].stacker;
     auto& facilitiesButtons = m_tabContents[TabsID::FACILITIES].buttons;
     facilitiesStacker.unstackAll();
     facilitiesButtons.clear();
 
-    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Treasure"), L"treasure"));
-    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Entrance"), L"entrance"));
-    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Ladder"),   L"ladder"));
-    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Stairs"),   L"stairs"));
+    const auto& facilitiesList = m_data.facilitiesDB().get();
+    auto facilitiesCount = facilitiesList.size();
+    facilitiesButtons.reserve(facilitiesCount);
 
-    for (auto& facilitiesButton : facilitiesButtons)
-        facilitiesStacker.stackBack(*facilitiesButton, nui::Align::CENTER);
+    for (const auto& facilityPair : facilitiesList) {
+        const auto& trapID = facilityPair.first;
+        facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(facilityPair.second.name, trapID));
+        auto& facilityButton = *facilitiesButtons.back();
+        facilitiesStacker.stackBack(facilityButton, nui::Align::CENTER);
+    }
+}
 
-    // Tools
+void Sidebar::refreshTabToolsContent()
+{
+    // TODO Merge facilities, tools and mechanics
+
     auto& toolsStacker = m_tabContents[TabsID::TOOLS].stacker;
     auto& toolsButtons = m_tabContents[TabsID::TOOLS].buttons;
     toolsStacker.unstackAll();
@@ -185,7 +196,14 @@ void Sidebar::refreshTabContents()
 
     for (auto& toolsButton : toolsButtons)
         toolsStacker.stackBack(*toolsButton, nui::Align::CENTER);
+}
 
+void Sidebar::refreshTabContents()
+{
+    refreshTabMonstersContent();
+    refreshTabTrapsContent();
+    refreshTabFacilitiesContent();
+    refreshTabToolsContent();
     refreshTabParameters();
 }
 

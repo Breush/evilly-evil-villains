@@ -78,6 +78,18 @@ namespace dungeon
         //! @name Internal change updates
         //! @{
 
+        //! Refresh the monsters tab contents.
+        void refreshTabMonstersContent();
+
+        //! Refresh the traps tab contents.
+        void refreshTabTrapsContent();
+
+        //! Refresh the facilities tab contents.
+        void refreshTabFacilitiesContent();
+
+        //! Refresh the tools tab contents.
+        void refreshTabToolsContent();
+
         //! Refresh the tabs contents.
         void refreshTabContents();
 

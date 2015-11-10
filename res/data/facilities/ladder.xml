@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<facility id="ladder" trName="Ladder">
+    <data name="baseCost" dosh="10" />
+</facility>

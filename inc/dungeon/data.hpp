@@ -6,6 +6,7 @@
 #include "dungeon/elementdata.hpp"
 #include "dungeon/monstersdb.hpp"
 #include "dungeon/trapsdb.hpp"
+#include "dungeon/facilitiesdb.hpp"
 #include "context/wallet.hpp"
 
 #include <SFML/System/Time.hpp>
@@ -243,6 +244,9 @@ namespace dungeon
         //! Access the list of all monsters inside dungeon and reserve.
         inline MonstersInfo& monstersInfo() { return m_monstersInfo; }
 
+        //! Acces the facilities data base.
+        inline const FacilitiesDB& facilitiesDB() const { return m_facilitiesDB; }
+
         //! Acces the monsters data base.
         inline const MonstersDB& monstersDB() const { return m_monstersDB; }
 
@@ -350,8 +354,9 @@ namespace dungeon
         const float m_timeGameHour; //!< Constant time: howmany real seconds equals an in-game hour.
 
         // Databases
-        MonstersDB m_monstersDB;    //!< All monsters infos.
-        TrapsDB m_trapsDB;          //!< All traps infos.
+        MonstersDB m_monstersDB;        //!< All monsters immuable data.
+        TrapsDB m_trapsDB;              //!< All traps immuable data.
+        FacilitiesDB m_facilitiesDB;    //!< All facilities immuable data.
     };
 }
 

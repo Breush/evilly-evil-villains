@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<facility id="treasure" trName="Treasure">
+    <data name="baseCost" dosh="5" />
+</facility>
