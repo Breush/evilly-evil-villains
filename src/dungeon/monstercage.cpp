@@ -261,4 +261,5 @@ MonsterGrabbable::MonsterGrabbable(scene::GrabbableSpawner& spawner, const std::
     attachChild(m_sprite);
     m_sprite.load(toString(L"dungeon/monsters/" + monsterID));
     m_sprite.setLocalScale(scale);
+    m_sprite.select(L"grabbed");
 }
