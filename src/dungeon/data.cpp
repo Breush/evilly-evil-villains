@@ -3,8 +3,6 @@
 #include "dungeon/debug.hpp"
 #include "dungeon/graph.hpp"
 #include "dungeon/hero.hpp"
-#include "dungeon/traps.hpp"
-#include "dungeon/facilities/maker.hpp"
 #include "context/villains.hpp"
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
@@ -425,7 +423,8 @@ void Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     auto& roomInfo = room(coords);
     returnif (hasOfType(roomInfo.facilities, facilityID));
 
-    returnif (!m_villain->doshWallet.sub(facilities::onCreateCost(facilityID)));
+    // TODO Use facilitiesDB data (in Inter!)
+    // returnif (!m_villain->doshWallet.sub(facilities::onCreateCost(facilityID)));
 
     roomInfo.facilities.emplace_back();
     auto& facility = roomInfo.facilities.back();
@@ -443,8 +442,8 @@ void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     auto found = std::find_if(roomInfo.facilities, [&](const ElementData& data) { return data.type() == facilityID; });
     wassert(found != std::end(roomInfo.facilities), L"Cannot find (and remove) facility '" << facilityID << L"' in room " << coords);
 
-    auto& facility = *found;
-    m_villain->doshWallet.add(facilities::onDestroyGain(facility));
+    // TODO Use facilitiesDB data (in Inter!)
+    // m_villain->doshWallet.add(facilities::onDestroyGain(facility));
     roomInfo.facilities.erase(found);
 
     Event event;
@@ -458,8 +457,9 @@ void Data::removeRoomFacilities(const sf::Vector2u& coords)
     auto& roomInfo = room(coords);
     returnif (roomInfo.facilities.empty());
 
-    for (const auto& facility : roomInfo.facilities)
-        m_villain->doshWallet.add(facilities::onDestroyGain(facility));
+    // TODO Use facilitiesDB data (in Inter!)
+    // for (const auto& facility : roomInfo.facilities)
+    //     m_villain->doshWallet.add(facilities::onDestroyGain(facility));
     roomInfo.facilities.clear();
 
     Event event;

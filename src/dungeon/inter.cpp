@@ -380,13 +380,13 @@ void Inter::addFacilityChoice(const sf::Vector2u& coords, const std::wstring& fa
 
     // The facility is already there
     if (facilityData != std::end(m_data->room(coords).facilities)) {
-        std::wstring text = _("Remove") + L" " + facilityName + L" (+" + toWString(facilities::onDestroyGain(*facilityData)) + L"d)";
+        std::wstring text = _("Remove") + L" " + facilityName;
         m_contextMenu.addChoice(text, [=]() { m_data->removeRoomFacility(coords, facilityID); });
     }
 
     // The facility is not there
     else {
-        std::wstring text = _("Create") + L" " + facilityName + L" (-" + toWString(facilities::onCreateCost(facilityID)) + L"d)";
+        std::wstring text = _("Create") + L" " + facilityName;
         m_contextMenu.addChoice(text, [=]() { m_data->createRoomFacility(coords, facilityID); });
     }
 }
