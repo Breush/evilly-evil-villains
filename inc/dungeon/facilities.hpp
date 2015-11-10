@@ -65,7 +65,7 @@ namespace dungeon
     public:
 
         //! Constructor, affecting texture and look.
-        FacilityGrabButton(const std::wstring& text, const std::string& textureID, std::wstring facilityID);
+        FacilityGrabButton(const std::wstring& text, std::wstring facilityID);
 
         //! Default destructor.
         ~FacilityGrabButton() = default;

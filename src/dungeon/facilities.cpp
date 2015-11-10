@@ -11,11 +11,11 @@ using namespace dungeon;
 //----------------------//
 //----- GrabButton -----//
 
-FacilityGrabButton::FacilityGrabButton(const std::wstring& text, const std::string& textureID, std::wstring facilityID)
-    : m_textureID(textureID)
-    , m_facilityID(facilityID)
+FacilityGrabButton::FacilityGrabButton(const std::wstring& text, std::wstring facilityID)
+    : m_facilityID(std::move(facilityID))
 {
-    setVisual(text, textureID);
+    m_textureID = "dungeon/facilities/" + toString(m_facilityID) + "/icon";
+    setVisual(text, m_textureID);
 }
 
 void FacilityGrabButton::grabbableButtonReleased(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)

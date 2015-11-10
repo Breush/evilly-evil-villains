@@ -164,9 +164,10 @@ void Sidebar::refreshTabContents()
     facilitiesStacker.unstackAll();
     facilitiesButtons.clear();
 
-    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Treasure"), "dungeon/facilities/treasure/icon", L"treasure"));
-    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Entrance"), "dungeon/facilities/entrance/icon", L"entrance"));
-    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Ladder"),   "dungeon/facilities/ladder/icon",   L"ladder"));
+    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Treasure"), L"treasure"));
+    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Entrance"), L"entrance"));
+    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Ladder"),   L"ladder"));
+    facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(_("Stairs"),   L"stairs"));
 
     for (auto& facilitiesButton : facilitiesButtons)
         facilitiesStacker.stackBack(*facilitiesButton, nui::Align::CENTER);
