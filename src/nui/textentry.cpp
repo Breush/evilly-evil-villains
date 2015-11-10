@@ -8,7 +8,8 @@
 using namespace nui;
 
 TextEntry::TextEntry()
-    : m_length(-1u)
+    : m_width(0.f)
+    , m_length(-1u)
     , m_maxCharacters(40u)
 {
     setFocusable(true);

@@ -25,11 +25,11 @@ namespace sfe
         //! Parsed text info.
         struct TextInfo
         {
-            sf::Text text;          //!< The text indeed.
-            sf::String string;      //!< The string of the text.
-            sf::String colorKey;    //!< Color key.
-            uint32 style;           //!< Style (italic/bold/underlined).
-            bool newLine = false;   //!< True if ends in new line.
+            sf::Text text;                      //!< The text indeed.
+            sf::String string;                  //!< The string of the text.
+            sf::String colorKey;                //!< Color key.
+            uint32 style = sf::Text::Regular;   //!< Style (italic/bold/underlined).
+            bool newLine = false;               //!< True if ends in new line.
         };
 
     public:

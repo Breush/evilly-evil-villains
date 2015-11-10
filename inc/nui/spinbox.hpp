@@ -119,8 +119,8 @@ namespace nui
 
     private:
 
-        Value_t m_value;    //!< The current and displayed value.
-        Value_t m_step;     //!< The value to add or substract when +/-.
+        Value_t m_value = 0;    //!< The current and displayed value.
+        Value_t m_step = 0;     //!< The value to add or substract when +/-.
 
         ValueChangeCallback m_callback = nullptr;   //!< The callback function called on any change.
         sf::Vector2f m_storedPosition;              //!< Stored position of last mouse left click.
