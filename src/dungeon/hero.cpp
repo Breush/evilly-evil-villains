@@ -3,6 +3,7 @@
 #include "dungeon/heroesmanager.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/data.hpp"
+#include "tools/random.hpp"
 #include "tools/tools.hpp"
 #include "ai/node.hpp"
 
@@ -120,7 +121,7 @@ void Hero::useGraph(Graph& graph)
 {
     // TODO Follow Monster guidelines to fix the "I keep going into a wall" issue.
     m_luaActor.useGraph(graph);
-    setCurrentNode(graph.startingNode());
+    setCurrentNode(alea::rand(graph.startingNodes()));
 }
 
 const Graph::NodeData* Hero::toNodeData(const ai::Node* node)

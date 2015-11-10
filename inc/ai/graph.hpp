@@ -19,24 +19,12 @@ namespace ai
         //! Default destructor.
         ~Graph() = default;
 
-        //--------------//
-        //! @name Graph
-        //! @{
-
-        //! Add a node to the graph.
-        Node& addNode(void* data = nullptr);
-
-        //! Set the starting node.
-        void setStartingNode(Node* startingNode);
-
-        //! @}
-
         //--------------------//
         //! @name Interaction
         //! @{
 
         //! Simple getter to access the starting node.
-        inline const Node* startingNode() const { return m_startingNode; }
+        inline const std::vector<Node*>& startingNodes() const { return m_startingNodes; }
 
         //! How many different nodes compose the graph.
         inline uint uniqueNodesCount() const { return m_nodes.size(); }
@@ -48,6 +36,15 @@ namespace ai
         //--------------//
         //! @name Graph
         //! @{
+
+        //! Add a node to the graph.
+        Node& addNode(void* data = nullptr);
+
+        //! Add a node to the starting list.
+        void addStartingNode(Node* startingNode);
+
+        //! Remove all nodes from the starting list.
+        void resetStartingNodes();
 
         //! Erase all information about the graph, reserving some space.
         /*!
@@ -65,6 +62,6 @@ namespace ai
         std::vector<Node> m_nodes;
 
         //! The entry point to the graph.
-        Node* m_startingNode = nullptr;
+        std::vector<Node*> m_startingNodes;
     };
 }

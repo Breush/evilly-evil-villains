@@ -13,14 +13,19 @@ Node& Graph::addNode(void* data)
     return m_nodes.back();
 }
 
-void Graph::setStartingNode(Node* startingNode)
+void Graph::addStartingNode(Node* startingNode)
 {
-    m_startingNode = startingNode;
+    m_startingNodes.emplace_back(startingNode);
+}
+
+void Graph::resetStartingNodes()
+{
+    m_startingNodes.clear();
 }
 
 void Graph::reset(uint nodesCount)
 {
     m_nodes.clear();
+    m_startingNodes.clear();
     m_nodes.reserve(nodesCount);
-    m_startingNode = nullptr;
 }

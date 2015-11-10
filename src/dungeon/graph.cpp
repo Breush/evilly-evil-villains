@@ -72,7 +72,7 @@ void Graph::reconstructFromData()
 
 void Graph::updateFromData()
 {
-    setStartingNode(nullptr);
+    resetStartingNodes();
 
     for (auto& floorNodes : m_nodes)
     for (auto& nodeData : floorNodes) {
@@ -83,7 +83,9 @@ void Graph::updateFromData()
         nodeData.entrance = false;
         nodeData.constructed = m_data->isRoomConstructed(nodeData.coords);
 
-        if (!nodeData.constructed) continue;
+        if (!nodeData.constructed) {
+            continue;
+        }
 
         auto& room = m_data->room(nodeData.coords);
 
@@ -92,8 +94,7 @@ void Graph::updateFromData()
             // Entrance
             if (facilityData.type() == L"entrance") {
                 nodeData.entrance = true;
-                // TODO Have multiple starting nodes
-                setStartingNode(&node);
+                addStartingNode(&node);
             }
 
             // Treasure

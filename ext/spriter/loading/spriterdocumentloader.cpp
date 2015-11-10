@@ -82,12 +82,12 @@ namespace SpriterEngine
                     point pivot(0, 1);
                     if (att->isValid() && att->getName() == "width")
                     {
-                        // TODO: if you need the width of the file for your implementation retrieve it here;
+                        // if you need the width of the file for your implementation retrieve it here;
                         att->advanceToNextAttribute();
                     }
                     if (att->isValid() && att->getName() == "height")
                     {
-                        // TODO: if you need the height of the file for your implementation retrieve it here;
+                        // if you need the height of the file for your implementation retrieve it here;
                         att->advanceToNextAttribute();
                     }
                     if (att->isValid() && att->getName() == "pivot_x")
@@ -167,7 +167,6 @@ namespace SpriterEngine
     Entity *SpriterDocumentLoader::getNewEntityFromEntityElement(SpriterFileElementWrapper *entityElement, SpriterModel *model)
     {
         SpriterFileAttributeWrapper *nameAtt = entityElement->getFirstAttribute("name");
-        Entity *entity = 0;
         if (nameAtt->isValid())
         {
             return model->pushBackEntity(nameAtt->getStringValue());
@@ -761,7 +760,6 @@ namespace SpriterEngine
         std::string timelineName;
         Object::ObjectType timelineType = Object::OBJECTTYPE_SPRITE;
         SpriterFileAttributeWrapper *att = timelineElement->getFirstAttribute("name");
-        Object *object = 0;
         if (att->isValid())
         {
             timelineName = att->getStringValue();
