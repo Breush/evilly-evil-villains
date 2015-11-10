@@ -11,6 +11,10 @@
 ---------------
 -- Callbacks --
 
+-- Called once on new data
+function _reinit()
+end
+
 -- Called once on object creation
 function _register()
 end

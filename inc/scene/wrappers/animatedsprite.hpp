@@ -100,6 +100,7 @@ namespace scene
 
         SpriterEngine::EntityInstance* m_spriterEntity = nullptr;   //!< The entity itself.
 
+        std::wstring m_currentAnimationName;        //!< Current animation name.
         SpriterEngine::real m_length = 0.;          //!< Current animation length.
         sf::Color m_tiltColor = sf::Color::White;   //!< Extra coloring of the sprites.
     };

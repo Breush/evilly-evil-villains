@@ -18,11 +18,8 @@ local fusing        -- Whether the Creepim is exploding
 ---------------
 -- Callbacks --
 
--- Called once on object creation
-function _register()
-    -- Register callbacks
-    eev_addCallback("cbHeroClose", "hero", "distance < 0.7")
-
+-- Called once on new data
+function _reinit()
     -- Register data
     eev_initEmptyDataFloat("fusingTime", 0)
 
@@ -31,6 +28,12 @@ function _register()
     if fusingTime ~= 0 then
         startFusing(fusingTime)
     end
+end
+
+-- Called once on object creation
+function _register()
+    -- Register callbacks
+    eev_addCallback("cbHeroClose", "hero", "distance < 0.7")
 end
 
 -- Whenever a hero comes too close
@@ -58,6 +61,7 @@ function startFusing(timeOffset)
 
     -- Apply offset
     if timeOffset ~= 0 then
+        eev_rewindAnimation()
         eev_forwardAnimation(timeOffset)
     end
 end

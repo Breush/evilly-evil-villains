@@ -60,6 +60,9 @@ namespace dungeon
         //! Access an existing attribute (const).
         inline const MetaData& at(const std::wstring& name) const { return m_attributes.at(name); }
 
+        //! Access an existing attribute.
+        inline MetaData& at(const std::wstring& name) { return m_attributes.at(name); }
+
         //! Access an attribute.
         inline MetaData& operator[](const std::wstring& name) { return m_attributes[name]; }
 

@@ -2,7 +2,7 @@
 <monster id="creepim" trName="Creepim">
     <data name="baseCost" dosh="150" soul="1" />
     <data name="weeklyCost" dosh="25" />
-    <data name="speed" vx="0.31" vy="0." />
+    <data name="speed" vx="0.51" vy="0." />
     <data name="pause" delay="1." />
     <data name="hireCountdown" delay="10" />
 </monster>

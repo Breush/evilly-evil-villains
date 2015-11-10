@@ -18,8 +18,8 @@
             </monster>
             <monster type="creepim">
                 <rx type="float" value="0.5" />
-                <ry type="float" value="2.5" />
-                <tx type="float" value="0.5" />
+                <ry type="float" value="3.5" />
+                <tx type="float" value="4.5" />
                 <ty type="float" value="4.5" />
             </monster>
             <monster type="creepim">

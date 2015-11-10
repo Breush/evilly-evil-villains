@@ -36,7 +36,7 @@ namespace dungeon
     public:
 
         //! Constructor.
-        Monster(ElementData& edata, dungeon::Inter& inter);
+        Monster(Inter& inter, Graph& graph);
 
         //! Default destructor.
         ~Monster() = default;
@@ -44,18 +44,12 @@ namespace dungeon
         std::string detectKey() const final { return "monster"; }
         std::string _name() const final { return "dungeon::Monster"; }
 
-        //--------------//
-        //! @name Graph
+        //---------------------//
+        //! @name Element data
         //! @{
 
-        //! The graph of the dungeon to be read from.
-        void useGraph(Graph& graph);
-
-        //! Refresh the position from the graph.
-        void updateFromGraph();
-
-        //! Convert a node to a node data.
-        const Graph::NodeData* toNodeData(const ai::Node* node);
+        //! Rebinds the element data.
+        void bindElementData(ElementData& edata);
 
         //! @}
 
@@ -104,6 +98,9 @@ namespace dungeon
         //! Advance the current animation from a certain offset.
         void lua_forwardAnimation(const lua_Number offset);
 
+        //! Restart the current animation from the beginning.
+        void lua_rewindAnimation();
+
         // TODO Find a better way to get those?
         // Note: sel::Tuple<uint, uint> fail, struct personnel fail, (uint&, uint&) fail
         //! Get the current room coordinates.
@@ -121,6 +118,12 @@ namespace dungeon
         //--------------------------------//
         //! @name Artificial intelligence
         //! @{
+
+        //! Refresh the position from the graph.
+        void updateFromGraph();
+
+        //! Convert a node to a node data.
+        const Graph::NodeData* toNodeData(const ai::Node* node);
 
         //! Reinits the state to start a fresh new run.
         void reinit();
@@ -163,9 +166,11 @@ namespace dungeon
 
     protected:
 
-        Inter& m_inter;             //!< To be able to interact with nearby elements.
-        ElementData& m_edata;       //!< The data corresponding to the monster.
-        Graph* m_graph = nullptr;   //!< Abstract dungeon graph.
+        Inter& m_inter;                 //!< To be able to interact with nearby elements.
+        Graph& m_graph;                 //!< Abstract dungeon graph.
+        ElementData* m_edata = nullptr; //!< The data corresponding to the monster.
+
+        std::wstring m_monsterID;       //!< Current monster ID.
 
         // Graph evaluation for AI
         sel::State m_lua;                                       //!< The lua state.

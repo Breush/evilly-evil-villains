@@ -70,7 +70,9 @@ void Inter::onSizeChanges()
     refreshOuterWalls();
 
     returnif (m_data == nullptr);
-    // TODO OPTIM Well, it's just position/size of elements that need to be updated, right?
+
+    // Should only update position/size of elements inside
+    // as no object changed inside
     refreshTiles();
     refreshMonsters();
 }
@@ -494,7 +496,7 @@ void Inter::setRoomWidth(const float roomWidth)
     // Note: We want room to keep the same ratio as original image.
     const float scaleFactor = roomWidth / m_refRoomSize.x;
     m_roomScale = {scaleFactor, scaleFactor};
-    m_predictionSprite.setLocalScale(roomScale());
+    m_predictionSprite.setLocalScale(m_roomScale);
     refreshSize();
 }
 
@@ -615,20 +617,23 @@ void Inter::refreshSize()
 void Inter::refreshMonsters()
 {
     auto& activeMonsters = m_data->monstersInfo().active;
+    uint monstersCountBefore = m_monsters.size();
     uint monstersCount = activeMonsters.size();
-
-    // TODO OPTIM Have a refreshFromData only! (And a _refreshFromData() function in lua API)
-    // There is too much useless memory reallocation right now...
-    m_monsters.clear();
     m_monsters.resize(monstersCount);
 
-    // Recreate them
-    for (uint i = 0u; i < monstersCount; ++i) {
+    // Create new ones
+    for (uint i = monstersCountBefore; i < monstersCount; ++i) {
         auto& monster = m_monsters[i];
-        auto& monsterInfo = activeMonsters[i];
-        monster = std::make_unique<Monster>(monsterInfo.data, *this);
-        monster->useGraph(m_data->graph());
+        monster = std::make_unique<Monster>(*this, m_data->graph());
         attachChild(*monster);
+    }
+
+    // Reparameter them all
+    for (uint i = 0u; i < monstersCount; ++i) {
+        auto& monster = m_monsters.at(i);
+        auto& monsterInfo = activeMonsters.at(i);
+        monster->bindElementData(monsterInfo.data);
+        monster->setLocalScale(m_roomScale);
     }
 }
 

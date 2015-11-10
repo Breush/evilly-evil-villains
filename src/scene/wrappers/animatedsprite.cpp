@@ -47,9 +47,6 @@ void AnimatedSprite::updateRoutine(const sf::Time& dt)
     if (m_started) {
         forward(dt);
         m_spriterEntity->playAllTriggers();
-
-        if (!m_looping && m_spriterEntity->getCurrentTime() >= m_length - dt.asMilliseconds())
-            m_started = false;
     }
 }
 
@@ -72,13 +69,12 @@ void AnimatedSprite::load(const std::string& id)
 
 void AnimatedSprite::select(const std::wstring& animationName)
 {
-    returnif (m_spriterEntity == nullptr);
+    returnif ((m_spriterEntity == nullptr) || (m_currentAnimationName == animationName));
 
-    // Note: If the aniation does not exists, it is just ignored
+    // Note: If the animation does not exists, it is just ignored
     m_spriterEntity->setCurrentAnimation(toString(animationName));
 
     m_length = m_spriterEntity->getCurrentAnimationLength();
-    restart();
 }
 
 void AnimatedSprite::forward(const sf::Time& offset)
@@ -86,6 +82,13 @@ void AnimatedSprite::forward(const sf::Time& offset)
     returnif (m_spriterEntity == nullptr);
 
     auto timeElapsed = offset.asMilliseconds();
+
+    // If we're not looping, call it an end
+    if (!m_looping && m_spriterEntity->getCurrentTime() + timeElapsed >= m_length) {
+        m_started = false;
+        return;
+    }
+
     m_spriterEntity->setTimeElapsed(timeElapsed);
 }
 
