@@ -74,13 +74,11 @@ void AnimatedSprite::select(const std::wstring& animationName)
 {
     returnif (m_spriterEntity == nullptr);
 
+    // Note: If the aniation does not exists, it is just ignored
     m_spriterEntity->setCurrentAnimation(toString(animationName));
 
     m_length = m_spriterEntity->getCurrentAnimationLength();
     restart();
-
-    // TODO What happens if the animation does not exists in this model?
-    // And how to detect it?
 }
 
 void AnimatedSprite::forward(const sf::Time& offset)

@@ -19,7 +19,13 @@ void DumbPuppet::updateAI(const sf::Time&)
     returnif (lerpable()->positionLerping());
 
     // Go somethere randomly
-    lerpable()->setTargetPosition({alea::rand(m_minX, m_maxX), localPosition().y});
+    sf::Vector2f targetPosition(alea::rand(m_minX, m_maxX), localPosition().y);
+    lerpable()->setTargetPosition(targetPosition);
+
+    if (localPosition().x < targetPosition.x)
+        m_sprite.select(L"rwalk");
+    else
+        m_sprite.select(L"lwalk");
 }
 
 //-------------------//
