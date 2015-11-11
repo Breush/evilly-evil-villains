@@ -5,7 +5,7 @@
 #include "dungeon/data.hpp"
 #include "dungeon/graph.hpp"
 #include "dungeon/inter.hpp"
-#include "dungeon/sidebar.hpp"
+#include "dungeon/sidebar/sidebar.hpp"
 #include "dungeon/heroesmanager.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
 

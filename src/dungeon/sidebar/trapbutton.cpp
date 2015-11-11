@@ -1,4 +1,4 @@
-#include "dungeon/traps.hpp"
+#include "dungeon/sidebar/trapbutton.hpp"
 
 #include "core/application.hpp"
 #include "dungeon/inter.hpp"

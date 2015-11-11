@@ -4,9 +4,9 @@
 #include "tools/int.hpp"
 #include "dungeon/event.hpp"
 #include "dungeon/elementdata.hpp"
-#include "dungeon/monstersdb.hpp"
-#include "dungeon/trapsdb.hpp"
-#include "dungeon/facilitiesdb.hpp"
+#include "dungeon/databases/monstersdb.hpp"
+#include "dungeon/databases/trapsdb.hpp"
+#include "dungeon/databases/facilitiesdb.hpp"
 #include "context/wallet.hpp"
 
 #include <SFML/System/Time.hpp>

@@ -1,4 +1,4 @@
-#include "dungeon/summary.hpp"
+#include "dungeon/sidebar/summary.hpp"
 
 #include "core/gettext.hpp"
 #include "core/application.hpp"

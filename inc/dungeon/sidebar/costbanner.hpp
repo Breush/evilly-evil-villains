@@ -1,6 +1,6 @@
 #pragma once
 
-#include "dungeon/cost.hpp"
+#include "context/cost.hpp"
 #include "nui/entity.hpp"
 #include "sfe/richtext.hpp"
 

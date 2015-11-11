@@ -1,8 +1,8 @@
 #include "nui/tabholder.hpp"
 
 #include "core/gettext.hpp"
-#include "dungeon/sidebar.hpp"
 #include "config/nuiguides.hpp"
+#include "dungeon/sidebar/sidebar.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"

@@ -2,7 +2,6 @@
 
 #include "ai/node.hpp"
 #include "dungeon/inter.hpp"
-#include "dungeon/monstersdb.hpp"
 #include "tools/random.hpp"
 
 using namespace dungeon;

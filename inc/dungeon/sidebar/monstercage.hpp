@@ -5,7 +5,7 @@
 #include "scene/wrappers/label.hpp"
 #include "scene/wrappers/richlabel.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
-#include "dungeon/costbanner.hpp"
+#include "dungeon/sidebar/costbanner.hpp"
 #include "context/event.hpp"
 #include "ai/dumbpuppet.hpp"
 

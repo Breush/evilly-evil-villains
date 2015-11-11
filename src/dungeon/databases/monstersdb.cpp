@@ -1,4 +1,4 @@
-#include "dungeon/monstersdb.hpp"
+#include "dungeon/databases/monstersdb.hpp"
 
 #include "core/gettext.hpp"
 #include "tools/filesystem.hpp"

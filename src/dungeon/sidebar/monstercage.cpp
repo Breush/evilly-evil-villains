@@ -1,4 +1,4 @@
-#include "dungeon/monstercage.hpp"
+#include "dungeon/sidebar/monstercage.hpp"
 
 #include "core/gettext.hpp"
 #include "core/application.hpp"

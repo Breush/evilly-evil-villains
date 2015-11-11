@@ -1,7 +1,7 @@
 #pragma once
 
 #include "tools/int.hpp"
-#include "dungeon/cost.hpp"
+#include "context/cost.hpp"
 
 #include <string>
 #include <unordered_map>

@@ -1,4 +1,4 @@
-#include "dungeon/facilitiesdb.hpp"
+#include "dungeon/databases/facilitiesdb.hpp"
 
 #include "core/gettext.hpp"
 #include "tools/filesystem.hpp"

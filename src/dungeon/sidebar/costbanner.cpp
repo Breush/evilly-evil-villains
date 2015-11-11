@@ -1,4 +1,4 @@
-#include "dungeon/costbanner.hpp"
+#include "dungeon/sidebar/costbanner.hpp"
 
 #include "core/application.hpp"
 #include "tools/string.hpp"

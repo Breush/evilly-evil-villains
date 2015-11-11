@@ -1,4 +1,4 @@
-#include "dungeon/trapsdb.hpp"
+#include "dungeon/databases/trapsdb.hpp"
 
 #include "core/gettext.hpp"
 #include "tools/filesystem.hpp"

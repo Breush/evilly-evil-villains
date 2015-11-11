@@ -1,4 +1,4 @@
-#include "dungeon/minimap.hpp"
+#include "dungeon/sidebar/minimap.hpp"
 
 #include "core/application.hpp"
 #include "scene/layer.hpp"

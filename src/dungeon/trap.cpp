@@ -2,7 +2,6 @@
 
 #include "dungeon/inter.hpp"
 #include "dungeon/detector.hpp"
-#include "dungeon/monstersdb.hpp"
 #include "dungeon/hero.hpp"
 #include "tools/random.hpp"
 
