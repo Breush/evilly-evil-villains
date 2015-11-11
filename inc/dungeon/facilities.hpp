@@ -1,6 +1,6 @@
 #pragma once
 
-#include "scene/entity.hpp"
+#include "dungeon/detectentity.hpp"
 #include "dungeon/elementdata.hpp"
 #include "context/event.hpp"
 #include "nui/grabbutton.hpp"
@@ -16,7 +16,7 @@ namespace dungeon
 
     //! A generic facility interface.
 
-    class Facility : public scene::Entity, public context::EventReceiver
+    class Facility : public DetectEntity, public context::EventReceiver
     {
     public:
 
@@ -34,6 +34,7 @@ namespace dungeon
         virtual ~Facility() = default;
 
         virtual std::string _name() const override = 0;
+        std::string detectKey() const final { return "facility"; }
 
     protected:
 

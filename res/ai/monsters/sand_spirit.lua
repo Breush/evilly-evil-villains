@@ -11,7 +11,7 @@
 ---------------
 -- Callbacks --
 
--- Called once on new data
+-- Called on new data
 function _reinit()
 end
 

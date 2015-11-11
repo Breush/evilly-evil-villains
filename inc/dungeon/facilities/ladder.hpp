@@ -3,6 +3,10 @@
 #include "dungeon/facilities.hpp"
 #include "scene/wrappers/sprite.hpp"
 
+#include <selene/selene.hpp>
+
+// FIXME Move all that to a gneric Facility interface
+
 namespace dungeon
 {
 namespace facilities
@@ -52,9 +56,26 @@ namespace facilities
 
         //! @}
 
+        //----------------//
+        //! @name Lua API
+        //! @{
+
+        //! Calling detector.
+        void lua_addCallback(const std::string& luaKey, const std::string& entityType, const std::string& condition);
+
+        //! Set the depth of the entity.
+        void lua_setDepth(const lua_Number inDepth);
+
+        //! Debug log function from lua.
+        void lua_log(const std::string& str) const;
+
+        //! @}
+
     private:
 
-        scene::Sprite m_sprite;   //!< The sprite.
+        scene::Sprite m_sprite; //!< The sprite.
+
+        sel::State m_lua;       //!< The lua state.
     };
 }
 }

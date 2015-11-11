@@ -18,7 +18,7 @@ local fusing        -- Whether the Creepim is exploding
 ---------------
 -- Callbacks --
 
--- Called once on new data
+-- Called on new data
 function _reinit()
     -- Register data
     eev_initEmptyDataFloat("fusingTime", 0)
