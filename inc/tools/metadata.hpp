@@ -3,6 +3,13 @@
 #include "tools/int.hpp"
 #include "tools/string.hpp"
 
+template<typename T>
+struct Vec2
+{
+    T x;
+    T y;
+};
+
 union MetaData_t
 {
     uint64 raw;
@@ -19,6 +26,9 @@ union MetaData_t
 
     float as_float;
     double as_double;
+
+    Vec2<uint8> as_v2uint8;
+    Vec2<float> as_v2float;
 };
 
 class MetaData
@@ -41,6 +51,9 @@ public:
     inline float&  operator=(const float& rhs)  { return m_data.as_float  = rhs; }
     inline double& operator=(const double& rhs) { return m_data.as_double = rhs; }
 
+    inline Vec2<uint8>& operator=(const Vec2<uint8>& rhs) { return m_data.as_v2uint8 = rhs; }
+    inline Vec2<float>& operator=(const Vec2<float>& rhs) { return m_data.as_v2float = rhs; }
+
     inline const int8&  as_int8()  const { return m_data.as_int8; }
     inline const int16& as_int16() const { return m_data.as_int16; }
     inline const int32& as_int32() const { return m_data.as_int32; }
@@ -53,6 +66,9 @@ public:
 
     inline const float&  as_float()  const { return m_data.as_float; }
     inline const double& as_double() const { return m_data.as_double; }
+
+    inline const Vec2<uint8>& as_v2uint8() const { return m_data.as_v2uint8; }
+    inline const Vec2<float>& as_v2float() const { return m_data.as_v2float; }
 
     inline int8&  as_int8()  { return m_data.as_int8; }
     inline int16& as_int16() { return m_data.as_int16; }
@@ -67,6 +83,9 @@ public:
     inline float&  as_float()  { return m_data.as_float; }
     inline double& as_double() { return m_data.as_double; }
 
+    inline Vec2<uint8>& as_v2uint8() { return m_data.as_v2uint8; }
+    inline Vec2<float>& as_v2float() { return m_data.as_v2float; }
+
     inline void init_int8 (int8  value) { m_type = L"int8";  m_data.as_int8  = value; }
     inline void init_int16(int16 value) { m_type = L"int16"; m_data.as_int16 = value; }
     inline void init_int32(int32 value) { m_type = L"int32"; m_data.as_int32 = value; }
@@ -79,6 +98,9 @@ public:
 
     inline void init_float (float value)  { m_type = L"float"; m_data.as_float = value; }
     inline void init_double(double value) { m_type = L"double"; m_data.as_double = value; }
+
+    inline void init_v2uint8(const Vec2<uint8>& value) { m_type = L"v2uint8"; m_data.as_v2uint8 = value; }
+    inline void init_v2float(const Vec2<float>& value) { m_type = L"v2float"; m_data.as_v2float = value; }
 
 private:
 

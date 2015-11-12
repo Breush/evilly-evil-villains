@@ -34,22 +34,31 @@ void ElementData::saveXML(pugi::xml_node& node) const
     for (const auto& attribute : m_attributes) {
         const auto& type = attribute.second.type();
         auto child = node.append_child(attribute.first.c_str());
-
         child.append_attribute(L"type") = type.c_str();
-        auto value = child.append_attribute(L"value");
 
-        if (type == L"int8")       value = static_cast<int>(attribute.second.as_int8());
-        else if (type == L"int16") value = static_cast<int>(attribute.second.as_int16());
-        else if (type == L"int32") value = static_cast<int>(attribute.second.as_int32());
-        else if (type == L"int64") value = static_cast<long long>(attribute.second.as_int64());
+        if (type == L"int8")       child.append_attribute(L"value") = static_cast<int>(attribute.second.as_int8());
+        else if (type == L"int16") child.append_attribute(L"value") = static_cast<int>(attribute.second.as_int16());
+        else if (type == L"int32") child.append_attribute(L"value") = static_cast<int>(attribute.second.as_int32());
+        else if (type == L"int64") child.append_attribute(L"value") = static_cast<long long>(attribute.second.as_int64());
 
-        else if (type == L"uint8")  value = static_cast<unsigned int>(attribute.second.as_uint8());
-        else if (type == L"uint16") value = static_cast<unsigned int>(attribute.second.as_uint16());
-        else if (type == L"uint32") value = static_cast<unsigned int>(attribute.second.as_uint32());
-        else if (type == L"uint64") value = static_cast<unsigned long long>(attribute.second.as_uint64());
+        else if (type == L"uint8")  child.append_attribute(L"value") = static_cast<unsigned int>(attribute.second.as_uint8());
+        else if (type == L"uint16") child.append_attribute(L"value") = static_cast<unsigned int>(attribute.second.as_uint16());
+        else if (type == L"uint32") child.append_attribute(L"value") = static_cast<unsigned int>(attribute.second.as_uint32());
+        else if (type == L"uint64") child.append_attribute(L"value") = static_cast<unsigned long long>(attribute.second.as_uint64());
 
-        else if (type == L"float")  value = attribute.second.as_float();
-        else if (type == L"double") value = attribute.second.as_double();
+        else if (type == L"float")  child.append_attribute(L"value") = attribute.second.as_float();
+        else if (type == L"double") child.append_attribute(L"value") = attribute.second.as_double();
+
+        else if (type == L"v2uint8") {
+            const auto& v = attribute.second.as_v2uint8();
+            child.append_attribute(L"x") = static_cast<unsigned int>(v.x);
+            child.append_attribute(L"y") = static_cast<unsigned int>(v.y);
+        }
+        else if (type == L"v2float") {
+            const auto& v = attribute.second.as_v2float();
+            child.append_attribute(L"x") = v.x;
+            child.append_attribute(L"y") = v.y;
+        }
 
         else throw std::logic_error("Some MetaData has an invalid type.");
     }
@@ -83,5 +92,18 @@ void ElementData::loadXML(const pugi::xml_node& node)
 
         else if (type == L"float")  m_attributes[name] = child.attribute(L"value").as_float();
         else if (type == L"double") m_attributes[name] = child.attribute(L"value").as_double();
+
+        else if (type == L"v2uint8") {
+            Vec2<uint8> v;
+            v.x = child.attribute(L"x").as_uint();
+            v.y = child.attribute(L"y").as_uint();
+            m_attributes[name] = v;
+        }
+        else if (type == L"v2float") {
+            Vec2<float> v;
+            v.x = child.attribute(L"x").as_float();
+            v.y = child.attribute(L"y").as_float();
+            m_attributes[name] = v;
+        }
     }
 }
