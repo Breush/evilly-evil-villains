@@ -185,15 +185,18 @@ void Data::loadDungeon(const std::wstring& file)
 
             wdebug_dungeon_3(L"Found room " << room.pos << L" of state " << roomStateString);
 
-            // Elements
+            // Traps
             const auto& trapNode = roomNode.child(L"trap");
             if (trapNode) room.trap.loadXML(trapNode);
+
+            // Facilities
             for (const auto& facilityNode : roomNode.children(L"facility")) {
                 room.facilities.emplace_back();
                 auto& facilityInfo = room.facilities.back();
                 facilityInfo.data.loadXML(facilityNode);
 
                 // Links
+                facilityInfo.isLink = facilityNode.attribute(L"isLink").as_bool();
                 for (auto rlinkNode : facilityNode.children(L"rlink")) {
                     auto direction = static_cast<Direction>(rlinkNode.attribute(L"direction").as_uint());
                     facilityInfo.rlinks.emplace_back(direction);
@@ -278,6 +281,7 @@ void Data::saveDungeon(const std::wstring& file)
                 facility.data.saveXML(facilityNode);
 
                 // Links
+                if (facility.isLink) facilityNode.append_attribute(L"isLink") = true;
                 for (auto& rlink : facility.rlinks) {
                     auto rlinkNode = facilityNode.append_child(L"rlink");
                     rlinkNode.append_attribute(L"direction") = static_cast<uint>(rlink);
@@ -340,6 +344,25 @@ void Data::constructRoom(const sf::Vector2u& coords, bool hard)
     event.room = {coords.x, coords.y};
     EventEmitter::emit(event);
 
+    // We check all implicit links getting to this room
+    // and create those which need to be there
+    // TODO Have a flyweight pointer to the info inside DB
+    // for each facility would be a great thing
+    for (const auto& floor : m_floors)
+    for (const auto& room : floor.rooms)
+    for (const auto& facility : room.facilities) {
+        const auto& facilityInfo = facilitiesDB().get(facility.data.type());
+        for (const auto& link : facilityInfo.links) {
+            if (link.style == Link::Style::IMPLICIT) {
+                sf::Vector2u linkCoords;
+                linkCoords.x = room.coords.x + link.x;
+                linkCoords.y = room.coords.y + link.y;
+                if (linkCoords == coords)
+                    createRoomFacility(coords, link.id, true);
+            }
+        }
+    }
+
     emit("dungeon_changed");
 }
 
@@ -349,15 +372,12 @@ void Data::destroyRoom(const sf::Vector2u& coords)
     returnif (coords.y >= m_roomsByFloor);
     returnif (room(coords).state == RoomState::VOID);
 
-    // TODO Hard should not retrieve money from facilities/traps.
-
-    m_villain->doshWallet.add(onDestroyRoomGain);
-    room(coords).state = RoomState::VOID;
-
     // Clear elements
     removeRoomFacilities(coords);
     removeRoomTrap(coords);
     removeRoomMonsters(coords);
+
+    room(coords).state = RoomState::VOID;
 
     Event event;
     event.type = "room_destroyed";
@@ -449,8 +469,10 @@ void Data::stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh
 //--------------------------------//
 //----- Facilities and traps -----//
 
-void Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID)
+void Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool isLink)
 {
+    returnif (!isRoomConstructed(coords));
+
     auto& roomInfo = room(coords);
     for (const auto& facilityInfo : roomInfo.facilities)
         returnif (facilityInfo.data.type() == facilityID);
@@ -461,18 +483,55 @@ void Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     roomInfo.facilities.emplace_back();
     auto& facility = roomInfo.facilities.back();
     facility.data.create(facilityID);
+    facility.isLink = isLink;
 
     Event event;
     event.type = "facility_changed";
     event.facility.room = {coords.x, coords.y};
     EventEmitter::emit(event);
+
+    // Create all the implicit links too
+    // FIXME This if is a cheat...
+    // We should have LadderIn and LadderOut to fix that issue of self-replicating
+    if (!isLink) {
+        const auto& facilityInfo = facilitiesDB().get(facilityID);
+        for (const auto& link : facilityInfo.links) {
+            if (link.style == Link::Style::IMPLICIT) {
+                sf::Vector2u linkCoords;
+                linkCoords.x = coords.x + link.x;
+                linkCoords.y = coords.y + link.y;
+                createRoomFacility(linkCoords, link.id, true);
+            }
+        }
+    }
 }
 
 void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID)
 {
+    returnif (!isRoomConstructed(coords));
+
     auto& roomInfo = room(coords);
     auto found = std::find_if(roomInfo.facilities, [facilityID] (const FacilityInfo& facilityInfo) { return facilityInfo.data.type() == facilityID; });
-    wassert(found != std::end(roomInfo.facilities), L"Cannot find (and remove) facility '" << facilityID << L"' in room " << coords);
+    returnif (found == std::end(roomInfo.facilities));
+
+    std::cerr << "Removing facility " << toString(facilityID) << "in " << coords << std::endl;
+
+    // Remove all implicit links
+    // TODO This if should be ultimately removed, see createRoomFacility()
+    if (!found->isLink) {
+        const auto& facilityInfo = facilitiesDB().get(facilityID);
+        for (const auto& link : facilityInfo.links) {
+            if (link.style == Link::Style::IMPLICIT) {
+                sf::Vector2u linkCoords;
+                linkCoords.x = coords.x + link.x;
+                linkCoords.y = coords.y + link.y;
+                std::cerr << "Also deleting " << linkCoords << std::endl;
+                // Note: Whatever happens, there can be only one of this ID
+                // in that same room, so there no issue deleting it without more checking
+                removeRoomFacility(linkCoords, link.id);
+            }
+        }
+    }
 
     // TODO Use facilitiesDB data (in Inter!)
     // m_villain->doshWallet.add(facilities::onDestroyGain(facility));
@@ -486,18 +545,12 @@ void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
 
 void Data::removeRoomFacilities(const sf::Vector2u& coords)
 {
-    auto& roomInfo = room(coords);
-    returnif (roomInfo.facilities.empty());
+    returnif (!isRoomConstructed(coords));
 
-    // TODO Use facilitiesDB data (in Inter!)
-    // for (const auto& facility : roomInfo.facilities)
-    //     m_villain->doshWallet.add(facilities::onDestroyGain(facility));
-    roomInfo.facilities.clear();
-
-    Event event;
-    event.type = "facility_changed";
-    event.facility.room = {coords.x, coords.y};
-    EventEmitter::emit(event);
+    const auto& roomInfo = room(coords);
+    const auto facilities = roomInfo.facilities;
+    for (const auto& facility : facilities)
+        removeRoomFacility(coords, facility.data.type());
 }
 
 void Data::removeRoomMonsters(const sf::Vector2u& coords)

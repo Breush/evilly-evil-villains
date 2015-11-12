@@ -1,8 +1,9 @@
 #pragma once
 
 #include "context/cost.hpp"
+#include "dungeon/databases/link.hpp"
 
-#include <string>
+#include <vector>
 #include <unordered_map>
 
 #include <SFML/System/Vector2.hpp>
@@ -27,6 +28,7 @@ namespace dungeon
         {
             std::wstring name = L"(Unknown)";   //!< Translated name.
             Cost baseCost;                      //!< Construction price.
+            std::vector<Link> links;            //!< All the links upon creation.
         };
 
     public:

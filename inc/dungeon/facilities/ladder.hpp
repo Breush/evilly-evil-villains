@@ -51,6 +51,9 @@ namespace facilities
         //! Set the depth of the entity.
         void lua_setDepth(const lua_Number inDepth);
 
+        //! Get the state of this facility: are we created as a link?
+        bool lua_isLink();
+
         //! Get the n-th relative link from the list.
         //! Return 0u if not found.
         uint32 lua_getRlink(const uint32 nth) const;
@@ -68,10 +71,9 @@ namespace facilities
 
     private:
 
+        FacilityInfo& m_facilityInfo;   //!< The facility data reference.
         scene::AnimatedSprite m_sprite; //!< The sprite.
         sel::State m_lua;               //!< The lua state.
-
-        FacilityInfo& m_facilityInfo;   //!< The facility data reference.
     };
 }
 }

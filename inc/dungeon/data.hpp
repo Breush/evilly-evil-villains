@@ -44,11 +44,12 @@ namespace dungeon
         SOUTH = 0x01,
     };
 
-    //! A facility informatino.
+    //! A facility information.
     struct FacilityInfo
     {
         ElementData data;               //!< The data.
         std::vector<Direction> rlinks;  //!< Relative links that allow a specific direction.
+        bool isLink = false;            //!< Is these info been created by a link?
     };
 
     // Forward declarations
@@ -190,7 +191,7 @@ namespace dungeon
 
         //! Add the specified facility to the dungeon if it does not exists yet.
         //! Will emit an event if a change occured.
-        void createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID);
+        void createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool isLink = false);
 
         //! Remove the specified facility from the dungeon.
         //! Will emit an event if a change occured.

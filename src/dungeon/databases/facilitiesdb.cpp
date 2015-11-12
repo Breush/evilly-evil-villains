@@ -55,10 +55,29 @@ void FacilitiesDB::add(const std::string& filename)
     facilityData.name = _(toString(trName).c_str());
 
     // Adding data
-    for (const auto& dataNode : facilityNode) {
+    for (const auto& dataNode : facilityNode.children(L"data")) {
         std::wstring name = dataNode.attribute(L"name").as_string();
 
         if (name == L"baseCost")    readCostNode(facilityData.baseCost, dataNode);
+    }
+
+    // Adding links
+    for (const auto& linkNode : facilityNode.children(L"link")) {
+        Link link;
+        link.id = linkNode.attribute(L"id").as_string();
+
+        std::wstring style = linkNode.attribute(L"style").as_string();
+        if (style == L"implicit") {
+            link.style = Link::Style::IMPLICIT;
+            link.x = linkNode.attribute(L"x").as_int();
+            link.y = linkNode.attribute(L"y").as_int();
+        }
+        else if (style == L"explicit") {
+            link.style = Link::Style::EXPLICIT;
+            link.id = linkNode.attribute(L"id").as_string();
+        }
+
+        facilityData.links.emplace_back(std::move(link));
     }
 }
 

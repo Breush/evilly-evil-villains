@@ -23,10 +23,18 @@ local EAST  = 18
 
 -- Called on new data
 function _reinit()
-    -- No relative link yet, create it to the north
+    -- Are we created as a link? (i.e. implicitly)
+    local isLink = eev_isLink()
+
+    -- No relative link yet
     local rlink = eev_getRlink(0)
     if rlink == 0 then
-        eev_addRlink(NORTH)
+        if isLink then
+            rlink = SOUTH
+        else
+            rlink = NORTH
+        end
+        eev_addRlink(rlink)
     end
 
     -- Is this a double entry ladder or a simple one?

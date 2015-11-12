@@ -18,10 +18,13 @@ FacilityGrabButton::FacilityGrabButton(const std::wstring& text, std::wstring fa
     setVisual(text, m_textureID);
 }
 
-void FacilityGrabButton::grabbableButtonReleased(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
+void FacilityGrabButton::grabbableButtonPressed(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
 {
-    returnif (button != sf::Mouse::Left);
-    graph()->removeGrabbable();
+    // If right button, deselect
+    if (button == sf::Mouse::Right) {
+        graph()->removeGrabbable();
+        return;
+    }
 
     // Forward to dungeon::Inter if it is below
     auto inter = dynamic_cast<Inter*>(entity);

@@ -154,11 +154,13 @@ void Inter::receive(const context::Event& event)
         coords = {devent.room.x, devent.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTile(coords); });
         m_tileRefreshPending.emplace_back([=]() { return refreshNeighboursLayers(coords); });
+        m_tileRefreshPending.emplace_back([=]() { return refreshMonsters(); });
     }
     else if (event.type == "room_constructed") {
         coords = {devent.room.x, devent.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTile(coords); });
         m_tileRefreshPending.emplace_back([=]() { return refreshNeighboursLayers(coords); });
+        m_tileRefreshPending.emplace_back([=]() { return refreshMonsters(); });
     }
     else if (event.type == "facility_changed") {
         // FIXME BUG We should update all elementData references,
@@ -167,8 +169,6 @@ void Inter::receive(const context::Event& event)
         coords = {devent.facility.room.x, devent.facility.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTileFacilities(coords); });
         m_tileRefreshPending.emplace_back([=]() { return refreshTileDoshLabel(coords); });
-        // TODO That's only because of ladder...
-        m_tileRefreshPending.emplace_back([=]() { return refreshNeighboursFacilities(coords); });
     }
     else if (event.type == "trap_changed") {
         coords = {devent.room.x, devent.room.y};
@@ -492,7 +492,8 @@ void Inter::setRoomWidth(const float roomWidth)
 
 void Inter::createRoomFacility(const sf::Vector2f& relPos, const std::wstring& facilityID)
 {
-    m_data->createRoomFacility(tileFromLocalPosition(relPos), facilityID);
+    const auto coords = tileFromLocalPosition(relPos);
+    m_data->createRoomFacility(coords, facilityID);
 }
 
 void Inter::setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID)
@@ -650,14 +651,6 @@ void Inter::refreshNeighboursLayers(const sf::Vector2u& coords)
     refreshTileLayers(m_data->roomNeighbourCoords(coords, SOUTH));
     refreshTileLayers(m_data->roomNeighbourCoords(coords, EAST));
     refreshTileLayers(m_data->roomNeighbourCoords(coords, NORTH));
-}
-
-void Inter::refreshNeighboursFacilities(const sf::Vector2u& coords)
-{
-    refreshTileFacilities(m_data->roomNeighbourCoords(coords, WEST));
-    refreshTileFacilities(m_data->roomNeighbourCoords(coords, SOUTH));
-    refreshTileFacilities(m_data->roomNeighbourCoords(coords, EAST));
-    refreshTileFacilities(m_data->roomNeighbourCoords(coords, NORTH));
 }
 
 void Inter::refreshTileDoshLabel(const sf::Vector2u& coords)

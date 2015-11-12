@@ -11,6 +11,7 @@ Monster::Monster(Inter& inter, Graph& graph)
     : baseClass(true)
     , m_inter(inter)
     , m_graph(graph)
+    , m_lua(true)
 {
     // Initializing
     setDetectable(false);

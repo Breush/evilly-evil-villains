@@ -13,6 +13,7 @@ using namespace std::placeholders;
 Ladder::Ladder(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dungeon::Inter& inter)
     : baseClass(coords, facilityInfo.data, inter)
     , m_facilityInfo(facilityInfo)
+    , m_lua(true)
 {
     // Decorum
     attachChild(m_sprite);
@@ -23,6 +24,7 @@ Ladder::Ladder(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dungeon::
     std::function<void(const std::string&, const std::string&, const std::string&)> eev_addCallback = std::bind(&Ladder::lua_addCallback, this, _1, _2, _3);
     m_lua["eev_addCallback"] = eev_addCallback;
     m_lua["eev_setDepth"] = [this] (const lua_Number inDepth) { lua_setDepth(inDepth); };
+    m_lua["eev_isLink"] = [this] { return lua_isLink(); };
     m_lua["eev_getRlink"] = [this] (const uint32 nth) { return lua_getRlink(nth); };
     m_lua["eev_addRlink"] = [this] (const uint32 direction) { lua_addRlink(direction); };
     m_lua["eev_selectAnimation"] = [this] (const std::string& animationKey) { lua_selectAnimation(animationKey); };
@@ -51,6 +53,11 @@ void Ladder::lua_setDepth(const lua_Number inDepth)
     setDepth(static_cast<float>(inDepth));
 }
 
+bool Ladder::lua_isLink()
+{
+    return m_facilityInfo.isLink;
+}
+
 uint32 Ladder::lua_getRlink(const uint32 nth) const
 {
     returnif (nth >= m_facilityInfo.rlinks.size()) 0u;
@@ -71,6 +78,6 @@ void Ladder::lua_selectAnimation(const std::string& animationKey)
 
 void Ladder::lua_log(const std::string& str) const
 {
-    // TODO
-    // std::cerr << "LUA [facility::" << toString(m_edata->type()) << "] " << str << std::endl;
+    // TODO Adjust
+    std::cerr << "LUA [facility::ladder] " << str << std::endl;
 }
