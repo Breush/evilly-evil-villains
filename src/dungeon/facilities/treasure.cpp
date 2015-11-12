@@ -14,7 +14,7 @@ Treasure::Treasure(const sf::Vector2u& coords, ElementData& elementdata, dungeon
 
     // Initialize attributes if they do not exists yet,
     // i.e. we just constructed this, and not loaded it from XML.
-    if (m_elementdata.empty()) {
+    if (!m_elementdata.exists(L"dosh")) {
         m_elementdata[L"dosh"].init_uint32(0u);
         if (m_inter.villain().doshWallet.sub(100u))
             m_elementdata[L"dosh"].as_uint32() = 100u;

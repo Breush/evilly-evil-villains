@@ -46,6 +46,14 @@ namespace dungeon
 
         //! @}
 
+        //------------------//
+        //! @name Usability
+        //! @{
+
+        // virtual bool isUsable() const = 0;
+
+        //! @}
+
     protected:
 
         sf::Vector2u m_coords;          //!< The room in which the facility is set.

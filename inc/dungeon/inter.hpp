@@ -245,9 +245,6 @@ namespace dungeon
         //! @name Context menu
         //! @{
 
-        //! Add a choice to the context menu, given the state of a facility.
-        void addFacilityChoice(const sf::Vector2u& coords, const std::wstring& facilityID, const std::wstring& facilityName);
-
         //! Pop the context menu for the specified tile coordinates at the position.
         void showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& nuiPos);
 

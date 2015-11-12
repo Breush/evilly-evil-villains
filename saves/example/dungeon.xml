@@ -13,74 +13,122 @@
 		</reserve>
 		<active>
 			<monster type="creepim">
+				<fusingTime type="float" value="0" />
+				<tx type="float" value="1.5" />
+				<ty type="float" value="3.5" />
+				<ry type="float" value="4.53929043" />
 				<rx type="float" value="1.5" />
-				<ry type="float" value="4.62" />
 			</monster>
 			<monster type="creepim">
-				<rx type="float" value="0.5" />
-				<ry type="float" value="3.5" />
+				<fusingTime type="float" value="0" />
 				<tx type="float" value="0.5" />
 				<ty type="float" value="4.5" />
+				<ry type="float" value="3.58250809" />
+				<rx type="float" value="0.5" />
 			</monster>
 			<monster type="creepim">
+				<tx type="float" value="2.5" />
+				<fusingTime type="float" value="1.5617826" />
+				<ty type="float" value="3.20000005" />
+				<ry type="float" value="3.20000005" />
 				<rx type="float" value="2.5" />
-				<ry type="float" value="3.2" />
-				<fusingTime type="float" value="1.4" />
 			</monster>
 		</active>
 	</monsters>
 	<floor pos="0">
-		<room pos="0" state="constructed" />
+		<room pos="0" state="constructed">
+			<facility type="ladder">
+				<rlink direction="33" />
+			</facility>
+		</room>
 		<room pos="1" state="constructed">
 			<facility type="entrance" />
 		</room>
-		<room pos="2" state="constructed" />
-		<room pos="3" state="constructed" />
+		<room pos="2" state="void" />
+		<room pos="3" state="constructed">
+			<facility type="entrance" />
+		</room>
 		<room pos="4" state="constructed">
-			<facility type="ladder" />
+			<facility type="ladder">
+				<rlink direction="33" />
+			</facility>
 		</room>
 	</floor>
 	<floor pos="1">
-		<room pos="0" state="void" />
+		<room pos="0" state="constructed">
+			<facility type="ladder">
+				<rlink direction="1" />
+				<rlink direction="33" />
+			</facility>
+		</room>
 		<room pos="1" state="void" />
 		<room pos="2" state="constructed">
-			<facility type="ladder" />
+			<facility type="ladder">
+				<rlink direction="33" />
+			</facility>
 		</room>
 		<room pos="3" state="constructed" />
-		<room pos="4" state="constructed" />
+		<room pos="4" state="constructed">
+			<facility type="ladder">
+				<rlink direction="1" />
+			</facility>
+		</room>
 	</floor>
 	<floor pos="2">
-		<room pos="0" state="void" />
-		<room pos="1" state="constructed">
-			<facility type="ladder" />
-		</room>
-		<room pos="2" state="constructed" />
-		<room pos="3" state="constructed" />
-		<room pos="4" state="void" />
-	</floor>
-	<floor pos="3">
 		<room pos="0" state="constructed">
+			<facility type="ladder">
+				<rlink direction="1" />
+			</facility>
+		</room>
+		<room pos="1" state="constructed">
 			<trap type="pickpock">
 				<dosh type="uint32" value="0" />
 			</trap>
 		</room>
+		<room pos="2" state="constructed">
+			<facility type="ladder">
+				<rlink direction="33" />
+				<rlink direction="1" />
+			</facility>
+		</room>
+		<room pos="3" state="constructed" />
+		<room pos="4" state="void" />
+	</floor>
+	<floor pos="3">
+		<room pos="0" state="void" />
 		<room pos="1" state="constructed">
-			<facility type="ladder" />
+			<trap type="pickpock">
+				<dosh type="uint32" value="0" />
+			</trap>
 		</room>
-		<room pos="2" state="constructed" />
+		<room pos="2" state="constructed">
+			<facility type="ladder">
+				<rlink direction="1" />
+			</facility>
+		</room>
 		<room pos="3" state="constructed">
-			<facility type="ladder" />
+			<trap type="trompe_loeil" />
 		</room>
-		<room pos="4" state="constructed" />
+		<room pos="4" state="constructed">
+			<facility type="ladder">
+				<rlink direction="33" />
+			</facility>
+		</room>
 	</floor>
 	<floor pos="4">
 		<room pos="0" state="constructed" />
 		<room pos="1" state="constructed" />
 		<room pos="2" state="constructed">
-			<facility type="ladder" />
+			<facility type="ladder">
+				<rlink direction="33" />
+			</facility>
 		</room>
 		<room pos="3" state="constructed" />
-		<room pos="4" state="constructed" />
+		<room pos="4" state="constructed">
+			<facility type="ladder">
+				<rlink direction="1" />
+			</facility>
+		</room>
 	</floor>
 	<floor pos="5">
 		<room pos="0" state="void" />
@@ -89,11 +137,16 @@
 			<trap type="pickpock">
 				<dosh type="uint32" value="2" />
 			</trap>
-			<facility type="ladder" />
+			<facility type="ladder">
+				<rlink direction="1" />
+				<rlink direction="33" />
+			</facility>
 		</room>
 		<room pos="3" state="void" />
 		<room pos="4" state="constructed">
-			<facility type="ladder" />
+			<facility type="ladder">
+				<rlink direction="33" />
+			</facility>
 		</room>
 	</floor>
 	<floor pos="6">
@@ -103,8 +156,16 @@
 				<dosh type="uint32" value="421" />
 			</facility>
 		</room>
-		<room pos="2" state="constructed" />
+		<room pos="2" state="constructed">
+			<facility type="ladder">
+				<rlink direction="1" />
+			</facility>
+		</room>
 		<room pos="3" state="constructed" />
-		<room pos="4" state="constructed" />
+		<room pos="4" state="constructed">
+			<facility type="ladder">
+				<rlink direction="1" />
+			</facility>
+		</room>
 	</floor>
 </dungeon>

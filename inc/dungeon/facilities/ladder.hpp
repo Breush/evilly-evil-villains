@@ -1,7 +1,7 @@
 #pragma once
 
 #include "dungeon/facilities.hpp"
-#include "scene/wrappers/sprite.hpp"
+#include "scene/wrappers/animatedsprite.hpp"
 
 #include <selene/selene.hpp>
 
@@ -9,6 +9,10 @@
 
 namespace dungeon
 {
+    // Forward declarations
+
+    class FacilityInfo;
+
 namespace facilities
 {
     //!< The ladder facility.
@@ -19,32 +23,13 @@ namespace facilities
 
     public:
 
-        //! Defines in what mode the ladder is drawn.
-        enum class Design
-        {
-            MAIN,
-            EXIT_END,
-            EXIT_MAIN,
-        };
-
-    public:
-
         //! Constructor.
-        Ladder(const sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter);
+        Ladder(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dungeon::Inter& inter);
 
         //! Default destructor.
         ~Ladder() = default;
 
         std::string _name() const final { return "dungeon::facilities::Ladder"; }
-
-        //---------------//
-        //! @name Design
-        //! @{
-
-        //! Defines in what mode the ladder is drawn.
-        void setDesign(Design design);
-
-        //! @}
 
     protected:
 
@@ -66,6 +51,16 @@ namespace facilities
         //! Set the depth of the entity.
         void lua_setDepth(const lua_Number inDepth);
 
+        //! Get the n-th relative link from the list.
+        //! Return 0u if not found.
+        uint32 lua_getRlink(const uint32 nth) const;
+
+        //! Add a relative link to the list.
+        void lua_addRlink(const uint32 direction);
+
+        //! Select an animation to play.
+        void lua_selectAnimation(const std::string& animationKey);
+
         //! Debug log function from lua.
         void lua_log(const std::string& str) const;
 
@@ -73,9 +68,10 @@ namespace facilities
 
     private:
 
-        scene::Sprite m_sprite; //!< The sprite.
+        scene::AnimatedSprite m_sprite; //!< The sprite.
+        sel::State m_lua;               //!< The lua state.
 
-        sel::State m_lua;       //!< The lua state.
+        FacilityInfo& m_facilityInfo;   //!< The facility data reference.
     };
 }
 }

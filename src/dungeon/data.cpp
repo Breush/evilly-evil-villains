@@ -190,7 +190,14 @@ void Data::loadDungeon(const std::wstring& file)
             if (trapNode) room.trap.loadXML(trapNode);
             for (const auto& facilityNode : roomNode.children(L"facility")) {
                 room.facilities.emplace_back();
-                room.facilities.back().loadXML(facilityNode);
+                auto& facilityInfo = room.facilities.back();
+                facilityInfo.data.loadXML(facilityNode);
+
+                // Links
+                for (auto rlinkNode : facilityNode.children(L"rlink")) {
+                    auto direction = static_cast<Direction>(rlinkNode.attribute(L"direction").as_uint());
+                    facilityInfo.rlinks.emplace_back(direction);
+                }
             }
 
             // Add the room
@@ -268,7 +275,13 @@ void Data::saveDungeon(const std::wstring& file)
             // Facilities
             for (const auto& facility : room.facilities) {
                 auto facilityNode = roomNode.append_child(L"facility");
-                facility.saveXML(facilityNode);
+                facility.data.saveXML(facilityNode);
+
+                // Links
+                for (auto& rlink : facility.rlinks) {
+                    auto rlinkNode = facilityNode.append_child(L"rlink");
+                    rlinkNode.append_attribute(L"direction") = static_cast<uint>(rlink);
+                }
             }
         }
     }
@@ -356,19 +369,25 @@ void Data::destroyRoom(const sf::Vector2u& coords)
 
 bool Data::roomNeighbourAccessible(const sf::Vector2u& coords, Direction direction)
 {
+    // Just say no if out of bounds
     auto neighbourCoord = roomNeighbourCoords(coords, direction);
     returnif (neighbourCoord.x >= m_floorsCount) false;
     returnif (neighbourCoord.y >= m_roomsByFloor) false;
 
+    // Just refuse non-constructed room
     auto& currentRoom = room(coords);
     auto& neighbourRoom = room(neighbourCoord);
     returnif (neighbourRoom.state != RoomState::CONSTRUCTED) false;
 
-    // When north or south, be sure there is a ladder
-    returnif (direction == NORTH && !hasOfType(currentRoom.facilities, L"ladder")) false;
-    returnif (direction == SOUTH && !hasOfType(neighbourRoom.facilities, L"ladder")) false;
+    // West/east is always ok
+    returnif (direction == WEST || direction == EAST) true;
 
-    return true;
+    // Check if a facility gives us an access
+    for (const auto& facilityInfo : currentRoom.facilities)
+        for (const auto& rlink : facilityInfo.rlinks)
+            returnif (rlink == direction) true;
+
+    return false;
 }
 
 sf::Vector2u Data::roomNeighbourCoords(const sf::Vector2u& coords, Direction direction)
@@ -388,10 +407,13 @@ sf::Vector2u Data::roomDirectionVector(Direction direction)
 
 uint Data::roomTreasureDosh(const sf::Vector2u& coords)
 {
+    uint treasureDosh = 0u;
     auto& roomInfo = room(coords);
-    auto treasureFacilityIt = findOfType(roomInfo.facilities, L"treasure");
-    returnif (treasureFacilityIt == std::end(roomInfo.facilities)) 0u;
-    return (*treasureFacilityIt)[L"dosh"].as_uint32();
+    // TODO Use the treasure tag
+    for (const auto& facilityInfo : roomInfo.facilities)
+        if (facilityInfo.data.type() == L"treasure" && facilityInfo.data.exists(L"dosh"))
+            treasureDosh += facilityInfo.data.at(L"dosh").as_uint32();
+    return treasureDosh;
 }
 
 //---------------------//
@@ -400,14 +422,23 @@ uint Data::roomTreasureDosh(const sf::Vector2u& coords)
 void Data::stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh)
 {
     auto& roomInfo = room(coords);
-    auto treasureFacilityIt = findOfType(roomInfo.facilities, L"treasure");
-    assert(treasureFacilityIt != std::end(roomInfo.facilities));
 
-    auto& treasureFacility = *treasureFacilityIt;
-    assert(stolenDosh <= treasureFacility[L"dosh"].as_uint32());
+    // Stealing all potential facilities until the amount of stolen dosh is reached
+    for (auto& facilityInfo : roomInfo.facilities) {
+        if (facilityInfo.data.type() == L"treasure" && facilityInfo.data.exists(L"dosh")) {
+            auto& treasureDosh = facilityInfo.data[L"dosh"].as_uint32();
+            auto dosh = std::min(treasureDosh, stolenDosh);
+            hero.addDosh(dosh);
+            treasureDosh -= dosh;
+            stolenDosh -= dosh;
 
-    treasureFacility[L"dosh"].as_uint32() -= stolenDosh;
-    hero.addDosh(stolenDosh);
+            if (stolenDosh == 0u)
+                break;
+        }
+    }
+
+    // We could check that stolenDosh is zero hero,
+    // If not, we were not able to steal the amount asked
 
     Event event;
     event.type = "facility_changed";
@@ -421,14 +452,15 @@ void Data::stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh
 void Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID)
 {
     auto& roomInfo = room(coords);
-    returnif (hasOfType(roomInfo.facilities, facilityID));
+    for (const auto& facilityInfo : roomInfo.facilities)
+        returnif (facilityInfo.data.type() == facilityID);
 
     // TODO Use facilitiesDB data (in Inter!)
     // returnif (!m_villain->doshWallet.sub(facilities::onCreateCost(facilityID)));
 
     roomInfo.facilities.emplace_back();
     auto& facility = roomInfo.facilities.back();
-    facility.create(facilityID);
+    facility.data.create(facilityID);
 
     Event event;
     event.type = "facility_changed";
@@ -439,7 +471,7 @@ void Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
 void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID)
 {
     auto& roomInfo = room(coords);
-    auto found = std::find_if(roomInfo.facilities, [&](const ElementData& data) { return data.type() == facilityID; });
+    auto found = std::find_if(roomInfo.facilities, [facilityID] (const FacilityInfo& facilityInfo) { return facilityInfo.data.type() == facilityID; });
     wassert(found != std::end(roomInfo.facilities), L"Cannot find (and remove) facility '" << facilityID << L"' in room " << coords);
 
     // TODO Use facilitiesDB data (in Inter!)

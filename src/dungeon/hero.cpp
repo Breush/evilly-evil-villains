@@ -121,7 +121,9 @@ void Hero::useGraph(Graph& graph)
 {
     // TODO Follow Monster guidelines to fix the "I keep going into a wall" issue.
     m_luaActor.useGraph(graph);
-    setCurrentNode(alea::rand(graph.startingNodes()));
+
+    if (!graph.startingNodes().empty())
+        setCurrentNode(alea::rand(graph.startingNodes()));
 }
 
 const Graph::NodeData* Hero::toNodeData(const ai::Node* node)

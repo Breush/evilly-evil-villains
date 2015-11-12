@@ -29,6 +29,28 @@ namespace context
 
 namespace dungeon
 {
+    // TODO Move these to their own file
+    //! Defines the possibly accessible relative directions from a room.
+    /*!
+     *  They are defined this way to be quickly masked.
+     *  So that (direction & 0xf - 1u) gives WEST -1 and EAST +1 (x axis)
+     *  And (direction >> 0x4 - 1u) gives SOUTH -1 and NORTH +1 (y axis)
+     */
+    enum Direction : uint8
+    {
+        EAST =  0x12,
+        WEST =  0x10,
+        NORTH = 0x21,
+        SOUTH = 0x01,
+    };
+
+    //! A facility informatino.
+    struct FacilityInfo
+    {
+        ElementData data;               //!< The data.
+        std::vector<Direction> rlinks;  //!< Relative links that allow a specific direction.
+    };
+
     // Forward declarations
 
     class Graph;
@@ -47,20 +69,6 @@ namespace dungeon
         const uint onConstructRoomCost = 1100u; //!< The dosh cost for creating a room.
         const uint onDestroyRoomGain = 745u;    //!< The dosh gain when destroying a room.
 
-        //! Defines the possibly accessible relative directions from a room.
-        /*!
-         *  They are defined this way to be quickly masked.
-         *  So that (direction & 0xf - 1u) gives WEST -1 and EAST +1 (x axis)
-         *  And (direction >> 0x4 - 1u) gives SOUTH -1 and NORTH +1 (y axis)
-         */
-        enum Direction : uint8
-        {
-            EAST =  0x12,
-            WEST =  0x10,
-            NORTH = 0x21,
-            SOUTH = 0x01,
-        };
-
         //! Defines rooms state.
         enum class RoomState
         {
@@ -72,11 +80,11 @@ namespace dungeon
         //! A room as in the xml specification.
         struct Room
         {
-            sf::Vector2u coords;                            //!< The floor/room coordinates of the room.
-            RoomState state = RoomState::UNKNOWN;           //!< The current state.
+            sf::Vector2u coords;                    //!< The floor/room coordinates of the room.
+            RoomState state = RoomState::UNKNOWN;   //!< The current state.
 
-            std::vector<ElementData> facilities;   //!< All the facilities.
-            ElementData trap;                      //!< The trap protecting the room.
+            std::vector<FacilityInfo> facilities;   //!< All the facilities.
+            ElementData trap;                       //!< The trap protecting the room.
         };
 
         //! A floor is a vector of rooms.

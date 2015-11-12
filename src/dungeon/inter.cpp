@@ -161,6 +161,9 @@ void Inter::receive(const context::Event& event)
         m_tileRefreshPending.emplace_back([=]() { return refreshNeighboursLayers(coords); });
     }
     else if (event.type == "facility_changed") {
+        // FIXME BUG We should update all elementData references,
+        // otherwise, on creating some pending reference will stay...
+        // And this might be better done directly, not in pending
         coords = {devent.facility.room.x, devent.facility.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTileFacilities(coords); });
         m_tileRefreshPending.emplace_back([=]() { return refreshTileDoshLabel(coords); });
@@ -376,23 +379,6 @@ void Inter::resetHoveredTile()
 //------------------------//
 //----- Context menu -----//
 
-void Inter::addFacilityChoice(const sf::Vector2u& coords, const std::wstring& facilityID, const std::wstring& facilityName)
-{
-    auto facilityData = findOfType(m_data->room(coords).facilities, facilityID);
-
-    // The facility is already there
-    if (facilityData != std::end(m_data->room(coords).facilities)) {
-        std::wstring text = _("Remove") + L" " + facilityName;
-        m_contextMenu.addChoice(text, [=]() { m_data->removeRoomFacility(coords, facilityID); });
-    }
-
-    // The facility is not there
-    else {
-        std::wstring text = _("Create") + L" " + facilityName;
-        m_contextMenu.addChoice(text, [=]() { m_data->createRoomFacility(coords, facilityID); });
-    }
-}
-
 void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& nuiPos)
 {
     auto& room = m_data->room(coords);
@@ -419,13 +405,10 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
             m_data->destroyRoom(coords);
         });
 
-        // Facilities
-        addFacilityChoice(coords, L"ladder", _("ladder"));
-        addFacilityChoice(coords, L"entrance", _("entrance"));
-
         // If treasure, modifiy pop-up
-        if (hasOfType(m_data->room(coords).facilities, L"treasure"))
-            m_contextMenu.addChoice(_("Edit treasure dosh"), [=]() { showEditTreasureDialog(coords); });
+        for (const auto& facilityInfo : m_data->room(coords).facilities)
+            if (facilityInfo.data.type() == L"treasure")
+                m_contextMenu.addChoice(_("Edit treasure dosh"), [=]() { showEditTreasureDialog(coords); });
     }
 
     // Context positions
@@ -435,7 +418,14 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
 
 void Inter::showEditTreasureDialog(const sf::Vector2u& coords)
 {
-    auto& treasureData = *findOfType(m_data->room(coords).facilities, L"treasure");
+    // Find the reference in dungeon data
+    ElementData* pTreasureData = nullptr;
+    for (auto& facilityInfo : m_data->room(coords).facilities)
+        if (facilityInfo.data.type() == L"treasure")
+            pTreasureData = &facilityInfo.data;
+    returnif (pTreasureData == nullptr);
+
+    auto& treasureData = *pTreasureData;
     auto& treasureDosh = treasureData[L"dosh"].as_uint32();
 
     m_treasureEditSpinBox.entry().giveFocus();
@@ -656,18 +646,18 @@ void Inter::refreshTile(const sf::Vector2u& coords)
 
 void Inter::refreshNeighboursLayers(const sf::Vector2u& coords)
 {
-    refreshTileLayers(m_data->roomNeighbourCoords(coords, Data::WEST));
-    refreshTileLayers(m_data->roomNeighbourCoords(coords, Data::SOUTH));
-    refreshTileLayers(m_data->roomNeighbourCoords(coords, Data::EAST));
-    refreshTileLayers(m_data->roomNeighbourCoords(coords, Data::NORTH));
+    refreshTileLayers(m_data->roomNeighbourCoords(coords, WEST));
+    refreshTileLayers(m_data->roomNeighbourCoords(coords, SOUTH));
+    refreshTileLayers(m_data->roomNeighbourCoords(coords, EAST));
+    refreshTileLayers(m_data->roomNeighbourCoords(coords, NORTH));
 }
 
 void Inter::refreshNeighboursFacilities(const sf::Vector2u& coords)
 {
-    refreshTileFacilities(m_data->roomNeighbourCoords(coords, Data::WEST));
-    refreshTileFacilities(m_data->roomNeighbourCoords(coords, Data::SOUTH));
-    refreshTileFacilities(m_data->roomNeighbourCoords(coords, Data::EAST));
-    refreshTileFacilities(m_data->roomNeighbourCoords(coords, Data::NORTH));
+    refreshTileFacilities(m_data->roomNeighbourCoords(coords, WEST));
+    refreshTileFacilities(m_data->roomNeighbourCoords(coords, SOUTH));
+    refreshTileFacilities(m_data->roomNeighbourCoords(coords, EAST));
+    refreshTileFacilities(m_data->roomNeighbourCoords(coords, NORTH));
 }
 
 void Inter::refreshTileDoshLabel(const sf::Vector2u& coords)
@@ -732,11 +722,11 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
     {
         addLayer(coords, "dungeon/inter/void_room");
 
-        if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, Data::WEST)))
+        if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, WEST)))
             addLayer(coords, "dungeon/inter/void_west_transition");
-        if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, Data::SOUTH)))
+        if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, SOUTH)))
             addLayer(coords, "dungeon/inter/void_south_transition");
-        if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, Data::EAST)))
+        if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, EAST)))
             addLayer(coords, "dungeon/inter/void_east_transition");
 
         return;
@@ -746,7 +736,7 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
     addLayer(coords, "dungeon/inter/inner_wall", 100.f);
     addLayer(coords, "dungeon/inter/floor", 75.f);
 
-    if (!m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, Data::EAST)))
+    if (!m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, EAST)))
         addLayer(coords, "dungeon/inter/right_wall", 75.f);
 }
 
@@ -764,37 +754,14 @@ void Inter::refreshTileFacilities(const sf::Vector2u& coords)
     // Room is not constructed
     returnif (room.state != Data::RoomState::CONSTRUCTED);
 
-    // If room below has a ladder, we need a way down
-    bool needWayDown = m_data->roomNeighbourAccessible(coords, Data::Direction::SOUTH);
-
     // Facilities
-    for (auto& facilityData : room.facilities) {
-        auto facility = facilities::make(coords, facilityData, *this);
+    for (auto& facilityInfo : room.facilities) {
+        auto facility = facilities::make(coords, facilityInfo, *this);
         facility->setLocalPosition(tileLocalPosition(coords) + tileSize() / 2.f);
         facility->setLocalScale(m_roomScale);
         facility->setEmitter(m_data);
         facility->centerOrigin();
-        if (needWayDown && facilityData.type() == L"ladder") {
-            auto ladder = dynamic_cast<facilities::Ladder*>(facility.get());
-            ladder->setDesign(facilities::Ladder::Design::EXIT_MAIN);
-            needWayDown = false;
-        }
         tile.facilities.emplace_back(std::move(facility));
-        attachChild(*tile.facilities.back());
-    }
-
-    // Add ladder if none yet
-    // TODO Duplication of code...
-    if (needWayDown) {
-        // TODO This creates a pending reference inside ladder (which is not used, but still...)
-        ElementData elementData;
-        auto ladder = std::make_unique<facilities::Ladder>(coords, elementData, *this);
-        ladder->setDesign(facilities::Ladder::Design::EXIT_END);
-        ladder->setLocalPosition(tileLocalPosition(coords) + tileSize() / 2.f);
-        ladder->setLocalScale(m_roomScale);
-        ladder->setEmitter(m_data);
-        ladder->centerOrigin();
-        tile.facilities.emplace_back(std::move(ladder));
         attachChild(*tile.facilities.back());
     }
 }

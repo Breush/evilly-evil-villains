@@ -75,9 +75,12 @@ void ElementData::loadXML(const pugi::xml_node& node)
 
     // And all its attributes
     for (const auto& child : node.children()) {
+        // Is is a valid elementData attribute?
+        if (!child.attribute(L"type"))
+            continue;
+
         std::wstring name = child.name();
         std::wstring type = child.attribute(L"type").as_string();
-
         m_attributes[name].setType(type);
 
         if (type == L"int8")       m_attributes[name] = static_cast<int8>(child.attribute(L"value").as_int());

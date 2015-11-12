@@ -83,28 +83,29 @@ void Graph::updateFromData()
         nodeData.entrance = false;
         nodeData.constructed = m_data->isRoomConstructed(nodeData.coords);
 
-        if (!nodeData.constructed) {
+        if (!nodeData.constructed)
             continue;
-        }
 
         auto& room = m_data->room(nodeData.coords);
 
         // Check facilities
-        for (auto facilityData : room.facilities) {
+        for (auto facilityInfo : room.facilities) {
             // Entrance
-            if (facilityData.type() == L"entrance") {
+            // FIXME Have an entrance tag into facility
+            if (facilityInfo.data.type() == L"entrance") {
                 nodeData.entrance = true;
                 addStartingNode(&node);
             }
 
             // Treasure
-            else if (facilityData.type() == L"treasure") {
+            // FIXME Have an treasure tag into facility
+            else if (facilityInfo.data.type() == L"treasure") {
                 refreshTreasure(nodeData);
             }
         }
 
         // Check neighbourhood
-        for (auto direction : {Data::EAST, Data::WEST, Data::NORTH, Data::SOUTH}) {
+        for (auto direction : {EAST, WEST, NORTH, SOUTH}) {
             if (m_data->roomNeighbourAccessible(nodeData.coords, direction)) {
                 auto neighbourCoords = m_data->roomNeighbourCoords(nodeData.coords, direction);
                 node.neighbours.emplace_back(m_nodes.at(neighbourCoords.x).at(neighbourCoords.y).node);
@@ -128,7 +129,7 @@ void Graph::refreshTreasure(NodeData& nodeData)
 
     // TODO Should be a getTreasure() function in all facilities
     auto& room = m_data->room(nodeData.coords);
-    for (auto facilityData : room.facilities)
-        if (facilityData.type() == L"treasure")
-            nodeData.treasure += facilityData[L"dosh"].as_uint32();
+    for (auto& facilityInfo : room.facilities)
+        if (facilityInfo.data.type() == L"treasure")
+            nodeData.treasure += facilityInfo.data[L"dosh"].as_uint32();
 }
