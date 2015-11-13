@@ -193,9 +193,10 @@ void Data::loadDungeon(const std::wstring& file)
             for (const auto& facilityNode : roomNode.children(L"facility")) {
                 room.facilities.emplace_back();
                 auto& facilityInfo = room.facilities.back();
-                facilityInfo.isLink = facilityNode.attribute(L"isLink").as_bool();
-                facilityInfo.treasure = facilityNode.attribute(L"treasure").as_uint(-1u);
                 facilityInfo.data.loadXML(facilityNode);
+                facilityInfo.isLink = facilityNode.attribute(L"isLink").as_bool();
+                facilityInfo.common = &facilitiesDB().get(facilityInfo.data.type());
+                facilityInfo.treasure = facilityNode.attribute(L"treasure").as_uint(-1u);
 
                 // Tunnels
                 for (auto rtunnelNode : facilityNode.children(L"rtunnel")) {
@@ -494,6 +495,7 @@ void Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     auto& facility = roomInfo.facilities.back();
     facility.data.create(facilityID);
     facility.isLink = isLink;
+    facility.common = &facilitiesDB().get(facilityID);
 
     Event event;
     event.type = "facility_changed";

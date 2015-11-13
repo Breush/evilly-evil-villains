@@ -55,6 +55,7 @@ void FacilitiesDB::add(const std::string& filename)
     std::wstring trName = facilityNode.attribute(L"trName").as_string();
     facilityData.name = _(toString(trName).c_str());
     facilityData.listed = facilityNode.attribute(L"listed").as_bool(true);
+    facilityData.entrance = facilityNode.attribute(L"entrance").as_bool();
     if (facilityData.listed) ++m_listedCount;
 
     // Adding data

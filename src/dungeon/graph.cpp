@@ -91,8 +91,7 @@ void Graph::updateFromData()
         // Check facilities
         for (auto facilityInfo : room.facilities) {
             // Entrance
-            // FIXME Have an entrance tag into facility
-            if (facilityInfo.data.type() == L"entrance") {
+            if (facilityInfo.common->entrance) {
                 nodeData.entrance = true;
                 addStartingNode(&node);
             }
