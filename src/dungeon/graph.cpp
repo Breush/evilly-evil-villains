@@ -98,10 +98,7 @@ void Graph::updateFromData()
             }
 
             // Treasure
-            // FIXME Have an treasure tag into facility
-            else if (facilityInfo.data.type() == L"treasure") {
-                refreshTreasure(nodeData);
-            }
+            refreshTreasure(nodeData);
         }
 
         // Check neighbourhood
@@ -132,9 +129,8 @@ void Graph::refreshTreasure(NodeData& nodeData)
 
     returnif (!m_data->isRoomConstructed(nodeData.coords));
 
-    // TODO Should be a getTreasure() function in all facilities
     auto& room = m_data->room(nodeData.coords);
-    for (auto& facilityInfo : room.facilities)
-        if (facilityInfo.data.type() == L"treasure" && facilityInfo.data.exists(L"dosh"))
-            nodeData.treasure += facilityInfo.data[L"dosh"].as_uint32();
+    for (auto& facility : room.facilities)
+        if (nodeData.treasure != -1u)
+            nodeData.treasure += facility.treasure;
 }

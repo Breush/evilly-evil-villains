@@ -158,9 +158,7 @@
 	<floor pos="6">
 		<room pos="0" state="constructed" />
 		<room pos="1" state="constructed">
-			<facility type="treasure">
-				<dosh type="uint32" value="421" />
-			</facility>
+			<facility type="smallChest" treasure="198" />
 		</room>
 		<room pos="2" state="constructed">
 			<facility type="ladderExit" isLink="true">

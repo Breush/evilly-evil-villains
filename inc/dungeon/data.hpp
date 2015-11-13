@@ -47,9 +47,10 @@ namespace dungeon
     //! A facility information.
     struct FacilityInfo
     {
-        ElementData data;               //!< The data.
-        std::vector<Direction> rtunnels;  //!< Relative tunnels that allow a specific direction.
-        bool isLink = false;            //!< Is these info been created by a link?
+        ElementData data;                   //!< The data.
+        std::vector<Direction> rtunnels;    //!< Relative tunnels that allow a specific direction.
+        bool isLink = false;                //!< Is these info been created by a link?
+        uint treasure = -1u;                //!< The treasure held.
     };
 
     // Forward declarations

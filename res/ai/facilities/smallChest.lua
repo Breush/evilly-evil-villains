@@ -1,6 +1,6 @@
----------------------------
--- Facilities | Treasure --
----------------------------
+------------------------------
+-- Facilities | Small chest --
+------------------------------
 -- by A. Breust --
 
 ---- Description:
@@ -10,6 +10,9 @@
 
 ---------------
 -- Callbacks --
+
+-- TODO Have a callback on treasure value changed
+-- so that we can adapt the display (empty/full/etc.)
 
 -- Called on new data
 function _reinit()

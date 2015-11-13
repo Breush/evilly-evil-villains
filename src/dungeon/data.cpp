@@ -194,6 +194,7 @@ void Data::loadDungeon(const std::wstring& file)
                 room.facilities.emplace_back();
                 auto& facilityInfo = room.facilities.back();
                 facilityInfo.isLink = facilityNode.attribute(L"isLink").as_bool();
+                facilityInfo.treasure = facilityNode.attribute(L"treasure").as_uint(-1u);
                 facilityInfo.data.loadXML(facilityNode);
 
                 // Tunnels
@@ -279,6 +280,7 @@ void Data::saveDungeon(const std::wstring& file)
             for (const auto& facility : room.facilities) {
                 auto facilityNode = roomNode.append_child(L"facility");
                 if (facility.isLink) facilityNode.append_attribute(L"isLink") = true;
+                if (facility.treasure != -1u) facilityNode.append_attribute(L"treasure") = facility.treasure;
                 facility.data.saveXML(facilityNode);
 
                 // Tunnels
@@ -429,10 +431,11 @@ uint Data::roomTreasureDosh(const sf::Vector2u& coords)
 {
     uint treasureDosh = 0u;
     auto& roomInfo = room(coords);
-    // TODO Use the treasure tag
-    for (const auto& facilityInfo : roomInfo.facilities)
-        if (facilityInfo.data.type() == L"treasure" && facilityInfo.data.exists(L"dosh"))
-            treasureDosh += facilityInfo.data.at(L"dosh").as_uint32();
+    for (const auto& facilityInfo : roomInfo.facilities) {
+        auto& treasure = facilityInfo.treasure;
+        if (treasure == -1u) continue;
+        treasureDosh += treasure;
+    }
     return treasureDosh;
 }
 
@@ -445,16 +448,16 @@ void Data::stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh
 
     // Stealing all potential facilities until the amount of stolen dosh is reached
     for (auto& facilityInfo : roomInfo.facilities) {
-        if (facilityInfo.data.type() == L"treasure" && facilityInfo.data.exists(L"dosh")) {
-            auto& treasureDosh = facilityInfo.data[L"dosh"].as_uint32();
-            auto dosh = std::min(treasureDosh, stolenDosh);
-            hero.addDosh(dosh);
-            treasureDosh -= dosh;
-            stolenDosh -= dosh;
+        auto& treasure = facilityInfo.treasure;
+        if (treasure == -1u) continue;
 
-            if (stolenDosh == 0u)
-                break;
-        }
+        auto dosh = std::min(treasure, stolenDosh);
+        hero.addDosh(dosh);
+        treasure -= dosh;
+        stolenDosh -= dosh;
+
+        if (stolenDosh == 0u)
+            break;
     }
 
     // We could check that stolenDosh is zero hero,

@@ -403,8 +403,9 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
         });
 
         // If treasure, modifiy pop-up
+        // TODO Let the facility itself edit its treasure content
         for (const auto& facilityInfo : m_data->room(coords).facilities)
-            if (facilityInfo.data.type() == L"treasure")
+            if (facilityInfo.treasure != -1u)
                 m_contextMenu.addChoice(_("Edit treasure dosh"), [=]() { showEditTreasureDialog(coords); });
     }
 
@@ -416,25 +417,26 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
 void Inter::showEditTreasureDialog(const sf::Vector2u& coords)
 {
     // Find the reference in dungeon data
-    ElementData* pTreasureData = nullptr;
-    for (auto& facilityInfo : m_data->room(coords).facilities)
-        if (facilityInfo.data.type() == L"treasure")
-            pTreasureData = &facilityInfo.data;
-    returnif (pTreasureData == nullptr);
+    // TODO We can currently only edit one type of treasure...
+    // Do something elsewhere and better
 
-    auto& treasureData = *pTreasureData;
-    auto& treasureDosh = treasureData[L"dosh"].as_uint32();
+    uint* pTreasureDosh = nullptr;
+    for (auto& facilityInfo : m_data->room(coords).facilities)
+        if (facilityInfo.treasure != -1u)
+            pTreasureDosh = &facilityInfo.treasure;
+    returnif (pTreasureDosh == nullptr);
+    auto& treasureDosh = *pTreasureDosh;
 
     m_treasureEditSpinBox.entry().giveFocus();
     m_treasureEditSpinBox.setVisible(true);
     m_treasureEditSpinBox.set(treasureDosh);
     m_treasureEditSpinBox.setLocalPosition(tileLocalPosition(coords));
     m_treasureEditSpinBox.setMaxLimit(treasureDosh + m_data->villain().doshWallet.value());
-    m_treasureEditSpinBox.setOnValueChangeCallback([this, &coords, &treasureData] (uint32 oldValue, uint32 newValue) {
+    m_treasureEditSpinBox.setOnValueChangeCallback([this, &coords, &treasureDosh] (uint32 oldValue, uint32 newValue) {
         // Sub or add
         if (newValue >= oldValue) m_data->villain().doshWallet.sub(newValue - oldValue);
         else m_data->villain().doshWallet.add(oldValue - newValue);
-        treasureData[L"dosh"].as_uint32() = newValue;
+        treasureDosh = newValue;
 
         // Global dosh changed
         emitter()->emit("dosh_changed");
