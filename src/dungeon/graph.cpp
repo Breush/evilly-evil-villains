@@ -129,7 +129,9 @@ void Graph::refreshTreasure(NodeData& nodeData)
     returnif (!m_data->isRoomConstructed(nodeData.coords));
 
     auto& room = m_data->room(nodeData.coords);
-    for (auto& facility : room.facilities)
-        if (nodeData.treasure != -1u)
-            nodeData.treasure += facility.treasure;
+    for (auto& facility : room.facilities) {
+        const auto& treasure = facility.treasure;
+        if (treasure != -1u)
+            nodeData.treasure += treasure;
+    }
 }
