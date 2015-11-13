@@ -1,14 +1,12 @@
 #include "dungeon/facilities/ladder.hpp"
 
 #include "dungeon/data.hpp"
+#include "dungeon/inter.hpp"
 #include "tools/tools.hpp"
 #include "tools/string.hpp"
 
 using namespace dungeon::facilities;
 using namespace std::placeholders;
-
-// FIXME
-// Still have to find out how to force construction of "exit_end"
 
 Ladder::Ladder(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dungeon::Inter& inter)
     : baseClass(coords, facilityInfo.data, inter)
@@ -28,10 +26,12 @@ Ladder::Ladder(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dungeon::
     m_lua["eev_getRlink"] = [this] (const uint32 nth) { return lua_getRlink(nth); };
     m_lua["eev_addRlink"] = [this] (const uint32 direction) { lua_addRlink(direction); };
     m_lua["eev_selectAnimation"] = [this] (const std::string& animationKey) { lua_selectAnimation(animationKey); };
+    m_lua["eev_hasSiblingFacility"] = [this] (const std::string& facilityID) { return lua_hasSiblingFacility(facilityID); };
+    m_lua["eev_setVisible"] = [this] (bool isVisible) { lua_setVisible(isVisible); };
     m_lua["eev_log"] = [this] (const std::string& str) { lua_log(str); };
 
     // Load lua file
-    std::wstring facilityID = L"ladder";
+    const auto& facilityID = facilityInfo.data.type();
     std::string luaFilename = "res/ai/facilities/" + toString(facilityID) + ".lua";
     if (!m_lua.load(luaFilename))
         throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
@@ -74,6 +74,16 @@ void Ladder::lua_addRlink(const uint32 direction)
 void Ladder::lua_selectAnimation(const std::string& animationKey)
 {
     m_sprite.select(toWString(animationKey));
+}
+
+bool Ladder::lua_hasSiblingFacility(const std::string& facilityID) const
+{
+    return m_inter.hasFacility(m_coords, toWString(facilityID));
+}
+
+void Ladder::lua_setVisible(bool isVisible)
+{
+    setVisible(isVisible);
 }
 
 void Ladder::lua_log(const std::string& str) const

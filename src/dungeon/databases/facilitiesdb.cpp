@@ -18,6 +18,7 @@ FacilitiesDB::FacilitiesDB()
 
 void FacilitiesDB::reload()
 {
+    m_listedCount = 0u;
     m_facilitiesData.clear();
 
     // Loading from XML files
@@ -53,6 +54,8 @@ void FacilitiesDB::add(const std::string& filename)
     auto& facilityData = m_facilitiesData[id];
     std::wstring trName = facilityNode.attribute(L"trName").as_string();
     facilityData.name = _(toString(trName).c_str());
+    facilityData.listed = facilityNode.attribute(L"listed").as_bool(true);
+    if (facilityData.listed) ++m_listedCount;
 
     // Adding data
     for (const auto& dataNode : facilityNode.children(L"data")) {

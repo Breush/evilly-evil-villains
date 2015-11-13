@@ -5,7 +5,7 @@
 
 #include <selene/selene.hpp>
 
-// FIXME Move all that to a gneric Facility interface
+// FIXME Move all that to a generic Facility interface
 
 namespace dungeon
 {
@@ -63,6 +63,12 @@ namespace facilities
 
         //! Select an animation to play.
         void lua_selectAnimation(const std::string& animationKey);
+
+        //! Does a facility with the specified ID exists in the same room?
+        bool lua_hasSiblingFacility(const std::string& facilityID) const;
+
+        //! Control the visibility of the entity.
+        void lua_setVisible(bool isVisible);
 
         //! Debug log function from lua.
         void lua_log(const std::string& str) const;

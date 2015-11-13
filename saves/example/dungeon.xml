@@ -57,8 +57,10 @@
 	<floor pos="1">
 		<room pos="0" state="constructed">
 			<facility type="ladder">
-				<rlink direction="1" />
 				<rlink direction="33" />
+			</facility>
+			<facility type="ladderExit" isLink="true">
+				<rlink direction="1" />
 			</facility>
 		</room>
 		<room pos="1" state="void" />
@@ -69,14 +71,14 @@
 		</room>
 		<room pos="3" state="constructed" />
 		<room pos="4" state="constructed">
-			<facility type="ladder">
+			<facility type="ladderExit" isLink="true">
 				<rlink direction="1" />
 			</facility>
 		</room>
 	</floor>
 	<floor pos="2">
 		<room pos="0" state="constructed">
-			<facility type="ladder">
+			<facility type="ladderExit" isLink="true">
 				<rlink direction="1" />
 			</facility>
 		</room>
@@ -88,6 +90,8 @@
 		<room pos="2" state="constructed">
 			<facility type="ladder">
 				<rlink direction="33" />
+			</facility>
+			<facility type="ladderExit" isLink="true">
 				<rlink direction="1" />
 			</facility>
 		</room>
@@ -102,7 +106,7 @@
 			</trap>
 		</room>
 		<room pos="2" state="constructed">
-			<facility type="ladder">
+			<facility type="ladderExit" isLink="true">
 				<rlink direction="1" />
 			</facility>
 		</room>
@@ -125,7 +129,7 @@
 		</room>
 		<room pos="3" state="constructed" />
 		<room pos="4" state="constructed">
-			<facility type="ladder">
+			<facility type="ladderExit" isLink="true">
 				<rlink direction="1" />
 			</facility>
 		</room>
@@ -138,8 +142,10 @@
 				<dosh type="uint32" value="2" />
 			</trap>
 			<facility type="ladder">
-				<rlink direction="1" />
 				<rlink direction="33" />
+			</facility>
+			<facility type="ladderExit" isLink="true">
+				<rlink direction="1" />
 			</facility>
 		</room>
 		<room pos="3" state="void" />
@@ -157,13 +163,13 @@
 			</facility>
 		</room>
 		<room pos="2" state="constructed">
-			<facility type="ladder">
+			<facility type="ladderExit" isLink="true">
 				<rlink direction="1" />
 			</facility>
 		</room>
 		<room pos="3" state="constructed" />
 		<room pos="4" state="constructed">
-			<facility type="ladder">
+			<facility type="ladderExit" isLink="true">
 				<rlink direction="1" />
 			</facility>
 		</room>

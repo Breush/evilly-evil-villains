@@ -27,6 +27,7 @@ namespace dungeon
         struct FacilityData
         {
             std::wstring name = L"(Unknown)";   //!< Translated name.
+            bool listed = true;                 //!< Is the facility constructible by the player?
             Cost baseCost;                      //!< Construction price.
             std::vector<Link> links;            //!< All the links upon creation.
         };
@@ -55,6 +56,9 @@ namespace dungeon
         //! Get all the possibilities.
         inline const std::unordered_map<std::wstring, FacilityData>& get() const { return m_facilitiesData; }
 
+        //! Get how many listed facilities there are.
+        inline uint listedCount() const { return m_listedCount; }
+
         //! @}
 
     protected:
@@ -74,5 +78,6 @@ namespace dungeon
     private:
 
         std::unordered_map<std::wstring, FacilityData> m_facilitiesData;    //!< All data.
+        uint m_listedCount = 0u;                                            //!< How many listed facilities there are.
     };
 }

@@ -481,6 +481,11 @@ void Inter::setPredictionMonster(const sf::Vector2f& relPos, const std::wstring&
 //---------------------//
 //----- Structure -----//
 
+bool Inter::hasFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const
+{
+    return m_data->hasFacility(coords, facilityID);
+}
+
 void Inter::setRoomWidth(const float roomWidth)
 {
     // Note: We want room to keep the same ratio as original image.

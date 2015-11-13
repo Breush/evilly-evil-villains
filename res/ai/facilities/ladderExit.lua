@@ -25,24 +25,21 @@ local EAST  = 18
 function _reinit()
     -- No relative link yet
     if eev_getRlink(0) == 0 then
-        eev_addRlink(NORTH)
+        eev_addRlink(SOUTH)
     end
 
-    -- Is this a double entry ladder or a simple one?
-    local double = eev_hasSiblingFacility("ladderExit")
-
-    -- Set the correct visual given the graph link
-    if double then
-        eev_selectAnimation("exit_main")
-    else
-        eev_selectAnimation("main")
-    end
+    -- Should be hidden if the main ladder handle the graphics
+    local double = eev_hasSiblingFacility("ladder")
+    eev_setVisible(not double)
 end
 
 -- Called once on object creation
 function _register()
     -- Behind almost everything, but still in front of back wall
     eev_setDepth(99)
+
+    -- FIXME ladder and ladderExit should have different animation files
+    eev_selectAnimation("exit_end")
 end
 
 -------------

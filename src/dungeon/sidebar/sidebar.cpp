@@ -169,10 +169,11 @@ void Sidebar::refreshTabFacilitiesContent()
     facilitiesButtons.clear();
 
     const auto& facilitiesList = m_data.facilitiesDB().get();
-    auto facilitiesCount = facilitiesList.size();
+    auto facilitiesCount = m_data.facilitiesDB().listedCount();
     facilitiesButtons.reserve(facilitiesCount);
 
     for (const auto& facilityPair : facilitiesList) {
+        if (!facilityPair.second.listed) continue;
         const auto& trapID = facilityPair.first;
         facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(facilityPair.second.name, trapID));
         auto& facilityButton = *facilitiesButtons.back();

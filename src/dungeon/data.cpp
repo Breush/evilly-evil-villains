@@ -469,6 +469,13 @@ void Data::stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh
 //--------------------------------//
 //----- Facilities and traps -----//
 
+bool Data::hasFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const
+{
+    const auto& roomInfo = room(coords);
+    auto found = std::find_if(roomInfo.facilities, [facilityID] (const FacilityInfo& facilityInfo) { return facilityInfo.data.type() == facilityID; });
+    return found != std::end(roomInfo.facilities);
+}
+
 void Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool isLink)
 {
     returnif (!isRoomConstructed(coords));
@@ -491,17 +498,13 @@ void Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     EventEmitter::emit(event);
 
     // Create all the implicit links too
-    // FIXME This if is a cheat...
-    // We should have LadderIn and LadderOut to fix that issue of self-replicating
-    if (!isLink) {
-        const auto& facilityInfo = facilitiesDB().get(facilityID);
-        for (const auto& link : facilityInfo.links) {
-            if (link.style == Link::Style::IMPLICIT) {
-                sf::Vector2u linkCoords;
-                linkCoords.x = coords.x + link.x;
-                linkCoords.y = coords.y + link.y;
-                createRoomFacility(linkCoords, link.id, true);
-            }
+    const auto& facilityInfo = facilitiesDB().get(facilityID);
+    for (const auto& link : facilityInfo.links) {
+        if (link.style == Link::Style::IMPLICIT) {
+            sf::Vector2u linkCoords;
+            linkCoords.x = coords.x + link.x;
+            linkCoords.y = coords.y + link.y;
+            createRoomFacility(linkCoords, link.id, true);
         }
     }
 }
@@ -514,22 +517,16 @@ void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     auto found = std::find_if(roomInfo.facilities, [facilityID] (const FacilityInfo& facilityInfo) { return facilityInfo.data.type() == facilityID; });
     returnif (found == std::end(roomInfo.facilities));
 
-    std::cerr << "Removing facility " << toString(facilityID) << "in " << coords << std::endl;
-
     // Remove all implicit links
-    // TODO This if should be ultimately removed, see createRoomFacility()
-    if (!found->isLink) {
-        const auto& facilityInfo = facilitiesDB().get(facilityID);
-        for (const auto& link : facilityInfo.links) {
-            if (link.style == Link::Style::IMPLICIT) {
-                sf::Vector2u linkCoords;
-                linkCoords.x = coords.x + link.x;
-                linkCoords.y = coords.y + link.y;
-                std::cerr << "Also deleting " << linkCoords << std::endl;
-                // Note: Whatever happens, there can be only one of this ID
-                // in that same room, so there no issue deleting it without more checking
-                removeRoomFacility(linkCoords, link.id);
-            }
+    const auto& facilityInfo = facilitiesDB().get(facilityID);
+    for (const auto& link : facilityInfo.links) {
+        if (link.style == Link::Style::IMPLICIT) {
+            sf::Vector2u linkCoords;
+            linkCoords.x = coords.x + link.x;
+            linkCoords.y = coords.y + link.y;
+            // Note: Whatever happens, there can be only one of this ID
+            // in that same room, so there no issue deleting it without more checking
+            removeRoomFacility(linkCoords, link.id);
         }
     }
 
@@ -547,10 +544,14 @@ void Data::removeRoomFacilities(const sf::Vector2u& coords)
 {
     returnif (!isRoomConstructed(coords));
 
+    // Note: facilities here is a copy, so that progressive
+    // removals won't change that.
+    // A more optimized version could exist, but is it necessary?
     const auto& roomInfo = room(coords);
     const auto facilities = roomInfo.facilities;
     for (const auto& facility : facilities)
-        removeRoomFacility(coords, facility.data.type());
+        if (!facility.isLink)
+            removeRoomFacility(coords, facility.data.type());
 }
 
 void Data::removeRoomMonsters(const sf::Vector2u& coords)

@@ -85,6 +85,9 @@ namespace dungeon
         //! @name Structure
         //! @{
 
+        //! Return true if a facility exists in this room.
+        bool hasFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const;
+
         //! Computes the correct roomScale from the expected width.
         void setRoomWidth(const float roomWidth);
 

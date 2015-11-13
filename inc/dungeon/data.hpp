@@ -157,6 +157,9 @@ namespace dungeon
         //! Easy getter to access a room.
         inline Room& room(const sf::Vector2u& coords) { return m_floors[coords.x].rooms[coords.y]; }
 
+        //! Easy getter to access a room (const).
+        inline const Room& room(const sf::Vector2u& coords) const { return m_floors[coords.x].rooms[coords.y]; }
+
         //! Whether a specific is in constructed state.
         //! If coords are outside of boundaries, returns false.
         bool isRoomConstructed(const sf::Vector2u& coords);
@@ -188,6 +191,9 @@ namespace dungeon
         //-----------------------------//
         //! @name Facilities and traps
         //! @{
+
+        //! Returns true if a facility exists in the specified coordinates.
+        bool hasFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const;
 
         //! Add the specified facility to the dungeon if it does not exists yet.
         //! Will emit an event if a change occured.

@@ -172,7 +172,8 @@ void Hero::refreshPositionFromNode(bool firstNode)
 
     // FIXME Here, we know it's ladder, so we change depth,
     // but this is still not a good design,
-    // a state machine with depth memory would be useful
+    // this won't work anymore with stairs.
+    // -> Might do a callback to Lua for a isUsingTunnel() or so.
     if (lerpable()->targetPosition().y != localPosition().y) {
         m_sprite.select(L"climb");
         setDepth(90.f);
