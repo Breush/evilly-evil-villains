@@ -6,7 +6,7 @@
 #include "dungeon/data.hpp"
 #include "dungeon/trap.hpp"
 #include "dungeon/monster.hpp"
-#include "dungeon/facilities.hpp"
+#include "dungeon/facility.hpp"
 #include "nui/contextmenu.hpp"
 #include "nui/spinbox.hpp"
 #include "sfe/grid.hpp"

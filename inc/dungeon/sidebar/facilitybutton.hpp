@@ -10,57 +10,6 @@
 
 namespace dungeon
 {
-    // Forward declarations
-
-    class Inter;
-
-    //! A generic facility interface.
-
-    class Facility : public DetectEntity, public context::EventReceiver
-    {
-    public:
-
-        //! Constructor.
-        //! Set the reference to the room in data.
-        Facility(const sf::Vector2u& coords, ElementData& elementdata, dungeon::Inter& inter)
-            : m_coords(coords)
-            , m_inter(inter)
-            , m_elementdata(elementdata)
-        {
-            setDetectable(false);
-        }
-
-        //! Default destructor.
-        virtual ~Facility() = default;
-
-        virtual std::string _name() const override = 0;
-        std::string detectKey() const final { return "facility"; }
-
-    protected:
-
-        //---------------//
-        //! @name Events
-        //! @{
-
-        virtual void receive(const context::Event& event) override = 0;
-
-        //! @}
-
-        //------------------//
-        //! @name Usability
-        //! @{
-
-        // virtual bool isUsable() const = 0;
-
-        //! @}
-
-    protected:
-
-        sf::Vector2u m_coords;          //!< The room in which the facility is set.
-        dungeon::Inter& m_inter;        //!< To be able to interact with nearby elements.
-        ElementData& m_elementdata;     //!< The data corresponding to the facility.
-    };
-
     //! A FacilityGrabbable spawner.
     /*!
      *  Implements the scene::GrabbableSpawner for a dungeon facility.

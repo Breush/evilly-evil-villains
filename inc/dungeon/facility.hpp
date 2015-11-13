@@ -1,45 +1,36 @@
 #pragma once
 
-#include "dungeon/facilities.hpp"
+#include "dungeon/elementdata.hpp"
+#include "dungeon/detectentity.hpp"
 #include "scene/wrappers/animatedsprite.hpp"
 
 #include <selene/selene.hpp>
-
-// FIXME Move all that to a generic Facility interface
 
 namespace dungeon
 {
     // Forward declarations
 
     class FacilityInfo;
+    class Inter;
 
-namespace facilities
-{
-    //!< The ladder facility.
+    //! A generic facility interface.
 
-    class Ladder final : public Facility
+    class Facility final : public DetectEntity
     {
-        using baseClass = Facility;
+        using baseClass = DetectEntity;
 
     public:
 
         //! Constructor.
-        Ladder(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dungeon::Inter& inter);
+        Facility(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dungeon::Inter& inter);
 
         //! Default destructor.
-        ~Ladder() = default;
+        virtual ~Facility() = default;
 
-        std::string _name() const final { return "dungeon::facilities::Ladder"; }
+        std::string detectKey() const final { return "facility"; }
+        std::string _name() const final { return "dungeon::Facility"; }
 
     protected:
-
-        //---------------//
-        //! @name Events
-        //! @{
-
-        void receive(const context::Event& event) final {}
-
-        //! @}
 
         //----------------//
         //! @name Lua API
@@ -77,9 +68,10 @@ namespace facilities
 
     private:
 
+        sf::Vector2u m_coords;          //!< The room in which the facility is set.
+        dungeon::Inter& m_inter;        //!< To be able to interact with nearby elements.
         FacilityInfo& m_facilityInfo;   //!< The facility data reference.
         scene::AnimatedSprite m_sprite; //!< The sprite.
         sel::State m_lua;               //!< The lua state.
     };
-}
 }

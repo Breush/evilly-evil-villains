@@ -19,17 +19,15 @@ Trap::Trap(const sf::Vector2u& coords, ElementData& edata, Inter& inter)
     auto sTrapID = toString(trapID);
 
     // Initializing
-    setDetectRangeFactor(m_inter.tileSize().x);
-
-    // Position
     sf::Vector2f trapPosition = m_inter.tileLocalPosition(coords) + 0.5f * m_inter.tileSize();
+    setDetectRangeFactor(m_inter.tileSize().x);
+    setLocalScale(m_inter.roomScale());
     setLocalPosition(trapPosition);
     centerOrigin();
 
     // Decorum
     attachChild(m_sprite);
     m_sprite.load("dungeon/traps/" + sTrapID);
-    m_sprite.setLocalScale(m_inter.roomScale());
 
     // Lua
     std::string luaFilename = "res/ai/traps/" + sTrapID + ".lua";

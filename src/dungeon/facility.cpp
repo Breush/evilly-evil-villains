@@ -1,25 +1,36 @@
-#include "dungeon/facilities/ladder.hpp"
+#include "dungeon/facility.hpp"
 
 #include "dungeon/data.hpp"
 #include "dungeon/inter.hpp"
 #include "tools/tools.hpp"
 #include "tools/string.hpp"
 
-using namespace dungeon::facilities;
+using namespace dungeon;
 using namespace std::placeholders;
 
-Ladder::Ladder(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dungeon::Inter& inter)
-    : baseClass(coords, facilityInfo.data, inter)
+Facility::Facility(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dungeon::Inter& inter)
+    : m_coords(coords)
+    , m_inter(inter)
     , m_facilityInfo(facilityInfo)
     , m_lua(true)
 {
+    setDetectable(false);
+    const auto& facilityID = facilityInfo.data.type();
+    auto sFacilityID = toString(facilityID);
+
+    // Initializing
+    sf::Vector2f facilityPosition = m_inter.tileLocalPosition(coords) + 0.5f * m_inter.tileSize();
+    setDetectRangeFactor(m_inter.tileSize().x);
+    setLocalScale(m_inter.roomScale());
+    setLocalPosition(facilityPosition);
+    centerOrigin();
+
     // Decorum
     attachChild(m_sprite);
-    m_sprite.load("dungeon/facilities/ladder");
-    m_sprite.centerOrigin();
+    m_sprite.load("dungeon/facilities/" + sFacilityID);
 
     // Lua API
-    std::function<void(const std::string&, const std::string&, const std::string&)> eev_addCallback = std::bind(&Ladder::lua_addCallback, this, _1, _2, _3);
+    std::function<void(const std::string&, const std::string&, const std::string&)> eev_addCallback = std::bind(&Facility::lua_addCallback, this, _1, _2, _3);
     m_lua["eev_addCallback"] = eev_addCallback;
     m_lua["eev_setDepth"] = [this] (const lua_Number inDepth) { lua_setDepth(inDepth); };
     m_lua["eev_isLink"] = [this] { return lua_isLink(); };
@@ -31,8 +42,7 @@ Ladder::Ladder(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dungeon::
     m_lua["eev_log"] = [this] (const std::string& str) { lua_log(str); };
 
     // Load lua file
-    const auto& facilityID = facilityInfo.data.type();
-    std::string luaFilename = "res/ai/facilities/" + toString(facilityID) + ".lua";
+    std::string luaFilename = "res/ai/facilities/" + sFacilityID + ".lua";
     if (!m_lua.load(luaFilename))
         throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
     m_lua["_register"]();
@@ -43,51 +53,50 @@ Ladder::Ladder(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dungeon::
 //---------------------------//
 //----- LUA interaction -----//
 
-void Ladder::lua_addCallback(const std::string& luaKey, const std::string& entityType, const std::string& condition)
+void Facility::lua_addCallback(const std::string& luaKey, const std::string& entityType, const std::string& condition)
 {
     addDetectSignal(entityType, condition, [this, luaKey] (const uint32 UID) { m_lua[luaKey.c_str()](UID); });
 }
 
-void Ladder::lua_setDepth(const lua_Number inDepth)
+void Facility::lua_setDepth(const lua_Number inDepth)
 {
     setDepth(static_cast<float>(inDepth));
 }
 
-bool Ladder::lua_isLink()
+bool Facility::lua_isLink()
 {
     return m_facilityInfo.isLink;
 }
 
-uint32 Ladder::lua_getRtunnel(const uint32 nth) const
+uint32 Facility::lua_getRtunnel(const uint32 nth) const
 {
     returnif (nth >= m_facilityInfo.rtunnels.size()) 0u;
     return static_cast<uint32>(m_facilityInfo.rtunnels.at(nth));
 }
 
-void Ladder::lua_addRtunnel(const uint32 direction)
+void Facility::lua_addRtunnel(const uint32 direction)
 {
     // TODO Should be passed through a dungeon data function
     // So that an event can occur and refresh the graph
     m_facilityInfo.rtunnels.emplace_back(static_cast<Direction>(direction));
 }
 
-void Ladder::lua_selectAnimation(const std::string& animationKey)
+void Facility::lua_selectAnimation(const std::string& animationKey)
 {
     m_sprite.select(toWString(animationKey));
 }
 
-bool Ladder::lua_hasSiblingFacility(const std::string& facilityID) const
+bool Facility::lua_hasSiblingFacility(const std::string& facilityID) const
 {
     return m_inter.hasFacility(m_coords, toWString(facilityID));
 }
 
-void Ladder::lua_setVisible(bool isVisible)
+void Facility::lua_setVisible(bool isVisible)
 {
     setVisible(isVisible);
 }
 
-void Ladder::lua_log(const std::string& str) const
+void Facility::lua_log(const std::string& str) const
 {
-    // TODO Adjust
-    std::cerr << "LUA [facility::ladder] " << str << std::endl;
+    std::cerr << "LUA [facility::" << toString(m_facilityInfo.data.type()) << "] " << str << std::endl;
 }

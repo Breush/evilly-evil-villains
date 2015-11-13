@@ -5,7 +5,7 @@
 #include "dungeon/event.hpp"
 #include "dungeon/sidebar/monstercage.hpp"
 #include "dungeon/sidebar/trapbutton.hpp"
-#include "dungeon/facilities.hpp"
+#include "dungeon/sidebar/facilitybutton.hpp"
 #include "dungeon/tools.hpp"
 #include "dungeon/data.hpp"
 #include "scene/scene.hpp"

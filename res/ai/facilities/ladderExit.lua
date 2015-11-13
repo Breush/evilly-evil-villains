@@ -1,6 +1,6 @@
--------------------------
--- Facilities | Ladder --
--------------------------
+-----------------------------
+-- Facilities | LadderExit --
+-----------------------------
 -- by A. Breust --
 
 ---- Description:
@@ -37,9 +37,6 @@ end
 function _register()
     -- Behind almost everything, but still in front of back wall
     eev_setDepth(99)
-
-    -- FIXME ladder and ladderExit should have different animation files
-    eev_selectAnimation("exit_end")
 end
 
 -------------

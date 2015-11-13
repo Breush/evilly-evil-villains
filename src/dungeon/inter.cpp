@@ -4,9 +4,6 @@
 #include "core/application.hpp"
 #include "context/villains.hpp"
 #include "context/logger.hpp"
-#include "dungeon/trap.hpp"
-#include "dungeon/monster.hpp"
-#include "dungeon/facilities/maker.hpp"
 #include "dungeon/heroesmanager.hpp"
 #include "tools/debug.hpp"
 #include "tools/event.hpp"
@@ -754,11 +751,7 @@ void Inter::refreshTileFacilities(const sf::Vector2u& coords)
 
     // Facilities
     for (auto& facilityInfo : room.facilities) {
-        auto facility = facilities::make(coords, facilityInfo, *this);
-        facility->setLocalPosition(tileLocalPosition(coords) + tileSize() / 2.f);
-        facility->setLocalScale(m_roomScale);
-        facility->setEmitter(m_data);
-        facility->centerOrigin();
+        auto facility = std::make_unique<Facility>(coords, facilityInfo, *this);
         tile.facilities.emplace_back(std::move(facility));
         attachChild(*tile.facilities.back());
     }
