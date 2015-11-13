@@ -39,6 +39,9 @@ namespace dungeon
         //! Returns true if the data has no attributes.
         inline bool empty() const { return m_attributes.empty(); }
 
+        //! Whether an attribute exists or not.
+        bool exists(const std::wstring& name) const;
+
         //! @}
 
         //------------------------//
@@ -65,9 +68,6 @@ namespace dungeon
 
         //! Access an attribute.
         inline MetaData& operator[](const std::wstring& name) { return m_attributes[name]; }
-
-        //! Whether an attribute exists or not.
-        inline bool exists(const std::wstring& name) const { return m_exists && (m_attributes.find(name) != std::end(m_attributes)); }
 
         //! Whether the data exists (false if cleared or just created).
         inline bool exists() const { return m_exists; }

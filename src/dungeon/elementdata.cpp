@@ -20,6 +20,14 @@ void ElementData::create(std::wstring type)
     m_exists = true;
 }
 
+bool ElementData::exists(const std::wstring& name) const
+{
+    returnif (!m_exists) false;
+    auto found = m_attributes.find(name);
+    returnif (found == std::end(m_attributes)) false;
+    return !found->second.type().empty();
+}
+
 //---------------------------//
 //----- XML interaction -----//
 

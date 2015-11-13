@@ -22,20 +22,9 @@ namespace dungeon
     {
         union
         {
-            int delta;  //!< The difference between previous and current value of resources.
+            int delta;              //!< The difference between previous and current value of resources.
             RoomCoords room;        //!< The coordinates of a room whenever it is constructed/destroyed.
             const wchar_t* message; //!< An additional information.
-
-            //! When an action interacts with a room.
-            struct
-            {
-                union
-                {
-                    Hero* hero;         //!< The hero concerned.
-                    Monster* monster;   //!< The monster concerned.
-                };
-                RoomCoords room;    //!< The coordinates of the room.
-            } action;
 
             //! When a facility changed.
             struct

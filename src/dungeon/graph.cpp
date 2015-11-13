@@ -121,6 +121,11 @@ void Graph::updateFromData()
 //-----------------------------------//
 //----- Internal changes update -----//
 
+// FIXME BUG This refresh is called on facility_changed
+// but the treasure entity has not been created (in Inter),
+// so the treasure will not be refreshed unless an other event is
+// launched from the Treasure constructor. (From Lua!)
+// -> Make it react to a treasure_changed event.
 void Graph::refreshTreasure(NodeData& nodeData)
 {
     nodeData.treasure = 0u;
@@ -130,6 +135,6 @@ void Graph::refreshTreasure(NodeData& nodeData)
     // TODO Should be a getTreasure() function in all facilities
     auto& room = m_data->room(nodeData.coords);
     for (auto& facilityInfo : room.facilities)
-        if (facilityInfo.data.type() == L"treasure")
+        if (facilityInfo.data.type() == L"treasure" && facilityInfo.data.exists(L"dosh"))
             nodeData.treasure += facilityInfo.data[L"dosh"].as_uint32();
 }
