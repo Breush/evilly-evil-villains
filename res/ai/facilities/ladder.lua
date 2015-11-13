@@ -23,9 +23,9 @@ local EAST  = 18
 
 -- Called on new data
 function _reinit()
-    -- No relative link yet
-    if eev_getRlink(0) == 0 then
-        eev_addRlink(NORTH)
+    -- No relative tunnel yet
+    if eev_getRtunnel(0) == 0 then
+        eev_addRtunnel(NORTH)
     end
 
     -- Is this a double entry ladder or a simple one?

@@ -48,7 +48,7 @@ namespace dungeon
     struct FacilityInfo
     {
         ElementData data;               //!< The data.
-        std::vector<Direction> rlinks;  //!< Relative links that allow a specific direction.
+        std::vector<Direction> rtunnels;  //!< Relative tunnels that allow a specific direction.
         bool isLink = false;            //!< Is these info been created by a link?
     };
 

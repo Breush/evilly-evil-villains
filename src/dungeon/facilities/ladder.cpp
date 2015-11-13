@@ -23,8 +23,8 @@ Ladder::Ladder(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dungeon::
     m_lua["eev_addCallback"] = eev_addCallback;
     m_lua["eev_setDepth"] = [this] (const lua_Number inDepth) { lua_setDepth(inDepth); };
     m_lua["eev_isLink"] = [this] { return lua_isLink(); };
-    m_lua["eev_getRlink"] = [this] (const uint32 nth) { return lua_getRlink(nth); };
-    m_lua["eev_addRlink"] = [this] (const uint32 direction) { lua_addRlink(direction); };
+    m_lua["eev_getRtunnel"] = [this] (const uint32 nth) { return lua_getRtunnel(nth); };
+    m_lua["eev_addRtunnel"] = [this] (const uint32 direction) { lua_addRtunnel(direction); };
     m_lua["eev_selectAnimation"] = [this] (const std::string& animationKey) { lua_selectAnimation(animationKey); };
     m_lua["eev_hasSiblingFacility"] = [this] (const std::string& facilityID) { return lua_hasSiblingFacility(facilityID); };
     m_lua["eev_setVisible"] = [this] (bool isVisible) { lua_setVisible(isVisible); };
@@ -58,17 +58,17 @@ bool Ladder::lua_isLink()
     return m_facilityInfo.isLink;
 }
 
-uint32 Ladder::lua_getRlink(const uint32 nth) const
+uint32 Ladder::lua_getRtunnel(const uint32 nth) const
 {
-    returnif (nth >= m_facilityInfo.rlinks.size()) 0u;
-    return static_cast<uint32>(m_facilityInfo.rlinks.at(nth));
+    returnif (nth >= m_facilityInfo.rtunnels.size()) 0u;
+    return static_cast<uint32>(m_facilityInfo.rtunnels.at(nth));
 }
 
-void Ladder::lua_addRlink(const uint32 direction)
+void Ladder::lua_addRtunnel(const uint32 direction)
 {
     // TODO Should be passed through a dungeon data function
     // So that an event can occur and refresh the graph
-    m_facilityInfo.rlinks.emplace_back(static_cast<Direction>(direction));
+    m_facilityInfo.rtunnels.emplace_back(static_cast<Direction>(direction));
 }
 
 void Ladder::lua_selectAnimation(const std::string& animationKey)

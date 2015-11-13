@@ -54,12 +54,12 @@ namespace facilities
         //! Get the state of this facility: are we created as a link?
         bool lua_isLink();
 
-        //! Get the n-th relative link from the list.
+        //! Get the n-th relative tunnel from the list.
         //! Return 0u if not found.
-        uint32 lua_getRlink(const uint32 nth) const;
+        uint32 lua_getRtunnel(const uint32 nth) const;
 
-        //! Add a relative link to the list.
-        void lua_addRlink(const uint32 direction);
+        //! Add a relative tunnel to the list.
+        void lua_addRtunnel(const uint32 direction);
 
         //! Select an animation to play.
         void lua_selectAnimation(const std::string& animationKey);

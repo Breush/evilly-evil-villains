@@ -193,13 +193,13 @@ void Data::loadDungeon(const std::wstring& file)
             for (const auto& facilityNode : roomNode.children(L"facility")) {
                 room.facilities.emplace_back();
                 auto& facilityInfo = room.facilities.back();
+                facilityInfo.isLink = facilityNode.attribute(L"isLink").as_bool();
                 facilityInfo.data.loadXML(facilityNode);
 
-                // Links
-                facilityInfo.isLink = facilityNode.attribute(L"isLink").as_bool();
-                for (auto rlinkNode : facilityNode.children(L"rlink")) {
-                    auto direction = static_cast<Direction>(rlinkNode.attribute(L"direction").as_uint());
-                    facilityInfo.rlinks.emplace_back(direction);
+                // Tunnels
+                for (auto rtunnelNode : facilityNode.children(L"rtunnel")) {
+                    auto direction = static_cast<Direction>(rtunnelNode.attribute(L"direction").as_uint());
+                    facilityInfo.rtunnels.emplace_back(direction);
                 }
             }
 
@@ -278,13 +278,13 @@ void Data::saveDungeon(const std::wstring& file)
             // Facilities
             for (const auto& facility : room.facilities) {
                 auto facilityNode = roomNode.append_child(L"facility");
+                if (facility.isLink) facilityNode.append_attribute(L"isLink") = true;
                 facility.data.saveXML(facilityNode);
 
-                // Links
-                if (facility.isLink) facilityNode.append_attribute(L"isLink") = true;
-                for (auto& rlink : facility.rlinks) {
-                    auto rlinkNode = facilityNode.append_child(L"rlink");
-                    rlinkNode.append_attribute(L"direction") = static_cast<uint>(rlink);
+                // Tunnels
+                for (auto& rtunnel : facility.rtunnels) {
+                    auto rtunnelNode = facilityNode.append_child(L"rtunnel");
+                    rtunnelNode.append_attribute(L"direction") = static_cast<uint>(rtunnel);
                 }
             }
         }
@@ -404,8 +404,8 @@ bool Data::roomNeighbourAccessible(const sf::Vector2u& coords, Direction directi
 
     // Check if a facility gives us an access
     for (const auto& facilityInfo : currentRoom.facilities)
-        for (const auto& rlink : facilityInfo.rlinks)
-            returnif (rlink == direction) true;
+        for (const auto& rtunnel : facilityInfo.rtunnels)
+            returnif (rtunnel == direction) true;
 
     return false;
 }

@@ -23,9 +23,9 @@ local EAST  = 18
 
 -- Called on new data
 function _reinit()
-    -- No relative link yet
-    if eev_getRlink(0) == 0 then
-        eev_addRlink(SOUTH)
+    -- No relative tunnel yet
+    if eev_getRtunnel(0) == 0 then
+        eev_addRtunnel(SOUTH)
     end
 
     -- Should be hidden if the main ladder handle the graphics
