@@ -62,10 +62,4 @@ namespace SpriterEngine
         resultObject->setScale(linear(scale, bObject->getScale(), t));
         resultObject->setAlpha(linear(alpha, bObject->getAlpha(), t));
     }
-
-    void BoneObjectInfo::render()
-    {
-        // override and add drawing code here to enable bone debug rendering
-    }
-
 }

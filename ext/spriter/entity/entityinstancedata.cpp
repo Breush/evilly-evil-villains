@@ -19,7 +19,7 @@ namespace SpriterEngine
 
     EntityInstanceData::EntityInstanceData(SpriterModel *model, EntityInstance *entityInstance, Entity *entity, ObjectFactory *objectFactory)
     {
-        transformers.insert(std::make_pair(THIS_ENTITY, TransformProcessor(entityInstance)));
+        transformProcessor = &(*transformers.insert(std::make_pair(THIS_ENTITY, TransformProcessor(entityInstance))).first).second;
         entity->setupInstance(model, entityInstance, this, objectFactory);
     }
 
@@ -373,4 +373,8 @@ namespace SpriterEngine
         }
     }
 
+    void EntityInstanceData::updateTransformProcessor()
+    {
+        transformProcessor->setTrigFunctions();
+    }
 }

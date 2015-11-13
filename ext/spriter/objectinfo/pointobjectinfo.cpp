@@ -40,10 +40,4 @@ namespace SpriterEngine
         resultObject->setAngle(angle.angleLinear(bObject->getAngle(), t));
         resultObject->setPosition(linear(position, bObject->getPosition(), t));
     }
-
-    void PointObjectInfo::render()
-    {
-        // override and add drawing code here to enable point debug rendering
-    }
-
 }
