@@ -336,6 +336,9 @@ void Inter::selectTile(const sf::Vector2u& coords)
 
     for (auto& layer : m_selectedTile->layers)
         layer->setShader("nui/select");
+
+    // Animated sprites do not handle shaders right now...
+    // so, nothing else to select
 }
 
 void Inter::deselectTile()

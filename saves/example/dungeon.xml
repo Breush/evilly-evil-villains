@@ -16,22 +16,13 @@
 				<fusingTime type="float" value="0" />
 				<tx type="float" value="1.5" />
 				<ty type="float" value="3.5" />
-				<ry type="float" value="4.53929043" />
 				<rx type="float" value="1.5" />
+				<ry type="float" value="4.53929043" />
 			</monster>
 			<monster type="creepim">
-				<fusingTime type="float" value="0" />
-				<tx type="float" value="0.5" />
-				<ty type="float" value="4.5" />
-				<ry type="float" value="3.58250809" />
-				<rx type="float" value="0.5" />
-			</monster>
-			<monster type="creepim">
-				<tx type="float" value="2.5" />
 				<fusingTime type="float" value="1.5617826" />
-				<ty type="float" value="3.20000005" />
-				<ry type="float" value="3.20000005" />
 				<rx type="float" value="2.5" />
+				<ry type="float" value="3.20000005" />
 			</monster>
 		</active>
 	</monsters>
@@ -49,8 +40,8 @@
 			<facility type="entrance" />
 		</room>
 		<room pos="4" state="constructed">
-			<facility type="ladder">
-				<rtunnel direction="33" />
+			<facility type="stairs" linkX="1" linkY="3">
+				<tunnel x="1" y="3" />
 			</facility>
 		</room>
 	</floor>
@@ -69,12 +60,12 @@
 				<rtunnel direction="33" />
 			</facility>
 		</room>
-		<room pos="3" state="constructed" />
-		<room pos="4" state="constructed">
-			<facility type="ladderExit" isLink="true">
-				<rtunnel direction="1" />
+		<room pos="3" state="constructed">
+			<facility type="stairs" linkX="0" linkY="4">
+				<tunnel x="0" y="4" />
 			</facility>
 		</room>
+		<room pos="4" state="constructed" />
 	</floor>
 	<floor pos="2">
 		<room pos="0" state="constructed">

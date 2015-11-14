@@ -86,7 +86,8 @@ void Graph::updateFromData()
         if (!nodeData.constructed)
             continue;
 
-        auto& room = m_data->room(nodeData.coords);
+        const auto& coords = nodeData.coords;
+        auto& room = m_data->room(coords);
 
         // Check facilities
         for (auto facilityInfo : room.facilities) {
@@ -98,14 +99,26 @@ void Graph::updateFromData()
 
             // Treasure
             refreshTreasure(nodeData);
+
+            // Tunnels
+            // TODO As data said, we should merge both rtunnel and tunnel definitions
+            for (auto direction : facilityInfo.rtunnels) {
+                auto tunnelCoords = m_data->roomNeighbourCoords(coords, direction);
+                if (m_data->isRoomConstructed(tunnelCoords))
+                    node.neighbours.emplace_back(m_nodes.at(tunnelCoords.x).at(tunnelCoords.y).node);
+            }
+
+            for (auto tunnelCoords : facilityInfo.tunnels) {
+                if (m_data->isRoomConstructed(tunnelCoords))
+                    node.neighbours.emplace_back(m_nodes.at(tunnelCoords.x).at(tunnelCoords.y).node);
+            }
         }
 
         // Check neighbourhood
-        for (auto direction : {EAST, WEST, NORTH, SOUTH}) {
-            if (m_data->roomNeighbourAccessible(nodeData.coords, direction)) {
-                auto neighbourCoords = m_data->roomNeighbourCoords(nodeData.coords, direction);
+        for (auto direction : {EAST, WEST}) {
+            auto neighbourCoords = m_data->roomNeighbourCoords(coords, direction);
+            if (m_data->isRoomConstructed(neighbourCoords))
                 node.neighbours.emplace_back(m_nodes.at(neighbourCoords.x).at(neighbourCoords.y).node);
-            }
         }
     }
 

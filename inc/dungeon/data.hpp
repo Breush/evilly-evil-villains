@@ -50,6 +50,7 @@ namespace dungeon
         const FacilitiesDB::FacilityData* common = nullptr; //!< All the common data.
         ElementData data;                                   //!< The individual data.
         std::vector<Direction> rtunnels;                    //!< Relative tunnels that allow a specific direction.
+        std::vector<sf::Vector2u> tunnels;                  //!< Absolute tunnels coordinates that allow a way to an other room.
         bool isLink = false;                                //!< Is these info been created by a link?
         uint treasure = -1u;                                //!< The treasure held.
     };
@@ -173,10 +174,6 @@ namespace dungeon
         //! Destroy a room.
         //! @param hard Destroy monsters inside.
         void destroyRoom(const sf::Vector2u& coords);
-
-        //! Return true if you can access the next room from the specified one.
-        //! In the case of unexisting room, it returns false.
-        bool roomNeighbourAccessible(const sf::Vector2u& coords, Direction direction);
 
         //! Return the coordinates of the next room from the specified one.
         /*!

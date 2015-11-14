@@ -203,6 +203,13 @@ void Data::loadDungeon(const std::wstring& file)
                     auto direction = static_cast<Direction>(rtunnelNode.attribute(L"direction").as_uint());
                     facilityInfo.rtunnels.emplace_back(direction);
                 }
+
+                for (auto tunnelNode : facilityNode.children(L"tunnel")) {
+                    sf::Vector2u tunnelCoords;
+                    tunnelCoords.x = tunnelNode.attribute(L"x").as_uint();
+                    tunnelCoords.y = tunnelNode.attribute(L"y").as_uint();
+                    facilityInfo.tunnels.emplace_back(tunnelCoords);
+                }
             }
 
             // Add the room
@@ -285,9 +292,18 @@ void Data::saveDungeon(const std::wstring& file)
                 facility.data.saveXML(facilityNode);
 
                 // Tunnels
+                // TODO Why should relative tunnels only be a direction
+                // and not relative coordinates? We should merge relative and absolute tunnel together.
+                // <tunnel type="relative" x="1" y="0" />
                 for (auto& rtunnel : facility.rtunnels) {
                     auto rtunnelNode = facilityNode.append_child(L"rtunnel");
                     rtunnelNode.append_attribute(L"direction") = static_cast<uint>(rtunnel);
+                }
+
+                for (auto& tunnel : facility.tunnels) {
+                    auto tunnelNode = facilityNode.append_child(L"tunnel");
+                    tunnelNode.append_attribute(L"x") = tunnel.x;
+                    tunnelNode.append_attribute(L"y") = tunnel.y;
                 }
             }
         }
@@ -388,29 +404,6 @@ void Data::destroyRoom(const sf::Vector2u& coords)
     EventEmitter::emit(event);
 
     emit("dungeon_changed");
-}
-
-bool Data::roomNeighbourAccessible(const sf::Vector2u& coords, Direction direction)
-{
-    // Just say no if out of bounds
-    auto neighbourCoord = roomNeighbourCoords(coords, direction);
-    returnif (neighbourCoord.x >= m_floorsCount) false;
-    returnif (neighbourCoord.y >= m_roomsByFloor) false;
-
-    // Just refuse non-constructed room
-    auto& currentRoom = room(coords);
-    auto& neighbourRoom = room(neighbourCoord);
-    returnif (neighbourRoom.state != RoomState::CONSTRUCTED) false;
-
-    // West/east is always ok
-    returnif (direction == WEST || direction == EAST) true;
-
-    // Check if a facility gives us an access
-    for (const auto& facilityInfo : currentRoom.facilities)
-        for (const auto& rtunnel : facilityInfo.rtunnels)
-            returnif (rtunnel == direction) true;
-
-    return false;
 }
 
 sf::Vector2u Data::roomNeighbourCoords(const sf::Vector2u& coords, Direction direction)
