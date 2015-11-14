@@ -61,6 +61,21 @@ namespace dungeon
         //! Control the visibility of the entity.
         void lua_setVisible(bool isVisible);
 
+        //! Has the facility an absolute link to an other room?
+        bool lua_hasLink() const;
+
+        //! The x coordinate of the absolute link. (Return -1u if none.)
+        uint32 lua_getLinkRoomX() const;
+
+        //! The x coordinate of the absolute link. (Return -1u if none.)
+        uint32 lua_getLinkRoomY() const;
+
+        //! Get the current room x coordinate.
+        uint32 lua_getCurrentRoomX() const;
+
+        //! Get the current room y coordinate.
+        uint32 lua_getCurrentRoomY() const;
+
         //! Debug log function from lua.
         void lua_log(const std::string& str) const;
 

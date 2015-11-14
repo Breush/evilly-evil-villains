@@ -51,7 +51,8 @@ namespace dungeon
         ElementData data;                                   //!< The individual data.
         std::vector<Direction> rtunnels;                    //!< Relative tunnels that allow a specific direction.
         std::vector<sf::Vector2u> tunnels;                  //!< Absolute tunnels coordinates that allow a way to an other room.
-        bool isLink = false;                                //!< Is these info been created by a link?
+        sf::Vector2u link = {-1u, -1u};                     //!< If these info are absolutely linked to another room.
+        bool isLink = false;                                //!< Are these info been created by a link?
         uint treasure = -1u;                                //!< The treasure held.
     };
 

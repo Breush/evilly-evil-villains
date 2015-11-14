@@ -39,6 +39,11 @@ Facility::Facility(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dunge
     m_lua["eev_selectAnimation"] = [this] (const std::string& animationKey) { lua_selectAnimation(animationKey); };
     m_lua["eev_hasSiblingFacility"] = [this] (const std::string& facilityID) { return lua_hasSiblingFacility(facilityID); };
     m_lua["eev_setVisible"] = [this] (bool isVisible) { lua_setVisible(isVisible); };
+    m_lua["eev_hasLink"] = [this] { return lua_hasLink(); };
+    m_lua["eev_getLinkRoomX"] = [this] { return lua_getLinkRoomX(); };
+    m_lua["eev_getLinkRoomY"] = [this] { return lua_getLinkRoomY(); };
+    m_lua["eev_getCurrentRoomX"] = [this] { return lua_getCurrentRoomX(); };
+    m_lua["eev_getCurrentRoomY"] = [this] { return lua_getCurrentRoomY(); };
     m_lua["eev_log"] = [this] (const std::string& str) { lua_log(str); };
 
     // Load lua file
@@ -94,6 +99,31 @@ bool Facility::lua_hasSiblingFacility(const std::string& facilityID) const
 void Facility::lua_setVisible(bool isVisible)
 {
     setVisible(isVisible);
+}
+
+bool Facility::lua_hasLink() const
+{
+    return (m_facilityInfo.link.x != -1u) && (m_facilityInfo.link.y != -1u);
+}
+
+uint32 Facility::lua_getLinkRoomX() const
+{
+    return m_facilityInfo.link.x;
+}
+
+uint32 Facility::lua_getLinkRoomY() const
+{
+    return m_facilityInfo.link.y;
+}
+
+uint32 Facility::lua_getCurrentRoomX() const
+{
+    return m_coords.x;
+}
+
+uint32 Facility::lua_getCurrentRoomY() const
+{
+    return m_coords.y;
 }
 
 void Facility::lua_log(const std::string& str) const

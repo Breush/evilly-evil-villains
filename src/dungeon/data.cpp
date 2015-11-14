@@ -197,6 +197,8 @@ void Data::loadDungeon(const std::wstring& file)
                 facilityInfo.isLink = facilityNode.attribute(L"isLink").as_bool();
                 facilityInfo.common = &facilitiesDB().get(facilityInfo.data.type());
                 facilityInfo.treasure = facilityNode.attribute(L"treasure").as_uint(-1u);
+                facilityInfo.link.x = facilityNode.attribute(L"linkX").as_uint(-1u);
+                facilityInfo.link.y = facilityNode.attribute(L"linkY").as_uint(-1u);
 
                 // Tunnels
                 for (auto rtunnelNode : facilityNode.children(L"rtunnel")) {
@@ -289,6 +291,8 @@ void Data::saveDungeon(const std::wstring& file)
                 auto facilityNode = roomNode.append_child(L"facility");
                 if (facility.isLink) facilityNode.append_attribute(L"isLink") = true;
                 if (facility.treasure != -1u) facilityNode.append_attribute(L"treasure") = facility.treasure;
+                if (facility.link.x != -1u) facilityNode.append_attribute(L"linkX") = facility.link.x;
+                if (facility.link.y != -1u) facilityNode.append_attribute(L"linkY") = facility.link.y;
                 facility.data.saveXML(facilityNode);
 
                 // Tunnels

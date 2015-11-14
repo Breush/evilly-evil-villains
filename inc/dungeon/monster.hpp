@@ -101,10 +101,10 @@ namespace dungeon
         //! Restart the current animation from the beginning.
         void lua_rewindAnimation();
 
-        // TODO Find a better way to get those?
-        // Note: sel::Tuple<uint, uint> fail, struct personnel fail, (uint&, uint&) fail
-        //! Get the current room coordinates.
+        //! Get the current room x coordinate.
         uint lua_getCurrentRoomX() const;
+
+        //! Get the current room y coordinate.
         uint lua_getCurrentRoomY() const;
 
         //! Debug log function from lua.
