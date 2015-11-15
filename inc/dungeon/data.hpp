@@ -78,7 +78,7 @@ namespace dungeon
         enum class RoomState
         {
             UNKNOWN,        //!< Error state.
-            VOID,           //!< Empty.
+            EMPTY,          //!< Empty.
             CONSTRUCTED,    //!< Constructed.
         };
 
@@ -350,7 +350,7 @@ namespace dungeon
         /*!
          *  Will resize the room/floor vectors to current values
          *  held in floorsCount and roomsByFloor properties,
-         *  and replace all RoomState::UNKNOWN to RoomState::VOID.
+         *  and replace all RoomState::UNKNOWN to RoomState::EMPTY.
          */
         void correctFloorsRooms();
 

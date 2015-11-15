@@ -43,7 +43,10 @@ DetectEntity::DetectCondition DetectEntity::interpretDetectCondition(const std::
     if (tokens.size() >= 3u) {
         // In range
         if (tokens[0u] == "distance" && tokens[1u] == "<") {
-            float range = std::stof(tokens[2u]);
+            std::stringstream str;
+            str << tokens[2u];
+            float range;
+            str >> range;
             return [this, key, range] { return isInRange(key, range); };
         }
     }

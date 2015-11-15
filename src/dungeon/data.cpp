@@ -180,7 +180,7 @@ void Data::loadDungeon(const std::wstring& file)
             room.coords.y = roomNode.attribute(L"pos").as_uint();
 
             std::wstring roomStateString = roomNode.attribute(L"state").as_string();
-            if (roomStateString == L"void") room.state = RoomState::VOID;
+            if (roomStateString == L"void") room.state = RoomState::EMPTY;
             else if (roomStateString == L"constructed") room.state = RoomState::CONSTRUCTED;
 
             wdebug_dungeon_3(L"Found room " << room.pos << L" of state " << roomStateString);
@@ -276,7 +276,7 @@ void Data::saveDungeon(const std::wstring& file)
 
             RoomState roomState = room.state;
             std::wstring roomStateString = L"unknown";
-            if (roomState == RoomState::VOID) roomStateString = L"void";
+            if (roomState == RoomState::EMPTY) roomStateString = L"void";
             else if (roomState == RoomState::CONSTRUCTED) roomStateString = L"constructed";
             roomNode.append_attribute(L"state") = roomStateString.c_str();
 
@@ -336,7 +336,7 @@ void Data::correctFloorsRooms()
 
             // Unknown rooms become empty
             if (ownRoom.state == RoomState::UNKNOWN)
-                ownRoom.state = RoomState::VOID;
+                ownRoom.state = RoomState::EMPTY;
         }
     }
 
@@ -350,14 +350,14 @@ bool Data::isRoomConstructed(const sf::Vector2u& coords)
 {
     returnif (coords.x >= m_floorsCount) false;
     returnif (coords.y >= m_roomsByFloor) false;
-    return room(coords).state != RoomState::VOID;
+    return room(coords).state != RoomState::EMPTY;
 }
 
 void Data::constructRoom(const sf::Vector2u& coords, bool hard)
 {
     returnif (coords.x >= m_floorsCount);
     returnif (coords.y >= m_roomsByFloor);
-    returnif (room(coords).state != RoomState::VOID);
+    returnif (room(coords).state != RoomState::EMPTY);
 
     returnif (!hard && !m_villain->doshWallet.sub(onConstructRoomCost));
     room(coords).state = RoomState::CONSTRUCTED;
@@ -393,14 +393,14 @@ void Data::destroyRoom(const sf::Vector2u& coords)
 {
     returnif (coords.x >= m_floorsCount);
     returnif (coords.y >= m_roomsByFloor);
-    returnif (room(coords).state == RoomState::VOID);
+    returnif (room(coords).state == RoomState::EMPTY);
 
     // Clear elements
     removeRoomFacilities(coords);
     removeRoomTrap(coords);
     removeRoomMonsters(coords);
 
-    room(coords).state = RoomState::VOID;
+    room(coords).state = RoomState::EMPTY;
 
     Event event;
     event.type = "room_destroyed";

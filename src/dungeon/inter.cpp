@@ -387,7 +387,7 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
     m_contextMenu.setTitle(roomName.str());
 
     // Room does not exists yet
-    if (room.state == Data::RoomState::VOID) {
+    if (room.state == Data::RoomState::EMPTY) {
         std::wstring text = _("Build room") + L" (-" + toWString(m_data->onConstructRoomCost) + L"d)";
         if (m_data->onConstructRoomCost <= m_data->villain().doshWallet.value())
             m_contextMenu.addChoice(text, [=]() { m_data->constructRoom(coords); });
@@ -671,7 +671,7 @@ void Inter::refreshTileDoshLabel(const sf::Vector2u& coords)
     auto& tile = m_tiles[coords];
 
     // Remove label if no room
-    if (room.state == Data::RoomState::VOID) {
+    if (room.state == Data::RoomState::EMPTY) {
         tile.totalDoshLabel = nullptr;
         tile.harvestableDoshLabel = nullptr;
         return;
@@ -719,7 +719,7 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
     }
 
     // Room is not constructed
-    if (state == Data::RoomState::VOID)
+    if (state == Data::RoomState::EMPTY)
     {
         addLayer(coords, "dungeon/inter/void_room");
 

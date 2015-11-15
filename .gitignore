@@ -36,3 +36,4 @@ libeev*
 *.rej
 *_debug.xml
 *.vcxproj*
+*.user
