@@ -44,7 +44,6 @@ extern "C"
 //! Main function.
 int main(int argc, char *argv[])
 {
-    Application app;
     int returnStatus = EXIT_SUCCESS;
 
     // Catch GCC signals
@@ -54,34 +53,24 @@ int main(int argc, char *argv[])
     #endif
     #endif
 
-    // Disable synchronisation
-    // Note: Remove the safety of using printf/scanf (so don't use them)
-    // but this makes the streams faster.
-    // std::ios_base::sync_with_stdio(false);
-    // Note: In fact, as we do not control all libraries,
+    // As we do not control all libraries,
     // keeping in sync is important to avoid interleaved characters.
     std::ios_base::sync_with_stdio(true);
-
-    // Forcing wide/narrow encodings.
     std::wcout << L"";
     std::cerr << "";
-
-    // Handle arguments
-    for (int i = 1; i < argc; ++i)
-        mdebug_core_1("Argument " << i << " : " << argv[i]);
 
     // Initialize randomness
     alea::s_generator.seed(time(nullptr));
 
     // Start Steam
-    bool steamActivated = false;
-    // No need to try: there nothing to activate unless we get an appID,
-    // which supposed to have been greenlit.
-    // steamActivated = steam::SteamAPI_Init();
-    mdebug_core_2("Steam interfacing: " << (steamActivated? "Enabled" : "Disabled"));
+    // Note: That's important to do that before the call to Application,
+    // otherwise the hook to OpenGL (Shift+Tab) won't work.
+    bool steamActivated = steam::SteamAPI_Init();
+    mdebug_core_1("Steam interfacing: " << (steamActivated? "Enabled" : "Disabled"));
 
     // Running application
     try {
+        Application app;
         app.run();
     }
     catch(std::exception& e) {
