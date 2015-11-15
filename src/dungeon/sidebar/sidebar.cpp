@@ -174,8 +174,8 @@ void Sidebar::refreshTabFacilitiesContent()
 
     for (const auto& facilityPair : facilitiesList) {
         if (!facilityPair.second.listed) continue;
-        const auto& trapID = facilityPair.first;
-        facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(facilityPair.second.name, trapID));
+        const auto& facilityID = facilityPair.first;
+        facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(facilityPair.second, facilityID));
         auto& facilityButton = *facilitiesButtons.back();
         facilitiesStacker.stackBack(facilityButton, nui::Align::CENTER);
     }

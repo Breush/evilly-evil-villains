@@ -37,6 +37,8 @@ function _reinit()
 
         -- TODO Create tunnel if none and the linked room is valid
     else
+        eev_selectAnimation("dead_end")
+
         -- TODO Remove tunnel if any
         -- eev_removeTunnel()
     end

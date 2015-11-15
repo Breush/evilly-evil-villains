@@ -1,7 +1,6 @@
 #pragma once
 
-#include "dungeon/detectentity.hpp"
-#include "dungeon/elementdata.hpp"
+#include "dungeon/databases/facilitiesdb.hpp"
 #include "context/event.hpp"
 #include "nui/grabbutton.hpp"
 #include "tools/int.hpp"
@@ -23,7 +22,7 @@ namespace dungeon
     public:
 
         //! Constructor, affecting texture and look.
-        FacilityGrabButton(const std::wstring& text, std::wstring facilityID);
+        FacilityGrabButton(const FacilitiesDB::FacilityData& facilityData, std::wstring facilityID);
 
         //! Default destructor.
         ~FacilityGrabButton() = default;
@@ -37,12 +36,24 @@ namespace dungeon
         void grabbableButtonPressed(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
         std::unique_ptr<scene::Grabbable> spawnGrabbable() final;
 
+        //! Refresh the grabbable look and the facility created.
+        void setGrabbableFacilityID(const std::wstring& facilityID);
+
         //! @}
 
     private:
 
-        std::string m_textureID;    //!< The texture of the grabbable and button.
-        std::wstring m_facilityID;  //!< The facility to be constructed in the dungeon inter.
+        const FacilitiesDB::FacilityData& m_facilityData;   //!< Reference to the data.
+        std::wstring m_facilityID;                          //!< The identifier for the facility.
+
+        // Grabbable
+        std::wstring m_grabbableFacilityID;                 //!< The identifier for the facility to create when the grabbable is going.
+        std::string m_textureID;                            //!< The texture of the grabbable and button.
+
+        // Explicit links
+        sf::Vector2u m_explicitLinkCoords;  //!< Memory for the coords to link to.
+        uint m_explicitLinksCount = 0u;     //!< Number of explicit links.
+        uint m_explicitLinksDone = 0u;      //!< How many explicit links have we done so far.
     };
 
     //! A facility temporary object.

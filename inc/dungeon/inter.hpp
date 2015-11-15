@@ -91,8 +91,11 @@ namespace dungeon
         //! Computes the correct roomScale from the expected width.
         void setRoomWidth(const float roomWidth);
 
-        //! Find the room below the specified relative position and forward change to data.
-        void createRoomFacility(const sf::Vector2f& relPos, const std::wstring& facilityID);
+        //! Find the room and forward change to data.
+        bool createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID);
+
+        //! Set the room facility link to specific coordinates.
+        void setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords);
 
         //! Find the room below the specified relative position and forward change to data.
         void setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID);

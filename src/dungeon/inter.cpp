@@ -160,9 +160,6 @@ void Inter::receive(const context::Event& event)
         m_tileRefreshPending.emplace_back([=]() { return refreshMonsters(); });
     }
     else if (event.type == "facility_changed") {
-        // FIXME BUG We should update all elementData references,
-        // otherwise, on creating some pending reference will stay...
-        // And this might be better done directly, not in pending
         coords = {devent.facility.room.x, devent.facility.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTileFacilities(coords); });
         m_tileRefreshPending.emplace_back([=]() { return refreshTileDoshLabel(coords); });
@@ -497,10 +494,14 @@ void Inter::setRoomWidth(const float roomWidth)
     refreshSize();
 }
 
-void Inter::createRoomFacility(const sf::Vector2f& relPos, const std::wstring& facilityID)
+bool Inter::createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID)
 {
-    const auto coords = tileFromLocalPosition(relPos);
-    m_data->createRoomFacility(coords, facilityID);
+    return m_data->createRoomFacility(coords, facilityID);
+}
+
+void Inter::setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords)
+{
+    m_data->setRoomFacilityLink(coords, facilityID, linkCoords);
 }
 
 void Inter::setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID)

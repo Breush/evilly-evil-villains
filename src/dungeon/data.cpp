@@ -477,13 +477,13 @@ bool Data::hasFacility(const sf::Vector2u& coords, const std::wstring& facilityI
     return found != std::end(roomInfo.facilities);
 }
 
-void Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool isLink)
+bool Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool isLink)
 {
-    returnif (!isRoomConstructed(coords));
+    returnif (!isRoomConstructed(coords)) false;
 
     auto& roomInfo = room(coords);
     for (const auto& facilityInfo : roomInfo.facilities)
-        returnif (facilityInfo.data.type() == facilityID);
+        returnif (facilityInfo.data.type() == facilityID) false;
 
     // TODO Use facilitiesDB data (in Inter!)
     // returnif (!m_villain->doshWallet.sub(facilities::onCreateCost(facilityID)));
@@ -507,6 +507,25 @@ void Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
             linkCoords.x = coords.x + link.x;
             linkCoords.y = coords.y + link.y;
             createRoomFacility(linkCoords, link.id, true);
+        }
+    }
+
+    return true;
+}
+
+void Data::setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords)
+{
+    returnif (!isRoomConstructed(coords));
+
+    auto& roomInfo = room(coords);
+    for (auto& facilityInfo : roomInfo.facilities) {
+        if (facilityInfo.data.type() == facilityID) {
+            facilityInfo.link = linkCoords;
+
+            Event event;
+            event.type = "facility_changed";
+            event.facility.room = {coords.x, coords.y};
+            EventEmitter::emit(event);
         }
     }
 }

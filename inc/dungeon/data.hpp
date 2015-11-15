@@ -197,7 +197,10 @@ namespace dungeon
 
         //! Add the specified facility to the dungeon if it does not exists yet.
         //! Will emit an event if a change occured.
-        void createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool isLink = false);
+        bool createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool isLink = false);
+
+        //! Set the room facility link to specific coordinates.
+        void setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords);
 
         //! Remove the specified facility from the dungeon.
         //! Will emit an event if a change occured.
