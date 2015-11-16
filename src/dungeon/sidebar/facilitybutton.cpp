@@ -51,6 +51,10 @@ void FacilityGrabButton::grabbableButtonPressed(Entity* entity, const sf::Mouse:
     returnif (m_explicitLinksCount == 0u);
     returnif (!created);
 
+    // FIXME If we were creating an explicit link,
+    // but the main has been destroyed since,
+    // we create an invalid pending link
+
     // If we just created the main of explicit links, remember that
     if (m_explicitLinksDone == 0u) {
         m_explicitLinkCoords = coords;

@@ -32,8 +32,7 @@ void Data::update(const sf::Time& dt)
     while (gameTimeBuffer >= m_timeGameHour) {
         gameTimeBuffer -= m_timeGameHour;
         m_time += 1u;
-
-        emit("time_changed");
+        EventEmitter::emit("time_changed");
     }
 
     // Monster reserve countdowns
@@ -219,7 +218,7 @@ void Data::loadDungeon(const std::wstring& file)
         }
     }
 
-    emit("dungeon_changed");
+    EventEmitter::emit("dungeon_changed");
 }
 
 void Data::saveDungeon(const std::wstring& file)
@@ -340,7 +339,18 @@ void Data::correctFloorsRooms()
         }
     }
 
-    emit("dungeon_changed");
+    EventEmitter::emit("dungeon_changed");
+}
+
+//-------------------//
+//----- Emitter -----//
+
+void Data::emit(std::string eventType, const sf::Vector2u& coords)
+{
+    Event event;
+    event.type = std::move(eventType);
+    event.room = {coords.x, coords.y};
+    EventEmitter::emit(event);
 }
 
 //-----------------//
@@ -359,13 +369,9 @@ void Data::constructRoom(const sf::Vector2u& coords, bool hard)
     returnif (coords.y >= m_roomsByFloor);
     returnif (room(coords).state != RoomState::EMPTY);
 
-    returnif (!hard && !m_villain->doshWallet.sub(onConstructRoomCost));
+    // TODO Let inter manage that returnif (!hard && !m_villain->doshWallet.sub(onConstructRoomCost));
     room(coords).state = RoomState::CONSTRUCTED;
-
-    Event event;
-    event.type = "room_constructed";
-    event.room = {coords.x, coords.y};
-    EventEmitter::emit(event);
+    emit("room_constructed", coords);
 
     // We check all implicit links getting to this room
     // and create those which need to be there
@@ -386,7 +392,7 @@ void Data::constructRoom(const sf::Vector2u& coords, bool hard)
         }
     }
 
-    emit("dungeon_changed");
+    EventEmitter::emit("dungeon_changed");
 }
 
 void Data::destroyRoom(const sf::Vector2u& coords)
@@ -402,12 +408,8 @@ void Data::destroyRoom(const sf::Vector2u& coords)
 
     room(coords).state = RoomState::EMPTY;
 
-    Event event;
-    event.type = "room_destroyed";
-    event.room = {coords.x, coords.y};
-    EventEmitter::emit(event);
-
-    emit("dungeon_changed");
+    emit("room_destroyed", coords);
+    EventEmitter::emit("dungeon_changed");
 }
 
 sf::Vector2u Data::roomNeighbourCoords(const sf::Vector2u& coords, Direction direction)
@@ -461,14 +463,11 @@ void Data::stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh
     // We could check that stolenDosh is zero hero,
     // If not, we were not able to steal the amount asked
 
-    Event event;
-    event.type = "facility_changed";
-    event.facility.room = {coords.x, coords.y};
-    EventEmitter::emit(event);
+    emit("facility_changed", coords);
 }
 
-//--------------------------------//
-//----- Facilities and traps -----//
+//----------------------//
+//----- Facilities -----//
 
 bool Data::hasFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const
 {
@@ -494,10 +493,7 @@ bool Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     facility.isLink = isLink;
     facility.common = &facilitiesDB().get(facilityID);
 
-    Event event;
-    event.type = "facility_changed";
-    event.facility.room = {coords.x, coords.y};
-    EventEmitter::emit(event);
+    emit("facility_changed", coords);
 
     // Create all the implicit links too
     const auto& facilityInfo = facilitiesDB().get(facilityID);
@@ -521,11 +517,22 @@ void Data::setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& f
     for (auto& facilityInfo : roomInfo.facilities) {
         if (facilityInfo.data.type() == facilityID) {
             facilityInfo.link = linkCoords;
+            emit("facility_changed", coords);
+            return;
+        }
+    }
+}
 
-            Event event;
-            event.type = "facility_changed";
-            event.facility.room = {coords.x, coords.y};
-            EventEmitter::emit(event);
+void Data::removeRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID)
+{
+    returnif (!isRoomConstructed(coords));
+
+    auto& roomInfo = room(coords);
+    for (auto& facilityInfo : roomInfo.facilities) {
+        if (facilityInfo.data.type() == facilityID) {
+            facilityInfo.link = {-1u, -1u};
+            emit("facility_changed", coords);
+            return;
         }
     }
 }
@@ -535,30 +542,31 @@ void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     returnif (!isRoomConstructed(coords));
 
     auto& roomInfo = room(coords);
-    auto found = std::find_if(roomInfo.facilities, [facilityID] (const FacilityInfo& facilityInfo) { return facilityInfo.data.type() == facilityID; });
-    returnif (found == std::end(roomInfo.facilities));
+    auto pFacility = std::find_if(roomInfo.facilities, [facilityID] (const FacilityInfo& facilityInfo) { return facilityInfo.data.type() == facilityID; });
+    returnif (pFacility == std::end(roomInfo.facilities));
 
-    // Remove all implicit links
+    // Check and update links
     const auto& facilityInfo = facilitiesDB().get(facilityID);
     for (const auto& link : facilityInfo.links) {
+        // Remove all implicit links
         if (link.style == Link::Style::IMPLICIT) {
-            sf::Vector2u linkCoords;
-            linkCoords.x = coords.x + link.x;
-            linkCoords.y = coords.y + link.y;
+            sf::Vector2u linkCoords(coords.x + link.x, coords.y + link.y);
             // Note: Whatever happens, there can be only one of this ID
             // in that same room, so there no issue deleting it without more checking
             removeRoomFacility(linkCoords, link.id);
+        }
+
+        // Remove all explicit links of a change
+        else if (link.style == Link::Style::EXPLICIT && (pFacility->link.x != -1u && pFacility->link.y != -1u)) {
+            removeRoomFacilityLink(pFacility->link, link.id);
         }
     }
 
     // TODO Use facilitiesDB data (in Inter!)
     // m_villain->doshWallet.add(facilities::onDestroyGain(facility));
-    roomInfo.facilities.erase(found);
+    roomInfo.facilities.erase(pFacility);
 
-    Event event;
-    event.type = "facility_changed";
-    event.facility.room = {coords.x, coords.y};
-    EventEmitter::emit(event);
+    emit("facility_changed", coords);
 }
 
 void Data::removeRoomFacilities(const sf::Vector2u& coords)
@@ -575,21 +583,8 @@ void Data::removeRoomFacilities(const sf::Vector2u& coords)
             removeRoomFacility(coords, facility.data.type());
 }
 
-void Data::removeRoomMonsters(const sf::Vector2u& coords)
-{
-    std::erase_if(m_monstersInfo.active, [this, coords] (const MonsterInfo& monsterInfo) {
-        sf::Vector2u monsterCoords;
-        monsterCoords.x = static_cast<uint>(monsterInfo.data.at(L"rx").as_float());
-        monsterCoords.y = static_cast<uint>(monsterInfo.data.at(L"ry").as_float());
-
-        if (monsterCoords == coords) {
-            emit("monster_removed");
-            return true;
-        }
-
-        return false;
-    });
-}
+//-----------------//
+//----- Traps -----//
 
 void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
 {
@@ -609,11 +604,7 @@ void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
     // Set the trap to the new one.
     roomInfo.trap.create(trapID);
 
-    // Emit event
-    Event event;
-    event.type = "trap_changed";
-    event.room = {coords.x, coords.y};
-    EventEmitter::emit(event);
+    emit("trap_changed", coords);
 }
 
 void Data::removeRoomTrap(const sf::Vector2u& coords)
@@ -625,20 +616,32 @@ void Data::removeRoomTrap(const sf::Vector2u& coords)
     // m_villain->doshWallet.add(traps::onDestroyGain(roomInfo.trap));
     roomInfo.trap.clear();
 
-    // Emit event
-    Event event;
-    event.type = "trap_changed";
-    event.room = {coords.x, coords.y};
-    EventEmitter::emit(event);
+    emit("trap_changed", coords);
+}
+
+//--------------------//
+//----- Monsters -----//
+
+void Data::removeRoomMonsters(const sf::Vector2u& coords)
+{
+    std::erase_if(m_monstersInfo.active, [this, coords] (const MonsterInfo& monsterInfo) {
+        sf::Vector2u monsterCoords;
+        monsterCoords.x = static_cast<uint>(monsterInfo.data.at(L"rx").as_float());
+        monsterCoords.y = static_cast<uint>(monsterInfo.data.at(L"ry").as_float());
+
+        if (monsterCoords == coords) {
+            EventEmitter::emit("monster_removed");
+            return true;
+        }
+
+        return false;
+    });
 }
 
 bool Data::addMonsterValid(const sf::Vector2u& coords, const std::wstring& monsterID)
 {
-    // Does room exist?
-    auto& roomInfo = room(coords);
-    returnif (roomInfo.state != RoomState::CONSTRUCTED) false;
-
-    return true;
+    // TODO Why would we care about monsterID?
+    return isRoomConstructed(coords);
 }
 
 void Data::addMonsterToReserve(const std::wstring& monsterID, const uint countdownIncrease)

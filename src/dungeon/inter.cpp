@@ -145,27 +145,23 @@ void Inter::handleMouseLeft()
 void Inter::receive(const context::Event& event)
 {
     const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
-    sf::Vector2u coords;
+    sf::Vector2u coords(devent.room.x, devent.room.y);
 
     if (event.type == "room_destroyed") {
-        coords = {devent.room.x, devent.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTile(coords); });
         m_tileRefreshPending.emplace_back([=]() { return refreshNeighboursLayers(coords); });
         m_tileRefreshPending.emplace_back([=]() { return refreshMonsters(); });
     }
     else if (event.type == "room_constructed") {
-        coords = {devent.room.x, devent.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTile(coords); });
         m_tileRefreshPending.emplace_back([=]() { return refreshNeighboursLayers(coords); });
         m_tileRefreshPending.emplace_back([=]() { return refreshMonsters(); });
     }
     else if (event.type == "facility_changed") {
-        coords = {devent.facility.room.x, devent.facility.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTileFacilities(coords); });
         m_tileRefreshPending.emplace_back([=]() { return refreshTileDoshLabel(coords); });
     }
     else if (event.type == "trap_changed") {
-        coords = {devent.room.x, devent.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTileTraps(coords); });
     }
     else if (event.type == "monster_added") {
@@ -175,7 +171,6 @@ void Inter::receive(const context::Event& event)
         m_tileRefreshPending.emplace_back([=]() { return refreshMonsters(); });
     }
     else if (event.type == "harvestable_dosh_changed") {
-        coords = {devent.room.x, devent.room.y};
         m_tileRefreshPending.emplace_back([=]() { return refreshTileDoshLabel(coords); });
     }
 }
@@ -440,12 +435,7 @@ void Inter::showEditTreasureDialog(const sf::Vector2u& coords)
 
         // Global dosh changed
         emitter()->emit("dosh_changed");
-
-        // Treasure dosh changed
-        Event devent;
-        devent.type = "facility_changed";
-        devent.facility.room = {coords.x, coords.y};
-        emitter()->emit(devent);
+        m_data->emit("facility_changed", coords);
     });
 }
 

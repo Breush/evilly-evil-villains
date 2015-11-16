@@ -52,6 +52,15 @@ namespace dungeon
         //! Add a relative tunnel to the list.
         void lua_addRtunnel(const uint32 direction);
 
+        //! Checks if a tunnel exists.
+        bool lua_hasTunnel() const;
+
+        //! Add a tunnel.
+        void lua_addTunnel(const uint32 x, const uint32 y);
+
+        //! Remove all tunnels.
+        void lua_removeTunnels();
+
         //! Select an animation to play.
         void lua_selectAnimation(const std::string& animationKey);
 

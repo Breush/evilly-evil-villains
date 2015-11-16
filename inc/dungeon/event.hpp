@@ -7,7 +7,6 @@ namespace dungeon
 {
     // Forward declarations
 
-    class Hero;
     class Monster;
 
     //! The position of a room.
@@ -25,12 +24,6 @@ namespace dungeon
             int delta;              //!< The difference between previous and current value of resources.
             RoomCoords room;        //!< The coordinates of a room whenever it is constructed/destroyed.
             const wchar_t* message; //!< An additional information.
-
-            //! When a facility changed.
-            struct
-            {
-                RoomCoords room;    //!< The coordinates of the room.
-            } facility;
 
             //! When a monster changed.
             struct

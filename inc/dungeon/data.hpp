@@ -29,6 +29,10 @@ namespace context
 
 namespace dungeon
 {
+    // Forward declarations
+
+    class Hero;
+
     // TODO Move these to their own file
     //! Defines the possibly accessible relative directions from a room.
     /*!
@@ -154,6 +158,15 @@ namespace dungeon
 
         //! @}
 
+        //----------------//
+        //! @name Emitter
+        //! @{
+
+        //! Quick tool to emit an dungeon event with coords informations.
+        void emit(std::string eventType, const sf::Vector2u& coords);
+
+        //! @}
+
         //--------------//
         //! @name Rooms
         //! @{
@@ -188,8 +201,8 @@ namespace dungeon
 
         //! @}
 
-        //-----------------------------//
-        //! @name Facilities and traps
+        //-------------------//
+        //! @name Facilities
         //! @{
 
         //! Returns true if a facility exists in the specified coordinates.
@@ -202,6 +215,9 @@ namespace dungeon
         //! Set the room facility link to specific coordinates.
         void setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords);
 
+        //! Remove the room facility link if any.
+        void removeRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID);
+
         //! Remove the specified facility from the dungeon.
         //! Will emit an event if a change occured.
         void removeRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID);
@@ -210,6 +226,12 @@ namespace dungeon
         //! Will emit an event if a change occured.
         void removeRoomFacilities(const sf::Vector2u& coords);
 
+        //! @}
+
+        //--------------//
+        //! @name Traps
+        //! @{
+
         //! Set the trap of the specified room.
         //! Will emit an event if a change occured.
         void setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID);
@@ -217,6 +239,12 @@ namespace dungeon
         //! Remove the trap of the specified room (if any).
         //! Will emit an event if a change occured.
         void removeRoomTrap(const sf::Vector2u& coords);
+
+        //! @}
+
+        //-----------------//
+        //! @name Monsters
+        //! @{
 
         //! Is adding the monster a valid action? Checks against dungeon consistency.
         bool addMonsterValid(const sf::Vector2u& coords, const std::wstring& monsterID);

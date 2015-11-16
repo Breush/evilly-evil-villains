@@ -36,6 +36,9 @@ Facility::Facility(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dunge
     m_lua["eev_isLink"] = [this] { return lua_isLink(); };
     m_lua["eev_getRtunnel"] = [this] (const uint32 nth) { return lua_getRtunnel(nth); };
     m_lua["eev_addRtunnel"] = [this] (const uint32 direction) { lua_addRtunnel(direction); };
+    m_lua["eev_hasTunnel"] = [this] { return lua_hasTunnel(); };
+    m_lua["eev_addTunnel"] = [this] (const uint32 x, const uint32 y) { lua_addTunnel(x, y); };
+    m_lua["eev_removeTunnels"] = [this] { lua_removeTunnels(); };
     m_lua["eev_selectAnimation"] = [this] (const std::string& animationKey) { lua_selectAnimation(animationKey); };
     m_lua["eev_hasSiblingFacility"] = [this] (const std::string& facilityID) { return lua_hasSiblingFacility(facilityID); };
     m_lua["eev_setVisible"] = [this] (bool isVisible) { lua_setVisible(isVisible); };
@@ -84,6 +87,24 @@ void Facility::lua_addRtunnel(const uint32 direction)
     // TODO Should be passed through a dungeon data function
     // So that an event can occur and refresh the graph
     m_facilityInfo.rtunnels.emplace_back(static_cast<Direction>(direction));
+}
+
+bool Facility::lua_hasTunnel() const
+{
+    return !m_facilityInfo.tunnels.empty();
+}
+
+void Facility::lua_addTunnel(const uint32 x, const uint32 y)
+{
+    // TODO Same as addRtunnel
+    sf::Vector2u tunnelCoords(x, y);
+    m_facilityInfo.tunnels.emplace_back(tunnelCoords);
+}
+
+void Facility::lua_removeTunnels()
+{
+    // TODO Same as addRtunnel
+    m_facilityInfo.tunnels.clear();
 }
 
 void Facility::lua_selectAnimation(const std::string& animationKey)
