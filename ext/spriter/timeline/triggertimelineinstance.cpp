@@ -1,12 +1,12 @@
 #include "timeline/triggertimelineinstance.h"
 
+#include "global/settings.h"
+
 #include "entity/entityinstancedata.h"
 #include "objectinfo/universalobjectinterface.h"
 
 #include "timeline/timeline.h"
 #include "timeline/timelinekey.h"
-
-#include <iostream>
 
 namespace SpriterEngine
 {
@@ -102,8 +102,7 @@ namespace SpriterEngine
         }
         else
         {
-            // error
-            std::cerr << "Error" << std::endl;
+            Settings::error("TriggerTimelineInstance::findTimeForward - could not find key at time " + std::to_string(newTime) + " : falling back on first key");
             timelineKeyIterator = timelineKeys->begin();
             return;
         }
@@ -157,7 +156,7 @@ namespace SpriterEngine
         }
 
         checkTrigger(*currentIt, aTime, bTime);
-        if ((*currentIt)->getTime() < newTime)
+        if ((*currentIt)->getTime() <= newTime)
         {
             timelineKeyIterator = currentIt;
             return;

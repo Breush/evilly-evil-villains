@@ -1,5 +1,7 @@
 ﻿#include "entity/entityinstance.h"
 
+#include "global/settings.h"
+
 #include "charactermap/charactermapinterface.h"
 #include "objectinfo/tagobjectinforeference.h"
 #include "objectinfo/triggerobjectinfo.h"
@@ -11,8 +13,6 @@
 #include "entity/entity.h"
 #include "entity/entityinstancedata.h"
 
-#include <iostream>
-
 namespace SpriterEngine
 {
     EntityInstance::EntityInstance() :
@@ -23,7 +23,11 @@ namespace SpriterEngine
         currentEntity(0),
         currentAnimation(0),
         characterMapInterface(0),
-        playbackSpeedRatio(1)
+        playbackSpeedRatio(1),
+        blendCurrentTime(0),
+        blendTotalTime(0),
+        blendedAnimation(0),
+        isPlaying(true)
     {
     }
     EntityInstance::EntityInstance(SpriterModel *model, Entity *entity, CharacterMapInterface *initialCharacterMapInterface, ObjectFactory *objectFactory) :
@@ -34,7 +38,11 @@ namespace SpriterEngine
         currentEntity(0),
         currentAnimation(0),
         characterMapInterface(initialCharacterMapInterface),
-        playbackSpeedRatio(1)
+        playbackSpeedRatio(1),
+        blendCurrentTime(0),
+        blendTotalTime(0),
+        blendedAnimation(0),
+        isPlaying(true)
     {
         model->setupFileReferences(&files);
         currentEntity = (*entities.insert(std::make_pair(entity->getId(), new EntityInstanceData(model, this, entity, objectFactory))).first).second;
@@ -50,19 +58,82 @@ namespace SpriterEngine
         }
 
         for (auto& it : entities)
+        {
             delete it.second;
+        }
     }
 
     void EntityInstance::setTimeElapsed(real timeElapsed)
     {
         if (currentAnimation)
         {
-            timeElapsed *= playbackSpeedRatio;
-            currentAnimation->findAndProcessKeys(getCurrentTime() + timeElapsed, timeElapsed >= 0, &zOrder);
+            if (isPlaying)
+            {
+                timeElapsed *= playbackSpeedRatio;
+                real newTime = getCurrentTime() + timeElapsed;
+
+                if (!currentAnimation->looping() && newTime >= currentAnimation->length())
+                {
+                    isPlaying = false;
+                    newTime = currentAnimation->length();
+                }
+
+                if (blendedAnimation)
+                {
+                    blendCurrentTime += timeElapsed;
+
+                    if (blendCurrentTime >= blendTotalTime)
+                    {
+                        blendCurrentTime = 0;
+                        blendTotalTime = 0;
+
+                        currentAnimation = blendedAnimation;
+                        currentAnimation->findAndProcessKeys(newTime, timeElapsed >= 0, &zOrder);
+
+                        blendedAnimation = 0;
+                    }
+                    else
+                    {
+
+                        real blendRatio = blendCurrentTime / blendTotalTime;
+
+                        real currentT = getCurrentTime() / currentAnimation->length();
+                        real currentAnimationT = newTime / currentAnimation->length();
+                        real blendedAnimationT = ((currentT * blendedAnimation->length()) + timeElapsed) / blendedAnimation->length();
+
+                        currentT = linear(currentAnimationT, blendedAnimationT, blendRatio);
+
+                        bool forward = timeElapsed >= 0;
+
+                        real newCurrentAnimationTime = currentT * currentAnimation->length();
+                        currentAnimation->findCurrentKeys(newCurrentAnimationTime, forward);
+                        currentAnimation->processRefKeys(currentAnimation->currentTime());
+
+                        real newBlendedAnimationTime = currentT * blendedAnimation->length();
+                        blendedAnimation->findCurrentKeys(newBlendedAnimationTime, forward);
+                        blendedAnimation->blendRefKeys(blendedAnimation->currentTime(), blendRatio);
+
+                        if (blendRatio < 0.5)
+                        {
+                            currentAnimation->setZOrder(&zOrder);
+                            currentAnimation->processRefTransforms();
+                        }
+                        else
+                        {
+                            blendedAnimation->setZOrder(&zOrder);
+                            blendedAnimation->processRefTransforms();
+                        }
+                    }
+                }
+                else
+                {
+                    currentAnimation->findAndProcessKeys(newTime, timeElapsed >= 0, &zOrder);
+                }
+            }
         }
         else
         {
-            // error
+            Settings::error("EntityInstance::setTimeElapsed - current animation not set");
         }
     }
 
@@ -85,14 +156,13 @@ namespace SpriterEngine
 
     FileReference *EntityInstance::getFile(int fileId)
     {
-        if (unsigned(fileId) < files.size())
+        if (fileId < files.size())
         {
             return files.at(fileId);
         }
         else
         {
-            // error
-            // std::cerr << "[Spriter++] Unknown file ID " << fileId << std::endl;
+            Settings::error("EntityInstance::getFile - file id " + std::to_string(fileId) + " out of range");
             return 0;
         }
     }
@@ -125,11 +195,6 @@ namespace SpriterEngine
     real EntityInstance::getTimeRatio()
     {
         return getCurrentTime() / currentAnimation->length();
-    }
-
-    void EntityInstance::setCurrentAnimationLooping(bool inLooping)
-    {
-        currentAnimation->setLooping(inLooping);
     }
 
     VariableInstanceNameAndIdMap *EntityInstance::getVariables()
@@ -226,7 +291,9 @@ namespace SpriterEngine
     {
         angle.angle = newAngle;
         if (currentEntity)
+        {
             currentEntity->updateTransformProcessor();
+        }
     }
 
     void EntityInstance::setScale(const point &newScale)
@@ -244,6 +311,7 @@ namespace SpriterEngine
         angle.spinDirection = newSpin;
     }
 
+
     void EntityInstance::setCurrentEntity(int newEntityId)
     {
         auto it = entities.find(newEntityId);
@@ -254,7 +322,7 @@ namespace SpriterEngine
         }
         else
         {
-            // error
+            Settings::error("EntityInstance::setCurrentEntity - entity with id " + std::to_string(newEntityId) + " not found");
         }
     }
 
@@ -262,30 +330,35 @@ namespace SpriterEngine
     {
         currentEntity = newCurrentEntity;
         if (currentEntity)
+        {
             currentEntity->updateTransformProcessor();
+        }
     }
 
     void EntityInstance::setCurrentAnimation(int newAnimationIndex)
     {
         currentEntity->setCurrentAnimation(newAnimationIndex, &currentAnimation);
+        isPlaying = true;
     }
 
     void EntityInstance::setCurrentAnimation(const std::string & animationName)
     {
         currentEntity->setCurrentAnimation(animationName, &currentAnimation);
+        isPlaying = true;
+    }
+
+    void EntityInstance::setCurrentAnimation(const std::string & animationName, real blendTime)
+    {
+        blendedAnimation = currentEntity->getAnimation(animationName);
+        blendCurrentTime = 0;
+        blendTotalTime = blendTime;
+        isPlaying = true;
     }
 
     void EntityInstance::setCurrentAnimation(AnimationInstance * newCurrentAnimation)
     {
         currentAnimation = newCurrentAnimation;
-    }
-
-    real EntityInstance::getCurrentAnimationLength()
-    {
-        if (currentAnimation)
-            return currentAnimation->length();
-        else
-            return 0.;
+        isPlaying = true;
     }
 
     void EntityInstance::setCurrentTime(real newCurrentTime)
@@ -296,7 +369,7 @@ namespace SpriterEngine
         }
         else
         {
-            // error
+            Settings::error("EntityInstance::setCurrentTime - current animation not set");
         }
     }
 
@@ -334,12 +407,12 @@ namespace SpriterEngine
 
     void EntityInstance::render()
     {
-        if (zOrder == nullptr)
-            return;
-
-        for (auto& it : *zOrder)
+        if (zOrder)
         {
-            it->render();
+            for (auto& it : *zOrder)
+            {
+                it->render();
+            }
         }
     }
 
@@ -380,7 +453,7 @@ namespace SpriterEngine
         }
         else
         {
-            // error
+            Settings::error("EntityInstance::getEntity - entity instance data with id " + std::to_string(entityId) + " not found");
             return 0;
         }
     }

@@ -76,9 +76,6 @@ namespace resources
         using SpriterModelPtr = std::unique_ptr<SpriterEngine::SpriterModel>;
         std::unordered_map<std::string, SpriterModelPtr> m_models;  //!< All the models.
 
-        std::unique_ptr<SpriterEngine::ExampleFileFactory> m_fileFactory;       //!< Manage files.
-        std::unique_ptr<SpriterEngine::ExampleObjectFactory> m_objectFactory;   //!< Manage objects.
-
         std::string m_defaultID;    //!< The backup solution when an animation model is not found.
     };
 }

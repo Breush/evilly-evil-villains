@@ -3,8 +3,12 @@
 namespace SpriterEngine
 {
 
-	EasingCurveInterface::EasingCurveInterface()
-	{
-	}
+    EasingCurveInterface::EasingCurveInterface()
+    {
+    }
+
+    EasingCurveInterface::~EasingCurveInterface()
+    {
+    }
 
 }

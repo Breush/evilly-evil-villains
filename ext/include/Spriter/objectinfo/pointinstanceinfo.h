@@ -1,5 +1,5 @@
-#ifndef BONEINSTANCEINFO_H
-#define BONEINSTANCEINFO_H
+#ifndef POINTINSTANCEINFO_H
+#define POINTINSTANCEINFO_H
 
 #include "universalobjectinterface.h"
 
@@ -8,20 +8,20 @@
 namespace SpriterEngine
 {
 
-	class BoneInstanceInfo : public UniversalObjectInterface
+	class PointInstanceInfo : public UniversalObjectInterface
 	{
 	public:
-		BoneInstanceInfo(point initialSize);
+		PointInstanceInfo();
 
 		point getPosition() override;
 		real getAngle() override;
 		point getScale() override;
 		real getAlpha() override;
 
-		point getSize() override;
-
 		void setPosition(const point &newPosition) override;
 		void setAngle(real newAngle) override;
+		void setSpin(int newSpin) override;
+
 		void setScale(const point &newScale) override;
 		void setAlpha(real newAlpha) override;
 
@@ -32,12 +32,8 @@ namespace SpriterEngine
 	private:
 		point position;
 		AngleInfo angle;
-		point scale;
-		real alpha;
-
-		point size;
 	};
 
 }
 
-#endif // BONEINSTANCEINFO_H
+#endif // POINTINSTANCEINFO_H

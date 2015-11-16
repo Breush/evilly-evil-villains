@@ -43,7 +43,6 @@ Trap::Trap(const sf::Vector2u& coords, ElementData& edata, Inter& inter)
     m_lua["eev_getDataU32"] = [this] (const std::string& s) { return lua_getDataU32(s); };
     m_lua["eev_getUIDDataU32"] = [this] (const uint32 UID, const std::string& s) { return lua_getUIDDataU32(UID, s); };
     m_lua["eev_initEmptyDataU32"] = [this] (const std::string& s, const uint32 value) { lua_initEmptyDataU32(s, value); };
-    m_lua["eev_setAnimationLooping"] = [this] (const bool looping) { lua_setAnimationLooping(looping); };
     m_lua["eev_selectAnimation"] = [this] (const std::string& animationKey) { lua_selectAnimation(animationKey); };
     m_lua["eev_isAnimationStopped"] = [this] { return lua_isAnimationStopped(); };
     m_lua["eev_log"] = [this] (const std::string& str) { lua_log(str); };
@@ -141,11 +140,6 @@ uint32 Trap::lua_getUIDDataU32(const uint32 UID, const std::string& s) const
 void Trap::lua_selectAnimation(const std::string& animationKey)
 {
     m_sprite.select(toWString(animationKey));
-}
-
-void Trap::lua_setAnimationLooping(const bool looping)
-{
-    m_sprite.setLooping(looping);
 }
 
 bool Trap::lua_isAnimationStopped() const

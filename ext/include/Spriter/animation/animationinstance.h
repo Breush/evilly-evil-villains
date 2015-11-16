@@ -8,53 +8,57 @@
 namespace SpriterEngine
 {
 
-    class MainlineKeyInstance;
-    class EntityInstanceData;
-    class Animation;
-    class TimelineInstance;
+	class MainlineKeyInstance;
+	class EntityInstanceData;
+	class Animation;
+	class TimelineInstance;
 
-    typedef std::vector<MainlineKeyInstance*> MainlineKeyInstanceVector;
-    typedef MainlineKeyInstanceVector::iterator MainlineKeyInstanceVectorIterator;
-    typedef std::vector<TimelineInstance*>TimelineInstanceVector;
+	typedef std::vector<MainlineKeyInstance*> MainlineKeyInstanceVector;
+	typedef MainlineKeyInstanceVector::iterator MainlineKeyInstanceVectorIterator;
+	typedef std::vector<TimelineInstance*>TimelineInstanceVector;
+	
+	class AnimationInstance
+	{
+	public:
+		AnimationInstance(EntityInstance *entityInstance, EntityInstanceData *entityInstanceData, Animation *animation);
+		~AnimationInstance();
 
-    class AnimationInstance
-    {
-    public:
-        AnimationInstance(EntityInstance *entityInstance, EntityInstanceData *entityInstanceData, Animation *animation);
-        ~AnimationInstance();
+		void findAndProcessKeys(real newTime, bool forward, ObjectInterfaceVector ** instanceZOrder);
 
-        void findAndProcessKeys(real newTime, bool forward, ObjectInterfaceVector ** instanceZOrder);
+		void findCurrentKeys(real newTime, bool forward);
+		void processCurrentKeys(real newTime, ObjectInterfaceVector **instanceZOrder);
 
-        void findCurrentKeys(real newTime, bool forward);
-        void processCurrentKeys(real newTime, ObjectInterfaceVector **instanceZOrder);
+		bool looping();
 
-        inline void setLooping(bool inLooping) { isLooping = inLooping; }
+		real length();
 
+		real currentTime();
 
-        real length();
+		real processRefKeys(real newTime);
+		void blendRefKeys(real newTime, real blendRatio);
+		void setZOrder(ObjectInterfaceVector ** instanceZOrder);
+		void processRefTransforms();
 
-        real currentTime();
+	private:
+		void findCurrentTimelineKeys(real newTime, bool forward);
+		void processCurrentTimelineKeys(real newTime);
 
-    private:
-        void findCurrentTimelineKeys(real newTime, bool forward);
-        void processCurrentTimelineKeys(real newTime);
+		void findCurrentMainlineKey(real newTime, bool forward);
+		real processCurrentMainlineKey(real newTime, ObjectInterfaceVector **instanceZOrder);
 
-        void findCurrentMainlineKey(real newTime, bool forward);
-        real processCurrentMainlineKey(real newTime, ObjectInterfaceVector **instanceZOrder);
+		void findMainlineKeyTimeForward(real newTime);
+		void findMainlineKeyTimeBackward(real newTime);
 
-        void findMainlineKeyTimeForward(real newTime);
-        void findMainlineKeyTimeBackward(real newTime);
+		real time;
 
-        real time;
+		MainlineKeyInstanceVector mainlineKeys;
+		MainlineKeyInstanceVectorIterator mainlineKeyIterator;
 
-        MainlineKeyInstanceVector mainlineKeys;
-        MainlineKeyInstanceVectorIterator mainlineKeyIterator;
+		TimelineInstanceVector timelines;
 
-        TimelineInstanceVector timelines;
-
-        real animationLength;
-        bool isLooping;
-    };
+		real animationLength;
+		bool isLooping;
+	};
 
 }
 

@@ -8,24 +8,24 @@
 namespace SpriterEngine
 {
 
-    class PointObjectInfo : public UniversalObjectInterface
-    {
-    public:
-        PointObjectInfo();
+	class PointObjectInfo : public UniversalObjectInterface
+	{
+	public:
+		PointObjectInfo();
 
-        point getPosition() override;
-        real getAngle() override;
+		point getPosition() override;
+		real getAngle() override;
 
-        void setPosition(const point &newPosition) override;
-        void setAngle(real newAngle) override;
-        void setSpin(int newSpin) override;
+		void setPosition(const point &newPosition) override;
+		void setAngle(real newAngle) override;
+		void setSpin(int newSpin) override;
 
-        void setObjectTolinear(UniversalObjectInterface *bObject, real t, UniversalObjectInterface *resultObject) override;
+		void setObjectToLinear(UniversalObjectInterface *bObject, real t, UniversalObjectInterface *resultObject) override;
 
-    private:
-        point position;
-        AngleInfo angle;
-    };
+	private:
+		point position;
+		AngleInfo angle;
+	};
 
 }
 

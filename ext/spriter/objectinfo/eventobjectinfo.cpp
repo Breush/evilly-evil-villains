@@ -3,8 +3,8 @@
 namespace SpriterEngine
 {
 
-	EventObjectInfo::EventObjectInfo()
-	{
-	}
+    EventObjectInfo::EventObjectInfo()
+    {
+    }
 
 }

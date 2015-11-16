@@ -91,9 +91,6 @@ namespace dungeon
         //! Select an animation to play.
         void lua_selectAnimation(const std::string& animationKey);
 
-        //! Set the looping paramter of the current animation.
-        void lua_setAnimationLooping(const bool looping);
-
         //! Returns true if the current animation has stopped (looping has to be false).
         bool lua_isAnimationStopped() const;
 

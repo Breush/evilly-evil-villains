@@ -1,5 +1,7 @@
 #include "entity/entityinstancedata.h"
 
+#include "global/settings.h"
+
 #include "objectref/transformprocessor.h"
 #include "objectinfo/tagobjectinforeference.h"
 #include "objectinfo/triggerobjectinfo.h"
@@ -12,7 +14,6 @@
 #include "entity/entityinstance.h"
 #include "entity/entity.h"
 
-#include <iostream>
 
 namespace SpriterEngine
 {
@@ -26,13 +27,24 @@ namespace SpriterEngine
     EntityInstanceData::~EntityInstanceData()
     {
         for (auto& it : animations)
+        {
             delete it;
+        }
+
         for (auto& it : objectNameMap)
+        {
             delete it.second;
+        }
+
         for (auto& it : triggerNameMap)
+        {
             delete it.second;
+        }
+
         for (auto& it : soundNameMap)
+        {
             delete it.second;
+        }
     }
 
     UniversalObjectInterface *EntityInstanceData::getObjectInstance(int objectId)
@@ -44,7 +56,7 @@ namespace SpriterEngine
         }
         else
         {
-            // error
+            Settings::error("EntityInstanceData::getObjectInstance - object interface with id " + std::to_string(objectId) + " not found");
             return 0;
         }
     }
@@ -58,14 +70,14 @@ namespace SpriterEngine
         }
         else
         {
-            // error
+            Settings::error("EntityInstanceData::getObjectInstance - object interface with name \"" + objectName + "\" not found");
             return 0;
         }
     }
 
     TransformProcessor *EntityInstanceData::getTransformer(int id)
     {
-        auto it = transformers.find(id);
+        auto  it = transformers.find(id);
         if (it != transformers.end())
         {
             return &(*it).second;
@@ -79,7 +91,7 @@ namespace SpriterEngine
             }
             else
             {
-                // error
+                Settings::error("EntityInstanceData::getTransformer - object instance with id " + std::to_string(id) + " not found");
                 return 0;
             }
         }
@@ -104,7 +116,7 @@ namespace SpriterEngine
         }
         else
         {
-            // error
+            Settings::error("EntityInstanceData::getVariables - variable instance map for object id " + std::to_string(objectId) + " not found");
             return 0;
         }
     }
@@ -118,7 +130,7 @@ namespace SpriterEngine
         }
         else
         {
-            // error
+            Settings::error("EntityInstanceData::getVariable - variable instance map for object id " + std::to_string(objectId) + " not found");
             return 0;
         }
     }
@@ -137,7 +149,7 @@ namespace SpriterEngine
         }
         else
         {
-            // error
+            Settings::error("EntityInstanceData::getVariables - variable instance map for object name \"" + objectName + "\" not found");
             return 0;
         }
     }
@@ -151,7 +163,7 @@ namespace SpriterEngine
         }
         else
         {
-            // error
+            Settings::error("EntityInstanceData::getVariable - variable instance map for object name \"" + objectName + "\" not found");
             return 0;
         }
     }
@@ -170,7 +182,7 @@ namespace SpriterEngine
         }
         else
         {
-            // error
+            Settings::error("EntityInstanceData::getTags - taglist for object id " + std::to_string(objectId) + " not found");
             return 0;
         }
     }
@@ -184,8 +196,8 @@ namespace SpriterEngine
         }
         else
         {
-            // error
-            return 0;
+            Settings::error("entityInstanceData::tagIsActive - taglist for object id " + std::to_string(objectId) + " not found");
+            return false;
         }
     }
 
@@ -203,7 +215,7 @@ namespace SpriterEngine
         }
         else
         {
-            // error
+            Settings::error("EntityInstanceData::getTags - taglist for object name \"" + objectName + "\" not found");
             return 0;
         }
     }
@@ -217,7 +229,7 @@ namespace SpriterEngine
         }
         else
         {
-            // error
+            Settings::error("EntityInstanceData::tagIsActive - taglist for object name \"" + objectName + "\" not found");
             return 0;
         }
     }
@@ -231,7 +243,7 @@ namespace SpriterEngine
         }
         else
         {
-            // error
+            Settings::error("EntityInstanceData::getTriggerObject - trigger instance with id " + std::to_string(triggerId) + " not found");
             return 0;
         }
     }
@@ -245,7 +257,7 @@ namespace SpriterEngine
         }
         else
         {
-            // error
+            Settings::error("EntityInstanceData::getTriggerObject - trigger instance with name \"" + triggerName + "\" not found");
             return 0;
         }
     }
@@ -259,7 +271,7 @@ namespace SpriterEngine
         }
         else
         {
-            // error
+            Settings::error("EntityInstanceData::getSoundObject - sound instance with id " + std::to_string(soundId) + " not found");
             return 0;
         }
     }
@@ -273,20 +285,20 @@ namespace SpriterEngine
         }
         else
         {
-            // error
+            Settings::error("EntityInstanceData::getSoundObject - sound instance with name \"" + soundName + "\" not found");
             return 0;
         }
     }
 
     void EntityInstanceData::setCurrentAnimation(int newAnimationIndex, AnimationInstance **currentAnimation)
     {
-        if (unsigned(newAnimationIndex) < animations.size())
+        if (newAnimationIndex < animations.size())
         {
             *currentAnimation = animations.at(newAnimationIndex);
         }
         else
         {
-            // error
+            Settings::error("EntityInstanceData::setCurrentAnimation - animation index " + std::to_string(newAnimationIndex) + " out of range");
         }
     }
 
@@ -299,7 +311,7 @@ namespace SpriterEngine
         }
         else
         {
-            // error
+            Settings::error("EntityInstanceData::setCurrentAnimation - animation with name \"" + animationName + "\" not found");
         }
     }
 
@@ -346,13 +358,27 @@ namespace SpriterEngine
 
     AnimationInstance * EntityInstanceData::getAnimation(int animationIndex)
     {
-        if (unsigned(animationIndex) < animations.size())
+        if (animationIndex < animations.size())
         {
             return animations.at(animationIndex);
         }
         else
         {
-            // error
+            Settings::error("EntityInstanceData::getAnimation - animation index " + std::to_string(animationIndex) + " out of range");
+            return 0;
+        }
+    }
+
+    AnimationInstance * EntityInstanceData::getAnimation(std::string animationName)
+    {
+        auto it = animationNameMap.find(animationName);
+        if (it != animationNameMap.end())
+        {
+            return (*it).second;
+        }
+        else
+        {
+            Settings::error("EntityInstanceData::getAnimation - animation with name \"" + animationName + "\" not found");
             return 0;
         }
     }
@@ -377,4 +403,5 @@ namespace SpriterEngine
     {
         transformProcessor->setTrigFunctions();
     }
+
 }

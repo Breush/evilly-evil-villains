@@ -33,7 +33,6 @@ function cbHeroClose(heroUID)
             -- Stop doing anything else
             stealing = true
             eev_selectAnimation("grab")
-            eev_setAnimationLooping(false)
 
             -- TODO How to animate the hero grabbed?
 
@@ -54,7 +53,6 @@ function _update(dt)
     if stealing and eev_isAnimationStopped() then
         stealing = false
         eev_selectAnimation("idle")
-        eev_setAnimationLooping(true)
     end
 end
 

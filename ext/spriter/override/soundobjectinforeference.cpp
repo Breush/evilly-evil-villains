@@ -43,12 +43,12 @@ namespace SpriterEngine
 
     void SoundObjectInfoReference::setPlaybackVolume()
     {
-        // add code to adjust current playback volume using getVolume() here
+        // TODO: override and add code to adjust current playback volume using getVolume() here
     }
 
     void SoundObjectInfoReference::setPlaybackPanning()
     {
-        // add code to adjust current playback panning using getPanning() here
+        // TODO: override and add code to adjust current playback panning using getPanning() here
     }
 
 }

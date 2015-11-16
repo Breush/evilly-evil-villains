@@ -1,5 +1,7 @@
 #include "timeline/timeline.h"
 
+#include "global/settings.h"
+
 #include "timeline/timelineinstance.h"
 
 namespace SpriterEngine
@@ -45,20 +47,20 @@ namespace SpriterEngine
         }
         else
         {
-            // error
+            Settings::error("Timeline::pushFrontProxyKey - timeline has no key : cannot create proxy key");
             return 0;
         }
     }
 
     TimelineKey *Timeline::getKey(int keyIndex)
     {
-        if (unsigned(keyIndex) < keys.size())
+        if (keyIndex < keys.size())
         {
             return keys.at(keyIndex);
         }
         else
         {
-            // error
+            Settings::error("Timeline::getKey - key index " + std::to_string(keyIndex) + " out of range");
             return 0;
         }
     }

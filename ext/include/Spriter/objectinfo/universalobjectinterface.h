@@ -8,91 +8,92 @@
 
 namespace SpriterEngine
 {
-    class UniversalObjectInterface;
-    class ImageFile;
-    class SoundFile;
-    class EntityInstanceData;
-    class AnimationInstance;
-    class TagList;
-    class VariableInstanceNameAndIdMap;
-    class TagObjectInfoReference;
+	class UniversalObjectInterface;
+	class ImageFile;
+	class SoundFile;
+	class EntityInstanceData;
+	class AnimationInstance;
+	class TagList;
+	class VariableInstanceNameAndIdMap;
+	class TagObjectInfoReference;
 
-    typedef std::vector<UniversalObjectInterface*> ObjectInterfaceVector;
+	typedef std::vector<UniversalObjectInterface*> ObjectInterfaceVector;
+	
+	class UniversalObjectInterface
+	{
+	public:
+		UniversalObjectInterface();
+		virtual ~UniversalObjectInterface() = 0;
 
-    class UniversalObjectInterface
-    {
-    public:
-        UniversalObjectInterface();
-        virtual ~UniversalObjectInterface() = 0;
+		virtual point getPosition();
+		virtual real getAngle();
+		virtual point getScale();
+		virtual point getPivot();
+		virtual real getAlpha();
 
-        virtual point getPosition();
-        virtual real getAngle();
-        virtual point getScale();
-        virtual point getPivot();
-        virtual real getAlpha();
+		virtual point getSize();
 
-        virtual point getSize();
+		virtual ImageFile *getImage();
 
-        virtual ImageFile *getImage();
+		virtual EntityInstanceData *getEntity(int entityId);
+		virtual real getCurrentTime();
+		virtual real getTimeRatio();
 
-        virtual EntityInstanceData *getEntity(int entityId);
-        virtual real getCurrentTime();
-        virtual real getTimeRatio();
+		virtual void reprocessCurrentTime();
 
-        virtual void reprocessCurrentTime();
+		virtual ObjectInterfaceVector *getZOrder();
 
-        virtual ObjectInterfaceVector *getZOrder();
+		virtual real getRealValue();
+		virtual int getIntValue();
+		virtual std::string getStringValue();
 
-        virtual real getRealValue();
-        virtual int getIntValue();
-        virtual std::string getStringValue();
+		virtual int getTriggerCount();
 
-        virtual int getTriggerCount();
+		virtual real getVolume();
+		virtual real getPanning();
 
-        virtual real getVolume();
-        virtual real getPanning();
+		virtual VariableInstanceNameAndIdMap *getVariables();
+		virtual UniversalObjectInterface *getTags() const;
 
-        virtual VariableInstanceNameAndIdMap *getVariables();
-        virtual UniversalObjectInterface *getTags() const;
+		virtual bool tagIsActive(std::string tagToCheck) const;
 
-        virtual bool tagIsActive(std::string tagToCheck) const;
+		virtual void setPosition(const point &newPosition);
+		virtual void setAngle(real newAngle);
+		virtual void setScale(const point &newScale);
+		virtual void setPivot(const point &newPivot);
+		virtual void setAlpha(real newAlpha);
+		virtual void setSpin(int newSpin);
 
-        virtual void setPosition(const point &newPosition);
-        virtual void setAngle(real newAngle);
-        virtual void setScale(const point &newScale);
-        virtual void setPivot(const point &newPivot);
-        virtual void setAlpha(real newAlpha);
-        virtual void setSpin(int newSpin);
+		virtual void setImage(ImageFile *newImageFile);
 
-        virtual void setImage(ImageFile *newImageFile);
+		virtual void setCurrentEntity(int newEntityIndex);
+		virtual void setCurrentEntity(EntityInstanceData *newCurrentEntity);
+		virtual void setCurrentAnimation(int newAnimationIndex);
+		virtual void setCurrentAnimation(AnimationInstance *newCurrentAnimation);
+		virtual void setTimeRatio(real newCurrentTimeRatio);
 
-        virtual void setCurrentEntity(int newEntityIndex);
-        virtual void setCurrentEntity(EntityInstanceData *newCurrentEntity);
-        virtual void setCurrentAnimation(int newAnimationIndex);
-        virtual void setCurrentAnimation(AnimationInstance *newCurrentAnimation);
-        virtual void setTimeRatio(real newCurrentTimeRatio);
+		virtual void setRealValue(real newValue);
+		virtual void setIntValue(int newValue);
+		virtual void setStringValue(std::string newValue);
+		virtual void setStringValue(std::string *newValue);
 
-        virtual void setRealValue(real newValue);
-        virtual void setIntValue(int newValue);
-        virtual void setStringValue(std::string newValue);
-        virtual void setStringValue(std::string *newValue);
+		virtual void setTriggerCount(int newTriggerCount);
 
-        virtual void setTriggerCount(int newTriggerCount);
+		virtual void setVolume(real newVolume);
+		virtual void setPanning(real newPanning);
 
-        virtual void setVolume(real newVolume);
-        virtual void setPanning(real newPanning);
+		virtual void setSound(SoundFile *newSoundFile);
 
-        virtual void setSound(SoundFile *newSoundFile);
-
-        virtual void setTagList(TagList *newTagList);
+		virtual void setTagList(TagList *newTagList);
 
 
-        virtual void setObjectTolinear(UniversalObjectInterface *bObject, real t, UniversalObjectInterface *resultObject);
+		virtual void setObjectToLinear(UniversalObjectInterface *bObject, real t, UniversalObjectInterface *resultObject);
+		virtual void setToBlendedLinear(UniversalObjectInterface * aObject, UniversalObjectInterface * bObject, real t, real blendRatio);
 
-        virtual void render();
+		virtual void render();
 
-        virtual void playTrigger();
-    };
+		virtual void playTrigger();
+	};
 
 }
 

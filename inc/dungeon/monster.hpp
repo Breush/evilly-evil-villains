@@ -83,9 +83,6 @@ namespace dungeon
         //! Select an animation to play.
         void lua_selectAnimation(const std::string& animationKey);
 
-        //! Set the looping paramter of the current animation.
-        void lua_setAnimationLooping(const bool looping);
-
         //! Will stop the entity to move and won't call for nextNode anymore.
         void lua_stopMoving();
 

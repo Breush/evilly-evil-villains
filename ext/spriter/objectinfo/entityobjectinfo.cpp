@@ -4,8 +4,8 @@ namespace SpriterEngine
 {
 
     EntityObjectInfo::EntityObjectInfo() :
-        scale(1., 1.),
-        alpha(1.),
+        scale(1, 1),
+        alpha(1),
         timeRatio(0)
     {
     }
@@ -67,7 +67,7 @@ namespace SpriterEngine
     }
 
 
-    void EntityObjectInfo::setObjectTolinear(UniversalObjectInterface *bObject, real t, UniversalObjectInterface *resultObject)
+    void EntityObjectInfo::setObjectToLinear(UniversalObjectInterface *bObject, real t, UniversalObjectInterface *resultObject)
     {
         resultObject->setAngle(angle.angleLinear(bObject->getAngle(), t));
         resultObject->setPosition(linear(position, bObject->getPosition(), t));

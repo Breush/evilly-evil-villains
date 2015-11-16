@@ -1,7 +1,6 @@
 #pragma once
 
 #include "scene/entity.hpp"
-#include "tools/param.hpp"
 #include "tools/int.hpp"
 
 #include <SFML/Graphics/Color.hpp>
@@ -59,20 +58,15 @@ namespace scene
         //! @name Extra control
         //! @{
 
+        //! Set if the animation should run.
+        inline void setStarted(bool inStarted) { m_started = inStarted; }
+
+        //! Is the current animation running?
+        //! Also control if the animation has been stopped because not looping.
+        bool started() const;
+
         //! Add a tilt color to all the sprite composing the animation.
         void setTiltColor(const sf::Color& color);
-
-        //! @}
-
-        //--------------------------//
-        //! @name Public properties
-        //! @{
-
-        //! Whether the animation should loop or just freeze at the end.
-        PARAMGS(bool, m_looping, looping, setLooping)
-
-        //! Start or stop the current animation.
-        PARAMGS(bool, m_started, started, setStarted)
 
         //! @}
 
@@ -87,15 +81,6 @@ namespace scene
 
         //! @}
 
-        //------------//
-        //! @name ICU
-        //! @{
-
-        //! Refresh the current animation from looping value.
-        void refreshFromLooping();
-
-        //! @}
-
     private:
 
         SpriterEngine::EntityInstance* m_spriterEntity = nullptr;   //!< The entity itself.
@@ -103,5 +88,6 @@ namespace scene
         std::wstring m_currentAnimationName;        //!< Current animation name.
         SpriterEngine::real m_length = 0.;          //!< Current animation length.
         sf::Color m_tiltColor = sf::Color::White;   //!< Extra coloring of the sprites.
+        bool m_started = true;                      //!< Whether the animation should run or not.
     };
 }

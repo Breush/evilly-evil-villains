@@ -1,9 +1,8 @@
 #include "objectref/spriteref.h"
 
 #include "entity/entityinstance.h"
-#include "objectref/spriterefinstance.h"
 
-#include <iostream>
+#include "objectref/spriterefinstance.h"
 
 namespace SpriterEngine
 {

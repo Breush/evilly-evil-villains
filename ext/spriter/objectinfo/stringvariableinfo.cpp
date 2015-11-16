@@ -3,23 +3,23 @@
 namespace SpriterEngine
 {
 
-	StringVariableInfo::StringVariableInfo()
-	{
-	}
+    StringVariableInfo::StringVariableInfo()
+    {
+    }
 
-	std::string StringVariableInfo::getStringValue()
-	{
-		return value;
-	}
+    std::string StringVariableInfo::getStringValue()
+    {
+        return value;
+    }
 
-	void StringVariableInfo::setStringValue(std::string newValue)
-	{
-		value = newValue;
-	}
+    void StringVariableInfo::setStringValue(std::string newValue)
+    {
+        value = newValue;
+    }
 
-	void StringVariableInfo::setObjectTolinear(UniversalObjectInterface *bObject, real t, UniversalObjectInterface *resultObject)
-	{
-		resultObject->setStringValue(&value);
-	}
+    void StringVariableInfo::setObjectToLinear(UniversalObjectInterface *bObject, real t, UniversalObjectInterface *resultObject)
+    {
+        resultObject->setStringValue(&value);
+    }
 
 }

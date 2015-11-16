@@ -52,7 +52,6 @@ function startFusing(timeOffset)
     eev_stopMoving()
 
     -- Select correct way to explode
-    eev_setAnimationLooping(false)
     if eev_isLookingDirection("left") then
         eev_selectAnimation("lexplode")
     else

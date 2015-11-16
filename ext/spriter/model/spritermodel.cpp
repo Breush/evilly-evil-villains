@@ -1,5 +1,7 @@
 #include "model/spritermodel.h"
 
+#include "global/settings.h"
+
 #include "entity/entityinstance.h"
 
 #include "override/imagefile.h"
@@ -19,9 +21,9 @@ namespace SpriterEngine
     }
 
     SpriterModel::SpriterModel(FileFactory * newFileFactory, ObjectFactory * newObjectFactory) :
-        loader(newFileFactory->newScmlDocumentWrapper(), newFileFactory->newSconDocumentWrapper()),
         fileFactory(newFileFactory),
-        objectFactory(newObjectFactory)
+        objectFactory(newObjectFactory),
+        loader(newFileFactory->newScmlDocumentWrapper(), newFileFactory->newSconDocumentWrapper())
     {
     }
 
@@ -36,17 +38,26 @@ namespace SpriterEngine
             delete it;
         }
 
-        // We don't remove file or object factory in our working way
+        if (fileFactory)
+        {
+            delete fileFactory;
+        }
+
+        if (objectFactory)
+        {
+            delete objectFactory;
+        }
     }
 
     EntityInstance *SpriterModel::getNewEntityInstance(int entityId)
     {
-        if (unsigned(entityId) < entities.size())
+        if (entityId < entities.size())
         {
             return entities.at(entityId)->getNewEntityInstance(this, objectFactory);
         }
         else
         {
+            Settings::error("SpriterModel::getNewEntityInstance - entity id " + std::to_string(entityId) + " out of range");
             return 0;
         }
     }
@@ -63,7 +74,7 @@ namespace SpriterEngine
             }
             else
             {
-                // error
+                Settings::error("SpriterModel::getNewEntityInstance - could not find entity with id " + std::to_string(it));
             }
         }
         return newEntityInstance;
@@ -78,7 +89,7 @@ namespace SpriterEngine
                 return it->getNewEntityInstance(this, objectFactory);
             }
         }
-        // error
+        Settings::error("SpriterModel::getNewEntityInstance - could not find entity with name \"" + entityName + "\"");
         return 0;
     }
 
@@ -118,7 +129,7 @@ namespace SpriterEngine
 
     File * SpriterModel::getFileAtIndex(int fileIndex)
     {
-        if (fileIndex >= 0 && unsigned(fileIndex) < files.size())
+        if (fileIndex >= 0 && fileIndex < files.size())
         {
             return files.at(fileIndex);
         }
@@ -130,13 +141,13 @@ namespace SpriterEngine
 
     const std::string * SpriterModel::getTag(int tagIndex)
     {
-        if (unsigned(tagIndex) < tags.size())
+        if (tagIndex < tags.size())
         {
             return &tags.at(tagIndex);
         }
         else
         {
-            // error
+            Settings::error("SpriterModel::getTag - tag index " + std::to_string(tagIndex) + " out of range");
             return 0;
         }
     }
@@ -148,13 +159,13 @@ namespace SpriterEngine
 
     Entity * SpriterModel::getEntity(int entityId)
     {
-        if (unsigned(entityId) < entities.size())
+        if (entityId < entities.size())
         {
             return entities.at(entityId);
         }
         else
         {
-            // error
+            Settings::error("SpriterModel::getEntity - entity id " + std::to_string(entityId) + " out of range");
             return 0;
         }
     }

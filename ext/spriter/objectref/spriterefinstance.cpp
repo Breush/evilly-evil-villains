@@ -4,8 +4,6 @@
 #include "file/filereference.h"
 #include "override/imagefile.h"
 
-#include <iostream>
-
 namespace SpriterEngine
 {
 
@@ -18,15 +16,10 @@ namespace SpriterEngine
         imageRef(initialImageRef),
         useDefaultPivot(initialUseDefaultPivotPoint)
     {
-        // if (imageRef == nullptr)
-        //    std::cerr << "[Spriter++] Initializing with nullptr imageRef, that's suspicious" << std::endl;
     }
 
     void SpriteRefInstance::process(real currentTime)
     {
-        if (imageRef == nullptr)
-            return;
-
         ObjectRefInstance::process(currentTime);
         resultObject()->setImage(imageRef->image());
         if (useDefaultPivot && imageRef->image())

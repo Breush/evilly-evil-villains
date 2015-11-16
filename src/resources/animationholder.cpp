@@ -10,10 +10,6 @@ using namespace resources;
 
 AnimationHolder::AnimationHolder()
 {
-    // Note: We only care about
-    auto& window = Application::context().window;
-    m_fileFactory = std::make_unique<SpriterEngine::ExampleFileFactory>(&window);
-    m_objectFactory = std::make_unique<SpriterEngine::ExampleObjectFactory>(&window);
 }
 
 //-------------------//
@@ -28,8 +24,12 @@ std::string AnimationHolder::getID(const std::string& filename)
 
 void AnimationHolder::load(const std::string& filename)
 {
+    auto& window = Application::context().window;
+    auto newFileFactory = new SpriterEngine::ExampleFileFactory(&window);
+    auto newObjectFactory = new SpriterEngine::ExampleObjectFactory(&window);
+
     auto id = getID(filename);
-    auto model = std::make_unique<SpriterEngine::SpriterModel>(filename, m_fileFactory.get(), m_objectFactory.get());
+    auto model = std::make_unique<SpriterEngine::SpriterModel>(filename, newFileFactory, newObjectFactory);
     m_models.emplace(id, std::move(model));
 }
 

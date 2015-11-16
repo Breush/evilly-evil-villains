@@ -14,72 +14,72 @@
 namespace SpriterEngine
 {
 
-    class AnimationInstance;
-    class UniversalObjectInterface;
-    class EntityInstance;
-    class EntityInstanceData;
-    class SpriterModel;
-    class ObjectFactory;
+	class AnimationInstance;
+	class UniversalObjectInterface;
+	class EntityInstance;
+	class EntityInstanceData;
+	class SpriterModel;
+	class ObjectFactory;
 
-    typedef std::vector<Animation*> AnimationVector;
-    typedef std::map<std::string, Object> ObjectNameMap;
-    typedef std::map<int, Object*> ObjectIdMap;
-    typedef std::map<std::string, CharacterMap> CharacterMapMap;
+	typedef std::vector<Animation*> AnimationVector;
+	typedef std::map<std::string, Object> ObjectNameMap;
+	typedef std::map<int, Object*> ObjectIdMap;
+	typedef std::map<std::string, CharacterMap> CharacterMapMap;
 
-    class Entity : public VariableContainer, private CharacterMapInterface
-    {
-    public:
-        Entity(std::string initialName, int initialId, FileVector *initialFileVector);
-        ~Entity();
+	class Entity : public VariableContainer, private CharacterMapInterface
+	{
+	public:
+		Entity(std::string initialName, int initialId, FileVector *initialFileVector);
+		~Entity();
 
-        int getId();
+		int getId();
 
-        std::string getName();
+		std::string getName();
 
-        EntityInstance *getNewEntityInstance(SpriterModel *model, ObjectFactory *objectFactory);
-        void setupInstance(SpriterModel *model, EntityInstance *entityInstance, EntityInstanceData *entityInstanceData, ObjectFactory *objectFactory);
+		EntityInstance *getNewEntityInstance(SpriterModel *model, ObjectFactory *objectFactory);
+		void setupInstance(SpriterModel *model, EntityInstance *entityInstance, EntityInstanceData *entityInstanceData, ObjectFactory *objectFactory);
 
-        Animation *pushBackAnimation(std::string animationName, real length, bool looping);
+		Animation *pushBackAnimation(std::string animationName, real length, bool looping);
+		
+		Object *setObject(std::string objectName, Object::ObjectType objectType);
+		Object *getObject(int objectId);
 
-        Object *setObject(std::string objectName, Object::ObjectType objectType);
-        Object *getObject(int objectId);
+		Variable *getVariable(int objectId, int variableId);
 
-        Variable *getVariable(int objectId, int variableId);
+		CharacterMap *addCharacterMap(std::string name);
 
-        CharacterMap *addCharacterMap(std::string name);
+		void applyCharacterMap(std::string mapName, FileReferenceVector *mappedFiles) override;
+		void removeAllCharacterMaps(FileReferenceVector *mappedFiles) override;
 
-        void applyCharacterMap(std::string mapName, FileReferenceVector *mappedFiles) override;
-        void removeAllCharacterMaps(FileReferenceVector *mappedFiles) override;
+		UniversalObjectInterface *getNewObjectInfoInstance(int objectId);
 
-        UniversalObjectInterface *getNewObjectInfoInstance(int objectId);
+		void setupDefaultVariableTimelines();
 
-        void setupDefaultVariableTimelines();
+	private:
+		int entityId;
 
-    private:
-        int entityId;
+		std::string name;
 
-        std::string name;
+		Object *setSpatialObject(std::string objectName, Object::ObjectType objectType);
+		Object *setTriggerObject(std::string objectName);
+		Object *setSubEntityObject(std::string objectName);
+		Object *setSoundObject(std::string objectName);
 
-        Object *setSpatialObject(std::string objectName, Object::ObjectType objectType);
-        Object *setTriggerObject(std::string objectName);
-        Object *setSubEntityObject(std::string objectName);
-        Object *setSoundObject(std::string objectName);
+		void setupAnimationInstances(EntityInstance *entityInstance, EntityInstanceData *entityInstanceData);
+		void setupObjectInstance(Object * object, SpriterModel * model, EntityInstance * entityInstance, EntityInstanceData * entityInstanceData, ObjectFactory * objectFactory);
+		void setupObjectInstances(SpriterModel * model, EntityInstance * entityInstance, EntityInstanceData * entityInstanceData, ObjectFactory * objectFactory);
 
-        void setupAnimationInstances(EntityInstance *entityInstance, EntityInstanceData *entityInstanceData);
-        void setupObjectInstance(Object * object, SpriterModel * model, EntityInstance * entityInstance, EntityInstanceData * entityInstanceData, ObjectFactory * objectFactory);
-        void setupObjectInstances(SpriterModel * model, EntityInstance * entityInstance, EntityInstanceData * entityInstanceData, ObjectFactory * objectFactory);
+		AnimationVector animations;
+		ObjectNameMap objectNameMap;
+		ObjectIdMap objectIdMap;
+		CharacterMapMap characterMaps;
 
-        AnimationVector animations;
-        ObjectNameMap objectNameMap;
-        ObjectIdMap objectIdMap;
-        CharacterMapMap characterMaps;
+		ObjectIdMap triggerIdMap;
+		ObjectIdMap soundIdMap;
+		ObjectIdMap subEntityIdMap;
 
-        ObjectIdMap triggerIdMap;
-        ObjectIdMap soundIdMap;
-        ObjectIdMap subEntityIdMap;
-
-        FileVector *files;
-    };
+		FileVector *files;
+	};
 
 }
 

@@ -7,24 +7,23 @@
 namespace SpriterEngine
 {
 
-	EntityRefInstance::EntityRefInstance(UniversalObjectInterface *initialResultObject,
-		TransformProcessor *initialParentTransformer,
-		TimelineKey *initialKey,
-		EntityInstanceData *initialEntity,
-		AnimationInstance *initialAnimation) :
-		ObjectRefInstance(initialResultObject, initialParentTransformer, initialKey),
-		entity(initialEntity),
-		animation(initialAnimation),
-		lastTime(0)
-	{
-	}
+    EntityRefInstance::EntityRefInstance(UniversalObjectInterface *initialResultObject,
+        TransformProcessor *initialParentTransformer,
+        TimelineKey *initialKey,
+        EntityInstanceData *initialEntity,
+        AnimationInstance *initialAnimation) :
+        ObjectRefInstance(initialResultObject, initialParentTransformer, initialKey),
+        entity(initialEntity),
+        animation(initialAnimation)
+    {
+    }
 
-	void EntityRefInstance::process(real currentTime)
-	{
-		resultObject()->setCurrentEntity(entity);
-		resultObject()->setCurrentAnimation(animation);
-		ObjectRefInstance::process(currentTime);
-		resultObject()->reprocessCurrentTime();
-	}
+    void EntityRefInstance::process(real currentTime)
+    {
+        resultObject()->setCurrentEntity(entity);
+        resultObject()->setCurrentAnimation(animation);
+        ObjectRefInstance::process(currentTime);
+        resultObject()->reprocessCurrentTime();
+    }
 
 }

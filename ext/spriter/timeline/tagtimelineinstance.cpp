@@ -8,10 +8,10 @@
 namespace SpriterEngine
 {
 
-	TagTimelineInstance::TagTimelineInstance(EntityInstanceData *entityInstanceData, Timeline *timeline, int objectId) :
-		TimelineInstance(timeline)
-	{
-		resultObject = entityInstanceData->getTags(objectId);
-	}
+    TagTimelineInstance::TagTimelineInstance(EntityInstanceData *entityInstanceData, Timeline *timeline, int objectId) :
+        TimelineInstance(timeline)
+    {
+        resultObject = entityInstanceData->getTags(objectId);
+    }
 
 }

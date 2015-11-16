@@ -5,10 +5,10 @@
 namespace SpriterEngine
 {
 
-	VariableTimelineInstance::VariableTimelineInstance(EntityInstanceData *entityInstanceData, Timeline *timeline, int objectId, int initialVariableId) :
-		TimelineInstance(timeline)
-	{
-		resultObject = entityInstanceData->getVariable(objectId, initialVariableId);
-	}
+    VariableTimelineInstance::VariableTimelineInstance(EntityInstanceData *entityInstanceData, Timeline *timeline, int objectId, int initialVariableId) :
+        TimelineInstance(timeline)
+    {
+        resultObject = entityInstanceData->getVariable(objectId, initialVariableId);
+    }
 
 }

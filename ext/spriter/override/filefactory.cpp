@@ -3,6 +3,9 @@
 #include "override/imagefile.h"
 #include "override/soundfile.h"
 
+#include "override/spriterfiledocumentwrapper.h"
+
+
 namespace SpriterEngine
 {
 
@@ -26,12 +29,12 @@ namespace SpriterEngine
 
     SpriterFileDocumentWrapper * FileFactory::newScmlDocumentWrapper()
     {
-        return nullptr;
+        return 0;
     }
 
     SpriterFileDocumentWrapper * FileFactory::newSconDocumentWrapper()
     {
-        return nullptr;
+        return 0;
     }
 
 }

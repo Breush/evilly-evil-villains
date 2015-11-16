@@ -18,7 +18,7 @@ namespace SpriterEngine
 
     void ImageFile::renderSprite(UniversalObjectInterface * spriteInfo)
     {
-        // override and add custom rendering code here using:
+        // TODO: override and add custom rendering code here using:
 
         // spriteInfo->getAlpha()
         // spriteInfo->getPosition()

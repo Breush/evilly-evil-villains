@@ -1,5 +1,7 @@
 #include "animation/animation.h"
 
+#include "global/settings.h"
+
 #include "timeline/timeline.h"
 #include "timeline/timelineinstance.h"
 #include "timeline/soundtimelineinstance.h"
@@ -145,26 +147,26 @@ namespace SpriterEngine
 
     int Animation::getObjectIdFromTimelineIndex(int timelineIndex)
     {
-        if (unsigned(timelineIndex) < objectTimelines.size())
+        if (timelineIndex < objectTimelines.size())
         {
             return objectTimelines.at(timelineIndex)->getObjectId();
         }
         else
         {
-            // error
+            Settings::error("Animation::getObjectIdFromTimelineIndex - timeline index " + std::to_string(timelineIndex) + " out of range");
             return OUT_OF_RANGE;
         }
     }
 
     TimelineKey *Animation::getObjectTimelineKey(int timelineIndex, int keyIndex)
     {
-        if (unsigned(timelineIndex) < objectTimelines.size())
+        if (timelineIndex < objectTimelines.size())
         {
             return objectTimelines.at(timelineIndex)->getKey(keyIndex);
         }
         else
         {
-            // error
+            Settings::error("Animation::getObjectTimelineKey - timeline index " + std::to_string(timelineIndex) + " out of range");
             return 0;
         }
     }

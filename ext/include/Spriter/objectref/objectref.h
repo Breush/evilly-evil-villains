@@ -4,33 +4,32 @@
 namespace SpriterEngine
 {
 
-    class ObjectRefInstance;
-    class EntityInstance;
-    class EntityInstanceData;
-    class TransformProcessor;
-    class TimelineKey;
-    class UniversalObjectInterface;
+	class ObjectRefInstance;
+	class EntityInstance;
+	class EntityInstanceData;
+	class TransformProcessor;
+	class TimelineKey;
+	class UniversalObjectInterface;
 
-    class ObjectRef
-    {
-    public:
-        ObjectRef(int initialObjectId, int initialParentObjectId, TimelineKey *initialKey);
-        virtual ~ObjectRef() = default;
+	class ObjectRef
+	{
+	public:
+		ObjectRef(int initialObjectId, int initialParentObjectId, TimelineKey *initialKey);
 
-        ObjectRefInstance *getNewObjectRefInstance(EntityInstance *entityInstance, EntityInstanceData *entityInstanceData);
-        int id();
+		ObjectRefInstance *getNewObjectRefInstance(EntityInstance *entityInstance, EntityInstanceData *entityInstanceData);
+		int id();
 
-    protected:
-        TimelineKey *getKey();
+	protected:
+		TimelineKey *getKey();
 
-    private:
-        virtual ObjectRefInstance *getNewSpecializedObjectRefInstance(EntityInstance *entityInstance, EntityInstanceData *entityInstanceData, TransformProcessor *initialParentTransformer, UniversalObjectInterface *objectInstance);
+	private:
+		virtual ObjectRefInstance *getNewSpecializedObjectRefInstance(EntityInstance *entityInstance, EntityInstanceData *entityInstanceData, TransformProcessor *initialParentTransformer, UniversalObjectInterface *objectInstance);
 
-        int objectId;
-        int parentObjectId;
+		int objectId;
+		int parentObjectId;
 
-        TimelineKey *key;
-    };
+		TimelineKey *key;
+	};
 
 }
 

@@ -5,26 +5,26 @@
 namespace SpriterEngine
 {
 
-	TagObjectInfoReference::TagObjectInfoReference() :
-		tagList(0)
-	{
-	}
+    TagObjectInfoReference::TagObjectInfoReference() :
+        tagList(0)
+    {
+    }
 
-	bool TagObjectInfoReference::tagIsActive(std::string tagToCheck) const
-	{
-		if (tagList)
-		{
-			return tagList->tagIsActive(tagToCheck);
-		}
-		else
-		{
-			return false;
-		}
-	}
+    bool TagObjectInfoReference::tagIsActive(std::string tagToCheck) const
+    {
+        if (tagList)
+        {
+            return tagList->tagIsActive(tagToCheck);
+        }
+        else
+        {
+            return false;
+        }
+    }
 
-	void TagObjectInfoReference::setTagList(TagList *newTagList)
-	{
-		tagList = newTagList;
-	}
+    void TagObjectInfoReference::setTagList(TagList *newTagList)
+    {
+        tagList = newTagList;
+    }
 
 }

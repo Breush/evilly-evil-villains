@@ -10,8 +10,6 @@ using namespace scene;
 
 AnimatedSprite::AnimatedSprite(bool isLerpable)
     : baseClass(isLerpable)
-    , m_looping(true)
-    , m_started(true)
 {
 }
 
@@ -33,6 +31,7 @@ void AnimatedSprite::drawInternal(sf::RenderTarget& target, sf::RenderStates sta
     m_spriterEntity->setAngle(getRotation());
 
     // Forcing immediate refresh to current parameters
+    // FIXME This might be causing the sound issue
     m_spriterEntity->reprocessCurrentTime();
 
     // TODO This does not take states shader in account?
@@ -61,7 +60,6 @@ void AnimatedSprite::load(const std::string& id)
     m_spriterEntity = model.getNewEntityInstance(0);
 
     // The first animation is loaded
-    m_length = m_spriterEntity->getCurrentAnimationLength();
     restart();
 
     // TODO m_spriterEntity->setTiltColor(m_tiltColor);
@@ -74,7 +72,7 @@ void AnimatedSprite::select(const std::wstring& animationName)
     // Note: If the animation does not exists, it is just ignored
     m_spriterEntity->setCurrentAnimation(toString(animationName));
 
-    m_length = m_spriterEntity->getCurrentAnimationLength();
+    restart();
 }
 
 void AnimatedSprite::forward(const sf::Time& offset)
@@ -82,30 +80,23 @@ void AnimatedSprite::forward(const sf::Time& offset)
     returnif (m_spriterEntity == nullptr);
 
     auto timeElapsed = offset.asMilliseconds();
-
-    // If we're not looping, call it an end
-    if (!m_looping && m_spriterEntity->getCurrentTime() + timeElapsed >= m_length) {
-        m_started = false;
-        return;
-    }
-
     m_spriterEntity->setTimeElapsed(timeElapsed);
 }
 
 void AnimatedSprite::restart()
 {
     m_started = true;
-    m_spriterEntity->setCurrentTime(0.);
-    refreshFromLooping();
+    if (m_spriterEntity != nullptr)
+        m_spriterEntity->setCurrentTime(0.);
 }
 
 //-------------------------//
 //----- Extra control -----//
 
-void AnimatedSprite::refreshFromLooping()
+bool AnimatedSprite::started() const
 {
-    // TODO This does not work
-    // m_spriterEntity->setCurrentAnimationLooping(m_looping);
+    returnif (m_spriterEntity == nullptr) false;
+    return m_started && m_spriterEntity->isPlaying;
 }
 
 void AnimatedSprite::setTiltColor(const sf::Color& color)

@@ -40,7 +40,6 @@ SplashScreen::SplashScreen(StateStack& stack)
     nuiRoot.attachChild(m_logo);
     m_logo.load("jumping-toasts/logo");
     m_logo.setRelativePosition({0.5f, 0.5f});
-    m_logo.setLooping(false);
     m_logo.restart();
 }
 

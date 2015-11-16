@@ -3,19 +3,19 @@
 namespace SpriterEngine
 {
 
-	TriggerObjectInfo::TriggerObjectInfo() :
-		triggerCount(0)
-	{
-	}
+    TriggerObjectInfo::TriggerObjectInfo() :
+        triggerCount(0)
+    {
+    }
 
-	int TriggerObjectInfo::getTriggerCount()
-	{
-		return triggerCount;
-	}
+    int TriggerObjectInfo::getTriggerCount()
+    {
+        return triggerCount;
+    }
 
-	void TriggerObjectInfo::setTriggerCount(int newTriggerCount)
-	{
-		triggerCount = newTriggerCount;
-	}
+    void TriggerObjectInfo::setTriggerCount(int newTriggerCount)
+    {
+        triggerCount = newTriggerCount;
+    }
 
 }

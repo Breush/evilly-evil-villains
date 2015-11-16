@@ -15,10 +15,12 @@ namespace SpriterEngine
     MainlineKey::~MainlineKey()
     {
         delete timeInfo;
+
         for (auto& it : boneRefs)
         {
             delete it;
         }
+
         for (auto& it : zOrderRefs)
         {
             delete it;

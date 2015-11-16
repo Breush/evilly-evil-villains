@@ -4,19 +4,19 @@
 
 namespace SpriterEngine
 {
-	SoundFile::SoundFile(std::string initialFilePath) :
-		File(initialFilePath)
-	{
-	}
+    SoundFile::SoundFile(std::string initialFilePath) :
+        File(initialFilePath)
+    {
+    }
 
-	SoundFile *SoundFile::soundFile()
-	{
-		return this;
-	}
+    SoundFile *SoundFile::soundFile()
+    {
+        return this;
+    }
 
-	SoundObjectInfoReference * SoundFile::newSoundInfoReference()
-	{
-		return new SoundObjectInfoReference();
-	}
+    SoundObjectInfoReference * SoundFile::newSoundInfoReference()
+    {
+        return new SoundObjectInfoReference();
+    }
 
 }

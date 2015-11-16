@@ -24,7 +24,6 @@ Monster::Monster(Inter& inter, Graph& graph)
     std::function<void(const std::string&, const std::string&, const std::string&)> eev_addCallback = std::bind(&Monster::lua_addCallback, this, _1, _2, _3);
     m_lua["eev_addCallback"] = eev_addCallback;
     m_lua["eev_stopMoving"] = [this] { lua_stopMoving(); };
-    m_lua["eev_setAnimationLooping"] = [this] (const bool looping) { lua_setAnimationLooping(looping); };
     m_lua["eev_selectAnimation"] = [this] (const std::string& animationKey) { lua_selectAnimation(animationKey); };
     m_lua["eev_isLookingDirection"] = [this] (const std::string& direction) { return lua_isLookingDirection(direction); };
     m_lua["eev_isAnimationStopped"] = [this] { return lua_isAnimationStopped(); };
@@ -155,11 +154,6 @@ lua_Number Monster::lua_getDataFloat(const std::string& s) const
 void Monster::lua_selectAnimation(const std::string& animationKey)
 {
     m_sprite.select(toWString(animationKey));
-}
-
-void Monster::lua_setAnimationLooping(const bool looping)
-{
-    m_sprite.setLooping(looping);
 }
 
 void Monster::lua_rewindAnimation()

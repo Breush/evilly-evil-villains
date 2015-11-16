@@ -2,7 +2,10 @@
 #define SPRITERDOCUMENTLOADER_H
 
 #include "../global/global.h"
-#include "loadinghelpers.h"
+
+#include "../override/spriterfiledocumentwrapper.h"
+
+#include "../loading/loadinghelpers.h"
 
 namespace SpriterEngine
 {

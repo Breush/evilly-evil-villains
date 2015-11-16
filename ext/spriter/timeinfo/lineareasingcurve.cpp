@@ -3,19 +3,19 @@
 namespace SpriterEngine
 {
 
-	LinearEasingCurve::LinearEasingCurve()
-	{
-	}
+    LinearEasingCurve::LinearEasingCurve()
+    {
+    }
 
 
-	real LinearEasingCurve::adjustedTimeRatio(real timeRatio)
-	{
-		return timeRatio;
-	}
+    real LinearEasingCurve::adjustedTimeRatio(real timeRatio)
+    {
+        return timeRatio;
+    }
 
-	EasingCurveInterface * LinearEasingCurve::clone()
-	{
-		return new LinearEasingCurve();
-	}
+    EasingCurveInterface * LinearEasingCurve::clone()
+    {
+        return new LinearEasingCurve();
+    }
 
 }

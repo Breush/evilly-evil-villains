@@ -1,5 +1,7 @@
 #include "entity/object.h"
 
+#include "global/settings.h"
+
 #include "override/objectfactory.h"
 
 #include "objectinfo/pointobjectinfo.h"
@@ -9,6 +11,7 @@
 #include "objectinfo/entityobjectinfo.h"
 #include "objectinfo/soundobjectinfo.h"
 #include "objectinfo/triggerobjectinfo.h"
+#include "objectinfo/pointinstanceinfo.h"
 #include "objectinfo/boneinstanceinfo.h"
 #include "objectinfo/boxinstanceinfo.h"
 
@@ -19,18 +22,14 @@
 #include "entity/entityinstance.h"
 #include "entity/entityinstancedata.h"
 
-#include <iostream>
-
 namespace SpriterEngine
 {
 
     Object::Object(std::string initialName, int initialId, ObjectType initialObjectType) :
         name(initialName),
-        objectType(initialObjectType),
-        objectId(initialId)
+        objectId(initialId),
+        objectType(initialObjectType)
     {
-        if (objectType == OBJECTTYPE_NONE)
-            std::cerr << "[Spriter++] Initializing with object type NONE, that's suspicious." << std::endl;
     }
 
     std::string Object::getName()
@@ -65,39 +64,18 @@ namespace SpriterEngine
         size = newSize;
     }
 
-    UniversalObjectInterface *Object::getNewObjectInfoInstance(ObjectFactory *objectFactory)
+    UniversalObjectInterface *Object::getNewObjectInfoInstance()
     {
         switch (objectType)
         {
         case OBJECTTYPE_POINT:
-            if (objectFactory)
-            {
-                return objectFactory->newPointObjectInfo();
-            }
-            else
-            {
-                return new PointObjectInfo();
-            }
+            return new PointObjectInfo();
 
         case OBJECTTYPE_BONE:
-            if (objectFactory)
-            {
-                return objectFactory->newBoneInstanceInfo(size);
-            }
-            else
-            {
-                return new BoneObjectInfo();
-            }
+            return new BoneObjectInfo();
 
         case OBJECTTYPE_BOX:
-            if (objectFactory)
-            {
-                return objectFactory->newBoxInstanceInfo(size);
-            }
-            else
-            {
-                return new BoxObjectInfo();
-            }
+            return new BoxObjectInfo();
 
         case OBJECTTYPE_SPRITE:
             return new SpriteObjectInfo();
@@ -112,8 +90,7 @@ namespace SpriterEngine
             return new TriggerObjectInfo();
 
         default:
-            // error;
-            std::cerr << "[Spriter++] Error: Cannot determine objectType." << std::endl;
+            Settings::error("Object::getNewObjectInfoInstance - invalid object type");
             return 0;
         }
     }
@@ -122,6 +99,17 @@ namespace SpriterEngine
     {
         switch (objectType)
         {
+        case OBJECTTYPE_POINT:
+            if (objectFactory)
+            {
+                entityInstanceData->setObjectInstance(objectId, name, objectFactory->newPointInstanceInfo());
+            }
+            else
+            {
+                entityInstanceData->setObjectInstance(objectId, name, new PointInstanceInfo());
+            }
+            break;
+
         case OBJECTTYPE_BONE:
             if (objectFactory)
             {
@@ -167,7 +155,7 @@ namespace SpriterEngine
             break;
 
         default:
-            entityInstanceData->setObjectInstance(objectId, name, getNewObjectInfoInstance(objectFactory));
+            entityInstanceData->setObjectInstance(objectId, name, getNewObjectInfoInstance());
             break;
         }
     }
