@@ -11,8 +11,9 @@ using namespace dungeon;
 //----------------------//
 //----- GrabButton -----//
 
-FacilityGrabButton::FacilityGrabButton(const FacilitiesDB::FacilityData& facilityData, std::wstring facilityID)
-    : m_facilityData(facilityData)
+FacilityGrabButton::FacilityGrabButton(const FacilitiesDB::FacilityData& facilityData, std::wstring facilityID, Inter& inter)
+    : m_inter(inter)
+    , m_facilityData(facilityData)
     , m_facilityID(std::move(facilityID))
 {
     m_grabbableFacilityID = m_facilityID;
@@ -25,6 +26,19 @@ FacilityGrabButton::FacilityGrabButton(const FacilitiesDB::FacilityData& facilit
             ++m_explicitLinksCount;
 }
 
+void FacilityGrabButton::grabbableMoved(Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f&)
+{
+    // Show link if linking
+    returnif (m_explicitLinksCount == 0u || m_explicitLinksDone == 0u);
+
+    // Forward to dungeon::Inter if it is below
+    auto inter = dynamic_cast<Inter*>(entity);
+    returnif (inter == nullptr);
+
+    auto targetCoords = inter->tileFromLocalPosition(relPos);
+    inter->setPredictionLink(m_explicitLinkCoords, targetCoords);
+}
+
 void FacilityGrabButton::grabbableButtonPressed(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
 {
     // If right button, deselect
@@ -32,6 +46,7 @@ void FacilityGrabButton::grabbableButtonPressed(Entity* entity, const sf::Mouse:
         // Still some explicit links to do, do not stop construction
         returnif (m_explicitLinksDone != 0u && m_explicitLinksDone < m_explicitLinksCount);
         m_grabbableFacilityID = m_facilityID;
+        m_inter.resetPredictionLink();
         graph()->removeGrabbable();
         m_explicitLinksDone = 0u;
         return;
@@ -80,6 +95,7 @@ void FacilityGrabButton::grabbableButtonPressed(Entity* entity, const sf::Mouse:
     // If we did enough links, go back to the main
     else if (m_explicitLinksDone == m_explicitLinksCount) {
         m_explicitLinksDone = 0u;
+        inter->resetPredictionLink();
         setGrabbableFacilityID(m_facilityID);
     }
 }

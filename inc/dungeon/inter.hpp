@@ -12,6 +12,7 @@
 #include "sfe/grid.hpp"
 #include "scene/wrappers/label.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
+#include "scene/wrappers/customline.hpp"
 #include "tools/vector.hpp"
 
 #include <array>
@@ -80,6 +81,12 @@ namespace dungeon
 
         //! Set the prediction overlay to a monster.
         void setPredictionMonster(const sf::Vector2f& relPos, const std::wstring& monsterID);
+
+        //! Remove the current link prediction.
+        void resetPredictionLink();
+
+        //! Show a link prediction between two rooms.
+        void setPredictionLink(const sf::Vector2u& coords, const sf::Vector2u& linkCoords);
 
         //! @}
 
@@ -346,6 +353,7 @@ namespace dungeon
         // Prediction
         std::wstring m_predictionID;                //!< The current ID of the element overlay.
         scene::AnimatedSprite m_predictionSprite;   //!< The current sprite shown.
+        scene::CustomLine m_predictionLink;         //!< The current link shown.
 
         // NUI
         nui::ContextMenu& m_contextMenu;            //!< The context menu, got from global state.

@@ -1,9 +1,8 @@
 #pragma once
 
+#include "dungeon/inter.hpp"
 #include "dungeon/databases/facilitiesdb.hpp"
-#include "context/event.hpp"
 #include "nui/grabbutton.hpp"
-#include "tools/int.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
@@ -22,7 +21,7 @@ namespace dungeon
     public:
 
         //! Constructor, affecting texture and look.
-        FacilityGrabButton(const FacilitiesDB::FacilityData& facilityData, std::wstring facilityID);
+        FacilityGrabButton(const FacilitiesDB::FacilityData& facilityData, std::wstring facilityID, Inter& inter);
 
         //! Default destructor.
         ~FacilityGrabButton() = default;
@@ -33,6 +32,7 @@ namespace dungeon
         //! @name Spawn and react
         //! @{
 
+        void grabbableMoved(Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
         void grabbableButtonPressed(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
         std::unique_ptr<scene::Grabbable> spawnGrabbable() final;
 
@@ -45,6 +45,8 @@ namespace dungeon
         //! @}
 
     private:
+
+        Inter& m_inter;             //!< Reference to the dungeon inter.
 
         const FacilitiesDB::FacilityData& m_facilityData;   //!< Reference to the data.
         std::wstring m_facilityID;                          //!< The identifier for the facility.

@@ -32,8 +32,12 @@ Inter::Inter(nui::ContextMenu& contextMenu, const HeroesManager& heroesManager)
 
     // Prediction
     attachChild(m_predictionSprite);
-    m_predictionSprite.setDepth(-1.f);
+    m_predictionSprite.setDepth(-10.f);
     m_predictionSprite.setStarted(false);
+    m_predictionSprite.setVisible(false);
+
+    attachChild(m_predictionLink);
+    m_predictionLink.setDepth(-15.f);
 
     // Outer walls
     addPart(&m_outerWalls[0]);
@@ -465,6 +469,19 @@ void Inter::setPredictionMonster(const sf::Vector2f& relPos, const std::wstring&
         m_predictionSprite.setTiltColor({119u, 192u, 119u, 200u});
     else
         m_predictionSprite.setTiltColor({192u, 119u, 119u, 200u});
+}
+
+void Inter::resetPredictionLink()
+{
+    m_predictionLink.setVisible(false);
+}
+
+void Inter::setPredictionLink(const sf::Vector2u& coords, const sf::Vector2u& linkCoords)
+{
+    m_predictionLink.setVisible(true);
+    auto limitStart = tileLocalPosition(coords) + tileSize() / 2.f;
+    auto limitEnd   = tileLocalPosition(linkCoords) + tileSize() / 2.f;
+    m_predictionLink.setLimits(limitStart, limitEnd);
 }
 
 //---------------------//
