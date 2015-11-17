@@ -13,6 +13,7 @@
 namespace pugi
 {
     class xml_node;
+    class xml_attribute;
 }
 
 namespace dungeon
@@ -73,6 +74,9 @@ namespace dungeon
 
         //! Read node and affect it to a cost variable.
         void readCostNode(Cost& cost, const pugi::xml_node& node);
+
+        //! Read attribute and affect it to a constraint parameter variable.
+        void readConstraintParameterAttribute(ConstraintParameter& constraintParameter, const pugi::xml_attribute& attribute);
 
         //! @}
 

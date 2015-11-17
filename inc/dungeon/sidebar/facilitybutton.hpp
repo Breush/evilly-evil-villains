@@ -39,6 +39,9 @@ namespace dungeon
         //! Refresh the grabbable look and the facility created.
         void setGrabbableFacilityID(const std::wstring& facilityID);
 
+        //! Get current link.
+        const Link& getCurrentExplicitLink() const;
+
         //! @}
 
     private:

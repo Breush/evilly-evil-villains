@@ -2,6 +2,7 @@
 
 #include "core/gettext.hpp"
 #include "tools/filesystem.hpp"
+#include "tools/tools.hpp"
 
 #include <pugixml/pugixml.hpp>
 #include <stdexcept>
@@ -79,10 +80,27 @@ void FacilitiesDB::add(const std::string& filename)
         else if (style == L"explicit") {
             link.style = Link::Style::EXPLICIT;
             link.id = linkNode.attribute(L"id").as_string();
+
+            for (const auto& constraintNode : linkNode.children(L"constraint")) {
+                Constraint constraint;
+                std::wstring mode = constraintNode.attribute(L"mode").as_string();
+                if (mode == L"include")         constraint.mode = Constraint::Mode::INCLUDE;
+                else if (mode == L"exclude")    constraint.mode = Constraint::Mode::EXCLUDE;
+                readConstraintParameterAttribute(constraint.x, constraintNode.attribute(L"x"));
+                readConstraintParameterAttribute(constraint.y, constraintNode.attribute(L"y"));
+                link.constraints.emplace_back(std::move(constraint));
+            }
         }
 
         facilityData.links.emplace_back(std::move(link));
     }
+}
+
+void FacilitiesDB::readConstraintParameterAttribute(ConstraintParameter& constraintParameter, const pugi::xml_attribute& attribute)
+{
+    returnif (!attribute);
+    constraintParameter.type = ConstraintParameter::Type::EQUAL;
+    constraintParameter.value = attribute.as_int();
 }
 
 void FacilitiesDB::readCostNode(Cost& cost, const pugi::xml_node& node)

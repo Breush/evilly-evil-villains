@@ -94,6 +94,9 @@ namespace dungeon
         //! Find the room and forward change to data.
         bool createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID);
 
+        //! Create a facility, and try to link it to another one.
+        bool createRoomFacilityLinked(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords, const std::wstring& linkFacilityID);
+
         //! Set the room facility link to specific coordinates.
         void setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords);
 

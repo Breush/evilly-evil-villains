@@ -509,6 +509,17 @@ bool Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     return true;
 }
 
+bool Data::createRoomFacilityLinked(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords, const std::wstring& linkFacilityID)
+{
+    returnif (!createRoomFacility(coords, facilityID)) false;
+    returnif (!hasFacility(linkCoords, linkFacilityID)) true;
+
+    // If both exist, link them together
+    setRoomFacilityLink(coords, facilityID, linkCoords);
+    setRoomFacilityLink(linkCoords, linkFacilityID, coords);
+    return true;
+}
+
 void Data::setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords)
 {
     returnif (!isRoomConstructed(coords));

@@ -489,6 +489,11 @@ bool Inter::createRoomFacility(const sf::Vector2u& coords, const std::wstring& f
     return m_data->createRoomFacility(coords, facilityID);
 }
 
+bool Inter::createRoomFacilityLinked(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords, const std::wstring& linkFacilityID)
+{
+    return m_data->createRoomFacilityLinked(coords, facilityID, linkCoords, linkFacilityID);
+}
+
 void Inter::setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords)
 {
     m_data->setRoomFacilityLink(coords, facilityID, linkCoords);

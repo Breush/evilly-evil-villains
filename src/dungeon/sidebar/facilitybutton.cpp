@@ -33,6 +33,7 @@ void FacilityGrabButton::grabbableButtonPressed(Entity* entity, const sf::Mouse:
         returnif (m_explicitLinksDone != 0u && m_explicitLinksDone < m_explicitLinksCount);
         m_grabbableFacilityID = m_facilityID;
         graph()->removeGrabbable();
+        m_explicitLinksDone = 0u;
         return;
     }
 
@@ -47,37 +48,33 @@ void FacilityGrabButton::grabbableButtonPressed(Entity* entity, const sf::Mouse:
     //  - All linked to the first one
     //  - Linked as a chain (possibliy a circle)
     auto coords = inter->tileFromLocalPosition(relPos);
-    bool created = inter->createRoomFacility(coords, m_grabbableFacilityID);
-    returnif (m_explicitLinksCount == 0u);
-    returnif (!created);
-
-    // FIXME If we were creating an explicit link,
-    // but the main has been destroyed since,
-    // we create an invalid pending link
-
-    // If we just created the main of explicit links, remember that
     if (m_explicitLinksDone == 0u) {
         m_explicitLinkCoords = coords;
+        returnif (!inter->createRoomFacility(coords, m_grabbableFacilityID));
     }
-    // If we're created a link, link them together
     else {
-        inter->setRoomFacilityLink(m_explicitLinkCoords, m_facilityID, coords);
-        inter->setRoomFacilityLink(coords, m_grabbableFacilityID, m_explicitLinkCoords);
+        // Checking constraints
+        const auto& link = getCurrentExplicitLink();
+        for (const auto& constraint : link.constraints) {
+            if (constraint.mode == Constraint::Mode::EXCLUDE) {
+                if (constraint.x.type == ConstraintParameter::Type::EQUAL)
+                    returnif (m_explicitLinkCoords.x + constraint.x.value == coords.x);
+                if (constraint.y.type == ConstraintParameter::Type::EQUAL)
+                    returnif (m_explicitLinkCoords.y + constraint.y.value == coords.y);
+            }
+        }
+
+        // If all constraints are OK, create the facility
+        returnif (!inter->createRoomFacilityLinked(coords, m_grabbableFacilityID, m_explicitLinkCoords, m_facilityID));
     }
+
+    returnif (m_explicitLinksCount == 0u);
 
     // Find and use next link info
     if (m_explicitLinksDone < m_explicitLinksCount) {
-        // Find next explicit link
-        const Link* pLink = nullptr;
-        uint explicitLinkCount = 0u;
-        for (const auto& link : m_facilityData.links)
-            if (link.style == Link::Style::EXPLICIT)
-                if (explicitLinkCount++ == m_explicitLinksDone)
-                    pLink = &link;
-
-        // Display of the next link
-        setGrabbableFacilityID(pLink->id);
         ++m_explicitLinksDone;
+        const auto& link = getCurrentExplicitLink();
+        setGrabbableFacilityID(link.id);
     }
 
     // If we did enough links, go back to the main
@@ -87,9 +84,21 @@ void FacilityGrabButton::grabbableButtonPressed(Entity* entity, const sf::Mouse:
     }
 }
 
+const Link& FacilityGrabButton::getCurrentExplicitLink() const
+{
+    const Link* pLink = nullptr;
+    uint explicitLinkCount = 0u;
+
+    for (const auto& link : m_facilityData.links)
+        if (link.style == Link::Style::EXPLICIT)
+            if (++explicitLinkCount == m_explicitLinksDone)
+                pLink = &link;
+
+    return *pLink;
+}
+
 std::unique_ptr<scene::Grabbable> FacilityGrabButton::spawnGrabbable()
 {
-    m_explicitLinksDone = 0u;
     return std::make_unique<FacilityGrabbable>(*this, m_textureID);
 }
 
