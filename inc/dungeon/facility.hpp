@@ -85,6 +85,16 @@ namespace dungeon
         //! Get the current room y coordinate.
         uint32 lua_getCurrentRoomY() const;
 
+        //! Whether the facility currently hold treasure.
+        bool lua_hasTreasure() const;
+
+        //! Set the treasure held by the facility.
+        void lua_setTreasure(const uint32 value);
+
+        //! Borrow money from the reserve.
+        //! Return the amount borrowed.
+        uint32 lua_borrowVillainDosh(const uint32 amount);
+
         //! Debug log function from lua.
         void lua_log(const std::string& str) const;
 

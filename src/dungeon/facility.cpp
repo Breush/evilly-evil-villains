@@ -2,6 +2,7 @@
 
 #include "dungeon/data.hpp"
 #include "dungeon/inter.hpp"
+#include "context/villains.hpp"
 #include "tools/tools.hpp"
 #include "tools/string.hpp"
 
@@ -47,6 +48,9 @@ Facility::Facility(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dunge
     m_lua["eev_getLinkRoomY"] = [this] { return lua_getLinkRoomY(); };
     m_lua["eev_getCurrentRoomX"] = [this] { return lua_getCurrentRoomX(); };
     m_lua["eev_getCurrentRoomY"] = [this] { return lua_getCurrentRoomY(); };
+    m_lua["eev_hasTreasure"] = [this] { return lua_hasTreasure(); };
+    m_lua["eev_setTreasure"] = [this] (const uint32 value) { lua_setTreasure(value); };
+    m_lua["eev_borrowVillainDosh"] = [this] (const uint32 amount) { return lua_borrowVillainDosh(amount); };
     m_lua["eev_log"] = [this] (const std::string& str) { lua_log(str); };
 
     // Load lua file
@@ -145,6 +149,23 @@ uint32 Facility::lua_getCurrentRoomX() const
 uint32 Facility::lua_getCurrentRoomY() const
 {
     return m_coords.y;
+}
+
+bool Facility::lua_hasTreasure() const
+{
+    return m_facilityInfo.treasure != -1u;
+}
+
+void Facility::lua_setTreasure(const uint32 value)
+{
+    // TODO Same as addRtunnel
+    m_facilityInfo.treasure = value;
+}
+
+uint32 Facility::lua_borrowVillainDosh(const uint32 amount)
+{
+    returnif (!m_inter.villain().doshWallet.sub(amount)) 0u;
+    return amount;
 }
 
 void Facility::lua_log(const std::string& str) const

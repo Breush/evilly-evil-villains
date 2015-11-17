@@ -16,6 +16,11 @@
 
 -- Called on new data
 function _reinit()
+    -- If no treasure yet, initialize it
+    if not eev_hasTreasure() then
+        local dosh = eev_borrowVillainDosh(100)
+        eev_setTreasure(dosh)
+    end
 end
 
 -- Called once on object creation
