@@ -31,7 +31,6 @@ void AnimatedSprite::drawInternal(sf::RenderTarget& target, sf::RenderStates sta
     m_spriterEntity->setAngle(getRotation());
 
     // Forcing immediate refresh to current parameters
-    // FIXME This might be causing the sound issue
     m_spriterEntity->reprocessCurrentTime();
 
     // TODO This does not take states shader in account?

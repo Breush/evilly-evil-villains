@@ -13,17 +13,11 @@ namespace SpriterEngine
 
     void SfmlSoundObjectInfoReference::playTrigger()
     {
-        if (getTriggerCount())
+        if (getTriggerCount() > 0)
         {
-            // FIXME Too much sounds!
-            // std::cerr << "Play " << m_soundID << std::endl;
-            // Application::context().sounds.play(m_soundID);
+            Application::context().sounds.play(m_soundID);
 
             // TODO Use volume
         }
-    }
-
-    void SfmlSoundObjectInfoReference::setPlaybackVolume()
-    {
     }
 }

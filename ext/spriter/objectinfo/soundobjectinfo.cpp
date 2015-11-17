@@ -9,7 +9,7 @@ namespace SpriterEngine
 
     int SoundObjectInfo::getTriggerCount()
     {
-        return trigger;
+        return trigger? 1 : 0;
     }
 
     real SoundObjectInfo::getVolume()

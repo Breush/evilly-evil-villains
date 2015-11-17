@@ -32,7 +32,7 @@ namespace SpriterEngine
 		real volume;
 		real panning;
 
-		int triggerCount;
+		int triggerCount = 0;
 	};
 
 }

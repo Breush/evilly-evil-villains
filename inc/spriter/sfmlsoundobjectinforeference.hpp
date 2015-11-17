@@ -16,10 +16,6 @@ namespace SpriterEngine
 
     private:
 
-        void setPlaybackVolume() final;
-
-    private:
-
         std::string m_soundID;
     };
 }
