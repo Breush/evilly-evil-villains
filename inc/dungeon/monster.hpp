@@ -1,24 +1,15 @@
 #pragma once
 
 #include "dungeon/graph.hpp"
-#include "dungeon/elementdata.hpp"
-#include "dungeon/detectentity.hpp"
-#include "scene/wrappers/animatedsprite.hpp"
-#include "scene/wrappers/rectangleshape.hpp"
-
-#include <selene/selene.hpp>
+#include "dungeon/element.hpp"
 
 namespace dungeon
 {
-    // Forward declarations
-
-    class Inter;
-
     //! A generic monster interface.
 
-    class Monster final : public DetectEntity
+    class Monster final : public Element
     {
-        using baseClass = DetectEntity;
+        using baseClass = Element;
 
         //! All the weights used by Lua algorithms.
         struct Weight
@@ -68,47 +59,17 @@ namespace dungeon
         //! @name Lua API
         //! @{
 
-        //! Calling detector.
-        void lua_addCallback(const std::string& luaKey, const std::string& entityType, const std::string& condition);
-
-        //! Init the eData with the value if empty.
-        void lua_initEmptyDataFloat(const std::string& s, const lua_Number value);
-
-        //! Set the eData with the value specified.
-        void lua_setDataFloat(const std::string& s, const lua_Number value);
-
-        //! Get the correponding eData.
-        lua_Number lua_getDataFloat(const std::string& s) const;
-
-        //! Select an animation to play.
-        void lua_selectAnimation(const std::string& animationKey);
-
         //! Will stop the entity to move and won't call for nextNode anymore.
         void lua_stopMoving();
 
         //! Returns true if the current direction is matching.
         bool lua_isLookingDirection(const std::string& direction) const;
 
-        //! Returns true if the current animation has stopped (looping has to be false).
-        bool lua_isAnimationStopped() const;
-
-        //! Advance the current animation from a certain offset.
-        void lua_forwardAnimation(const lua_Number offset);
-
-        //! Restart the current animation from the beginning.
-        void lua_rewindAnimation();
-
         //! Get the current room x coordinate.
         uint lua_getCurrentRoomX() const;
 
         //! Get the current room y coordinate.
         uint lua_getCurrentRoomY() const;
-
-        //! Debug log function from lua.
-        void lua_log(const std::string& str) const;
-
-        //! Explode the corresponding room.
-        void lua_dungeonExplodeRoom(const uint x, const uint y);
 
         //! @}
 
@@ -161,22 +122,15 @@ namespace dungeon
             uint16 lastVisit = 0x7FFF;  //!< The tick of the last time the node has been visited.
         };
 
-    protected:
+    private:
 
-        Inter& m_inter;                 //!< To be able to interact with nearby elements.
         Graph& m_graph;                 //!< Abstract dungeon graph.
-        ElementData* m_edata = nullptr; //!< The data corresponding to the monster.
-
         std::wstring m_monsterID;       //!< Current monster ID.
 
         // Graph evaluation for AI
-        sel::State m_lua;                                       //!< The lua state.
         uint m_tick = 0u;                                       //!< The current tick (how many nodes has been visited so far).
         std::unordered_map<sf::Vector2u, NodeInfo> m_nodeInfos; //!< Remembers the visits of a certain node.
         std::vector<int> m_evaluations;                         //!< Stores the evaluations of the rooms, mainly used for debug.
-
-        // Decorum
-        scene::AnimatedSprite m_sprite;   //!< The sprite.
 
         // Artificial intelligence
         const ai::Node* m_currentNode = nullptr;    //!< The current room where is this monster.

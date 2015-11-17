@@ -777,7 +777,6 @@ void Inter::refreshTileTraps(const sf::Vector2u& coords)
 
     // Trap
     tile.trap = std::make_unique<Trap>(coords, room.trap, *this);
-    tile.trap->setEmitter(m_data);
     attachChild(*tile.trap);
 }
 

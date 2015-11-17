@@ -60,7 +60,7 @@ function startFusing(timeOffset)
 
     -- Apply offset
     if timeOffset ~= 0 then
-        eev_rewindAnimation()
+        eev_restartAnimation()
         eev_forwardAnimation(timeOffset)
     end
 end

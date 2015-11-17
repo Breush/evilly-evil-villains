@@ -2,56 +2,40 @@
 
 #include "dungeon/data.hpp"
 #include "dungeon/inter.hpp"
-#include "context/villains.hpp"
-#include "tools/tools.hpp"
 #include "tools/string.hpp"
 
 using namespace dungeon;
-using namespace std::placeholders;
 
 Facility::Facility(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dungeon::Inter& inter)
-    : m_coords(coords)
-    , m_inter(inter)
+    : baseClass(inter)
+    , m_coords(coords)
     , m_facilityInfo(facilityInfo)
-    , m_lua(true)
 {
-    setDetectable(false);
     const auto& facilityID = facilityInfo.data.type();
     auto sFacilityID = toString(facilityID);
 
     // Initializing
     sf::Vector2f facilityPosition = m_inter.tileLocalPosition(coords) + 0.5f * m_inter.tileSize();
-    setDetectRangeFactor(m_inter.tileSize().x);
-    setLocalScale(m_inter.roomScale());
     setLocalPosition(facilityPosition);
-    centerOrigin();
 
     // Decorum
-    attachChild(m_sprite);
     m_sprite.load("dungeon/facilities/" + sFacilityID);
 
     // Lua API
-    std::function<void(const std::string&, const std::string&, const std::string&)> eev_addCallback = std::bind(&Facility::lua_addCallback, this, _1, _2, _3);
-    m_lua["eev_addCallback"] = eev_addCallback;
-    m_lua["eev_setDepth"] = [this] (const lua_Number inDepth) { lua_setDepth(inDepth); };
+    m_lua["eev_hasSiblingFacility"] = [this] (const std::string& facilityID) { return lua_hasSiblingFacility(facilityID); };
+    m_lua["eev_getCurrentRoomX"] = [this] { return lua_getCurrentRoomX(); };
+    m_lua["eev_getCurrentRoomY"] = [this] { return lua_getCurrentRoomY(); };
+    m_lua["eev_hasTreasure"] = [this] { return lua_hasTreasure(); };
+    m_lua["eev_setTreasure"] = [this] (const uint32 value) { lua_setTreasure(value); };
     m_lua["eev_isLink"] = [this] { return lua_isLink(); };
+    m_lua["eev_hasLink"] = [this] { return lua_hasLink(); };
+    m_lua["eev_getLinkRoomX"] = [this] { return lua_getLinkRoomX(); };
+    m_lua["eev_getLinkRoomY"] = [this] { return lua_getLinkRoomY(); };
     m_lua["eev_getRtunnel"] = [this] (const uint32 nth) { return lua_getRtunnel(nth); };
     m_lua["eev_addRtunnel"] = [this] (const uint32 direction) { lua_addRtunnel(direction); };
     m_lua["eev_hasTunnel"] = [this] { return lua_hasTunnel(); };
     m_lua["eev_addTunnel"] = [this] (const uint32 x, const uint32 y) { lua_addTunnel(x, y); };
     m_lua["eev_removeTunnels"] = [this] { lua_removeTunnels(); };
-    m_lua["eev_selectAnimation"] = [this] (const std::string& animationKey) { lua_selectAnimation(animationKey); };
-    m_lua["eev_hasSiblingFacility"] = [this] (const std::string& facilityID) { return lua_hasSiblingFacility(facilityID); };
-    m_lua["eev_setVisible"] = [this] (bool isVisible) { lua_setVisible(isVisible); };
-    m_lua["eev_hasLink"] = [this] { return lua_hasLink(); };
-    m_lua["eev_getLinkRoomX"] = [this] { return lua_getLinkRoomX(); };
-    m_lua["eev_getLinkRoomY"] = [this] { return lua_getLinkRoomY(); };
-    m_lua["eev_getCurrentRoomX"] = [this] { return lua_getCurrentRoomX(); };
-    m_lua["eev_getCurrentRoomY"] = [this] { return lua_getCurrentRoomY(); };
-    m_lua["eev_hasTreasure"] = [this] { return lua_hasTreasure(); };
-    m_lua["eev_setTreasure"] = [this] (const uint32 value) { lua_setTreasure(value); };
-    m_lua["eev_borrowVillainDosh"] = [this] (const uint32 amount) { return lua_borrowVillainDosh(amount); };
-    m_lua["eev_log"] = [this] (const std::string& str) { lua_log(str); };
 
     // Load lua file
     std::string luaFilename = "res/ai/facilities/" + sFacilityID + ".lua";
@@ -65,19 +49,50 @@ Facility::Facility(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dunge
 //---------------------------//
 //----- LUA interaction -----//
 
-void Facility::lua_addCallback(const std::string& luaKey, const std::string& entityType, const std::string& condition)
+bool Facility::lua_hasSiblingFacility(const std::string& facilityID) const
 {
-    addDetectSignal(entityType, condition, [this, luaKey] (const uint32 UID) { m_lua[luaKey.c_str()](UID); });
+    return m_inter.hasFacility(m_coords, toWString(facilityID));
 }
 
-void Facility::lua_setDepth(const lua_Number inDepth)
+uint32 Facility::lua_getCurrentRoomX() const
 {
-    setDepth(static_cast<float>(inDepth));
+    return m_coords.x;
+}
+
+uint32 Facility::lua_getCurrentRoomY() const
+{
+    return m_coords.y;
+}
+
+bool Facility::lua_hasTreasure() const
+{
+    return m_facilityInfo.treasure != -1u;
+}
+
+void Facility::lua_setTreasure(const uint32 value)
+{
+    // TODO Same as addRtunnel
+    m_facilityInfo.treasure = value;
 }
 
 bool Facility::lua_isLink()
 {
     return m_facilityInfo.isLink;
+}
+
+bool Facility::lua_hasLink() const
+{
+    return (m_facilityInfo.link.x != -1u) && (m_facilityInfo.link.y != -1u);
+}
+
+uint32 Facility::lua_getLinkRoomX() const
+{
+    return m_facilityInfo.link.x;
+}
+
+uint32 Facility::lua_getLinkRoomY() const
+{
+    return m_facilityInfo.link.y;
 }
 
 uint32 Facility::lua_getRtunnel(const uint32 nth) const
@@ -109,66 +124,4 @@ void Facility::lua_removeTunnels()
 {
     // TODO Same as addRtunnel
     m_facilityInfo.tunnels.clear();
-}
-
-void Facility::lua_selectAnimation(const std::string& animationKey)
-{
-    m_sprite.select(toWString(animationKey));
-}
-
-bool Facility::lua_hasSiblingFacility(const std::string& facilityID) const
-{
-    return m_inter.hasFacility(m_coords, toWString(facilityID));
-}
-
-void Facility::lua_setVisible(bool isVisible)
-{
-    setVisible(isVisible);
-}
-
-bool Facility::lua_hasLink() const
-{
-    return (m_facilityInfo.link.x != -1u) && (m_facilityInfo.link.y != -1u);
-}
-
-uint32 Facility::lua_getLinkRoomX() const
-{
-    return m_facilityInfo.link.x;
-}
-
-uint32 Facility::lua_getLinkRoomY() const
-{
-    return m_facilityInfo.link.y;
-}
-
-uint32 Facility::lua_getCurrentRoomX() const
-{
-    return m_coords.x;
-}
-
-uint32 Facility::lua_getCurrentRoomY() const
-{
-    return m_coords.y;
-}
-
-bool Facility::lua_hasTreasure() const
-{
-    return m_facilityInfo.treasure != -1u;
-}
-
-void Facility::lua_setTreasure(const uint32 value)
-{
-    // TODO Same as addRtunnel
-    m_facilityInfo.treasure = value;
-}
-
-uint32 Facility::lua_borrowVillainDosh(const uint32 amount)
-{
-    returnif (!m_inter.villain().doshWallet.sub(amount)) 0u;
-    return amount;
-}
-
-void Facility::lua_log(const std::string& str) const
-{
-    std::cerr << "LUA [facility::" << toString(m_facilityInfo.data.type()) << "] " << str << std::endl;
 }

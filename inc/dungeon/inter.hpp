@@ -55,6 +55,8 @@ namespace dungeon
         //! @name Data events
         //! @{
 
+        inline Data& data() { return *m_data; }
+
         //! Set the dungeon data source.
         void useData(Data& data);
 

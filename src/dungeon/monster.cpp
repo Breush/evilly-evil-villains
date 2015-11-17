@@ -5,38 +5,16 @@
 #include "tools/random.hpp"
 
 using namespace dungeon;
-using namespace std::placeholders;
 
 Monster::Monster(Inter& inter, Graph& graph)
-    : baseClass(true)
-    , m_inter(inter)
+    : baseClass(inter, true)
     , m_graph(graph)
-    , m_lua(true)
 {
-    // Initializing
-    setDetectable(false);
-    centerOrigin();
-
-    // Animated sprite
-    attachChild(m_sprite);
-
     // Lua API
-    std::function<void(const std::string&, const std::string&, const std::string&)> eev_addCallback = std::bind(&Monster::lua_addCallback, this, _1, _2, _3);
-    m_lua["eev_addCallback"] = eev_addCallback;
     m_lua["eev_stopMoving"] = [this] { lua_stopMoving(); };
-    m_lua["eev_selectAnimation"] = [this] (const std::string& animationKey) { lua_selectAnimation(animationKey); };
     m_lua["eev_isLookingDirection"] = [this] (const std::string& direction) { return lua_isLookingDirection(direction); };
-    m_lua["eev_isAnimationStopped"] = [this] { return lua_isAnimationStopped(); };
-    m_lua["eev_rewindAnimation"] = [this] { lua_rewindAnimation(); };
-    m_lua["eev_forwardAnimation"] = [this] (const lua_Number offset) { lua_forwardAnimation(offset); };
     m_lua["eev_getCurrentRoomX"] = [this] { return lua_getCurrentRoomX(); };
     m_lua["eev_getCurrentRoomY"] = [this] { return lua_getCurrentRoomY(); };
-    m_lua["eev_log"] = [this] (const std::string& str) { lua_log(str); };
-    m_lua["eev_dungeonExplodeRoom"] = [this] (const uint x, const uint y) { lua_dungeonExplodeRoom(x, y); };
-
-    m_lua["eev_setDataFloat"] = [this] (const std::string& s, const lua_Number value) { lua_setDataFloat(s, value); };
-    m_lua["eev_getDataFloat"] = [this] (const std::string& s) { return lua_getDataFloat(s); };
-    m_lua["eev_initEmptyDataFloat"] = [this] (const std::string& s, const lua_Number value) { lua_initEmptyDataFloat(s, value); };
 }
 
 //------------------//
@@ -127,45 +105,6 @@ const Graph::NodeData* Monster::findNextNode(const Graph::NodeData* currentNode)
 //---------------------------//
 //----- LUA interaction -----//
 
-void Monster::lua_addCallback(const std::string& luaKey, const std::string& entityType, const std::string& condition)
-{
-    addDetectSignal(entityType, condition, [this, luaKey] (const uint32 UID) { m_lua[luaKey.c_str()](UID); });
-}
-
-void Monster::lua_initEmptyDataFloat(const std::string& s, const lua_Number value)
-{
-    auto ws = toWString(s);
-    if (!m_edata->exists(ws))
-        m_edata->operator[](ws).init_float(static_cast<float>(value));
-}
-
-void Monster::lua_setDataFloat(const std::string& s, const lua_Number value)
-{
-    auto ws = toWString(s);
-    m_edata->operator[](ws).as_float() = static_cast<float>(value);
-}
-
-lua_Number Monster::lua_getDataFloat(const std::string& s) const
-{
-    auto ws = toWString(s);
-    return static_cast<lua_Number>(m_edata->operator[](ws).as_float());
-}
-
-void Monster::lua_selectAnimation(const std::string& animationKey)
-{
-    m_sprite.select(toWString(animationKey));
-}
-
-void Monster::lua_rewindAnimation()
-{
-    m_sprite.restart();
-}
-
-void Monster::lua_forwardAnimation(const lua_Number offset)
-{
-    m_sprite.forward(sf::seconds(static_cast<float>(offset)));
-}
-
 void Monster::lua_stopMoving()
 {
     m_moving = false;
@@ -179,11 +118,6 @@ bool Monster::lua_isLookingDirection(const std::string& direction) const
     else throw std::runtime_error("Unknown direction '" + direction + "' from LUA isLookingDirection().");
 }
 
-bool Monster::lua_isAnimationStopped() const
-{
-    return !m_sprite.started();
-}
-
 uint Monster::lua_getCurrentRoomX() const
 {
     return static_cast<uint>(m_edata->operator[](L"rx").as_float());
@@ -192,16 +126,6 @@ uint Monster::lua_getCurrentRoomX() const
 uint Monster::lua_getCurrentRoomY() const
 {
     return static_cast<uint>(m_edata->operator[](L"ry").as_float());
-}
-
-void Monster::lua_log(const std::string& str) const
-{
-    std::cerr << "LUA [monster::" << toString(m_edata->type()) << "] " << str << std::endl;
-}
-
-void Monster::lua_dungeonExplodeRoom(const uint x, const uint y)
-{
-    m_inter.destroyRoom(sf::Vector2u(x, y));
 }
 
 //---------------------------//
@@ -290,6 +214,7 @@ uint Monster::call(const char* function, const Graph::NodeData* node)
 //-----------------------//
 //---- Element data -----//
 
+// FIXME Should that procedure be in a MovingElement class (shared with Hero)?
 void Monster::bindElementData(ElementData& edata)
 {
     // It's our first time is previous data is not the same monster type
