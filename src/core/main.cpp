@@ -65,7 +65,9 @@ int main(int argc, char *argv[])
     // Start Steam
     // Note: That's important to do that before the call to Application,
     // otherwise the hook to OpenGL (Shift+Tab) won't work.
-    bool steamActivated = steam::SteamAPI_Init();
+    // FIXME bool steamActivated = steam::SteamAPI_Init();
+    // Currently disabled because of Linux incompatibilities.
+    bool steamActivated = false;
     mdebug_core_1("Steam interfacing: " << (steamActivated? "Enabled" : "Disabled"));
 
     // Running application

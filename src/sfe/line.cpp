@@ -25,10 +25,7 @@ void Line::setColor(const sf::Color& color)
 
 void Line::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    // Transform from sf::Tranformable
     states.transform *= getTransform();
-
-    // Drawing
     target.draw(m_vertices, states);
 }
 

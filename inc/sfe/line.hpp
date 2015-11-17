@@ -13,10 +13,10 @@ namespace sfe
     class Line : public sf::Drawable, public sf::Transformable
     {
     public:
-    
+
         //! Constructor.
         Line();
-        
+
         //! Default destructor.
         virtual ~Line() = default;
 
@@ -32,10 +32,10 @@ namespace sfe
         //----------------//
         //! @name Control
         //! @{
-        
+
         //! Set line color.
         void setColor(const sf::Color& color);
-        
+
         //! @}
 
         //--------------------------//
@@ -43,13 +43,13 @@ namespace sfe
         //! @{
 
         //! Size override.
-        PARAMGSU(float, m_length, length, setLength, update);
+        PARAMGSU(float, m_length, length, setLength, update)
 
         //! Percent of line fading away in borders.
-        PARAMGSU(float, m_shade, shade, setShade, update);
-        
+        PARAMGSU(float, m_shade, shade, setShade, update)
+
         //! @}
-    
+
     protected:
 
         //----------------//
@@ -58,11 +58,11 @@ namespace sfe
 
         //! Update vertices positions.
         virtual void update() = 0;
-        
+
         //! @}
 
     protected:
-    
+
         //! A line is just 4 vertices.
         sf::VertexArray m_vertices;
     };
@@ -72,10 +72,10 @@ namespace sfe
     class HLine final : public Line
     {
     public:
-    
+
         //! Default constructor.
         HLine() = default;
-        
+
         //! Default destructor.
         ~HLine() = default;
 
@@ -84,9 +84,9 @@ namespace sfe
         //----------------//
         //! @name Updates
         //! @{
-        
+
         void update() final;
-        
+
         //! @}
     };
 
@@ -95,10 +95,10 @@ namespace sfe
     class VLine final : public Line
     {
     public:
-    
+
         //! Default constructor.
         VLine() = default;
-        
+
         //! Default destructor.
         ~VLine() = default;
 
@@ -107,9 +107,9 @@ namespace sfe
         //----------------//
         //! @name Updates
         //! @{
-        
+
         void update() final;
-        
+
         //! @}
     };
 }
