@@ -14,7 +14,8 @@ namespace SpriterEngine
 
     // set to &simpleError to use std::cerr to output errors, or use your own callback function
     // to output to your authoring tool's or custom engine's debug
-    ErrorFunctionPointer Settings::errFunction = &nullError;
+    // ErrorFunctionPointer Settings::errFunction = &nullError;
+    ErrorFunctionPointer Settings::errFunction = &simpleError;
 
     // end of program initial settings
 
