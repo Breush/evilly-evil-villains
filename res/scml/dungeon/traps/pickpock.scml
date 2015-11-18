@@ -6,8 +6,8 @@
         <file id="2" name="res/tex/dungeon/traps/pickpock/door_open.png" width="106" height="28" pivot_x="0.5" pivot_y="0.892857"/>
         <file id="3" name="res/tex/dungeon/traps/pickpock/rope_down.png" width="24" height="262" pivot_x="0.053571" pivot_y="0.979094"/>
         <file id="4" name="res/tex/dungeon/traps/pickpock/rope_up.png" width="9" height="66" pivot_x="0.542857" pivot_y="0.98"/>
-        <file id="6" name="res/tex/dungeon/traps/pickpock/loop_down.png" width="49" height="25" pivot_x="0.265306" pivot_y="1.08"/>
-        <file id="7" name="res/tex/dungeon/traps/pickpock/loop_up.png" width="35" height="34" pivot_x="0.514286" pivot_y="0.911765"/>
+        <file id="5" name="res/tex/dungeon/traps/pickpock/loop_down.png" width="49" height="25" pivot_x="0.265306" pivot_y="1.08"/>
+        <file id="6" name="res/tex/dungeon/traps/pickpock/loop_up.png" width="35" height="34" pivot_x="0.514286" pivot_y="0.911765"/>
     </folder>
     <entity id="0" name="pickpock">
         <obj_info name="pickpock_trapdoor_frame" realname="trapdoor_frame" type="sprite">
@@ -27,12 +27,12 @@
         </obj_info>
         <obj_info name="pickpock_loop_down" realname="loop_down" type="sprite">
             <frames>
-                <i folder="0" file="6"/>
+                <i folder="0" file="5"/>
             </frames>
         </obj_info>
         <obj_info name="pickpock_loop_up" realname="loop_up" type="sprite">
             <frames>
-                <i folder="0" file="7"/>
+                <i folder="0" file="6"/>
             </frames>
         </obj_info>
         <obj_info name="pickpock_rope_up" realname="rope_up" type="sprite">
@@ -51,7 +51,7 @@
                     <object_ref id="0" name="trapdoor_frame" folder="0" file="0" abs_x="-89.851119" abs_y="-62.638738" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
                     <object_ref id="1" name="door_close" folder="0" file="1" abs_x="-71.175112" abs_y="-69.00001" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="1" key="0" z_index="1"/>
                     <object_ref id="2" name="down_rope" folder="0" file="3" abs_x="-36.198411" abs_y="192.055665" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="2" key="0" z_index="2"/>
-                    <object_ref id="3" name="loop_down" folder="0" file="6" abs_x="-30.624994" abs_y="-69.821429" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="3" key="0" z_index="3"/>
+                    <object_ref id="3" name="loop_down" folder="0" file="5" abs_x="-30.624994" abs_y="-69.821429" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="3" key="0" z_index="3"/>
                 </key>
                 <key id="1" time="2500">
                     <object_ref id="0" timeline="0" key="0" z_index="0"/>
@@ -80,7 +80,7 @@
             </timeline>
             <timeline id="3" obj="3" name="loop_down">
                 <key id="0" spin="0">
-                    <object folder="0" file="6" x="-17.625" y="-67.821429" angle="0"/>
+                    <object folder="0" file="5" x="-17.625" y="-67.821429" angle="0"/>
                 </key>
             </timeline>
         </animation>
@@ -90,7 +90,7 @@
                     <object_ref id="0" name="trapdoor_frame" folder="0" file="0" abs_x="-89.851119" abs_y="-62.638738" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
                     <object_ref id="1" name="door_close" folder="0" file="1" abs_x="-71.175112" abs_y="-69.00001" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="1" key="0" z_index="1"/>
                     <object_ref id="2" name="down_rope" folder="0" file="3" abs_x="-36.198411" abs_y="192.055665" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="2" key="0" z_index="2"/>
-                    <object_ref id="3" name="loop_down" folder="0" file="6" abs_x="-30.576955" abs_y="-69.398213" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="3" key="0" z_index="3"/>
+                    <object_ref id="3" name="loop_down" folder="0" file="5" abs_x="-30.576955" abs_y="-69.398213" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="3" key="0" z_index="3"/>
                 </key>
                 <key id="1" time="500">
                     <object_ref id="0" timeline="0" key="0" z_index="0"/>
@@ -209,51 +209,51 @@
             </timeline>
             <timeline id="3" obj="3" name="loop_down">
                 <key id="0" spin="0">
-                    <object folder="0" file="6" x="-17.576961" y="-67.398213" angle="0"/>
+                    <object folder="0" file="5" x="-17.576961" y="-67.398213" angle="0"/>
                 </key>
                 <key id="1" time="500" spin="0">
-                    <object folder="0" file="6" x="-17.555389" y="78.44249" angle="0" scale_x="0.480086" scale_y="1.211795"/>
+                    <object folder="0" file="5" x="-17.555389" y="78.44249" angle="0" scale_x="0.480086" scale_y="1.211795"/>
                 </key>
                 <key id="2" time="3601" spin="0">
-                    <object folder="0" file="6" x="-17.555389" y="78.44249" angle="0" scale_x="0.480086" scale_y="1.211795"/>
+                    <object folder="0" file="5" x="-17.555389" y="78.44249" angle="0" scale_x="0.480086" scale_y="1.211795"/>
                 </key>
             </timeline>
             <timeline id="4" obj="4" name="loop_up">
                 <key id="0" time="501" spin="0">
-                    <object folder="0" file="7" x="-10.43956" y="68.33061" angle="0" scale_y="0.78623"/>
+                    <object folder="0" file="6" x="-10.43956" y="68.33061" angle="0" scale_y="0.78623"/>
                 </key>
                 <key id="1" time="1000" spin="0">
-                    <object folder="0" file="7" x="-3.013818" y="125.523012" angle="0"/>
+                    <object folder="0" file="6" x="-3.013818" y="125.523012" angle="0"/>
                 </key>
                 <key id="2" time="1200" spin="-1">
-                    <object folder="0" file="7" x="-3.013818" y="85.523012" angle="0"/>
+                    <object folder="0" file="6" x="-3.013818" y="85.523012" angle="0"/>
                 </key>
                 <key id="3" time="1500">
-                    <object folder="0" file="7" x="-11.353002" y="88.234435" angle="346.652506" scale_y="0.985089"/>
+                    <object folder="0" file="6" x="-11.353002" y="88.234435" angle="346.652506" scale_y="0.985089"/>
                 </key>
                 <key id="4" time="1750" spin="-1">
-                    <object folder="0" file="7" x="9.374465" y="91.460031" angle="16.503513" scale_y="0.972664"/>
+                    <object folder="0" file="6" x="9.374465" y="91.460031" angle="16.503513" scale_y="0.972664"/>
                 </key>
                 <key id="5" time="2000">
-                    <object folder="0" file="7" x="-11.353002" y="88.234435" angle="346.652506" scale_y="0.985089"/>
+                    <object folder="0" file="6" x="-11.353002" y="88.234435" angle="346.652506" scale_y="0.985089"/>
                 </key>
                 <key id="6" time="2250" spin="-1">
-                    <object folder="0" file="7" x="9.374465" y="91.460031" angle="16.503513" scale_y="0.972664"/>
+                    <object folder="0" file="6" x="9.374465" y="91.460031" angle="16.503513" scale_y="0.972664"/>
                 </key>
                 <key id="7" time="2500">
-                    <object folder="0" file="7" x="-11.353002" y="88.234435" angle="346.652506" scale_y="0.985089"/>
+                    <object folder="0" file="6" x="-11.353002" y="88.234435" angle="346.652506" scale_y="0.985089"/>
                 </key>
                 <key id="8" time="2750" spin="-1">
-                    <object folder="0" file="7" x="9.374465" y="91.460031" angle="16.503513" scale_y="0.972664"/>
+                    <object folder="0" file="6" x="9.374465" y="91.460031" angle="16.503513" scale_y="0.972664"/>
                 </key>
                 <key id="9" time="3000">
-                    <object folder="0" file="7" x="-11.353002" y="88.234435" angle="346.652506" scale_y="0.985089"/>
+                    <object folder="0" file="6" x="-11.353002" y="88.234435" angle="346.652506" scale_y="0.985089"/>
                 </key>
                 <key id="10" time="3300" spin="0">
-                    <object folder="0" file="7" x="-3.013818" y="125.523012" angle="0"/>
+                    <object folder="0" file="6" x="-3.013818" y="125.523012" angle="0"/>
                 </key>
                 <key id="11" time="3600" spin="0">
-                    <object folder="0" file="7" x="-10.43956" y="68.33061" angle="0" scale_y="0.78623"/>
+                    <object folder="0" file="6" x="-10.43956" y="68.33061" angle="0" scale_y="0.78623"/>
                 </key>
             </timeline>
             <timeline id="5" obj="5" name="rope_up">
