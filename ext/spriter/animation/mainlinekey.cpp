@@ -51,4 +51,8 @@ namespace SpriterEngine
         zOrderRefs.push_back(ref);
     }
 
+    real MainlineKey::getTime()
+    {
+        return timeInfo->getTime();
+    }
 }

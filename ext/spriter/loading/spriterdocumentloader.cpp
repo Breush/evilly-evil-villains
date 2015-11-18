@@ -389,8 +389,9 @@ namespace SpriterEngine
             {
                 SpriteKeyFileInfoObjectIdMap spriteKeyFileInfoMap;
                 SubEntityKeyInfoMap subEntityKeyInfoMap;
-                getTimelinesFromAnimationElement(animationElement, model, entity, newAnimation, fileFlattener, &spriteKeyFileInfoMap, &subEntityKeyInfoMap, defaultBoxPivotMap);
-                getMainlineFromAnimationElement(animationElement, newAnimation, &spriteKeyFileInfoMap, &subEntityKeyInfoMap);
+                BooleanVector timelineRedunantKeyedVector;
+                getTimelinesFromAnimationElement(animationElement, model, entity, newAnimation, fileFlattener, &spriteKeyFileInfoMap, &subEntityKeyInfoMap, defaultBoxPivotMap, &timelineRedunantKeyedVector);
+                getMainlineFromAnimationElement(animationElement, newAnimation, &spriteKeyFileInfoMap, &subEntityKeyInfoMap, &timelineRedunantKeyedVector);
                 getEventlinesFromAnimationElement(animationElement, entity, newAnimation);
                 getSoundlinesFromAnimationElement(animationElement, entity, newAnimation, fileFlattener);
                 getMetaDataFromElement(animationElement, model, entity, newAnimation, THIS_ENTITY);
@@ -442,7 +443,9 @@ namespace SpriterEngine
         }
     }
 
-    void SpriterDocumentLoader::getTimelinesFromAnimationElement(SpriterFileElementWrapper *animationElement, SpriterModel *model, Entity *entity, Animation *animation, FileFlattener *fileFlattener, SpriteKeyFileInfoObjectIdMap *spriteKeyFileInfoMap, SubEntityKeyInfoMap *subEntityKeyInfoMap, PointMap *defaultBoxPivotMap)
+    void SpriterDocumentLoader::getTimelinesFromAnimationElement(SpriterFileElementWrapper *animationElement, SpriterModel *model, Entity *entity,
+                                                                 Animation *animation, FileFlattener *fileFlattener, SpriteKeyFileInfoObjectIdMap *spriteKeyFileInfoMap,
+                                                                 SubEntityKeyInfoMap *subEntityKeyInfoMap, PointMap *defaultBoxPivotMap, BooleanVector* timelineRedunantKeyedVector)
     {
         SpriterFileElementWrapper *timelineElement = animationElement->getFirstChildElement("timeline");
         int timelineIndex = 0;
@@ -542,7 +545,7 @@ namespace SpriterEngine
                 }
             }
 
-            createRedundantFirstKeys(animation, newTimeline);
+            timelineRedunantKeyedVector->push_back(createRedundantFirstKeys(animation, newTimeline));
 
             getMetaDataFromElement(timelineElement, model, entity, animation, object->getId());
 
@@ -551,13 +554,19 @@ namespace SpriterEngine
         }
     }
 
-    void SpriterDocumentLoader::createRedundantFirstKeys(Animation *animation, Timeline *timeline)
+    bool SpriterDocumentLoader::createRedundantFirstKeys(Animation *animation, Timeline *timeline)
     {
         TimelineKey *firstKey = timeline->getKey(0);
         if (firstKey && firstKey->getTime() > 0)
         {
             TimelineKey *lastKey = timeline->getLastKey();
             timeline->pushFrontProxyKey(lastKey->getTime() - animation->getLength(), firstKey->getTime(), animation->getIsLooping());
+
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -986,7 +995,9 @@ namespace SpriterEngine
         }
     }
 
-    void SpriterDocumentLoader::getMainlineFromAnimationElement(SpriterFileElementWrapper *animationElement, Animation *animation, SpriteKeyFileInfoObjectIdMap *spriteKeyFileInfoMap, SubEntityKeyInfoMap *subEntityKeyInfoMap)
+    void SpriterDocumentLoader::getMainlineFromAnimationElement(SpriterFileElementWrapper *animationElement, Animation *animation,
+                                                                SpriteKeyFileInfoObjectIdMap *spriteKeyFileInfoMap, SubEntityKeyInfoMap *subEntityKeyInfoMap,
+                                                                BooleanVector* timelineRedunantKeyedVector)
     {
         SpriterFileElementWrapper *mainlineElement = animationElement->getFirstChildElement("mainline");
         if (mainlineElement->isValid())
@@ -998,13 +1009,15 @@ namespace SpriterEngine
                 SpriterFileElementWrapper *nextKeyElement = keyElement->getNextSiblingElement();
                 MainlineKey *mainlineKey = animation->pushBackMainlineKey(getTimeInfoFromElement(keyElement, nextKeyElement, firstKeyElement, animation->getLength(), animation->getIsLooping()));
 
-                getRefsFromMainlineKeyElement(keyElement, animation, mainlineKey, spriteKeyFileInfoMap, subEntityKeyInfoMap);
+                getRefsFromMainlineKeyElement(keyElement, animation, mainlineKey, spriteKeyFileInfoMap, subEntityKeyInfoMap, timelineRedunantKeyedVector);
                 keyElement->advanceToNextSiblingElementOfSameName();
             }
         }
     }
 
-    void SpriterDocumentLoader::getRefsFromMainlineKeyElement(SpriterFileElementWrapper *keyElement, Animation *animation, MainlineKey *mainlineKey, SpriteKeyFileInfoObjectIdMap *spriteKeyFileInfoMap, SubEntityKeyInfoMap *subEntityKeyInfoMap)
+    void SpriterDocumentLoader::getRefsFromMainlineKeyElement(SpriterFileElementWrapper *keyElement, Animation *animation, MainlineKey *mainlineKey,
+                                                              SpriteKeyFileInfoObjectIdMap *spriteKeyFileInfoMap, SubEntityKeyInfoMap *subEntityKeyInfoMap,
+                                                              BooleanVector* timelineRedunantKeyedVector)
     {
         SpriterFileElementWrapper *refElement = keyElement->getFirstChildElement();
         std::vector<int> refObjectIds;
@@ -1012,9 +1025,12 @@ namespace SpriterEngine
         {
             const int NOT_FOUND = -1;
             int keyIndex = NOT_FOUND;
+            int adjustedKeyIndex = NOT_FOUND;
             int timelineIndex = NOT_FOUND;
             int objectId = NOT_FOUND;
             int parentObjectId = THIS_ENTITY;
+
+            bool redunantKeyed = false;
 
             SpriterFileAttributeWrapper *att = refElement->getFirstAttribute();
             while (att->isValid())
@@ -1037,10 +1053,27 @@ namespace SpriterEngine
                     timelineIndex = att->getIntValue();
                     objectId = animation->getObjectIdFromTimelineIndex(timelineIndex);
                     refObjectIds.push_back(objectId);
+
+
+                    if (timelineIndex >= 0 && timelineIndex < timelineRedunantKeyedVector->size())
+                    {
+                        if (timelineRedunantKeyedVector->at(timelineIndex))
+                        {
+                            {
+                                redunantKeyed = true;
+                            }
+                        }
+                    }
                 }
                 else if (att->getName() == "key")
                 {
                     keyIndex = att->getIntValue();
+                    adjustedKeyIndex = keyIndex;
+
+                    if (redunantKeyed)
+                    {
+                        adjustedKeyIndex++;
+                    }
                 }
 
                 att->advanceToNextAttribute();
@@ -1053,7 +1086,13 @@ namespace SpriterEngine
                 return;
             }
 
-            TimelineKey *timelineKey = animation->getObjectTimelineKey(timelineIndex, keyIndex);
+            TimelineKey *timelineKey = animation->getObjectTimelineKey(timelineIndex, adjustedKeyIndex);
+
+            if (redunantKeyed && timelineKey->getTime() > mainlineKey->getTime())
+            {
+                timelineKey = animation->getObjectTimelineKey(timelineIndex, 0);
+            }
+
             if (!timelineKey)
             {
                 Settings::error("SpriterDocument::getRefsFromMainlineKeyElement - \"" + refElement->getName() + "\" contains invalid or missing timeline or key data");

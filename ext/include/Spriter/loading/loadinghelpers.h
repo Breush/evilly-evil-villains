@@ -9,69 +9,71 @@
 
 namespace SpriterEngine
 {
-	class EasingCurveInterface;
+    class EasingCurveInterface;
 
-	static const int NO_FILE = -1;
+    static const int NO_FILE = -1;
 
-	struct SpriteKeyFileInfo
-	{
-		bool useDefaultPivot;
-		int fileIndex;
-	};
+    struct SpriteKeyFileInfo
+    {
+        bool useDefaultPivot;
+        int fileIndex;
+    };
 
-	struct SubEntityKeyInfo
-	{
-		int entityId;
-		int animationIndex;
-	};
+    struct SubEntityKeyInfo
+    {
+        int entityId;
+        int animationIndex;
+    };
 
-	typedef std::vector<SpriteKeyFileInfo> SpriteKeyFileInfoVector;
-	typedef std::map<int, SpriteKeyFileInfoVector> SpriteKeyFileInfoObjectIdMap;
+    typedef std::vector<SpriteKeyFileInfo> SpriteKeyFileInfoVector;
+    typedef std::map<int, SpriteKeyFileInfoVector> SpriteKeyFileInfoObjectIdMap;
 
-	typedef std::vector<SubEntityKeyInfo> SubEntityKeyInfoVector;
-	typedef std::map<int, SubEntityKeyInfoVector> SubEntityKeyInfoMap;
+    typedef std::vector<SubEntityKeyInfo> SubEntityKeyInfoVector;
+    typedef std::map<int, SubEntityKeyInfoVector> SubEntityKeyInfoMap;
 
-	typedef std::vector<int> IntVector;
-	typedef std::vector < IntVector> Int2DVector;
+    typedef std::vector<int> IntVector;
+    typedef std::vector < IntVector> Int2DVector;
 
-	typedef std::map<int, point> PointMap;
+    typedef std::map<int, point> PointMap;
 
-	const int MAX_CONTROL_POINTS = 4;
-	typedef real ControlPointArray[MAX_CONTROL_POINTS];
+    typedef std::vector<bool> BooleanVector;
 
-	enum CurveType
-	{
-		CURVETYPE_NONE,
-		CURVETYPE_INSTANT,
-		CURVETYPE_LINEAR,
-		CURVETYPE_QUADRATIC,
-		CURVETYPE_CUBIC,
-		CURVETYPE_QUARTIC,
-		CURVETYPE_QUINTIC,
-		CURVETYPE_BEZIER
-	};
+    const int MAX_CONTROL_POINTS = 4;
+    typedef real ControlPointArray[MAX_CONTROL_POINTS];
 
-	Object::ObjectType objectTypeNameToType(std::string typeName);
+    enum CurveType
+    {
+        CURVETYPE_NONE,
+        CURVETYPE_INSTANT,
+        CURVETYPE_LINEAR,
+        CURVETYPE_QUADRATIC,
+        CURVETYPE_CUBIC,
+        CURVETYPE_QUARTIC,
+        CURVETYPE_QUINTIC,
+        CURVETYPE_BEZIER
+    };
 
-	CurveType curveTypeNameToType(std::string typeName);
+    Object::ObjectType objectTypeNameToType(std::string typeName);
 
-	EasingCurveInterface *getNewEasingCurve(CurveType curveType, ControlPointArray *controlPoints);
+    CurveType curveTypeNameToType(std::string typeName);
 
-	std::string extractFilePath(std::string fileName);
+    EasingCurveInterface *getNewEasingCurve(CurveType curveType, ControlPointArray *controlPoints);
 
-	class FileFlattener
-	{
-	public:
-		FileFlattener();
+    std::string extractFilePath(std::string fileName);
 
-		void appendFolder();
-		void appendFile();
-		int getFlattenedIndex(int folderIndex, int fileIndex);
+    class FileFlattener
+    {
+    public:
+        FileFlattener();
 
-	private:
-		Int2DVector folders;
-		int fileCount;
-	};
+        void appendFolder();
+        void appendFile();
+        int getFlattenedIndex(int folderIndex, int fileIndex);
+
+    private:
+        Int2DVector folders;
+        int fileCount;
+    };
 
 }
 
