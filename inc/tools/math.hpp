@@ -3,6 +3,7 @@
 #define _USE_MATH_DEFINES // Useful on Windows
 #include <cmath>
 #include <string>
+#include <sstream>
 
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/Vector2.hpp>
