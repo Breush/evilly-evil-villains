@@ -3,10 +3,12 @@
 #include "dungeon/data.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/detector.hpp"
-#include "dungeon/hero.hpp"
 #include "context/villains.hpp"
 #include "tools/tools.hpp"
 #include "tools/string.hpp"
+
+// TODO This is cheating for eev_setUIDDataU32
+#include "dungeon/hero.hpp"
 
 using namespace dungeon;
 using namespace std::placeholders;

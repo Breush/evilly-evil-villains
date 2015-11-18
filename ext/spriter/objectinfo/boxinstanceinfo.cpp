@@ -85,7 +85,6 @@ namespace SpriterEngine
     void BoxInstanceInfo::render()
     {
         // if (renderDebugBoxes)
-        // TODO: add drawing code here to enable bone debug rendering
 
         // getPosition()
         // getAngle();

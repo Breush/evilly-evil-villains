@@ -84,12 +84,10 @@ namespace SpriterEngine
                     point pivot(0, 1);
                     if (att->isValid() && att->getName() == "width")
                     {
-                        // TODO: if you need the width of the file for your implementation retrieve it here;
                         att->advanceToNextAttribute();
                     }
                     if (att->isValid() && att->getName() == "height")
                     {
-                        // TODO: if you need the height of the file for your implementation retrieve it here;
                         att->advanceToNextAttribute();
                     }
                     if (att->isValid() && att->getName() == "pivot_x")
