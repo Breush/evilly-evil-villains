@@ -18,8 +18,6 @@ namespace SpriterEngine
 
     void ImageFile::renderSprite(UniversalObjectInterface * spriteInfo)
     {
-        // TODO: override and add custom rendering code here using:
-
         // spriteInfo->getAlpha()
         // spriteInfo->getPosition()
         // spriteInfo->getAngle()

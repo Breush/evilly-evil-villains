@@ -73,10 +73,7 @@ namespace context
     private:
 
         std::queue<Command> m_commandQueue;         //!< The command queue.
-
-        // TODO Better have separate lists of commandables, given their category.
         std::vector<Commandable*> m_commandables;   //!< The commandables to call on update.
-
         std::vector<Interpreter*> m_interpreters;   //!< The interpreter to call when a command line comes.
     };
 }

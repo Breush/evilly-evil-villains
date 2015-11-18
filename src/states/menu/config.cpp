@@ -2,26 +2,12 @@
 
 #include "core/gettext.hpp"
 #include "context/villains.hpp"
+#include "tools/math.hpp"
 #include "tools/tools.hpp"
 #include "tools/string.hpp"
 #include "tools/filesystem.hpp"
 
 using namespace states;
-
-// TODO Move these somewhere else to their own file
-
-uint gcd(uint a, uint b)
-{
-    return (b == 0u)? a : gcd(b, a % b);
-}
-
-std::wstring aspectRatio(uint w, uint h)
-{
-    auto g = gcd(w, h);
-    std::wstringstream s;
-    s << (w/g) << L':' << (h/g);
-    return s.str();
-}
 
 //----------------------//
 //----- MenuConfig -----//

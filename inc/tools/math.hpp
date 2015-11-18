@@ -2,9 +2,19 @@
 
 #define _USE_MATH_DEFINES // Useful on Windows
 #include <cmath>
+#include <string>
 
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/Vector2.hpp>
+
+//-------------------//
+//----- Generic -----//
+
+template<typename T>
+T gcd(T a, T b);
+
+template<typename T>
+std::wstring aspectRatio(T w, T h);
 
 //--------------------//
 //----- Clamping -----//
@@ -29,6 +39,6 @@ void clamp(sf::Vector2<T1>& pos, const sf::Vector2<T2>& maxPos);
 // 0.f <= t <= 1.f
 
 template<typename T>
-inline T interpolate(T a, T b, float t);
+T interpolate(T a, T b, float t);
 
 #include "math.inl"
