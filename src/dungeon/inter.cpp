@@ -3,7 +3,6 @@
 #include "core/gettext.hpp"
 #include "core/application.hpp"
 #include "context/villains.hpp"
-#include "context/logger.hpp"
 #include "dungeon/heroesmanager.hpp"
 #include "tools/debug.hpp"
 #include "tools/event.hpp"
@@ -16,7 +15,8 @@
 using namespace dungeon;
 
 Inter::Inter(nui::ContextMenu& contextMenu, const HeroesManager& heroesManager)
-    : m_heroesManager(heroesManager)
+    : m_commandable(this)
+    , m_heroesManager(heroesManager)
     , m_contextMenu(contextMenu)
 {
     // Grid
@@ -176,46 +176,6 @@ void Inter::receive(const context::Event& event)
     }
     else if (event.type == "harvestable_dosh_changed") {
         m_tileRefreshPending.emplace_back([=]() { return refreshTileDoshLabel(coords); });
-    }
-}
-
-//-----------------------//
-//----- Interpreter -----//
-
-context::Command Inter::interpret(const std::vector<std::wstring>& tokens)
-{
-    std::wstring logMessage = L"> [dungeon] Unable to interpret command";
-    auto nTokens = tokens.size();
-
-    if (nTokens >= 4u) {
-        // Construct room
-        if (tokens[0u] == L"construct" && tokens[1u] == L"room") {
-            logMessage = L"> [dungeon] Constructing room " + tokens[2u] + L"/" + tokens[3u];
-            bool hard = (nTokens >= 5u) && (tokens[4u] == L"hard");
-            m_data->constructRoom({to<uint>(tokens[2u]), to<uint>(tokens[3u])}, hard);
-        }
-    }
-
-    // Generate log
-    context::Command command;
-    return context::setCommandLog(command, logMessage);
-}
-
-void Inter::autoComplete(std::vector<std::wstring>& possibilities,
-                         const std::vector<std::wstring>& tokens, const std::wstring& lastToken)
-{
-    // TODO How to automatize that?
-    // Have a tree of tokens?
-
-    auto nTokens = tokens.size();
-
-    if (nTokens == 0u) {
-        if (std::wstring(L"construct").find(lastToken) == 0u)
-            possibilities.emplace_back(L"construct");
-    }
-    else if (nTokens == 1u && tokens[0u] == L"construct") {
-        if (std::wstring(L"room").find(lastToken) == 0u)
-            possibilities.emplace_back(L"room");
     }
 }
 

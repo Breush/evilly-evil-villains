@@ -2,11 +2,11 @@
 
 #include "scene/entity.hpp"
 #include "context/event.hpp"
-#include "context/command.hpp"
 #include "dungeon/data.hpp"
 #include "dungeon/trap.hpp"
 #include "dungeon/monster.hpp"
 #include "dungeon/facility.hpp"
+#include "dungeon/commandable.hpp"
 #include "nui/contextmenu.hpp"
 #include "nui/spinbox.hpp"
 #include "sfe/grid.hpp"
@@ -26,7 +26,7 @@ namespace dungeon
 
     //! The dungeon itself, handling user interactions.
 
-    class Inter final : public scene::Entity, private context::EventReceiver, private context::Interpreter
+    class Inter final : public scene::Entity, private context::EventReceiver
     {
         using baseClass = scene::Entity;
 
@@ -209,17 +209,6 @@ namespace dungeon
 
         //! @}
 
-        //--------------------//
-        //! @name Interpreter
-        //! @{
-
-        std::wstring interpreterKey() const final { return L"dungeon"; }
-        context::Command interpret(const std::vector<std::wstring>& tokens) final;
-        void autoComplete(std::vector<std::wstring>& possibilities,
-                          const std::vector<std::wstring>& tokens, const std::wstring& lastToken) final;
-
-        //! @}
-
         //------------------------//
         //! @name Tile management
         //! @{
@@ -337,6 +326,7 @@ namespace dungeon
     private:
 
         Data* m_data = nullptr;                 //!< Dungeon data.
+        Commandable m_commandable;              //!< The interpreter.
         const HeroesManager& m_heroesManager;   //!< Heroes manager reference.
 
         // Display
