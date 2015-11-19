@@ -36,7 +36,7 @@ Facility::Facility(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dunge
     m_lua["eev_removeTunnels"] = [this] { lua_removeTunnels(); };
 
     // Load lua file
-    std::string luaFilename = "res/ai/facilities/" + sFacilityID + ".lua";
+    std::string luaFilename = "res/ai/dungeon/facilities/" + sFacilityID + ".lua";
     if (!m_lua.load(luaFilename))
         throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
     m_lua["_register"]();
