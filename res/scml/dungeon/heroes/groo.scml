@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r4.1">
-    <folder id="0" name="res/tex/heroes/groo/side">
-        <file id="0" name="res/tex/heroes/groo/side/armor_body_left.png" width="82" height="100" pivot_x="0.487805" pivot_y="0.27"/>
-        <file id="1" name="res/tex/heroes/groo/side/armor_body_right.png" width="85" height="99" pivot_x="0.623529" pivot_y="0.262626"/>
-        <file id="2" name="res/tex/heroes/groo/side/armor_larm.png" width="40" height="40" pivot_x="0.825" pivot_y="0.65"/>
-        <file id="3" name="res/tex/heroes/groo/side/armor_lleg.png" width="37" height="62" pivot_x="0.540541" pivot_y="0.741935"/>
-        <file id="4" name="res/tex/heroes/groo/side/armor_rarm_left.png" width="906" height="1059" pivot_x="0" pivot_y="1"/>
-        <file id="5" name="res/tex/heroes/groo/side/armor_rarm_right.png" width="76" height="113" pivot_x="0" pivot_y="1"/>
-        <file id="6" name="res/tex/heroes/groo/side/body.png" width="85" height="138" pivot_x="0.4" pivot_y="0.253623"/>
-        <file id="7" name="res/tex/heroes/groo/side/head.png" width="73" height="47" pivot_x="0.876712" pivot_y="0.382979"/>
-        <file id="8" name="res/tex/heroes/groo/side/larm1.png" width="48" height="55" pivot_x="0.479167" pivot_y="0.654545"/>
-        <file id="9" name="res/tex/heroes/groo/side/larm2.png" width="44" height="36" pivot_x="0.659091" pivot_y="0.777778"/>
-        <file id="10" name="res/tex/heroes/groo/side/larm3.png" width="45" height="34" pivot_x="0.866667" pivot_y="0.794118"/>
-        <file id="11" name="res/tex/heroes/groo/side/lleg1.png" width="33" height="61" pivot_x="0.363636" pivot_y="0.819672"/>
-        <file id="12" name="res/tex/heroes/groo/side/lleg2.png" width="39" height="23" pivot_x="0.307692" pivot_y="0.782609"/>
-        <file id="13" name="res/tex/heroes/groo/side/lleg3.png" width="36" height="46" pivot_x="0.638889" pivot_y="0.869565"/>
-        <file id="14" name="res/tex/heroes/groo/side/lleg4.png" width="55" height="27" pivot_x="0.836364" pivot_y="0.925926"/>
-        <file id="15" name="res/tex/heroes/groo/side/rarm1.png" width="34" height="59" pivot_x="0.470588" pivot_y="0.728814"/>
-        <file id="16" name="res/tex/heroes/groo/side/rarm2.png" width="45" height="43" pivot_x="0.8" pivot_y="0.72093"/>
-        <file id="17" name="res/tex/heroes/groo/side/rarm3.png" width="38" height="31" pivot_x="0.947368" pivot_y="0.612903"/>
-        <file id="18" name="res/tex/heroes/groo/side/rleg1.png" width="40" height="61" pivot_x="0.675" pivot_y="0.786885"/>
-        <file id="19" name="res/tex/heroes/groo/side/rleg2.png" width="39" height="24" pivot_x="0.358974" pivot_y="0.791667"/>
-        <file id="20" name="res/tex/heroes/groo/side/rleg3.png" width="35" height="47" pivot_x="0.8" pivot_y="0.93617"/>
-        <file id="21" name="res/tex/heroes/groo/side/rleg4.png" width="53" height="31" pivot_x="0.792453" pivot_y="0.645161"/>
-        <file id="22" name="res/tex/heroes/groo/side/tail.png" width="232" height="86" pivot_x="0.077586" pivot_y="0.755814"/>
+    <folder id="0" name="res/tex/dungeon/heroes/groo/side">
+        <file id="0" name="res/tex/dungeon/heroes/groo/side/armor_body_left.png" width="82" height="100" pivot_x="0.487805" pivot_y="0.27"/>
+        <file id="1" name="res/tex/dungeon/heroes/groo/side/armor_body_right.png" width="85" height="99" pivot_x="0.623529" pivot_y="0.262626"/>
+        <file id="2" name="res/tex/dungeon/heroes/groo/side/armor_larm.png" width="40" height="40" pivot_x="0.825" pivot_y="0.65"/>
+        <file id="3" name="res/tex/dungeon/heroes/groo/side/armor_lleg.png" width="37" height="62" pivot_x="0.540541" pivot_y="0.741935"/>
+        <file id="4" name="res/tex/dungeon/heroes/groo/side/armor_rarm_left.png" width="906" height="1059" pivot_x="0" pivot_y="1"/>
+        <file id="5" name="res/tex/dungeon/heroes/groo/side/armor_rarm_right.png" width="76" height="113" pivot_x="0" pivot_y="1"/>
+        <file id="6" name="res/tex/dungeon/heroes/groo/side/body.png" width="85" height="138" pivot_x="0.4" pivot_y="0.253623"/>
+        <file id="7" name="res/tex/dungeon/heroes/groo/side/head.png" width="73" height="47" pivot_x="0.876712" pivot_y="0.382979"/>
+        <file id="8" name="res/tex/dungeon/heroes/groo/side/larm1.png" width="48" height="55" pivot_x="0.479167" pivot_y="0.654545"/>
+        <file id="9" name="res/tex/dungeon/heroes/groo/side/larm2.png" width="44" height="36" pivot_x="0.659091" pivot_y="0.777778"/>
+        <file id="10" name="res/tex/dungeon/heroes/groo/side/larm3.png" width="45" height="34" pivot_x="0.866667" pivot_y="0.794118"/>
+        <file id="11" name="res/tex/dungeon/heroes/groo/side/lleg1.png" width="33" height="61" pivot_x="0.363636" pivot_y="0.819672"/>
+        <file id="12" name="res/tex/dungeon/heroes/groo/side/lleg2.png" width="39" height="23" pivot_x="0.307692" pivot_y="0.782609"/>
+        <file id="13" name="res/tex/dungeon/heroes/groo/side/lleg3.png" width="36" height="46" pivot_x="0.638889" pivot_y="0.869565"/>
+        <file id="14" name="res/tex/dungeon/heroes/groo/side/lleg4.png" width="55" height="27" pivot_x="0.836364" pivot_y="0.925926"/>
+        <file id="15" name="res/tex/dungeon/heroes/groo/side/rarm1.png" width="34" height="59" pivot_x="0.470588" pivot_y="0.728814"/>
+        <file id="16" name="res/tex/dungeon/heroes/groo/side/rarm2.png" width="45" height="43" pivot_x="0.8" pivot_y="0.72093"/>
+        <file id="17" name="res/tex/dungeon/heroes/groo/side/rarm3.png" width="38" height="31" pivot_x="0.947368" pivot_y="0.612903"/>
+        <file id="18" name="res/tex/dungeon/heroes/groo/side/rleg1.png" width="40" height="61" pivot_x="0.675" pivot_y="0.786885"/>
+        <file id="19" name="res/tex/dungeon/heroes/groo/side/rleg2.png" width="39" height="24" pivot_x="0.358974" pivot_y="0.791667"/>
+        <file id="20" name="res/tex/dungeon/heroes/groo/side/rleg3.png" width="35" height="47" pivot_x="0.8" pivot_y="0.93617"/>
+        <file id="21" name="res/tex/dungeon/heroes/groo/side/rleg4.png" width="53" height="31" pivot_x="0.792453" pivot_y="0.645161"/>
+        <file id="22" name="res/tex/dungeon/heroes/groo/side/tail.png" width="232" height="86" pivot_x="0.077586" pivot_y="0.755814"/>
     </folder>
-    <folder id="1" name="res/tex/heroes/groo/back">
-        <file id="0" name="res/tex/heroes/groo/back/body.png" width="113" height="191" pivot_x="0" pivot_y="1"/>
-        <file id="1" name="res/tex/heroes/groo/back/larm1.png" width="49" height="78" pivot_x="0" pivot_y="1"/>
-        <file id="2" name="res/tex/heroes/groo/back/larm2.png" width="26" height="57" pivot_x="0" pivot_y="1"/>
-        <file id="3" name="res/tex/heroes/groo/back/larm3.png" width="30" height="37" pivot_x="0" pivot_y="1"/>
-        <file id="4" name="res/tex/heroes/groo/back/lleg1.png" width="48" height="65" pivot_x="0" pivot_y="1"/>
-        <file id="5" name="res/tex/heroes/groo/back/lleg2.png" width="31" height="21" pivot_x="0" pivot_y="1"/>
-        <file id="6" name="res/tex/heroes/groo/back/lleg3.png" width="36" height="54" pivot_x="0" pivot_y="1"/>
-        <file id="7" name="res/tex/heroes/groo/back/lleg4.png" width="55" height="33" pivot_x="0" pivot_y="1"/>
-        <file id="8" name="res/tex/heroes/groo/back/rarm1.png" width="49" height="78" pivot_x="0" pivot_y="1"/>
-        <file id="9" name="res/tex/heroes/groo/back/rarm2.png" width="26" height="57" pivot_x="0" pivot_y="1"/>
-        <file id="10" name="res/tex/heroes/groo/back/rarm3.png" width="30" height="37" pivot_x="0" pivot_y="1"/>
-        <file id="11" name="res/tex/heroes/groo/back/rleg1.png" width="47" height="65" pivot_x="0" pivot_y="1"/>
-        <file id="12" name="res/tex/heroes/groo/back/rleg2.png" width="31" height="21" pivot_x="0" pivot_y="1"/>
-        <file id="13" name="res/tex/heroes/groo/back/rleg3.png" width="35" height="54" pivot_x="0" pivot_y="1"/>
-        <file id="14" name="res/tex/heroes/groo/back/rleg4.png" width="55" height="33" pivot_x="0" pivot_y="1"/>
+    <folder id="1" name="res/tex/dungeon/heroes/groo/back">
+        <file id="0" name="res/tex/dungeon/heroes/groo/back/body.png" width="113" height="191" pivot_x="0" pivot_y="1"/>
+        <file id="1" name="res/tex/dungeon/heroes/groo/back/larm1.png" width="49" height="78" pivot_x="0" pivot_y="1"/>
+        <file id="2" name="res/tex/dungeon/heroes/groo/back/larm2.png" width="26" height="57" pivot_x="0" pivot_y="1"/>
+        <file id="3" name="res/tex/dungeon/heroes/groo/back/larm3.png" width="30" height="37" pivot_x="0" pivot_y="1"/>
+        <file id="4" name="res/tex/dungeon/heroes/groo/back/lleg1.png" width="48" height="65" pivot_x="0" pivot_y="1"/>
+        <file id="5" name="res/tex/dungeon/heroes/groo/back/lleg2.png" width="31" height="21" pivot_x="0" pivot_y="1"/>
+        <file id="6" name="res/tex/dungeon/heroes/groo/back/lleg3.png" width="36" height="54" pivot_x="0" pivot_y="1"/>
+        <file id="7" name="res/tex/dungeon/heroes/groo/back/lleg4.png" width="55" height="33" pivot_x="0" pivot_y="1"/>
+        <file id="8" name="res/tex/dungeon/heroes/groo/back/rarm1.png" width="49" height="78" pivot_x="0" pivot_y="1"/>
+        <file id="9" name="res/tex/dungeon/heroes/groo/back/rarm2.png" width="26" height="57" pivot_x="0" pivot_y="1"/>
+        <file id="10" name="res/tex/dungeon/heroes/groo/back/rarm3.png" width="30" height="37" pivot_x="0" pivot_y="1"/>
+        <file id="11" name="res/tex/dungeon/heroes/groo/back/rleg1.png" width="47" height="65" pivot_x="0" pivot_y="1"/>
+        <file id="12" name="res/tex/dungeon/heroes/groo/back/rleg2.png" width="31" height="21" pivot_x="0" pivot_y="1"/>
+        <file id="13" name="res/tex/dungeon/heroes/groo/back/rleg3.png" width="35" height="54" pivot_x="0" pivot_y="1"/>
+        <file id="14" name="res/tex/dungeon/heroes/groo/back/rleg4.png" width="55" height="33" pivot_x="0" pivot_y="1"/>
     </folder>
     <entity id="0" name="groo">
         <obj_info name="groo_body" realname="body" type="sprite">
