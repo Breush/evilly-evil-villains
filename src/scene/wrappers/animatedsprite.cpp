@@ -61,7 +61,7 @@ void AnimatedSprite::load(const std::string& id)
     // The first animation is loaded
     restart();
 
-    // TODO m_spriterEntity->setTiltColor(m_tiltColor);
+    m_spriterEntity->setTiltColor(m_tiltColor);
 }
 
 void AnimatedSprite::select(const std::wstring& animationName)
@@ -104,5 +104,5 @@ void AnimatedSprite::setTiltColor(const sf::Color& color)
     m_tiltColor = color;
 
     returnif (m_spriterEntity == nullptr);
-    /* m_spriterEntity->setTiltColor(m_tiltColor); */
+    m_spriterEntity->setTiltColor(m_tiltColor);
 }

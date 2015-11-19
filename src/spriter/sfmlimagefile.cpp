@@ -26,8 +26,7 @@ namespace SpriterEngine
 
     void SfmlImageFile::renderSprite(UniversalObjectInterface * spriteInfo)
     {
-        /*auto tiltColor = spriteInfo->getTiltColor();*/
-        sf::Color tiltColor = sf::Color::White;
+        auto tiltColor = spriteInfo->getTiltColor();
         tiltColor.a *= spriteInfo->getAlpha();
 
         sprite.setColor(tiltColor);

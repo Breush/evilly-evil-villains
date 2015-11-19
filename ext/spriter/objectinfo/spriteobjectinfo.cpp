@@ -29,6 +29,11 @@ namespace SpriterEngine
         return alpha;
     }
 
+    const sf::Color& SpriteObjectInfo::getTiltColor()
+    {
+        return tiltColor;
+    }
+
     point SpriteObjectInfo::getPivot()
     {
         return pivot;
@@ -73,6 +78,11 @@ namespace SpriterEngine
     void SpriteObjectInfo::setSpin(int newSpin)
     {
         angle.spinDirection = newSpin;
+    }
+
+    void SpriteObjectInfo::setTiltColor(const sf::Color& color)
+    {
+        tiltColor = color;
     }
 
     void SpriteObjectInfo::setToBlendedLinear(UniversalObjectInterface *aObject, UniversalObjectInterface *bObject, real t, real blendRatio)
