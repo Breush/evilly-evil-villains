@@ -375,12 +375,10 @@ void Data::constructRoom(const sf::Vector2u& coords, bool hard)
 
     // We check all implicit links getting to this room
     // and create those which need to be there
-    // TODO Have a flyweight pointer to the info inside DB
-    // for each facility would be a great thing
     for (const auto& floor : m_floors)
     for (const auto& room : floor.rooms)
     for (const auto& facility : room.facilities) {
-        const auto& facilityInfo = facilitiesDB().get(facility.data.type());
+        const auto& facilityInfo = *facility.common;
         for (const auto& link : facilityInfo.links) {
             if (link.style == Link::Style::IMPLICIT) {
                 sf::Vector2u linkCoords;
