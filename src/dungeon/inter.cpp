@@ -524,14 +524,40 @@ void Inter::removeRoomFacilities(const sf::Vector2f& relPos)
 //-----------------//
 //----- Traps -----//
 
-void Inter::setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID)
+uint Inter::gainRemoveRoomTrap(const sf::Vector2u& coords)
 {
-    m_data->setRoomTrap(tileFromLocalPosition(relPos), trapID);
+    returnif (!m_data->isRoomConstructed(coords)) 0;
+    auto& trapData = m_data->room(coords).trap;
+    returnif (!trapData.exists()) 0;
+
+    // TODO Gain something proportionate to the current resistance?
+    // TODO Have a "common" attribute pointing to the DB Info, as in facilities
+    const auto& trapInfo = trapsDB().get(trapData.type());
+    return static_cast<uint>(trapInfo.repairCost.dosh * trapInfo.resistance.durability);
 }
 
-void Inter::removeRoomTrap(const sf::Vector2f& relPos)
+void Inter::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID, bool free)
 {
-    m_data->removeRoomTrap(tileFromLocalPosition(relPos));
+    returnif (!m_data->isRoomConstructed(coords));
+    auto& trapData = m_data->room(coords).trap;
+    returnif (trapData.exists() && trapData.type() == trapID);
+
+    if (!free) {
+        // FIXME We're only using the dosh in the cost...
+        const auto& trapInfo = trapsDB().get(trapID);
+        const uint createCost = trapInfo.baseCost.dosh;
+        const uint removeGain = gainRemoveRoomTrap(coords);
+        returnif (!villain().doshWallet.addsub(removeGain, createCost));
+    }
+
+    // Note: Setting does remove the previous trap if any
+    m_data->setRoomTrap(coords, trapID);
+}
+
+void Inter::removeRoomTrap(const sf::Vector2u& coords, bool loss)
+{
+    if (!loss) villain().doshWallet.add(gainRemoveRoomTrap(coords));
+    m_data->removeRoomTrap(coords);
 }
 
 //--------------------//

@@ -86,7 +86,7 @@ std::wstring Commander::autoComplete(std::wstring commandLine)
 
     // Check if it is the key to autocomplete
     std::vector<std::wstring> possibilities;
-    if (tokens.empty() || (tokens.size() == 1u && !isTokenStart)) {
+    if (tokens.empty()) {
         // Find all interpreter keys starting with the last token
         for (auto pInterpreter : m_interpreters) {
             auto key = pInterpreter->interpreterKey();

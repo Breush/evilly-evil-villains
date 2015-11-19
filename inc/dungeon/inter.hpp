@@ -109,7 +109,7 @@ namespace dungeon
         //! Find the room below the specified relative position and construct it if possible.
         inline void constructRoom(const sf::Vector2f& relPos) { constructRoom(tileFromLocalPosition(relPos)); }
 
-        //! Forward room construction to data, after cheking against price if not free.
+        //! Construct the room, after cheking against price if not free.
         void constructRoom(const sf::Vector2u& coords, bool free = false);
 
         //! Find the room below the specified relative position and remove it if any.
@@ -157,11 +157,21 @@ namespace dungeon
         //! @name Traps
         //! @{
 
+        //! How much money do you get back if you're removing the trap in the specified room.
+        uint gainRemoveRoomTrap(const sf::Vector2u& coords);
+
         //! Find the room below the specified relative position and forward change to data.
-        void setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID);
+        inline void setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID) { setRoomTrap(tileFromLocalPosition(relPos), trapID); }
+
+        //! Set the room trap, after cheking against price if not free.
+        //! This will remove the previous trap if any.
+        void setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID, bool free = false);
 
         //! Find the room below the specified relative position and remove the trap in it if any.
-        void removeRoomTrap(const sf::Vector2f& relPos);
+        inline void removeRoomTrap(const sf::Vector2f& relPos) { removeRoomTrap(tileFromLocalPosition(relPos)); }
+
+        //! Remove the room trap, without gaining money if loss is enabled.
+        void removeRoomTrap(const sf::Vector2u& coords, bool loss = false);
 
         //! @}
 
@@ -210,6 +220,9 @@ namespace dungeon
 
         //! Get the facilities database from data.
         inline const FacilitiesDB& facilitiesDB() const { return m_data->facilitiesDB(); }
+
+        //! Get the traps database from data.
+        inline const TrapsDB& trapsDB() const { return m_data->trapsDB(); }
 
         //! @}
 

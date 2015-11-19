@@ -360,7 +360,7 @@ bool Data::isRoomConstructed(const sf::Vector2u& coords)
 {
     returnif (coords.x >= m_floorsCount) false;
     returnif (coords.y >= m_roomsByFloor) false;
-    return room(coords).state != RoomState::EMPTY;
+    return (room(coords).state != RoomState::EMPTY);
 }
 
 void Data::constructRoom(const sf::Vector2u& coords, bool hard)
@@ -395,9 +395,7 @@ void Data::constructRoom(const sf::Vector2u& coords, bool hard)
 
 void Data::destroyRoom(const sf::Vector2u& coords)
 {
-    returnif (coords.x >= m_floorsCount);
-    returnif (coords.y >= m_roomsByFloor);
-    returnif (room(coords).state == RoomState::EMPTY);
+    returnif (!isRoomConstructed(coords));
 
     // Clear elements
     removeRoomFacilities(coords);
@@ -599,20 +597,13 @@ void Data::removeRoomFacilities(const sf::Vector2u& coords)
 
 void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
 {
-    // TODO Should the test be done in Inter and data just really sets the trap?
-    // -> Surely yes...
+    returnif (!isRoomConstructed(coords));
 
     auto& roomInfo = room(coords);
     returnif (roomInfo.trap.exists() && roomInfo.trap.type() == trapID);
 
-    // Continue if and only if wallet authorize us
-    // TODO Use trapsDB data (in Inter!)
-    // returnif (!m_villain->doshWallet.addsub(traps::onDestroyGain(roomInfo.trap), traps::onCreateCost(trapID)));
-
-    // Destroy previous trap if any
+    // Destroy previous trap if any and set it to the new one
     roomInfo.trap.clear();
-
-    // Set the trap to the new one.
     roomInfo.trap.create(trapID);
 
     emit("trap_changed", coords);
@@ -620,6 +611,8 @@ void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
 
 void Data::removeRoomTrap(const sf::Vector2u& coords)
 {
+    returnif (!isRoomConstructed(coords));
+
     auto& roomInfo = room(coords);
     returnif (!roomInfo.trap.exists());
 
