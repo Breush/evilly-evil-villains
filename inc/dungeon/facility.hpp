@@ -64,18 +64,11 @@ namespace dungeon
 
         //----- Tunnels
 
-        //! Get the n-th relative tunnel from the list.
-        //! Return 0u if not found.
-        uint32 lua_getRtunnel(const uint32 nth) const;
-
-        //! Add a relative tunnel to the list.
-        void lua_addRtunnel(const uint32 direction);
-
         //! Checks if a tunnel exists.
         bool lua_hasTunnel() const;
 
         //! Add a tunnel.
-        void lua_addTunnel(const uint32 x, const uint32 y);
+        void lua_addTunnel(const int32 x, const int32 y, bool relative);
 
         //! Remove all tunnels.
         void lua_removeTunnels();

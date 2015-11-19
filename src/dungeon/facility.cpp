@@ -31,10 +31,8 @@ Facility::Facility(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dunge
     m_lua["eev_hasLink"] = [this] { return lua_hasLink(); };
     m_lua["eev_getLinkRoomX"] = [this] { return lua_getLinkRoomX(); };
     m_lua["eev_getLinkRoomY"] = [this] { return lua_getLinkRoomY(); };
-    m_lua["eev_getRtunnel"] = [this] (const uint32 nth) { return lua_getRtunnel(nth); };
-    m_lua["eev_addRtunnel"] = [this] (const uint32 direction) { lua_addRtunnel(direction); };
     m_lua["eev_hasTunnel"] = [this] { return lua_hasTunnel(); };
-    m_lua["eev_addTunnel"] = [this] (const uint32 x, const uint32 y) { lua_addTunnel(x, y); };
+    m_lua["eev_addTunnel"] = [this] (const int32 x, const int32 y, bool relative) { lua_addTunnel(x, y, relative); };
     m_lua["eev_removeTunnels"] = [this] { lua_removeTunnels(); };
 
     // Load lua file
@@ -95,33 +93,21 @@ uint32 Facility::lua_getLinkRoomY() const
     return m_facilityInfo.link.y;
 }
 
-uint32 Facility::lua_getRtunnel(const uint32 nth) const
-{
-    returnif (nth >= m_facilityInfo.rtunnels.size()) 0u;
-    return static_cast<uint32>(m_facilityInfo.rtunnels.at(nth));
-}
-
-void Facility::lua_addRtunnel(const uint32 direction)
-{
-    // TODO Should be passed through a dungeon data function
-    // So that an event can occur and refresh the graph
-    m_facilityInfo.rtunnels.emplace_back(static_cast<Direction>(direction));
-}
-
 bool Facility::lua_hasTunnel() const
 {
     return !m_facilityInfo.tunnels.empty();
 }
 
-void Facility::lua_addTunnel(const uint32 x, const uint32 y)
+void Facility::lua_addTunnel(const int32 x, const int32 y, bool relative)
 {
-    // TODO Same as addRtunnel
-    sf::Vector2u tunnelCoords(x, y);
-    m_facilityInfo.tunnels.emplace_back(tunnelCoords);
+    Tunnel tunnel;
+    tunnel.coords.x = x;
+    tunnel.coords.y = y;
+    tunnel.relative = relative;
+    m_facilityInfo.tunnels.emplace_back(std::move(tunnel));
 }
 
 void Facility::lua_removeTunnels()
 {
-    // TODO Same as addRtunnel
     m_facilityInfo.tunnels.clear();
 }

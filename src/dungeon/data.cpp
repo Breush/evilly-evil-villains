@@ -200,16 +200,12 @@ void Data::loadDungeon(const std::wstring& file)
                 facilityInfo.link.y = facilityNode.attribute(L"linkY").as_uint(-1u);
 
                 // Tunnels
-                for (auto rtunnelNode : facilityNode.children(L"rtunnel")) {
-                    auto direction = static_cast<Direction>(rtunnelNode.attribute(L"direction").as_uint());
-                    facilityInfo.rtunnels.emplace_back(direction);
-                }
-
                 for (auto tunnelNode : facilityNode.children(L"tunnel")) {
-                    sf::Vector2u tunnelCoords;
-                    tunnelCoords.x = tunnelNode.attribute(L"x").as_uint();
-                    tunnelCoords.y = tunnelNode.attribute(L"y").as_uint();
-                    facilityInfo.tunnels.emplace_back(tunnelCoords);
+                    Tunnel tunnel;
+                    tunnel.coords.x = tunnelNode.attribute(L"x").as_int();
+                    tunnel.coords.y = tunnelNode.attribute(L"y").as_int();
+                    tunnel.relative = tunnelNode.attribute(L"relative").as_bool();
+                    facilityInfo.tunnels.emplace_back(std::move(tunnel));
                 }
             }
 
@@ -295,18 +291,11 @@ void Data::saveDungeon(const std::wstring& file)
                 facility.data.saveXML(facilityNode);
 
                 // Tunnels
-                // TODO Why should relative tunnels only be a direction
-                // and not relative coordinates? We should merge relative and absolute tunnel together.
-                // <tunnel type="relative" x="1" y="0" />
-                for (auto& rtunnel : facility.rtunnels) {
-                    auto rtunnelNode = facilityNode.append_child(L"rtunnel");
-                    rtunnelNode.append_attribute(L"direction") = static_cast<uint>(rtunnel);
-                }
-
-                for (auto& tunnel : facility.tunnels) {
+                for (const auto& tunnel : facility.tunnels) {
                     auto tunnelNode = facilityNode.append_child(L"tunnel");
-                    tunnelNode.append_attribute(L"x") = tunnel.x;
-                    tunnelNode.append_attribute(L"y") = tunnel.y;
+                    tunnelNode.append_attribute(L"x") = tunnel.coords.x;
+                    tunnelNode.append_attribute(L"y") = tunnel.coords.y;
+                    if (tunnel.relative) tunnelNode.append_attribute(L"relative") = true;
                 }
             }
         }

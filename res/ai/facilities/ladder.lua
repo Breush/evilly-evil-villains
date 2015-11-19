@@ -5,16 +5,6 @@
 
 ---- Description:
 
------------
--- Const --
-
--- TODO Should they be in another file
--- containing all const?
-local NORTH = 33
-local SOUTH = 01
-local WEST  = 16
-local EAST  = 18
-
 ------------
 -- Locals --
 
@@ -24,8 +14,8 @@ local EAST  = 18
 -- Called on new data
 function _reinit()
     -- No relative tunnel yet
-    if eev_getRtunnel(0) == 0 then
-        eev_addRtunnel(NORTH)
+    if not eev_hasTunnel(0) then
+        eev_addTunnel(1, 0, true)
     end
 
     -- Is this a double entry ladder or a simple one?

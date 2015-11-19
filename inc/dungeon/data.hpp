@@ -48,13 +48,20 @@ namespace dungeon
         SOUTH = 0x01,
     };
 
+    //! A one-way access between two rooms.
+
+    struct Tunnel
+    {
+        sf::Vector2i coords;
+        bool relative = false;
+    };
+
     //! A facility information.
     struct FacilityInfo
     {
         const FacilitiesDB::FacilityData* common = nullptr; //!< All the common data.
         ElementData data;                                   //!< The individual data.
-        std::vector<Direction> rtunnels;                    //!< Relative tunnels that allow a specific direction.
-        std::vector<sf::Vector2u> tunnels;                  //!< Absolute tunnels coordinates that allow a way to an other room.
+        std::vector<Tunnel> tunnels;                        //!< All tunnels that allow a way to an other room.
         sf::Vector2u link = {-1u, -1u};                     //!< If these info are absolutely linked to another room.
         bool isLink = false;                                //!< Are these info been created by a link?
         uint treasure = -1u;                                //!< The treasure held.

@@ -29,7 +29,7 @@
 	<floor pos="0">
 		<room pos="0" state="constructed">
 			<facility type="ladder">
-				<rtunnel direction="33" />
+				<tunnel x="1" y="0" relative="true" />
 			</facility>
 		</room>
 		<room pos="1" state="constructed">
@@ -48,16 +48,16 @@
 	<floor pos="1">
 		<room pos="0" state="constructed">
 			<facility type="ladder">
-				<rtunnel direction="33" />
+				<tunnel x="1" y="0" relative="true" />
 			</facility>
 			<facility type="ladderExit" isLink="true">
-				<rtunnel direction="1" />
+				<tunnel x="-1" y="0" relative="true" />
 			</facility>
 		</room>
 		<room pos="1" state="void" />
 		<room pos="2" state="constructed">
 			<facility type="ladder">
-				<rtunnel direction="33" />
+				<tunnel x="1" y="0" relative="true" />
 			</facility>
 		</room>
 		<room pos="3" state="constructed">
@@ -70,7 +70,7 @@
 	<floor pos="2">
 		<room pos="0" state="constructed">
 			<facility type="ladderExit" isLink="true">
-				<rtunnel direction="1" />
+				<tunnel x="-1" y="0" relative="true" />
 			</facility>
 		</room>
 		<room pos="1" state="constructed">
@@ -80,10 +80,10 @@
 		</room>
 		<room pos="2" state="constructed">
 			<facility type="ladder">
-				<rtunnel direction="33" />
+				<tunnel x="1" y="0" relative="true" />
 			</facility>
 			<facility type="ladderExit" isLink="true">
-				<rtunnel direction="1" />
+				<tunnel x="-1" y="0" relative="true" />
 			</facility>
 		</room>
 		<room pos="3" state="constructed" />
@@ -98,7 +98,7 @@
 		</room>
 		<room pos="2" state="constructed">
 			<facility type="ladderExit" isLink="true">
-				<rtunnel direction="1" />
+				<tunnel x="-1" y="0" relative="true" />
 			</facility>
 		</room>
 		<room pos="3" state="constructed">
@@ -106,7 +106,7 @@
 		</room>
 		<room pos="4" state="constructed">
 			<facility type="ladder">
-				<rtunnel direction="33" />
+				<tunnel x="1" y="0" relative="true" />
 			</facility>
 		</room>
 	</floor>
@@ -115,13 +115,13 @@
 		<room pos="1" state="constructed" />
 		<room pos="2" state="constructed">
 			<facility type="ladder">
-				<rtunnel direction="33" />
+				<tunnel x="1" y="0" relative="true" />
 			</facility>
 		</room>
 		<room pos="3" state="constructed" />
 		<room pos="4" state="constructed">
 			<facility type="ladderExit" isLink="true">
-				<rtunnel direction="1" />
+				<tunnel x="-1" y="0" relative="true" />
 			</facility>
 		</room>
 	</floor>
@@ -133,16 +133,16 @@
 				<dosh type="uint32" value="2" />
 			</trap>
 			<facility type="ladder">
-				<rtunnel direction="33" />
+				<tunnel x="1" y="0" relative="true" />
 			</facility>
 			<facility type="ladderExit" isLink="true">
-				<rtunnel direction="1" />
+				<tunnel x="-1" y="0" relative="true" />
 			</facility>
 		</room>
 		<room pos="3" state="void" />
 		<room pos="4" state="constructed">
 			<facility type="ladder">
-				<rtunnel direction="33" />
+				<tunnel x="1" y="0" relative="true" />
 			</facility>
 		</room>
 	</floor>
@@ -153,13 +153,13 @@
 		</room>
 		<room pos="2" state="constructed">
 			<facility type="ladderExit" isLink="true">
-				<rtunnel direction="1" />
+				<tunnel x="-1" y="0" relative="true" />
 			</facility>
 		</room>
 		<room pos="3" state="constructed" />
 		<room pos="4" state="constructed">
 			<facility type="ladderExit" isLink="true">
-				<rtunnel direction="1" />
+				<tunnel x="-1" y="0" relative="true" />
 			</facility>
 		</room>
 	</floor>

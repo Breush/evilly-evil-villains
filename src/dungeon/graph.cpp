@@ -101,14 +101,10 @@ void Graph::updateFromData()
             refreshTreasure(nodeData);
 
             // Tunnels
-            // TODO As data said, we should merge both rtunnel and tunnel definitions
-            for (auto direction : facilityInfo.rtunnels) {
-                auto tunnelCoords = m_data->roomNeighbourCoords(coords, direction);
-                if (m_data->isRoomConstructed(tunnelCoords))
-                    node.neighbours.emplace_back(m_nodes.at(tunnelCoords.x).at(tunnelCoords.y).node);
-            }
+            for (const auto& tunnel : facilityInfo.tunnels) {
+                sf::Vector2u tunnelCoords = sf::v2u(tunnel.coords);
+                if (tunnel.relative) tunnelCoords += coords;
 
-            for (auto tunnelCoords : facilityInfo.tunnels) {
                 if (m_data->isRoomConstructed(tunnelCoords))
                     node.neighbours.emplace_back(m_nodes.at(tunnelCoords.x).at(tunnelCoords.y).node);
             }

@@ -37,7 +37,7 @@ function _reinit()
 
         -- Create tunnel if none
         if not eev_hasTunnel() then
-            eev_addTunnel(linkX, linkY)
+            eev_addTunnel(linkX, linkY, false)
         end
     else
         -- Remove tunnel if any
