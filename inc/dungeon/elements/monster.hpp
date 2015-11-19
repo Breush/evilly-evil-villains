@@ -20,5 +20,15 @@ namespace dungeon
 
         std::string detectKey() const final { return "monster"; }
         std::string _name() const final { return "dungeon::Monster"; }
+
+    protected:
+
+        //---------------------//
+        //! @name Element data
+        //! @{
+
+        void rebindElementData() final;
+
+        //! @}
     };
 }

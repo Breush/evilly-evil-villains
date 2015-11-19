@@ -110,5 +110,8 @@ namespace dungeon
         // Heroes
         std::vector<HeroInfo> m_heroesInfo; //!< All the heroes currently in the dungeon.
         float m_nextGroupDelay = -1.f;
+
+        // FIXME Debug thingy waiting for Data saving Heroes informations
+        ElementData m_edata;
     };
 }

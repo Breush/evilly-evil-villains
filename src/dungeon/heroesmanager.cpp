@@ -7,6 +7,8 @@ using namespace dungeon;
 HeroesManager::HeroesManager(Inter& inter)
     : m_inter(inter)
 {
+    m_edata.create(L"groo");
+    m_edata[L"dosh"].init_uint32(0u);
 }
 
 //-------------------//
@@ -25,12 +27,11 @@ void HeroesManager::update(const sf::Time& dt)
         if (heroInfo.status == HeroStatus::TO_SPAWN) {
             heroInfo.data -= dt.asSeconds();
             if (heroInfo.data <= 0.f) {
-                auto& hero = heroInfo.hero;
-                hero = std::make_unique<Hero>(*this, m_inter);
-                hero->setLocalScale(m_inter.roomScale());
-                hero->useGraph(*m_graph);
-                m_inter.attachChild(*hero);
                 heroInfo.status = HeroStatus::RUNNING;
+                auto& hero = heroInfo.hero;
+                hero = std::make_unique<Hero>(*this, m_inter, *m_graph);
+                hero->bindElementData(m_edata);
+                m_inter.attachChild(*hero);
             }
         }
     }
@@ -63,9 +64,8 @@ void HeroesManager::receive(const context::Event& event)
     }
     else if (devent.type == "dungeon_graph_changed") {
         for (auto& heroInfo : m_heroesInfo) {
-            // TODO Do something cleverer
             if (heroInfo.status == HeroStatus::RUNNING)
-                heroInfo.hero->useGraph(*m_graph);
+                heroInfo.hero->bindElementData(m_edata);
         }
     }
 }
@@ -108,8 +108,10 @@ void HeroesManager::spawnHeroesGroup()
 void HeroesManager::heroGetsOut(Hero* hero)
 {
     // If no dosh stolen, hero is unhappy, fame decrease
-    if (hero->dosh() == 0u) m_data->subFame(4u);
-    else                    m_data->addFame(1u);
+    if (hero->edata().at(L"dosh").as_uint32() == 0u)
+        m_data->subFame(4u);
+    else
+        m_data->addFame(1u);
 
     // Remove hero from list
     hero->setVisible(false);

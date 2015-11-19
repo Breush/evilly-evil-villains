@@ -27,6 +27,18 @@ namespace dungeon
         //! Default destructor.
         virtual ~Element() = default;
 
+        //---------------------//
+        //! @name Element data
+        //! @{
+
+        //! Quick access to element data (const).
+        inline const ElementData& edata() const { return *m_edata; }
+
+        //! Quick access to element data.
+        inline ElementData& edata() { return *m_edata; }
+
+        //! @}
+
     protected:
 
         //----------------//

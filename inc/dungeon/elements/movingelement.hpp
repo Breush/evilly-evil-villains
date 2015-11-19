@@ -39,6 +39,9 @@ namespace dungeon
         //! Rebinds the element data.
         void bindElementData(ElementData& edata);
 
+        //! Rebinds the element data, called before lua reinit.
+        virtual void rebindElementData() = 0;
+
         //! @}
 
     protected:
@@ -119,11 +122,11 @@ namespace dungeon
             uint16 lastVisit = 0x7FFF;  //!< The tick of the last time the node has been visited.
         };
 
-    private:
+    protected:
 
         Graph& m_graph;                 //!< Abstract dungeon graph.
-        std::string m_folder;           //!< The folder name where to find.
-        std::wstring m_monsterID;       //!< Current monster ID.
+        std::string m_folder;           //!< Folder reference.
+        std::wstring m_elementID;       //!< Current element ID.
 
         // Graph evaluation for AI
         uint m_tick = 0u;                                       //!< The current tick (how many nodes has been visited so far).

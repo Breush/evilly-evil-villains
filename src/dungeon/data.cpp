@@ -439,7 +439,7 @@ void Data::stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh
         if (treasure == -1u) continue;
 
         auto dosh = std::min(treasure, stolenDosh);
-        hero.addDosh(dosh);
+        hero.edata()[L"dosh"].as_uint32() += dosh;
         treasure -= dosh;
         stolenDosh -= dosh;
 

@@ -124,8 +124,7 @@ void Element::lua_setUIDDataU32(const uint32 UID, const std::string& s, const ui
 
     if (entity->detectKey() == "hero") {
         auto* hero = reinterpret_cast<Hero*>(entity);
-        // FIXME Cheating here... as hero have no edata yet
-        hero->setDosh(value);
+        hero->edata()[ws].as_uint32() = value;
     }
 }
 
@@ -137,8 +136,7 @@ uint32 Element::lua_getUIDDataU32(const uint32 UID, const std::string& s) const
 
     if (entity->detectKey() == "hero") {
         const auto* hero = reinterpret_cast<const Hero*>(entity);
-        // FIXME Cheating here... as hero have no edata yet
-        return hero->dosh();
+        return hero->edata().at(ws).as_uint32();
     }
 
     // Not found

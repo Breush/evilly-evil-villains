@@ -44,7 +44,7 @@ void MovingElement::updateAI(const sf::Time& dt)
 
 void MovingElement::updateRoutine(const sf::Time& dt)
 {
-    massert(m_edata != nullptr, "Some Monster's elementData was left uninitialized.");
+    massert(m_edata != nullptr, "[dungeon::MovingElement] Some elementData was left uninitialized.");
 
     // Update to current position
     auto relPosition = m_inter.relTileFromLocalPosition(localPosition());
@@ -218,13 +218,13 @@ uint MovingElement::call(const char* function, const Graph::NodeData* node)
 void MovingElement::bindElementData(ElementData& edata)
 {
     // It's our first time is previous data is not the same monster type
-    bool firstTime = (m_edata == nullptr) || (m_monsterID != edata.type());
+    bool firstTime = (m_edata == nullptr) || (m_elementID != edata.type());
     m_edata = &edata;
 
     // Get full data
-    m_monsterID = m_edata->type();
-    auto sMonsterID = toString(m_monsterID);
-    const auto& monsterData = m_inter.monstersDB().get(m_monsterID);
+    m_elementID = m_edata->type();
+    auto sElementID = toString(m_elementID);
+    rebindElementData();
 
     // Was there a target position saved?
     if (!m_edata->exists(L"tx")) {
@@ -233,26 +233,22 @@ void MovingElement::bindElementData(ElementData& edata)
     }
 
     // Initial position
-    sf::Vector2f monsterPosition = m_inter.relTileLocalPosition({m_edata->operator[](L"rx").as_float(), m_edata->operator[](L"ry").as_float()});
+    sf::Vector2f position = m_inter.relTileLocalPosition({m_edata->operator[](L"rx").as_float(), m_edata->operator[](L"ry").as_float()});
     sf::Vector2f targetPosition  = m_inter.relTileLocalPosition({m_edata->operator[](L"tx").as_float(), m_edata->operator[](L"ty").as_float()});
     lerpable()->setTargetPosition(targetPosition);
-    setLocalPosition(monsterPosition);
+    setLocalPosition(position);
     refreshAnimation();
 
     // Reparameter from inter
-    lerpable()->setPositionSpeed(m_inter.tileSize() * monsterData.speed);
     setDetectRangeFactor(m_inter.tileSize().x);
 
     // First time or new monsterID
     if (firstTime) {
-        // Refresh for database
-        m_pauseDelay = monsterData.pauseDelay;
-
         // Animated sprite
-        m_sprite.load(m_folder + sMonsterID);
+        m_sprite.load(m_folder + sElementID);
 
         // Lua
-        std::string luaFilename = "res/ai/" + m_folder + sMonsterID + ".lua";
+        std::string luaFilename = "res/ai/" + m_folder + sElementID + ".lua";
         if (!m_lua.load(luaFilename))
             throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
 

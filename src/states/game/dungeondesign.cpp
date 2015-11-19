@@ -72,8 +72,8 @@ GameDungeonDesign::~GameDungeonDesign()
     Application::context().musics.stop("angevin_70");
 
     // Freeing resources
-    Application::freeTextures({"dungeon", "elements", "heroes", "effects"});
-    Application::freeAnimations({"dungeon", "heroes"});
+    Application::freeTextures({"dungeon", "elements", "effects"});
+    Application::freeAnimations({"dungeon"});
 }
 
 //-------------------//
@@ -159,14 +159,14 @@ void GameDungeonDesign::updateLoading(const sf::Time& dt)
     LOAD( 6u, Application::loadTextures({"dungeon/sidebar"}));
     LOAD( 7u, Application::loadTextures({"dungeon/tools"}));
     LOAD( 8u, Application::loadTextures({"dungeon/traps"}));
-    LOAD( 9u, Application::loadTextures({"elements"}));
-    LOAD(10u, Application::loadTextures({"heroes"}));
+    LOAD( 9u, Application::loadTextures({"dungeon/heroes"}));
+    LOAD(10u, Application::loadTextures({"elements"}));
     LOAD(11u, Application::loadTextures({"effects"}));
 
     LOAD(12u, Application::loadAnimations({"dungeon/facilities"}));
     LOAD(13u, Application::loadAnimations({"dungeon/monsters"}));
     LOAD(14u, Application::loadAnimations({"dungeon/traps"}));
-    LOAD(15u, Application::loadAnimations({"heroes"}));
+    LOAD(15u, Application::loadAnimations({"dungeon/heroes"}));
 
     LOAD(16u, Application::context().textures.get("dungeon/sidebar/tab/monsters/cage").setRepeated(true));
     LOAD(17u, Application::context().textures.get("dungeon/inter/outer_wall_west").setRepeated(true));
