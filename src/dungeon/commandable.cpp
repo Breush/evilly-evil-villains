@@ -22,8 +22,8 @@ context::Command Commandable::interpret(const std::vector<std::wstring>& tokens)
         // Construct room
         if (tokens[0u] == L"construct" && tokens[1u] == L"room") {
             logMessage = L"> [dungeon] Constructing room " + tokens[2u] + L"/" + tokens[3u];
-            bool hard = (nTokens >= 5u) && (tokens[4u] == L"hard");
-            m_inter.data().constructRoom({to<uint>(tokens[2u]), to<uint>(tokens[3u])}, hard);
+            bool free = (nTokens >= 5u) && (tokens[4u] == L"free");
+            m_inter.constructRoom({to<uint>(tokens[2u]), to<uint>(tokens[3u])}, free);
         }
     }
 

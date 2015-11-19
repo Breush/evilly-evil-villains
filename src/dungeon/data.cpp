@@ -369,9 +369,8 @@ void Data::constructRoom(const sf::Vector2u& coords, bool hard)
     returnif (coords.y >= m_roomsByFloor);
     returnif (room(coords).state != RoomState::EMPTY);
 
-    // TODO Let inter manage that returnif (!hard && !m_villain->doshWallet.sub(onConstructRoomCost));
+    // Do construct
     room(coords).state = RoomState::CONSTRUCTED;
-    emit("room_constructed", coords);
 
     // We check all implicit links getting to this room
     // and create those which need to be there
@@ -390,6 +389,7 @@ void Data::constructRoom(const sf::Vector2u& coords, bool hard)
         }
     }
 
+    emit("room_constructed", coords);
     EventEmitter::emit("dungeon_changed");
 }
 
@@ -404,6 +404,7 @@ void Data::destroyRoom(const sf::Vector2u& coords)
     removeRoomTrap(coords);
     removeRoomMonsters(coords);
 
+    // Destroy the room
     room(coords).state = RoomState::EMPTY;
 
     emit("room_destroyed", coords);
@@ -437,9 +438,10 @@ uint Data::roomTreasureDosh(const sf::Vector2u& coords)
     return treasureDosh;
 }
 
-//---------------------//
-//----- Treasures -----//
+//----------------------------//
+//----- Hero interaction -----//
 
+// TODO This kind of high level function should probably not be in Data but in Inter
 void Data::stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh)
 {
     auto& roomInfo = room(coords);
@@ -458,8 +460,8 @@ void Data::stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh
             break;
     }
 
-    // We could check that stolenDosh is zero hero,
-    // If not, we were not able to steal the amount asked
+    // Note: We could check that stolenDosh is zero here.
+    // If not, we were not able to steal the amount asked.
 
     emit("facility_changed", coords);
 }

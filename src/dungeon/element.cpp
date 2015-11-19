@@ -179,7 +179,8 @@ uint32 Element::lua_borrowVillainDosh(const uint32 amount)
 
 void Element::lua_dungeonExplodeRoom(const uint x, const uint y)
 {
-    m_inter.destroyRoom(sf::Vector2u(x, y));
+    // Note: It's an explosion, we do not get any money back
+    m_inter.destroyRoom(sf::Vector2u(x, y), true);
 }
 
 //----- Debug

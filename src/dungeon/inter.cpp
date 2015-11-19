@@ -333,7 +333,7 @@ void Inter::resetHoveredTile()
 }
 
 //------------------------//
-//----- Context menu -----//
+//----- Augmented UI -----//
 
 void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& nuiPos)
 {
@@ -347,9 +347,10 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
 
     // Room does not exists yet
     if (room.state == Data::RoomState::EMPTY) {
+        // TODO Have a nice way to display money cost in context menu
         std::wstring text = _("Build room") + L" (-" + toWString(m_data->onConstructRoomCost) + L"d)";
         if (m_data->onConstructRoomCost <= m_data->villain().doshWallet.value())
-            m_contextMenu.addChoice(text, [=]() { m_data->constructRoom(coords); });
+            m_contextMenu.addChoice(text, [this, coords] () { constructRoom(coords); });
         else
             m_contextMenu.addChoice(text, nullptr);
     }
@@ -357,15 +358,13 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
     // Room does exists
     else {
         // TODO Show really how much we get for destroying (adding all elements inside)
-        m_contextMenu.addChoice(_("Destroy room") + L" (+" + toWString(m_data->onDestroyRoomGain) + L"d)", [=]() {
-            m_data->destroyRoom(coords);
-        });
+        m_contextMenu.addChoice(_("Destroy room"), [=]() { destroyRoom(coords); });
 
         // If treasure, modifiy pop-up
         // TODO Let the facility itself edit its treasure content
         for (const auto& facilityInfo : m_data->room(coords).facilities)
             if (facilityInfo.treasure != -1u)
-                m_contextMenu.addChoice(_("Edit treasure dosh"), [=]() { showEditTreasureDialog(coords); });
+                m_contextMenu.addChoice(_("Edit treasure dosh"), [this, coords] () { showEditTreasureDialog(coords); });
     }
 
     // Context positions
@@ -444,13 +443,8 @@ void Inter::setPredictionLink(const sf::Vector2u& coords, const sf::Vector2u& li
     m_predictionLink.setLimits(limitStart, limitEnd);
 }
 
-//---------------------//
-//----- Structure -----//
-
-bool Inter::hasFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const
-{
-    return m_data->hasFacility(coords, facilityID);
-}
+//-------------------//
+//----- Control -----//
 
 void Inter::setRoomWidth(const float roomWidth)
 {
@@ -461,56 +455,20 @@ void Inter::setRoomWidth(const float roomWidth)
     refreshSize();
 }
 
-bool Inter::createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID)
+//---------------------//
+//----- Structure -----//
+
+void Inter::constructRoom(const sf::Vector2u& coords, bool free)
 {
-    return m_data->createRoomFacility(coords, facilityID);
+    if (!free) returnif (!villain().doshWallet.sub(m_data->onConstructRoomCost));
+    m_data->constructRoom(coords);
 }
 
-bool Inter::createRoomFacilityLinked(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords, const std::wstring& linkFacilityID)
+void Inter::destroyRoom(const sf::Vector2u& coords, bool loss)
 {
-    return m_data->createRoomFacilityLinked(coords, facilityID, linkCoords, linkFacilityID);
-}
-
-void Inter::setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords)
-{
-    m_data->setRoomFacilityLink(coords, facilityID, linkCoords);
-}
-
-void Inter::setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID)
-{
-    m_data->setRoomTrap(tileFromLocalPosition(relPos), trapID);
-}
-
-void Inter::moveMonsterFromReserve(const sf::Vector2f& relPos, const std::wstring& monsterID)
-{
-    m_data->moveMonsterFromReserve(tileFromLocalPosition(relPos), monsterID);
-}
-
-void Inter::addMonsterToReserve(const std::wstring& monsterID)
-{
-    // Increase countdown
-    const auto& hireCountdown = monstersDB().get(monsterID).hireCountdown;
-    m_data->addMonsterToReserve(monsterID, hireCountdown);
-}
-
-void Inter::constructRoom(const sf::Vector2f& relPos)
-{
-    m_data->constructRoom(tileFromLocalPosition(relPos));
-}
-
-void Inter::destroyRoom(const sf::Vector2u& coords)
-{
+    // TODO Get all the dosh gained from destroying what's inside (facilities, etc.)
+    if (!loss) villain().doshWallet.add(m_data->onDestroyRoomGain);
     m_data->destroyRoom(coords);
-}
-
-void Inter::removeRoomTrap(const sf::Vector2f& relPos)
-{
-    m_data->removeRoomTrap(tileFromLocalPosition(relPos));
-}
-
-void Inter::removeRoomFacilities(const sf::Vector2f& relPos)
-{
-    m_data->removeRoomFacilities(tileFromLocalPosition(relPos));
 }
 
 void Inter::adaptFloorsCount(int relativeValue)
@@ -533,6 +491,62 @@ void Inter::setRoomsByFloor(uint value)
 {
     m_data->setRoomsByFloor(value);
     refreshFromData();
+}
+
+//----------------------//
+//----- Facilities -----//
+
+bool Inter::hasFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const
+{
+    return m_data->hasFacility(coords, facilityID);
+}
+
+bool Inter::createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID)
+{
+    return m_data->createRoomFacility(coords, facilityID);
+}
+
+bool Inter::createRoomFacilityLinked(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords, const std::wstring& linkFacilityID)
+{
+    return m_data->createRoomFacilityLinked(coords, facilityID, linkCoords, linkFacilityID);
+}
+
+void Inter::setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords)
+{
+    m_data->setRoomFacilityLink(coords, facilityID, linkCoords);
+}
+
+void Inter::removeRoomFacilities(const sf::Vector2f& relPos)
+{
+    m_data->removeRoomFacilities(tileFromLocalPosition(relPos));
+}
+
+//-----------------//
+//----- Traps -----//
+
+void Inter::setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID)
+{
+    m_data->setRoomTrap(tileFromLocalPosition(relPos), trapID);
+}
+
+void Inter::removeRoomTrap(const sf::Vector2f& relPos)
+{
+    m_data->removeRoomTrap(tileFromLocalPosition(relPos));
+}
+
+//--------------------//
+//----- Monsters -----//
+
+void Inter::moveMonsterFromReserve(const sf::Vector2f& relPos, const std::wstring& monsterID)
+{
+    m_data->moveMonsterFromReserve(tileFromLocalPosition(relPos), monsterID);
+}
+
+void Inter::addMonsterToReserve(const std::wstring& monsterID)
+{
+    // Increase countdown
+    const auto& hireCountdown = monstersDB().get(monsterID).hireCountdown;
+    m_data->addMonsterToReserve(monsterID, hireCountdown);
 }
 
 //----------------//

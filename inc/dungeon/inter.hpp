@@ -90,48 +90,33 @@ namespace dungeon
 
         //! @}
 
-        //------------------//
-        //! @name Structure
+        //----------------//
+        //! @name Control
         //! @{
-
-        //! Return true if a facility exists in this room.
-        bool hasFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const;
 
         //! Computes the correct roomScale from the expected width.
         void setRoomWidth(const float roomWidth);
 
-        //! Find the room and forward change to data.
-        bool createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID);
+        //! Get the room scale factors, relative to original image size.
+        inline const sf::Vector2f& roomScale() const { return m_roomScale; }
 
-        //! Create a facility, and try to link it to another one.
-        bool createRoomFacilityLinked(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords, const std::wstring& linkFacilityID);
+        //! @}
 
-        //! Set the room facility link to specific coordinates.
-        void setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords);
-
-        //! Find the room below the specified relative position and forward change to data.
-        void setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID);
-
-        //! Move a monster from reserve into the dungeon.
-        void moveMonsterFromReserve(const sf::Vector2f& relPos, const std::wstring& monsterID);
-
-        //! Add a monster to the reserve.
-        void addMonsterToReserve(const std::wstring& monsterID);
+        //------------------//
+        //! @name Structure
+        //! @{
 
         //! Find the room below the specified relative position and construct it if possible.
-        void constructRoom(const sf::Vector2f& relPos);
+        inline void constructRoom(const sf::Vector2f& relPos) { constructRoom(tileFromLocalPosition(relPos)); }
+
+        //! Forward room construction to data, after cheking against price if not free.
+        void constructRoom(const sf::Vector2u& coords, bool free = false);
 
         //! Find the room below the specified relative position and remove it if any.
         inline void destroyRoom(const sf::Vector2f& relPos) { destroyRoom(tileFromLocalPosition(relPos)); }
 
-        //! Remove the room at coords if any.
-        void destroyRoom(const sf::Vector2u& coords);
-
-        //! Find the room below the specified relative position and remove the trap in it if any.
-        void removeRoomTrap(const sf::Vector2f& relPos);
-
-        //! Find the room below the specified relative position and remove all the facilities in it if any.
-        void removeRoomFacilities(const sf::Vector2f& relPos);
+        //! Remove the room at coords if any, without gaining money if loss is enabled.
+        void destroyRoom(const sf::Vector2u& coords, bool loss = false);
 
         //! Change the number of floors.
         void adaptFloorsCount(int relativeValue);
@@ -145,8 +130,50 @@ namespace dungeon
         //! Set the number of rooms by floor.
         void setRoomsByFloor(uint value);
 
-        //! Get the room scale factors, relative to original image size.
-        inline const sf::Vector2f& roomScale() const { return m_roomScale; }
+        //! @}
+
+        //-------------------//
+        //! @name Facilities
+        //! @{
+
+        //! Return true if a facility exists in this room.
+        bool hasFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const;
+
+        //! Find the room and forward change to data.
+        bool createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID);
+
+        //! Create a facility, and try to link it to another one.
+        bool createRoomFacilityLinked(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords, const std::wstring& linkFacilityID);
+
+        //! Set the room facility link to specific coordinates.
+        void setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords);
+
+        //! Find the room below the specified relative position and remove all the facilities in it if any.
+        void removeRoomFacilities(const sf::Vector2f& relPos);
+
+        //! @}
+
+        //--------------//
+        //! @name Traps
+        //! @{
+
+        //! Find the room below the specified relative position and forward change to data.
+        void setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID);
+
+        //! Find the room below the specified relative position and remove the trap in it if any.
+        void removeRoomTrap(const sf::Vector2f& relPos);
+
+        //! @}
+
+        //-----------------//
+        //! @name Monsters
+        //! @{
+
+        //! Move a monster from reserve into the dungeon.
+        void moveMonsterFromReserve(const sf::Vector2f& relPos, const std::wstring& monsterID);
+
+        //! Add a monster to the reserve.
+        void addMonsterToReserve(const std::wstring& monsterID);
 
         //! @}
 
@@ -252,7 +279,7 @@ namespace dungeon
         //! @}
 
         //---------------------//
-        //! @name Context menu
+        //! @name Augmented UI
         //! @{
 
         //! Pop the context menu for the specified tile coordinates at the position.
