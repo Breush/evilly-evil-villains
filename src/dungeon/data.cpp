@@ -356,7 +356,7 @@ void Data::emit(std::string eventType, const sf::Vector2u& coords)
 //-----------------//
 //----- Rooms -----//
 
-bool Data::isRoomConstructed(const sf::Vector2u& coords)
+bool Data::isRoomConstructed(const sf::Vector2u& coords) const
 {
     returnif (coords.x >= m_floorsCount) false;
     returnif (coords.y >= m_roomsByFloor) false;
@@ -469,22 +469,34 @@ void Data::stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh
 
 bool Data::hasFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const
 {
+    return getFacility(coords, facilityID) != nullptr;
+}
+
+FacilityInfo* Data::getFacility(const sf::Vector2u& coords, const std::wstring& facilityID)
+{
+    returnif (!isRoomConstructed(coords)) nullptr;
+    auto& roomInfo = room(coords);
+    auto found = std::find_if(roomInfo.facilities, [&facilityID] (const FacilityInfo& facilityInfo) { return facilityInfo.data.type() == facilityID; });
+    returnif (found == std::end(roomInfo.facilities)) nullptr;
+    return &(*found);
+}
+
+const FacilityInfo* Data::getFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const
+{
+    returnif (!isRoomConstructed(coords)) nullptr;
     const auto& roomInfo = room(coords);
-    auto found = std::find_if(roomInfo.facilities, [facilityID] (const FacilityInfo& facilityInfo) { return facilityInfo.data.type() == facilityID; });
-    return found != std::end(roomInfo.facilities);
+    auto found = std::find_if(roomInfo.facilities, [&facilityID] (const FacilityInfo& facilityInfo) { return facilityInfo.data.type() == facilityID; });
+    returnif (found == std::end(roomInfo.facilities)) nullptr;
+    return &(*found);
 }
 
 bool Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool isLink)
 {
     returnif (!isRoomConstructed(coords)) false;
+    returnif (hasFacility(coords, facilityID)) false;
 
+    // Facility creation, indeed
     auto& roomInfo = room(coords);
-    for (const auto& facilityInfo : roomInfo.facilities)
-        returnif (facilityInfo.data.type() == facilityID) false;
-
-    // TODO Use facilitiesDB data (in Inter!)
-    // returnif (!m_villain->doshWallet.sub(facilities::onCreateCost(facilityID)));
-
     roomInfo.facilities.emplace_back();
     auto& facility = roomInfo.facilities.back();
     facility.data.create(facilityID);
@@ -571,8 +583,6 @@ void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
         }
     }
 
-    // TODO Use facilitiesDB data (in Inter!)
-    // m_villain->doshWallet.add(facilities::onDestroyGain(facility));
     roomInfo.facilities.erase(pFacility);
 
     emit("facility_changed", coords);
@@ -582,7 +592,7 @@ void Data::removeRoomFacilities(const sf::Vector2u& coords)
 {
     returnif (!isRoomConstructed(coords));
 
-    // Note: facilities here is a copy, so that progressive
+    // Note: variable facilities here is a copy, so that progressive
     // removals won't change that.
     // A more optimized version could exist, but is it necessary?
     const auto& roomInfo = room(coords);

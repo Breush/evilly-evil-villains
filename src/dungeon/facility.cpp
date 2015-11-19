@@ -51,7 +51,7 @@ Facility::Facility(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dunge
 
 bool Facility::lua_hasSiblingFacility(const std::string& facilityID) const
 {
-    return m_inter.hasFacility(m_coords, toWString(facilityID));
+    return m_inter.hasRoomFacility(m_coords, toWString(facilityID));
 }
 
 uint32 Facility::lua_getCurrentRoomX() const

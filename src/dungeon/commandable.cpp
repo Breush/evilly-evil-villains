@@ -29,15 +29,15 @@ context::Command Commandable::interpret(const std::vector<std::wstring>& tokens)
         // Destroy room
         else if (tokens[0u] == L"destroy" && tokens[1u] == L"room") {
             logMessage = L"> [dungeon] Destroying room " + tokens[2u] + L"/" + tokens[3u];
-            bool free = (nTokens >= 5u) && (tokens[4u] == L"loss");
-            m_inter.destroyRoom({to<uint>(tokens[2u]), to<uint>(tokens[3u])}, free);
+            bool loss = (nTokens >= 5u) && (tokens[4u] == L"loss");
+            m_inter.destroyRoom({to<uint>(tokens[2u]), to<uint>(tokens[3u])}, loss);
         }
 
         // Remove trap
         else if (tokens[0u] == L"remove" && tokens[1u] == L"room") {
-            logMessage = L"> [dungeon] Removing trap in room " + tokens[2u] + L"/" + tokens[3u];
-            bool free = (nTokens >= 5u) && (tokens[4u] == L"loss");
-            m_inter.removeRoomTrap({to<uint>(tokens[2u]), to<uint>(tokens[3u])}, free);
+            logMessage = L"> [dungeon] Removing trap from room " + tokens[2u] + L"/" + tokens[3u];
+            bool loss = (nTokens >= 5u) && (tokens[4u] == L"loss");
+            m_inter.removeRoomTrap({to<uint>(tokens[2u]), to<uint>(tokens[3u])}, loss);
         }
     }
 
@@ -47,6 +47,20 @@ context::Command Commandable::interpret(const std::vector<std::wstring>& tokens)
             logMessage = L"> [dungeon] Setting trap " + tokens[2u] + L" in room " + tokens[3u] + L"/" + tokens[4u];
             bool free = (nTokens >= 6u) && (tokens[5u] == L"free");
             m_inter.setRoomTrap({to<uint>(tokens[3u]), to<uint>(tokens[4u])}, tokens[2u], free);
+        }
+
+        // Create facility
+        else if (tokens[0u] == L"create" && tokens[1u] == L"facility") {
+            logMessage = L"> [dungeon] Setting trap " + tokens[2u] + L" in room " + tokens[3u] + L"/" + tokens[4u];
+            bool free = (nTokens >= 6u) && (tokens[5u] == L"free");
+            m_inter.createRoomFacility({to<uint>(tokens[3u]), to<uint>(tokens[4u])}, tokens[2u], free);
+        }
+
+        // Remove facility
+        else if (tokens[0u] == L"remove" && tokens[1u] == L"facility") {
+            logMessage = L"> [dungeon] Removing facility " + tokens[2u] + L" from room " + tokens[3u] + L"/" + tokens[4u];
+            bool loss = (nTokens >= 6u) && (tokens[5u] == L"free");
+            m_inter.removeRoomFacility({to<uint>(tokens[3u]), to<uint>(tokens[4u])}, tokens[2u], loss);
         }
     }
 
@@ -64,27 +78,44 @@ void Commandable::autoComplete(std::vector<std::wstring>& possibilities,
     auto nTokens = tokens.size();
 
     if (nTokens == 0u) {
-        if (std::wstring(L"construct").find(lastToken) == 0u)   possibilities.emplace_back(L"construct");
-        if (std::wstring(L"destroy").find(lastToken) == 0u)     possibilities.emplace_back(L"destroy");
-        if (std::wstring(L"set").find(lastToken) == 0u)         possibilities.emplace_back(L"set");
-        if (std::wstring(L"remove").find(lastToken) == 0u)      possibilities.emplace_back(L"remove");
+        if (std::wstring(L"construct").find(lastToken) == 0u)       possibilities.emplace_back(L"construct");
+        if (std::wstring(L"destroy").find(lastToken) == 0u)         possibilities.emplace_back(L"destroy");
+        if (std::wstring(L"set").find(lastToken) == 0u)             possibilities.emplace_back(L"set");
+        if (std::wstring(L"create").find(lastToken) == 0u)          possibilities.emplace_back(L"create");
+        if (std::wstring(L"remove").find(lastToken) == 0u)          possibilities.emplace_back(L"remove");
     }
     else if (nTokens == 1u && tokens[0u] == L"construct") {
-        if (std::wstring(L"room").find(lastToken) == 0u)        possibilities.emplace_back(L"room");
+        if (std::wstring(L"room").find(lastToken) == 0u)            possibilities.emplace_back(L"room");
     }
     else if (nTokens == 1u && tokens[0u] == L"destroy") {
-        if (std::wstring(L"room").find(lastToken) == 0u)        possibilities.emplace_back(L"room");
+        if (std::wstring(L"room").find(lastToken) == 0u)            possibilities.emplace_back(L"room");
     }
     else if (nTokens >= 1u && tokens[0u] == L"set") {
         if (nTokens == 1u) {
-            if (std::wstring(L"trap").find(lastToken) == 0u)    possibilities.emplace_back(L"trap");
+            if (std::wstring(L"trap").find(lastToken) == 0u)        possibilities.emplace_back(L"trap");
         }
         else if (nTokens == 2u && tokens[1u] == L"trap") {
             for (const auto& trapInfoPair : m_inter.trapsDB().get())
-                if (trapInfoPair.first.find(lastToken) == 0u)   possibilities.emplace_back(trapInfoPair.first);
+                if (trapInfoPair.first.find(lastToken) == 0u)       possibilities.emplace_back(trapInfoPair.first);
         }
     }
-    else if (nTokens == 1u && tokens[0u] == L"remove") {
-        if (std::wstring(L"trap").find(lastToken) == 0u)        possibilities.emplace_back(L"trap");
+    else if (nTokens >= 1u && tokens[0u] == L"create") {
+        if (nTokens == 1u) {
+            if (std::wstring(L"facility").find(lastToken) == 0u)    possibilities.emplace_back(L"facility");
+        }
+        else if (nTokens == 2u && tokens[1u] == L"facility") {
+            for (const auto& facilityInfoPair : m_inter.facilitiesDB().get())
+                if (facilityInfoPair.first.find(lastToken) == 0u)   possibilities.emplace_back(facilityInfoPair.first);
+        }
+    }
+    else if (nTokens >= 1u && tokens[0u] == L"remove") {
+        if (nTokens == 1u) {
+            if (std::wstring(L"trap").find(lastToken) == 0u)        possibilities.emplace_back(L"trap");
+            if (std::wstring(L"facility").find(lastToken) == 0u)    possibilities.emplace_back(L"facility");
+        }
+        else if (nTokens == 2u && tokens[1u] == L"facility") {
+            for (const auto& facilityInfoPair : m_inter.facilitiesDB().get())
+                if (facilityInfoPair.first.find(lastToken) == 0u)   possibilities.emplace_back(facilityInfoPair.first);
+        }
     }
 }

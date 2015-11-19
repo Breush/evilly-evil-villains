@@ -460,14 +460,23 @@ void Inter::setRoomWidth(const float roomWidth)
 
 void Inter::constructRoom(const sf::Vector2u& coords, bool free)
 {
+    returnif (m_data->isRoomConstructed(coords));
+
     if (!free) returnif (!villain().doshWallet.sub(m_data->onConstructRoomCost));
     m_data->constructRoom(coords);
 }
 
 void Inter::destroyRoom(const sf::Vector2u& coords, bool loss)
 {
-    // TODO Get all the dosh gained from destroying what's inside (facilities, etc.)
-    if (!loss) villain().doshWallet.add(m_data->onDestroyRoomGain);
+    returnif (!m_data->isRoomConstructed(coords));
+
+    if (!loss) {
+        uint gainedDosh = m_data->onDestroyRoomGain;
+        gainedDosh += gainRemoveRoomFacilities(coords);
+        gainedDosh += gainRemoveRoomTrap(coords);
+        villain().doshWallet.add(gainedDosh);
+    }
+
     m_data->destroyRoom(coords);
 }
 
@@ -496,19 +505,58 @@ void Inter::setRoomsByFloor(uint value)
 //----------------------//
 //----- Facilities -----//
 
-bool Inter::hasFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const
+bool Inter::hasRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const
 {
     return m_data->hasFacility(coords, facilityID);
 }
 
-bool Inter::createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID)
+uint Inter::gainRemoveRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const
 {
-    return m_data->createRoomFacility(coords, facilityID);
+    const auto pFacilityInfo = m_data->getFacility(coords, facilityID);
+    returnif (pFacilityInfo == nullptr) 0u;
+    returnif (pFacilityInfo->isLink) 0u;
+
+    uint gainedDosh = 0u;
+    if (pFacilityInfo->treasure != -1u) gainedDosh += pFacilityInfo->treasure;
+    gainedDosh += static_cast<uint>(0.80f * pFacilityInfo->common->baseCost.dosh);
+
+    return gainedDosh;
 }
 
-bool Inter::createRoomFacilityLinked(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords, const std::wstring& linkFacilityID)
+uint Inter::gainRemoveRoomFacilities(const sf::Vector2u& coords) const
 {
-    return m_data->createRoomFacilityLinked(coords, facilityID, linkCoords, linkFacilityID);
+    returnif (!m_data->isRoomConstructed(coords)) 0u;
+    const auto& facilitiesData = m_data->room(coords).facilities;
+
+    uint gainedDosh = 0u;
+    for (const auto& facilityData : facilitiesData)
+        gainedDosh += gainRemoveRoomFacility(coords, facilityData.data.type());
+
+    return gainedDosh;
+}
+
+bool Inter::createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool free)
+{
+    auto cost = facilitiesDB().get(facilityID).baseCost.dosh;
+    if (!free) returnif (villain().doshWallet.value() < cost) false;
+
+    bool created = m_data->createRoomFacility(coords, facilityID);
+    returnif (!created) false;
+
+    if (!free) villain().doshWallet.sub(cost);
+    return true;
+}
+
+bool Inter::createRoomFacilityLinked(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords, const std::wstring& linkFacilityID, bool free)
+{
+    auto cost = facilitiesDB().get(facilityID).baseCost.dosh;
+    if (!free) returnif (villain().doshWallet.value() < cost) false;
+
+    bool created = m_data->createRoomFacilityLinked(coords, facilityID, linkCoords, linkFacilityID);
+    returnif (!created) false;
+
+    if (!free) villain().doshWallet.sub(cost);
+    return true;
 }
 
 void Inter::setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords)
@@ -516,19 +564,26 @@ void Inter::setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& 
     m_data->setRoomFacilityLink(coords, facilityID, linkCoords);
 }
 
-void Inter::removeRoomFacilities(const sf::Vector2f& relPos)
+void Inter::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool loss)
 {
-    m_data->removeRoomFacilities(tileFromLocalPosition(relPos));
+    if (!loss) villain().doshWallet.add(gainRemoveRoomFacility(coords, facilityID));
+    m_data->removeRoomFacility(coords, facilityID);
+}
+
+void Inter::removeRoomFacilities(const sf::Vector2u& coords, bool loss)
+{
+    if (!loss) villain().doshWallet.add(gainRemoveRoomFacilities(coords));
+    m_data->removeRoomFacilities(coords);
 }
 
 //-----------------//
 //----- Traps -----//
 
-uint Inter::gainRemoveRoomTrap(const sf::Vector2u& coords)
+uint Inter::gainRemoveRoomTrap(const sf::Vector2u& coords) const
 {
-    returnif (!m_data->isRoomConstructed(coords)) 0;
-    auto& trapData = m_data->room(coords).trap;
-    returnif (!trapData.exists()) 0;
+    returnif (!m_data->isRoomConstructed(coords)) 0u;
+    const auto& trapData = m_data->room(coords).trap;
+    returnif (!trapData.exists()) 0u;
 
     // TODO Gain something proportionate to the current resistance?
     // TODO Have a "common" attribute pointing to the DB Info, as in facilities

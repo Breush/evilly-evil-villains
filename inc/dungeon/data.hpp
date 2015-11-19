@@ -179,7 +179,7 @@ namespace dungeon
 
         //! Whether a specific is in constructed state.
         //! If coords are outside of boundaries, returns false.
-        bool isRoomConstructed(const sf::Vector2u& coords);
+        bool isRoomConstructed(const sf::Vector2u& coords) const;
 
         //! Construct a room.
         //! @param hard Do not check for money.
@@ -207,6 +207,14 @@ namespace dungeon
 
         //! Returns true if a facility exists in the specified coordinates.
         bool hasFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const;
+
+        //! Quick access to facility info.
+        //! Returns nullptr if not found or invalid coordinates.
+        FacilityInfo* getFacility(const sf::Vector2u& coords, const std::wstring& facilityID);
+
+        //! Quick access to facility info (const).
+        //! Returns nullptr if not found or invalid coordinates.
+        const FacilityInfo* getFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const;
 
         //! Add the specified facility to the dungeon if it does not exists yet.
         //! Will emit an event if a change occured.
