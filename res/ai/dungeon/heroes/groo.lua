@@ -39,34 +39,34 @@ end
 -- Called with the current node information
 function _evaluateReference()
     -- If it is the first time we met a treasure, change state
-    if (weight.treasure() > 0) then
+    if (eev_weight.treasure() > 0) then
         eev_stealTreasure()
         treasure_found = true
     end
 
     -- Save current references
-    altitude_ref = weight.altitude()
-    visited_ref = weight.visited()
-    lastVisit_ref = weight.lastVisit()
+    altitude_ref = eev_weight.altitude()
+    visited_ref = eev_weight.visited()
+    lastVisit_ref = eev_weight.lastVisit()
 
     -- Try to get out if treasure found or if there is no other nodes to visit
-    if weight.exit() and (treasure_found or weight.visited() >= 5) then
+    if eev_weight.exit() and (treasure_found or eev_weight.visited() >= 5) then
         eev_getOut()
     end
 
     -- Evaluate the current room
     -- Never stay in the same room
-    return - 42 * weight.visited()
+    return - 42 * eev_weight.visited()
 end
 
 -- Called with one of the neighbours of the current node
 function _evaluate()
     if (treasure_found) then
         -- Treasure is found, we follow our steps back
-        return lastVisit_ref - weight.lastVisit()
+        return lastVisit_ref - eev_weight.lastVisit()
     else
         -- We try to get a node that has been least visited, and the higher one
-        return (weight.altitude() - altitude_ref) - 2 * (weight.visited() - visited_ref)
+        return (eev_weight.altitude() - altitude_ref) - 2 * (eev_weight.visited() - visited_ref)
     end
 end
 
