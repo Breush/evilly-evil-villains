@@ -25,6 +25,9 @@ Hero::Hero(HeroesManager& manager, Inter& inter, Graph& graph)
 
 void Hero::rebindElementData()
 {
+    const auto& heroData = m_inter.heroesDB().get(m_elementID);
+    lerpable()->setPositionSpeed(m_inter.tileSize() * heroData.speed);
+    m_pauseDelay = heroData.pauseDelay;
 }
 
 //-------------------//

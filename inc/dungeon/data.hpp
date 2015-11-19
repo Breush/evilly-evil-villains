@@ -7,6 +7,7 @@
 #include "dungeon/databases/monstersdb.hpp"
 #include "dungeon/databases/trapsdb.hpp"
 #include "dungeon/databases/facilitiesdb.hpp"
+#include "dungeon/databases/heroesdb.hpp"
 #include "context/wallet.hpp"
 
 #include <SFML/System/Time.hpp>
@@ -308,14 +309,17 @@ namespace dungeon
         //! Access the list of all monsters inside dungeon and reserve.
         inline MonstersInfo& monstersInfo() { return m_monstersInfo; }
 
-        //! Acces the facilities data base.
+        //! Access the facilities data base.
         inline const FacilitiesDB& facilitiesDB() const { return m_facilitiesDB; }
 
-        //! Acces the monsters data base.
+        //! Access the monsters data base.
         inline const MonstersDB& monstersDB() const { return m_monstersDB; }
 
-        //! Acces the traps data base.
+        //! Access the traps data base.
         inline const TrapsDB& trapsDB() const { return m_trapsDB; }
+
+        //! Access the heroes data base.
+        inline const HeroesDB& heroesDB() const { return m_heroesDB; }
 
         //! Access the associated villain.
         inline context::Villain& villain() { return *m_villain; }
@@ -421,6 +425,7 @@ namespace dungeon
         MonstersDB m_monstersDB;        //!< All monsters immuable data.
         TrapsDB m_trapsDB;              //!< All traps immuable data.
         FacilitiesDB m_facilitiesDB;    //!< All facilities immuable data.
+        HeroesDB m_heroesDB;            //!< All heroes immuable data.
     };
 }
 

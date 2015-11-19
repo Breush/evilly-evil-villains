@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<hero id="groo" trName="Gr'oo">
+    <data name="speed" vx="0.66" vy="0.35" />
+    <data name="pause" delay="1." />
+</monster>

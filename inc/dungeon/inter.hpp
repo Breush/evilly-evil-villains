@@ -236,6 +236,9 @@ namespace dungeon
         //! Get the traps database from data.
         inline const TrapsDB& trapsDB() const { return m_data->trapsDB(); }
 
+        //! Get the traps database from data.
+        inline const HeroesDB& heroesDB() const { return m_data->heroesDB(); }
+
         //! @}
 
     protected:
