@@ -1,4 +1,4 @@
-#include "dungeon/hero.hpp"
+#include "dungeon/elements/hero.hpp"
 
 #include "dungeon/heroesmanager.hpp"
 #include "dungeon/inter.hpp"

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "dungeon/graph.hpp"
-#include "dungeon/element.hpp"
+#include "dungeon/elements/element.hpp"
 
 namespace dungeon
 {

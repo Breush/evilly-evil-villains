@@ -1,4 +1,4 @@
-#include "dungeon/movingelement.hpp"
+#include "dungeon/elements/movingelement.hpp"
 
 #include "ai/node.hpp"
 #include "dungeon/inter.hpp"

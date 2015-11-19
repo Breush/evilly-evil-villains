@@ -3,7 +3,7 @@
 #include "tools/param.hpp"
 #include "tools/int.hpp"
 #include "dungeon/event.hpp"
-#include "dungeon/elementdata.hpp"
+#include "dungeon/elements/elementdata.hpp"
 #include "dungeon/databases/monstersdb.hpp"
 #include "dungeon/databases/trapsdb.hpp"
 #include "dungeon/databases/facilitiesdb.hpp"

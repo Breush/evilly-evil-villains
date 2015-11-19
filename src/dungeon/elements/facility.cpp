@@ -1,4 +1,4 @@
-#include "dungeon/facility.hpp"
+#include "dungeon/elements/facility.hpp"
 
 #include "dungeon/data.hpp"
 #include "dungeon/inter.hpp"

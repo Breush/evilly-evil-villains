@@ -1,4 +1,4 @@
-#include "dungeon/element.hpp"
+#include "dungeon/elements/element.hpp"
 
 #include "dungeon/data.hpp"
 #include "dungeon/inter.hpp"
@@ -8,7 +8,7 @@
 #include "tools/string.hpp"
 
 // TODO This is cheating for eev_setUIDDataU32
-#include "dungeon/hero.hpp"
+#include "dungeon/elements/hero.hpp"
 
 using namespace dungeon;
 using namespace std::placeholders;

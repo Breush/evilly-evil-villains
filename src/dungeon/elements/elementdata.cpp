@@ -1,4 +1,4 @@
-#include "dungeon/elementdata.hpp"
+#include "dungeon/elements/elementdata.hpp"
 
 #include <stdexcept>
 

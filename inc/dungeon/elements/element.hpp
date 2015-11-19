@@ -1,6 +1,6 @@
 #pragma once
 
-#include "dungeon/elementdata.hpp"
+#include "dungeon/elements/elementdata.hpp"
 #include "dungeon/detectentity.hpp"
 #include "scene/wrappers/animatedsprite.hpp"
 

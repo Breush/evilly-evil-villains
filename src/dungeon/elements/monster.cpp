@@ -1,4 +1,4 @@
-#include "dungeon/monster.hpp"
+#include "dungeon/elements/monster.hpp"
 
 using namespace dungeon;
 

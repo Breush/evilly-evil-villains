@@ -1,6 +1,6 @@
 #pragma once
 
-#include "dungeon/element.hpp"
+#include "dungeon/elements/element.hpp"
 
 namespace dungeon
 {

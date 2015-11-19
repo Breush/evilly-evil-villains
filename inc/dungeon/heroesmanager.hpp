@@ -2,7 +2,7 @@
 
 #include "scene/entity.hpp"
 #include "dungeon/graph.hpp"
-#include "dungeon/hero.hpp"
+#include "dungeon/elements/hero.hpp"
 #include "context/event.hpp"
 #include "scene/wrappers/label.hpp"
 #include "scene/wrappers/animatedsprite.hpp"

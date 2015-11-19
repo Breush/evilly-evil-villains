@@ -1,4 +1,4 @@
-#include "dungeon/trap.hpp"
+#include "dungeon/elements/trap.hpp"
 
 #include "dungeon/inter.hpp"
 #include "tools/random.hpp"
