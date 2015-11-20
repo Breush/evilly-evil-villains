@@ -162,7 +162,7 @@ void MovingElement::updateFromGraph()
     if (node == nullptr || toNodeData(node)->constructed == false) {
         setNewTargetPosition(localPosition());
         relCoords.x = m_edata->operator[](L"tx").as_float();
-        relCoords.x = m_edata->operator[](L"ty").as_float();
+        relCoords.y = m_edata->operator[](L"ty").as_float();
         coords = sf::v2u(relCoords);
     }
 
