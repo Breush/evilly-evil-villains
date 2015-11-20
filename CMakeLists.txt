@@ -52,7 +52,7 @@ elseif (CMAKE_BUILD_TYPE MATCHES "Release")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 
     # Static libc++ for distribution
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Bstatic")
 
 else ()
     # Configuration error

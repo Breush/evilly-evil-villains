@@ -2,6 +2,7 @@
 
 #include "tools/debug.hpp"
 
+#include <string>
 #include <vector>
 
 namespace context
