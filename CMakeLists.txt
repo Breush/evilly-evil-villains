@@ -13,16 +13,16 @@ endmacro()
 
 # Useful variables
 set(AUTHOR_EMAIL alexis.breust@jumpingtoasts.com)
-set(EEV_VERSION_SWEET_NAME Papaya)
+set(EEV_VERSION_SWEET_NAME Papyri)
 set(EEV_VERSION_MAJ 0)
-set(EEV_VERSION_MIN 2)
+set(EEV_VERSION_MIN 3)
 
 #=====
 # Project
 
 # Set a default build type if none was provided
 # This has to be done before the project() instruction!
-eev_set_option(CMAKE_BUILD_TYPE Debug STRING "Choose the type of build (Debug or Release)")
+eev_set_option(CMAKE_BUILD_TYPE Release STRING "Choose the type of build (Debug or Release)")
 
 # Add project and main executable
 project(EEV)
