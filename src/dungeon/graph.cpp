@@ -37,7 +37,7 @@ void Graph::receive(const context::Event& event)
 void Graph::useData(Data& data)
 {
     m_data = &data;
-    m_data->linkGraph(this);
+    m_data->useGraph(*this);
 
     setEmitter(m_data);
     reconstructFromData();

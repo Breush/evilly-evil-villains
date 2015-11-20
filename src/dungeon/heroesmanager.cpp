@@ -1,14 +1,12 @@
 #include "dungeon/heroesmanager.hpp"
 
 #include "dungeon/inter.hpp"
+#include "tools/random.hpp"
 
 using namespace dungeon;
 
-HeroesManager::HeroesManager(Inter& inter)
-    : m_inter(inter)
+HeroesManager::HeroesManager()
 {
-    m_edata.create(L"groo");
-    m_edata[L"dosh"].init_uint32(0u);
 }
 
 //-------------------//
@@ -25,13 +23,13 @@ void HeroesManager::update(const sf::Time& dt)
     for (auto& heroInfo : m_heroesInfo) {
         // Spawn hero or update delay before spawning
         if (heroInfo.status == HeroStatus::TO_SPAWN) {
-            heroInfo.data -= dt.asSeconds();
-            if (heroInfo.data <= 0.f) {
+            heroInfo.spawnDelay -= dt.asSeconds();
+            if (heroInfo.spawnDelay <= 0.f) {
                 heroInfo.status = HeroStatus::RUNNING;
                 auto& hero = heroInfo.hero;
-                hero = std::make_unique<Hero>(*this, m_inter, *m_graph);
-                hero->bindElementData(m_edata);
-                m_inter.attachChild(*hero);
+                hero = std::make_unique<Hero>(*this, *m_inter, *m_graph);
+                hero->bindElementData(heroInfo.data);
+                m_inter->attachChild(*hero);
             }
         }
     }
@@ -58,24 +56,39 @@ void HeroesManager::receive(const context::Event& event)
             if (hero == nullptr) continue;
 
             sf::Vector2u coords = {devent.room.x, devent.room.y};
-            if (m_inter.tileFromLocalPosition(hero->localPosition()) == coords)
+            if (m_inter->tileFromLocalPosition(hero->localPosition()) == coords)
                 heroInfo.status = HeroStatus::TO_BE_REMOVED;
         }
     }
     else if (devent.type == "dungeon_graph_changed") {
+        // TODO Should be a refreshHeroes() ICU
         for (auto& heroInfo : m_heroesInfo) {
             if (heroInfo.status == HeroStatus::RUNNING)
-                heroInfo.hero->bindElementData(m_edata);
+                heroInfo.hero->bindElementData(heroInfo.data);
         }
     }
+}
+
+//----------------------------//
+//----- File interaction -----//
+
+void HeroesManager::load(const pugi::xml_node& node)
+{
+    // TODO
+}
+
+void HeroesManager::save(pugi::xml_node node)
+{
+    // TODO
 }
 
 //-------------------------------//
 //----- Dungeon interaction -----//
 
-void HeroesManager::useData(Data& data)
+void HeroesManager::useInter(Inter& inter)
 {
-    m_data = &data;
+    m_inter = &inter;
+    m_data = &m_inter->data();
     setEmitter(m_data);
 }
 
@@ -85,18 +98,40 @@ void HeroesManager::useGraph(Graph& graph)
     spawnHeroesGroup();
 }
 
-//--------------------//
-//----- Activity -----//
+//-----------------------------------//
+//----- Artificial intelligence -----//
+
+const Graph::NodeData* HeroesManager::toNodeData(const ai::Node* node)
+{
+    returnif (node == nullptr) nullptr;
+    return reinterpret_cast<const Graph::NodeData*>(node->data);
+}
 
 void HeroesManager::spawnHeroesGroup()
 {
+    const auto& startingNodes = m_graph->startingNodes();
+    returnif (startingNodes.empty());
+
     uint newHeroesCount = 1u + rand() % 5u;
 
     float delay = 0.f;
     for (uint i = 0u; i < newHeroesCount; ++i) {
         m_heroesInfo.emplace_back();
-        m_heroesInfo.back().data = delay;
-        delay += 2.f + static_cast<float>(rand() % 12u);
+        auto& heroInfo = m_heroesInfo.back();
+
+        // FIXME We're spawning only Gr'oo right now...
+        // We should make a more complex group theory
+        heroInfo.data.create(L"groo");
+        heroInfo.data[L"dosh"].init_uint32(0u);
+        heroInfo.spawnDelay = delay;
+
+        // Choose an entrance
+        auto startingNode = alea::rand(startingNodes);
+        auto coords = toNodeData(startingNode)->coords;
+        heroInfo.data[L"rx"].init_float(coords.x + 0.5f);
+        heroInfo.data[L"ry"].init_float(coords.y + 0.5f);
+
+        delay += 3.f + static_cast<float>(rand() % 20u);
     }
 
     m_nextGroupDelay = 37.f + static_cast<float>(rand() % 120u);

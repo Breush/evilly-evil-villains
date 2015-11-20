@@ -6,7 +6,6 @@
 #include "dungeon/graph.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/sidebar/sidebar.hpp"
-#include "dungeon/heroesmanager.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
 
 namespace states
@@ -60,7 +59,6 @@ namespace states
         dungeon::Graph m_dungeonGraph;
         dungeon::Inter m_dungeonInter;
         dungeon::Sidebar m_dungeonSidebar;
-        dungeon::HeroesManager m_heroesManager;
 
         // Loading
         scene::Label m_loadingText;

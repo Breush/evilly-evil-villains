@@ -20,10 +20,6 @@
 
 namespace dungeon
 {
-    // Forward declarations
-
-    class HeroesManager;
-
     //! The dungeon itself, handling user interactions.
 
     class Inter final : public scene::Entity, private context::EventReceiver
@@ -33,7 +29,7 @@ namespace dungeon
     public:
 
         //! Constructor.
-        Inter(nui::ContextMenu& contextMenu, const HeroesManager& heroesManager);
+        Inter(nui::ContextMenu& contextMenu);
 
         //! Default destructor.
         virtual ~Inter() = default;
@@ -382,7 +378,6 @@ namespace dungeon
 
         Data* m_data = nullptr;                 //!< Dungeon data.
         Commandable m_commandable;              //!< The interpreter.
-        const HeroesManager& m_heroesManager;   //!< Heroes manager reference.
 
         // Display
         sfe::Grid m_grid;                                   //!< The internal grid for overlay display.

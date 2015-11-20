@@ -35,6 +35,9 @@ void Data::update(const sf::Time& dt)
         EventEmitter::emit("time_changed");
     }
 
+    // Heroes
+    m_heroesManager.update(dt);
+
     // Monster reserve countdowns
     static float reserveTimeBuffer = 0.f;
     reserveTimeBuffer += dt.asSeconds();
@@ -136,7 +139,14 @@ void Data::loadDungeon(const std::wstring& file)
     setFame(dungeon.attribute(L"fame").as_uint());
     wdebug_dungeon_1(L"Dungeon is " << m_name << L" of size " << m_floorsCount << L"x" << m_roomsByFloor << L".");
 
+    //---- Heroes
+
+    const auto& heroesNode = dungeon.child(L"heroes");
+    m_heroesManager.load(heroesNode);
+
     //---- Monsters
+
+    // TODO Make a monstersManager too?
 
     // Reserve
     const auto& monstersNode = dungeon.child(L"monsters");
@@ -230,6 +240,11 @@ void Data::saveDungeon(const std::wstring& file)
     dungeon.append_attribute(L"floorsCount") = m_floorsCount;
     dungeon.append_attribute(L"roomsByFloor") = m_roomsByFloor;
     dungeon.append_attribute(L"fame") = fame();
+
+    //---- Heroes
+
+    auto heroesNode = dungeon.append_child(L"monsters");
+    m_heroesManager.save(heroesNode);
 
     //---- Monsters
 
@@ -702,6 +717,15 @@ void Data::moveMonsterFromReserve(const sf::Vector2u& coords, const std::wstring
     event.type = "monster_added";
     event.monster.id = monsterID.c_str();
     EventEmitter::emit(event);
+}
+
+//-------------------------//
+//----- Graph linking -----//
+
+void Data::useGraph(Graph& graph)
+{
+    m_graph = &graph;
+    m_heroesManager.useGraph(graph);
 }
 
 //-------------------//

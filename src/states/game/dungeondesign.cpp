@@ -13,9 +13,8 @@ using namespace states;
 
 GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     : State(stack)
-    , m_dungeonInter(m_contextMenu, m_heroesManager)
+    , m_dungeonInter(m_contextMenu)
     , m_dungeonSidebar(scene(), m_dungeonInter, m_dungeonData)
-    , m_heroesManager(m_dungeonInter)
 {
     // Creating scene
     sf::Vector2f sceneSize(1200.f, 2700.f);
@@ -90,7 +89,6 @@ bool GameDungeonDesign::update(const sf::Time& dt)
     // Loading is over, we're just updating the whole thing
     auto dtFactored = timeFactor() * dt;
     m_dungeonData.update(dtFactored);
-    m_heroesManager.update(dtFactored);
     return baseClass::update(dt);
 }
 
@@ -184,9 +182,9 @@ void GameDungeonDesign::updateLoading(const sf::Time& dt)
     LOAD(23u, m_dungeonSidebar.useData(m_dungeonData));
     LOAD(24u, m_dungeonSidebar.setMinimapLayer(scene().layer("DUNGEON")));
 
-    // Dungeon hero
-    LOAD(25u, m_heroesManager.useGraph(m_dungeonGraph));
-    LOAD(26u, m_heroesManager.useData(m_dungeonData));
+    // -----
+    LOAD(25u, (void)0);
+    LOAD(26u, (void)0);
 
     // Decorum
     LOAD(27u, m_sceneFront.setTexture("dungeon/scene/front"));

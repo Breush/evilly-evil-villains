@@ -9,8 +9,6 @@
 #include "scene/wrappers/rectangleshape.hpp"
 #include "ai/debug.hpp"
 
-#include <selene/selene.hpp>
-
 namespace dungeon
 {
     // Forward declarations
@@ -25,7 +23,7 @@ namespace dungeon
     public:
 
         //! Constructor.
-        HeroesManager(Inter& inter);
+        HeroesManager();
 
         //! Default destructor.
         ~HeroesManager() = default;
@@ -39,6 +37,18 @@ namespace dungeon
 
         //! @}
 
+        //-------------------------//
+        //! @name File interaction
+        //! @{
+
+        //! Load from an XML file.
+        void load(const pugi::xml_node& node);
+
+        //! Save to an XML file.
+        void save(pugi::xml_node node);
+
+        //! @}
+
         //----------------------------//
         //! @name Dungeon interaction
         //! @{
@@ -46,8 +56,8 @@ namespace dungeon
         //! The graph of the dungeon to be read from.
         void useGraph(Graph& graph);
 
-        //! Set the dungeon data source.
-        void useData(Data& data);
+        //! Set the dungeon inter source.
+        void useInter(Inter& inter);
 
         //! @}
 
@@ -73,9 +83,12 @@ namespace dungeon
 
         //! @}
 
-        //-----------------//
-        //! @name Activity
+        //--------------------------------//
+        //! @name Artificial intelligence
         //! @{
+
+        //! Convert a node to a node data.
+        const Graph::NodeData* toNodeData(const ai::Node* node);
 
         //! Spawns a new random group of heroes.
         void spawnHeroesGroup();
@@ -97,7 +110,8 @@ namespace dungeon
         {
             std::unique_ptr<Hero> hero = nullptr;       //!< Hero pointer.
             HeroStatus status = HeroStatus::TO_SPAWN;   //!< Hero status.
-            float data = 0.f;                           //!< Extra data information.
+            float spawnDelay = 0.f;                     //!< Seconds to wait before effective spawning.
+            ElementData data;                           //!< All its data.
         };
 
     private:
@@ -105,13 +119,10 @@ namespace dungeon
         // Shared data
         Data* m_data = nullptr;     //!< Dungeon data.
         Graph* m_graph = nullptr;   //!< The graph of the dungeon to be read from.
-        Inter& m_inter;             //!< The dungeon inter, to get cellsize and position.
+        Inter* m_inter = nullptr;   //!< The dungeon inter, to get cellsize and position.
 
         // Heroes
         std::vector<HeroInfo> m_heroesInfo; //!< All the heroes currently in the dungeon.
         float m_nextGroupDelay = -1.f;
-
-        // FIXME Debug thingy waiting for Data saving Heroes informations
-        ElementData m_edata;
     };
 }

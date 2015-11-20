@@ -14,9 +14,8 @@
 
 using namespace dungeon;
 
-Inter::Inter(nui::ContextMenu& contextMenu, const HeroesManager& heroesManager)
+Inter::Inter(nui::ContextMenu& contextMenu)
     : m_commandable(this)
-    , m_heroesManager(heroesManager)
     , m_contextMenu(contextMenu)
 {
     // Grid
@@ -185,6 +184,8 @@ void Inter::receive(const context::Event& event)
 void Inter::useData(Data& data)
 {
     m_data = &data;
+    m_data->heroesManager().useInter(*this);
+
     setEmitter(&data);
     refreshFromData();
 }

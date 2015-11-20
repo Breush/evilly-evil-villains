@@ -3,6 +3,7 @@
 #include "tools/param.hpp"
 #include "tools/int.hpp"
 #include "dungeon/event.hpp"
+#include "dungeon/heroesmanager.hpp"
 #include "dungeon/elements/elementdata.hpp"
 #include "dungeon/databases/monstersdb.hpp"
 #include "dungeon/databases/trapsdb.hpp"
@@ -324,6 +325,9 @@ namespace dungeon
         //! Access the associated villain.
         inline context::Villain& villain() { return *m_villain; }
 
+        //! Access the heroes manager.
+        inline HeroesManager& heroesManager() { return m_heroesManager; }
+
         //! Access the associated graph.
         inline Graph& graph() { return *m_graph; }
 
@@ -382,7 +386,7 @@ namespace dungeon
         //! @{
 
         //! Set the graph to be linked with these data.
-        void linkGraph(Graph* graph) { m_graph = graph; }
+        void useGraph(Graph& graph);
 
         //! @}
 
@@ -412,9 +416,11 @@ namespace dungeon
         context::Villain* m_villain = nullptr;  //!< The villain reference.
         context::Wallet m_fameWallet;           //!< The resource fame value.
 
-        std::vector<Floor> m_floors;    //!< A dungeon consists in a vector of floors.
+        // Managers
+        HeroesManager m_heroesManager;  //!< Manage all heroes.
 
-        // Monsters
+        // Dungeon
+        std::vector<Floor> m_floors;    //!< A dungeon consists in a vector of floors.
         MonstersInfo m_monstersInfo;    //!< A dungeon also has some list of monsters.
 
         // Time
