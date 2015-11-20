@@ -15,7 +15,7 @@ endmacro()
 set(AUTHOR_EMAIL alexis.breust@jumpingtoasts.com)
 set(EEV_VERSION_SWEET_NAME Papaya)
 set(EEV_VERSION_MAJ 0)
-set(EEV_VERSION_MIN 1)
+set(EEV_VERSION_MIN 2)
 
 #=====
 # Project
