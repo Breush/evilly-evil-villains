@@ -14,10 +14,14 @@ HeroesManager::HeroesManager()
 
 void HeroesManager::update(const sf::Time& dt)
 {
-    // Remove dead/out heroes
-    std::erase_if(m_heroesInfo, [](const HeroInfo& heroInfo) { return heroInfo.status == HeroStatus::TO_BE_REMOVED; });
-
     returnif (m_graph == nullptr);
+
+    // Remove dead/out heroes
+    auto heroesCountBefore = m_heroesInfo.size();
+    std::erase_if(m_heroesInfo, [](const HeroInfo& heroInfo) { return heroInfo.status == HeroStatus::TO_BE_REMOVED; });
+    auto heroesCountAfter = m_heroesInfo.size();
+    if (heroesCountBefore != heroesCountAfter)
+        refreshHeroesData();
 
     // Consider other updates
     for (auto& heroInfo : m_heroesInfo) {
@@ -49,8 +53,6 @@ void HeroesManager::receive(const context::Event& event)
 
     if (devent.type == "room_destroyed") {
         // Remove all heroes in that room
-        // FIXME Ultimately, this should be part of dungeon::Data
-        // (Well, all that HeroesManager should)
         for (auto& heroInfo : m_heroesInfo) {
             auto& hero = heroInfo.hero;
             if (hero == nullptr) continue;
@@ -61,11 +63,7 @@ void HeroesManager::receive(const context::Event& event)
         }
     }
     else if (devent.type == "dungeon_graph_changed") {
-        // TODO Should be a refreshHeroes() ICU
-        for (auto& heroInfo : m_heroesInfo) {
-            if (heroInfo.status == HeroStatus::RUNNING)
-                heroInfo.hero->bindElementData(heroInfo.data);
-        }
+        refreshHeroesData();
     }
 }
 
@@ -74,12 +72,45 @@ void HeroesManager::receive(const context::Event& event)
 
 void HeroesManager::load(const pugi::xml_node& node)
 {
-    // TODO
+    m_heroesInfo.clear();
+
+    m_nextGroupDelay = node.attribute(L"nextWaveDelay").as_float();
+
+    for (const auto& heroNode : node.children(L"hero")) {
+        m_heroesInfo.emplace_back();
+        auto& heroInfo = m_heroesInfo.back();
+        heroInfo.data.loadXML(heroNode);
+
+        std::wstring status = heroNode.attribute(L"status").as_string();
+        if (status == L"spawning") {
+            heroInfo.status = HeroStatus::TO_SPAWN;
+            heroInfo.spawnDelay = heroNode.attribute(L"spawnDelay").as_float();
+        }
+        else if (status == L"running") {
+            heroInfo.status = HeroStatus::TO_SPAWN;
+            heroInfo.spawnDelay = 0.f;
+        }
+    }
 }
 
 void HeroesManager::save(pugi::xml_node node)
 {
-    // TODO
+    node.append_attribute(L"nextWaveDelay") = m_nextGroupDelay;
+
+    for (const auto& heroInfo : m_heroesInfo) {
+        if (heroInfo.status == HeroStatus::TO_BE_REMOVED) continue;
+
+        auto heroNode = node.append_child(L"hero");
+        heroInfo.data.saveXML(heroNode);
+
+        if (heroInfo.status == HeroStatus::TO_SPAWN) {
+            heroNode.append_attribute(L"status") = L"spawning";
+            heroNode.append_attribute(L"spawnDelay") = heroInfo.spawnDelay;
+        }
+        else if (heroInfo.status == HeroStatus::RUNNING) {
+            heroNode.append_attribute(L"status") = L"running";
+        }
+    }
 }
 
 //-------------------------------//
@@ -134,6 +165,9 @@ void HeroesManager::spawnHeroesGroup()
         delay += 3.f + static_cast<float>(rand() % 20u);
     }
 
+    // Refresh all element data, as pending reference might be lost
+    refreshHeroesData();
+
     m_nextGroupDelay = 37.f + static_cast<float>(rand() % 120u);
 }
 
@@ -161,4 +195,14 @@ void HeroesManager::heroGetsOut(Hero* hero)
 void HeroesManager::heroStealsTreasure(Hero* hero, const sf::Vector2u& coords, const uint stolenDosh)
 {
     m_data->stealTreasure(coords, *hero, stolenDosh);
+}
+
+//---------------//
+//----- ICU -----//
+
+void HeroesManager::refreshHeroesData()
+{
+    for (auto& heroInfo : m_heroesInfo)
+        if (heroInfo.status == HeroStatus::RUNNING)
+            heroInfo.hero->bindElementData(heroInfo.data);
 }

@@ -95,6 +95,15 @@ namespace dungeon
 
         //! @}
 
+        //------------//
+        //! @name ICU
+        //! @{
+
+        //! Refresh all element data reference for heroes.
+        void refreshHeroesData();
+
+        //! @}
+
     private:
 
         //! Basic hero status, modifications occurs during update.

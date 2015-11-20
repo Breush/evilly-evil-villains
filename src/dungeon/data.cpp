@@ -243,7 +243,7 @@ void Data::saveDungeon(const std::wstring& file)
 
     //---- Heroes
 
-    auto heroesNode = dungeon.append_child(L"monsters");
+    auto heroesNode = dungeon.append_child(L"heroes");
     m_heroesManager.save(heroesNode);
 
     //---- Monsters
