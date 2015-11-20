@@ -5,6 +5,20 @@
 
 #include <string>
 
+// Fix for to_string not defined in mingw...
+#if defined(__GNUC__)
+#if defined(__MINGW32__)
+namespace std
+{
+	template<typename T>
+	std::string to_string(const T& value)
+	{
+		return std::string();
+	}
+}
+#endif
+#endif
+
 namespace SpriterEngine
 {
 

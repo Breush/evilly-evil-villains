@@ -1,4 +1,5 @@
 include_directories(${SPRITER_INCLUDE_DIR})
+include_directories(${SPRITER_INCLUDE_DIR}/..)
 
 file(GLOB_RECURSE SPRITER_SRCS RELATIVE ${SPRITER_ROOT_DIR} *.cpp)
 
