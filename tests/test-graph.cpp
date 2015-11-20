@@ -19,7 +19,7 @@ int main(void)
     graph.useData(data);
     graph.reconstructFromData();
 
-    const auto& node = *graph.startingNode();
+    const auto& node = *graph.startingNodes()[0];
     const auto& nodeData = *toNodeData(&node);
 
     // Starting node

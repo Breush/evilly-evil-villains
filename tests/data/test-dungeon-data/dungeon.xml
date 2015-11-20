@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <dungeon name="Dungeon" time="23" floorsCount="3" roomsByFloor="4" fame="0">
+	<heroes nextWaveDelay="0" />
 	<monsters>
 		<reserve>
 			<monsterCage type="sand_spirit" countdown="44">
@@ -39,7 +40,7 @@
 	</floor>
 	<floor pos="2">
 		<room pos="0" state="constructed">
-			<facility type="treasure">
+			<facility type="smallChest">
 				<dosh type="uint32" value="42" />
 			</facility>
 		</room>
