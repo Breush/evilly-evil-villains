@@ -84,7 +84,7 @@
                 </key>
             </timeline>
         </animation>
-        <animation id="1" name="grab" length="4000" interval="100">
+        <animation id="1" name="grab" length="4000" interval="100" looping="false">
             <mainline>
                 <key id="0">
                     <object_ref id="0" name="trapdoor_frame" folder="0" file="0" abs_x="-89.851119" abs_y="-62.638738" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
