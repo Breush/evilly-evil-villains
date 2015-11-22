@@ -4,6 +4,7 @@
 -- by A. Breust --
 
 ---- Description:
+-- A non-trap that looks deadly but is just a painting.
 
 ------------
 -- Locals --
@@ -13,6 +14,9 @@
 
 -- Called once on object creation
 function _register()
+    -- In front of wall (100) and floor (75)
+    -- but behind entities (50)
+    eev_setDepth(70)
 end
 
 -------------

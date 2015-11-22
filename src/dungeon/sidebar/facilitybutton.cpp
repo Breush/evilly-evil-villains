@@ -43,8 +43,6 @@ void FacilityGrabButton::grabbableButtonPressed(Entity* entity, const sf::Mouse:
 {
     // If right button, deselect
     if (button == sf::Mouse::Right) {
-        // Still some explicit links to do, do not stop construction
-        returnif (m_explicitLinksDone != 0u && m_explicitLinksDone < m_explicitLinksCount);
         m_grabbableFacilityID = m_facilityID;
         m_inter.resetPredictionLink();
         graph()->removeGrabbable();

@@ -20,7 +20,7 @@ namespace dungeon
 
             // Those are element-specific
             uint altitude = 0u;     //!< How high is the node.
-            uint treasure = 0u;     //!< How many money there is stored in this node.
+            uint treasure = 0u;     //!< How much money there is stored in this node.
             bool exit = false;      //!< Whether the hero can exit the dungeon by this node or not.
         };
 
