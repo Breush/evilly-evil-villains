@@ -40,11 +40,8 @@ void Data::update(const sf::Time& dt)
     while (gameTimeBuffer >= m_timeGameHour) {
         gameTimeBuffer -= m_timeGameHour;
         m_time += 1u;
-        EventEmitter::emit("time_changed");
+        EventEmitter::addEvent("time_changed");
     }
-
-    // Heroes
-    m_heroesManager.update(dt);
 
     // Monster reserve countdowns
     static float reserveTimeBuffer = 0.f;
@@ -56,12 +53,18 @@ void Data::update(const sf::Time& dt)
             if (reserveInfo.countdown == 0u) continue;
             reserveInfo.countdown -= 1u;
 
-            Event event;
-            event.type = "reserve_countdown_changed";
-            event.monster.id = reserveInfo.type.c_str();
-            EventEmitter::emit(event);
+            auto event = std::make_unique<Event>();
+            event->type = "reserve_countdown_changed";
+            event->monster.id = reserveInfo.type.c_str();
+            EventEmitter::addEvent(std::move(event));
         }
     }
+
+    // Send events
+    broadcast();
+
+    // Heroes
+    m_heroesManager.update(dt);
 }
 
 //---------------------------//
@@ -236,7 +239,7 @@ void Data::loadDungeon(const std::wstring& file)
         }
     }
 
-    EventEmitter::emit("dungeon_changed");
+    EventEmitter::addEvent("dungeon_changed");
 }
 
 void Data::saveDungeon(const std::wstring& file)
@@ -355,18 +358,18 @@ void Data::correctFloorsRooms()
         }
     }
 
-    EventEmitter::emit("dungeon_changed");
+    EventEmitter::addEvent("dungeon_changed");
 }
 
 //-------------------//
 //----- Emitter -----//
 
-void Data::emit(std::string eventType, const sf::Vector2u& coords)
+void Data::addEvent(std::string eventType, const sf::Vector2u& coords)
 {
-    Event event;
-    event.type = std::move(eventType);
-    event.room = {coords.x, coords.y};
-    EventEmitter::emit(event);
+    auto event = std::make_unique<Event>();
+    event->type = std::move(eventType);
+    event->room = {coords.x, coords.y};
+    EventEmitter::addEvent(std::move(event));
 }
 
 //-----------------//
@@ -405,8 +408,8 @@ void Data::constructRoom(const sf::Vector2u& coords, bool hard)
         }
     }
 
-    emit("room_constructed", coords);
-    EventEmitter::emit("dungeon_changed");
+    addEvent("room_constructed", coords);
+    EventEmitter::addEvent("dungeon_changed");
 }
 
 void Data::destroyRoom(const sf::Vector2u& coords)
@@ -421,8 +424,8 @@ void Data::destroyRoom(const sf::Vector2u& coords)
     // Destroy the room
     room(coords).state = RoomState::EMPTY;
 
-    emit("room_destroyed", coords);
-    EventEmitter::emit("dungeon_changed");
+    addEvent("room_destroyed", coords);
+    EventEmitter::addEvent("dungeon_changed");
 }
 
 sf::Vector2u Data::roomNeighbourCoords(const sf::Vector2u& coords, Direction direction)
@@ -477,7 +480,7 @@ void Data::stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh
     // Note: We could check that stolenDosh is zero here.
     // If not, we were not able to steal the amount asked.
 
-    emit("facility_changed", coords);
+    addEvent("facility_changed", coords);
 }
 
 //----------------------//
@@ -519,7 +522,7 @@ bool Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     facility.isLink = isLink;
     facility.common = &facilitiesDB().get(facilityID);
 
-    emit("facility_changed", coords);
+    addEvent("facility_changed", coords);
 
     // Create all the implicit links too
     const auto& facilityInfo = facilitiesDB().get(facilityID);
@@ -554,7 +557,7 @@ void Data::setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& f
     for (auto& facilityInfo : roomInfo.facilities) {
         if (facilityInfo.data.type() == facilityID) {
             facilityInfo.link = linkCoords;
-            emit("facility_changed", coords);
+            addEvent("facility_changed", coords);
             return;
         }
     }
@@ -568,7 +571,7 @@ void Data::removeRoomFacilityLink(const sf::Vector2u& coords, const std::wstring
     for (auto& facilityInfo : roomInfo.facilities) {
         if (facilityInfo.data.type() == facilityID) {
             facilityInfo.link = {-1u, -1u};
-            emit("facility_changed", coords);
+            addEvent("facility_changed", coords);
             return;
         }
     }
@@ -601,7 +604,7 @@ void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
 
     roomInfo.facilities.erase(pFacility);
 
-    emit("facility_changed", coords);
+    addEvent("facility_changed", coords);
 }
 
 void Data::removeRoomFacilities(const sf::Vector2u& coords)
@@ -632,7 +635,7 @@ void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
     roomInfo.trap.clear();
     roomInfo.trap.create(trapID);
 
-    emit("trap_changed", coords);
+    addEvent("trap_changed", coords);
 }
 
 void Data::removeRoomTrap(const sf::Vector2u& coords)
@@ -646,7 +649,7 @@ void Data::removeRoomTrap(const sf::Vector2u& coords)
     // m_villain->doshWallet.add(traps::onDestroyGain(roomInfo.trap));
     roomInfo.trap.clear();
 
-    emit("trap_changed", coords);
+    addEvent("trap_changed", coords);
 }
 
 //--------------------//
@@ -660,7 +663,7 @@ void Data::removeRoomMonsters(const sf::Vector2u& coords)
         monsterCoords.y = static_cast<uint>(monsterInfo.data.at(L"ry").as_float());
 
         if (monsterCoords == coords) {
-            EventEmitter::emit("monster_removed");
+            EventEmitter::addEvent("monster_removed");
             return true;
         }
 
@@ -676,32 +679,27 @@ bool Data::addMonsterValid(const sf::Vector2u& coords, const std::wstring& monst
 
 void Data::addMonsterToReserve(const std::wstring& monsterID, const uint countdownIncrease)
 {
-    Event event;
     auto& reserve = m_monstersInfo.reserve;
     auto pMonsterCage = std::find_if(reserve, [&monsterID] (const MonsterCageInfo& monsterCage) { return monsterCage.type == monsterID; });
-
-    // No previous cage, create it
-    if (pMonsterCage == std::end(reserve)) {
-        m_monstersInfo.reserve.emplace_back();
-        pMonsterCage = std::prev(std::end(m_monstersInfo.reserve));
-        pMonsterCage->type = monsterID;
-    }
+    returnif (pMonsterCage == std::end(reserve));
 
     // Add a monster in there
     pMonsterCage->monsters.emplace_back();
     auto& monsterInfo = pMonsterCage->monsters.back();
     monsterInfo.data.create(monsterID);
 
-    event.type = "monster_added";
-    event.monster.id = monsterID.c_str();
-    EventEmitter::emit(event);
+    auto event = std::make_unique<Event>();
+    event->type = "monster_added";
+    event->monster.id = pMonsterCage->type.c_str();
+    EventEmitter::addEvent(std::move(event));
 
     // Increase the countdown
     pMonsterCage->countdown += countdownIncrease;
 
-    event.type = "reserve_countdown_changed";
-    event.monster.id = monsterID.c_str();
-    EventEmitter::emit(event);
+    event = std::make_unique<Event>();
+    event->type = "reserve_countdown_changed";
+    event->monster.id = pMonsterCage->type.c_str();
+    EventEmitter::addEvent(std::move(event));
 }
 
 void Data::moveMonsterFromReserve(const sf::Vector2u& coords, const std::wstring& monsterID)
@@ -725,10 +723,10 @@ void Data::moveMonsterFromReserve(const sf::Vector2u& coords, const std::wstring
     m_monstersInfo.active.emplace_back(std::move(monsterInfo));
     pMonsterCage->monsters.resize(monstersCount - 1u);
 
-    Event event;
-    event.type = "monster_added";
-    event.monster.id = monsterID.c_str();
-    EventEmitter::emit(event);
+    auto event = std::make_unique<Event>();
+    event->type = "monster_added";
+    event->monster.id = pMonsterCage->type.c_str();
+    EventEmitter::addEvent(std::move(event));
 }
 
 //-------------------------//

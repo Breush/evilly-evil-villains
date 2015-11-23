@@ -28,7 +28,7 @@ void Graph::receive(const context::Event& event)
     if (event.type == "facility_changed")
         refreshTreasure(m_nodes.at(devent.room.x).at(devent.room.y));
     else if (event.type == "dungeon_changed")
-        reconstructFromData();
+        updateFromData();
 }
 
 //------------------------//
@@ -41,6 +41,28 @@ void Graph::useData(Data& data)
 
     setEmitter(m_data);
     reconstructFromData();
+}
+
+//-----------------------------------//
+//----- Internal changes update -----//
+
+// FIXME BUG This refresh is called on facility_changed
+// but the treasure entity has not been created (in Inter),
+// so the treasure will not be refreshed unless an other event is
+// launched from the Treasure constructor. (From Lua!)
+// -> Make it react to a treasure_changed event.
+void Graph::refreshTreasure(NodeData& nodeData)
+{
+    nodeData.treasure = 0u;
+
+    returnif (!m_data->isRoomConstructed(nodeData.coords));
+
+    auto& room = m_data->room(nodeData.coords);
+    for (auto& facility : room.facilities) {
+        const auto& treasure = facility.treasure;
+        if (treasure != -1u)
+            nodeData.treasure += treasure;
+    }
 }
 
 void Graph::reconstructFromData()
@@ -118,29 +140,5 @@ void Graph::updateFromData()
         }
     }
 
-    Event event;
-    event.type = "dungeon_graph_changed";
-    emitter()->emit(event);
-}
-
-//-----------------------------------//
-//----- Internal changes update -----//
-
-// FIXME BUG This refresh is called on facility_changed
-// but the treasure entity has not been created (in Inter),
-// so the treasure will not be refreshed unless an other event is
-// launched from the Treasure constructor. (From Lua!)
-// -> Make it react to a treasure_changed event.
-void Graph::refreshTreasure(NodeData& nodeData)
-{
-    nodeData.treasure = 0u;
-
-    returnif (!m_data->isRoomConstructed(nodeData.coords));
-
-    auto& room = m_data->room(nodeData.coords);
-    for (auto& facility : room.facilities) {
-        const auto& treasure = facility.treasure;
-        if (treasure != -1u)
-            nodeData.treasure += treasure;
-    }
+    emitter()->addEvent("dungeon_graph_changed");
 }

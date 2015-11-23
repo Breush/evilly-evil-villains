@@ -62,5 +62,5 @@ uint32 Trap::harvestableDosh()
 
 void Trap::lua_warnHarvestableDosh()
 {
-    m_inter.data().emit("harvestable_dosh_changed", m_coords);
+    m_inter.data().addEvent("harvestable_dosh_changed", m_coords);
 }

@@ -387,9 +387,6 @@ namespace dungeon
         sf::Vector2f m_roomScale = {1.f, 1.f};              //!< The room scale.
         sf::Vector2f m_refRoomSize;                         //!< The original room size.
 
-        // Delay
-        std::vector<std::function<void()>> m_tileRefreshPending;    //! Pending list of tile refreshTileXXX.
-
         // Prediction
         std::wstring m_predictionID;                //!< The current ID of the element overlay.
         scene::AnimatedSprite m_predictionSprite;   //!< The current sprite shown.

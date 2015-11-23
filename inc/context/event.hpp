@@ -1,9 +1,12 @@
 #pragma once
 
+#include "tools/platform-fixes.hpp"
 #include "tools/debug.hpp"
+#include "tools/int.hpp"
 
 #include <string>
 #include <vector>
+#include <deque>
 
 namespace context
 {
@@ -15,6 +18,8 @@ namespace context
 
     struct Event
     {
+        virtual ~Event() = default;
+
         std::string type;   //!< The type of event which is sent.
     };
 
@@ -34,14 +39,25 @@ namespace context
         //! @{
 
         //! Emits an event through all receivers.
-        void emit(const Event& event) const;
+        //! Note: similar events won't be launched twice.
+        void addEvent(std::unique_ptr<Event> event);
 
         //! Emits a default event type through all receivers.
-        void emit(std::string eventType) const;
+        //! Note: similar events won't be launched twice.
+        void addEvent(std::string eventType);
 
         //! @}
 
-    private:
+    protected:
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        //! Emits stored events through all receivers (or count if specified).
+        void broadcast(uint count = -1u);
+
+        //! @}
 
         //-------------------------//
         //! @name Manage receivers
@@ -59,6 +75,9 @@ namespace context
 
         //! All the receivers to be called when an event is sent.
         std::vector<EventReceiver*> m_receivers;
+
+        //! The list of events to broadcasts.
+        std::deque<std::unique_ptr<Event>> m_events;
     };
 
     //! Base class for those who want to be able to receive a dungeon event.
@@ -80,7 +99,7 @@ namespace context
         void setEmitter(EventEmitter* emitter);
 
         //! Get the event emitter.
-        inline EventEmitter* emitter() { return m_emitter; };
+        inline EventEmitter* emitter() { return m_emitter; }
 
         //! @}
 

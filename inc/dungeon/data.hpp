@@ -172,7 +172,7 @@ namespace dungeon
         //! @{
 
         //! Quick tool to emit an dungeon event with coords informations.
-        void emit(std::string eventType, const sf::Vector2u& coords);
+        void addEvent(std::string eventType, const sf::Vector2u& coords);
 
         //! @}
 

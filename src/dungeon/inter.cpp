@@ -58,10 +58,6 @@ void Inter::init()
 
 void Inter::updateRoutine(const sf::Time&)
 {
-    // Do delayed refresh
-    for (const auto& tileRefresh : m_tileRefreshPending)
-        tileRefresh();
-    m_tileRefreshPending.clear();
 }
 
 void Inter::onSizeChanges()
@@ -151,30 +147,30 @@ void Inter::receive(const context::Event& event)
     sf::Vector2u coords(devent.room.x, devent.room.y);
 
     if (event.type == "room_destroyed") {
-        m_tileRefreshPending.emplace_back([=]() { return refreshTile(coords); });
-        m_tileRefreshPending.emplace_back([=]() { return refreshNeighboursLayers(coords); });
-        m_tileRefreshPending.emplace_back([=]() { return refreshMonsters(); });
+        refreshTile(coords);
+        refreshNeighboursLayers(coords);
+        refreshMonsters();
     }
     else if (event.type == "room_constructed") {
-        m_tileRefreshPending.emplace_back([=]() { return refreshTile(coords); });
-        m_tileRefreshPending.emplace_back([=]() { return refreshNeighboursLayers(coords); });
-        m_tileRefreshPending.emplace_back([=]() { return refreshMonsters(); });
+        refreshTile(coords);
+        refreshNeighboursLayers(coords);
+        refreshMonsters();
     }
     else if (event.type == "facility_changed") {
-        m_tileRefreshPending.emplace_back([=]() { return refreshTileFacilities(coords); });
-        m_tileRefreshPending.emplace_back([=]() { return refreshTileDoshLabel(coords); });
+        refreshTileFacilities(coords);
+        refreshTileDoshLabel(coords);
     }
     else if (event.type == "trap_changed") {
-        m_tileRefreshPending.emplace_back([=]() { return refreshTileTraps(coords); });
+        refreshTileTraps(coords);
     }
     else if (event.type == "monster_added") {
-        m_tileRefreshPending.emplace_back([=]() { return refreshMonsters(); });
+        refreshMonsters();
     }
     else if (event.type == "monster_removed") {
-        m_tileRefreshPending.emplace_back([=]() { return refreshMonsters(); });
+        refreshMonsters();
     }
     else if (event.type == "harvestable_dosh_changed") {
-        m_tileRefreshPending.emplace_back([=]() { return refreshTileDoshLabel(coords); });
+        refreshTileDoshLabel(coords);
     }
 }
 
@@ -398,7 +394,7 @@ void Inter::showEditTreasureDialog(const sf::Vector2u& coords)
         treasureDosh = newValue;
 
         // Global dosh changed
-        m_data->emit("facility_changed", coords);
+        m_data->addEvent("facility_changed", coords);
     });
 }
 

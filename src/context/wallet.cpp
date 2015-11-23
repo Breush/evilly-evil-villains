@@ -15,7 +15,7 @@ void Wallet::set(const uint value)
 
         // Send event if we should
         if (m_emitter != nullptr)
-            m_emitter->emit(m_eventType);
+            m_emitter->addEvent(m_eventType);
     }
 }
 

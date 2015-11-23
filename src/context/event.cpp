@@ -1,6 +1,7 @@
 #include "context/event.hpp"
 
-#include "tools/platform-fixes.hpp" // erase_if
+#include "tools/tools.hpp"
+#include "tools/math.hpp"
 
 #include <stdexcept>
 
@@ -33,30 +34,41 @@ void EventReceiver::setEmitter(EventEmitter* emitter)
 //-------------------------//
 //----- Event emitter -----//
 
-void EventEmitter::emit(const Event& event) const
+void EventEmitter::broadcast(uint count)
 {
-    // Make a copy of the current list
-    // so that it can be modify during the emit
-    auto receivers = m_receivers;
+    count = std::min(count, static_cast<uint>(m_events.size()));
+    returnif (count == 0u);
 
 #if DEBUG_GLOBAL > 0
-    for (auto& receiver : receivers)
+    for (auto& receiver : m_receivers)
         receiver->m_lock = true;
 #endif
 
-    for (auto& receiver : receivers)
-        receiver->receive(event);
+    for (uint i = 0u; i < count; ++i) {
+        const auto& event = m_events[i];
+        for (auto& receiver : m_receivers)
+            receiver->receive(*event);
+    }
+
+    m_events.erase(std::begin(m_events), std::begin(m_events) + count);
 
 #if DEBUG_GLOBAL > 0
-    for (auto& receiver : receivers)
+    for (auto& receiver : m_receivers)
         receiver->m_lock = false;
 #endif
 }
 
-void EventEmitter::emit(std::string eventType) const
+void EventEmitter::addEvent(std::unique_ptr<Event> event)
 {
-    Event event{std::move(eventType)};
-    emit(event);
+    // std::cerr << "[DEBUG] Adding event: " << event->type << std::endl;
+    m_events.emplace_back(std::move(event));
+}
+
+void EventEmitter::addEvent(std::string eventType)
+{
+    auto event = std::make_unique<Event>();
+    event->type = std::move(eventType);
+    addEvent(std::move(event));
 }
 
 //-------------------------------//
@@ -64,7 +76,7 @@ void EventEmitter::emit(std::string eventType) const
 
 void EventEmitter::addReceiver(EventReceiver* receiver)
 {
-    m_receivers.push_back(receiver);
+    m_receivers.emplace_back(receiver);
 }
 
 void EventEmitter::removeReceiver(EventReceiver* receiver)

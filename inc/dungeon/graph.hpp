@@ -35,7 +35,7 @@ namespace dungeon
 
     public:
 
-        //! Constructor.
+        //! Default constructor.
         Graph() = default;
 
         //! Default destructor.
@@ -47,12 +47,6 @@ namespace dungeon
 
         //! The data of the dungeon to be read from.
         void useData(Data& data);
-
-        //! Reconstruct size of graph (and update it) to the current data.
-        void reconstructFromData();
-
-        //! Updates the graph to the current data.
-        void updateFromData();
 
         //! @}
 
@@ -81,6 +75,12 @@ namespace dungeon
 
         //! Refresh the treasure dosh of a node.
         void refreshTreasure(NodeData& node);
+
+        //! Reconstruct size of graph (and update it) to the current data.
+        void reconstructFromData();
+
+        //! Updates the graph to the current data.
+        void updateFromData();
 
         //! @}
 

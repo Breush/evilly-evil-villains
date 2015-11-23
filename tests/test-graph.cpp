@@ -17,7 +17,6 @@ int main(void)
     // Loading and initializing
     data.load(L"../tests/data/test-graph/");
     graph.useData(data);
-    graph.reconstructFromData();
 
     const auto& node = *graph.startingNodes()[0];
     const auto& nodeData = *toNodeData(&node);
