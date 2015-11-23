@@ -70,6 +70,7 @@ void AnimatedSprite::select(const std::wstring& animationName)
 
     // Note: If the animation does not exists, it is just ignored
     m_spriterEntity->setCurrentAnimation(toString(animationName));
+    m_currentAnimationName = animationName;
 
     restart();
 }
