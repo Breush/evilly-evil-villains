@@ -391,14 +391,13 @@ void Inter::showEditTreasureDialog(const sf::Vector2u& coords)
     m_treasureEditSpinBox.set(treasureDosh);
     m_treasureEditSpinBox.setLocalPosition(tileLocalPosition(coords));
     m_treasureEditSpinBox.setMaxLimit(treasureDosh + m_data->villain().doshWallet.value());
-    m_treasureEditSpinBox.setOnValueChangeCallback([this, &coords, &treasureDosh] (uint32 oldValue, uint32 newValue) {
-        // Sub or add
+    m_treasureEditSpinBox.setOnValueChangeCallback([this, coords, &treasureDosh] (uint32 oldValue, uint32 newValue) {
+        // Sub or add (doshWallet will send an event)
         if (newValue >= oldValue) m_data->villain().doshWallet.sub(newValue - oldValue);
         else m_data->villain().doshWallet.add(oldValue - newValue);
         treasureDosh = newValue;
 
         // Global dosh changed
-        emitter()->emit("dosh_changed");
         m_data->emit("facility_changed", coords);
     });
 }
@@ -599,7 +598,7 @@ void Inter::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID, 
     returnif (trapData.exists() && trapData.type() == trapID);
 
     if (!free) {
-        // FIXME We're only using the dosh in the cost...
+        // FIXME We're only using the dosh (no soul, no fame) in the cost...
         const auto& trapInfo = trapsDB().get(trapID);
         const uint createCost = trapInfo.baseCost.dosh;
         const uint removeGain = gainRemoveRoomTrap(coords);
