@@ -149,11 +149,12 @@ void Inter::receive(const context::Event& event)
     if (event.type == "room_destroyed") {
         refreshTile(coords);
         refreshNeighboursLayers(coords);
-        refreshMonsters();
     }
     else if (event.type == "room_constructed") {
         refreshTile(coords);
         refreshNeighboursLayers(coords);
+    }
+    else if (event.type == "dungeon_graph_changed") {
         refreshMonsters();
     }
     else if (event.type == "facility_changed") {
