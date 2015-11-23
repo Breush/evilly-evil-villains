@@ -19,6 +19,14 @@ Data::Data()
     , m_timeGameHour(1.f)
 {
     m_fameWallet.setEvents(this, "fame_changed");
+
+    // Reload the monsters cages
+    m_monstersInfo.reserve.reserve(m_monstersDB.get().size());
+    for (const auto& monsterPair : m_monstersDB.get()) {
+        MonsterCageInfo monsterCageInfo;
+        monsterCageInfo.type = monsterPair.first;
+        m_monstersInfo.reserve.emplace_back(std::move(monsterCageInfo));
+    }
 }
 
 //-------------------//
@@ -119,7 +127,6 @@ void Data::loadDungeon(const std::wstring& file)
 {
     m_floors.clear();
     m_monstersInfo.active.clear();
-    m_monstersInfo.reserve.clear();
 
     // Parsing XML
     pugi::xml_document doc;
@@ -152,15 +159,20 @@ void Data::loadDungeon(const std::wstring& file)
     const auto& monstersNode = dungeon.child(L"monsters");
     const auto& reserveNode = monstersNode.child(L"reserve");
     for (const auto& monsterCageNode : reserveNode.children(L"monsterCage")) {
-        MonsterCageInfo monsterCageInfo;
-        monsterCageInfo.type = monsterCageNode.attribute(L"type").as_string();
+        std::wstring monsterID = monsterCageNode.attribute(L"type").as_string();
+        auto found = std::find_if(m_monstersInfo.reserve, [&monsterID] (const MonsterCageInfo& monsterCageInfo) { return monsterCageInfo.type == monsterID; });
+
+        // Ignore unknown monsterID
+        if (found == std::end(m_monstersInfo.reserve))
+            continue;
+
+        auto& monsterCageInfo = *found;
         monsterCageInfo.countdown = monsterCageNode.attribute(L"countdown").as_uint();
         for (const auto& monsterNode : monsterCageNode.children(L"monster")) {
             MonsterInfo monsterInfo;
             monsterInfo.data.loadXML(monsterNode);
             monsterCageInfo.monsters.emplace_back(std::move(monsterInfo));
         }
-        m_monstersInfo.reserve.emplace_back(std::move(monsterCageInfo));
     }
 
     // Active
