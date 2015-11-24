@@ -154,6 +154,10 @@ void Inter::receive(const context::Event& event)
         refreshTile(coords);
         refreshNeighboursLayers(coords);
     }
+    else if (event.type == "room_changed") {
+        refreshTile(coords);
+        refreshNeighboursLayers(coords);
+    }
     else if (event.type == "dungeon_graph_changed") {
         refreshMonsters();
     }
@@ -475,6 +479,11 @@ void Inter::destroyRoom(const sf::Vector2u& coords, bool loss)
     }
 
     m_data->destroyRoom(coords);
+}
+
+bool Inter::pushRoom(const sf::Vector2u& coords, Direction direction)
+{
+    return m_data->pushRoom(coords, direction);
 }
 
 void Inter::adaptFloorsCount(int relativeValue)

@@ -15,11 +15,16 @@ local stealing = false  -- Whether the Pick-pock is already stealing
 ---------------
 -- Callbacks --
 
+-- Called on new data
+function _reinit()
+    eev_initEmptyDataU32("dosh", 0)
+end
+
 -- Called once on object creation
 function _register()
     eev_addCallback("cbHeroClose", "hero", "distance < 0.3")
-
-    eev_initEmptyDataU32("dosh", 0)
+    
+    eev_setDepth(60)
 end
 
 -- Whenever a hero comes too close

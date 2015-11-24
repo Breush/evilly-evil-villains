@@ -44,7 +44,9 @@ void ElementData::saveXML(pugi::xml_node& node) const
         auto child = node.append_child(attribute.first.c_str());
         child.append_attribute(L"type") = type.c_str();
 
-        if (type == L"int8")       child.append_attribute(L"value") = static_cast<int>(attribute.second.as_int8());
+        if (type == L"bool")       child.append_attribute(L"value") = attribute.second.as_bool();
+
+        else if (type == L"int8")  child.append_attribute(L"value") = static_cast<int>(attribute.second.as_int8());
         else if (type == L"int16") child.append_attribute(L"value") = static_cast<int>(attribute.second.as_int16());
         else if (type == L"int32") child.append_attribute(L"value") = static_cast<int>(attribute.second.as_int32());
         else if (type == L"int64") child.append_attribute(L"value") = static_cast<long long>(attribute.second.as_int64());

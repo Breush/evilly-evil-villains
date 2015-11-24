@@ -12,6 +12,10 @@
 ---------------
 -- Callbacks --
 
+-- Called on new data
+function _reinit()
+end
+
 -- Called once on object creation
 function _register()
     -- In front of wall (100) and floor (75)

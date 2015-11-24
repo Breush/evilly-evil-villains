@@ -57,13 +57,22 @@ namespace dungeon
         //----- Element data
 
         //! Set the eData with the value specified.
+        void lua_setDataBool(const std::string& s, const bool value);
+
+        //! Get the correponding eData.
+        bool lua_getDataBool(const std::string& s) const;
+
+        //! Init the eData with the value if empty.
+        bool lua_initEmptyDataBool(const std::string& s, const bool value);
+
+        //! Set the eData with the value specified.
         void lua_setDataU32(const std::string& s, const uint32 value);
 
         //! Get the correponding eData.
         uint32 lua_getDataU32(const std::string& s) const;
 
         //! Init the eData with the value if empty.
-        void lua_initEmptyDataU32(const std::string& s, const uint32 value);
+        uint32 lua_initEmptyDataU32(const std::string& s, const uint32 value);
 
         //! Set the eData with the value specified.
         void lua_setDataFloat(const std::string& s, const lua_Number value);
@@ -72,7 +81,7 @@ namespace dungeon
         lua_Number lua_getDataFloat(const std::string& s) const;
 
         //! Init the eData with the value if empty.
-        void lua_initEmptyDataFloat(const std::string& s, const lua_Number value);
+        lua_Number lua_initEmptyDataFloat(const std::string& s, const lua_Number value);
 
         //----- Element data from UID
 
@@ -106,6 +115,9 @@ namespace dungeon
 
         //! Explode the corresponding room.
         void lua_dungeonExplodeRoom(const uint x, const uint y);
+
+        //! Tries to push rooms in the direction from the one specified.
+        bool lua_dungeonPushRoom(const uint x, const uint y, const std::string& sDirection);
 
         //----- Debug
 

@@ -12,7 +12,7 @@ struct Vec2
 
 union MetaData_t
 {
-    uint64 raw;
+    bool as_bool;
 
     int8 as_int8;
     int16 as_int16;
@@ -38,6 +38,8 @@ public:
     inline MetaData_t& setType(std::wstring type) { m_type = std::move(type); return m_data; }
     inline const std::wstring& type() const { return m_type; }
 
+    inline bool& operator=(const bool& rhs)  { return m_data.as_bool = rhs; }
+
     inline int8& operator= (const int8& rhs)  { return m_data.as_int8  = rhs; }
     inline int16& operator=(const int16& rhs) { return m_data.as_int16 = rhs; }
     inline int32& operator=(const int32& rhs) { return m_data.as_int32 = rhs; }
@@ -53,6 +55,8 @@ public:
 
     inline Vec2<uint8>& operator=(const Vec2<uint8>& rhs) { return m_data.as_v2uint8 = rhs; }
     inline Vec2<float>& operator=(const Vec2<float>& rhs) { return m_data.as_v2float = rhs; }
+
+    inline const bool&  as_bool()  const { return m_data.as_bool; }
 
     inline const int8&  as_int8()  const { return m_data.as_int8; }
     inline const int16& as_int16() const { return m_data.as_int16; }
@@ -70,6 +74,8 @@ public:
     inline const Vec2<uint8>& as_v2uint8() const { return m_data.as_v2uint8; }
     inline const Vec2<float>& as_v2float() const { return m_data.as_v2float; }
 
+    inline bool&  as_bool() { return m_data.as_bool; }
+
     inline int8&  as_int8()  { return m_data.as_int8; }
     inline int16& as_int16() { return m_data.as_int16; }
     inline int32& as_int32() { return m_data.as_int32; }
@@ -85,6 +91,8 @@ public:
 
     inline Vec2<uint8>& as_v2uint8() { return m_data.as_v2uint8; }
     inline Vec2<float>& as_v2float() { return m_data.as_v2float; }
+
+    inline void init_bool(int8  value) { m_type = L"bool";  m_data.as_bool = value; }
 
     inline void init_int8 (int8  value) { m_type = L"int8";  m_data.as_int8  = value; }
     inline void init_int16(int16 value) { m_type = L"int16"; m_data.as_int16 = value; }

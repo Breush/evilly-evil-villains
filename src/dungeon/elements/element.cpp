@@ -33,12 +33,15 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
     m_lua["eev_setDepth"] = [this] (const lua_Number inDepth) { lua_setDepth(inDepth); };
     m_lua["eev_setVisible"] = [this] (bool isVisible) { lua_setVisible(isVisible); };
 
+    m_lua["eev_setDataBool"] = [this] (const std::string& s, const bool value) { lua_setDataBool(s, value); };
+    m_lua["eev_getDataBool"] = [this] (const std::string& s) { return lua_getDataBool(s); };
+    m_lua["eev_initEmptyDataBool"] = [this] (const std::string& s, const bool value) { return lua_initEmptyDataBool(s, value); };
     m_lua["eev_setDataU32"] = [this] (const std::string& s, const uint32 value) { lua_setDataU32(s, value); };
     m_lua["eev_getDataU32"] = [this] (const std::string& s) { return lua_getDataU32(s); };
-    m_lua["eev_initEmptyDataU32"] = [this] (const std::string& s, const uint32 value) { lua_initEmptyDataU32(s, value); };
+    m_lua["eev_initEmptyDataU32"] = [this] (const std::string& s, const uint32 value) { return lua_initEmptyDataU32(s, value); };
     m_lua["eev_setDataFloat"] = [this] (const std::string& s, const lua_Number value) { lua_setDataFloat(s, value); };
     m_lua["eev_getDataFloat"] = [this] (const std::string& s) { return lua_getDataFloat(s); };
-    m_lua["eev_initEmptyDataFloat"] = [this] (const std::string& s, const lua_Number value) { lua_initEmptyDataFloat(s, value); };
+    m_lua["eev_initEmptyDataFloat"] = [this] (const std::string& s, const lua_Number value) { return lua_initEmptyDataFloat(s, value); };
 
     m_lua["eev_setUIDDataU32"] = [this] (const uint32 UID, const std::string& s, const uint32 value) { lua_setUIDDataU32(UID, s, value); };
     m_lua["eev_getUIDDataU32"] = [this] (const uint32 UID, const std::string& s) { return lua_getUIDDataU32(UID, s); };
@@ -51,6 +54,7 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
     m_lua["eev_borrowVillainDosh"] = [this] (const uint32 amount) { return lua_borrowVillainDosh(amount); };
 
     m_lua["eev_dungeonExplodeRoom"] = [this] (const uint x, const uint y) { lua_dungeonExplodeRoom(x, y); };
+    m_lua["eev_dungeonPushRoom"] = [this] (const uint x, const uint y, const std::string& direction) { return lua_dungeonPushRoom(x, y, direction); };
 
     m_lua["eev_log"] = [this] (const std::string& str) { lua_log(str); };
 }
@@ -75,6 +79,27 @@ void Element::lua_setVisible(bool isVisible)
 
 //----- Element data
 
+void Element::lua_setDataBool(const std::string& s, const bool value)
+{
+    auto ws = toWString(s);
+    m_edata->operator[](ws).as_bool() = value;
+}
+
+bool Element::lua_getDataBool(const std::string& s) const
+{
+    auto ws = toWString(s);
+    return m_edata->operator[](ws).as_bool();
+}
+
+bool Element::lua_initEmptyDataBool(const std::string& s, const bool value)
+{
+    auto ws = toWString(s);
+    if (!m_edata->exists(ws))
+        m_edata->operator[](ws).init_bool(value);
+    return m_edata->operator[](ws).as_bool();
+}
+
+
 void Element::lua_setDataU32(const std::string& s, const uint32 value)
 {
     auto ws = toWString(s);
@@ -87,11 +112,12 @@ uint32 Element::lua_getDataU32(const std::string& s) const
     return m_edata->operator[](ws).as_uint32();
 }
 
-void Element::lua_initEmptyDataU32(const std::string& s, const uint32 value)
+uint32 Element::lua_initEmptyDataU32(const std::string& s, const uint32 value)
 {
     auto ws = toWString(s);
     if (!m_edata->exists(ws))
         m_edata->operator[](ws).init_uint32(value);
+    return m_edata->operator[](ws).as_uint32();
 }
 
 void Element::lua_setDataFloat(const std::string& s, const lua_Number value)
@@ -106,11 +132,12 @@ lua_Number Element::lua_getDataFloat(const std::string& s) const
     return static_cast<lua_Number>(m_edata->operator[](ws).as_float());
 }
 
-void Element::lua_initEmptyDataFloat(const std::string& s, const lua_Number value)
+lua_Number Element::lua_initEmptyDataFloat(const std::string& s, const lua_Number value)
 {
     auto ws = toWString(s);
     if (!m_edata->exists(ws))
         m_edata->operator[](ws).init_float(static_cast<float>(value));
+    return m_edata->operator[](ws).as_float();
 }
 
 //----- Element data from UID
@@ -177,7 +204,12 @@ uint32 Element::lua_borrowVillainDosh(const uint32 amount)
 void Element::lua_dungeonExplodeRoom(const uint x, const uint y)
 {
     // Note: It's an explosion, we do not get any money back
-    m_inter.destroyRoom(sf::Vector2u(x, y), true);
+    m_inter.destroyRoom(sf::Vector2u{x, y}, true);
+}
+
+bool Element::lua_dungeonPushRoom(const uint x, const uint y, const std::string& sDirection)
+{
+    return m_inter.pushRoom(sf::Vector2u{x, y}, direction(sDirection));
 }
 
 //----- Debug

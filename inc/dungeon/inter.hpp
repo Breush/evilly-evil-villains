@@ -114,6 +114,13 @@ namespace dungeon
         //! Remove the room at coords if any, without gaining money if loss is enabled.
         void destroyRoom(const sf::Vector2u& coords, bool loss = false);
 
+        //! Find the room below the specified relative position and push it.
+        bool pushRoom(const sf::Vector2f& relPos, Direction direction) { return pushRoom(tileFromLocalPosition(relPos), direction); }
+
+        //! Push the room at coords if any.
+        //! @return true on success or if no room and false if action is impossible.
+        bool pushRoom(const sf::Vector2u& coords, Direction direction);
+
         //! Change the number of floors.
         void adaptFloorsCount(int relativeValue);
 

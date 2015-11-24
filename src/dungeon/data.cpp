@@ -382,7 +382,7 @@ bool Data::isRoomConstructed(const sf::Vector2u& coords) const
     return (room(coords).state != RoomState::EMPTY);
 }
 
-void Data::constructRoom(const sf::Vector2u& coords, bool hard)
+void Data::constructRoom(const sf::Vector2u& coords)
 {
     returnif (coords.x >= m_floorsCount);
     returnif (coords.y >= m_roomsByFloor);
@@ -426,6 +426,46 @@ void Data::destroyRoom(const sf::Vector2u& coords)
 
     addEvent("room_destroyed", coords);
     EventEmitter::addEvent("dungeon_changed");
+}
+
+bool Data::pushRoom(const sf::Vector2u& coords, Direction direction)
+{
+    returnif (coords.x >= m_floorsCount)  false;
+    returnif (coords.y >= m_roomsByFloor) false;
+
+    // We look for the first void in the direction,
+    // if none, it's impossible to move the rooms
+    auto voidCoords = coords;
+    while (isRoomConstructed(voidCoords))
+        voidCoords = roomNeighbourCoords(voidCoords, direction);
+
+    returnif (voidCoords.x >= m_floorsCount)  false;
+    returnif (voidCoords.y >= m_roomsByFloor) false;
+
+    // We're all right, let's move the rooms
+    auto antiDirection = oppositeDirection(direction);
+    sf::Vector2u movingCoords = voidCoords;
+    while (movingCoords != coords) {
+        addEvent("room_changed", movingCoords);
+
+        // Swapping the rooms
+        auto& roomTo = room(movingCoords);
+        movingCoords = roomNeighbourCoords(movingCoords, antiDirection);
+        auto& roomFrom = room(movingCoords);
+        roomTo = std::move(roomFrom);
+
+        // FIXME Move the moving elements too! (Monsters/Heroes)
+        // FIXME Update links (implicit and explicit)
+    }
+
+    // Set the start room to void
+    auto& startRoom = room(coords);
+    startRoom.state = RoomState::EMPTY;
+    addEvent("room_changed", coords);
+
+    EventEmitter::addEvent("dungeon_changed");
+
+    return true;
 }
 
 sf::Vector2u Data::roomNeighbourCoords(const sf::Vector2u& coords, Direction direction)

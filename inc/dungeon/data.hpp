@@ -50,6 +50,27 @@ namespace dungeon
         SOUTH = 0x01,
     };
 
+    // TODO Make a wstring version of this for dungeon/commandable.cpp
+    inline Direction direction(const std::string& sDirection)
+    {
+        if (sDirection == "north")      return Direction::NORTH;
+        else if (sDirection == "south") return Direction::SOUTH;
+        else if (sDirection == "east")  return Direction::EAST;
+        else if (sDirection == "west")  return Direction::WEST;
+        else throw std::runtime_error("Unknown direction key " + sDirection);
+    }
+
+    inline Direction oppositeDirection(Direction direction)
+    {
+        switch (direction) {
+        case EAST:  return WEST;
+        case WEST:  return EAST;
+        case NORTH: return SOUTH;
+        case SOUTH: return NORTH;
+        default:    return NORTH;
+        }
+    }
+
     //! A one-way access between two rooms.
 
     struct Tunnel
@@ -191,12 +212,14 @@ namespace dungeon
         bool isRoomConstructed(const sf::Vector2u& coords) const;
 
         //! Construct a room.
-        //! @param hard Do not check for money.
-        void constructRoom(const sf::Vector2u& coords, bool hard = false);
+        void constructRoom(const sf::Vector2u& coords);
 
         //! Destroy a room.
-        //! @param hard Destroy monsters inside.
         void destroyRoom(const sf::Vector2u& coords);
+
+        //! Push the room at coords if any.
+        //! @return true on success or if no room and false if action is impossible.
+        bool pushRoom(const sf::Vector2u& coords, Direction direction);
 
         //! Return the coordinates of the next room from the specified one.
         /*!
