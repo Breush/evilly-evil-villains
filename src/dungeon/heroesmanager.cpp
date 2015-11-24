@@ -50,15 +50,16 @@ void HeroesManager::update(const sf::Time& dt)
 void HeroesManager::receive(const context::Event& event)
 {
     const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
+    sf::Vector2u coords = {devent.room.x, devent.room.y};
 
     if (devent.type == "room_destroyed") {
         // Remove all heroes in that room
         for (auto& heroInfo : m_heroesInfo) {
-            auto& hero = heroInfo.hero;
-            if (hero == nullptr) continue;
+            sf::Vector2u heroCoords;
+            heroCoords.x = static_cast<uint>(heroInfo.data[L"rx"].as_float());
+            heroCoords.y = static_cast<uint>(heroInfo.data[L"ry"].as_float());
 
-            sf::Vector2u coords = {devent.room.x, devent.room.y};
-            if (m_inter->tileFromLocalPosition(hero->localPosition()) == coords)
+            if (heroCoords == coords)
                 heroInfo.status = HeroStatus::TO_BE_REMOVED;
         }
     }
