@@ -11,7 +11,9 @@ Facility::Facility(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dunge
     , m_coords(coords)
     , m_facilityInfo(facilityInfo)
 {
-    const auto& facilityID = facilityInfo.data.type();
+    m_edata = &m_facilityInfo.data;
+
+    const auto& facilityID = m_edata->type();
     auto sFacilityID = toString(facilityID);
 
     // Initializing
