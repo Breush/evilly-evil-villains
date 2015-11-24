@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r4.1">
     <folder id="0" name="res/tex/dungeon/monsters/sand_spirit/left">
-        <file id="0" name="res/tex/dungeon/monsters/sand_spirit/left/body_back.png" width="94" height="108" pivot_x="0.308511" pivot_y="0.953704"/>
-        <file id="1" name="res/tex/dungeon/monsters/sand_spirit/left/body_front.png" width="171" height="228" pivot_x="0.196203" pivot_y="0.924171"/>
-        <file id="2" name="res/tex/dungeon/monsters/sand_spirit/left/body_sand.png" width="160" height="286" pivot_x="0.225" pivot_y="0.891608"/>
-        <file id="3" name="res/tex/dungeon/monsters/sand_spirit/left/head.png" width="53" height="83" pivot_x="0.566038" pivot_y="0.192771"/>
-        <file id="4" name="res/tex/dungeon/monsters/sand_spirit/left/larm_back.png" width="96" height="122" pivot_x="0.135417" pivot_y="0.909836"/>
-        <file id="5" name="res/tex/dungeon/monsters/sand_spirit/left/larm_front.png" width="115" height="167" pivot_x="0.147826" pivot_y="0.916168"/>
-        <file id="6" name="res/tex/dungeon/monsters/sand_spirit/left/larm_sand.png" width="111" height="192" pivot_x="0.101852" pivot_y="0.919786"/>
-        <file id="7" name="res/tex/dungeon/monsters/sand_spirit/left/rarm_back.png" width="53" height="98" pivot_x="0.377358" pivot_y="0.928571"/>
-        <file id="8" name="res/tex/dungeon/monsters/sand_spirit/left/rarm_front.png" width="55" height="151" pivot_x="0.345455" pivot_y="0.927152"/>
-        <file id="9" name="res/tex/dungeon/monsters/sand_spirit/left/rarm_sand.png" width="70" height="187" pivot_x="0.205882" pivot_y="0.928962"/>
-        <file id="10" name="res/tex/dungeon/monsters/sand_spirit/left/rub1.png" width="41" height="25" pivot_x="0.195122" pivot_y="0.04"/>
-        <file id="11" name="res/tex/dungeon/monsters/sand_spirit/left/rub2.png" width="91" height="32" pivot_x="0.054945" pivot_y="0.09375"/>
-        <file id="12" name="res/tex/dungeon/monsters/sand_spirit/left/rub3.png" width="122" height="30" pivot_x="0.0491803" pivot_y="0.366667"/>
+        <file id="0" name="res/tex/dungeon/monsters/sand_spirit/left/body_back.png" width="65" height="75" pivot_x="0.308511" pivot_y="0.953704"/>
+        <file id="1" name="res/tex/dungeon/monsters/sand_spirit/left/body_front.png" width="119" height="159" pivot_x="0.196203" pivot_y="0.924171"/>
+        <file id="2" name="res/tex/dungeon/monsters/sand_spirit/left/body_sand.png" width="112" height="200" pivot_x="0.225" pivot_y="0.891608"/>
+        <file id="3" name="res/tex/dungeon/monsters/sand_spirit/left/head.png" width="37" height="58" pivot_x="0.566038" pivot_y="0.192771"/>
+        <file id="4" name="res/tex/dungeon/monsters/sand_spirit/left/larm_back.png" width="67" height="85" pivot_x="0.135417" pivot_y="0.909836"/>
+        <file id="5" name="res/tex/dungeon/monsters/sand_spirit/left/larm_front.png" width="80" height="116" pivot_x="0.147826" pivot_y="0.916168"/>
+        <file id="6" name="res/tex/dungeon/monsters/sand_spirit/left/larm_sand.png" width="77" height="134" pivot_x="0.101852" pivot_y="0.919786"/>
+        <file id="7" name="res/tex/dungeon/monsters/sand_spirit/left/rarm_back.png" width="37" height="68" pivot_x="0.377358" pivot_y="0.928571"/>
+        <file id="8" name="res/tex/dungeon/monsters/sand_spirit/left/rarm_front.png" width="38" height="105" pivot_x="0.345455" pivot_y="0.927152"/>
+        <file id="9" name="res/tex/dungeon/monsters/sand_spirit/left/rarm_sand.png" width="49" height="130" pivot_x="0.205882" pivot_y="0.928962"/>
+        <file id="10" name="res/tex/dungeon/monsters/sand_spirit/left/rub1.png" width="28" height="17" pivot_x="0.195122" pivot_y="0.04"/>
+        <file id="11" name="res/tex/dungeon/monsters/sand_spirit/left/rub2.png" width="63" height="22" pivot_x="0.054945" pivot_y="0.09375"/>
+        <file id="12" name="res/tex/dungeon/monsters/sand_spirit/left/rub3.png" width="85" height="21" pivot_x="0.0491803" pivot_y="0.366667"/>
     </folder>
     <entity id="0" name="sand_spirit">
         <obj_info name="sand_spirit_rarm_back" realname="rarm_back" type="sprite">
@@ -88,6 +88,7 @@
         <obj_info name="sand_spirit_bone_004" realname="bone_004" type="bone" w="22.6946" h="7"/>
         <obj_info name="sand_spirit_bone_005" realname="bone_005" type="bone" w="51.5469" h="7"/>
         <obj_info name="sand_spirit_bone_006" realname="bone_006" type="bone" w="57.3456" h="7"/>
+        <obj_info name="sand_spirit_hitbox" realname="hitbox" type="box" w="98.6928" h="187.582" pivot_x="0" pivot_y="0"/>
         <animation id="0" name="lwalk" length="1000" interval="100">
             <mainline>
                 <key id="0">
@@ -98,19 +99,20 @@
                     <bone_ref id="4" parent="0" timeline="17" key="0"/>
                     <bone_ref id="5" parent="0" timeline="18" key="0"/>
                     <bone_ref id="6" parent="0" timeline="19" key="0"/>
-                    <object_ref id="0" parent="2" name="rarm_back" folder="0" file="7" abs_x="-48.114259" abs_y="77.2429" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
-                    <object_ref id="1" parent="2" name="rarm_sand" folder="0" file="9" abs_x="-48.126025" abs_y="108.026963" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="1" key="0" z_index="1"/>
-                    <object_ref id="2" parent="2" name="rarm_front" folder="0" file="8" abs_x="-49.21431" abs_y="109.242906" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="2" key="0" z_index="2"/>
-                    <object_ref id="3" parent="6" name="rub3" folder="0" file="12" abs_x="-8.214282" abs_y="78.442847" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="3" key="0" z_index="3"/>
-                    <object_ref id="4" parent="5" name="rub2" folder="0" file="11" abs_x="-1.042852" abs_y="121.100001" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="4" key="0" z_index="4"/>
-                    <object_ref id="5" parent="4" name="rub1" folder="0" file="10" abs_x="-11.182254" abs_y="128.338526" abs_angle="356.506695" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="5" key="0" z_index="5"/>
-                    <object_ref id="6" parent="0" name="body_back" folder="0" file="0" abs_x="-32.614319" abs_y="50.742826" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="6" key="0" z_index="6"/>
-                    <object_ref id="7" parent="0" name="body_sand" folder="0" file="2" abs_x="-46.573087" abs_y="129.544127" abs_angle="359.883673" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="7" key="0" z_index="7"/>
-                    <object_ref id="8" parent="0" name="body_front" folder="0" file="1" abs_x="-42.031752" abs_y="124.69362" abs_angle="359.883673" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="8" key="0" z_index="8"/>
-                    <object_ref id="9" parent="1" name="larm_back" folder="0" file="4" abs_x="7.885683" abs_y="84.042866" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="9" key="0" z_index="9"/>
-                    <object_ref id="10" parent="1" name="larm_sand" folder="0" file="6" abs_x="1.880143" abs_y="108.043946" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="10" key="0" z_index="10"/>
-                    <object_ref id="11" parent="1" name="larm_front" folder="0" file="5" abs_x="-7.66074" abs_y="113.649873" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="11" key="0" z_index="11"/>
-                    <object_ref id="12" parent="3" name="head" folder="0" file="3" abs_x="-36.970191" abs_y="179.990187" abs_angle="359.883673" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="12" key="0" z_index="12"/>
+                    <object_ref id="0" parent="2" name="rarm_back" folder="0" file="7" abs_x="-42.076532" abs_y="75.10003" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" parent="2" name="rarm_sand" folder="0" file="9" abs_x="-43.802503" abs_y="103.977797" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="1" key="0" z_index="1"/>
+                    <object_ref id="2" parent="2" name="rarm_front" folder="0" file="8" abs_x="-43.341576" abs_y="105.891897" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="2" key="0" z_index="2"/>
+                    <object_ref id="3" parent="6" name="rub3" folder="0" file="12" abs_x="-6.394611" abs_y="72.74285" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="3" key="0" z_index="3"/>
+                    <object_ref id="4" parent="5" name="rub2" folder="0" file="11" abs_x="0.495608" abs_y="112.037501" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="4" key="0" z_index="4"/>
+                    <object_ref id="5" parent="4" name="rub1" folder="0" file="10" abs_x="-9.118337" abs_y="120.518236" abs_angle="356.506695" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="5" key="0" z_index="5"/>
+                    <object_ref id="6" parent="0" name="body_back" folder="0" file="0" abs_x="-23.667501" abs_y="49.215058" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="6" key="0" z_index="6"/>
+                    <object_ref id="7" parent="0" name="body_sand" folder="0" file="2" abs_x="-35.792035" abs_y="120.200507" abs_angle="359.883673" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="7" key="0" z_index="7"/>
+                    <object_ref id="8" parent="0" name="body_front" folder="0" file="1" abs_x="-31.83984" abs_y="119.440715" abs_angle="359.883673" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="8" key="0" z_index="8"/>
+                    <object_ref id="9" parent="1" name="larm_back" folder="0" file="4" abs_x="11.812775" abs_y="80.706797" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="9" key="0" z_index="9"/>
+                    <object_ref id="10" parent="1" name="larm_sand" folder="0" file="6" abs_x="5.343111" abs_y="103.391534" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="10" key="0" z_index="10"/>
+                    <object_ref id="11" parent="1" name="larm_front" folder="0" file="5" abs_x="-2.48683" abs_y="109.37444" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="11" key="0" z_index="11"/>
+                    <object_ref id="12" parent="3" name="head" folder="0" file="3" abs_x="-27.954574" abs_y="159.791116" abs_angle="359.883673" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="12" key="0" z_index="12"/>
+                    <object_ref id="13" timeline="20" key="0" z_index="13"/>
                 </key>
                 <key id="1" time="300">
                     <bone_ref id="0" timeline="13" key="0"/>
@@ -133,6 +135,7 @@
                     <object_ref id="10" parent="1" timeline="10" key="0" z_index="10"/>
                     <object_ref id="11" parent="1" timeline="11" key="0" z_index="11"/>
                     <object_ref id="12" parent="3" timeline="12" key="0" z_index="12"/>
+                    <object_ref id="13" timeline="20" key="1" z_index="13"/>
                 </key>
                 <key id="2" time="600">
                     <bone_ref id="0" timeline="13" key="0"/>
@@ -155,6 +158,7 @@
                     <object_ref id="10" parent="1" timeline="10" key="0" z_index="10"/>
                     <object_ref id="11" parent="1" timeline="11" key="0" z_index="11"/>
                     <object_ref id="12" parent="3" timeline="12" key="0" z_index="12"/>
+                    <object_ref id="13" timeline="20" key="2" z_index="13"/>
                 </key>
             </mainline>
             <timeline id="0" obj="0" name="rarm_back">
@@ -272,6 +276,17 @@
                     <bone x="62.292126" y="12.909172" angle="89.413935"/>
                 </key>
             </timeline>
+            <timeline id="20" obj="20" name="hitbox" object_type="box">
+                <key id="0" spin="0">
+                    <object x="-38.562092" y="151.633987" pivot_x="0" pivot_y="1" scale_x="1" scale_y="1"/>
+                </key>
+                <key id="1" time="300" spin="0">
+                    <object x="-38.562092" y="151.633987" pivot_x="0" pivot_y="1" scale_x="1" scale_y="1"/>
+                </key>
+                <key id="2" time="600" spin="0">
+                    <object x="-38.562092" y="151.633987" pivot_x="0" pivot_y="1" scale_x="1" scale_y="1"/>
+                </key>
+            </timeline>
         </animation>
         <animation id="1" name="rwalk" length="1000" interval="100">
             <mainline>
@@ -283,19 +298,20 @@
                     <bone_ref id="4" parent="0" timeline="17" key="0"/>
                     <bone_ref id="5" parent="0" timeline="18" key="0"/>
                     <bone_ref id="6" parent="0" timeline="19" key="0"/>
-                    <object_ref id="0" parent="2" name="rarm_back" folder="0" file="7" abs_x="48.114259" abs_y="77.2429" abs_angle="0" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
-                    <object_ref id="1" parent="2" name="rarm_sand" folder="0" file="9" abs_x="48.126025" abs_y="108.026963" abs_angle="0" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="1" key="0" z_index="1"/>
-                    <object_ref id="2" parent="2" name="rarm_front" folder="0" file="8" abs_x="49.21431" abs_y="109.242906" abs_angle="0" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="2" key="0" z_index="2"/>
-                    <object_ref id="3" parent="6" name="rub3" folder="0" file="12" abs_x="8.214282" abs_y="78.442847" abs_angle="0" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="3" key="0" z_index="3"/>
-                    <object_ref id="4" parent="5" name="rub2" folder="0" file="11" abs_x="1.042852" abs_y="121.100001" abs_angle="0" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="4" key="0" z_index="4"/>
-                    <object_ref id="5" parent="4" name="rub1" folder="0" file="10" abs_x="11.182254" abs_y="128.338526" abs_angle="3.493305" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="5" key="0" z_index="5"/>
-                    <object_ref id="6" parent="0" name="body_back" folder="0" file="0" abs_x="32.614319" abs_y="50.742826" abs_angle="0" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="6" key="0" z_index="6"/>
-                    <object_ref id="7" parent="0" name="body_sand" folder="0" file="2" abs_x="46.573087" abs_y="129.544127" abs_angle="0.116327" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="7" key="0" z_index="7"/>
-                    <object_ref id="8" parent="0" name="body_front" folder="0" file="1" abs_x="42.031752" abs_y="124.69362" abs_angle="0.116327" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="8" key="0" z_index="8"/>
-                    <object_ref id="9" parent="1" name="larm_back" folder="0" file="4" abs_x="-7.885683" abs_y="84.042866" abs_angle="0" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="9" key="0" z_index="9"/>
-                    <object_ref id="10" parent="1" name="larm_sand" folder="0" file="6" abs_x="-1.880143" abs_y="108.043946" abs_angle="0" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="10" key="0" z_index="10"/>
-                    <object_ref id="11" parent="1" name="larm_front" folder="0" file="5" abs_x="7.66074" abs_y="113.649873" abs_angle="0" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="11" key="0" z_index="11"/>
-                    <object_ref id="12" parent="3" name="head" folder="0" file="3" abs_x="36.970191" abs_y="179.990187" abs_angle="0.116327" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="12" key="0" z_index="12"/>
+                    <object_ref id="0" parent="2" name="rarm_back" folder="0" file="7" abs_x="42.076532" abs_y="75.10003" abs_angle="0" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" parent="2" name="rarm_sand" folder="0" file="9" abs_x="43.802503" abs_y="103.977797" abs_angle="0" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="1" key="0" z_index="1"/>
+                    <object_ref id="2" parent="2" name="rarm_front" folder="0" file="8" abs_x="43.341576" abs_y="105.891897" abs_angle="0" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="2" key="0" z_index="2"/>
+                    <object_ref id="3" parent="6" name="rub3" folder="0" file="12" abs_x="6.394611" abs_y="72.74285" abs_angle="0" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="3" key="0" z_index="3"/>
+                    <object_ref id="4" parent="5" name="rub2" folder="0" file="11" abs_x="-0.495608" abs_y="112.037501" abs_angle="0" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="4" key="0" z_index="4"/>
+                    <object_ref id="5" parent="4" name="rub1" folder="0" file="10" abs_x="9.118337" abs_y="120.518236" abs_angle="3.493305" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="5" key="0" z_index="5"/>
+                    <object_ref id="6" parent="0" name="body_back" folder="0" file="0" abs_x="23.667501" abs_y="49.215058" abs_angle="0" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="6" key="0" z_index="6"/>
+                    <object_ref id="7" parent="0" name="body_sand" folder="0" file="2" abs_x="35.792035" abs_y="120.200507" abs_angle="0.116327" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="7" key="0" z_index="7"/>
+                    <object_ref id="8" parent="0" name="body_front" folder="0" file="1" abs_x="31.83984" abs_y="119.440715" abs_angle="0.116327" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="8" key="0" z_index="8"/>
+                    <object_ref id="9" parent="1" name="larm_back" folder="0" file="4" abs_x="-11.812775" abs_y="80.706797" abs_angle="0" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="9" key="0" z_index="9"/>
+                    <object_ref id="10" parent="1" name="larm_sand" folder="0" file="6" abs_x="-5.343111" abs_y="103.391534" abs_angle="0" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="10" key="0" z_index="10"/>
+                    <object_ref id="11" parent="1" name="larm_front" folder="0" file="5" abs_x="2.48683" abs_y="109.37444" abs_angle="0" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="11" key="0" z_index="11"/>
+                    <object_ref id="12" parent="3" name="head" folder="0" file="3" abs_x="27.954574" abs_y="159.791116" abs_angle="0.116327" abs_scale_x="-1" abs_scale_y="1" abs_a="1" timeline="12" key="0" z_index="12"/>
+                    <object_ref id="13" timeline="20" key="0" z_index="13"/>
                 </key>
                 <key id="1" time="300">
                     <bone_ref id="0" timeline="13" key="0"/>
@@ -318,6 +334,7 @@
                     <object_ref id="10" parent="1" timeline="10" key="0" z_index="10"/>
                     <object_ref id="11" parent="1" timeline="11" key="0" z_index="11"/>
                     <object_ref id="12" parent="3" timeline="12" key="0" z_index="12"/>
+                    <object_ref id="13" timeline="20" key="1" z_index="13"/>
                 </key>
                 <key id="2" time="600">
                     <bone_ref id="0" timeline="13" key="0"/>
@@ -340,6 +357,7 @@
                     <object_ref id="10" parent="1" timeline="10" key="0" z_index="10"/>
                     <object_ref id="11" parent="1" timeline="11" key="0" z_index="11"/>
                     <object_ref id="12" parent="3" timeline="12" key="0" z_index="12"/>
+                    <object_ref id="13" timeline="20" key="2" z_index="13"/>
                 </key>
             </mainline>
             <timeline id="0" obj="0" name="rarm_back">
@@ -455,6 +473,17 @@
                 </key>
                 <key id="2" time="600" spin="-1">
                     <bone x="62.292126" y="12.909172" angle="89.413935"/>
+                </key>
+            </timeline>
+            <timeline id="20" obj="20" name="hitbox" object_type="box">
+                <key id="0" spin="0">
+                    <object x="-58.823529" y="147.058824" pivot_x="0" pivot_y="1" scale_x="1" scale_y="1"/>
+                </key>
+                <key id="1" time="300" spin="0">
+                    <object x="-58.823529" y="147.058824" pivot_x="0" pivot_y="1" scale_x="1" scale_y="1"/>
+                </key>
+                <key id="2" time="600" spin="0">
+                    <object x="-58.823529" y="147.058824" pivot_x="0" pivot_y="1" scale_x="1" scale_y="1"/>
                 </key>
             </timeline>
         </animation>

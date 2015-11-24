@@ -62,6 +62,10 @@ namespace SpriterEngine
         angle.spinDirection = newSpin;
     }
 
+    void BoxObjectInfo::setTiltColor(const sf::Color& color)
+    {
+    }
+
     void BoxObjectInfo::setObjectToLinear(UniversalObjectInterface *bObject, real t, UniversalObjectInterface *resultObject)
     {
         resultObject->setAngle(angle.angleLinear(bObject->getAngle(), t));

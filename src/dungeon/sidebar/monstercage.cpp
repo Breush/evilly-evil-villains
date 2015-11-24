@@ -283,12 +283,12 @@ MonsterGrabbable::MonsterGrabbable(scene::GrabbableSpawner& spawner, const std::
         init = true;
 
         b2BodyDef bodyDef;
-        bodyDef.position = {0.f, 1.f};
+        bodyDef.position = {0.f, 0.f};
         bodyDef.type = b2_dynamicBody;
         s_body = s_world.CreateBody(&bodyDef);
 
         b2PolygonShape shape;
-        shape.SetAsBox(1.f, 2.f);
+        shape.SetAsBox(0.5f, 1.f, {0.5f, 0.f}, 0.f);
 
         b2FixtureDef fixtureDef;
         fixtureDef.density = 1.f;
@@ -296,8 +296,8 @@ MonsterGrabbable::MonsterGrabbable(scene::GrabbableSpawner& spawner, const std::
         s_body->CreateFixture(&fixtureDef);
 
         b2CircleShape weightShape;
-        weightShape.m_p = {0.f, 1.f};
-        weightShape.m_radius = 1.f;
+        weightShape.m_p = {0.f, 2.f};
+        weightShape.m_radius = 0.25f;
 
         b2FixtureDef fixtureWeightDef;
         fixtureWeightDef.density = 300.f;
@@ -312,8 +312,11 @@ MonsterGrabbable::MonsterGrabbable(scene::GrabbableSpawner& spawner, const std::
         b2RevoluteJointDef revoluteJointDef;
         revoluteJointDef.bodyA = s_body;
         revoluteJointDef.bodyB = s_staticBody;
-        revoluteJointDef.localAnchorA = {0.f, -1.f};
+        revoluteJointDef.localAnchorA = {0.f, 0.f};
         revoluteJointDef.localAnchorB = {0.f, 0.f};
+        revoluteJointDef.enableMotor = true;
+        revoluteJointDef.motorSpeed = 0.f;
+        revoluteJointDef.maxMotorTorque = 8.f;
 
         s_world.CreateJoint(&revoluteJointDef);
     }

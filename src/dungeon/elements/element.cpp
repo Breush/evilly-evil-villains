@@ -7,9 +7,6 @@
 #include "tools/tools.hpp"
 #include "tools/string.hpp"
 
-// TODO This is cheating for eev_setUIDDataU32
-#include "dungeon/elements/hero.hpp"
-
 using namespace dungeon;
 using namespace std::placeholders;
 
@@ -18,6 +15,8 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
     , m_inter(inter)
     , m_lua(true)
 {
+    // TODO Animated sprites have no hitbox...
+    // No enabling detection wouldn't change anything.
     setDetectable(false);
 
     // Initializing
