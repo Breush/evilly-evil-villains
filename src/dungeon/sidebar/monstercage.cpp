@@ -8,6 +8,8 @@
 #include "tools/vector.hpp"
 #include "tools/random.hpp"
 
+#include <Box2D/Box2D.hpp>
+
 using namespace dungeon;
 
 MonsterCage::MonsterCage(std::wstring monsterID, Inter& inter, Data& data)
@@ -127,8 +129,12 @@ void MonsterCage::handleMouseLeft()
 //---------------------//
 //----- Grabbable -----//
 
-void MonsterCage::grabbableMoved(Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f&)
+void MonsterCage::grabbableMoved(Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos)
 {
+    auto offset = m_grabbablePosition - nuiPos;
+    reinterpret_cast<MonsterGrabbable*>(graph()->grabbable())->movedOffset(offset);
+    m_grabbablePosition = nuiPos;
+
     if (entity != &m_inter) {
         m_inter.resetPrediction();
         return;
@@ -152,6 +158,9 @@ std::unique_ptr<scene::Grabbable> MonsterCage::spawnGrabbable()
 {
     // Grab if puppets available
     returnif (m_puppets.size() == 0u) nullptr;
+
+    // FIXME This is cheating... we need spawn position.
+    m_grabbablePosition = sf::v2f(sf::Mouse::getPosition());
 
     // And hide one puppet, as it is being grabbed
     m_puppets.back()->setVisible(false);
@@ -255,6 +264,13 @@ void MonsterCage::refreshReservePuppetsParameters(const uint monstersUpdateStart
 //----------------------------//
 //----- MonsterGrabbable -----//
 
+// FIXME To be refatored inside MonsterGrabbable or in Grabbable itself
+b2World s_world({0.f, -9.81f});
+b2Body* s_staticBody;
+b2Body* s_body;
+
+bool init = false;
+
 MonsterGrabbable::MonsterGrabbable(scene::GrabbableSpawner& spawner, const std::wstring& monsterID, const sf::Vector2f& scale)
     : baseClass(spawner)
 {
@@ -262,4 +278,63 @@ MonsterGrabbable::MonsterGrabbable(scene::GrabbableSpawner& spawner, const std::
     m_sprite.load(toString(L"dungeon/monsters/" + monsterID));
     m_sprite.setLocalScale(scale);
     m_sprite.select(L"grabbed");
+
+    if (!init) {
+        init = true;
+
+        b2BodyDef bodyDef;
+        bodyDef.position = {0.f, 1.f};
+        bodyDef.type = b2_dynamicBody;
+        s_body = s_world.CreateBody(&bodyDef);
+
+        b2PolygonShape shape;
+        shape.SetAsBox(1.f, 2.f);
+
+        b2FixtureDef fixtureDef;
+        fixtureDef.density = 1.f;
+        fixtureDef.shape = &shape;
+        s_body->CreateFixture(&fixtureDef);
+
+        b2CircleShape weightShape;
+        weightShape.m_p = {0.f, 1.f};
+        weightShape.m_radius = 1.f;
+
+        b2FixtureDef fixtureWeightDef;
+        fixtureWeightDef.density = 300.f;
+        fixtureWeightDef.shape = &weightShape;
+        s_body->CreateFixture(&fixtureWeightDef);
+
+        b2BodyDef staticBodyDef;
+        staticBodyDef.position = {0.f, 0.f};
+        staticBodyDef.type = b2_staticBody;
+        s_staticBody = s_world.CreateBody(&staticBodyDef);
+
+        b2RevoluteJointDef revoluteJointDef;
+        revoluteJointDef.bodyA = s_body;
+        revoluteJointDef.bodyB = s_staticBody;
+        revoluteJointDef.localAnchorA = {0.f, -1.f};
+        revoluteJointDef.localAnchorB = {0.f, 0.f};
+
+        s_world.CreateJoint(&revoluteJointDef);
+    }
+
+    s_body->SetTransform({0.f, 0.f}, 0.f);
+    s_body->SetAngularVelocity(0.f);
+}
+
+void MonsterGrabbable::updateRoutine(const sf::Time& dt)
+{
+    s_world.Step(dt.asSeconds(), 8, 3);
+
+    auto rotation = s_body->GetAngle() * 180.f / b2_pi;
+    m_sprite.setLocalRotation(rotation);
+}
+
+void MonsterGrabbable::movedOffset(const sf::Vector2f& dir)
+{
+    float bodyAngle = s_body->GetAngle();
+    float desiredAngle = std::atan2(dir.x, dir.y);
+    float length = std::sqrt(dir.x * dir.x + dir.y * dir.y);
+
+    s_body->ApplyAngularImpulse((desiredAngle - bodyAngle) * length, true);
 }

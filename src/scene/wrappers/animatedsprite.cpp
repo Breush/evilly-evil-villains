@@ -28,7 +28,7 @@ void AnimatedSprite::drawInternal(sf::RenderTarget& target, sf::RenderStates sta
 
     m_spriterEntity->setPosition({getPosition().x, getPosition().y});
     m_spriterEntity->setScale({scale().x, scale().y});
-    m_spriterEntity->setAngle(getRotation());
+    m_spriterEntity->setAngle(getRotation() * M_PI / 180.f);
 
     // Forcing immediate refresh to current parameters
     m_spriterEntity->reprocessCurrentTime();

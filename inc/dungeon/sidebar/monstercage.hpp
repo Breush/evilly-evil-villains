@@ -103,6 +103,8 @@ namespace dungeon
         Data& m_data;               //!< Reference to the whole data.
         std::wstring m_monsterID;   //!< The monster to be managed in this cage.
 
+        sf::Vector2f m_grabbablePosition;   //!< Retains the last mouse position knowned.
+
         // Reserve
         sf::RectangleShape m_reserveBackground;                 //!< Background for the reserve part.
         std::vector<std::unique_ptr<ai::DumbPuppet>> m_puppets; //!< Puppet that moves from left to right.
@@ -140,6 +142,19 @@ namespace dungeon
         ~MonsterGrabbable() = default;
 
         std::string _name() const final { return "dungeon::MonsterGrabbable"; }
+
+        //! Called whenever the grabbable moved.
+        void movedOffset(const sf::Vector2f& dir);
+
+    protected:
+
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        void updateRoutine(const sf::Time& dt) final;
+
+        //! @}
 
     private:
 

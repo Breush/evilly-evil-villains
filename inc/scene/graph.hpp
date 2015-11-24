@@ -85,6 +85,9 @@ namespace scene
         //! Remove the currently grabbed object.
         void removeGrabbable();
 
+        //! Access to the grabbed object.
+        Grabbable* grabbable() { return m_grabbable.get(); }
+
         //! @}
 
     protected:

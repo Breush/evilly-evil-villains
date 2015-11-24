@@ -5,8 +5,5 @@
 // Fix some missing include in library
 #include <cstring>
 
-namespace b2
-{
-    #include "Box2D.h"
-}
+#include "Box2D.h"
 
