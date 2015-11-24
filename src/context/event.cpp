@@ -13,8 +13,10 @@ using namespace context;
 EventReceiver::~EventReceiver()
 {
 #if DEBUG_GLOBAL > 0
-    if (m_lock)
-        throw std::logic_error("Receiver is locked, you can not destroy it, please delay that somehow.");
+    if (m_lock) {
+        std::cerr << "ERROR: Receiver is locked, you can not destroy it, please delay that somehow.";
+        std::cerr << " If an exception follows, this message might not be relevant." << std::endl;
+    }
 #endif
 
     setEmitter(nullptr);
@@ -29,6 +31,11 @@ void EventReceiver::setEmitter(EventEmitter* emitter)
 
     if (m_emitter != nullptr)
         m_emitter->addReceiver(this);
+
+#if DEBUG_GLOBAL > 0
+    if (m_emitter == nullptr)
+        m_lock = false;
+#endif
 }
 
 //-------------------------//
