@@ -79,7 +79,7 @@ void AnimatedSprite::forward(const sf::Time& offset)
 {
     returnif (m_spriterEntity == nullptr);
 
-    auto timeElapsed = offset.asMilliseconds();
+    auto timeElapsed = offset.asSeconds() * 1000.f;
     m_spriterEntity->setTimeElapsed(timeElapsed);
 }
 
