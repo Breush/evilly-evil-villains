@@ -406,23 +406,7 @@ void Data::constructRoom(const sf::Vector2u& coords)
 
     // Do construct
     room(coords).state = RoomState::CONSTRUCTED;
-
-    // We check all implicit links getting to this room
-    // and create those which need to be there
-    for (const auto& floor : m_floors)
-    for (const auto& room : floor.rooms)
-    for (const auto& facility : room.facilities) {
-        const auto& facilityInfo = *facility.common;
-        for (const auto& link : facilityInfo.links) {
-            if (link.style == Link::Style::IMPLICIT) {
-                sf::Vector2u linkCoords;
-                linkCoords.x = room.coords.x + link.x;
-                linkCoords.y = room.coords.y + link.y;
-                if (linkCoords == coords)
-                    createRoomFacility(coords, link.id, true);
-            }
-        }
-    }
+    createRoomFacilitiesLinks(coords);
 
     addEvent("room_constructed", coords);
     EventEmitter::addEvent("dungeon_changed");
@@ -431,6 +415,9 @@ void Data::constructRoom(const sf::Vector2u& coords)
 void Data::destroyRoom(const sf::Vector2u& coords)
 {
     returnif (!isRoomConstructed(coords));
+
+    // Note: removeRoomFacilities() manage to remove also
+    // implicit links if any silently, and that's all right.
 
     // Clear elements
     removeRoomFacilities(coords);
@@ -460,23 +447,34 @@ bool Data::pushRoom(const sf::Vector2u& coords, Direction direction)
 
     // We're all right, let's move the rooms
     auto antiDirection = oppositeDirection(direction);
-    sf::Vector2u movingCoords = voidCoords;
-    while (movingCoords != coords) {
-        addEvent("room_changed", movingCoords);
+    sf::Vector2u targetCoords = voidCoords;
+    while (targetCoords != coords) {
+        // Remove previous links if any (and explicit ones are broken)
+        auto movingCoords = roomNeighbourCoords(targetCoords, antiDirection);
+        removeRoomFacilitiesLinks(movingCoords);
 
         // Swapping the rooms
-        auto& roomTo = room(movingCoords);
-        movingCoords = roomNeighbourCoords(movingCoords, antiDirection);
         auto& roomFrom = room(movingCoords);
+        auto& roomTo = room(targetCoords);
         roomTo = std::move(roomFrom);
 
-        // FIXME Move the moving elements too! (Monsters/Heroes)
-        // FIXME Update links (implicit and explicit)
+        // Reset coords
+        roomFrom.coords = movingCoords;
+        roomTo.coords = targetCoords;
+
+        // Create the new links
+        createRoomFacilitiesLinks(targetCoords);
+        addEvent("room_changed", targetCoords);
+
+        // Note: It is not our job to move the moving elements (monsters/heroes)
+        // We let inter and the managers handle that
+        targetCoords = movingCoords;
     }
 
     // Set the start room to void
     auto& startRoom = room(coords);
     startRoom.state = RoomState::EMPTY;
+    removeRoomFacilitiesLinks(coords);
     addEvent("room_changed", coords);
 
     EventEmitter::addEvent("dungeon_changed");
@@ -578,18 +576,8 @@ bool Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     facility.isLink = isLink;
     facility.common = &facilitiesDB().get(facilityID);
 
+    createFacilityLinks(coords, facility);
     addEvent("facility_changed", coords);
-
-    // Create all the implicit links too
-    const auto& facilityInfo = facilitiesDB().get(facilityID);
-    for (const auto& link : facilityInfo.links) {
-        if (link.style == Link::Style::IMPLICIT) {
-            sf::Vector2u linkCoords;
-            linkCoords.x = coords.x + link.x;
-            linkCoords.y = coords.y + link.y;
-            createRoomFacility(linkCoords, link.id, true);
-        }
-    }
 
     return true;
 }
@@ -614,6 +602,49 @@ void Data::setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& f
     addEvent("facility_changed", coords);
 }
 
+void Data::createFacilityLinks(const sf::Vector2u& coords, const FacilityInfo& facility)
+{
+    const auto& facilityData = facilitiesDB().get(facility.data.type());
+    for (const auto& link : facilityData.links) {
+        // Create implicit links, ignore the explicit ones
+        if (link.style == Link::Style::IMPLICIT) {
+            sf::Vector2u linkCoords(coords.x + link.x, coords.y + link.y);
+            createRoomFacility(linkCoords, link.id, true);
+        }
+    }
+}
+
+void Data::createRoomFacilitiesLinks(const sf::Vector2u& coords)
+{
+    returnif (!isRoomConstructed(coords));
+    const auto& selectedRoom = room(coords);
+
+    // For each facility of the room, create its links
+    for (const auto& facility : selectedRoom.facilities)
+        createFacilityLinks(coords, facility);
+
+    // Note: The following code block seems a bit fat,
+    // but beside keeping up-to-date a list of facilities
+    // pointing to this room, there is no choice.
+    // Implementing that selectedRoom.incomingLinks list would be awesome!
+    // But be careful with the pushRoom() function moving memory as it wants.
+
+    // We check all implicit links getting to this room
+    // and create those which need to be there
+    for (const auto& floor : m_floors)
+    for (const auto& room : floor.rooms)
+    for (const auto& facility : room.facilities) {
+        const auto& facilityInfo = *facility.common;
+        for (const auto& link : facilityInfo.links) {
+            if (link.style == Link::Style::IMPLICIT) {
+                sf::Vector2u linkCoords(room.coords.x + link.x, room.coords.y + link.y);
+                if (linkCoords == coords)
+                    createRoomFacility(coords, link.id, true);
+            }
+        }
+    }
+}
+
 void Data::removeRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID)
 {
     auto pFacilityInfo = getFacility(coords, facilityID);
@@ -621,6 +652,39 @@ void Data::removeRoomFacilityLink(const sf::Vector2u& coords, const std::wstring
 
     pFacilityInfo->link = {-1u, -1u};
     addEvent("facility_changed", coords);
+}
+
+void Data::removeFacilityLinks(const sf::Vector2u& coords, FacilityInfo& facility)
+{
+    const auto& facilityData = facilitiesDB().get(facility.data.type());
+    for (const auto& link : facilityData.links) {
+        // Remove all implicit links
+        if (link.style == Link::Style::IMPLICIT) {
+            sf::Vector2u linkCoords(coords.x + link.x, coords.y + link.y);
+            removeRoomFacility(linkCoords, link.id);
+        }
+
+        // Remove all explicit links of a change
+        else if (link.style == Link::Style::EXPLICIT && (facility.link.x != -1u && facility.link.y != -1u)) {
+            removeRoomFacilityLink(facility.link, link.id);
+        }
+    }
+
+    // Also break this facility explicit link if any
+    facility.link = {-1u, -1u};
+}
+
+void Data::removeRoomFacilitiesLinks(const sf::Vector2u& coords)
+{
+    returnif (!isRoomConstructed(coords));
+    auto& selectedRoom = room(coords);
+
+    // For each facility of the room, delete its links
+    for (auto& facility : selectedRoom.facilities)
+        removeFacilityLinks(coords, facility);
+
+    // Also remove all implicit links in this room
+    std::erase_if(selectedRoom.facilities, [] (const FacilityInfo& facility) { return facility.isLink; });
 }
 
 void Data::setRoomFacilityBarrier(const sf::Vector2u& coords, const std::wstring& facilityID, bool activated)
@@ -641,23 +705,7 @@ void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     auto pFacility = std::find_if(roomInfo.facilities, [facilityID] (const FacilityInfo& facilityInfo) { return facilityInfo.data.type() == facilityID; });
     returnif (pFacility == std::end(roomInfo.facilities));
 
-    // Check and update links
-    const auto& facilityInfo = facilitiesDB().get(facilityID);
-    for (const auto& link : facilityInfo.links) {
-        // Remove all implicit links
-        if (link.style == Link::Style::IMPLICIT) {
-            sf::Vector2u linkCoords(coords.x + link.x, coords.y + link.y);
-            // Note: Whatever happens, there can be only one of this ID
-            // in that same room, so there no issue deleting it without more checking
-            removeRoomFacility(linkCoords, link.id);
-        }
-
-        // Remove all explicit links of a change
-        else if (link.style == Link::Style::EXPLICIT && (pFacility->link.x != -1u && pFacility->link.y != -1u)) {
-            removeRoomFacilityLink(pFacility->link, link.id);
-        }
-    }
-
+    removeFacilityLinks(coords, *pFacility);
     roomInfo.facilities.erase(pFacility);
 
     addEvent("facility_changed", coords);

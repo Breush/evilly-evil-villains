@@ -265,6 +265,24 @@ namespace dungeon
         //! Remove the room facility link if any.
         void removeRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID);
 
+        //! Remove all links (leaving/entering) of a facility.
+        void removeFacilityLinks(const sf::Vector2u& coords, FacilityInfo& facility);
+
+        //! Remove all links (leaving/entering) of all facilities in the room.
+        void removeRoomFacilitiesLinks(const sf::Vector2u& coords);
+
+        //! Create all links (leaving/entering) of a facility.
+        void createFacilityLinks(const sf::Vector2u& coords, const FacilityInfo& facility);
+
+        //! Create all links (leaving/entering) of all facilities in the room.
+        /*! One can except the following code
+         *  removeRoomFacilitiesLinks(coords);
+         *  createRoomFacilitiesLinks(coords);
+         *  to delete only explicit links.
+         *  Because implicit links in/out will be destroyed and recreated.
+         */
+        void createRoomFacilitiesLinks(const sf::Vector2u& coords);
+
         //! Set the specified room facility's barrier.
         void setRoomFacilityBarrier(const sf::Vector2u& coords, const std::wstring& facilityID, bool activated);
 
