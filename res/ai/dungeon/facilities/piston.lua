@@ -35,14 +35,11 @@ function cbHeroClose()
         on = true
         eev_setDataBool("on", on)
 
-        -- TODO Specify the correct coordinates!
         local x = eev_getCurrentRoomX()
         local y = eev_getCurrentRoomY()
         local success = eev_dungeonPushRoom(x + 1, y, "north", 500)
         if success then
-            eev_log("PISTON Pushing successful")
-        else
-            eev_log("PISTON Pushing failed")
+            eev_selectAnimation("extend")
         end
     end
 end
