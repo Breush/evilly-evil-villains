@@ -6,6 +6,7 @@
 #include "tools/vector.hpp"
 #include "tools/string.hpp"
 #include "tools/filesystem.hpp"
+#include "tools/tools.hpp"
 
 #include <SFML/Window/Event.hpp>
 #include <string>
@@ -153,6 +154,8 @@ void Application::run()
 
 void Application::setPaused(bool paused)
 {
+    returnif (s_paused == paused);
+
     s_paused = paused;
     s_context.sounds.setPaused(s_paused);
     s_context.musics.setPaused(s_paused);
