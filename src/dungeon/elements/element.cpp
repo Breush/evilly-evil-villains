@@ -54,7 +54,8 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
     m_lua["eev_borrowVillainDosh"] = [this] (const uint32 amount) { return lua_borrowVillainDosh(amount); };
 
     m_lua["eev_dungeonExplodeRoom"] = [this] (const uint x, const uint y) { lua_dungeonExplodeRoom(x, y); };
-    m_lua["eev_dungeonPushRoom"] = [this] (const uint x, const uint y, const std::string& direction) { return lua_dungeonPushRoom(x, y, direction); };
+    m_lua["eev_dungeonPushRoom"] = [this] (const uint x, const uint y, const std::string& direction, const uint animationDelay)
+        { return lua_dungeonPushRoom(x, y, direction, animationDelay); };
 
     m_lua["eev_log"] = [this] (const std::string& str) { lua_log(str); };
 }
@@ -207,9 +208,9 @@ void Element::lua_dungeonExplodeRoom(const uint x, const uint y)
     m_inter.destroyRoom(sf::Vector2u{x, y}, true);
 }
 
-bool Element::lua_dungeonPushRoom(const uint x, const uint y, const std::string& sDirection)
+bool Element::lua_dungeonPushRoom(const uint x, const uint y, const std::string& sDirection, const uint animationDelay)
 {
-    return m_inter.pushRoom(sf::Vector2u{x, y}, direction(sDirection));
+    return m_inter.pushRoom(sf::Vector2u{x, y}, direction(sDirection), animationDelay);
 }
 
 //----- Debug

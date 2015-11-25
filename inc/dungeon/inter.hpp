@@ -26,6 +26,19 @@ namespace dungeon
     {
         using baseClass = scene::Entity;
 
+        //! A basic void callback.
+        using Callback = std::function<void()>;
+
+        //! A moving room.
+        struct MovingRoom
+        {
+            float animationTime = 0.f;              //!< Current time of animation (milliseconds).
+            float animationDelay = 0.f;             //!< Total time of animation (milliseconds).
+            sf::Vector2u coords;                    //!< Which room to move (starting coords).
+            sf::Vector2f velocity;                  //!< At which speed and direction to go.
+            Callback onFinishCallback = nullptr;    //!< A function to execute when this animation finished.
+        };
+
     public:
 
         //! Constructor.
@@ -115,11 +128,12 @@ namespace dungeon
         void destroyRoom(const sf::Vector2u& coords, bool loss = false);
 
         //! Find the room below the specified relative position and push it.
-        bool pushRoom(const sf::Vector2f& relPos, Direction direction) { return pushRoom(tileFromLocalPosition(relPos), direction); }
+        inline bool pushRoom(const sf::Vector2f& relPos, Direction direction, uint animationTime)
+            { return pushRoom(tileFromLocalPosition(relPos), direction, animationTime); }
 
         //! Push the room at coords if any.
         //! @return true on success or if no room and false if action is impossible.
-        bool pushRoom(const sf::Vector2u& coords, Direction direction);
+        bool pushRoom(const sf::Vector2u& coords, Direction direction, uint animationDelay = 0u);
 
         //! Change the number of floors.
         void adaptFloorsCount(int relativeValue);
@@ -390,9 +404,15 @@ namespace dungeon
         sfe::Grid m_grid;                                   //!< The internal grid for overlay display.
         std::vector<std::unique_ptr<Monster>> m_monsters;   //!< All monsters.
         std::unordered_map<sf::Vector2u, Tile> m_tiles;     //!< All tiles constituing the dungeon.
-        std::array<sf::RectangleShape, 2u> m_outerWalls;    //!< Sprites for left/right outer walls.
         sf::Vector2f m_roomScale = {1.f, 1.f};              //!< The room scale.
         sf::Vector2f m_refRoomSize;                         //!< The original room size.
+
+        // Decorum
+        std::array<sf::RectangleShape, 2u> m_outerWalls;    //!< Sprites for left/right outer walls.
+        sf::RectangleShape m_voidBackground;                //!< The void background of each room.
+
+        // Animation
+        std::vector<MovingRoom> m_movingRooms;      //!< The rooms to animate.
 
         // Prediction
         std::wstring m_predictionID;                //!< The current ID of the element overlay.

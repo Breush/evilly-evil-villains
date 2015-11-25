@@ -39,6 +39,7 @@ Inter::Inter(nui::ContextMenu& contextMenu)
     m_predictionLink.setDepth(-15.f);
 
     // Outer walls
+    addPart(&m_voidBackground);
     addPart(&m_outerWalls[0]);
     addPart(&m_outerWalls[1]);
 }
@@ -46,6 +47,7 @@ Inter::Inter(nui::ContextMenu& contextMenu)
 void Inter::init()
 {
     // Outer walls
+    m_voidBackground.setTexture(&Application::context().textures.get("dungeon/inter/void_room"));
     m_outerWalls[0].setTexture(&Application::context().textures.get("dungeon/inter/outer_wall_west"));
     m_outerWalls[1].setTexture(&Application::context().textures.get("dungeon/inter/outer_wall_east"));
 
@@ -56,8 +58,27 @@ void Inter::init()
 //-------------------//
 //----- Routine -----//
 
-void Inter::updateRoutine(const sf::Time&)
+void Inter::updateRoutine(const sf::Time& dt)
 {
+    returnif (m_movingRooms.empty());
+
+    auto timeElapsed = dt.asSeconds();
+
+    // Animate the rooms
+    for (auto& movingRoom : m_movingRooms) {
+        movingRoom.animationTime += timeElapsed;
+        auto adaptedTimeElapsed = timeElapsed;
+        if (movingRoom.animationTime >= movingRoom.animationDelay) {
+            adaptedTimeElapsed -= (movingRoom.animationTime - movingRoom.animationDelay);
+            if (movingRoom.onFinishCallback != nullptr) movingRoom.onFinishCallback();
+        }
+
+        for (auto& layer : m_tiles[movingRoom.coords].layers)
+            layer->localMove(movingRoom.velocity * adaptedTimeElapsed);
+    }
+
+    // Remove all the rooms which finished their animation
+    std::erase_if(m_movingRooms, [] (const MovingRoom& movingRoom) { return movingRoom.animationTime >= movingRoom.animationDelay; });
 }
 
 void Inter::onSizeChanges()
@@ -251,7 +272,7 @@ sf::Vector2f Inter::relTileFromLocalPosition(const sf::Vector2f& pos) const
 
 void Inter::addLayer(const sf::Vector2u& coords, const std::string& textureID, float depth)
 {
-    auto& tile = m_tiles.at(coords);
+    auto& tile = m_tiles[coords];
 
     auto layer = std::make_unique<scene::RectangleShape>();
     layer->setTexture(textureID);
@@ -481,9 +502,46 @@ void Inter::destroyRoom(const sf::Vector2u& coords, bool loss)
     m_data->destroyRoom(coords);
 }
 
-bool Inter::pushRoom(const sf::Vector2u& coords, Direction direction)
+bool Inter::pushRoom(const sf::Vector2u& coords, Direction direction, uint animationDelay)
 {
-    return m_data->pushRoom(coords, direction);
+    const auto& floorsCount = m_data->floorsCount();
+    const auto& roomsByFloor = m_data->roomsByFloor();
+
+    returnif (coords.x >= floorsCount)  false;
+    returnif (coords.y >= roomsByFloor) false;
+
+    // We look for the first void in the direction,
+    // if none, it's impossible to move the rooms
+    auto voidCoords = coords;
+    while (m_data->isRoomConstructed(voidCoords))
+        voidCoords = m_data->roomNeighbourCoords(voidCoords, direction);
+
+    returnif (voidCoords.x >= floorsCount)  false;
+    returnif (voidCoords.y >= roomsByFloor) false;
+    returnif (coords == voidCoords) true;
+
+    // All right, let's register the rooms to animate
+    auto movingCoords = coords;
+    float animationDelayS = animationDelay / 1000.f;
+    while (movingCoords != voidCoords) {
+        auto targetCoords = m_data->roomNeighbourCoords(movingCoords, direction);
+        auto startPosition = tileLocalPosition(movingCoords);
+        auto targetPosition = tileLocalPosition(targetCoords);
+        auto velocity = (targetPosition - startPosition) / animationDelayS;
+
+        MovingRoom movingRoom;
+        movingRoom.animationDelay = animationDelayS;
+        movingRoom.coords = movingCoords;
+        movingRoom.velocity = velocity;
+        m_movingRooms.emplace_back(std::move(movingRoom));
+
+        movingCoords = targetCoords;
+    }
+
+    // Inform data on the change when moving is over
+    m_movingRooms.back().onFinishCallback = [this, coords, direction] { m_data->pushRoom(coords, direction); };
+
+    return true;
 }
 
 void Inter::adaptFloorsCount(int relativeValue)
@@ -774,6 +832,8 @@ void Inter::refreshTileDoshLabel(const sf::Vector2u& coords)
 
 void Inter::refreshTileLayers(const sf::Vector2u& coords)
 {
+    // TODO Do not refresh is locked because of moving
+
     returnif (coords.x >= m_data->floorsCount());
     returnif (coords.y >= m_data->roomsByFloor());
 
@@ -794,14 +854,12 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
     // Room is not constructed
     if (state == Data::RoomState::EMPTY)
     {
-        addLayer(coords, "dungeon/inter/void_room");
-
         if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, WEST)))
-            addLayer(coords, "dungeon/inter/void_west_transition");
+            addLayer(coords, "dungeon/inter/void_west_transition", 150.f);
         if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, SOUTH)))
-            addLayer(coords, "dungeon/inter/void_south_transition");
+            addLayer(coords, "dungeon/inter/void_south_transition", 150.f);
         if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, EAST)))
-            addLayer(coords, "dungeon/inter/void_east_transition");
+            addLayer(coords, "dungeon/inter/void_east_transition", 150.f);
 
         return;
     }
@@ -861,6 +919,12 @@ void Inter::refreshTileTraps(const sf::Vector2u& coords)
 void Inter::refreshOuterWalls()
 {
     const auto& roomSize = Application::context().textures.get("dungeon/inter/inner_wall").getSize();
+
+    // Void rooms behind
+    const auto& voidTextureSize = Application::context().textures.get("dungeon/inter/void_room").getSize();
+    sf::IntRect voidRect(0, 0, voidTextureSize.x * m_grid.columns(), voidTextureSize.y * m_grid.rows());
+    m_voidBackground.setSize(size());
+    m_voidBackground.setTextureRect(voidRect);
 
     // West wall
     const auto& westTextureSize = Application::context().textures.get("dungeon/inter/outer_wall_west").getSize();

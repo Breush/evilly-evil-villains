@@ -169,21 +169,21 @@ void GameDungeonDesign::updateLoading(const sf::Time& dt)
     LOAD(16u, Application::context().textures.get("dungeon/sidebar/tab/monsters/cage").setRepeated(true));
     LOAD(17u, Application::context().textures.get("dungeon/inter/outer_wall_west").setRepeated(true));
     LOAD(18u, Application::context().textures.get("dungeon/inter/outer_wall_east").setRepeated(true));
+    LOAD(19u, Application::context().textures.get("dungeon/inter/void_room").setRepeated(true));
 
     // Inits
-    LOAD(19u, m_dungeonInter.init());
-    LOAD(20u, m_dungeonSidebar.init());
+    LOAD(20u, m_dungeonInter.init());
+    LOAD(21u, m_dungeonSidebar.init());
 
     // Dungeon inter
-    LOAD(21u, m_dungeonInter.useData(m_dungeonData));
-    LOAD(22u, m_dungeonInter.setRoomWidth(128.f));
+    LOAD(22u, m_dungeonInter.useData(m_dungeonData));
+    LOAD(23u, m_dungeonInter.setRoomWidth(128.f));
 
     // Dungeon sidebar
-    LOAD(23u, m_dungeonSidebar.useData(m_dungeonData));
-    LOAD(24u, m_dungeonSidebar.setMinimapLayer(scene().layer("DUNGEON")));
+    LOAD(24u, m_dungeonSidebar.useData(m_dungeonData));
+    LOAD(25u, m_dungeonSidebar.setMinimapLayer(scene().layer("DUNGEON")));
 
     // -----
-    LOAD(25u, (void)0);
     LOAD(26u, (void)0);
 
     // Decorum

@@ -89,6 +89,22 @@ namespace scene
 
         //! @}
 
+        //-----------------//
+        //! @name Position
+        //! @{
+
+        //! Set the local position property.
+        void setLocalPosition(const sf::Vector2f& inLocalPosition);
+
+        //! Set the position relative to the size of the parent.
+        //! Expects inRelativePosition coordinates to be between 0.f and 1.f.
+        void setRelativePosition(const sf::Vector2f& inRelativePosition);
+
+        //! Move the local position.
+        inline void localMove(const sf::Vector2f& offset) { setLocalPosition(localPosition() + offset); }
+
+        //! @}
+
         //-----------------------------//
         //! @name Setters and delayers
         //! @{
@@ -101,9 +117,6 @@ namespace scene
 
         //! Set the size property.
         void setSize(const sf::Vector2f& inSize);
-
-        //! Set the local position property.
-        void setLocalPosition(const sf::Vector2f& inLocalPosition);
 
         //! Whether the entity is centered.
         //! This function overwrites the relativeOrigin property.
@@ -121,10 +134,6 @@ namespace scene
 
         //! Set the shader applied to the whole entity.
         void setShader(const std::string& shaderID);
-
-        //! Set the position relative to the size of the parent.
-        //! Expects inRelativePosition coordinates to be between 0.f and 1.f.
-        void setRelativePosition(const sf::Vector2f& inRelativePosition);
 
         //! Returns true if the global clipping is activated.
         inline bool globalClipping() const { return m_globalClipping; }

@@ -117,7 +117,7 @@ namespace dungeon
         void lua_dungeonExplodeRoom(const uint x, const uint y);
 
         //! Tries to push rooms in the direction from the one specified.
-        bool lua_dungeonPushRoom(const uint x, const uint y, const std::string& sDirection);
+        bool lua_dungeonPushRoom(const uint x, const uint y, const std::string& sDirection, const uint animationDelay);
 
         //----- Debug
 
