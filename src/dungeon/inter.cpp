@@ -73,8 +73,17 @@ void Inter::updateRoutine(const sf::Time& dt)
             if (movingRoom.onFinishCallback != nullptr) movingRoom.onFinishCallback();
         }
 
-        for (auto& layer : m_tiles[movingRoom.coords].layers)
-            layer->localMove(movingRoom.velocity * adaptedTimeElapsed);
+        auto& tile = m_tiles[movingRoom.coords];
+        const auto offset = movingRoom.velocity * adaptedTimeElapsed;
+
+        for (auto& layer : tile.layers)             layer->localMove(offset);
+        for (auto& facility : tile.facilities)      facility->localMove(offset);
+        if (tile.trap != nullptr)                   tile.trap->localMove(offset);
+        if (tile.totalDoshLabel != nullptr)         tile.totalDoshLabel->localMove(offset);
+        if (tile.harvestableDoshLabel != nullptr)   tile.harvestableDoshLabel->localMove(offset);
+
+        // TODO Move entities (monsters/heroes)
+        // -> How to inform heroes manager?
     }
 
     // Remove all the rooms which finished their animation
