@@ -15,7 +15,19 @@ local on    -- Always equal to its data homonym
 
 -- Called on new data
 function _reinit()
+    -- No blocked yet, block it then
+    if not eev_hasBarrier() then
+        eev_setBarrier(true)
+    end
+
+    -- Is the piston extended?
     on = eev_initEmptyDataBool("on", false)
+    if on then
+        eev_selectAnimation("extend")
+        eev_forwardAnimation(0.5)
+    else
+        eev_selectAnimation("idle")
+    end
 end
 
 -- Called once on object creation
@@ -23,7 +35,7 @@ function _register()
     -- FIXME This is clearly a temporary thingy,
     -- the activate state should be controlled by mouse and mechanism's signals
     -- and not that kind of callback
-    eev_addCallback("cbHeroClose", "hero", "distance < 0.3")
+    eev_addCallback("cbHeroClose", "hero", "distance < 1.1")
 
     -- In front of almost everything
     eev_setDepth(10)

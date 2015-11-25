@@ -219,6 +219,7 @@ void Data::loadDungeon(const std::wstring& file)
                 auto& facilityInfo = room.facilities.back();
                 facilityInfo.data.loadXML(facilityNode);
                 facilityInfo.isLink = facilityNode.attribute(L"isLink").as_bool();
+                facilityInfo.barrier = facilityNode.attribute(L"barrier").as_bool();
                 facilityInfo.common = &facilitiesDB().get(facilityInfo.data.type());
                 facilityInfo.treasure = facilityNode.attribute(L"treasure").as_uint(-1u);
                 facilityInfo.link.x = facilityNode.attribute(L"linkX").as_uint(-1u);
@@ -315,6 +316,7 @@ void Data::saveDungeon(const std::wstring& file)
             for (const auto& facility : room.facilities) {
                 auto facilityNode = roomNode.append_child(L"facility");
                 if (facility.isLink) facilityNode.append_attribute(L"isLink") = true;
+                if (facility.barrier) facilityNode.append_attribute(L"barrier") = true;
                 if (facility.treasure != -1u) facilityNode.append_attribute(L"treasure") = facility.treasure;
                 if (facility.link.x != -1u) facilityNode.append_attribute(L"linkX") = facility.link.x;
                 if (facility.link.y != -1u) facilityNode.append_attribute(L"linkY") = facility.link.y;
@@ -380,6 +382,20 @@ bool Data::isRoomConstructed(const sf::Vector2u& coords) const
     returnif (coords.x >= m_floorsCount) false;
     returnif (coords.y >= m_roomsByFloor) false;
     return (room(coords).state != RoomState::EMPTY);
+}
+
+bool Data::isRoomWalkable(const sf::Vector2u &coords) const
+{
+    returnif (coords.x >= m_floorsCount) false;
+    returnif (coords.y >= m_roomsByFloor) false;
+    const auto& selectedRoom = room(coords);
+    returnif (selectedRoom.state == RoomState::EMPTY) false;
+
+    // Check that there is no barrier in this room
+    for (const auto& facility : selectedRoom.facilities)
+        returnif (facility.barrier) false;
+
+    return true;
 }
 
 void Data::constructRoom(const sf::Vector2u& coords)
@@ -591,30 +607,30 @@ bool Data::createRoomFacilityLinked(const sf::Vector2u& coords, const std::wstri
 
 void Data::setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords)
 {
-    returnif (!isRoomConstructed(coords));
+    auto pFacilityInfo = getFacility(coords, facilityID);
+    returnif (pFacilityInfo == nullptr);
 
-    auto& roomInfo = room(coords);
-    for (auto& facilityInfo : roomInfo.facilities) {
-        if (facilityInfo.data.type() == facilityID) {
-            facilityInfo.link = linkCoords;
-            addEvent("facility_changed", coords);
-            return;
-        }
-    }
+    pFacilityInfo->link = linkCoords;
+    addEvent("facility_changed", coords);
 }
 
 void Data::removeRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID)
 {
-    returnif (!isRoomConstructed(coords));
+    auto pFacilityInfo = getFacility(coords, facilityID);
+    returnif (pFacilityInfo == nullptr);
 
-    auto& roomInfo = room(coords);
-    for (auto& facilityInfo : roomInfo.facilities) {
-        if (facilityInfo.data.type() == facilityID) {
-            facilityInfo.link = {-1u, -1u};
-            addEvent("facility_changed", coords);
-            return;
-        }
-    }
+    pFacilityInfo->link = {-1u, -1u};
+    addEvent("facility_changed", coords);
+}
+
+void Data::setRoomFacilityBarrier(const sf::Vector2u& coords, const std::wstring& facilityID, bool activated)
+{
+    auto pFacilityInfo = getFacility(coords, facilityID);
+    returnif (pFacilityInfo == nullptr);
+
+    pFacilityInfo->barrier = activated;
+    addEvent("facility_changed", coords);
+    addEvent("dungeon_changed", coords);
 }
 
 void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID)

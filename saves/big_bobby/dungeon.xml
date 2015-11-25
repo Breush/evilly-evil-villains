@@ -5,7 +5,11 @@
 	<floor pos="0">
 		<room pos="0" state="constructed" />
 		<room pos="1" state="constructed" />
-		<room pos="2" state="constructed" />
+		<room pos="2" state="constructed">
+			<facility type="piston" barrier="true">
+				<on type="bool" value="true" />
+			</facility>
+		</room>
 		<room pos="3" state="constructed" />
 		<room pos="4" state="constructed" />
 		<room pos="5" state="void" />

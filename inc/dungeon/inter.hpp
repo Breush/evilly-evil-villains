@@ -171,6 +171,9 @@ namespace dungeon
         //! Set the room facility link to specific coordinates.
         void setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords);
 
+        //! Set the specified room facility's barrier.
+        void setRoomFacilityBarrier(const sf::Vector2u& coords, const std::wstring& facilityID, bool activated);
+
         //! Find the room below the specified relative position and remove all the facilities in it if any.
         inline void removeRoomFacilities(const sf::Vector2f& relPos) { removeRoomFacilities(tileFromLocalPosition(relPos)); }
 

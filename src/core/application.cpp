@@ -79,10 +79,6 @@ void cleanExtraFiles()
 Application::Application()
     : m_initialState(StateID::SPLASHSCREEN)
 {
-#if DEBUG_GLOBAL > 0
-    cleanExtraFiles();
-#endif
-
     // Context
     s_context.windowInfo.title = "Evilly Evil Villains";
     refreshFromConfig();
@@ -96,14 +92,21 @@ Application::Application()
     preloadAnimations();
     loadStates();
 
+    // Full refresh on start
+    refreshWindow();
+    refreshNUI();
+
     // All is ready, go for it
     m_stateStack.pushState(m_initialState);
     s_visualDebug.init();
     m_cursor.init();
 
-    // Full refresh on start
-    refreshWindow();
-    refreshNUI();
+#if DEBUG_GLOBAL > 0
+    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+        mdebug_core_1("Cleaning saved files from last session. Disable this by pressing LControl during application start.");
+        cleanExtraFiles();
+    }
+#endif
 }
 
 void Application::run()

@@ -73,6 +73,14 @@ namespace dungeon
         //! Remove all tunnels.
         void lua_removeTunnels();
 
+        //----- Barrieres
+
+        //! Checks if a barrier exists.
+        bool lua_hasBarrier() const;
+
+        //! Set the barrier state.
+        void lua_setBarrier(bool activated);
+
         //! @}
 
     private:

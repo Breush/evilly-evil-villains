@@ -92,7 +92,7 @@ public:
     inline Vec2<uint8>& as_v2uint8() { return m_data.as_v2uint8; }
     inline Vec2<float>& as_v2float() { return m_data.as_v2float; }
 
-    inline void init_bool(int8  value) { m_type = L"bool";  m_data.as_bool = value; }
+    inline void init_bool(bool value) { m_type = L"bool";  m_data.as_bool = value; }
 
     inline void init_int8 (int8  value) { m_type = L"int8";  m_data.as_int8  = value; }
     inline void init_int16(int16 value) { m_type = L"int16"; m_data.as_int16 = value; }

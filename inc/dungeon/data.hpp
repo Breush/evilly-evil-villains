@@ -87,6 +87,7 @@ namespace dungeon
         std::vector<Tunnel> tunnels;                        //!< All tunnels that allow a way to an other room.
         sf::Vector2u link = {-1u, -1u};                     //!< If these info are absolutely linked to another room.
         bool isLink = false;                                //!< Are these info been created by a link?
+        bool barrier = false;                               //!< Is this block the room for passage?
         uint treasure = -1u;                                //!< The treasure held.
     };
 
@@ -207,9 +208,12 @@ namespace dungeon
         //! Easy getter to access a room (const).
         inline const Room& room(const sf::Vector2u& coords) const { return m_floors[coords.x].rooms[coords.y]; }
 
-        //! Whether a specific is in constructed state.
+        //! Whether a specific room is in constructed state.
         //! If coords are outside of boundaries, returns false.
         bool isRoomConstructed(const sf::Vector2u& coords) const;
+
+        //! Whether a specific room allows walking.
+        bool isRoomWalkable(const sf::Vector2u &coords) const;
 
         //! Construct a room.
         void constructRoom(const sf::Vector2u& coords);
@@ -260,6 +264,9 @@ namespace dungeon
 
         //! Remove the room facility link if any.
         void removeRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID);
+
+        //! Set the specified room facility's barrier.
+        void setRoomFacilityBarrier(const sf::Vector2u& coords, const std::wstring& facilityID, bool activated);
 
         //! Remove the specified facility from the dungeon.
         //! Will emit an event if a change occured.

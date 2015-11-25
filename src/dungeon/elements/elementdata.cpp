@@ -70,7 +70,7 @@ void ElementData::saveXML(pugi::xml_node& node) const
             child.append_attribute(L"y") = v.y;
         }
 
-        else throw std::logic_error("Some MetaData has an invalid type.");
+        else throw std::logic_error("Some MetaData (saveXML) has an invalid type.");
     }
 }
 
@@ -93,7 +93,9 @@ void ElementData::loadXML(const pugi::xml_node& node)
         std::wstring type = child.attribute(L"type").as_string();
         m_attributes[name].setType(type);
 
-        if (type == L"int8")       m_attributes[name] = static_cast<int8>(child.attribute(L"value").as_int());
+        if (type == L"bool")       m_attributes[name] = child.attribute(L"value").as_bool();
+
+        else if (type == L"int8")  m_attributes[name] = static_cast<int8>(child.attribute(L"value").as_int());
         else if (type == L"int16") m_attributes[name] = static_cast<int16>(child.attribute(L"value").as_int());
         else if (type == L"int32") m_attributes[name] = static_cast<int32>(child.attribute(L"value").as_int());
         else if (type == L"int64") m_attributes[name] = static_cast<int64>(child.attribute(L"value").as_llong());
@@ -118,5 +120,6 @@ void ElementData::loadXML(const pugi::xml_node& node)
             v.y = child.attribute(L"y").as_float();
             m_attributes[name] = v;
         }
+        else throw std::logic_error("Some MetaData (loadXML) has an invalid type.");
     }
 }

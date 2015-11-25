@@ -35,6 +35,8 @@ Facility::Facility(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dunge
     m_lua["eev_getLinkRoomY"] = [this] { return lua_getLinkRoomY(); };
     m_lua["eev_hasTunnel"] = [this] { return lua_hasTunnel(); };
     m_lua["eev_addTunnel"] = [this] (const int32 x, const int32 y, bool relative) { lua_addTunnel(x, y, relative); };
+    m_lua["eev_hasBarrier"] = [this] { return lua_hasBarrier(); };
+    m_lua["eev_setBarrier"] = [this] (bool activated) { lua_setBarrier(activated); };
     m_lua["eev_removeTunnels"] = [this] { lua_removeTunnels(); };
 
     // Load lua file
@@ -71,7 +73,7 @@ bool Facility::lua_hasTreasure() const
 
 void Facility::lua_setTreasure(const uint32 value)
 {
-    // TODO Same as addRtunnel
+    // TODO Should be done via data interface, so that an event can occur
     m_facilityInfo.treasure = value;
 }
 
@@ -107,6 +109,16 @@ void Facility::lua_addTunnel(const int32 x, const int32 y, bool relative)
     tunnel.coords.y = y;
     tunnel.relative = relative;
     m_facilityInfo.tunnels.emplace_back(std::move(tunnel));
+}
+
+bool Facility::lua_hasBarrier() const
+{
+    return m_facilityInfo.barrier;
+}
+
+void Facility::lua_setBarrier(bool activated)
+{
+    m_inter.setRoomFacilityBarrier(m_coords, m_facilityInfo.data.type(), activated);
 }
 
 void Facility::lua_removeTunnels()

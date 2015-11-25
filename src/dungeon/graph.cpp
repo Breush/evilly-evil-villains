@@ -127,7 +127,7 @@ void Graph::updateFromData()
                 sf::Vector2u tunnelCoords = sf::v2u(tunnel.coords);
                 if (tunnel.relative) tunnelCoords += coords;
 
-                if (m_data->isRoomConstructed(tunnelCoords))
+                if (m_data->isRoomWalkable(tunnelCoords))
                     node.neighbours.emplace_back(m_nodes.at(tunnelCoords.x).at(tunnelCoords.y).node);
             }
         }
@@ -135,7 +135,7 @@ void Graph::updateFromData()
         // Check neighbourhood
         for (auto direction : {EAST, WEST}) {
             auto neighbourCoords = m_data->roomNeighbourCoords(coords, direction);
-            if (m_data->isRoomConstructed(neighbourCoords))
+            if (m_data->isRoomWalkable(neighbourCoords))
                 node.neighbours.emplace_back(m_nodes.at(neighbourCoords.x).at(neighbourCoords.y).node);
         }
     }

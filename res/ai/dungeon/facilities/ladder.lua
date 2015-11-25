@@ -14,7 +14,7 @@
 -- Called on new data
 function _reinit()
     -- No relative tunnel yet
-    if not eev_hasTunnel(0) then
+    if not eev_hasTunnel() then
         eev_addTunnel(1, 0, true)
     end
 

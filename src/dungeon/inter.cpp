@@ -637,6 +637,11 @@ void Inter::setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& 
     m_data->setRoomFacilityLink(coords, facilityID, linkCoords);
 }
 
+void Inter::setRoomFacilityBarrier(const sf::Vector2u& coords, const std::wstring& facilityID, bool activated)
+{
+    m_data->setRoomFacilityBarrier(coords, facilityID, activated);
+}
+
 void Inter::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool loss)
 {
     if (!loss) villain().doshWallet.add(gainRemoveRoomFacility(coords, facilityID));
