@@ -80,7 +80,7 @@ namespace dungeon
         //----- Element data
 
         //! Set the eData with the value specified.
-        void lua_setDataBool(const std::string& s, const bool value);
+        bool lua_setDataBool(const std::string& s, const bool value);
 
         //! Get the correponding eData.
         bool lua_getDataBool(const std::string& s) const;
@@ -89,7 +89,7 @@ namespace dungeon
         bool lua_initEmptyDataBool(const std::string& s, const bool value);
 
         //! Set the eData with the value specified.
-        void lua_setDataU32(const std::string& s, const uint32 value);
+        uint32 lua_setDataU32(const std::string& s, const uint32 value);
 
         //! Get the correponding eData.
         uint32 lua_getDataU32(const std::string& s) const;
@@ -98,7 +98,7 @@ namespace dungeon
         uint32 lua_initEmptyDataU32(const std::string& s, const uint32 value);
 
         //! Set the eData with the value specified.
-        void lua_setDataFloat(const std::string& s, const lua_Number value);
+        lua_Number lua_setDataFloat(const std::string& s, const lua_Number value);
 
         //! Get the correponding eData.
         lua_Number lua_getDataFloat(const std::string& s) const;

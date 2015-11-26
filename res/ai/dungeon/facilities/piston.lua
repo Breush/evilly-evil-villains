@@ -4,11 +4,21 @@
 -- by A. Breust --
 
 ---- Description:
+-- A piston can push nearby rooms into the direction it's pointing.
+
+-----------
+-- Const --
+
+local NORTH = 0
+local SOUTH = 1
+local EAST  = 2
+local WEST  = 3
 
 ------------
 -- Locals --
 
-local on    -- Always equal to its data homonym
+local on        -- Always equal to its data homonym
+local direction -- The direction the piston is pointing
 
 ---------------
 -- Callbacks --
@@ -20,18 +30,16 @@ function _reinit()
         eev_setBarrier(true)
     end
 
-    -- Is the piston extended?
+    -- Get from data
     on = eev_initEmptyDataBool("on", false)
-    if on then
-        eev_selectAnimation("extend")
-        eev_forwardAnimation(0.5)
-    else
-        eev_selectAnimation("idle")
-    end
+    direction = eev_initEmptyDataU32("direction", NORTH)
+
+    refreshDisplay(true)
 end
 
 -- Called once on object creation
 function _register()
+    -- Click actions
     eev_setLeftClickAction("cbLeftClick", "Activate")
     eev_setRightClickAction("cbRightClick", "Orient")
 
@@ -41,13 +49,15 @@ end
 
 -- Called whenever a left click occurs
 function cbLeftClick()
-    eev_log("Left click")
-    activatePiston()
+    if on then
+        deactivatePiston()
+    else
+        activatePiston()
+    end
 end
 
 -- Called whenever a right click occurs
 function cbRightClick()
-    eev_log("Right click")
     orientPiston()
 end
 
@@ -63,20 +73,71 @@ end
 
 -- If the piston is off, turn it on
 function activatePiston()
-    if not on then
-        local x = eev_getCurrentRoomX()
-        local y = eev_getCurrentRoomY()
+    if on then return end
 
-        local success = eev_dungeonPushRoom(x + 1, y, "north", 500)
-        if success then
-            on = true
-            eev_setDataBool("on", on)
-            eev_selectAnimation("extend")
-        end
+    local success = false
+    local x = eev_getCurrentRoomX()
+    local y = eev_getCurrentRoomY()
+
+    if direction == NORTH then      success = eev_dungeonPushRoom(x + 1, y, "north", 500)
+    elseif direction == SOUTH then  success = eev_dungeonPushRoom(x - 1, y, "south", 500)
+    elseif direction == WEST then   success = eev_dungeonPushRoom(x, y - 1, "west", 500)
+    elseif direction == EAST then   success = eev_dungeonPushRoom(x, y + 1, "east", 500)
     end
+
+    if not success then return end
+    on = eev_setDataBool("on", true)
+    refreshDisplay(false)
 end
 
--- Turn the piston counter-clockwise
+-- If the piston is on, turn it off
+function deactivatePiston()
+    if not on then return end
+
+    local x = eev_getCurrentRoomX()
+    local y = eev_getCurrentRoomY()
+
+    on = eev_setDataBool("on", false)
+    refreshDisplay(false)
+end
+
+-- Turn the piston clockwise
 function orientPiston()
-    -- TODO
+    -- Change direction
+    if direction == NORTH then      direction = EAST
+    elseif direction == SOUTH then  direction = WEST
+    elseif direction == WEST then   direction = NORTH
+    elseif direction == EAST then   direction = SOUTH
+    end
+
+    -- Deactivate the piston
+    on = eev_setDataBool("on", false)
+    refreshDisplay(true)
+end
+
+-------------
+-- Display --
+
+function refreshDisplay(forward)
+    if direction == NORTH then
+        if on then  eev_selectAnimation("north_extend");
+        else        eev_selectAnimation("north_retract");
+        end
+    elseif direction == SOUTH then
+        if on then  eev_selectAnimation("south_extend");
+        else        eev_selectAnimation("south_retract");
+        end
+    elseif direction == WEST then
+        if on then  eev_selectAnimation("west_extend");
+        else        eev_selectAnimation("west_retract");
+        end
+    elseif direction == EAST then
+        if on then  eev_selectAnimation("east_extend");
+        else        eev_selectAnimation("east_retract");
+        end
+    end
+
+    if forward then
+        eev_forwardAnimation(0.5)
+    end
 end

@@ -41,13 +41,13 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
     m_lua["eev_setDepth"] = [this] (const lua_Number inDepth) { lua_setDepth(inDepth); };
     m_lua["eev_setVisible"] = [this] (bool isVisible) { lua_setVisible(isVisible); };
 
-    m_lua["eev_setDataBool"] = [this] (const std::string& s, const bool value) { lua_setDataBool(s, value); };
+    m_lua["eev_setDataBool"] = [this] (const std::string& s, const bool value) { return lua_setDataBool(s, value); };
     m_lua["eev_getDataBool"] = [this] (const std::string& s) { return lua_getDataBool(s); };
     m_lua["eev_initEmptyDataBool"] = [this] (const std::string& s, const bool value) { return lua_initEmptyDataBool(s, value); };
-    m_lua["eev_setDataU32"] = [this] (const std::string& s, const uint32 value) { lua_setDataU32(s, value); };
+    m_lua["eev_setDataU32"] = [this] (const std::string& s, const uint32 value) { return lua_setDataU32(s, value); };
     m_lua["eev_getDataU32"] = [this] (const std::string& s) { return lua_getDataU32(s); };
     m_lua["eev_initEmptyDataU32"] = [this] (const std::string& s, const uint32 value) { return lua_initEmptyDataU32(s, value); };
-    m_lua["eev_setDataFloat"] = [this] (const std::string& s, const lua_Number value) { lua_setDataFloat(s, value); };
+    m_lua["eev_setDataFloat"] = [this] (const std::string& s, const lua_Number value) { return lua_setDataFloat(s, value); };
     m_lua["eev_getDataFloat"] = [this] (const std::string& s) { return lua_getDataFloat(s); };
     m_lua["eev_initEmptyDataFloat"] = [this] (const std::string& s, const lua_Number value) { return lua_initEmptyDataFloat(s, value); };
 
@@ -149,10 +149,10 @@ void Element::lua_setVisible(bool isVisible)
 
 //----- Element data
 
-void Element::lua_setDataBool(const std::string& s, const bool value)
+bool Element::lua_setDataBool(const std::string& s, const bool value)
 {
     auto ws = toWString(s);
-    m_edata->operator[](ws).as_bool() = value;
+    return m_edata->operator[](ws).as_bool() = value;
 }
 
 bool Element::lua_getDataBool(const std::string& s) const
@@ -170,10 +170,10 @@ bool Element::lua_initEmptyDataBool(const std::string& s, const bool value)
 }
 
 
-void Element::lua_setDataU32(const std::string& s, const uint32 value)
+uint32 Element::lua_setDataU32(const std::string& s, const uint32 value)
 {
     auto ws = toWString(s);
-    m_edata->operator[](ws).as_uint32() = value;
+    return m_edata->operator[](ws).as_uint32() = value;
 }
 
 uint32 Element::lua_getDataU32(const std::string& s) const
@@ -190,10 +190,10 @@ uint32 Element::lua_initEmptyDataU32(const std::string& s, const uint32 value)
     return m_edata->operator[](ws).as_uint32();
 }
 
-void Element::lua_setDataFloat(const std::string& s, const lua_Number value)
+lua_Number Element::lua_setDataFloat(const std::string& s, const lua_Number value)
 {
     auto ws = toWString(s);
-    m_edata->operator[](ws).as_float() = static_cast<float>(value);
+    return m_edata->operator[](ws).as_float() = static_cast<float>(value);
 }
 
 lua_Number Element::lua_getDataFloat(const std::string& s) const
