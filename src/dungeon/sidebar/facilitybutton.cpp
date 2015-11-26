@@ -51,7 +51,9 @@ void FacilityGrabButton::grabbableButtonPressed(Entity* entity, const sf::Mouse:
     }
 
     // Forward to dungeon::Inter if it is below
-    auto inter = dynamic_cast<Inter*>(entity);
+    sf::Vector2f interRelPos(relPos);
+    returnif (entity == nullptr);
+    auto inter = entity->findParent<Inter>(interRelPos);
     returnif (inter == nullptr);
 
     // TODO In fact, facility does only remember one link,
@@ -60,7 +62,7 @@ void FacilityGrabButton::grabbableButtonPressed(Entity* entity, const sf::Mouse:
     // + We might want link patterns:
     //  - All linked to the first one
     //  - Linked as a chain (possibliy a circle)
-    auto coords = inter->tileFromLocalPosition(relPos);
+    auto coords = inter->tileFromLocalPosition(interRelPos);
     if (m_explicitLinksDone == 0u) {
         m_explicitLinkCoords = coords;
         returnif (!inter->createRoomFacility(coords, m_grabbableFacilityID));

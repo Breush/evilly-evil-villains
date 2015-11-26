@@ -135,12 +135,17 @@ void MonsterCage::grabbableMoved(Entity* entity, const sf::Vector2f& relPos, con
     reinterpret_cast<MonsterGrabbable*>(graph()->grabbable())->movedOffset(offset);
     m_grabbablePosition = nuiPos;
 
-    if (entity != &m_inter) {
+    // Forward to dungeon::Inter if it is below
+    sf::Vector2f interRelPos(relPos);
+    returnif (entity == nullptr);
+    auto inter = entity->findParent<Inter>(interRelPos);
+
+    if (inter == nullptr) {
         m_inter.resetPrediction();
         return;
     }
 
-    m_inter.setPredictionMonster(relPos, m_monsterID);
+    m_inter.setPredictionMonster(interRelPos, m_monsterID);
 }
 
 void MonsterCage::grabbableButtonReleased(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
@@ -150,8 +155,13 @@ void MonsterCage::grabbableButtonReleased(Entity* entity, const sf::Mouse::Butto
     graph()->removeGrabbable();
     m_inter.resetPrediction();
 
-    returnif (entity != &m_inter);
-    m_inter.moveMonsterFromReserve(relPos, m_monsterID);
+    // Forward to dungeon::Inter if it is below
+    sf::Vector2f interRelPos(relPos);
+    returnif (entity == nullptr);
+    auto inter = entity->findParent<Inter>(interRelPos);
+    returnif (inter == nullptr);
+
+    m_inter.moveMonsterFromReserve(interRelPos, m_monsterID);
 }
 
 std::unique_ptr<scene::Grabbable> MonsterCage::spawnGrabbable()

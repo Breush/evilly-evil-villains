@@ -24,9 +24,11 @@ void TrapGrabButton::grabbableButtonReleased(Entity* entity, const sf::Mouse::Bu
     graph()->removeGrabbable();
 
     // Forward to dungeon::Inter if it is below
-    auto inter = dynamic_cast<Inter*>(entity);
+    sf::Vector2f interRelPos(relPos);
+    returnif (entity == nullptr);
+    auto inter = entity->findParent<Inter>(interRelPos);
     returnif (inter == nullptr);
-    inter->setRoomTrap(relPos, m_trapID);
+    inter->setRoomTrap(interRelPos, m_trapID);
 }
 
 std::unique_ptr<scene::Grabbable> TrapGrabButton::spawnGrabbable()

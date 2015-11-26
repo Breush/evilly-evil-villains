@@ -141,6 +141,20 @@ namespace scene
         //! Returns the global clip area of the entity.
         inline sf::FloatRect globalClipArea() const { return m_globalClipArea; }
 
+        //! Tries to find a parent of the type specified, the relPos will be updated to the relative position
+        //! of the parent. If none, return nullptr and relPos is still changed.
+        //! The type specified should inherit from Entity.
+        // TODO Make inc/scene/entity.inl
+        template <class T>
+        inline T* findParent(sf::Vector2f& relPos)
+        {
+            T* t = dynamic_cast<T*>(this);
+            if (t != nullptr) return t;
+            if (m_parent == nullptr) return nullptr;
+            relPos += m_localPosition - getOrigin();
+            return m_parent->findParent<T>(relPos);
+        }
+
         //! @}
 
         //--------------------------//

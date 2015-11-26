@@ -95,8 +95,6 @@ bool Element::handleMouseButtonPressed(const sf::Mouse::Button button, const sf:
 
 bool Element::handleMouseMoved(const sf::Vector2f& relPos, const sf::Vector2f&)
 {
-    std::cerr << m_inter.tileSize() << " " << getOrigin() << " " << localPosition() << std::endl;
-
     // Is the mouse over the hitbox of this element?
     auto position = relPos + getOrigin();
     if (!m_sprite.hitbox().contains(position)) {
