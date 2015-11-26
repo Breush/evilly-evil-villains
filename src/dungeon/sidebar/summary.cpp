@@ -149,6 +149,6 @@ void Summary::refreshDoshBar()
 
 void Summary::refreshFameBar()
 {
-    auto fame = m_data->fame();
+    auto fame = m_data->fameWallet().value();
     m_bars[BAR_FAME].text.setString(toWString(fame));
 }

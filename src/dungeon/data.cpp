@@ -146,7 +146,7 @@ void Data::loadDungeon(const std::wstring& file)
     m_time = dungeon.attribute(L"time").as_uint();
     m_floorsCount = dungeon.attribute(L"floorsCount").as_uint();
     m_roomsByFloor = dungeon.attribute(L"roomsByFloor").as_uint();
-    setFame(dungeon.attribute(L"fame").as_uint());
+    m_fameWallet.set(dungeon.attribute(L"fame").as_uint());
     wdebug_dungeon_1(L"Dungeon is " << m_name << L" of size " << m_floorsCount << L"x" << m_roomsByFloor << L".");
 
     //---- Heroes
@@ -255,7 +255,7 @@ void Data::saveDungeon(const std::wstring& file)
     dungeon.append_attribute(L"time") = m_time;
     dungeon.append_attribute(L"floorsCount") = m_floorsCount;
     dungeon.append_attribute(L"roomsByFloor") = m_roomsByFloor;
-    dungeon.append_attribute(L"fame") = fame();
+    dungeon.append_attribute(L"fame") = m_fameWallet.value();
 
     //---- Heroes
 

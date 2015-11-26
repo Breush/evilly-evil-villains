@@ -342,12 +342,14 @@ namespace dungeon
         //! @name Resources
         //! @{
 
-        inline uint fame() const { return m_fameWallet.value(); }           //!< Get fame value.
-        inline void setFame(uint value) { m_fameWallet.set(value); }        //!< Set the fame to a specific value.
-        inline bool addFame(uint value) { return m_fameWallet.add(value); } //! Add fame to current value.
-        inline bool subFame(uint value) { return m_fameWallet.sub(value); } //! Substract fame from current value.
+        //! Access to the fame wallet.
+        inline context::Wallet& fameWallet() { return m_fameWallet; }
 
-        inline uint time() const { return m_time; } //!< Access the time.
+        //! Access to the fame wallet (const).
+        inline const context::Wallet& fameWallet() const { return m_fameWallet; }
+
+        //!< Access to the current game time.
+        inline uint time() const { return m_time; }
 
         //! @}
 

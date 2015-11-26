@@ -1,6 +1,8 @@
 #include "dungeon/heroesmanager.hpp"
 
 #include "dungeon/inter.hpp"
+#include "context/villains.hpp"
+#include "tools/platform-fixes.hpp"
 #include "tools/random.hpp"
 
 using namespace dungeon;
@@ -28,13 +30,29 @@ void HeroesManager::update(const sf::Time& dt)
         // Spawn hero or update delay before spawning
         if (heroInfo.status == HeroStatus::TO_SPAWN) {
             heroInfo.spawnDelay -= dt.asSeconds();
-            if (heroInfo.spawnDelay <= 0.f) {
-                heroInfo.status = HeroStatus::RUNNING;
-                auto& hero = heroInfo.hero;
-                hero = std::make_unique<Hero>(*this, *m_inter, *m_graph);
-                hero->bindElementData(heroInfo.data);
-                m_inter->attachChild(*hero);
+            if (heroInfo.spawnDelay > 0.f) continue;
+            heroInfo.status = HeroStatus::RUNNING;
+
+            // No entrance? Hero is disappointed
+            const auto& startingNodes = m_graph->startingNodes();
+            if (startingNodes.empty()) {
+                heroInfo.status = HeroStatus::TO_BE_REMOVED;
+                Application::context().sounds.play("dungeon/heroes/no_entrance");
+                m_data->fameWallet().sub(2u);
+                continue;
             }
+
+            // Choose an entrance
+            auto startingNode = alea::rand(startingNodes);
+            auto coords = toNodeData(startingNode)->coords;
+            heroInfo.data[L"rx"].init_float(coords.x + 0.5f);
+            heroInfo.data[L"ry"].init_float(coords.y + 0.5f);
+
+            // Create the hero object and add it as an Inter child
+            auto& hero = heroInfo.hero;
+            hero = std::make_unique<Hero>(*this, *m_inter, *m_graph);
+            hero->bindElementData(heroInfo.data);
+            m_inter->attachChild(*hero);
         }
     }
 
@@ -75,7 +93,7 @@ void HeroesManager::load(const pugi::xml_node& node)
 {
     m_heroesInfo.clear();
 
-    m_nextGroupDelay = node.attribute(L"nextWaveDelay").as_float();
+    m_nextGroupDelay = node.attribute(L"nextWaveDelay").as_float(10.f);
 
     for (const auto& heroNode : node.children(L"hero")) {
         m_heroesInfo.emplace_back();
@@ -127,7 +145,6 @@ void HeroesManager::useInter(Inter& inter)
 void HeroesManager::useGraph(Graph& graph)
 {
     m_graph = &graph;
-    spawnHeroesGroup();
 }
 
 //-----------------------------------//
@@ -141,9 +158,6 @@ const Graph::NodeData* HeroesManager::toNodeData(const ai::Node* node)
 
 void HeroesManager::spawnHeroesGroup()
 {
-    const auto& startingNodes = m_graph->startingNodes();
-    returnif (startingNodes.empty());
-
     uint newHeroesCount = 1u + rand() % 5u;
 
     float delay = 0.f;
@@ -156,12 +170,6 @@ void HeroesManager::spawnHeroesGroup()
         heroInfo.data.create(L"groo");
         heroInfo.data[L"dosh"].init_uint32(0u);
         heroInfo.spawnDelay = delay;
-
-        // Choose an entrance
-        auto startingNode = alea::rand(startingNodes);
-        auto coords = toNodeData(startingNode)->coords;
-        heroInfo.data[L"rx"].init_float(coords.x + 0.5f);
-        heroInfo.data[L"ry"].init_float(coords.y + 0.5f);
 
         delay += 3.f + static_cast<float>(rand() % 20u);
     }
@@ -177,20 +185,19 @@ void HeroesManager::spawnHeroesGroup()
 
 void HeroesManager::heroGetsOut(Hero* hero)
 {
+    auto pHeroInfo = std::find_if(m_heroesInfo, [hero] (const HeroInfo& heroInfo) { return heroInfo.hero.get() == hero; });
+    returnif (pHeroInfo == std::end(m_heroesInfo));
+    auto& heroInfo = *pHeroInfo;
+
     // If no dosh stolen, hero is unhappy, fame decrease
-    if (hero->edata().at(L"dosh").as_uint32() == 0u)
-        m_data->subFame(4u);
+    if (heroInfo.data[L"dosh"].as_uint32() == 0u)
+        m_data->fameWallet().sub(4u);
     else
-        m_data->addFame(1u);
+        m_data->fameWallet().add(1u);
 
     // Remove hero from list
+    heroInfo.status = HeroStatus::TO_BE_REMOVED;
     hero->setVisible(false);
-    for (auto& heroInfo : m_heroesInfo) {
-        if (heroInfo.hero.get() == hero) {
-            heroInfo.status = HeroStatus::TO_BE_REMOVED;
-            break;
-        }
-    }
 }
 
 void HeroesManager::heroStealsTreasure(Hero* hero, const sf::Vector2u& coords, const uint stolenDosh)
