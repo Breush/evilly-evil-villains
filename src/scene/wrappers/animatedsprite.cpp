@@ -11,6 +11,7 @@ using namespace scene;
 AnimatedSprite::AnimatedSprite(bool isLerpable)
     : baseClass(isLerpable)
 {
+    setDetectable(false);
 }
 
 AnimatedSprite::~AnimatedSprite()
@@ -88,6 +89,22 @@ void AnimatedSprite::restart()
     m_started = true;
     if (m_spriterEntity != nullptr)
         m_spriterEntity->setCurrentTime(0.);
+
+    // Getting the current hitbox if any
+    auto hitbox = m_spriterEntity->getObjectInstance("hitbox");
+    if (hitbox != nullptr) {
+        m_hitbox.width  = hitbox->getSize().x;
+        m_hitbox.height = hitbox->getSize().y;
+        m_hitbox.left   = hitbox->getPosition().x;
+        m_hitbox.top    = hitbox->getPosition().y;
+    }
+    // Setting the hixbox to some default
+    else {
+        m_hitbox.width  = 50.f;
+        m_hitbox.height = 50.f;
+        m_hitbox.left   = -25.f;
+        m_hitbox.top    = -25.f;
+    }
 }
 
 //-------------------------//

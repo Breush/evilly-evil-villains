@@ -252,6 +252,13 @@ void MovingElement::bindElementData(ElementData& edata)
         if (!m_lua.load(luaFilename))
             throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
 
+        // Clear all previous callbacks
+        removeDetectSignals();
+        m_leftClickAction.name = "";
+        m_rightClickAction.name = "";
+        m_leftClickAction.callback = nullptr;
+        m_rightClickAction.callback = nullptr;
+
         m_lua["_register"]();
     }
 

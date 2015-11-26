@@ -15,21 +15,29 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
     , m_inter(inter)
     , m_lua(true)
 {
-    // TODO Animated sprites have no hitbox...
-    // No enabling detection wouldn't change anything.
-    setDetectable(false);
+    // Note: an Element has a size fitting a whole room,
+    // so the hitbox cannot be bigger than that.
 
     // Initializing
+    // TODO Follow Monster design and delay that to a rebindFromData function
     setDetectRangeFactor(m_inter.tileSize().x);
     setLocalScale(m_inter.roomScale());
+    setSize(m_inter.tileSize());
+    centerOrigin();
 
     // Decorum
     attachChild(m_sprite);
+    m_sprite.setRelativePosition({0.5f, 0.5f});
 
     // Lua API
-    std::function<void(const std::string&, const std::string&, const std::string&)> eev_addCallback = std::bind(&Facility::lua_addCallback, this, _1, _2, _3);
+    std::function<void(const std::string&, const std::string&, const std::string&)> eev_addCallback = std::bind(&Element::lua_addCallback, this, _1, _2, _3);
+    std::function<void(const std::string&, const std::string&)> eev_setLeftClickAction = std::bind(&Element::lua_setLeftClickAction, this, _1, _2);
+    std::function<void(const std::string&, const std::string&)> eev_setRightClickAction = std::bind(&Element::lua_setRightClickAction, this, _1, _2);
 
     m_lua["eev_addCallback"] = eev_addCallback;
+    m_lua["eev_setLeftClickAction"] = eev_setLeftClickAction;
+    m_lua["eev_setRightClickAction"] = eev_setRightClickAction;
+
     m_lua["eev_setDepth"] = [this] (const lua_Number inDepth) { lua_setDepth(inDepth); };
     m_lua["eev_setVisible"] = [this] (bool isVisible) { lua_setVisible(isVisible); };
 
@@ -60,12 +68,75 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
     m_lua["eev_log"] = [this] (const std::string& str) { lua_log(str); };
 }
 
+//------------------//
+//----- Events -----//
+
+bool Element::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
+{
+    // Is the mouse over the hitbox of this element?
+    auto position = relPos - getOrigin();
+    returnif (!m_sprite.hitbox().contains(position)) false;
+
+    // Left mouse button pressed
+    if (button == sf::Mouse::Left) {
+        returnif (m_leftClickAction.callback == nullptr) false;
+        m_leftClickAction.callback();
+        return true;
+    }
+    // Right mouse button pressed
+    else if (button == sf::Mouse::Right) {
+        returnif (m_rightClickAction.callback == nullptr) false;
+        m_rightClickAction.callback();
+        return true;
+    }
+
+    return false;
+}
+
+bool Element::handleMouseMoved(const sf::Vector2f& relPos, const sf::Vector2f&)
+{
+    std::cerr << m_inter.tileSize() << " " << getOrigin() << " " << localPosition() << std::endl;
+
+    // Is the mouse over the hitbox of this element?
+    auto position = relPos + getOrigin();
+    if (!m_sprite.hitbox().contains(position)) {
+        m_sprite.setTiltColor(sf::Color::White);
+        return false;
+    }
+
+    // The mouse is indeed right.
+    m_sprite.setTiltColor({174u, 207u, 198u});
+
+    // TODO Show the possible actions
+
+    return true;
+}
+
+void Element::handleMouseLeft()
+{
+    // TODO Better use shaders when AnimatedSprite allows us
+    // And refactor that with the handleMouseMoved() check
+    m_sprite.setTiltColor(sf::Color::White);
+}
+
 //---------------------------//
 //----- LUA interaction -----//
 
 void Element::lua_addCallback(const std::string& luaKey, const std::string& entityType, const std::string& condition)
 {
     addDetectSignal(entityType, condition, [this, luaKey] (const uint32 UID) { m_lua[luaKey.c_str()](UID); });
+}
+
+void Element::lua_setLeftClickAction(const std::string& luaKey, const std::string& actionName)
+{
+    m_leftClickAction.name = actionName;
+    m_leftClickAction.callback = [this, luaKey] { m_lua[luaKey.c_str()](); };
+}
+
+void Element::lua_setRightClickAction(const std::string& luaKey, const std::string& actionName)
+{
+    m_rightClickAction.name = actionName;
+    m_rightClickAction.callback = [this, luaKey] { m_lua[luaKey.c_str()](); };
 }
 
 void Element::lua_setDepth(const lua_Number inDepth)

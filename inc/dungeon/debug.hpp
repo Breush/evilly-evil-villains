@@ -5,7 +5,7 @@
 //-----------------------------//
 //---- Change defines here ----//
 
-#define DEBUG_DUNGEON  1
+#define DEBUG_DUNGEON  0
 
 //--------------------//
 //---- Debug mode ----//

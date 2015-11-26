@@ -552,7 +552,7 @@ void Entity::refreshFromLocalScale()
 
 void Entity::refreshOrigin()
 {
-    setOrigin(m_relativeOrigin * m_size * m_scale);
+    setOrigin(m_relativeOrigin * m_size);
     refreshKeepInsideLocalRect();
     refreshFromLocalPosition();
 }

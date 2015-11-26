@@ -138,12 +138,12 @@ void Inter::handleGlobalEvent(const sf::Event& event)
 #endif
 }
 
-bool Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
+bool Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos)
 {
     returnif (button == sf::Mouse::Middle) false;
 
     // Selected the tile below
-    selectTile(mousePos);
+    selectTile(relPos);
 
     // Harvest the money
     if (button == sf::Mouse::Left)
@@ -159,9 +159,9 @@ bool Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::V
     return true;
 }
 
-bool Inter::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
+bool Inter::handleMouseMoved(const sf::Vector2f& relPos, const sf::Vector2f&)
 {
-    auto coords = tileFromLocalPosition(mousePos);
+    auto coords = tileFromLocalPosition(relPos);
     setHoveredTile(coords);
     return true;
 }
@@ -331,7 +331,7 @@ void Inter::selectTile(const sf::Vector2u& coords)
 
 void Inter::deselectTile()
 {
-    returnif(m_selectedTile == nullptr);
+    returnif (m_selectedTile == nullptr);
 
     for (auto& layer : m_selectedTile->layers)
         layer->setShader("");
@@ -344,10 +344,16 @@ void Inter::deselectTile()
 
 void Inter::setHoveredTile(const sf::Vector2u& coords)
 {
-    resetHoveredTile();
-    m_hoveredTile = &m_tiles.at(coords);
+    returnif (coords.x >= m_data->floorsCount());
+    returnif (coords.y >= m_data->roomsByFloor());
 
-    returnif(m_hoveredTile == m_selectedTile);
+    auto hoveredTile = &m_tiles.at(coords);
+    returnif (m_hoveredTile == hoveredTile);
+
+    resetHoveredTile();
+    m_hoveredTile = hoveredTile;
+
+    returnif (m_hoveredTile == m_selectedTile);
 
     for (auto& layer : m_hoveredTile->layers)
         layer->setShader("nui/hover");
@@ -355,11 +361,11 @@ void Inter::setHoveredTile(const sf::Vector2u& coords)
 
 void Inter::resetHoveredTile()
 {
-    returnif(m_hoveredTile == nullptr);
-    returnif(m_hoveredTile == m_selectedTile);
+    returnif (m_hoveredTile == nullptr);
 
-    for (auto& layer : m_hoveredTile->layers)
-        layer->setShader("");
+    if (m_hoveredTile != m_selectedTile)
+        for (auto& layer : m_hoveredTile->layers)
+            layer->setShader("");
 
     m_hoveredTile = nullptr;
 }
@@ -777,7 +783,6 @@ void Inter::refreshMonsters()
         auto& monster = m_monsters.at(i);
         auto& monsterInfo = activeMonsters.at(i);
         monster->bindElementData(monsterInfo.data);
-        monster->setLocalScale(m_roomScale);
     }
 }
 

@@ -19,6 +19,13 @@ namespace dungeon
     {
         using baseClass = DetectEntity;
 
+        //! An action linked to a click event.
+        struct ClickAction
+        {
+            std::string name;                           //!< Untranslated name of the action.
+            std::function<void()> callback = nullptr;   //!< A function to execute when the click occurs.
+        };
+
     public:
 
         //! Constructor.
@@ -41,12 +48,28 @@ namespace dungeon
 
     protected:
 
+        //---------------//
+        //! @name Events
+        //! @{
+
+        bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        bool handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseLeft() final;
+
+        //! @}
+
         //----------------//
         //! @name Lua API
         //! @{
 
         //! Calling detector.
         void lua_addCallback(const std::string& luaKey, const std::string& entityType, const std::string& condition);
+
+        //! Add action callback whenever a left click happens.
+        void lua_setLeftClickAction(const std::string& luaKey, const std::string& actionName);
+
+        //! Add action callback whenever a right click happens.
+        void lua_setRightClickAction(const std::string& luaKey, const std::string& actionName);
 
         //! Set the depth of the entity.
         void lua_setDepth(const lua_Number inDepth);
@@ -132,5 +155,9 @@ namespace dungeon
         ElementData* m_edata = nullptr; //!< The data of the element.
         scene::AnimatedSprite m_sprite; //!< The sprite.
         sel::State m_lua;               //!< The lua state.
+
+        // Click actions
+        ClickAction m_leftClickAction;  //!< When left click is pressed.
+        ClickAction m_rightClickAction; //!< When right click is pressed.
     };
 }

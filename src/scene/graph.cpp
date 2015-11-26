@@ -418,6 +418,10 @@ void Graph::detachedEntity(Entity* entity)
     // Cancel focus if it was
     if (m_focusedEntity == entity)
         setFocusedEntity(nullptr);
+
+    // Cancel hovering if it was
+    if (m_hoveredEntity == entity)
+        setHoveredEntity(nullptr);
 }
 
 void Graph::attachedEntity(Entity* entity)

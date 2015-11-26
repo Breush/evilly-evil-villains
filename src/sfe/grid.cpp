@@ -69,7 +69,7 @@ void Grid::setRowsColumns(const uint& inRows, const uint& inColumns)
 
 sf::Vector2u Grid::rowColumnFromCoords(const sf::Vector2f& coords) const
 {
-    if (coords.x < 0 || coords.x >= m_size.x || coords.y < 0 || coords.y >= m_size.y)
+    if (coords.x < 0.f || coords.x >= m_size.x || coords.y < 0.f || coords.y >= m_size.y)
         return sf::Vector2u(-1, -1);
 
     float cellHeight = m_size.y / m_rows;

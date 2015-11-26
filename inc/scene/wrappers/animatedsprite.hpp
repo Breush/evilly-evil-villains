@@ -70,6 +70,15 @@ namespace scene
 
         //! @}
 
+        //---------------//
+        //! @name Hitbox
+        //! @{
+
+        //! The current hitbox.
+        inline const sf::FloatRect& hitbox() const { return m_hitbox; }
+
+        //! @}
+
     protected:
 
         //----------------//
@@ -83,11 +92,15 @@ namespace scene
 
     private:
 
+        // Animation
         SpriterEngine::EntityInstance* m_spriterEntity = nullptr;   //!< The entity itself.
+        std::wstring m_currentAnimationName;                        //!< Current animation name.
+        bool m_started = true;                                      //!< Whether the animation should run or not.
 
-        std::wstring m_currentAnimationName;        //!< Current animation name.
-        SpriterEngine::real m_length = 0.;          //!< Current animation length.
+        // Color
         sf::Color m_tiltColor = sf::Color::White;   //!< Extra coloring of the sprites.
-        bool m_started = true;                      //!< Whether the animation should run or not.
+
+        // Hitbox
+        sf::FloatRect m_hitbox; //!< The current hitbox as defined in the animation file (if any).
     };
 }

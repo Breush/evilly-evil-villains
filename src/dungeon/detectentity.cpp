@@ -63,6 +63,11 @@ void DetectEntity::addDetectSignal(const std::string& key, const std::string& co
     m_detectSignals.emplace_back(std::move(signal));
 }
 
+void DetectEntity::removeDetectSignals()
+{
+    m_detectSignals.clear();
+}
+
 uint32 DetectEntity::isInRange(const std::string& key, float range) const
 {
     return s_detector.isInRange(*this, key, m_detectRangeFactor * range);

@@ -50,6 +50,9 @@ namespace dungeon
         //! For exemple, key = "hero", condition = "distance < 50".
         void addDetectSignal(const std::string& key, const std::string& condition, DetectCallback callback);
 
+        //! Clear all detect signals from the list.
+        void removeDetectSignals();
+
         //! Analyse a condition string and create a corresponding function.
         //! If an error occurs, the function always returns false.
         DetectCondition interpretDetectCondition(const std::string& key, const std::string& condition);

@@ -276,8 +276,8 @@ namespace dungeon
         //! @name Events
         //! @{
 
-        bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
-        bool handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
+        bool handleMouseMoved(const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
         void handleMouseLeft() final;
 
         void receive(const context::Event& event) final;
