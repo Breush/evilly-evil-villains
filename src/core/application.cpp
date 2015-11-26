@@ -93,10 +93,6 @@ Application::Application()
     preloadAnimations();
     loadStates();
 
-    // Full refresh on start
-    refreshWindow();
-    refreshNUI();
-
     // All is ready, go for it
     m_stateStack.pushState(m_initialState);
     s_visualDebug.init();
@@ -212,18 +208,20 @@ void Application::processInput()
 
         // Resizing window (grab only the last of these events)
         if (event.type == sf::Event::Resized) {
+            clearWindowEvents(event, sf::Event::Resized);
+
             // Security over the new size, a 0 dimension implies OpenGL bugs
             sf::Vector2u newSize(event.size.width, event.size.height);
             if (newSize.x < 10u || newSize.y < 10u) {
                     if (newSize.x < 10u) newSize.x = 10u;
                     if (newSize.y < 10u) newSize.y = 10u;
                     s_context.window.setSize(newSize);
+                    continue;
             }
 
-            clearWindowEvents(event, sf::Event::Resized);
             s_context.windowInfo.screenSize = sf::v2f(newSize);
             refreshWindow();
-            break;
+            continue;
         }
 
         m_stateStack.handleEvent(event);
