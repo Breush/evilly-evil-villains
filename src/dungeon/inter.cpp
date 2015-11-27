@@ -66,16 +66,19 @@ void Inter::updateRoutine(const sf::Time& dt)
 
     // Animate the rooms
     for (auto& movingRoom : m_movingRooms) {
+        auto& tile = m_tiles[movingRoom.coords];
+
+        // Time update
         movingRoom.animationTime += timeElapsed;
         auto adaptedTimeElapsed = timeElapsed;
         if (movingRoom.animationTime >= movingRoom.animationDelay) {
             adaptedTimeElapsed -= (movingRoom.animationTime - movingRoom.animationDelay);
             if (movingRoom.onFinishCallback != nullptr) movingRoom.onFinishCallback();
+            tile.movingLocked = false;
         }
 
-        auto& tile = m_tiles[movingRoom.coords];
+        // Move all it contains
         const auto offset = movingRoom.velocity * adaptedTimeElapsed;
-
         for (auto& layer : tile.layers)             layer->localMove(offset);
         for (auto& facility : tile.facilities)      facility->localMove(offset);
         if (tile.trap != nullptr)                   tile.trap->localMove(offset);
@@ -498,6 +501,7 @@ void Inter::setRoomWidth(const float roomWidth)
 void Inter::constructRoom(const sf::Vector2u& coords, bool free)
 {
     returnif (m_data->isRoomConstructed(coords));
+    returnif (m_tiles[coords].movingLocked);
 
     if (!free) returnif (!villain().doshWallet.sub(m_data->onConstructRoomCost));
     m_data->constructRoom(coords);
@@ -506,6 +510,7 @@ void Inter::constructRoom(const sf::Vector2u& coords, bool free)
 void Inter::destroyRoom(const sf::Vector2u& coords, bool loss)
 {
     returnif (!m_data->isRoomConstructed(coords));
+    returnif (m_tiles[coords].movingLocked);
 
     if (!loss) {
         uint gainedDosh = m_data->onDestroyRoomGain;
@@ -528,27 +533,35 @@ bool Inter::pushRoom(const sf::Vector2u& coords, Direction direction, uint anima
     // We look for the first void in the direction,
     // if none, it's impossible to move the rooms
     auto voidCoords = coords;
-    while (m_data->isRoomConstructed(voidCoords))
+    while (m_data->isRoomConstructed(voidCoords)) {
+        returnif (m_tiles[voidCoords].movingLocked) false;
         voidCoords = m_data->roomNeighbourCoords(voidCoords, direction);
+    }
 
     returnif (voidCoords.x >= floorsCount)  false;
     returnif (voidCoords.y >= roomsByFloor) false;
     returnif (coords == voidCoords) true;
 
+    // The velocity is the offset to go each second
+    float animationDelayS = animationDelay / 1000.f;
+    auto directionVector = sf::Vector2f(m_data->roomDirectionVector(direction));
+    sf::Vector2f offset(directionVector.y * tileSize().x, - directionVector.x * tileSize().y);
+    auto velocity = offset / animationDelayS;
+
     // All right, let's register the rooms to animate
     auto movingCoords = coords;
-    float animationDelayS = animationDelay / 1000.f;
     while (movingCoords != voidCoords) {
         auto targetCoords = m_data->roomNeighbourCoords(movingCoords, direction);
-        auto startPosition = tileLocalPosition(movingCoords);
-        auto targetPosition = tileLocalPosition(targetCoords);
-        auto velocity = (targetPosition - startPosition) / animationDelayS;
 
+        // Register it to move
         MovingRoom movingRoom;
         movingRoom.animationDelay = animationDelayS;
         movingRoom.coords = movingCoords;
         movingRoom.velocity = velocity;
         m_movingRooms.emplace_back(std::move(movingRoom));
+
+        // Lock it
+        m_tiles[movingCoords].movingLocked = true;
 
         movingCoords = targetCoords;
     }
@@ -616,6 +629,8 @@ uint Inter::gainRemoveRoomFacilities(const sf::Vector2u& coords) const
 
 bool Inter::createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool free)
 {
+    returnif (m_tiles[coords].movingLocked) false;
+
     auto cost = facilitiesDB().get(facilityID).baseCost.dosh;
     if (!free) returnif (villain().doshWallet.value() < cost) false;
 
@@ -650,12 +665,14 @@ void Inter::setRoomFacilityBarrier(const sf::Vector2u& coords, const std::wstrin
 
 void Inter::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool loss)
 {
+    returnif (m_tiles[coords].movingLocked);
     if (!loss) villain().doshWallet.add(gainRemoveRoomFacility(coords, facilityID));
     m_data->removeRoomFacility(coords, facilityID);
 }
 
 void Inter::removeRoomFacilities(const sf::Vector2u& coords, bool loss)
 {
+    returnif (m_tiles[coords].movingLocked);
     if (!loss) villain().doshWallet.add(gainRemoveRoomFacilities(coords));
     m_data->removeRoomFacilities(coords);
 }
@@ -677,7 +694,9 @@ uint Inter::gainRemoveRoomTrap(const sf::Vector2u& coords) const
 
 void Inter::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID, bool free)
 {
+    // TODO Have a isTileModifiable(coords) inside Inter
     returnif (!m_data->isRoomConstructed(coords));
+    returnif (m_tiles[coords].movingLocked);
     auto& trapData = m_data->room(coords).trap;
     returnif (trapData.exists() && trapData.type() == trapID);
 
@@ -695,6 +714,7 @@ void Inter::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID, 
 
 void Inter::removeRoomTrap(const sf::Vector2u& coords, bool loss)
 {
+    returnif (m_tiles[coords].movingLocked);
     if (!loss) villain().doshWallet.add(gainRemoveRoomTrap(coords));
     m_data->removeRoomTrap(coords);
 }
@@ -719,6 +739,7 @@ void Inter::addMonsterToReserve(const std::wstring& monsterID)
 
 void Inter::harvestTileDosh(const sf::Vector2u& coords)
 {
+    returnif (m_tiles[coords].movingLocked);
     auto& trap = m_tiles[coords].trap;
     returnif (trap == nullptr);
 

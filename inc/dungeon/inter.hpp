@@ -396,6 +396,7 @@ namespace dungeon
             std::unique_ptr<Trap> trap = nullptr;                       //!< The trap, protecting the tile.
             std::unique_ptr<scene::Label> totalDoshLabel;               //!< The total dosh inside the room.
             std::unique_ptr<scene::Label> harvestableDoshLabel;         //!< The harvestable dosh.
+            bool movingLocked = false;                                  //!< Is the tile locked because it is moving?
         };
 
     private:

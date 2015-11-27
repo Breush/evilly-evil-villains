@@ -60,7 +60,6 @@ void MouseOverlay::refreshMouseTexture()
     else if (left && !right)    texture = &Application::context().textures.get("global/mouse_l");
     else if (left && right)     texture = &Application::context().textures.get("global/mouse_rl");
 
-
     const auto textureSize = sf::v2f(texture->getSize());
     m_mouse.setOrigin(textureSize / 2.f);
     m_mouse.setSize(textureSize);

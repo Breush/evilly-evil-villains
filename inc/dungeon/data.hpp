@@ -208,6 +208,16 @@ namespace dungeon
         //! Easy getter to access a room (const).
         inline const Room& room(const sf::Vector2u& coords) const { return m_floors[coords.x].rooms[coords.y]; }
 
+        //! Return the next room from the specified one.
+        /*!
+         *  Note: this function does not check accessibility.
+         *  The next room should not be out of the limits of the dungeon.
+         */
+        Room& roomNeighbour(const sf::Vector2u& roomCoord, Direction direction);
+
+        //! Returns a unit vector symbolizing the direction.
+        sf::Vector2u roomDirectionVector(Direction direction);
+
         //! Whether a specific room is in constructed state.
         //! If coords are outside of boundaries, returns false.
         bool isRoomConstructed(const sf::Vector2u& coords) const;
@@ -412,22 +422,6 @@ namespace dungeon
 
         //! Save dungeon data to a specified file (must exists).
         void saveDungeon(const std::wstring& file);
-
-        //! @}
-
-        //--------------//
-        //! @name Rooms
-        //! @{
-
-        //! Return the next room from the specified one.
-        /*!
-         *  Note: this function does not check accessibility.
-         *  The next room should not be out of the limits of the dungeon.
-         */
-        Room& roomNeighbour(const sf::Vector2u& roomCoord, Direction direction);
-
-        //! Returns a unit vector symbolizing the direction.
-        sf::Vector2u roomDirectionVector(Direction direction);
 
         //! @}
 
