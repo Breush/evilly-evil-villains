@@ -174,6 +174,7 @@ void Data::loadDungeon(const std::wstring& file)
         for (const auto& monsterNode : monsterCageNode.children(L"monster")) {
             MonsterInfo monsterInfo;
             monsterInfo.data.loadXML(monsterNode);
+            monsterInfo.hp = monsterNode.attribute(L"hp").as_float(1.f);
             monsterCageInfo.monsters.emplace_back(std::move(monsterInfo));
         }
     }
@@ -183,6 +184,7 @@ void Data::loadDungeon(const std::wstring& file)
     for (const auto& monsterNode : activeNode.children(L"monster")) {
         MonsterInfo monsterInfo;
         monsterInfo.data.loadXML(monsterNode);
+        monsterInfo.hp = monsterNode.attribute(L"hp").as_float(1.f);
         m_monstersInfo.active.emplace_back(std::move(monsterInfo));
     }
 
@@ -274,6 +276,7 @@ void Data::saveDungeon(const std::wstring& file)
         for (const auto& monsterInfo : monsterCage.monsters) {
             auto monsterNode = monsterCageNode.append_child(L"monster");
             monsterInfo.data.saveXML(monsterNode);
+            monsterNode.append_attribute(L"hp") = monsterInfo.hp;
         }
     }
 
@@ -282,6 +285,7 @@ void Data::saveDungeon(const std::wstring& file)
     for (const auto& monsterInfo : m_monstersInfo.active) {
         auto monsterNode = activeNode.append_child(L"monster");
         monsterInfo.data.saveXML(monsterNode);
+        monsterNode.append_attribute(L"hp") = monsterInfo.hp;
     }
 
     //---- Structure

@@ -137,6 +137,7 @@ namespace dungeon
         //! A monster as stored in the xml.
         struct MonsterInfo
         {
+            float hp = 0.f;         //!< Current health point of the monster.
             ElementData data;       //!< Type of monster, plus individual information.
         };
 
