@@ -33,13 +33,13 @@ void Application::freeTextures(const std::initializer_list<std::string>& folders
 
 void Application::preloadTextures()
 {
+    loadTextures({"global", "menu", "nui"});
+
     // Force default
-    loadTextures({"menu"});
     s_context.textures.load("res/tex/default.png");
     s_context.textures.get("default").setRepeated(true);
     s_context.textures.setDefault("default");
 
     // And NUI
-    loadTextures({"nui"});
     s_context.textures.get("nui/focus").setRepeated(true);
 }

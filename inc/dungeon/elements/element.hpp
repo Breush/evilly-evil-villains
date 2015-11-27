@@ -3,6 +3,7 @@
 #include "dungeon/elements/elementdata.hpp"
 #include "dungeon/detectentity.hpp"
 #include "scene/wrappers/animatedsprite.hpp"
+#include "nui/mouseoverlay.hpp"
 
 #include <selene/selene.hpp>
 
@@ -55,6 +56,18 @@ namespace dungeon
         bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
         bool handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
         void handleMouseLeft() final;
+
+        //! @}
+
+        //----------------------//
+        //! @name Mouse overlay
+        //! @{
+
+        //! Show the mouse overlay if any.
+        void showMouseOverlay(const sf::Vector2f& relPos);
+
+        //! Hide the mouse overlay if any.
+        void hideMouseOverlay();
 
         //! @}
 
@@ -157,7 +170,8 @@ namespace dungeon
         sel::State m_lua;               //!< The lua state.
 
         // Click actions
-        ClickAction m_leftClickAction;  //!< When left click is pressed.
-        ClickAction m_rightClickAction; //!< When right click is pressed.
+        ClickAction m_leftClickAction;      //!< When left click is pressed.
+        ClickAction m_rightClickAction;     //!< When right click is pressed.
+        nui::MouseOverlay m_mouseOverlay;   //!< Display for the mouse actions.
     };
 }

@@ -4,6 +4,7 @@
 #include "dungeon/inter.hpp"
 #include "dungeon/detector.hpp"
 #include "context/villains.hpp"
+#include "core/gettext.hpp"
 #include "tools/tools.hpp"
 #include "tools/string.hpp"
 
@@ -28,6 +29,11 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
     // Decorum
     attachChild(m_sprite);
     m_sprite.setRelativePosition({0.5f, 0.5f});
+
+    // TODO Shouldn't it be done at NUI level?
+    attachChild(m_mouseOverlay);
+    m_mouseOverlay.setVisible(false);
+    m_mouseOverlay.setDepth(-50.f);
 
     // Lua API
     std::function<void(const std::string&, const std::string&, const std::string&)> eev_addCallback = std::bind(&Element::lua_addCallback, this, _1, _2, _3);
@@ -96,25 +102,44 @@ bool Element::handleMouseButtonPressed(const sf::Mouse::Button button, const sf:
 bool Element::handleMouseMoved(const sf::Vector2f& relPos, const sf::Vector2f&)
 {
     // Is the mouse over the hitbox of this element?
-    auto position = relPos + getOrigin();
+    auto position = relPos - getOrigin();
     if (!m_sprite.hitbox().contains(position)) {
-        m_sprite.setTiltColor(sf::Color::White);
+        hideMouseOverlay();
         return false;
     }
 
-    // The mouse is indeed right.
-    m_sprite.setTiltColor({174u, 207u, 198u});
-
-    // TODO Show the possible actions
-
+    showMouseOverlay(relPos);
     return true;
 }
 
 void Element::handleMouseLeft()
 {
+    hideMouseOverlay();
+}
+
+//-------------------------//
+//----- Mouse overlay -----//
+
+void Element::showMouseOverlay(const sf::Vector2f& relPos)
+{
+    // FIXME MouseOverlay should change the cursor temporaly
+    m_mouseOverlay.setLocalPosition(relPos + sf::Vector2f{0.f, -15.f});
+
+    returnif (m_mouseOverlay.visible());
+
     // TODO Better use shaders when AnimatedSprite allows us
-    // And refactor that with the handleMouseMoved() check
+    m_sprite.setTiltColor({174u, 207u, 198u});
+
+    if (m_leftClickAction.callback != nullptr || m_rightClickAction.callback != nullptr)
+        m_mouseOverlay.setVisible(true);
+}
+
+void Element::hideMouseOverlay()
+{
     m_sprite.setTiltColor(sf::Color::White);
+
+    returnif (!m_mouseOverlay.visible());
+    m_mouseOverlay.setVisible(false);
 }
 
 //---------------------------//
@@ -129,12 +154,14 @@ void Element::lua_setLeftClickAction(const std::string& luaKey, const std::strin
 {
     m_leftClickAction.name = actionName;
     m_leftClickAction.callback = [this, luaKey] { m_lua[luaKey.c_str()](); };
+    m_mouseOverlay.setLeft(_(m_leftClickAction.name.c_str()));
 }
 
 void Element::lua_setRightClickAction(const std::string& luaKey, const std::string& actionName)
 {
     m_rightClickAction.name = actionName;
     m_rightClickAction.callback = [this, luaKey] { m_lua[luaKey.c_str()](); };
+    m_mouseOverlay.setRight(_(m_rightClickAction.name.c_str()));
 }
 
 void Element::lua_setDepth(const lua_Number inDepth)
