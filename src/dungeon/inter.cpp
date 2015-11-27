@@ -544,7 +544,7 @@ bool Inter::pushRoom(const sf::Vector2u& coords, Direction direction, uint anima
 
     // The velocity is the offset to go each second
     float animationDelayS = animationDelay / 1000.f;
-    auto directionVector = sf::Vector2f(m_data->roomDirectionVector(direction));
+    auto directionVector = sf::Vector2f(m_data->roomDirectionVector2i(direction));
     sf::Vector2f offset(directionVector.y * tileSize().x, - directionVector.x * tileSize().y);
     auto velocity = offset / animationDelayS;
 

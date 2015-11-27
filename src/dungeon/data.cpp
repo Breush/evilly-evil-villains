@@ -484,7 +484,7 @@ bool Data::pushRoom(const sf::Vector2u& coords, Direction direction)
 
 sf::Vector2u Data::roomNeighbourCoords(const sf::Vector2u& coords, Direction direction)
 {
-    return coords + roomDirectionVector(direction);
+    return coords + roomDirectionVector2u(direction);
 }
 
 Data::Room& Data::roomNeighbour(const sf::Vector2u& coords, Direction direction)
@@ -492,9 +492,14 @@ Data::Room& Data::roomNeighbour(const sf::Vector2u& coords, Direction direction)
     return room(roomNeighbourCoords(coords, direction));
 }
 
-sf::Vector2u Data::roomDirectionVector(Direction direction)
+sf::Vector2u Data::roomDirectionVector2u(Direction direction)
 {
-    return sf::Vector2u((direction >> 0x4) - 1u, (direction & 0xf) - 1u);
+    return {(direction >> 0x4) - 1u, (direction & 0xf) - 1u};
+}
+
+sf::Vector2i Data::roomDirectionVector2i(Direction direction)
+{
+    return {(direction >> 0x4) - 1, (direction & 0xf) - 1};
 }
 
 uint Data::roomTreasureDosh(const sf::Vector2u& coords)

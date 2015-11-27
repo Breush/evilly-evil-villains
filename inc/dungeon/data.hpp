@@ -215,8 +215,11 @@ namespace dungeon
          */
         Room& roomNeighbour(const sf::Vector2u& roomCoord, Direction direction);
 
-        //! Returns a unit vector symbolizing the direction.
-        sf::Vector2u roomDirectionVector(Direction direction);
+        //! Returns a unit vector symbolizing the direction (int).
+        sf::Vector2i roomDirectionVector2i(Direction direction);
+
+        //! Returns a unit vector symbolizing the direction (uint).
+        sf::Vector2u roomDirectionVector2u(Direction direction);
 
         //! Whether a specific room is in constructed state.
         //! If coords are outside of boundaries, returns false.
