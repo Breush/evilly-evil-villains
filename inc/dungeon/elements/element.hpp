@@ -107,6 +107,9 @@ namespace dungeon
         //! Get the correponding eData.
         uint32 lua_getDataU32(const std::string& s) const;
 
+        //! Set the eData with the value specified.
+        uint32 lua_addDataU32(const std::string& s, const uint32 value);
+
         //! Init the eData with the value if empty.
         uint32 lua_initEmptyDataU32(const std::string& s, const uint32 value);
 
@@ -115,6 +118,9 @@ namespace dungeon
 
         //! Get the correponding eData.
         lua_Number lua_getDataFloat(const std::string& s) const;
+
+        //! Set the eData with the value specified.
+        lua_Number lua_addDataFloat(const std::string& s, const lua_Number value);
 
         //! Init the eData with the value if empty.
         lua_Number lua_initEmptyDataFloat(const std::string& s, const lua_Number value);

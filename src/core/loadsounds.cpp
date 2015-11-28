@@ -3,6 +3,9 @@
 #include "core/debug.hpp"
 #include "tools/filesystem.hpp"
 
+// FIXME Should be on the same structure that textures and animations,
+// as more and more sounds will be loaded
+
 void Application::loadSounds()
 {
     uint soundsCount = 0u;

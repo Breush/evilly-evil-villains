@@ -25,6 +25,15 @@ namespace dungeon
         std::string detectKey() const final { return "hero"; }
         std::string _name() const final { return "dungeon::Hero"; }
 
+        //------------------//
+        //! @name Loot info
+        //! @{
+
+        //! How much do the player get back when he kills the hero?
+        uint deadGain();
+
+        //! @}
+
     protected:
 
         //---------------------//
@@ -43,7 +52,7 @@ namespace dungeon
         void lua_getOut();
 
         //! When the hero wants to steal money from treasure.
-        void lua_stealTreasure();
+        uint lua_stealTreasure();
 
         //! @}
 

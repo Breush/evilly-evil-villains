@@ -17,7 +17,15 @@ Hero::Hero(HeroesManager& manager, Inter& inter, Graph& graph)
 {
     // Lua API
     m_lua["eev_getOut"] = [this] { lua_getOut(); };
-    m_lua["eev_stealTreasure"] = [this] { lua_stealTreasure(); };
+    m_lua["eev_stealTreasure"] = [this] { return lua_stealTreasure(); };
+}
+
+//---------------------//
+//----- Loot info -----//
+
+uint Hero::deadGain()
+{
+    return m_lua["_deadGain"]();
 }
 
 //------------------------//
@@ -39,9 +47,9 @@ void Hero::lua_getOut()
     m_manager.heroGetsOut(this);
 }
 
-void Hero::lua_stealTreasure()
+uint Hero::lua_stealTreasure()
 {
     auto maxStolenDosh = std::min(100u, toNodeData(m_currentNode)->treasure);
     auto stolenDosh = 1u + rand() % maxStolenDosh;
-    m_manager.heroStealsTreasure(this, toNodeData(m_currentNode)->coords, stolenDosh);
+    return m_manager.heroStealsTreasure(this, toNodeData(m_currentNode)->coords, stolenDosh);
 }

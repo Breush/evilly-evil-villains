@@ -20,10 +20,19 @@ local treasure_found
 function _reinit()
     -- FIXME Save this state in the eData
     treasure_found = false
+
+    -- All Gr'oo start with 50 dosh in pocket
+    eev_initEmptyDataU32("dosh", 50)
 end
 
 -- Called once on object creation
 function _register()
+end
+
+-- Called when this hero dies
+function _deadGain()
+    local dosh = eev_getDataU32("dosh")
+    return dosh
 end
 
 -------------
@@ -40,7 +49,8 @@ end
 function _evaluateReference()
     -- If it is the first time we met a treasure, change state
     if (eev_weight.treasure() > 0) then
-        eev_stealTreasure()
+        local stolenDosh = eev_stealTreasure()
+        eev_addDataU32("dosh", stolenDosh)
         treasure_found = true
     end
 

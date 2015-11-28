@@ -69,7 +69,7 @@ namespace dungeon
         void heroGetsOut(Hero* hero);
 
         //! Feedback from Hero when he tries to steal a treasure.
-        void heroStealsTreasure(Hero* hero, const sf::Vector2u& coords, const uint stolenDosh);
+        uint heroStealsTreasure(Hero* hero, const sf::Vector2u& coords, const uint stolenDosh);
 
         //! @}
 
@@ -121,6 +121,7 @@ namespace dungeon
             HeroStatus status = HeroStatus::TO_SPAWN;   //!< Hero status.
             float spawnDelay = 0.f;                     //!< Seconds to wait before effective spawning.
             ElementData data;                           //!< All its data.
+            bool reward = false;                        //!< Do the player get a reward when this hero is removed?
         };
 
     private:

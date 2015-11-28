@@ -31,10 +31,6 @@ namespace context
 
 namespace dungeon
 {
-    // Forward declarations
-
-    class Hero;
-
     // TODO Move these to their own file
     //! Defines the possibly accessible relative directions from a room.
     /*!
@@ -239,6 +235,10 @@ namespace dungeon
         //! @return true on success or if no room and false if action is impossible.
         bool pushRoom(const sf::Vector2u& coords, Direction direction);
 
+        //! Remove some dosh from the room.
+        //! Returns the amount stolen, between 0u and wantedDosh;
+        uint stealRoomTreasure(const sf::Vector2u& coords, uint wantedDosh);
+
         //! Return the coordinates of the next room from the specified one.
         /*!
          *  Note: this function does not check accessibility.
@@ -340,15 +340,6 @@ namespace dungeon
         //! Remove all the monsters from the room specified.
         //! Will emit an event if a change occured.
         void removeRoomMonsters(const sf::Vector2u& coords);
-
-        //! @}
-
-        //-------------------------//
-        //! @name Hero interaction
-        //! @{
-
-        //! When a hero steals some dosh from the treasure room.
-        void stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh);
 
         //! @}
 

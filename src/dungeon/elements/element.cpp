@@ -52,9 +52,11 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
     m_lua["eev_initEmptyDataBool"] = [this] (const std::string& s, const bool value) { return lua_initEmptyDataBool(s, value); };
     m_lua["eev_setDataU32"] = [this] (const std::string& s, const uint32 value) { return lua_setDataU32(s, value); };
     m_lua["eev_getDataU32"] = [this] (const std::string& s) { return lua_getDataU32(s); };
+    m_lua["eev_addDataU32"] = [this] (const std::string& s, const uint32 value) { return lua_addDataU32(s, value); };
     m_lua["eev_initEmptyDataU32"] = [this] (const std::string& s, const uint32 value) { return lua_initEmptyDataU32(s, value); };
     m_lua["eev_setDataFloat"] = [this] (const std::string& s, const lua_Number value) { return lua_setDataFloat(s, value); };
     m_lua["eev_getDataFloat"] = [this] (const std::string& s) { return lua_getDataFloat(s); };
+    m_lua["eev_addDataFloat"] = [this] (const std::string& s, const lua_Number value) { return lua_addDataFloat(s, value); };
     m_lua["eev_initEmptyDataFloat"] = [this] (const std::string& s, const lua_Number value) { return lua_initEmptyDataFloat(s, value); };
 
     m_lua["eev_setUIDDataU32"] = [this] (const uint32 UID, const std::string& s, const uint32 value) { lua_setUIDDataU32(UID, s, value); };
@@ -196,7 +198,6 @@ bool Element::lua_initEmptyDataBool(const std::string& s, const bool value)
     return m_edata->operator[](ws).as_bool();
 }
 
-
 uint32 Element::lua_setDataU32(const std::string& s, const uint32 value)
 {
     auto ws = toWString(s);
@@ -207,6 +208,11 @@ uint32 Element::lua_getDataU32(const std::string& s) const
 {
     auto ws = toWString(s);
     return m_edata->operator[](ws).as_uint32();
+}
+uint32 Element::lua_addDataU32(const std::string& s, const uint32 value)
+{
+    auto ws = toWString(s);
+    return m_edata->operator[](ws).as_uint32() += value;
 }
 
 uint32 Element::lua_initEmptyDataU32(const std::string& s, const uint32 value)
@@ -227,6 +233,12 @@ lua_Number Element::lua_getDataFloat(const std::string& s) const
 {
     auto ws = toWString(s);
     return static_cast<lua_Number>(m_edata->operator[](ws).as_float());
+}
+
+lua_Number Element::lua_addDataFloat(const std::string& s, const lua_Number value)
+{
+    auto ws = toWString(s);
+    return m_edata->operator[](ws).as_float() += static_cast<float>(value);
 }
 
 lua_Number Element::lua_initEmptyDataFloat(const std::string& s, const lua_Number value)

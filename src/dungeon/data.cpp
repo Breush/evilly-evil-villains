@@ -486,6 +486,30 @@ bool Data::pushRoom(const sf::Vector2u& coords, Direction direction)
     return true;
 }
 
+uint Data::stealRoomTreasure(const sf::Vector2u& coords, uint wantedDosh)
+{
+    auto& roomInfo = room(coords);
+
+    // Stealing all potential facilities until the amount of stolen dosh is reached
+    uint stolenDosh = 0u;
+    for (auto& facilityInfo : roomInfo.facilities) {
+        auto& treasure = facilityInfo.treasure;
+        if (treasure == -1u) continue;
+
+        auto dosh = std::min(treasure, wantedDosh);
+        treasure -= dosh;
+        wantedDosh -= dosh;
+        stolenDosh += dosh;
+
+        if (wantedDosh == 0u)
+            break;
+    }
+
+    addEvent("facility_changed", coords);
+
+    return stolenDosh;
+}
+
 sf::Vector2u Data::roomNeighbourCoords(const sf::Vector2u& coords, Direction direction)
 {
     return coords + roomDirectionVector2u(direction);
@@ -516,34 +540,6 @@ uint Data::roomTreasureDosh(const sf::Vector2u& coords)
         treasureDosh += treasure;
     }
     return treasureDosh;
-}
-
-//----------------------------//
-//----- Hero interaction -----//
-
-// TODO This kind of high level function should probably not be in Data but in Inter
-void Data::stealTreasure(const sf::Vector2u& coords, Hero& hero, uint stolenDosh)
-{
-    auto& roomInfo = room(coords);
-
-    // Stealing all potential facilities until the amount of stolen dosh is reached
-    for (auto& facilityInfo : roomInfo.facilities) {
-        auto& treasure = facilityInfo.treasure;
-        if (treasure == -1u) continue;
-
-        auto dosh = std::min(treasure, stolenDosh);
-        hero.edata()[L"dosh"].as_uint32() += dosh;
-        treasure -= dosh;
-        stolenDosh -= dosh;
-
-        if (stolenDosh == 0u)
-            break;
-    }
-
-    // Note: We could check that stolenDosh is zero here.
-    // If not, we were not able to steal the amount asked.
-
-    addEvent("facility_changed", coords);
 }
 
 //----------------------//

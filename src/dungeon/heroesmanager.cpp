@@ -18,15 +18,11 @@ void HeroesManager::update(const sf::Time& dt)
 {
     returnif (m_graph == nullptr);
 
-    // Remove dead/out heroes
-    auto heroesCountBefore = m_heroesInfo.size();
-    std::erase_if(m_heroesInfo, [](const HeroInfo& heroInfo) { return heroInfo.status == HeroStatus::TO_BE_REMOVED; });
-    auto heroesCountAfter = m_heroesInfo.size();
-    if (heroesCountBefore != heroesCountAfter)
-        refreshHeroesData();
+    // Update heroes
+    bool heroesCountChanged = false;
+    for (auto it = std::begin(m_heroesInfo); it != std::end(m_heroesInfo); ) {
+        auto& heroInfo = *it;
 
-    // Consider other updates
-    for (auto& heroInfo : m_heroesInfo) {
         // Spawn hero or update delay before spawning
         if (heroInfo.status == HeroStatus::TO_SPAWN) {
             heroInfo.spawnDelay -= dt.asSeconds();
@@ -54,7 +50,33 @@ void HeroesManager::update(const sf::Time& dt)
             hero->bindElementData(heroInfo.data);
             m_inter->attachChild(*hero);
         }
+
+        // Remove the hero
+        else if (heroInfo.status == HeroStatus::TO_BE_REMOVED) {
+            if (heroInfo.reward && heroInfo.hero != nullptr) {
+                // TODO Make it a loot object in the dungeon/room?
+                auto deadGain = heroInfo.hero->deadGain();
+                if (deadGain > 0u) {
+                    m_data->villain().doshWallet.add(deadGain);
+                    Application::context().sounds.play("resources/dosh_gain");
+                }
+            }
+
+            it = m_heroesInfo.erase(it);
+            heroesCountChanged = true;
+            continue;
+        }
+
+        ++it;
     }
+
+    // Heroes count changed, update all reference to their data
+    // TODO This could use a lighter version of refreshHeroesData
+    // because we are only interested in keeping the reference (pointer) OK,
+    // and not to reinitialize LUA/etc.
+    // Ultimately, we won't need _reinit() function in lua (just one _register on _init)
+    if (heroesCountChanged)
+        refreshHeroesData();
 
     // Next group
     m_nextGroupDelay -= dt.asSeconds();
@@ -70,6 +92,7 @@ void HeroesManager::receive(const context::Event& event)
     const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
     sf::Vector2u coords = {devent.room.x, devent.room.y};
 
+    // FIXME This event should slowly kills the hero via asphyxia
     if (devent.type == "room_destroyed") {
         // Remove all heroes in that room
         for (auto& heroInfo : m_heroesInfo) {
@@ -77,8 +100,10 @@ void HeroesManager::receive(const context::Event& event)
             heroCoords.x = static_cast<uint>(heroInfo.data[L"rx"].as_float());
             heroCoords.y = static_cast<uint>(heroInfo.data[L"ry"].as_float());
 
-            if (heroCoords == coords)
+            if (heroCoords == coords) {
                 heroInfo.status = HeroStatus::TO_BE_REMOVED;
+                heroInfo.reward = true;
+            }
         }
     }
     else if (devent.type == "dungeon_graph_changed") {
@@ -190,6 +215,7 @@ void HeroesManager::heroGetsOut(Hero* hero)
     auto& heroInfo = *pHeroInfo;
 
     // If no dosh stolen, hero is unhappy, fame decrease
+    // TODO This should be part of Hero Lua
     if (heroInfo.data[L"dosh"].as_uint32() == 0u)
         m_data->fameWallet().sub(4u);
     else
@@ -200,9 +226,9 @@ void HeroesManager::heroGetsOut(Hero* hero)
     hero->setVisible(false);
 }
 
-void HeroesManager::heroStealsTreasure(Hero* hero, const sf::Vector2u& coords, const uint stolenDosh)
+uint HeroesManager::heroStealsTreasure(Hero*, const sf::Vector2u& coords, const uint stolenDosh)
 {
-    m_data->stealTreasure(coords, *hero, stolenDosh);
+    return m_data->stealRoomTreasure(coords, stolenDosh);
 }
 
 //---------------//
