@@ -1,5 +1,5 @@
 Original names for fonts:
 
 mono    -> monofur.ttf
-nui     -> gravity.ttf
+nui     -> blue_highway.ttf
 horror  -> haunt.ttf
