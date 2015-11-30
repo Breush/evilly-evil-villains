@@ -22,7 +22,7 @@ function _reinit()
     treasure_found = false
 
     -- All Gr'oo start with 50 dosh in pocket
-    local dosh = eev_initEmptyDataU32("dosh", 50)
+    eev_initEmptyDataU32("dosh", 50)
 end
 
 -- Called once on object creation

@@ -223,6 +223,7 @@ uint32 Element::lua_initEmptyDataU32(const std::string& s, const uint32 value)
     auto ws = toWString(s);
     if (!m_edata->exists(ws))
         m_edata->operator[](ws).init_uint32(value);
+
     return m_edata->operator[](ws).as_uint32();
 }
 
