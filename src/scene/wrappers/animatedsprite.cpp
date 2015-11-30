@@ -5,6 +5,7 @@
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
+#include "tools/math.hpp"
 
 using namespace scene;
 

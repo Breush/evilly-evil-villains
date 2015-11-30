@@ -8,6 +8,10 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/Vector2.hpp>
 
+#if not defined(M_PI)
+    #define M_PI 3.1415927410125732421875f
+#endif
+
 //-------------------//
 //----- Generic -----//
 
