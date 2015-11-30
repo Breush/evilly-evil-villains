@@ -190,6 +190,12 @@ namespace SpriterEngine
                 std::string objectName = att->getStringValue();
                 att->advanceToNextAttribute();
 
+                if (att->isValid() && att->getName() == "realname")
+                {
+                    objectName = att->getStringValue();
+                    att->advanceToNextAttribute();
+                }
+
                 Object::ObjectType objectType = Object::OBJECTTYPE_SPRITE;
                 if (att->isValid() && att->getName() == "type")
                 {
@@ -224,6 +230,7 @@ namespace SpriterEngine
                             (*defaultBoxPivotMap)[newObject->getId()].y = 1 - att->getRealValue();
                             att->advanceToNextAttribute();
                         }
+
                         newObject->setSize(size);
                     }
 
