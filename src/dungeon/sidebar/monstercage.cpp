@@ -106,6 +106,7 @@ bool MonsterCage::handleMouseButtonPressed(const sf::Mouse::Button button, const
     // Cage part
     if (mousePos.x < 0.6f * size().x)
         graph()->setGrabbable(spawnGrabbable());
+
     // Hire part
     else
         hire();
@@ -169,7 +170,6 @@ std::unique_ptr<scene::Grabbable> MonsterCage::spawnGrabbable()
     // Grab if puppets available
     returnif (m_puppets.size() == 0u) nullptr;
 
-    // FIXME This is cheating... we need spawn position.
     m_grabbablePosition = sf::v2f(sf::Mouse::getPosition());
 
     // And hide one puppet, as it is being grabbed

@@ -36,9 +36,9 @@ end
 -- Called whenever a right click occurs
 function cbLeftClick()
     -- Give resources to the villain
-    eev_giveVillainDosh(eev_getDataU32("dosh"))
-    -- eev_giveVillainSoul(eev_getDataU32("soul"))
-    -- eev_giveVillainFame(eev_getDataU32("fame"))
+    eev_giveDosh(eev_getDataU32("dosh"))
+    eev_giveSoul(eev_getDataU32("soul"))
+    eev_giveFame(eev_getDataU32("fame"))
 
     -- Destroy itself
     eev_dynamicRemoveSelf()

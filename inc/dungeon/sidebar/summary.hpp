@@ -19,6 +19,7 @@ namespace dungeon
     {
         BAR_TIME,
         BAR_DOSH,
+        BAR_SOUL,
         BAR_FAME,
         BAR_COUNT,  //!< Keep last.
     };
@@ -92,6 +93,9 @@ namespace dungeon
 
         //! To be called whenever dosh changed.
         void refreshDoshBar();
+
+        //! To be called whenever soul changed.
+        void refreshSoulBar();
 
         //! To be called whenever fame changed.
         void refreshFameBar();

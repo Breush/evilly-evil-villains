@@ -731,7 +731,20 @@ void Inter::moveMonsterFromReserve(const sf::Vector2f& relPos, const std::wstrin
 void Inter::addMonsterToReserve(const std::wstring& monsterID)
 {
     // Increase countdown
-    const auto& hireCountdown = monstersDB().get(monsterID).hireCountdown;
+    const auto& monsterData = monstersDB().get(monsterID);
+    const auto& hireCountdown = monsterData.hireCountdown;
+
+    // Check for cost
+    returnif (m_data->villain().doshWallet.value() < monsterData.baseCost.dosh);
+    returnif (m_data->soulWallet().value() < monsterData.baseCost.soul);
+    returnif (m_data->fameWallet().value() < monsterData.baseCost.fame);
+
+    // Do pay
+    // TODO Let some globalWallet manage all resources
+    m_data->villain().doshWallet.sub(monsterData.baseCost.dosh);
+    m_data->soulWallet().sub(monsterData.baseCost.soul);
+    m_data->fameWallet().sub(monsterData.baseCost.fame);
+
     m_data->addMonsterToReserve(monsterID, hireCountdown);
 }
 

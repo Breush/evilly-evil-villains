@@ -354,6 +354,12 @@ namespace dungeon
         //! Access to the fame wallet (const).
         inline const context::Wallet& fameWallet() const { return m_fameWallet; }
 
+        //! Access to the soul wallet.
+        inline context::Wallet& soulWallet() { return m_soulWallet; }
+
+        //! Access to the soul wallet (const).
+        inline const context::Wallet& soulWallet() const { return m_soulWallet; }
+
         //!< Access to the current game time.
         inline uint time() const { return m_time; }
 
@@ -458,6 +464,7 @@ namespace dungeon
         Graph* m_graph = nullptr;   //!< The graph linked to these data.
         context::Villain* m_villain = nullptr;  //!< The villain reference.
         context::Wallet m_fameWallet;           //!< The resource fame value.
+        context::Wallet m_soulWallet;           //!< The resource soul value.
 
         // Managers
         HeroesManager m_heroesManager;      //!< Manage all heroes.

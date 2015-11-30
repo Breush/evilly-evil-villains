@@ -38,6 +38,7 @@ function _onDeath()
     local ry = eev_getDataFloat("ry")
     local lootUID = eev_spawnDynamic("loot", rx, ry)
     eev_setUIDDataU32(lootUID, "dosh", dosh)
+    eev_setUIDDataU32(lootUID, "soul", 1)
 end
 
 -------------

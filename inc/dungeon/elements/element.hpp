@@ -154,7 +154,13 @@ namespace dungeon
         uint32 lua_borrowVillainDosh(const uint32 amount);
 
         //! Add money to the reserve.
-        void lua_giveVillainDosh(const uint32 amount);
+        void lua_giveDosh(const uint32 amount);
+
+        //! Add soul to the reserve.
+        void lua_giveSoul(const uint32 amount);
+
+        //! Add fame to the reserve.
+        void lua_giveFame(const uint32 amount);
 
         //---- Elements control
 

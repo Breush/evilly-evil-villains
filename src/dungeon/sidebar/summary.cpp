@@ -28,6 +28,7 @@ Summary::Summary()
     }
 
     m_bars[BAR_DOSH].text.setColor({190u, 171u, 21u});
+    m_bars[BAR_SOUL].text.setColor({102u, 190u, 21u});
     m_bars[BAR_FAME].text.setColor({102u, 151u, 196u});
 }
 
@@ -35,6 +36,7 @@ void Summary::init()
 {
     // Bars
     m_bars[BAR_DOSH].logo.setTexture(&Application::context().textures.get("elements/dosh"));
+    m_bars[BAR_SOUL].logo.setTexture(&Application::context().textures.get("elements/soul"));
     m_bars[BAR_FAME].logo.setTexture(&Application::context().textures.get("elements/fame"));
 }
 
@@ -104,6 +106,8 @@ void Summary::receive(const context::Event& event)
         refreshTimeBar();
     else if (devent.type == "dosh_changed")
         refreshDoshBar();
+    else if (devent.type == "soul_changed")
+        refreshSoulBar();
     else if (devent.type == "fame_changed")
         refreshFameBar();
 }
@@ -118,6 +122,7 @@ void Summary::refreshFromData()
 
     refreshTimeBar();
     refreshDoshBar();
+    refreshSoulBar();
     refreshFameBar();
 
     updateSize();
@@ -145,6 +150,12 @@ void Summary::refreshDoshBar()
 {
     auto dosh = m_data->villain().doshWallet.value();
     m_bars[BAR_DOSH].text.setString(toWString(dosh));
+}
+
+void Summary::refreshSoulBar()
+{
+    auto soul = m_data->soulWallet().value();
+    m_bars[BAR_SOUL].text.setString(toWString(soul));
 }
 
 void Summary::refreshFameBar()

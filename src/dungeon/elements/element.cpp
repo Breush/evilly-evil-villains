@@ -70,7 +70,9 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
     m_lua["eev_spawnDynamic"] = [this] (const std::string& shortDynamicID, const lua_Number rx, const lua_Number ry) { return lua_spawnDynamic(shortDynamicID, rx, ry); };
 
     m_lua["eev_borrowVillainDosh"] = [this] (const uint32 amount) { return lua_borrowVillainDosh(amount); };
-    m_lua["eev_giveVillainDosh"] = [this] (const uint32 amount) { lua_giveVillainDosh(amount); };
+    m_lua["eev_giveDosh"] = [this] (const uint32 amount) { lua_giveDosh(amount); };
+    m_lua["eev_giveSoul"] = [this] (const uint32 amount) { lua_giveSoul(amount); };
+    m_lua["eev_giveFame"] = [this] (const uint32 amount) { lua_giveFame(amount); };
 
     m_lua["eev_dungeonExplodeRoom"] = [this] (const uint x, const uint y) { lua_dungeonExplodeRoom(x, y); };
     m_lua["eev_dungeonPushRoom"] = [this] (const uint x, const uint y, const std::string& direction, const uint animationDelay)
@@ -305,9 +307,19 @@ uint32 Element::lua_borrowVillainDosh(const uint32 amount)
     return amount;
 }
 
-void Element::lua_giveVillainDosh(const uint32 amount)
+void Element::lua_giveDosh(const uint32 amount)
 {
     m_inter.villain().doshWallet.add(amount);
+}
+
+void Element::lua_giveSoul(const uint32 amount)
+{
+    m_inter.data().soulWallet().add(amount);
+}
+
+void Element::lua_giveFame(const uint32 amount)
+{
+    m_inter.data().fameWallet().add(amount);
 }
 
 //----- Elements control
