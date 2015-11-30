@@ -4,6 +4,7 @@
 #include "tools/int.hpp"
 #include "dungeon/event.hpp"
 #include "dungeon/heroesmanager.hpp"
+#include "dungeon/dynamicsmanager.hpp"
 #include "dungeon/elements/elementdata.hpp"
 #include "dungeon/databases/monstersdb.hpp"
 #include "dungeon/databases/trapsdb.hpp"
@@ -383,6 +384,9 @@ namespace dungeon
         //! Access the heroes manager.
         inline HeroesManager& heroesManager() { return m_heroesManager; }
 
+        //! Access the dynamics manager.
+        inline DynamicsManager& dynamicsManager() { return m_dynamicsManager; }
+
         //! Access the associated graph.
         inline Graph& graph() { return *m_graph; }
 
@@ -456,7 +460,8 @@ namespace dungeon
         context::Wallet m_fameWallet;           //!< The resource fame value.
 
         // Managers
-        HeroesManager m_heroesManager;  //!< Manage all heroes.
+        HeroesManager m_heroesManager;      //!< Manage all heroes.
+        DynamicsManager m_dynamicsManager;  //!< Manage all dynamic elements.
 
         // Dungeon
         std::vector<Floor> m_floors;    //!< A dungeon consists in a vector of floors.

@@ -219,6 +219,16 @@ namespace dungeon
 
         //! @}
 
+        //-----------------//
+        //! @name Dynamics
+        //! @{
+
+        //! Create a dynamic element.
+        //! @return the UID of the element created.
+        uint32 spawnDynamic(const sf::Vector2f& relPos, const std::wstring& dynamicID);
+
+        //! @}
+
         //------------------------//
         //! @name Tile management
         //! @{

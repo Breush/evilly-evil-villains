@@ -153,6 +153,15 @@ namespace dungeon
         //! Return the amount borrowed.
         uint32 lua_borrowVillainDosh(const uint32 amount);
 
+        //! Add money to the reserve.
+        void lua_giveVillainDosh(const uint32 amount);
+
+        //---- Elements control
+
+        //! Creates a dynamicElement of the type specified in the relative coordinates.
+        //! @return the UID of the element created.
+        uint32 lua_spawnDynamic(const std::string& dynamicID, const lua_Number rx, const lua_Number ry);
+
         //----- Dungeon
 
         //! Explode the corresponding room.
@@ -170,7 +179,7 @@ namespace dungeon
 
     protected:
 
-        dungeon::Inter& m_inter;        //!< To be able to interact with nearby elements.
+        Inter& m_inter;                 //!< To be able to interact with nearby elements.
         ElementData* m_edata = nullptr; //!< The data of the element.
         scene::AnimatedSprite m_sprite; //!< The sprite.
         sel::State m_lua;               //!< The lua state.

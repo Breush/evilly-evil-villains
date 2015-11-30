@@ -1,15 +1,15 @@
 #pragma once
 
 #include "dungeon/graph.hpp"
-#include "dungeon/elements/element.hpp"
+#include "dungeon/elements/dynamicelement.hpp"
 
 namespace dungeon
 {
     //! A generic moving element interface.
 
-    class MovingElement : public Element
+    class MovingElement : public DynamicElement
     {
-        using baseClass = Element;
+        using baseClass = DynamicElement;
 
         //! All the weights used by Lua algorithms.
         struct Weight
@@ -64,12 +64,6 @@ namespace dungeon
 
         //! Returns true if the current direction is matching.
         bool lua_isLookingDirection(const std::string& direction) const;
-
-        //! Get the current room x coordinate.
-        uint lua_getCurrentRoomX() const;
-
-        //! Get the current room y coordinate.
-        uint lua_getCurrentRoomY() const;
 
         //! @}
 

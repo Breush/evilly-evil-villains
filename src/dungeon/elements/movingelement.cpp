@@ -7,7 +7,7 @@
 using namespace dungeon;
 
 MovingElement::MovingElement(std::string folder, Inter& inter, Graph& graph)
-    : baseClass(inter, true)
+    : baseClass(inter)
     , m_graph(graph)
     , m_folder(std::move(folder))
 {
@@ -119,16 +119,6 @@ bool MovingElement::lua_isLookingDirection(const std::string& direction) const
     else throw std::runtime_error("Unknown direction '" + direction + "' from LUA isLookingDirection().");
 }
 
-uint MovingElement::lua_getCurrentRoomX() const
-{
-    return static_cast<uint>(m_edata->operator[](L"rx").as_float());
-}
-
-uint MovingElement::lua_getCurrentRoomY() const
-{
-    return static_cast<uint>(m_edata->operator[](L"ry").as_float());
-}
-
 //---------------------------//
 //----- Node management -----//
 
@@ -217,7 +207,7 @@ uint MovingElement::call(const char* function, const Graph::NodeData* node)
 
 void MovingElement::bindElementData(ElementData& edata)
 {
-    // It's our first time is previous data is not the same monster type
+    // It's our first time is previous data is not the same element type
     bool firstTime = (m_edata == nullptr) || (m_elementID != edata.type());
     m_edata = &edata;
 

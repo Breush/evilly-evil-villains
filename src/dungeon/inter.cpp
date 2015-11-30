@@ -219,8 +219,9 @@ void Inter::useData(Data& data)
 {
     m_data = &data;
     m_data->heroesManager().useInter(*this);
+    m_data->dynamicsManager().useInter(*this);
 
-    setEmitter(&data);
+    setEmitter(m_data);
     refreshFromData();
 }
 
@@ -732,6 +733,14 @@ void Inter::addMonsterToReserve(const std::wstring& monsterID)
     // Increase countdown
     const auto& hireCountdown = monstersDB().get(monsterID).hireCountdown;
     m_data->addMonsterToReserve(monsterID, hireCountdown);
+}
+
+//--------------------//
+//----- Dynamics -----//
+
+uint32 Inter::spawnDynamic(const sf::Vector2f& relPos, const std::wstring& dynamicID)
+{
+    return m_data->dynamicsManager().create(relTileFromLocalPosition(relPos), dynamicID);
 }
 
 //----------------//

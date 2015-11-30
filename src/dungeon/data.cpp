@@ -63,8 +63,9 @@ void Data::update(const sf::Time& dt)
     // Send events
     broadcast();
 
-    // Heroes
+    // Managers
     m_heroesManager.update(dt);
+    m_dynamicsManager.update(dt);
 }
 
 //---------------------------//
@@ -148,6 +149,11 @@ void Data::loadDungeon(const std::wstring& file)
     m_roomsByFloor = dungeon.attribute(L"roomsByFloor").as_uint();
     m_fameWallet.set(dungeon.attribute(L"fame").as_uint());
     wdebug_dungeon_1(L"Dungeon is " << m_name << L" of size " << m_floorsCount << L"x" << m_roomsByFloor << L".");
+
+    //---- Dynamics
+
+    const auto& dynamicsNode = dungeon.child(L"dynamics");
+    m_dynamicsManager.load(dynamicsNode);
 
     //---- Heroes
 
@@ -258,6 +264,11 @@ void Data::saveDungeon(const std::wstring& file)
     dungeon.append_attribute(L"floorsCount") = m_floorsCount;
     dungeon.append_attribute(L"roomsByFloor") = m_roomsByFloor;
     dungeon.append_attribute(L"fame") = m_fameWallet.value();
+
+    //---- Dynamics
+
+    auto dynamicsNode = dungeon.append_child(L"dynamics");
+    m_dynamicsManager.save(dynamicsNode);
 
     //---- Heroes
 

@@ -25,12 +25,12 @@ namespace dungeon
         std::string detectKey() const final { return "hero"; }
         std::string _name() const final { return "dungeon::Hero"; }
 
-        //------------------//
-        //! @name Loot info
+        //-------------------//
+        //! @name Extern lua
         //! @{
 
-        //! How much do the player get back when he kills the hero?
-        uint deadGain();
+        //! Calls the Lua _onDeath() function.
+        void onDeath();
 
         //! @}
 

@@ -20,12 +20,12 @@ Hero::Hero(HeroesManager& manager, Inter& inter, Graph& graph)
     m_lua["eev_stealTreasure"] = [this] { return lua_stealTreasure(); };
 }
 
-//---------------------//
-//----- Loot info -----//
+//----------------------//
+//----- Extern Lua -----//
 
-uint Hero::deadGain()
+void Hero::onDeath()
 {
-    return m_lua["_deadGain"]();
+    m_lua["_onDeath"]();
 }
 
 //------------------------//

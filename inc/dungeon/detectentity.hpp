@@ -32,6 +32,15 @@ namespace dungeon
         //! Key that identify the type of entity.
         virtual std::string detectKey() const = 0;
 
+        //------------------//
+        //! @name Detection
+        //! @{
+
+        //! The UID of the entity.
+        inline uint32 UID() const { return m_UID; }
+
+        //! @}
+
     protected:
 
         //----------------//
@@ -62,9 +71,6 @@ namespace dungeon
 
         //! Factor applied to all range checks.
         inline void setDetectRangeFactor(const float detectRangeFactor) { m_detectRangeFactor = detectRangeFactor; }
-
-        //! The UID of the entity.
-        inline uint32 UID() const { return m_UID; }
 
         //! Set the UID of the entity, should be called by detector.
         inline void setUID(uint32 inUID) { m_UID = inUID; }

@@ -53,14 +53,8 @@ void HeroesManager::update(const sf::Time& dt)
 
         // Remove the hero
         else if (heroInfo.status == HeroStatus::TO_BE_REMOVED) {
-            if (heroInfo.reward && heroInfo.hero != nullptr) {
-                // TODO Make it a loot object in the dungeon/room?
-                auto deadGain = heroInfo.hero->deadGain();
-                if (deadGain > 0u) {
-                    m_data->villain().doshWallet.add(deadGain);
-                    Application::context().sounds.play("resources/dosh_gain");
-                }
-            }
+            if (heroInfo.reward && heroInfo.hero != nullptr)
+                heroInfo.hero->onDeath();
 
             it = m_heroesInfo.erase(it);
             heroesCountChanged = true;
@@ -135,6 +129,8 @@ void HeroesManager::load(const pugi::xml_node& node)
             heroInfo.spawnDelay = 0.f;
         }
     }
+
+    refreshHeroesData();
 }
 
 void HeroesManager::save(pugi::xml_node node)

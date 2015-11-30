@@ -67,7 +67,10 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
     m_lua["eev_restartAnimation"] = [this] { lua_restartAnimation(); };
     m_lua["eev_forwardAnimation"] = [this] (const lua_Number offset) { lua_forwardAnimation(offset); };
 
+    m_lua["eev_spawnDynamic"] = [this] (const std::string& shortDynamicID, const lua_Number rx, const lua_Number ry) { return lua_spawnDynamic(shortDynamicID, rx, ry); };
+
     m_lua["eev_borrowVillainDosh"] = [this] (const uint32 amount) { return lua_borrowVillainDosh(amount); };
+    m_lua["eev_giveVillainDosh"] = [this] (const uint32 amount) { lua_giveVillainDosh(amount); };
 
     m_lua["eev_dungeonExplodeRoom"] = [this] (const uint x, const uint y) { lua_dungeonExplodeRoom(x, y); };
     m_lua["eev_dungeonPushRoom"] = [this] (const uint x, const uint y, const std::string& direction, const uint animationDelay)
@@ -255,27 +258,20 @@ void Element::lua_setUIDDataU32(const uint32 UID, const std::string& s, const ui
 {
     auto ws = toWString(s);
     auto* entity = s_detector.find(UID);
-    returnif (entity == nullptr);
+    auto* element = dynamic_cast<Element*>(entity);
+    returnif (element == nullptr);
 
-    if (entity->detectKey() == "hero") {
-        auto* hero = reinterpret_cast<Hero*>(entity);
-        hero->edata()[ws].as_uint32() = value;
-    }
+    element->edata()[ws].as_uint32() = value;
 }
 
 uint32 Element::lua_getUIDDataU32(const uint32 UID, const std::string& s) const
 {
     auto ws = toWString(s);
     const auto* entity = s_detector.find(UID);
-    returnif (entity == nullptr) 0u;
+    const auto* element = dynamic_cast<const Element*>(entity);
+    returnif (element == nullptr) 0u;
 
-    if (entity->detectKey() == "hero") {
-        const auto* hero = reinterpret_cast<const Hero*>(entity);
-        return hero->edata().at(ws).as_uint32();
-    }
-
-    // Not found
-    return 0u;
+    return element->edata().at(ws).as_uint32();
 }
 
 //----- Animation
@@ -306,6 +302,20 @@ uint32 Element::lua_borrowVillainDosh(const uint32 amount)
 {
     returnif (!m_inter.villain().doshWallet.sub(amount)) 0u;
     return amount;
+}
+
+void Element::lua_giveVillainDosh(const uint32 amount)
+{
+    m_inter.villain().doshWallet.add(amount);
+}
+
+//----- Elements control
+
+uint32 Element::lua_spawnDynamic(const std::string& dynamicID, const lua_Number rx, const lua_Number ry)
+{
+    auto id = toWString(dynamicID);
+    sf::Vector2f relPos = m_inter.relTileLocalPosition({static_cast<float>(rx), static_cast<float>(ry)});
+    return m_inter.spawnDynamic(relPos, id);
 }
 
 //----- Dungeon

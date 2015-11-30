@@ -22,7 +22,7 @@ function _reinit()
     treasure_found = false
 
     -- All Gr'oo start with 50 dosh in pocket
-    eev_initEmptyDataU32("dosh", 50)
+    local dosh = eev_initEmptyDataU32("dosh", 50)
 end
 
 -- Called once on object creation
@@ -30,9 +30,14 @@ function _register()
 end
 
 -- Called when this hero dies
-function _deadGain()
+function _onDeath()
     local dosh = eev_getDataU32("dosh")
-    return dosh
+    if dosh == 0 then return end
+
+    local rx = eev_getDataFloat("rx")
+    local ry = eev_getDataFloat("ry")
+    local lootUID = eev_spawnDynamic("loot", rx, ry)
+    eev_setUIDDataU32(lootUID, "dosh", dosh)
 end
 
 -------------
