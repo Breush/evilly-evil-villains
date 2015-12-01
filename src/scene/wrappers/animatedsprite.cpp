@@ -28,13 +28,6 @@ void AnimatedSprite::drawInternal(sf::RenderTarget& target, sf::RenderStates sta
 {
     returnif (m_spriterEntity == nullptr);
 
-    m_spriterEntity->setPosition({getPosition().x, getPosition().y});
-    m_spriterEntity->setScale({scale().x, scale().y});
-    m_spriterEntity->setAngle(getRotation() * M_PI / 180.f);
-
-    // Forcing immediate refresh to current parameters
-    m_spriterEntity->reprocessCurrentTime();
-
     // TODO This does not take states shader in account?
     // And we might want to pass the target here.
     m_spriterEntity->render();
@@ -44,9 +37,24 @@ void AnimatedSprite::updateRoutine(const sf::Time& dt)
 {
     returnif (m_spriterEntity == nullptr);
 
+    // Refresh postionning
+    m_spriterEntity->setPosition({getPosition().x - getOrigin().x, getPosition().y - getOrigin().y});
+    m_spriterEntity->setScale({scale().x, scale().y});
+    m_spriterEntity->setAngle(getRotation() * M_PI / 180.f);
+
+    // Animate
     if (m_started) {
         forward(dt);
         m_spriterEntity->playAllTriggers();
+    }
+
+    // Update hitbox
+    if (m_hasHitbox) {
+        auto hitbox = m_spriterEntity->getObjectInstance("hitbox");
+        m_hitbox.width  = hitbox->getSize().x * hitbox->getScale().x;
+        m_hitbox.height = hitbox->getSize().y * hitbox->getScale().y;
+        m_hitbox.left   = hitbox->getPosition().x - (getPosition().x - getOrigin().x);
+        m_hitbox.top    = hitbox->getPosition().y - (getPosition().y - getOrigin().y);
     }
 }
 
@@ -88,19 +96,16 @@ void AnimatedSprite::forward(const sf::Time& offset)
 void AnimatedSprite::restart()
 {
     m_started = true;
-    if (m_spriterEntity != nullptr)
-        m_spriterEntity->setCurrentTime(0.);
+    returnif (m_spriterEntity == nullptr);
 
-    // Getting the current hitbox if any
-    auto hitbox = m_spriterEntity->getObjectInstance("hitbox");
-    if (hitbox != nullptr) {
-        m_hitbox.width  = hitbox->getSize().x;
-        m_hitbox.height = hitbox->getSize().y;
-        m_hitbox.left   = hitbox->getPosition().x;
-        m_hitbox.top    = hitbox->getPosition().y;
-    }
-    // Setting the hixbox to some default
-    else {
+    m_spriterEntity->setPosition({getPosition().x, getPosition().y});
+    m_spriterEntity->setScale({scale().x, scale().y});
+    m_spriterEntity->setAngle(getRotation() * M_PI / 180.f);
+    m_spriterEntity->setCurrentTime(0.);
+
+    // Setting the hitbox to some default if none
+    m_hasHitbox = (m_spriterEntity->getObjectInstance("hitbox") != nullptr);
+    if (!m_hasHitbox) {
         m_hitbox.width  = 50.f;
         m_hitbox.height = 50.f;
         m_hitbox.left   = -25.f;
