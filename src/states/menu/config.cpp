@@ -83,10 +83,11 @@ MenuConfig::MenuConfig(StateStack& stack)
         // Best bits per pixels are at the end with std::reverse
         if (refBitsPerPixel != videoMode.bitsPerPixel) continue;
 
-        Resolution resolution = {videoMode.width, videoMode.height};
-        m_resolutions.push_back(resolution);
-        std::wstring sResolution = toWString(resolution.width) + L'x' + toWString(resolution.height);
-        sResolution += L" (" + aspectRatio(resolution.width, resolution.height) + L')';
+        Resolution resolution{videoMode.width, videoMode.height};
+        m_resolutions.emplace_back(resolution);
+
+        std::wstring sResolution = toWString(resolution.x) + L'x' + toWString(resolution.y);
+        sResolution += L" (" + aspectRatio(resolution.x, resolution.y) + L')';
         m_resolutionBox.add(sResolution);
     }
 
@@ -238,9 +239,14 @@ void MenuConfig::refreshFormsFromConfig()
 
     // Graphics
     auto resolution = sf::v2u(display.window.resolution);
-    std::wstring sResolution = toWString(resolution.x) + L'x' + toWString(resolution.y);
-    sResolution += L" (" + aspectRatio(resolution.x, resolution.y) + L')';
-    m_resolutionBox.selectChoice(sResolution);
+    for (uint i = 0u; i < m_resolutions.size(); ++i) {
+        const auto& availableResolution = m_resolutions[i];
+        if (availableResolution == resolution) {
+            m_resolutionBox.selectChoice(i);
+            break;
+        }
+    }
+
     m_fullscreenBox.selectChoice(display.window.fullscreen? 0u : 1u);
     m_vsyncBox.selectChoice(display.window.vsync? 0u : 1u);
     m_antialiasingSelector.setValue(display.window.antialiasingLevel);
@@ -264,9 +270,7 @@ void MenuConfig::applyChanges()
     display.global.zoomSpeed = m_zoomSpeedSelector.value() / 100.f;
 
     // Graphics
-    Resolution selectedResolution = m_resolutions.at(m_resolutionBox.selectedChoice());
-    display.window.resolution.x = selectedResolution.width;
-    display.window.resolution.y = selectedResolution.height;
+    display.window.resolution = sf::v2f(m_resolutions.at(m_resolutionBox.selectedChoice()));
     display.window.fullscreen = (m_fullscreenBox.selectedChoice() == 0u);
     display.window.vsync = (m_vsyncBox.selectedChoice() == 0u);
     display.window.antialiasingLevel = m_antialiasingSelector.value();
