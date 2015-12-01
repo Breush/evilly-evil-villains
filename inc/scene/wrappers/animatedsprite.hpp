@@ -101,6 +101,7 @@ namespace scene
         sf::Color m_tiltColor = sf::Color::White;   //!< Extra coloring of the sprites.
 
         // Hitbox
-        sf::FloatRect m_hitbox; //!< The current hitbox as defined in the animation file (if any).
+        sf::FloatRect m_hitbox;     //!< The current hitbox as defined in the animation file (if any).
+        bool m_hasHitbox = false;   //!< Do we evaluate the hitbox?
     };
 }

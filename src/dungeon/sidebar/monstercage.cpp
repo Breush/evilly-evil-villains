@@ -189,8 +189,6 @@ void MonsterCage::hire()
     // Check that the monster can be hired
     returnif (pCage->countdown != 0u);
 
-    // TODO Check for cost (nor Inter nor Data should manage this, but some wallet)
-
     m_inter.addMonsterToReserve(m_monsterID);
 }
 

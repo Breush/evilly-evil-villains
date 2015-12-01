@@ -18,4 +18,5 @@ enum class StateID : uint8
     GAME_DUNGEON_DESIGN,
     GAME_PAUSE,
     GAME_OVER,
+    HUB,
 };

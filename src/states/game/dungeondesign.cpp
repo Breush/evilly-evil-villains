@@ -243,6 +243,14 @@ void GameDungeonDesign::handleEvent(const sf::Event& event)
             return;
         }
 
+        // Go to hub
+        // TODO Also have a UI element to access that
+        // TODO Have that key in shortcuts config
+        if (event.key.code == sf::Keyboard::H) {
+            stackPush(StateID::HUB);
+            return;
+        }
+
         // Decelerate time
         if (event.key.code == sf::Keyboard::F8) {
             setTimeFactor(timeFactor() / 2.f);

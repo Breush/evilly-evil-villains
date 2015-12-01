@@ -13,6 +13,7 @@
 #include "states/game/dungeondesign.hpp"
 #include "states/game/pause.hpp"
 #include "states/game/over.hpp"
+#include "states/hub/hub.hpp"
 
 void Application::loadStates()
 {
@@ -31,5 +32,7 @@ void Application::loadStates()
     m_stateStack.registerState<states::GameDungeonDesign>(StateID::GAME_DUNGEON_DESIGN);
     m_stateStack.registerState<states::GamePause>(StateID::GAME_PAUSE);
     m_stateStack.registerState<states::GameOver>(StateID::GAME_OVER);
+
+    m_stateStack.registerState<states::Hub>(StateID::HUB);
 }
 
