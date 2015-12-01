@@ -2,7 +2,7 @@
 
 #include "states/state.hpp"
 #include "states/identifiers.hpp"
-#include "scene/wrappers/animatedsprite.hpp"
+#include "hub/selector.hpp"
 
 namespace states
 {
@@ -33,18 +33,8 @@ namespace states
 
         //! @}
 
-        //------------//
-        //! @name ICU
-        //! @{
-
-        //! Select the correct animation over this position.
-        void refreshHitboxSelected(const sf::Vector2f& nuiPos);
-
-        //! @}
-
     private:
 
-        // Decorum
-        scene::AnimatedSprite m_scene;  //!< Basically, everything.
+        hub::Selector m_selector;
     };
 }
