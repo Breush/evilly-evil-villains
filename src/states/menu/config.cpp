@@ -79,13 +79,17 @@ MenuConfig::MenuConfig(StateStack& stack)
     // Graphics
     m_areas[AreaID::GRAPHICS].form.add(m_resolutionBox);
     auto refBitsPerPixel = sf::VideoMode::getFullscreenModes().at(0u).bitsPerPixel;
-    for (const auto& videoMode : sf::VideoMode::getFullscreenModes()) {
-        if (refBitsPerPixel != videoMode.bitsPerPixel) break;
-        std::wstring sResolution = toWString(videoMode.width) + L'x' + toWString(videoMode.height);
-        sResolution += L" (" + aspectRatio(videoMode.width, videoMode.height) + L')';
+    for (const auto& videoMode : std::reverse(sf::VideoMode::getFullscreenModes())) {
+	// Best bits per pixels are at the end with std::reverse
+        if (refBitsPerPixel != videoMode.bitsPerPixel) continue;
+	
+	Resolution resolution = {videoMode.width, videoMode.height};
+	m_resolutions.push_back(resolution);
+        std::wstring sResolution = toWString(resolution.width) + L'x' + toWString(resolution.height);
+        sResolution += L" (" + aspectRatio(resolution.width, resolution.height) + L')';
         m_resolutionBox.add(sResolution);
     }
-
+    
     m_areas[AreaID::GRAPHICS].form.add(m_fullscreenBox);
     m_fullscreenBox.showArrows(false);
     m_fullscreenBox.add({L"", L""});
@@ -260,9 +264,9 @@ void MenuConfig::applyChanges()
     display.global.zoomSpeed = m_zoomSpeedSelector.value() / 100.f;
 
     // Graphics
-    const auto& selectedVideoMode = sf::VideoMode::getFullscreenModes().at(m_resolutionBox.selectedChoice());
-    display.window.resolution.x = selectedVideoMode.width;
-    display.window.resolution.y = selectedVideoMode.height;
+    Resolution selectedResolution = m_resolutions.at(m_resolutionBox.selectedChoice());
+    display.window.resolution.x = selectedResolution.width;
+    display.window.resolution.y = selectedResolution.height;
     display.window.fullscreen = (m_fullscreenBox.selectedChoice() == 0u);
     display.window.vsync = (m_vsyncBox.selectedChoice() == 0u);
     display.window.antialiasingLevel = m_antialiasingSelector.value();

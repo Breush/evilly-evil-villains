@@ -80,6 +80,12 @@ namespace states
             nui::Form form;                     //!< The form inside the scroll area.
             scene::RectangleShape background;   //!< Area delimiter.
         };
+	
+	struct Resolution
+	{
+	  uint width;
+	  uint height;
+	};
 
     private:
 
@@ -96,6 +102,7 @@ namespace states
         nui::RangeSelector m_zoomSpeedSelector;         //!< Zoom speed.
 
         // Graphics
+        std::vector<Resolution> m_resolutions;      //!< Available resolutions
         nui::ChoiceBox m_resolutionBox;             //!< Screen resolutions.
         nui::ChoiceBox m_fullscreenBox;             //!< Fullscreen switch.
         nui::ChoiceBox m_vsyncBox;                  //!< VSync switch.
