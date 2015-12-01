@@ -80,16 +80,16 @@ MenuConfig::MenuConfig(StateStack& stack)
     m_areas[AreaID::GRAPHICS].form.add(m_resolutionBox);
     auto refBitsPerPixel = sf::VideoMode::getFullscreenModes().at(0u).bitsPerPixel;
     for (const auto& videoMode : std::reverse(sf::VideoMode::getFullscreenModes())) {
-	// Best bits per pixels are at the end with std::reverse
+        // Best bits per pixels are at the end with std::reverse
         if (refBitsPerPixel != videoMode.bitsPerPixel) continue;
-	
-	Resolution resolution = {videoMode.width, videoMode.height};
-	m_resolutions.push_back(resolution);
+
+        Resolution resolution = {videoMode.width, videoMode.height};
+        m_resolutions.push_back(resolution);
         std::wstring sResolution = toWString(resolution.width) + L'x' + toWString(resolution.height);
         sResolution += L" (" + aspectRatio(resolution.width, resolution.height) + L')';
         m_resolutionBox.add(sResolution);
     }
-    
+
     m_areas[AreaID::GRAPHICS].form.add(m_fullscreenBox);
     m_fullscreenBox.showArrows(false);
     m_fullscreenBox.add({L"", L""});
