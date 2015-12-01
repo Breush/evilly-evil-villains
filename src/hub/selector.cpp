@@ -2,6 +2,7 @@
 
 #include "core/gettext.hpp"
 #include "core/application.hpp"
+#include "states/state.hpp"
 #include "tools/vector.hpp"
 #include "tools/string.hpp"
 #include "tools/event.hpp"
@@ -9,7 +10,8 @@
 
 using namespace hub;
 
-Selector::Selector()
+Selector::Selector(states::State& state)
+    : m_state(state)
 {
     // Label
     attachChild(m_selectedLabel);
@@ -29,6 +31,26 @@ void Selector::init()
 
 //------------------//
 //----- Events -----//
+
+bool Selector::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
+{
+    returnif (button == sf::Mouse::Middle) false;
+    returnif (m_selectedBox == "none") false;
+
+    if (m_selectedBox == "sign") {
+        m_state.stackPop();
+    }
+    else if (m_selectedBox == "inn") {
+    }
+    else if (m_selectedBox == "bank") {
+    }
+    else if (m_selectedBox == "market") {
+    }
+    else if (m_selectedBox == "marketing_office") {
+    }
+
+    return true;
+}
 
 bool Selector::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 {

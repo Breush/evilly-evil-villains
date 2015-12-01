@@ -71,8 +71,6 @@ namespace states
 
         //! @}
 
-    protected:
-
         //----------------//
         //! @name Getters
         //! @{

@@ -8,6 +8,7 @@ using namespace states;
 
 Hub::Hub(StateStack& stack)
     : baseClass(stack)
+    , m_selector(*this)
 {
     // Loading resources
     Application::loadTextures({"hub"});

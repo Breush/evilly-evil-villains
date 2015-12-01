@@ -3,6 +3,13 @@
 #include "scene/wrappers/animatedsprite.hpp"
 #include "scene/wrappers/richlabel.hpp"
 
+// Forward declarations
+
+namespace states
+{
+    class State;
+}
+
 namespace hub
 {
     class Selector final : public scene::Entity
@@ -10,7 +17,7 @@ namespace hub
     public:
 
         //! Constructor;
-        Selector();
+        Selector(states::State& state);
 
         //! Default destructor;
         ~Selector() = default;
@@ -26,6 +33,7 @@ namespace hub
         //! @name Events
         //! @{
 
+        bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
         bool handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
 
         //! @}
@@ -41,6 +49,7 @@ namespace hub
 
     private:
 
+        states::State& m_state;             //!< The original state.
         std::string m_selectedBox = "none"; //!< The selected box.
 
         // Decorum
