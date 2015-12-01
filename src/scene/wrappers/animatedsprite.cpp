@@ -37,10 +37,10 @@ void AnimatedSprite::updateRoutine(const sf::Time& dt)
 {
     returnif (m_spriterEntity == nullptr);
 
-    // Refresh postionning
-    m_spriterEntity->setPosition({getPosition().x - getOrigin().x, getPosition().y - getOrigin().y});
-    m_spriterEntity->setScale({scale().x, scale().y});
-    m_spriterEntity->setAngle(getRotation() * M_PI / 180.f);
+    // Refresh transform
+    // FIXME This function should be needed if we successfully pass states.transform
+    // to the render function.
+    refreshSpriterEntityTransform();
 
     // Animate
     if (m_started) {
@@ -98,9 +98,7 @@ void AnimatedSprite::restart()
     m_started = true;
     returnif (m_spriterEntity == nullptr);
 
-    m_spriterEntity->setPosition({getPosition().x, getPosition().y});
-    m_spriterEntity->setScale({scale().x, scale().y});
-    m_spriterEntity->setAngle(getRotation() * M_PI / 180.f);
+    refreshSpriterEntityTransform();
     m_spriterEntity->setCurrentTime(0.);
 
     // Setting the hitbox to some default if none
@@ -129,4 +127,14 @@ void AnimatedSprite::setTiltColor(const sf::Color& color)
 
     returnif (m_spriterEntity == nullptr);
     m_spriterEntity->setTiltColor(m_tiltColor);
+}
+
+//---------------//
+//----- ICU -----//
+
+void AnimatedSprite::refreshSpriterEntityTransform()
+{
+    m_spriterEntity->setPosition({getPosition().x - getOrigin().x, getPosition().y - getOrigin().y});
+    m_spriterEntity->setScale({scale().x, scale().y});
+    m_spriterEntity->setAngle(getRotation() * M_PI / 180.f);
 }

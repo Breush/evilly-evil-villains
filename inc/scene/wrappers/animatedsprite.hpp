@@ -90,6 +90,15 @@ namespace scene
 
         //! @}
 
+        //------------//
+        //! @name ICU
+        //! @{
+
+        //! Refresh the spriter entity transform to the current position/scale/etc.
+        void refreshSpriterEntityTransform();
+
+        //! @}
+
     private:
 
         // Animation
