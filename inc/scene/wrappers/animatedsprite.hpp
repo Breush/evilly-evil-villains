@@ -77,6 +77,9 @@ namespace scene
         //! The current hitbox.
         inline const sf::FloatRect& hitbox() const { return m_hitbox; }
 
+        //! Find an object, returns its bounds.
+        sf::FloatRect findBox(const std::string& objectName) const;
+
         //! @}
 
     protected:

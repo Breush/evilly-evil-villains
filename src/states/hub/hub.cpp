@@ -1,6 +1,12 @@
 #include "states/hub/hub.hpp"
 
 #include "core/application.hpp"
+#include "tools/vector.hpp"
+#include "tools/string.hpp"
+#include "tools/event.hpp"
+#include "tools/tools.hpp"
+
+#include <iostream>
 
 using namespace states;
 
@@ -55,5 +61,39 @@ void Hub::handleEvent(const sf::Event& event)
         return;
     }
 
+    // Did we moved over an hitbox?
+    if (event.type == sf::Event::MouseMoved) {
+        // Where's the mouse
+        const auto& window = Application::context().window;
+        auto mousePos = mousePosition(event);
+        auto nuiPos = window.mapPixelToCoords(mousePos, nuiLayer().view());
+
+        // Find if over any hitbox
+        refreshHitboxSelected(nuiPos);
+        return;
+    }
+
     State::handleEvent(event);
+}
+
+//---------------//
+//----- ICU -----//
+
+void Hub::refreshHitboxSelected(const sf::Vector2f& nuiPos)
+{
+    auto findAndSelect = [this, &nuiPos] (const std::string& boxName)
+    {
+        auto boxBounds = m_scene.findBox(boxName + "_hitbox") + m_scene.getPosition();
+        returnif (!boxBounds.contains(nuiPos)) false;
+        m_scene.select(toWString(boxName) + L"_selected");
+        return true;
+    };
+
+    returnif (findAndSelect("inn"));
+    returnif (findAndSelect("bank"));
+    returnif (findAndSelect("market"));
+    returnif (findAndSelect("marketing_office"));
+
+    // If none found, select default animation
+    m_scene.select(L"none");
 }

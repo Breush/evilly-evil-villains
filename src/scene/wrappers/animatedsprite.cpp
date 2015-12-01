@@ -111,6 +111,24 @@ void AnimatedSprite::restart()
     }
 }
 
+//------------------//
+//----- Hitbox -----//
+
+sf::FloatRect AnimatedSprite::findBox(const std::string& objectName) const
+{
+    sf::FloatRect boxBounds;
+    auto box = m_spriterEntity->getObjectInstance(objectName);
+
+    if (box != nullptr) {
+        boxBounds.width  = box->getSize().x * box->getScale().x;
+        boxBounds.height = box->getSize().y * box->getScale().y;
+        boxBounds.left   = box->getPosition().x - (getPosition().x - getOrigin().x);
+        boxBounds.top    = box->getPosition().y - (getPosition().y - getOrigin().y);
+    }
+
+    return boxBounds;
+}
+
 //-------------------------//
 //----- Extra control -----//
 

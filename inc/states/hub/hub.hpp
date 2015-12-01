@@ -33,6 +33,15 @@ namespace states
 
         //! @}
 
+        //------------//
+        //! @name ICU
+        //! @{
+
+        //! Select the correct animation over this position.
+        void refreshHitboxSelected(const sf::Vector2f& nuiPos);
+
+        //! @}
+
     private:
 
         // Decorum
