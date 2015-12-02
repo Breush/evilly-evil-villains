@@ -47,6 +47,7 @@ namespace nui
         //! @{
 
         void onSizeChanges() final;
+        void onScaleChanges() final;
 
         //! @}
 

@@ -167,7 +167,6 @@ namespace SpriterEngine
     Entity *SpriterDocumentLoader::getNewEntityFromEntityElement(SpriterFileElementWrapper *entityElement, SpriterModel *model)
     {
         SpriterFileAttributeWrapper *nameAtt = entityElement->getFirstAttribute("name");
-        Entity *entity = 0;
         if (nameAtt->isValid())
         {
             return model->pushBackEntity(nameAtt->getStringValue());
@@ -413,7 +412,6 @@ namespace SpriterEngine
 
     Animation *SpriterDocumentLoader::getNewAnimationFromAnimationElement(SpriterFileElementWrapper *animationElement, Entity *entity)
     {
-        Animation *newAnimation = 0;
         real animationLength = 0;
         bool animationLooping = true;
         SpriterFileAttributeWrapper *att = animationElement->getFirstAttribute("name");
@@ -768,7 +766,6 @@ namespace SpriterEngine
         std::string timelineName;
         Object::ObjectType timelineType = Object::OBJECTTYPE_SPRITE;
         SpriterFileAttributeWrapper *att = timelineElement->getFirstAttribute("name");
-        Object *object = 0;
         if (att->isValid())
         {
             timelineName = att->getStringValue();

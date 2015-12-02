@@ -29,11 +29,6 @@ namespace SpriterEngine
         return alpha;
     }
 
-    const sf::Color& SpriteObjectInfo::getTiltColor()
-    {
-        return tiltColor;
-    }
-
     point SpriteObjectInfo::getPivot()
     {
         return pivot;
@@ -80,11 +75,6 @@ namespace SpriterEngine
         angle.spinDirection = newSpin;
     }
 
-    void SpriteObjectInfo::setTiltColor(const sf::Color& color)
-    {
-        tiltColor = color;
-    }
-
     void SpriteObjectInfo::setToBlendedLinear(UniversalObjectInterface *aObject, UniversalObjectInterface *bObject, real t, real blendRatio)
     {
         real tempAngle = angle.angle;
@@ -108,11 +98,11 @@ namespace SpriterEngine
         }
     }
 
-    void SpriteObjectInfo::render()
+    void SpriteObjectInfo::render(sf::RenderTarget& target, sf::RenderStates& states, const sf::Color& tiltColor)
     {
         if (imageFile)
         {
-            imageFile->renderSprite(this);
+            imageFile->renderSprite(this, target, states, tiltColor);
         }
     }
 

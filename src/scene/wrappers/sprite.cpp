@@ -15,9 +15,9 @@ Sprite::Sprite()
 //-------------------//
 //----- Routine -----//
 
-void Sprite::onSizeChanges()
+void Sprite::onScaleChanges()
 {
-    setScale(scale());
+    m_sprite.setScale(scale());
 }
 
 //--------------------//

@@ -25,7 +25,6 @@ namespace SpriterEngine
         void setAlpha(real newAlpha) override;
         void setPivot(const point &newPivot) override;
         void setSpin(int newSpin) override;
-        void setTiltColor(const sf::Color& color) override;
 
         void setObjectToLinear(UniversalObjectInterface *bObject, real t, UniversalObjectInterface *resultObject) override;
 

@@ -81,15 +81,4 @@ namespace SpriterEngine
             setPivot(tempPivot);
         }
     }
-
-    void BoxInstanceInfo::render()
-    {
-        // if (renderDebugBoxes)
-
-        // getPosition()
-        // getAngle();
-        // getScale();
-        // getPivot() * getSize();
-    }
-
 }

@@ -6,35 +6,30 @@
 
 #include <iostream>
 
-namespace SpriterEngine
+using namespace SpriterEngine;
+
+SfmlImageFile::SfmlImageFile(std::string filePath, point defaultPivot)
+    : baseClass(filePath, defaultPivot)
 {
+    auto fileID = Application::context().textures.getID(path());
+    auto& texture = Application::context().textures.get(fileID);
+    sprite.setTexture(texture);
+    m_textureSize = texture.getSize();
+}
 
-    SfmlImageFile::SfmlImageFile(std::string initialFilePath, point initialDefaultPivot, sf::RenderWindow *validRenderWindow) :
-        ImageFile(initialFilePath,initialDefaultPivot),
-        renderWindow(validRenderWindow)
-    {
-        initializeFile();
-    }
+//-------------------//
+//----- Routine -----//
 
-    void SfmlImageFile::initializeFile()
-    {
-        std::string fileID = Application::context().textures.getID(path());
-        auto& texture = Application::context().textures.get(fileID);
-        sprite.setTexture(texture);
-        m_textureSize = texture.getSize();
-    }
+void SfmlImageFile::renderSprite(UniversalObjectInterface *spriteInfo, sf::RenderTarget& target, sf::RenderStates& states, const sf::Color& tiltColor)
+{
+    auto color = tiltColor;
+    color.a *= spriteInfo->getAlpha();
 
-    void SfmlImageFile::renderSprite(UniversalObjectInterface * spriteInfo)
-    {
-        auto tiltColor = spriteInfo->getTiltColor();
-        tiltColor.a *= spriteInfo->getAlpha();
+    sprite.setColor(color);
+    sprite.setPosition(spriteInfo->getPosition().x, spriteInfo->getPosition().y);
+    sprite.setRotation(toDegrees(spriteInfo->getAngle()));
+    sprite.setScale(spriteInfo->getScale().x, spriteInfo->getScale().y);
+    sprite.setOrigin(spriteInfo->getPivot().x * m_textureSize.x, spriteInfo->getPivot().y * m_textureSize.y);
 
-        sprite.setColor(tiltColor);
-        sprite.setPosition(spriteInfo->getPosition().x, spriteInfo->getPosition().y);
-        sprite.setRotation(toDegrees(spriteInfo->getAngle()));
-        sprite.setScale(spriteInfo->getScale().x, spriteInfo->getScale().y);
-        sprite.setOrigin(spriteInfo->getPivot().x*m_textureSize.x, spriteInfo->getPivot().y*m_textureSize.y);
-        renderWindow->draw(sprite);
-    }
-
+    target.draw(sprite, states);
 }

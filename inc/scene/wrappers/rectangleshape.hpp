@@ -47,6 +47,7 @@ namespace scene
         //! @{
 
         void onSizeChanges() final;
+        void onScaleChanges() final;
 
         //! @}
 

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "resources/holder.hpp"
-#include "spriter/examplefilefactory.hpp"
-#include "spriter/exampleobjectfactory.hpp"
+#include "spriter/spriterfilefactory.hpp"
+#include "spriter/spriterobjectfactory.hpp"
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/System/Time.hpp>

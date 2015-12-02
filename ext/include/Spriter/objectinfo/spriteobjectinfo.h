@@ -11,7 +11,7 @@
 namespace SpriterEngine
 {
 
-    class SpriteObjectInfo : public UniversalObjectInterface
+    class SpriteObjectInfo final : public UniversalObjectInterface
     {
     public:
         SpriteObjectInfo();
@@ -22,7 +22,6 @@ namespace SpriterEngine
         real getAlpha() override;
         point getPivot() override;
         ImageFile *getImage() override;
-        const sf::Color& getTiltColor() override;
 
         void setPosition(const point &newPosition) override;
         void setAngle(real newAngle) override;
@@ -31,11 +30,10 @@ namespace SpriterEngine
         void setPivot(const point &newPivot) override;
         void setImage(ImageFile *newImageFile) override;
         void setSpin(int newSpin) override;
-        void setTiltColor(const sf::Color& color) override;
 
         void setToBlendedLinear(UniversalObjectInterface * aObject, UniversalObjectInterface * bObject, real t, real blendRatio) override;
 
-        void render() override;
+        void render(sf::RenderTarget& target, sf::RenderStates& states, const sf::Color& tiltColor) override;
 
     private:
         point position;
@@ -44,7 +42,6 @@ namespace SpriterEngine
         real alpha;
         point pivot;
         ImageFile *imageFile;
-        sf::Color tiltColor = sf::Color::White;
     };
 
 }

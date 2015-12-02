@@ -64,10 +64,4 @@ namespace SpriterEngine
         setAngle(shortestAngleLinear(tempAngle, angle.angle, blendRatio));
         setPosition(linear(tempPosition, position, blendRatio));
     }
-
-    void PointInstanceInfo::render()
-    {
-        // if (renderDebugPoints)
-    }
-
 }

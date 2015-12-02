@@ -2,27 +2,31 @@
 
 #include <Spriter/override/imagefile.h>
 
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 
 namespace SpriterEngine
 {
-    class SfmlImageFile : public ImageFile
+    class SfmlImageFile final : public ImageFile
     {
+        using baseClass = ImageFile;
+
     public:
 
-        SfmlImageFile(std::string initialFilePath, point initialDefaultPivot, sf::RenderWindow *validRenderWindow);
+        // Constructor
+        SfmlImageFile(std::string filePath, point defaultPivot);
 
-        void renderSprite(UniversalObjectInterface *spriteInfo) override;
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        void renderSprite(UniversalObjectInterface *spriteInfo, sf::RenderTarget& target, sf::RenderStates& states, const sf::Color& tiltColor) final;
+
+        //! @}
 
     private:
 
-        sf::Sprite sprite;
-        sf::RenderWindow *renderWindow;
-        sf::Vector2u m_textureSize;
-
-        void initializeFile();
+        sf::Sprite sprite;              //!< The sprite indeed.
+        sf::Vector2u m_textureSize;     //!< The texture size.
     };
 
 }

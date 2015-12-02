@@ -2,22 +2,19 @@
 
 #include "core/application.hpp"
 
-#include <iostream>
+using namespace SpriterEngine;
 
-namespace SpriterEngine
+SfmlSoundObjectInfoReference::SfmlSoundObjectInfoReference(std::string soundID)
+    : m_soundID(soundID)
 {
-    SfmlSoundObjectInfoReference::SfmlSoundObjectInfoReference(std::string soundID)
-        : m_soundID(soundID)
-    {
-    }
+}
 
-    void SfmlSoundObjectInfoReference::playTrigger()
+void SfmlSoundObjectInfoReference::playTrigger()
+{
+    if (getTriggerCount() > 0)
     {
-        if (getTriggerCount() > 0)
-        {
-            Application::context().sounds.play(m_soundID);
+        Application::context().sounds.play(m_soundID);
 
-            // TODO Use volume
-        }
+        // TODO Use volume
     }
 }

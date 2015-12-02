@@ -24,9 +24,8 @@ std::string AnimationHolder::getID(const std::string& filename)
 
 void AnimationHolder::load(const std::string& filename)
 {
-    auto& window = Application::context().window;
-    auto newFileFactory = new SpriterEngine::ExampleFileFactory(&window);
-    auto newObjectFactory = new SpriterEngine::ExampleObjectFactory(&window);
+    auto newFileFactory = new SpriterEngine::SpriterFileFactory();
+    auto newObjectFactory = new SpriterEngine::SpriterObjectFactory();
 
     auto id = getID(filename);
     auto model = std::make_unique<SpriterEngine::SpriterModel>(filename, newFileFactory, newObjectFactory);

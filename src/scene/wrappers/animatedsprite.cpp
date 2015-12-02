@@ -24,24 +24,27 @@ AnimatedSprite::~AnimatedSprite()
 //-------------------//
 //----- Routine -----//
 
+void AnimatedSprite::onScaleChanges()
+{
+    refreshSpriterEntityTransform();
+}
+
+void AnimatedSprite::onRotationChanges()
+{
+    refreshSpriterEntityTransform();
+}
+
 void AnimatedSprite::drawInternal(sf::RenderTarget& target, sf::RenderStates states) const
 {
     returnif (m_spriterEntity == nullptr);
 
-    // TODO This does not take states shader in account?
-    // And we might want to pass the target here.
-    m_spriterEntity->reprocessCurrentTime();
-    m_spriterEntity->render();
+    states.transform = getTransform();
+    m_spriterEntity->render(target, states, m_tiltColor);
 }
 
 void AnimatedSprite::updateRoutine(const sf::Time& dt)
 {
     returnif (m_spriterEntity == nullptr);
-
-    // Refresh transform
-    // FIXME This function should be needed if we successfully pass states.transform
-    // to the render function.
-    refreshSpriterEntityTransform();
 
     // Animate
     if (m_started) {
@@ -54,8 +57,8 @@ void AnimatedSprite::updateRoutine(const sf::Time& dt)
         auto hitbox = m_spriterEntity->getObjectInstance("hitbox");
         m_hitbox.width  = hitbox->getSize().x * hitbox->getScale().x;
         m_hitbox.height = hitbox->getSize().y * hitbox->getScale().y;
-        m_hitbox.left   = hitbox->getPosition().x - (getPosition().x - getOrigin().x);
-        m_hitbox.top    = hitbox->getPosition().y - (getPosition().y - getOrigin().y);
+        m_hitbox.left   = hitbox->getPosition().x;
+        m_hitbox.top    = hitbox->getPosition().y;
     }
 }
 
@@ -71,8 +74,6 @@ void AnimatedSprite::load(const std::string& id)
 
     // The first animation is loaded
     restart();
-
-    m_spriterEntity->setTiltColor(m_tiltColor);
 }
 
 void AnimatedSprite::select(const std::wstring& animationName)
@@ -123,8 +124,8 @@ sf::FloatRect AnimatedSprite::findBox(const std::string& objectName) const
     if (box != nullptr) {
         boxBounds.width  = box->getSize().x * box->getScale().x;
         boxBounds.height = box->getSize().y * box->getScale().y;
-        boxBounds.left   = box->getPosition().x - (getPosition().x - getOrigin().x);
-        boxBounds.top    = box->getPosition().y - (getPosition().y - getOrigin().y);
+        boxBounds.left   = box->getPosition().x;
+        boxBounds.top    = box->getPosition().y;
     }
 
     return boxBounds;
@@ -141,11 +142,7 @@ bool AnimatedSprite::started() const
 
 void AnimatedSprite::setTiltColor(const sf::Color& color)
 {
-    returnif (m_tiltColor == color);
     m_tiltColor = color;
-
-    returnif (m_spriterEntity == nullptr);
-    m_spriterEntity->setTiltColor(m_tiltColor);
 }
 
 //---------------//
@@ -153,7 +150,8 @@ void AnimatedSprite::setTiltColor(const sf::Color& color)
 
 void AnimatedSprite::refreshSpriterEntityTransform()
 {
-    m_spriterEntity->setPosition({getPosition().x - getOrigin().x, getPosition().y - getOrigin().y});
+    returnif (m_spriterEntity == nullptr);
+
     m_spriterEntity->setScale({scale().x, scale().y});
     m_spriterEntity->setAngle(getRotation() * M_PI / 180.f);
 }

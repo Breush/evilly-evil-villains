@@ -187,11 +187,6 @@ namespace SpriterEngine
         return alpha;
     }
 
-    const sf::Color& EntityInstance::getTiltColor()
-    {
-        return tiltColor;
-    }
-
     real EntityInstance::getCurrentTime()
     {
         return currentAnimation->currentTime();
@@ -316,12 +311,6 @@ namespace SpriterEngine
         angle.spinDirection = newSpin;
     }
 
-    void EntityInstance::setTiltColor(const sf::Color& color)
-    {
-        tiltColor = color;
-    }
-
-
     void EntityInstance::setCurrentEntity(int newEntityId)
     {
         auto it = entities.find(newEntityId);
@@ -415,14 +404,13 @@ namespace SpriterEngine
         appliedCharacterMaps.clear();
     }
 
-    void EntityInstance::render()
+    void EntityInstance::render(sf::RenderTarget& target, sf::RenderStates& states, const sf::Color& tiltColor)
     {
         if (zOrder)
         {
             for (auto& it : *zOrder)
             {
-                it->setTiltColor(tiltColor);
-                it->render();
+                it->render(target, states, tiltColor);
             }
         }
     }

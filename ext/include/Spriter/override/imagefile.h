@@ -4,24 +4,25 @@
 #include <string>
 
 #include "../file/file.h"
-
 #include "../global/global.h"
+
+#include <SFML/Graphics/RenderTarget.hpp>
 
 namespace SpriterEngine
 {
-	class UniversalObjectInterface;
+    class UniversalObjectInterface;
 
-	class ImageFile : public File
-	{
-	public:
-		ImageFile(std::string initialFilePath, point initialDefaultPivot);
+    class ImageFile : public File
+    {
+    public:
+        ImageFile(std::string initialFilePath, point initialDefaultPivot);
 
-		ImageFile *imageFile() override;
+        ImageFile *imageFile() override;
 
-		point defaultPivot;
+        point defaultPivot;
 
-		virtual void renderSprite(UniversalObjectInterface *spriteInfo);
-	};
+        virtual void renderSprite(UniversalObjectInterface *spriteInfo, sf::RenderTarget& target, sf::RenderStates& states, const sf::Color& tiltColor) = 0;
+    };
 
 }
 

@@ -499,6 +499,9 @@ void Entity::refreshFromLocal()
 
     for (auto& child : m_children)
         child->refreshFromLocal();
+
+    onRotationChanges();
+    onScaleChanges();
 }
 
 void Entity::refreshFromLocalPosition()
@@ -531,6 +534,8 @@ void Entity::refreshFromLocalRotation()
 
     for (auto& child : m_children)
         child->refreshFromLocalRotation();
+
+    onRotationChanges();
 }
 
 void Entity::refreshFromLocalScale()
@@ -547,7 +552,7 @@ void Entity::refreshFromLocalScale()
     for (auto& child : m_children)
         child->refreshFromLocalScale();
 
-    onSizeChanges();
+    onScaleChanges();
 }
 
 void Entity::refreshOrigin()

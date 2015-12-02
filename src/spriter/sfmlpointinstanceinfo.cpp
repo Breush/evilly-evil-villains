@@ -2,25 +2,21 @@
 
 #include <Spriter/global/settings.h>
 
-namespace SpriterEngine
+using namespace SpriterEngine;
+
+SfmlPointInstanceInfo::SfmlPointInstanceInfo()
+    : circle(10)
 {
+    circle.setFillColor(sf::Color::Red);
+    circle.setOrigin(5, 5);
+}
 
-    SfmlPointInstanceInfo::SfmlPointInstanceInfo(sf::RenderWindow *validRenderWindow) :
-        renderWindow(validRenderWindow),
-        circle(10)
+void SfmlPointInstanceInfo::render(sf::RenderTarget& target, sf::RenderStates& states, const sf::Color&)
+{
+    if (Settings::renderDebugPoints)
     {
-        circle.setFillColor(sf::Color::Red);
-        circle.setOrigin(5, 5);
+        circle.setPosition(getPosition().x, getPosition().y);
+        circle.setRotation(toDegrees(getAngle()));
+        target.draw(circle, states);
     }
-
-    void SfmlPointInstanceInfo::render()
-    {
-        if (Settings::renderDebugPoints)
-        {
-            circle.setPosition(getPosition().x, getPosition().y);
-            circle.setRotation(toDegrees(getAngle()));
-            renderWindow->draw(circle);
-        }
-    }
-
 }

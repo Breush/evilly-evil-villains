@@ -45,7 +45,6 @@ namespace SpriterEngine
         real getAngle() override;
         point getScale() override;
         real getAlpha() override;
-        const sf::Color& getTiltColor() override;
 
         real getCurrentTime() override;
         real getTimeRatio() override;
@@ -79,7 +78,6 @@ namespace SpriterEngine
         void setScale(const point &newScale) override;
         void setAlpha(real newAlpha) override;
         void setSpin(int newSpin) override;
-        void setTiltColor(const sf::Color& color) override;
 
         void setCurrentEntity(int newEntityIndex) override;
         void setCurrentEntity(EntityInstanceData *newCurrentEntity) override;
@@ -96,7 +94,7 @@ namespace SpriterEngine
         void removeCharacterMap(std::string mapName);
         void removeAllCharacterMaps();
 
-        void render() override;
+        void render(sf::RenderTarget& target, sf::RenderStates& states, const sf::Color& tiltColor) override;
 
         void playAllTriggers();
         void playSoundTriggers();

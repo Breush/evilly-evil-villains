@@ -70,14 +70,4 @@ namespace SpriterEngine
         setScale(linear(tempScale, scale, blendRatio));
         setAlpha(linear(tempAlpha, alpha, blendRatio));
     }
-
-    void BoneInstanceInfo::render()
-    {
-        // if (renderDebugBones)
-
-        // getPosition()
-        // getAngle();
-        // getScale() * getSize().x;
-    }
-
 }

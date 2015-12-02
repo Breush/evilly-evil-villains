@@ -43,12 +43,6 @@ namespace SpriterEngine
         return 1;
     }
 
-    const sf::Color& UniversalObjectInterface::getTiltColor()
-    {
-        Settings::error("UniversalObjectInterface::getTiltColor - object does not contain this component - falling back on default value");
-        return sf::Color::White;
-    }
-
     point UniversalObjectInterface::getSize()
     {
         Settings::error("UniversalObjectInterface::getSize - object does not contain this component - falling back on default value");
@@ -171,11 +165,6 @@ namespace SpriterEngine
         Settings::error("UniversalObjectInterface::setAlpha - object does not contain this component - no action taken");
     }
 
-    void UniversalObjectInterface::setTiltColor(const sf::Color& color)
-    {
-        Settings::error("UniversalObjectInterface::setTiltColor - object does not contain this component - no action taken");
-    }
-
     void UniversalObjectInterface::setSpin(int newSpin)
     {
         Settings::error("UniversalObjectInterface::setSpin - object does not contain this component - no action taken");
@@ -268,7 +257,7 @@ namespace SpriterEngine
         Settings::error("UniversalObjectInterface::setObjectToBlendedLinear - object does not contain this component - no action taken");
     }
 
-    void UniversalObjectInterface::render()
+    void UniversalObjectInterface::render(sf::RenderTarget& target, sf::RenderStates& states, const sf::Color& tiltColor)
     {
         Settings::error("UniversalObjectInterface::render - object does not contain this component - no action taken");
     }

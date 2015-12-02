@@ -15,7 +15,11 @@ RectangleShape::RectangleShape()
 void RectangleShape::onSizeChanges()
 {
     m_rectangleShape.setSize(size());
-    setScale(scale());
+}
+
+void RectangleShape::onScaleChanges()
+{
+    m_rectangleShape.setScale(scale());
 }
 
 //--------------------//

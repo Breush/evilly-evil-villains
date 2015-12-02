@@ -15,14 +15,4 @@ namespace SpriterEngine
     {
         return this;
     }
-
-    void ImageFile::renderSprite(UniversalObjectInterface * spriteInfo)
-    {
-        // spriteInfo->getAlpha()
-        // spriteInfo->getPosition()
-        // spriteInfo->getAngle()
-        // spriteInfo->getScale()
-        // spriteInfo->getPivot()
-    }
-
 }

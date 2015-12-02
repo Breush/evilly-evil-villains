@@ -8,12 +8,14 @@
 namespace SpriterEngine
 {
 
-    class SfmlBoxInstanceInfo : public BoxInstanceInfo
+    class SfmlBoxInstanceInfo final : public BoxInstanceInfo
     {
     public:
-        SfmlBoxInstanceInfo(point initialSize, sf::RenderWindow *validRenderWindow);
 
-        void render() override;
+        //! Constructor.
+        SfmlBoxInstanceInfo(point initialSize);
+
+        void render(sf::RenderTarget& target, sf::RenderStates& states, const sf::Color& tiltColor) final;
 
     private:
         sf::RenderWindow *renderWindow;

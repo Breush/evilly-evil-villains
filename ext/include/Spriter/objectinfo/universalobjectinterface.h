@@ -6,7 +6,7 @@
 
 #include "../global/global.h"
 
-#include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
 
 namespace SpriterEngine
 {
@@ -32,7 +32,6 @@ namespace SpriterEngine
         virtual point getScale();
         virtual point getPivot();
         virtual real getAlpha();
-        virtual const sf::Color& getTiltColor();
 
         virtual point getSize();
 
@@ -66,7 +65,6 @@ namespace SpriterEngine
         virtual void setPivot(const point &newPivot);
         virtual void setAlpha(real newAlpha);
         virtual void setSpin(int newSpin);
-        virtual void setTiltColor(const sf::Color& color);
 
         virtual void setImage(ImageFile *newImageFile);
 
@@ -94,7 +92,7 @@ namespace SpriterEngine
         virtual void setObjectToLinear(UniversalObjectInterface *bObject, real t, UniversalObjectInterface *resultObject);
         virtual void setToBlendedLinear(UniversalObjectInterface * aObject, UniversalObjectInterface * bObject, real t, real blendRatio);
 
-        virtual void render();
+        virtual void render(sf::RenderTarget& target, sf::RenderStates& states, const sf::Color& tiltColor);
 
         virtual void playTrigger();
     };

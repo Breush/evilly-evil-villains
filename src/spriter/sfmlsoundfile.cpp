@@ -5,23 +5,16 @@
 
 #include <iostream>
 
-namespace SpriterEngine
+using namespace SpriterEngine;
+
+SfmlSoundFile::SfmlSoundFile(std::string initialFilePath) :
+    SoundFile(initialFilePath)
 {
-    SfmlSoundFile::SfmlSoundFile(std::string initialFilePath) :
-        SoundFile(initialFilePath)
-    {
-        initializeFile();
-    }
+    m_soundID = Application::context().sounds.getID(path());
+}
 
-    void SfmlSoundFile::initializeFile()
-    {
-        m_soundID = Application::context().sounds.getID(path());
-    }
-
-    SoundObjectInfoReference * SfmlSoundFile::newSoundInfoReference()
-    {
-        // Note: Should be deleted by whoever calls it
-        return new SfmlSoundObjectInfoReference(m_soundID);
-    }
-
+SoundObjectInfoReference* SfmlSoundFile::newSoundInfoReference()
+{
+    // Note: Should be deleted by whoever calls it
+    return new SfmlSoundObjectInfoReference(m_soundID);
 }

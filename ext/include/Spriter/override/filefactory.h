@@ -8,22 +8,22 @@
 namespace SpriterEngine
 {
 
-	class ImageFile;
-	class SoundFile;
-	class SpriterFileDocumentWrapper;
+    class ImageFile;
+    class SoundFile;
+    class SpriterFileDocumentWrapper;
 
-	class FileFactory
-	{
-	public:
-		FileFactory();
-		virtual ~FileFactory();
+    class FileFactory
+    {
+    public:
+        FileFactory();
+        virtual ~FileFactory();
 
-		virtual ImageFile *newImageFile(const std::string &initialFilePath, point initialDefaultPivot);
-		virtual SoundFile *newSoundFile(const std::string &initialFilePath);
+        virtual ImageFile *newImageFile(const std::string &initialFilePath, point initialDefaultPivot) = 0;
+        virtual SoundFile *newSoundFile(const std::string &initialFilePath) = 0;
 
-		virtual SpriterFileDocumentWrapper *newScmlDocumentWrapper();
-		virtual SpriterFileDocumentWrapper *newSconDocumentWrapper();
-	};
+        virtual SpriterFileDocumentWrapper *newScmlDocumentWrapper() { return nullptr; }
+        virtual SpriterFileDocumentWrapper *newSconDocumentWrapper() { return nullptr; }
+    };
 
 }
 

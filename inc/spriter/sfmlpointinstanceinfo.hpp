@@ -1,22 +1,22 @@
 #pragma once
 
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Graphics/CircleShape.hpp>
-
 #include <Spriter/objectinfo/pointinstanceinfo.h>
+
+#include <SFML/Graphics/CircleShape.hpp>
 
 namespace SpriterEngine
 {
 
-    class SfmlPointInstanceInfo : public PointInstanceInfo
+    class SfmlPointInstanceInfo final : public PointInstanceInfo
     {
     public:
-        SfmlPointInstanceInfo(sf::RenderWindow *validRenderWindow);
 
-        void render() override;
+        //! Constructor.
+        SfmlPointInstanceInfo();
+
+        void render(sf::RenderTarget& target, sf::RenderStates& states, const sf::Color& tiltColor) final;
 
     private:
-        sf::RenderWindow *renderWindow;
 
         sf::CircleShape circle;
     };

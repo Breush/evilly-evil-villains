@@ -8,35 +8,33 @@
 namespace SpriterEngine
 {
 
-	class BoneInstanceInfo : public UniversalObjectInterface
-	{
-	public:
-		BoneInstanceInfo(point initialSize);
+    class BoneInstanceInfo : public UniversalObjectInterface
+    {
+    public:
+        BoneInstanceInfo(point initialSize);
 
-		point getPosition() override;
-		real getAngle() override;
-		point getScale() override;
-		real getAlpha() override;
+        point getPosition() override;
+        real getAngle() override;
+        point getScale() override;
+        real getAlpha() override;
 
-		point getSize() override;
+        point getSize() override;
 
-		void setPosition(const point &newPosition) override;
-		void setAngle(real newAngle) override;
-		void setScale(const point &newScale) override;
-		void setAlpha(real newAlpha) override;
+        void setPosition(const point &newPosition) override;
+        void setAngle(real newAngle) override;
+        void setScale(const point &newScale) override;
+        void setAlpha(real newAlpha) override;
 
-		void setToBlendedLinear(UniversalObjectInterface * aObject, UniversalObjectInterface * bObject, real t, real blendRatio);
+        void setToBlendedLinear(UniversalObjectInterface * aObject, UniversalObjectInterface * bObject, real t, real blendRatio);
 
-		void render() override;
+    private:
+        point position;
+        AngleInfo angle;
+        point scale;
+        real alpha;
 
-	private:
-		point position;
-		AngleInfo angle;
-		point scale;
-		real alpha;
-
-		point size;
-	};
+        point size;
+    };
 
 }
 

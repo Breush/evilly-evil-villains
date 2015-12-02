@@ -38,7 +38,7 @@ namespace scene
         //! @name Routine
         //! @{
 
-        void onSizeChanges() final;
+        void onScaleChanges() final;
 
         //! @}
 

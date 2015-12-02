@@ -227,12 +227,18 @@ namespace scene
         //! Called whenever the position/rotation/scale changed.
         virtual void onTransformChanges() {}
 
-        //! Called whenever size or scale changed.
+        //! Called whenever size changed.
         /*!
          *  Should be reimplemented in inherited classes to adapt
          *  display to the size and scale.
          */
         virtual void onSizeChanges() {}
+
+        //! Called whenever scale changed.
+        virtual void onScaleChanges() {}
+
+        //! Called whenever rotation changed.
+        virtual void onRotationChanges() {}
 
         //! Called whenever a child changed its size.
         virtual void onChildSizeChanges(scene::Entity& child) {}
