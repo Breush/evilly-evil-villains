@@ -133,9 +133,7 @@ void Element::showMouseOverlay(const sf::Vector2f& relPos)
     m_mouseOverlay.setLocalPosition(relPos + sf::Vector2f{0.f, -15.f});
 
     returnif (m_mouseOverlay.visible());
-
-    // TODO Better use shaders when AnimatedSprite allows us
-    m_sprite.setTiltColor({174u, 207u, 198u});
+    m_sprite.setShader("nui/hover");
 
     if (m_leftClickAction.callback != nullptr || m_rightClickAction.callback != nullptr)
         m_mouseOverlay.setVisible(true);
@@ -143,8 +141,7 @@ void Element::showMouseOverlay(const sf::Vector2f& relPos)
 
 void Element::hideMouseOverlay()
 {
-    m_sprite.setTiltColor(sf::Color::White);
-
+    m_sprite.setShader("");
     returnif (!m_mouseOverlay.visible());
     m_mouseOverlay.setVisible(false);
 }
