@@ -30,6 +30,7 @@ void AnimatedSprite::drawInternal(sf::RenderTarget& target, sf::RenderStates sta
 
     // TODO This does not take states shader in account?
     // And we might want to pass the target here.
+    m_spriterEntity->reprocessCurrentTime();
     m_spriterEntity->render();
 }
 
