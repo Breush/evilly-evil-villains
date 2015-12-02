@@ -301,6 +301,9 @@ namespace dungeon
         //! Set the specified room facility's barrier.
         void setRoomFacilityBarrier(const sf::Vector2u& coords, const std::wstring& facilityID, bool activated);
 
+        //! Add a tunnel to the specificed room facility.
+        void addFacilityTunnel(FacilityInfo& facilityInfo, const sf::Vector2i& tunnelCoords, bool relative);
+
         //! Remove the specified facility from the dungeon.
         //! Will emit an event if a change occured.
         void removeRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID);

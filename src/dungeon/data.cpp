@@ -597,7 +597,10 @@ bool Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     facility.common = &facilitiesDB().get(facilityID);
 
     createFacilityLinks(coords, facility);
+
     addEvent("facility_changed", coords);
+    if (facility.common->entrance)
+        EventEmitter::addEvent("dungeon_changed");
 
     return true;
 }
@@ -714,7 +717,17 @@ void Data::setRoomFacilityBarrier(const sf::Vector2u& coords, const std::wstring
 
     pFacilityInfo->barrier = activated;
     addEvent("facility_changed", coords);
-    addEvent("dungeon_changed", coords);
+    EventEmitter::addEvent("dungeon_changed");
+}
+
+void Data::addFacilityTunnel(FacilityInfo& facilityInfo, const sf::Vector2i& tunnelCoords, bool relative)
+{
+    Tunnel tunnel;
+    tunnel.coords = tunnelCoords;
+    tunnel.relative = relative;
+    facilityInfo.tunnels.emplace_back(std::move(tunnel));
+
+    EventEmitter::addEvent("dungeon_changed");
 }
 
 void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID)
@@ -725,10 +738,15 @@ void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     auto pFacility = std::find_if(roomInfo.facilities, [facilityID] (const FacilityInfo& facilityInfo) { return facilityInfo.data.type() == facilityID; });
     returnif (pFacility == std::end(roomInfo.facilities));
 
+    bool dungeonChanged = pFacility->common->entrance;
+    dungeonChanged |= !pFacility->tunnels.empty();
+
     removeFacilityLinks(coords, *pFacility);
     roomInfo.facilities.erase(pFacility);
 
     addEvent("facility_changed", coords);
+    if (dungeonChanged)
+        EventEmitter::addEvent("dungeon_changed");
 }
 
 void Data::removeRoomFacilities(const sf::Vector2u& coords)

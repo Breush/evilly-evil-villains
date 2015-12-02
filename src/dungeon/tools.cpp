@@ -44,25 +44,27 @@ void ToolGrabButton::grabbableButtonPressed(Entity* entity, const sf::Mouse::But
     }
 
     // Forward to dungeon::Inter if it is below
-    auto inter = dynamic_cast<Inter*>(entity);
+    sf::Vector2f interRelPos(relPos);
+    returnif (entity == nullptr);
+    auto inter = entity->findParent<Inter>(interRelPos);
     returnif (inter == nullptr);
 
     // Different action given the toolID
     switch (m_toolID) {
         case ToolID::ROOMS_BUILDER:
-            inter->constructRoom(relPos);
+            inter->constructRoom(interRelPos);
             break;
 
         case ToolID::ROOMS_DESTROYER:
-            inter->destroyRoom(relPos);
+            inter->destroyRoom(interRelPos);
             break;
 
         case ToolID::TRAPS_REMOVER:
-            inter->removeRoomTrap(relPos);
+            inter->removeRoomTrap(interRelPos);
             break;
 
         case ToolID::FACILITIES_REMOVER:
-            inter->removeRoomFacilities(relPos);
+            inter->removeRoomFacilities(interRelPos);
             break;
     }
 }

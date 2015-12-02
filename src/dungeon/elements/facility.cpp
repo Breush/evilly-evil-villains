@@ -104,11 +104,7 @@ bool Facility::lua_hasTunnel() const
 
 void Facility::lua_addTunnel(const int32 x, const int32 y, bool relative)
 {
-    Tunnel tunnel;
-    tunnel.coords.x = x;
-    tunnel.coords.y = y;
-    tunnel.relative = relative;
-    m_facilityInfo.tunnels.emplace_back(std::move(tunnel));
+    m_inter.data().addFacilityTunnel(m_facilityInfo, {x, y}, relative);
 }
 
 bool Facility::lua_hasBarrier() const
