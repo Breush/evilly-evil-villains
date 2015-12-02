@@ -1,6 +1,8 @@
 #include "states/hub/market.hpp"
 
 #include "core/gettext.hpp"
+#include "dungeon/databases/trapsdb.hpp"
+#include "tools/platform-fixes.hpp"
 
 using namespace states;
 
@@ -29,6 +31,19 @@ HubMarket::HubMarket(StateStack& stack)
     m_button.setRelativeOrigin({0.5f, 1.f});
     m_button.setRelativePosition({0.5f, 0.95f});
     m_button.setAction(_("Back"), [this] { stackPop(); });
+
+    // Scroll area
+    nuiRoot.attachChild(m_scrollArea);
+    m_scrollArea.setContent(m_globalStacker);
+    m_scrollArea.setRelativePosition({0.5f, 0.5f});
+    m_scrollArea.setSize(nuiSize * sf::Vector2f{0.75f, 0.65f});
+    m_scrollArea.centerOrigin();
+
+    // Columns
+    m_globalStacker.stackBack(m_columns[0u]);
+    m_globalStacker.stackBack(m_columns[1u]);
+
+    refreshColumns();
 }
 
 //-------------------//
@@ -44,4 +59,25 @@ void HubMarket::handleEvent(const sf::Event& event)
     }
 
     State::handleEvent(event);
+}
+
+//---------------//
+//----- ICU -----//
+
+void HubMarket::refreshColumns()
+{
+    m_trapLockers.clear();
+
+    dungeon::TrapsDB trapsDB;
+    const auto& trapsList = trapsDB.get();
+    m_trapLockers.resize(trapsList.size());
+
+    auto pTrapData = std::begin(trapsList);
+    for (uint i = 0u; i < trapsList.size(); ++i, pTrapData++) {
+        auto& trapLocker = m_trapLockers[i];
+        trapLocker = std::make_unique<TrapLocker>();
+        trapLocker->setText(pTrapData->second.name);
+        trapLocker->setPrestyle(scene::RichLabel::Prestyle::NUI);
+        m_columns[i % 2u].stackBack(*trapLocker);
+    }
 }

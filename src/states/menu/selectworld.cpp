@@ -34,7 +34,7 @@ MenuSelectWorld::MenuSelectWorld(StateStack& stack)
     // List for existing worlds
     nuiRoot.attachChild(m_list);
     m_list.centerOrigin();
-    m_list.setSize({0.75f * nuiSize.x, 0.65f * nuiSize.y});
+    m_list.setSize(nuiSize * sf::Vector2f{0.75f, 0.65f});
     m_list.setRelativePosition({0.5f, 0.5f});
     m_list.setColumnsTitles({_("Villain"), _("World name"), _("Main dungeon"), _("Last played")});
     m_list.setColumnAlign(3, nui::Align::OPPOSITE, nui::Align::CENTER);
