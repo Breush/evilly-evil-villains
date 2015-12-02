@@ -2,6 +2,7 @@
 
 #include "core/gettext.hpp"
 #include "core/application.hpp"
+#include "states/identifiers.hpp"
 #include "states/state.hpp"
 #include "tools/vector.hpp"
 #include "tools/string.hpp"
@@ -45,6 +46,7 @@ bool Selector::handleMouseButtonPressed(const sf::Mouse::Button button, const sf
     else if (m_selectedBox == "bank") {
     }
     else if (m_selectedBox == "market") {
+        m_state.stackPush(StateID::HUB_MARKET);
     }
     else if (m_selectedBox == "marketing_office") {
     }

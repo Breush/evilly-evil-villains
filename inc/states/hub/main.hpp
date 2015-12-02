@@ -8,19 +8,19 @@ namespace states
 {
     //! Central state for game.
 
-    class Hub : public State
+    class HubMain final : public State
     {
         using baseClass = State;
 
     public:
 
         //! Constructor.
-        Hub(StateStack& stack);
+        HubMain(StateStack& stack);
 
         //! Destructor.
-        ~Hub();
+        ~HubMain();
 
-        StateID id() const noexcept final { return StateID::HUB; }
+        StateID id() const noexcept final { return StateID::HUB_MAIN; }
 
     protected:
 

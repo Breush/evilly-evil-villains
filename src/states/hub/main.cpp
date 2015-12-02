@@ -1,4 +1,4 @@
-#include "states/hub/hub.hpp"
+#include "states/hub/main.hpp"
 
 #include "core/application.hpp"
 
@@ -6,7 +6,7 @@
 
 using namespace states;
 
-Hub::Hub(StateStack& stack)
+HubMain::HubMain(StateStack& stack)
     : baseClass(stack)
     , m_selector(*this)
 {
@@ -36,7 +36,7 @@ Hub::Hub(StateStack& stack)
     m_selector.init();
 }
 
-Hub::~Hub()
+HubMain::~HubMain()
 {
     // Freeing resources
     Application::freeAnimations({"hub"});
@@ -46,13 +46,13 @@ Hub::~Hub()
 //-------------------//
 //----- Routine -----//
 
-bool Hub::update(const sf::Time& dt)
+bool HubMain::update(const sf::Time& dt)
 {
     baseClass::update(dt);
     return false;
 }
 
-void Hub::handleEvent(const sf::Event& event)
+void HubMain::handleEvent(const sf::Event& event)
 {
     // Back to previous state on Escape
     if (event.type == sf::Event::KeyPressed

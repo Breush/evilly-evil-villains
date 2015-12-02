@@ -247,7 +247,7 @@ void GameDungeonDesign::handleEvent(const sf::Event& event)
         // TODO Also have a UI element to access that
         // TODO Have that key in shortcuts config
         if (event.key.code == sf::Keyboard::H) {
-            stackPush(StateID::HUB);
+            stackPush(StateID::HUB_MAIN);
             return;
         }
 
