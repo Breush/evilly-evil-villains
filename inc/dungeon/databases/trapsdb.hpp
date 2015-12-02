@@ -16,27 +16,25 @@ namespace pugi
 
 namespace dungeon
 {
+    //! How strong an object is.
+    struct TrapResistance
+    {
+        uint durability = 0u;   //!< Health point of the trap.
+    };
+
+    //! All infos that we can find in each trap.
+    struct TrapData
+    {
+        std::wstring name = L"(Unknown)";   //!< Translated name.
+        Cost baseCost;                      //!< Construction price.
+        TrapResistance resistance;          //!< How much a trap can resist.
+        RelCost repairCost;                 //!< Relative to damage repair cost.
+    };
+
     //! All common info for each trap and should never change.
 
     class TrapsDB final
     {
-    public:
-
-        //! How strong an object is.
-        struct Resistance
-        {
-            uint durability = 0u;   //!< Health point of the trap.
-        };
-
-        //! All infos that we can find in each trap.
-        struct TrapData
-        {
-            std::wstring name = L"(Unknown)";   //!< Translated name.
-            Cost baseCost;                      //!< Construction price.
-            Resistance resistance;              //!< How much a trap can resist.
-            RelCost repairCost;                 //!< Relative to damage repair cost.
-        };
-
     public:
 
         //! Constructor.
@@ -79,7 +77,7 @@ namespace dungeon
         void readRelCostNode(RelCost& cost, const pugi::xml_node& node);
 
         //! Read node and affect it to a resistance variable.
-        void readResistanceNode(Resistance& speed, const pugi::xml_node& node);
+        void readResistanceNode(TrapResistance& speed, const pugi::xml_node& node);
 
         //! @}
 

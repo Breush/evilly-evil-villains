@@ -36,12 +36,15 @@ HubMarket::HubMarket(StateStack& stack)
     nuiRoot.attachChild(m_scrollArea);
     m_scrollArea.setContent(m_globalStacker);
     m_scrollArea.setRelativePosition({0.5f, 0.5f});
-    m_scrollArea.setSize(nuiSize * sf::Vector2f{0.75f, 0.65f});
+    m_scrollArea.setSize(nuiSize * sf::Vector2f{0.8f, 0.65f});
     m_scrollArea.centerOrigin();
 
     // Columns
     m_globalStacker.stackBack(m_columns[0u]);
     m_globalStacker.stackBack(m_columns[1u]);
+    m_globalStacker.setPadding(0.f);
+    m_columns[0u].setPadding(0.f);
+    m_columns[1u].setPadding(0.f);
 
     refreshColumns();
 }
@@ -75,9 +78,10 @@ void HubMarket::refreshColumns()
     auto pTrapData = std::begin(trapsList);
     for (uint i = 0u; i < trapsList.size(); ++i, pTrapData++) {
         auto& trapLocker = m_trapLockers[i];
-        trapLocker = std::make_unique<TrapLocker>();
-        trapLocker->setText(pTrapData->second.name);
-        trapLocker->setPrestyle(scene::RichLabel::Prestyle::NUI);
+        trapLocker = std::make_unique<hub::TrapLocker>();
+        trapLocker->setSource(pTrapData->first, pTrapData->second);
+        trapLocker->setSize({0.4f * nuiLayer().size().x, 100.f});
+        trapLocker->setLocked((i % 2u == 0u));
         m_columns[i % 2u].stackBack(*trapLocker);
     }
 }

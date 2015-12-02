@@ -7,8 +7,8 @@
 #include "nui/vstacker.hpp"
 #include "nui/button.hpp"
 #include "scene/wrappers/rectanglegradient.hpp"
-#include "scene/wrappers/richlabel.hpp"
 #include "scene/wrappers/label.hpp"
+#include "hub/traplocker.hpp"
 
 #include <array>
 
@@ -61,8 +61,7 @@ namespace states
         nui::Button m_button;                       //!< Back button.
 
         // Lockers
-        using TrapLocker = scene::RichLabel;
-        std::vector<std::unique_ptr<TrapLocker>> m_trapLockers; //!< Available traps.
+        std::vector<std::unique_ptr<hub::TrapLocker>> m_trapLockers;    //!< Available traps.
 
         // Decorum
         scene::Label m_title;                   //!< Title.

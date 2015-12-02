@@ -78,7 +78,7 @@ void TrapsDB::readRelCostNode(RelCost& cost, const pugi::xml_node& node)
     cost.fame = node.attribute(L"fame").as_float();
 }
 
-void TrapsDB::readResistanceNode(Resistance& resistance, const pugi::xml_node& node)
+void TrapsDB::readResistanceNode(TrapResistance& resistance, const pugi::xml_node& node)
 {
     resistance.durability = node.attribute(L"durability").as_uint();
 }
