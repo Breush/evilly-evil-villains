@@ -29,15 +29,9 @@ void AnimatedSprite::onScaleChanges()
     refreshSpriterEntityTransform();
 }
 
-void AnimatedSprite::onRotationChanges()
-{
-    refreshSpriterEntityTransform();
-}
-
 void AnimatedSprite::drawInternal(sf::RenderTarget& target, sf::RenderStates states) const
 {
     returnif (m_spriterEntity == nullptr);
-
     states.transform = getTransform();
     m_spriterEntity->render(target, states, m_tiltColor);
 }
@@ -153,5 +147,4 @@ void AnimatedSprite::refreshSpriterEntityTransform()
     returnif (m_spriterEntity == nullptr);
 
     m_spriterEntity->setScale({scale().x, scale().y});
-    m_spriterEntity->setAngle(getRotation() * M_PI / 180.f);
 }

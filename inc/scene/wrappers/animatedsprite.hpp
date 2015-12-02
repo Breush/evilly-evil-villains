@@ -89,7 +89,6 @@ namespace scene
         //! @{
 
         void onScaleChanges() final;
-        void onRotationChanges() final;
         void drawInternal(sf::RenderTarget& target, sf::RenderStates states) const final;
         void updateRoutine(const sf::Time& dt) final;
 
