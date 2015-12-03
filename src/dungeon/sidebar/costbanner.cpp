@@ -12,9 +12,9 @@ CostBanner::CostBanner()
     m_text.setFont(Application::context().fonts.get("mono"));
 
     // Icons
-    m_icons[IconID::DOSH].setTexture(&Application::context().textures.get("elements/dosh"));
-    m_icons[IconID::SOUL].setTexture(&Application::context().textures.get("elements/soul"));
-    m_icons[IconID::FAME].setTexture(&Application::context().textures.get("elements/fame"));
+    m_icons[IconID::DOSH].setTexture(&Application::context().textures.get("resources/dosh"));
+    m_icons[IconID::SOUL].setTexture(&Application::context().textures.get("resources/soul"));
+    m_icons[IconID::FAME].setTexture(&Application::context().textures.get("resources/fame"));
 }
 
 //-------------------//

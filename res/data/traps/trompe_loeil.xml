@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <trap id="trompe_loeil" trName="Trompe l'oeil">
-    <data name="baseCost" dosh="150" />
+    <data name="unlockCost" dosh="1200" />
+    <data name="baseCost"   dosh="150" />
     <data name="resistance" durability="55" />
     <data name="repairCost" dosh="0.8" />
 </trap>

@@ -63,10 +63,13 @@ namespace hub
 
     private:
 
-        scene::RichLabel m_name;            //!< Title of the box.
-        scene::AnimatedSprite m_sprite;     //!< The trap displayed.
-        scene::RectangleShape m_rectangle;  //!< Border and rectangle over.
-        scene::RichLabel m_lockedText;      //!< The locked text.
+        scene::RichLabel m_name;                //!< Title of the box.
+        scene::AnimatedSprite m_sprite;         //!< The trap displayed.
+        scene::RectangleShape m_rectangle;      //!< Border and rectangle over.
+        scene::RichLabel m_lockedText;          //!< The locked text.
+        scene::RectangleShape m_lockedIcon;     //!< A closed lock image.
+        scene::RichLabel m_lockedCostText;      //!< The text for the cost to unlock.
+        scene::RectangleShape m_lockedDoshIcon; //!< The dosh image for the cost.
 
         // Room part
         sf::Vector2f m_roomTextureSize;     //!< The reference texture size.

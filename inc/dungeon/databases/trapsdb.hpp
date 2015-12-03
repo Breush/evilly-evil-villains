@@ -26,6 +26,7 @@ namespace dungeon
     struct TrapData
     {
         std::wstring name = L"(Unknown)";   //!< Translated name.
+        Cost unlockCost;                    //!< Unlock price.
         Cost baseCost;                      //!< Construction price.
         TrapResistance resistance;          //!< How much a trap can resist.
         RelCost repairCost;                 //!< Relative to damage repair cost.

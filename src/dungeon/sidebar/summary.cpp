@@ -35,9 +35,9 @@ Summary::Summary()
 void Summary::init()
 {
     // Bars
-    m_bars[BAR_DOSH].logo.setTexture(&Application::context().textures.get("elements/dosh"));
-    m_bars[BAR_SOUL].logo.setTexture(&Application::context().textures.get("elements/soul"));
-    m_bars[BAR_FAME].logo.setTexture(&Application::context().textures.get("elements/fame"));
+    m_bars[BAR_DOSH].logo.setTexture(&Application::context().textures.get("resources/dosh"));
+    m_bars[BAR_SOUL].logo.setTexture(&Application::context().textures.get("resources/soul"));
+    m_bars[BAR_FAME].logo.setTexture(&Application::context().textures.get("resources/fame"));
 }
 
 //-------------------//
