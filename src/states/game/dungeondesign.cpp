@@ -3,6 +3,7 @@
 #include "core/gettext.hpp"
 #include "core/application.hpp"
 #include "dungeon/detector.hpp"
+#include "states/hub/main.hpp"
 #include "context/worlds.hpp"
 #include "tools/tools.hpp"
 #include "tools/vector.hpp"
@@ -247,7 +248,7 @@ void GameDungeonDesign::handleEvent(const sf::Event& event)
         // TODO Also have a UI element to access that
         // TODO Have that key in shortcuts config
         if (event.key.code == sf::Keyboard::H) {
-            stackPush(StateID::HUB_MAIN);
+            stackDynamicPush<states::HubMain>(m_dungeonData);
             return;
         }
 

@@ -1,6 +1,9 @@
 #pragma once
 
-#include "states/state.hpp"
+#include "states/identifiers.hpp"
+#include "config/windowinfo.hpp"
+#include "config/nuiguides.hpp"
+#include "tools/platform-fixes.hpp"
 
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/System/NonCopyable.hpp>
@@ -21,6 +24,10 @@ namespace sf
 
 namespace states
 {
+    // Forward declarations
+
+    class State;
+
     //! States manager as a stacked states machine.
 
     class StateStack final : public sf::Drawable, private sf::NonCopyable
@@ -73,6 +80,18 @@ namespace states
         //! Push a state to the front.
         void pushState(StateID stateID);
 
+        // Note these kind of functions could replace pushState,
+        // but this removes StateID utility. Is it really better?
+        //! Dynamically push a state to the front.
+        template <class State_t, typename... Args>
+        inline void dynamicPushState(Args&&... args)
+        {
+            PendingChange change;
+            change.action = Action::DYNAMIC_PUSH;
+            change.pointer = std::make_unique<State_t>(*this, std::forward<Args>(args)...);
+            m_pendingChanges.emplace_back(std::move(change));
+        }
+
         //! Pop front-most state.
         void popState();
 
@@ -86,9 +105,8 @@ namespace states
         template <typename T>
         void registerState(StateID stateID)
         {
-            m_factories[stateID] = [this]() {
-                return std::unique_ptr<State>(new T(*this));
-            };
+            m_factories[stateID] = [this] () -> std::unique_ptr<State>
+                { return std::make_unique<T>(*this); };
         }
 
         //! @}
@@ -110,24 +128,26 @@ namespace states
         //! Possible actions to do with states.
         enum class Action
         {
-            PUSH,       //!< Add a state on top.
-            POP,        //!< Remove the state on top.
-            CLEAR,      //!< Remove all states.
-            REPLACE,    //!< Replace a state with another one.
+            DYNAMIC_PUSH,   //!< Add a state to the top, only used via dynamic functions.
+            PUSH,           //!< Add a state on top.
+            POP,            //!< Remove the state on top.
+            CLEAR,          //!< Remove all states.
+            REPLACE,        //!< Replace a state with another one.
         };
 
         //! An action to do on a state.
         struct PendingChange
         {
             Action action;                  //!< The action.
-            StateID stateID;                //!< The new state.
+            StateID stateID;                //!< The state.
+            std::shared_ptr<State> pointer; //!< The state to create if DYNAMIC_PUSH action.
             const State* pState = nullptr;  //!< The state reference.
         };
 
     private:
 
         //! The stack consists in a stack of states.
-        std::vector<std::unique_ptr<State>> m_stack;
+        std::vector<std::shared_ptr<State>> m_stack;
 
         //! The pending changes list.
         std::vector<PendingChange> m_pendingChanges;

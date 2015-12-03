@@ -2,6 +2,7 @@
 
 #include "core/application.hpp"
 #include "dungeon/inter.hpp"
+#include "scene/graph.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 
 #include <SFML/Graphics/RenderTarget.hpp>

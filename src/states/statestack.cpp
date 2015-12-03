@@ -1,7 +1,7 @@
 #include "states/statestack.hpp"
 
+#include "states/state.hpp"
 #include "core/application.hpp"
-#include "states/identifiers.hpp"
 #include "config/nuiguides.hpp"
 #include "tools/platform-fixes.hpp" // reverse
 #include "tools/debug.hpp"
@@ -85,6 +85,13 @@ void StateStack::applyPendingChanges()
     // Apply changes
     for (PendingChange change : m_pendingChanges) {
         switch (change.action) {
+        case Action::DYNAMIC_PUSH:
+            if (!m_stack.empty()) m_stack.back()->onHide();
+            m_stack.emplace_back(std::move(change.pointer));
+            m_stack.back()->refreshWindow(Application::context().windowInfo);
+            m_stack.back()->refreshNUI(Application::context().nuiGuides);
+            break;
+
         case Action::PUSH:
             if (!m_stack.empty()) m_stack.back()->onHide();
             m_stack.emplace_back(std::move(createState(change.stateID)));

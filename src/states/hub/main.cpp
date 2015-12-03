@@ -6,8 +6,9 @@
 
 using namespace states;
 
-HubMain::HubMain(StateStack& stack)
+HubMain::HubMain(StateStack& stack, dungeon::Data& data)
     : baseClass(stack)
+    , m_data(data)
     , m_selector(*this)
 {
     // Loading resources

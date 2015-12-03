@@ -1,5 +1,6 @@
 #pragma once
 
+#include "states/statestack.hpp"
 #include "scene/graph.hpp"
 #include "tools/int.hpp"
 
@@ -15,10 +16,6 @@ enum class StateID : uint8;
 
 namespace states
 {
-    // Forward declarations
-
-    class StateStack;
-
     //! Abstract state of the state stack machine.
 
     class State : public sf::Drawable
@@ -110,6 +107,13 @@ namespace states
 
         //! Add the specified state on top.
         void stackPush(StateID stateID);
+
+        //! Add the specified state on top.
+        template <class State_t, typename... Args>
+        inline void stackDynamicPush(Args&&... args)
+        {
+            m_stack.dynamicPushState<State_t>(std::forward<Args>(args)...);
+        }
 
         //! Remove top state then add the specified state on top.
         void stackPopPush(StateID stateID);

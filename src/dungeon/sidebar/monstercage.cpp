@@ -3,6 +3,7 @@
 #include "core/gettext.hpp"
 #include "core/application.hpp"
 #include "context/villains.hpp"
+#include "scene/graph.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/data.hpp"
 #include "tools/vector.hpp"

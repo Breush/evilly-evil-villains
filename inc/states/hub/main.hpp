@@ -4,6 +4,13 @@
 #include "states/identifiers.hpp"
 #include "hub/selector.hpp"
 
+// Forward declarations
+
+namespace dungeon
+{
+    class Data;
+}
+
 namespace states
 {
     //! Central state for game.
@@ -14,8 +21,8 @@ namespace states
 
     public:
 
-        //! Constructor.
-        HubMain(StateStack& stack);
+        //! Constructor...
+        HubMain(StateStack& stack, dungeon::Data& data);
 
         //! Destructor.
         ~HubMain();
@@ -35,6 +42,9 @@ namespace states
 
     private:
 
-        hub::Selector m_selector;
+        dungeon::Data& m_data;      //!< Current dungeon data reference.
+
+        // Decorum
+        hub::Selector m_selector;   //!< Houses (market/inn/etc.) selector.
     };
 }
