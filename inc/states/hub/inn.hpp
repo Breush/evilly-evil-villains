@@ -8,7 +8,6 @@
 #include "nui/button.hpp"
 #include "scene/wrappers/rectanglegradient.hpp"
 #include "scene/wrappers/label.hpp"
-#include "hub/traplocker.hpp"
 
 #include <array>
 
@@ -21,25 +20,25 @@ namespace dungeon
 
 namespace states
 {
-    //! Where to unlock traps in the hub.
+    //! Where to unlock monsters in the hub.
 
-    class HubMarket final : public State
+    class HubInn final : public State
     {
         using baseClass = State;
 
     public:
 
         //! Constructor.
-        HubMarket(StateStack& stack, dungeon::Data& data);
+        HubInn(StateStack& stack, dungeon::Data& data);
 
         //! Default destructor.
-        ~HubMarket() = default;
+        ~HubInn() = default;
 
         //----------------------//
         //! @name State control
         //! @{
 
-        StateID id() const noexcept final { return StateID::HUB_MARKET; }
+        StateID id() const noexcept final { return StateID::HUB_INN; }
 
         //! @}
 
@@ -70,9 +69,6 @@ namespace states
         nui::HStacker m_globalStacker;              //!< Stacker inside the scrollarea.
         std::array<nui::VStacker, 2u> m_columns;    //!< The stackers forming the columns.
         nui::Button m_button;                       //!< Back button.
-
-        // Lockers
-        std::vector<std::unique_ptr<hub::TrapLocker>> m_trapLockers;    //!< Traps list.
 
         // Decorum
         scene::Label m_title;                   //!< Title.

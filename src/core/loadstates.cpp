@@ -35,5 +35,6 @@ void Application::loadStates()
     // Note: Hub states are dynamic because they are constructed with dungeon::Data as argument.
     // m_stateStack.registerState<states::HubMain>(StateID::HUB_MAIN);
     // m_stateStack.registerState<states::HubMarket>(StateID::HUB_MARKET);
+    // m_stateStack.registerState<states::HubMarket>(StateID::HUB_INN);
 }
 

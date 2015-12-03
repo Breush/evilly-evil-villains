@@ -3,6 +3,7 @@
 #include "core/gettext.hpp"
 #include "core/application.hpp"
 #include "states/hub/market.hpp"
+#include "states/hub/inn.hpp"
 #include "tools/vector.hpp"
 #include "tools/string.hpp"
 #include "tools/event.hpp"
@@ -42,6 +43,7 @@ bool Selector::handleMouseButtonPressed(const sf::Mouse::Button button, const sf
         m_state.stackPop();
     }
     else if (m_selectedBox == "inn") {
+        m_state.stackDynamicPush<states::HubInn>(m_data);
     }
     else if (m_selectedBox == "bank") {
     }
