@@ -132,7 +132,6 @@ void Data::createFiles(const std::wstring& folder)
 void Data::loadDungeon(const std::wstring& file)
 {
     m_floors.clear();
-    m_monstersInfo.active.clear();
 
     // Parsing XML
     pugi::xml_document doc;
@@ -189,12 +188,25 @@ void Data::loadDungeon(const std::wstring& file)
     }
 
     // Active
+    m_monstersInfo.active.clear();
     const auto& activeNode = monstersNode.child(L"active");
     for (const auto& monsterNode : activeNode.children(L"monster")) {
         MonsterInfo monsterInfo;
         monsterInfo.data.loadXML(monsterNode);
         monsterInfo.hp = monsterNode.attribute(L"hp").as_float(1.f);
         m_monstersInfo.active.emplace_back(std::move(monsterInfo));
+    }
+
+    //---- Traps
+
+    m_trapsGenerics.clear();
+    const auto& trapsGenericsNode = dungeon.child(L"trapsGenerics");
+    for (const auto& trapData: m_trapsDB.get()) {
+        const auto& trapID = trapData.first;
+        const auto& trapGenericNode = trapsGenericsNode.child(trapID.c_str());
+        auto& trapGeneric = m_trapsGenerics[trapData.first];
+        trapGeneric.common = &trapData.second;
+        trapGeneric.unlocked = trapGenericNode.attribute(L"unlocked").as_bool();
     }
 
     //---- Structure
@@ -301,6 +313,14 @@ void Data::saveDungeon(const std::wstring& file)
         auto monsterNode = activeNode.append_child(L"monster");
         monsterInfo.data.saveXML(monsterNode);
         monsterNode.append_attribute(L"hp") = monsterInfo.hp;
+    }
+
+    //---- Traps
+
+    auto trapsGenericsNode = dungeon.append_child(L"trapsGenerics");
+    for (const auto& trapGenericPair : m_trapsGenerics) {
+        auto trapGenericNode = trapsGenericsNode.append_child(trapGenericPair.first.c_str());
+        trapGenericNode.append_attribute(L"unlocked") = trapGenericPair.second.unlocked;
     }
 
     //---- Structure

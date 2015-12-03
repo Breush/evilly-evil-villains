@@ -1,7 +1,11 @@
 <?xml version="1.0"?>
 <dungeon name="No woman, no pancakes" floorsCount="17" roomsByFloor="12" fame="559">
 	<heroes />
-    <monsters />
+	<monsters />
+	<trapsGenerics>
+		<pickpock unlocked="true" />
+		<trompe_loeil unlocked="true" />
+	</trapsGenerics>
 	<floor pos="0">
 		<room pos="0" state="constructed" />
 		<room pos="1" state="constructed" />

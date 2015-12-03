@@ -93,9 +93,21 @@ void Sidebar::onChildSizeChanges(scene::Entity& child)
         refreshScrollAreasSize();
 }
 
+//------------------//
+//----- Events -----//
+
+void Sidebar::receive(const context::Event& event)
+{
+    const auto& devent = reinterpret_cast<const dungeon::Event&>(event);
+
+    if (devent.type == "available_traps_changed")
+        refreshTabTrapsContent();
+}
+
 //------------------------//
 //----- Dungeon data -----//
 
+// TODO CleanUp Why is there a useData if passed to the constructor?
 void Sidebar::useData(Data& data)
 {
     m_summary.useData(data);
@@ -149,13 +161,14 @@ void Sidebar::refreshTabTrapsContent()
     trapsStacker.unstackAll();
     trapsButtons.clear();
 
-    const auto& trapsList = m_data.trapsDB().get();
-    auto trapsCount = trapsList.size();
+    const auto& trapsGenerics = m_data.trapsGenerics();
+    auto trapsCount = trapsGenerics.size();
     trapsButtons.reserve(trapsCount);
 
-    for (const auto& trapPair : trapsList) {
-        const auto& trapID = trapPair.first;
-        trapsButtons.emplace_back(std::make_unique<TrapGrabButton>(trapPair.second.name, trapID));
+    for (const auto& trapGenericPair : trapsGenerics) {
+        if (!trapGenericPair.second.unlocked) continue;
+        const auto& trapID = trapGenericPair.first;
+        trapsButtons.emplace_back(std::make_unique<TrapGrabButton>(trapGenericPair.second.common->name, trapID));
         auto& trapButton = *trapsButtons.back();
         trapsStacker.stackBack(trapButton, nui::Align::CENTER);
     }

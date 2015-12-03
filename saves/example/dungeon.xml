@@ -33,6 +33,10 @@
 			</monster>
 		</active>
 	</monsters>
+	<trapsGenerics>
+		<pickpock unlocked="true" />
+		<trompe_loeil unlocked="false" />
+	</trapsGenerics>
 	<floor pos="0">
 		<room pos="0" state="constructed">
 			<facility type="ladder">

@@ -88,6 +88,13 @@ namespace dungeon
         uint treasure = -1u;                                //!< The treasure held.
     };
 
+    //! More generic but dungeon-dependent info about traps type.
+    struct TrapGeneric
+    {
+        const TrapData* common = nullptr;   //!< All the common data.
+        bool unlocked = false;              //!< Is this trap type available?
+    };
+
     // Forward declarations
 
     class Graph;
@@ -384,6 +391,9 @@ namespace dungeon
         //! Access the traps data base.
         inline const TrapsDB& trapsDB() const { return m_trapsDB; }
 
+        //! Access the traps generics.
+        inline const std::unordered_map<std::wstring, TrapGeneric>& trapsGenerics() const { return m_trapsGenerics; }
+
         //! Access the heroes data base.
         inline const HeroesDB& heroesDB() const { return m_heroesDB; }
 
@@ -464,7 +474,7 @@ namespace dungeon
 
     private:
 
-        Graph* m_graph = nullptr;   //!< The graph linked to these data.
+        Graph* m_graph = nullptr;               //!< The graph linked to these data.
         context::Villain* m_villain = nullptr;  //!< The villain reference.
         context::Wallet m_fameWallet;           //!< The resource fame value.
         context::Wallet m_soulWallet;           //!< The resource soul value.
@@ -479,13 +489,16 @@ namespace dungeon
 
         // Time
         uint m_time = 0u;           //!< How much time the dungeon has been constructed, in in-game hours.
-        const float m_timeGameHour; //!< Constant time: howmany real seconds equals an in-game hour.
+        const float m_timeGameHour; //!< Constant time: how many real seconds equals an in-game hour.
 
         // Databases
         MonstersDB m_monstersDB;        //!< All monsters immuable data.
         TrapsDB m_trapsDB;              //!< All traps immuable data.
         FacilitiesDB m_facilitiesDB;    //!< All facilities immuable data.
         HeroesDB m_heroesDB;            //!< All heroes immuable data.
+
+        // More info
+        std::unordered_map<std::wstring, TrapGeneric> m_trapsGenerics;  //!< More general info about the traps.
     };
 }
 

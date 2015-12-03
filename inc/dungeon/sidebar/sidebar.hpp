@@ -27,7 +27,7 @@ namespace dungeon
 
     //! The sidebar shown in Dungeon Design state.
 
-    class Sidebar final : public scene::Entity
+    class Sidebar final : public scene::Entity, private context::EventReceiver
     {
         using baseClass = scene::Entity;
 
@@ -71,6 +71,14 @@ namespace dungeon
         void refreshNUI(const config::NUIGuides& cNUI) final;
         void onSizeChanges() final;
         void onChildSizeChanges(scene::Entity& child) final;
+
+        //! @}
+
+        //---------------//
+        //! @name Events
+        //! @{
+
+        void receive(const context::Event& event);
 
         //! @}
 
