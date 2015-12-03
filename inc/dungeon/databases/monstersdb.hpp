@@ -26,7 +26,7 @@ namespace dungeon
         //! All infos that we can find in each monster.
         struct MonsterData
         {
-            std::wstring name = L"(Unknown)";   //!< Translated name. TODO: How to get translation for this?
+            std::wstring name = L"(Unknown)";   //!< Translated name.
             Cost baseCost;                      //!< Starting price.
             Cost weeklyCost;                    //!< Salary.
             sf::Vector2f speed;                 //!< Speed relative to dungeon room size.

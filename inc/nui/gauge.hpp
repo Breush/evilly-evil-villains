@@ -1,6 +1,6 @@
 #pragma once
 
-#include "scene/entity.hpp"
+#include "nui/entity.hpp"
 #include "sfe/line.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -9,9 +9,9 @@ namespace nui
 {
     //! A variable gauge entity to show a percentage.
 
-    class Gauge final : public scene::Entity
+    class Gauge final : public nui::Entity
     {
-        using baseClass = scene::Entity;
+        using baseClass = nui::Entity;
 
     public:
 

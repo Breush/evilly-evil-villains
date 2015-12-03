@@ -58,9 +58,6 @@ void Application::refreshShaders()
 
     // NUI
     s_context.shaders.get("nui/hover").setParameter("texture", sf::Shader::CurrentTexture);
-    s_context.shaders.get("nui/focus").setParameter("screenSize", screenSize);
-    s_context.shaders.get("nui/focus").setParameter("resolution", resolution);
-    s_context.shaders.get("nui/focus").setParameter("effectiveDisplay", effectiveDisplay);
 
     // Splashcreen
     s_context.shaders.get("menu/splashscreen").setParameter("texture", sf::Shader::CurrentTexture);

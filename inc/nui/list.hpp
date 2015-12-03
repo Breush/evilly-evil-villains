@@ -1,6 +1,6 @@
 #pragma once
 
-#include "scene/entity.hpp"
+#include "nui/entity.hpp"
 #include "scene/wrappers/label.hpp"
 #include "tools/int.hpp"
 #include "sfe/line.hpp"
@@ -15,9 +15,9 @@ namespace nui
 {
     //! A table which displays information as a list.
 
-    class List final : public scene::Entity
+    class List final : public nui::Entity
     {
-        using baseClass = scene::Entity;
+        using baseClass = nui::Entity;
 
         //! The function signature to call on validation.
         using Callback = std::function<void()>;

@@ -15,12 +15,6 @@ using namespace scene;
 Graph::Graph()
     : m_scene(this)
 {
-    // Focusing
-    if (sf::Shader::isAvailable())
-        m_focusShader = &Application::context().shaders.get("nui/focus");
-    m_focusShape.setTexture(&Application::context().textures.get("nui/focus"));
-    m_focusShape.setFillColor({255, 255, 255, 100});
-
     // NUI layer
     m_nuiLayer.init(this);
     m_nuiLayer.setManipulable(false);
@@ -57,13 +51,6 @@ void Graph::update(const sf::Time& dt, const float factor)
     // The grabbable
     if (m_grabbable != nullptr)
         m_grabbable->update(dt);
-
-    // Focusing system - animation
-    if (m_focusedEntity != nullptr) {
-        m_focusAnimation += 60.f * dt.asSeconds();
-        const auto& focusSize = m_focusShape.getSize();
-        m_focusShape.setTextureRect(sf::IntRect(-m_focusAnimation, -m_focusAnimation, focusSize.x, focusSize.y));
-    }
 }
 
 void Graph::handleEvent(const sf::Event& event)
@@ -124,38 +111,6 @@ void Graph::refreshNUI(const config::NUIGuides& cNUI)
 
 //--------------------//
 //----- Focusing -----//
-
-void Graph::updateFocusSprite()
-{
-    returnif (m_focusedEntity == nullptr);
-    auto focusRect = m_focusedEntity->focusRect();
-
-    // FIXME This is now wrong as globalClipArea are global coordinates, not local ones.
-    // We should draw the focus sprite when the entity is drawned, and yeap, it will be all right
-    // This focus rect thingy marker should probably be handled by nui::Entity.
-    // The graph just informs the entity it's focused.
-    if (m_focusedEntity->globalClipping())
-        focusRect = tools::intersect(focusRect, m_focusedEntity->globalClipArea());
-
-    // Hide if focus rect invalid
-    if (focusRect.width < 0.f || focusRect.height < 0.f) {
-        m_focusShape.setSize({0.f, 0.f});
-        return;
-    }
-
-    sf::Vector2f focusPosition(focusRect.left, focusRect.top);
-    sf::Vector2f focusSize(focusRect.width, focusRect.height);
-
-    m_focusShape.setPosition(focusPosition);
-    m_focusShape.setSize(focusSize);
-
-    if (sf::Shader::isAvailable()) {
-        sf::Vector2f globalFocusPosition = m_focusedEntity->getPosition() - m_focusedEntity->getOrigin() + focusPosition;
-        Application::context().shaders.get("nui/focus").setParameter("position", globalFocusPosition);
-        Application::context().shaders.get("nui/focus").setParameter("textureSize", focusSize);
-    }
-    // TODO Any back-up?
-}
 
 void Graph::setFocusedEntity(Entity* focusedEntity)
 {

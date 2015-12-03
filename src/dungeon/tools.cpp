@@ -36,7 +36,7 @@ ToolGrabButton::ToolGrabButton(const std::wstring& text, ToolID toolID)
     setVisual(text, m_textureID);
 }
 
-void ToolGrabButton::grabbableButtonPressed(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
+void ToolGrabButton::grabbableButtonPressed(scene::Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
 {
     // If right button, deselect
     if (button == sf::Mouse::Right) {

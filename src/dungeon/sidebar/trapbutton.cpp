@@ -19,7 +19,7 @@ TrapGrabButton::TrapGrabButton(const std::wstring& text, std::wstring trapID)
     setVisual(text, toString(L"dungeon/traps/" + m_trapID + L"/icon"));
 }
 
-void TrapGrabButton::grabbableButtonReleased(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
+void TrapGrabButton::grabbableButtonReleased(scene::Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
 {
     returnif (button != sf::Mouse::Left);
     graph()->removeGrabbable();

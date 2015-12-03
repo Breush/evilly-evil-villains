@@ -61,12 +61,6 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
         // Sub-parts
         drawParts(target, states);
 
-        // Draw focus shape
-        if (m_focused) {
-            states.shader = m_graph->focusShader();
-            target.draw(m_graph->focusShape(), states);
-        }
-
         states.shader = initialShader;
     }
 
@@ -87,7 +81,7 @@ void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
         glEnable(GL_SCISSOR_TEST);
 
         glClipArea = tools::mapRectCoordsToPixel(target, m_globalClipArea);
-        glClipArea.top = screenSize.y - glClipArea.height - glClipArea.top; // SFML - GL compatibility
+        glClipArea.top = screenSize.y - (glClipArea.height + glClipArea.top); // SFML - GL compatibility
 
         glScissor(glClipArea.left, glClipArea.top, glClipArea.width, glClipArea.height);
     }
@@ -105,7 +99,7 @@ void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
             sf::FloatRect r(part.clippingRect);
             r = states.transform.transformRect(r);
             r = tools::mapRectCoordsToPixel(target, r);
-            r.top = screenSize.y - r.height - r.top;
+            r.top = screenSize.y - (r.height + r.top);
 
             // If entity has already a clipping value, intersects
             if (m_globalClipping) r = tools::intersect(r, glClipArea);
@@ -175,7 +169,7 @@ void Entity::updateChanges()
 
     // Update focus sprite
     if (m_focused && (m_localChanges || m_sizeChanges))
-        m_graph->updateFocusSprite();
+        onFocusChanged();
 }
 
 void Entity::refreshWindow(const config::WindowInfo& cWindow)
@@ -263,13 +257,15 @@ Entity* Entity::firstOver(const sf::Vector2f& position)
 void Entity::setFocusRect(const sf::FloatRect& inFocusRect)
 {
     m_focusRect = inFocusRect;
-    if (m_focused && m_graph != nullptr) m_graph->updateFocusSprite();
+    if (m_focused && m_graph != nullptr)
+        onFocusChanged();
 }
 
 void Entity::setFocused(bool inFocused)
 {
     m_focused = inFocused;
-    if (m_focused && m_graph != nullptr) m_graph->updateFocusSprite();
+    if (m_focused && m_graph != nullptr)
+        onFocusChanged();
 }
 
 Entity* Entity::closestNextSibling()
@@ -493,8 +489,6 @@ void Entity::refreshFromLocal()
         setRotation(m_localRotation);
         m_scale = m_localScale;
     }
-
-    if (m_focused) m_graph->updateFocusSprite();
 
     for (auto& child : m_children)
         child->refreshFromLocal();

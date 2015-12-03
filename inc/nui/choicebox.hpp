@@ -1,6 +1,6 @@
 #pragma once
 
-#include "scene/entity.hpp"
+#include "nui/entity.hpp"
 #include "tools/int.hpp"
 #include "sfe/line.hpp"
 #include "sfe/arrow.hpp"
@@ -19,9 +19,9 @@ namespace nui
      *  a few options.
      */
 
-    class ChoiceBox : public scene::Entity
+    class ChoiceBox : public Entity
     {
-        using baseClass = scene::Entity;
+        using baseClass = Entity;
 
     protected:
 

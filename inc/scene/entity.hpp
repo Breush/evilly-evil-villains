@@ -477,6 +477,9 @@ namespace scene
         //! Whether the entity is currently focused (state managed by the Graph).
         inline bool focused() const { return m_focused; }
 
+        //! Called whenever the entity is focus and the rect changed.
+        virtual void onFocusChanged() {}
+
         //! @}
 
         //-----------------------------//

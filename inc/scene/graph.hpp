@@ -60,21 +60,6 @@ namespace scene
 
         //! @}
 
-        //------------------------//
-        //! @name Focusing system
-        //! @{
-
-        //! Ask for recomputation of focused sprite.
-        void updateFocusSprite();
-
-        //! Get the focus shader.
-        inline const sf::Shader* focusShader() const { return m_focusShader; }
-
-        //! Get the focus shape.
-        inline const sf::RectangleShape& focusShape() const { return m_focusShape; }
-
-        //! @}
-
         //-----------------//
         //! @name Grabbing
         //! @{
@@ -183,10 +168,7 @@ namespace scene
         Layer m_nuiLayer;   //!< The NUI layer.
 
         // Focusing system
-        Entity* m_focusedEntity = nullptr;      //!< The currently focused entity.
-        float m_focusAnimation = 0.f;           //!< The time of focusing animation.
-        sf::Shader* m_focusShader = nullptr;    //!< Shader for focus effect.
-        sf::RectangleShape m_focusShape;        //!< Shape for focus effect.
+        Entity* m_focusedEntity = nullptr;  //!< The currently focused entity.
 
         // Mouse detection
         Entity* m_hoveredEntity = nullptr;  //!< The currently hovered entity.

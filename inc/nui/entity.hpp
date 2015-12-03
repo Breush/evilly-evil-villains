@@ -41,7 +41,9 @@ namespace nui
         //! @name Routine
         //! @{
 
+        void onFocusChanged() final;
         void update(const sf::Time& dt) final;
+        void drawInternal(sf::RenderTarget& target, sf::RenderStates states) const final;
         virtual void refreshNUI(const config::NUIGuides& cNUI) override;
 
         //! @}
@@ -65,6 +67,11 @@ namespace nui
         //! @}
 
     private:
+
+        // Focusing
+        sf::RectangleShape m_focusSprite;       //!< The focus sprite displayed.
+        sf::Shader* m_focusShader = nullptr;    //!< The focus shader.
+        float m_focusAnimation = 0.f;           //!< Current delay of focus animation.
 
         // Tooltip
         scene::RichLabel m_tooltipText;                     //!< The tooltip label.

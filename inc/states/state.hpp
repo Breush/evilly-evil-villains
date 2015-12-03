@@ -58,7 +58,7 @@ namespace states
         virtual StateID id() const noexcept = 0;
 
         //! Called whenever the state is shown on top.
-        virtual void onShow() noexcept { m_sceneGraph.updateFocusSprite(); }
+        virtual void onShow() noexcept {}
 
         //! Called whenever the state is no more on top.
         virtual void onHide() noexcept {}

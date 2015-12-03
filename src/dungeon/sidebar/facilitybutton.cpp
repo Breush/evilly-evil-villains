@@ -27,7 +27,7 @@ FacilityGrabButton::FacilityGrabButton(const FacilitiesDB::FacilityData& facilit
             ++m_explicitLinksCount;
 }
 
-void FacilityGrabButton::grabbableMoved(Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f&)
+void FacilityGrabButton::grabbableMoved(scene::Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f&)
 {
     // Show link if linking
     returnif (m_explicitLinksCount == 0u || m_explicitLinksDone == 0u);
@@ -40,7 +40,7 @@ void FacilityGrabButton::grabbableMoved(Entity* entity, const sf::Vector2f& relP
     inter->setPredictionLink(m_explicitLinkCoords, targetCoords);
 }
 
-void FacilityGrabButton::grabbableButtonPressed(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
+void FacilityGrabButton::grabbableButtonPressed(scene::Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
 {
     // If right button, deselect
     if (button == sf::Mouse::Right) {

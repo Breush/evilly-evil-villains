@@ -1,6 +1,6 @@
 #pragma once
 
-#include "scene/entity.hpp"
+#include "nui/entity.hpp"
 #include "sfe/line.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -10,9 +10,9 @@ namespace nui
 {
     //! An interactive entry allowing user to type text.
 
-    class TextEntry : public scene::Entity
+    class TextEntry : public nui::Entity
     {
-        using baseClass = scene::Entity;
+        using baseClass = nui::Entity;
 
         //! Callback type used when a change occurs.
         using TextChangeCallback = std::function<void(const std::wstring&, const std::wstring&)>;

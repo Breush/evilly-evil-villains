@@ -32,8 +32,8 @@ namespace dungeon
         //! @name Spawn and react
         //! @{
 
-        void grabbableMoved(Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
-        void grabbableButtonPressed(Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
+        void grabbableMoved(scene::Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
+        void grabbableButtonPressed(scene::Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
         std::unique_ptr<scene::Grabbable> spawnGrabbable() final;
 
         //! Refresh the grabbable look and the facility created.

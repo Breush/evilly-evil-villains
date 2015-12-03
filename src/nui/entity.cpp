@@ -2,14 +2,22 @@
 
 #include "core/application.hpp"
 #include "tools/string.hpp"
+#include "tools/tools.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 
 using namespace nui;
 
 Entity::Entity(bool isLerpable)
     : baseClass(isLerpable)
 {
+    // Focusing
+    if (sf::Shader::isAvailable())
+        m_focusShader = &Application::context().shaders.get("nui/focus");
+    m_focusSprite.setTexture(&Application::context().textures.get("nui/focus"));
+    m_focusSprite.setFillColor({255, 255, 255, 100});
+
     // Tooltip
     m_tooltipTime = sf::Time::Zero;
 
@@ -26,8 +34,44 @@ Entity::Entity(bool isLerpable)
 //-------------------//
 //----- Routine -----//
 
+void Entity::onFocusChanged()
+{
+    // Update the focus sprite
+    const auto& focusRectangle = focusRect();
+    m_focusSprite.setSize({focusRectangle.width, focusRectangle.height});
+
+    std::cerr << focusRectangle << std::endl;
+}
+
+void Entity::drawInternal(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    returnif (!focused());
+
+    // Update focus shader
+    if (sf::Shader::isAvailable()) {
+        const auto& screenSize = Application::context().windowInfo.screenSize;
+        auto focusWindowRect = states.transform.transformRect(focusRect());
+        focusWindowRect = tools::mapRectCoordsToPixel(target, focusWindowRect);
+        focusWindowRect.top = screenSize.y - (focusWindowRect.height + focusWindowRect.top); // SFML - GL compatibility
+        m_focusShader->setParameter("position", {focusWindowRect.left, focusWindowRect.top});
+        m_focusShader->setParameter("size", {focusWindowRect.width, focusWindowRect.height});
+    }
+
+    // And... draw it
+    states.shader = m_focusShader;
+    target.draw(m_focusSprite, states);
+}
+
 void Entity::update(const sf::Time& dt)
 {
+    // Focus
+    if (focused()) {
+        // TODO This became affected by game time factor, is it what we want?
+        m_focusAnimation += 60.f * dt.asSeconds();
+        const auto& focusSize = m_focusSprite.getSize();
+        m_focusSprite.setTextureRect(sf::IntRect(-m_focusAnimation, -m_focusAnimation, focusSize.x, focusSize.y));
+    }
+
     // Tooltip
     if (m_showTooltip && m_tooltipTime < m_tooltipDelay) {
         m_tooltipTime += dt;

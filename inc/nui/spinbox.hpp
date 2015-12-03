@@ -1,6 +1,6 @@
 #pragma once
 
-#include "scene/entity.hpp"
+#include "nui/entity.hpp"
 #include "nui/numberentry.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -12,9 +12,9 @@ namespace nui
     //! A basic tool to let the user edit numbers.
 
     template<typename Value_t>
-    class SpinBox final : public scene::Entity
+    class SpinBox final : public nui::Entity
     {
-        using baseClass = scene::Entity;
+        using baseClass = nui::Entity;
 
         //! Callback type used when a change occurs.
         using ValueChangeCallback = std::function<void(Value_t, Value_t)>;
