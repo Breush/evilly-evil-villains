@@ -58,7 +58,8 @@ void TrapsDB::add(const std::string& filename)
     for (const auto& dataNode : trapNode) {
         std::wstring name = dataNode.attribute(L"name").as_string();
 
-        if (name == L"baseCost")        readCostNode(trapData.baseCost, dataNode);
+        if (name == L"unlockCost")      readCostNode(trapData.unlockCost, dataNode);
+        else if (name == L"baseCost")   readCostNode(trapData.baseCost, dataNode);
         else if (name == L"resistance") readResistanceNode(trapData.resistance, dataNode);
         else if (name == L"repairCost") readRelCostNode(trapData.repairCost, dataNode);
     }

@@ -71,7 +71,7 @@ GameDungeonDesign::~GameDungeonDesign()
     Application::context().musics.stop("angevin_70");
 
     // Freeing resources
-    Application::freeTextures({"dungeon", "elements", "effects"});
+    Application::freeTextures({"dungeon", "resources", "effects"});
     Application::freeAnimations({"dungeon"});
 }
 
@@ -167,7 +167,7 @@ void GameDungeonDesign::updateLoading(const sf::Time& dt)
     LOAD( 8u, Application::loadTextures({"dungeon/tools"}))
     LOAD( 9u, Application::loadTextures({"dungeon/traps"}))
     LOAD(10u, Application::loadTextures({"dungeon/heroes"}))
-    LOAD(11u, Application::loadTextures({"elements"}))
+    LOAD(11u, Application::loadTextures({"resources"}))
     LOAD(12u, Application::loadTextures({"effects"}))
 
     LOAD(20u, Application::loadAnimations({"dungeon/dynamics"}))
