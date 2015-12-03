@@ -13,7 +13,6 @@
 #include "states/game/dungeondesign.hpp"
 #include "states/game/pause.hpp"
 #include "states/game/over.hpp"
-#include "states/hub/market.hpp"
 
 void Application::loadStates()
 {
@@ -33,7 +32,8 @@ void Application::loadStates()
     m_stateStack.registerState<states::GamePause>(StateID::GAME_PAUSE);
     m_stateStack.registerState<states::GameOver>(StateID::GAME_OVER);
 
-    // Note: Dynamic. m_stateStack.registerState<states::HubMain>(StateID::HUB_MAIN);
-    m_stateStack.registerState<states::HubMarket>(StateID::HUB_MARKET);
+    // Note: Hub states are dynamic because they are constructed with dungeon::Data as argument.
+    // m_stateStack.registerState<states::HubMain>(StateID::HUB_MAIN);
+    // m_stateStack.registerState<states::HubMarket>(StateID::HUB_MARKET);
 }
 

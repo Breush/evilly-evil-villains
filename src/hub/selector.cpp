@@ -2,8 +2,7 @@
 
 #include "core/gettext.hpp"
 #include "core/application.hpp"
-#include "states/identifiers.hpp"
-#include "states/state.hpp"
+#include "states/hub/market.hpp"
 #include "tools/vector.hpp"
 #include "tools/string.hpp"
 #include "tools/event.hpp"
@@ -11,8 +10,9 @@
 
 using namespace hub;
 
-Selector::Selector(states::State& state)
+Selector::Selector(states::State& state, dungeon::Data& data)
     : m_state(state)
+    , m_data(data)
 {
     // Label
     attachChild(m_selectedLabel);
@@ -46,7 +46,7 @@ bool Selector::handleMouseButtonPressed(const sf::Mouse::Button button, const sf
     else if (m_selectedBox == "bank") {
     }
     else if (m_selectedBox == "market") {
-        m_state.stackPush(StateID::HUB_MARKET);
+        m_state.stackDynamicPush<states::HubMarket>(m_data);
     }
     else if (m_selectedBox == "marketing_office") {
     }

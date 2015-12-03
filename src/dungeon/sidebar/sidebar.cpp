@@ -100,7 +100,7 @@ void Sidebar::receive(const context::Event& event)
 {
     const auto& devent = reinterpret_cast<const dungeon::Event&>(event);
 
-    if (devent.type == "available_traps_changed")
+    if (devent.type == "trap_generic_changed")
         refreshTabTrapsContent();
 }
 
@@ -110,6 +110,7 @@ void Sidebar::receive(const context::Event& event)
 // TODO CleanUp Why is there a useData if passed to the constructor?
 void Sidebar::useData(Data& data)
 {
+    setEmitter(&data);
     m_summary.useData(data);
     refreshTabContents();
 }

@@ -814,6 +814,12 @@ void Data::removeRoomTrap(const sf::Vector2u& coords)
     addEvent("trap_changed", coords);
 }
 
+void Data::setTrapGenericUnlocked(const std::wstring& trapID, bool unlocked)
+{
+    m_trapsGenerics[trapID].unlocked = unlocked;
+    EventEmitter::addEvent("trap_generic_changed");
+}
+
 //--------------------//
 //----- Monsters -----//
 

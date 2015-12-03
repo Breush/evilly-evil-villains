@@ -1,13 +1,14 @@
 #include "states/hub/market.hpp"
 
 #include "core/gettext.hpp"
-#include "dungeon/databases/trapsdb.hpp"
+#include "dungeon/data.hpp"
 #include "tools/platform-fixes.hpp"
 
 using namespace states;
 
-HubMarket::HubMarket(StateStack& stack)
+HubMarket::HubMarket(StateStack& stack, dungeon::Data& data)
     : baseClass(stack)
+    , m_data(data)
 {
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
@@ -69,19 +70,15 @@ void HubMarket::handleEvent(const sf::Event& event)
 
 void HubMarket::refreshColumns()
 {
-    m_trapLockers.clear();
+    const auto& trapsGenerics = m_data.trapsGenerics();
+    m_trapLockers.resize(trapsGenerics.size());
 
-    dungeon::TrapsDB trapsDB;
-    const auto& trapsList = trapsDB.get();
-    m_trapLockers.resize(trapsList.size());
-
-    auto pTrapData = std::begin(trapsList);
-    for (uint i = 0u; i < trapsList.size(); ++i, pTrapData++) {
+    auto pTrapGeneric = std::begin(trapsGenerics);
+    for (uint i = 0u; i < trapsGenerics.size(); ++i, pTrapGeneric++) {
         auto& trapLocker = m_trapLockers[i];
-        trapLocker = std::make_unique<hub::TrapLocker>();
-        trapLocker->setSource(pTrapData->first, pTrapData->second);
+        trapLocker = std::make_unique<hub::TrapLocker>(m_data);
+        trapLocker->setSource(pTrapGeneric->first, pTrapGeneric->second);
         trapLocker->setSize({0.4f * nuiLayer().size().x, 100.f});
-        trapLocker->setLocked((i % 2u == 0u));
         m_columns[i % 2u].stackBack(*trapLocker);
     }
 }

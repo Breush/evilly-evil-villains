@@ -10,6 +10,11 @@ namespace states
     class State;
 }
 
+namespace dungeon
+{
+    class Data;
+}
+
 namespace hub
 {
     class Selector final : public scene::Entity
@@ -17,7 +22,7 @@ namespace hub
     public:
 
         //! Constructor;
-        Selector(states::State& state);
+        Selector(states::State& state, dungeon::Data& data);
 
         //! Default destructor;
         ~Selector() = default;
@@ -50,6 +55,8 @@ namespace hub
     private:
 
         states::State& m_state;             //!< The original state.
+        dungeon::Data& m_data;              //!< Current dungeon data reference.
+
         std::string m_selectedBox = "none"; //!< The selected box.
 
         // Decorum

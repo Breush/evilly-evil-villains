@@ -1,12 +1,14 @@
 #include "hub/traplocker.hpp"
 
 #include "core/gettext.hpp"
-#include "dungeon/databases/trapsdb.hpp"
+#include "context/villains.hpp"
+#include "dungeon/data.hpp"
 #include "tools/string.hpp"
 
 using namespace hub;
 
-TrapLocker::TrapLocker()
+TrapLocker::TrapLocker(dungeon::Data& data)
+    : m_data(data)
 {
     // Name
     attachChild(m_name);
@@ -74,17 +76,51 @@ void TrapLocker::onSizeChanges()
     m_room.setScale({scale, scale});
 }
 
+//------------------//
+//----- Events -----//
+
+bool TrapLocker::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vector2f&, const sf::Vector2f&)
+{
+    returnif (!m_locked) true;
+    returnif (!m_data.villain().doshWallet.sub(m_trapGeneric->common->unlockCost.dosh)) true;
+
+    // TODO Yeah... well, have something more rewarding I guess
+    Application::context().sounds.play("resources/dosh_gain");
+
+    // We know the player has enough money and already paid, unlock it
+    m_data.setTrapGenericUnlocked(m_trapID, true);
+    setLocked(false);
+
+    return true;
+}
+
+bool TrapLocker::handleMouseMoved(const sf::Vector2f&, const sf::Vector2f&)
+{
+    returnif (!m_locked) true;
+    m_lockedIcon.setShader("nui/hover");
+    return true;
+}
+
+void TrapLocker::handleMouseLeft()
+{
+    returnif (!m_locked);
+    m_lockedIcon.setShader("");
+}
+
 //-------------------//
 //----- Control -----//
 
-void TrapLocker::setSource(const std::wstring& trapID, const dungeon::TrapData& trapData)
+void TrapLocker::setSource(const std::wstring& trapID, const dungeon::TrapGeneric& trapGeneric)
 {
+    m_trapID = trapID;
+    m_trapGeneric = &trapGeneric;
+
     m_sprite.load("dungeon/traps/" + toString(trapID));
     m_sprite.select(L"presentation");
-    m_name.setText(trapData.name);
-    m_lockedCostText.setText(L"*" + toWString(trapData.unlockCost.dosh) + L"*");
+    m_name.setText(trapGeneric.common->name);
+    m_lockedCostText.setText(L"*" + toWString(trapGeneric.common->unlockCost.dosh) + L"*");
 
-    refreshFromLocking();
+    setLocked(!trapGeneric.unlocked);
 }
 
 void TrapLocker::setLocked(bool locked)

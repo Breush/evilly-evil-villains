@@ -333,6 +333,9 @@ namespace dungeon
         //! Will emit an event if a change occured.
         void removeRoomTrap(const sf::Vector2u& coords);
 
+        //! Set the trap generic unlocked state.
+        void setTrapGenericUnlocked(const std::wstring& trapID, bool unlocked);
+
         //! @}
 
         //-----------------//

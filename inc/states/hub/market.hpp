@@ -12,16 +12,23 @@
 
 #include <array>
 
+// Forward declarations
+
+namespace dungeon
+{
+    class Data;
+}
+
 namespace states
 {
-    class HubMarket : public State
+    class HubMarket final : public State
     {
         using baseClass = State;
 
     public:
 
         //! Constructor.
-        HubMarket(StateStack& stack);
+        HubMarket(StateStack& stack, dungeon::Data& data);
 
         //! Default destructor.
         ~HubMarket() = default;
@@ -54,6 +61,8 @@ namespace states
 
     private:
 
+        dungeon::Data& m_data;      //!< Current dungeon data reference.
+
         // NUI
         nui::ScrollArea m_scrollArea;               //!< The scroll area.
         nui::HStacker m_globalStacker;              //!< Stacker inside the scrollarea.
@@ -61,7 +70,7 @@ namespace states
         nui::Button m_button;                       //!< Back button.
 
         // Lockers
-        std::vector<std::unique_ptr<hub::TrapLocker>> m_trapLockers;    //!< Available traps.
+        std::vector<std::unique_ptr<hub::TrapLocker>> m_trapLockers;    //!< Traps list.
 
         // Decorum
         scene::Label m_title;                   //!< Title.

@@ -42,8 +42,6 @@ namespace states
 
     private:
 
-        dungeon::Data& m_data;      //!< Current dungeon data reference.
-
         // Decorum
         hub::Selector m_selector;   //!< Houses (market/inn/etc.) selector.
     };

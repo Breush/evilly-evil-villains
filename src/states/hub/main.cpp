@@ -8,8 +8,7 @@ using namespace states;
 
 HubMain::HubMain(StateStack& stack, dungeon::Data& data)
     : baseClass(stack)
-    , m_data(data)
-    , m_selector(*this)
+    , m_selector(*this, data)
 {
     // Loading resources
     Application::loadTextures({"hub"});

@@ -9,7 +9,8 @@
 
 namespace dungeon
 {
-    class TrapData;
+    class Data;
+    class TrapGeneric;
 }
 
 namespace hub
@@ -23,7 +24,7 @@ namespace hub
     public:
 
         //! Constructor.
-        TrapLocker();
+        TrapLocker(dungeon::Data& data);
 
         //! Default destructor.
         ~TrapLocker() = default;
@@ -35,7 +36,7 @@ namespace hub
         //! @{
 
         //! Define the trap to display.
-        void setSource(const std::wstring& trapID, const dungeon::TrapData& trapData);
+        void setSource(const std::wstring& trapID, const dungeon::TrapGeneric& trapGeneric);
 
         //! Is the trap currently locked?
         void setLocked(bool locked);
@@ -52,6 +53,16 @@ namespace hub
 
         //! @}
 
+        //---------------//
+        //! @name Events
+        //! @{
+
+        bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        bool handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseLeft() final;
+
+        //! @}
+
         //------------//
         //! @name ICU
         //! @{
@@ -62,6 +73,10 @@ namespace hub
         //! @}
 
     private:
+
+        dungeon::Data& m_data;                                  //!< Current dungeon data reference.
+        const dungeon::TrapGeneric* m_trapGeneric = nullptr;    //!< Current trap generic reference.
+        std::wstring m_trapID;                                  //!< Current trap ID.
 
         scene::RichLabel m_name;                //!< Title of the box.
         scene::AnimatedSprite m_sprite;         //!< The trap displayed.
