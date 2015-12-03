@@ -116,6 +116,10 @@ void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
             glDisable(GL_SCISSOR_TEST);
     }
 
+    // Reset the global clipping
+    if (m_globalClipping)
+        glScissor(glClipArea.left, glClipArea.top, glClipArea.width, glClipArea.height);
+
     // Extra drawing hook
     drawInternal(target, states);
 

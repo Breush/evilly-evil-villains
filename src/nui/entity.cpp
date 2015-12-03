@@ -38,9 +38,8 @@ void Entity::onFocusChanged()
 {
     // Update the focus sprite
     const auto& focusRectangle = focusRect();
+    m_focusSprite.setPosition({focusRectangle.left, focusRectangle.top});
     m_focusSprite.setSize({focusRectangle.width, focusRectangle.height});
-
-    std::cerr << focusRectangle << std::endl;
 }
 
 void Entity::drawInternal(sf::RenderTarget& target, sf::RenderStates states) const
