@@ -86,9 +86,7 @@ void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
     {
         glEnable(GL_SCISSOR_TEST);
 
-        glClipArea = m_globalClipArea;
-        glClipArea = states.transform.transformRect(glClipArea);
-        glClipArea = tools::mapRectCoordsToPixel(target, glClipArea);
+        glClipArea = tools::mapRectCoordsToPixel(target, m_globalClipArea);
         glClipArea.top = screenSize.y - glClipArea.height - glClipArea.top; // SFML - GL compatibility
 
         glScissor(glClipArea.left, glClipArea.top, glClipArea.width, glClipArea.height);
@@ -583,10 +581,11 @@ void Entity::refreshClipArea()
 {
     m_globalClipArea = m_clipArea;
 
-    if (m_parent != nullptr) {
-        auto position = m_localPosition - getOrigin();
-        m_globalClipArea = tools::intersect(m_globalClipArea, m_parent->globalClipArea() - position);
-    }
+    if (m_globalClipArea.width >= 0.f && m_globalClipArea.height >= 0.f)
+        m_globalClipArea = getTransform().transformRect(m_globalClipArea);
+
+    if (m_parent != nullptr)
+        m_globalClipArea = tools::intersect(m_globalClipArea,m_parent->globalClipArea());
 
     m_globalClipping = (m_globalClipArea.width >= 0.f && m_globalClipArea.height >= 0.f);
 
