@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: EEV\n"
-"Report-Msgid-Bugs-To: sherlock.breust@gmail.com\n"
-"POT-Creation-Date: 2015-07-13 10:19+0200\n"
-"PO-Revision-Date: 2015-07-13 10:20+0100\n"
+"Report-Msgid-Bugs-To: alexis.breust@jumpingtoasts.com\n"
+"POT-Creation-Date: 2015-12-03 10:53+0100\n"
+"PO-Revision-Date: 2015-12-03 11:00+0100\n"
 "Last-Translator: Alexis Breust <alexis.breust@gmail.com>\n"
 "Language-Team: English\n"
 "Language: en_EN\n"
@@ -16,18 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.5.4\n"
-
-msgid "Pick-pock"
-msgstr "Pick-pock"
-
-msgid "Treasure"
-msgstr "Treasure"
-
-msgid "Entrance"
-msgstr "Entrance"
-
-msgid "Ladder"
-msgstr "Ladder"
 
 msgid "Monsters"
 msgstr "Monsters"
@@ -38,26 +26,89 @@ msgstr "Traps"
 msgid "Facilities"
 msgstr "Facilities"
 
-msgid "Remove"
-msgstr "Remove"
+msgid "Tools"
+msgstr "Tools"
 
-msgid "Create"
-msgstr "Create"
+msgid "Rooms builder"
+msgstr "Rooms builder"
+
+msgid "Rooms destroyer"
+msgstr "Rooms destroyer"
+
+msgid "Traps remover"
+msgstr "Traps remover"
+
+msgid "Facilities remover"
+msgstr "Facilities remover"
+
+msgid "January"
+msgstr "January"
+
+msgid "February"
+msgstr "February"
+
+msgid "March"
+msgstr "March"
+
+msgid "April"
+msgstr "April"
+
+msgid "May"
+msgstr "May"
+
+msgid "June"
+msgstr "June"
+
+msgid "July"
+msgstr "July"
+
+msgid "August"
+msgstr "August"
+
+msgid "September"
+msgstr "September"
+
+msgid "October"
+msgstr "October"
+
+msgid "November"
+msgstr "November"
+
+msgid "December"
+msgstr "December"
+
+msgid "Hire"
+msgstr "Hire"
+
+msgid "Weekly"
+msgstr "Weekly"
 
 msgid "Room"
 msgstr "Room"
 
-msgid "Construct room"
-msgstr "Construct room"
+msgid "Build room"
+msgstr "Build room"
 
 msgid "Destroy room"
 msgstr "Destroy room"
 
-msgid "ladder"
-msgstr "ladder"
+msgid "Edit treasure dosh"
+msgstr "Edit treasure dosh"
 
-msgid "entrance"
-msgstr "entrance"
+msgid "Locked"
+msgstr "Locked"
+
+msgid "Appreciation"
+msgstr "Appreciation"
+
+msgid "Confusion"
+msgstr "Confusion"
+
+msgid "Trust"
+msgstr "Trust"
+
+msgid "Conviction"
+msgstr "Conviction"
 
 msgid "Do you really want to quit?"
 msgstr "Do you really want to quit?"
@@ -68,14 +119,47 @@ msgstr "No, sorry, it is a mistake."
 msgid "Yes, I will lose everything not saved."
 msgstr "Yes, I will lose everything not saved."
 
-msgid "Create dungeon"
-msgstr "Create dungeon"
+msgid "market"
+msgstr "Market"
+
+msgid "Back"
+msgstr "Back"
+
+msgid "Game Over"
+msgstr "Game Over"
+
+msgid "Loading"
+msgstr "Loading"
+
+msgid ""
+"Loading is done.\n"
+"Click to start the game."
+msgstr ""
+"Loading is done.\n"
+"Click to start the game."
+
+msgid ""
+"Welcome to the Dungeon Community Bank (DCB). I heard that you wanted to open "
+"your own dungeon, this is the kind of operation we like to support here.\n"
+"\n"
+"Let me just ask you: *How do you want to name your tower of death?*"
+msgstr ""
+"Welcome to the Dungeon Community Bank (DCB). I heard that you wanted to open "
+"your own dungeon, this is the kind of operation we like to support here.\n"
+"\n"
+"Let me just ask you: *How do you want to name your tower of death?*"
+
+msgid "OK"
+msgstr "OK"
 
 msgid "Game paused"
 msgstr "Game paused"
 
 msgid "Continue, continue, continue"
 msgstr "Continue, continue, continue"
+
+msgid "Options"
+msgstr "Options"
 
 msgid "Save and return to main menu"
 msgstr "Save and return to main menu"
@@ -97,9 +181,6 @@ msgstr "Create new Villain"
 
 msgid "Delete selected Villain"
 msgstr "Delete selected Villain"
-
-msgid "Back"
-msgstr "Back"
 
 msgid "Villain deletion"
 msgstr "Villain deletion"
@@ -136,9 +217,6 @@ msgstr ""
 "There is already a villain with this name,\n"
 "and he is surely eviller than you."
 
-msgid "OK"
-msgstr "OK"
-
 msgid "Create a new world"
 msgstr "Create a new world"
 
@@ -150,6 +228,63 @@ msgstr "(Manage)"
 
 msgid "Create and start playing"
 msgstr "Create and start playing"
+
+msgid "Configuration"
+msgstr "Configuration"
+
+msgid "General"
+msgstr "General"
+
+msgid "Graphics"
+msgstr "Graphics"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "Language"
+msgstr "Language"
+
+msgid "Interface size"
+msgstr "Interface size"
+
+msgid "Font size (%)"
+msgstr "Font size (%)"
+
+msgid "Scrolling speed"
+msgstr "Scrolling speed"
+
+msgid "Zoom speed"
+msgstr "Zoom speed"
+
+msgid "Resolution"
+msgstr "Resolution"
+
+msgid "Fullscreen"
+msgstr "Fullscreen"
+
+msgid "V-sync"
+msgstr "V-sync"
+
+msgid "Antialiasing level"
+msgstr "Antialiasing level"
+
+msgid "Global volume"
+msgstr "Global volume"
+
+msgid "Music volume"
+msgstr "Music volume"
+
+msgid "Sounds volume"
+msgstr "Sounds volume"
+
+msgid "ON"
+msgstr "ON"
+
+msgid "OFF"
+msgstr "OFF"
+
+msgid "Apply changes"
+msgstr "Apply changes"
 
 msgid "Victim and alone"
 msgstr "Victim and alone"
@@ -174,6 +309,9 @@ msgstr "Main dungeon"
 
 msgid "Last played"
 msgstr "Last played"
+
+msgid "%Y-%m-%d"
+msgstr "%Y-%m-%d"
 
 msgid "Play"
 msgstr "Play"

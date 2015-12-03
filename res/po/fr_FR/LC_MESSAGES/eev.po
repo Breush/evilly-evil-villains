@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EEV\n"
 "Report-Msgid-Bugs-To: alexis.breust@jumpingtoasts.com\n"
-"POT-Creation-Date: 2015-10-27 09:33+0100\n"
-"PO-Revision-Date: 2015-10-27 09:38+0100\n"
+"POT-Creation-Date: 2015-12-03 10:53+0100\n"
+"PO-Revision-Date: 2015-12-03 11:02+0100\n"
 "Last-Translator: Alexis Breust <alexis.breust@gmail.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -30,18 +30,6 @@ msgstr "Aménagements"
 msgid "Tools"
 msgstr "Outils"
 
-msgid "Pick-pock"
-msgstr "Pick-pock"
-
-msgid "Treasure"
-msgstr "Trésor"
-
-msgid "Entrance"
-msgstr "Entrée"
-
-msgid "Ladder"
-msgstr "Échelle"
-
 msgid "Rooms builder"
 msgstr "Constructeur de Salles"
 
@@ -54,11 +42,47 @@ msgstr "Enleveur de Pièges"
 msgid "Facilities remover"
 msgstr "Enleveur d'Aménagements"
 
-msgid "Remove"
-msgstr "Retirer"
+msgid "January"
+msgstr "janvier"
 
-msgid "Create"
-msgstr "Ajouter"
+msgid "February"
+msgstr "février"
+
+msgid "March"
+msgstr "mars"
+
+msgid "April"
+msgstr "avril"
+
+msgid "May"
+msgstr "mai"
+
+msgid "June"
+msgstr "juin"
+
+msgid "July"
+msgstr "juillet"
+
+msgid "August"
+msgstr "août"
+
+msgid "September"
+msgstr "septembre"
+
+msgid "October"
+msgstr "octobre"
+
+msgid "November"
+msgstr "novembre"
+
+msgid "December"
+msgstr "décembre"
+
+msgid "Hire"
+msgstr "Engager"
+
+msgid "Weekly"
+msgstr "Semaine"
 
 msgid "Room"
 msgstr "Salle"
@@ -69,14 +93,11 @@ msgstr "Construire la salle"
 msgid "Destroy room"
 msgstr "Détruire salle"
 
-msgid "ladder"
-msgstr "échelle"
-
-msgid "entrance"
-msgstr "entrée"
-
 msgid "Edit treasure dosh"
 msgstr "Modifier Trésor"
+
+msgid "Locked"
+msgstr "Verrouillé"
 
 msgid "Appreciation"
 msgstr "Appréciation"
@@ -99,12 +120,37 @@ msgstr "Non, désolé, c'est une erreur."
 msgid "Yes, I will lose everything not saved."
 msgstr "Oui, je vais perdre tout ce qui n'est pas sauvegardé."
 
+msgid "market"
+msgstr "Marché"
+
+msgid "Back"
+msgstr "Retour"
+
+msgid "Game Over"
+msgstr "Game Over"
+
+msgid "Loading"
+msgstr "Chargement"
+
+msgid ""
+"Loading is done.\n"
+"Click to start the game."
+msgstr ""
+"Chargement terminé.\n"
+"Cliquez pour lancer le jeu."
+
 msgid ""
 "Welcome to the Dungeon Community Bank (DCB). I heard that you wanted to open "
 "your own dungeon, this is the kind of operation we like to support here.\n"
 "\n"
 "Let me just ask you: *How do you want to name your tower of death?*"
 msgstr ""
+"Bienvenue à la Banque Commune des Dungeon (BCD). J'ai entendu dure que vous "
+"voudriez ouvrir votre propre donjon. C'est le genre d'opérations que nous "
+"apprécions particulièrement ici.\n"
+"\n"
+"Laissez-moi juste vous demander : *Quel nom voulez-vous donner à votre tour "
+"de la mort ?*"
 
 msgid "OK"
 msgstr "D'accord"
@@ -114,6 +160,9 @@ msgstr "Pause"
 
 msgid "Continue, continue, continue"
 msgstr "Je veux continuer"
+
+msgid "Options"
+msgstr "Options"
 
 msgid "Save and return to main menu"
 msgstr "Sauvegarder et retourner au menu principal"
@@ -135,9 +184,6 @@ msgstr "Créer un nouveau Méchant"
 
 msgid "Delete selected Villain"
 msgstr "Supprimer le Méchant sélectionné"
-
-msgid "Back"
-msgstr "Retour"
 
 msgid "Villain deletion"
 msgstr "Supprimer le Méchant"
@@ -201,17 +247,23 @@ msgstr "Audio"
 msgid "Language"
 msgstr "Langue"
 
+msgid "Interface size"
+msgstr "Taille de l'interface"
+
+msgid "Font size (%)"
+msgstr "Taille de police (%)"
+
+msgid "Scrolling speed"
+msgstr "Sensibilité de défilement"
+
+msgid "Zoom speed"
+msgstr "Sensibilité de zoom"
+
 msgid "Resolution"
 msgstr "Résolution"
 
 msgid "Fullscreen"
 msgstr "Plein écran"
-
-msgid "ON"
-msgstr "ON"
-
-msgid "OFF"
-msgstr "OFF"
 
 msgid "V-sync"
 msgstr "V-sync"
@@ -219,14 +271,20 @@ msgstr "V-sync"
 msgid "Antialiasing level"
 msgstr "Niveau anti-crénelage"
 
+msgid "Global volume"
+msgstr "Volume global"
+
 msgid "Music volume"
 msgstr "Volume musique"
 
 msgid "Sounds volume"
 msgstr "Volume sons"
 
-msgid "Global volume"
-msgstr "Volume global"
+msgid "ON"
+msgstr "ON"
+
+msgid "OFF"
+msgstr "OFF"
 
 msgid "Apply changes"
 msgstr "Appliquer"
@@ -263,9 +321,3 @@ msgstr "Jouer"
 
 msgid "Create new world"
 msgstr "Créer un nouveau monde"
-
-#~ msgid "Construct room"
-#~ msgstr "Construire salle"
-
-#~ msgid "Create dungeon"
-#~ msgstr "Créer le Donjon"
