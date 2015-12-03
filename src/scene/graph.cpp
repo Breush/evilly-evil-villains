@@ -129,6 +129,11 @@ void Graph::updateFocusSprite()
 {
     returnif (m_focusedEntity == nullptr);
     auto focusRect = m_focusedEntity->focusRect();
+
+    // FIXME This is now wrong as globalClipArea are global coordinates, not local ones.
+    // We should draw the focus sprite when the entity is drawned, and yeap, it will be all right
+    // This focus rect thingy marker should probably be handled by nui::Entity.
+    // The graph just informs the entity it's focused.
     if (m_focusedEntity->globalClipping())
         focusRect = tools::intersect(focusRect, m_focusedEntity->globalClipArea());
 

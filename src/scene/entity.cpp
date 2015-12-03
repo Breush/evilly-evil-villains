@@ -248,10 +248,11 @@ Entity* Entity::firstOver(const sf::Vector2f& position)
     // Children are not over, maybe I am
     // Note: transparency does not affect detectability
     returnif (!m_detectable || !m_visible) nullptr;
-    sf::FloatRect localBounds({0.f, 0.f}, size());
-    localBounds = tools::intersect(m_globalClipArea, localBounds);
-    returnif (localBounds.width < 0.f || localBounds.height < 0.f) nullptr;
-    returnif (localBounds.contains(getInverseTransform().transformPoint(position))) this;
+    sf::FloatRect bounds({0.f, 0.f}, size());
+    bounds = getTransform().transformRect(bounds);
+    bounds = tools::intersect(m_globalClipArea, bounds);
+    returnif (bounds.width < 0.f || bounds.height < 0.f) nullptr;
+    returnif (bounds.contains(position)) this;
 
     return nullptr;
 }
