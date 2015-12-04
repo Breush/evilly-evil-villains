@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <worlds>
-	<world name="Example" villain="Breush" dungeons="1" mainDungeon="The Mighty Example" created="1388530800" lastPlayed="1422831600" folder="example/" />
-	<world name="Big bobby" villain="The Revolted Waffle" dungeons="2" mainDungeon="No woman, no pancakes" created="673221600" lastPlayed="967068000" folder="big_bobby/" />
-	<world name="You might think it's a stupid name" villain="Le Précurseur" dungeons="1" mainDungeon="Château d'eau" created="1286661600" lastPlayed="1355266800" folder="stupid_name/" />
+	<world name="The Mighty Example" villain="Breush" created="1388530800" lastPlayed="1422831600" folder="example/" />
+	<world name="No woman, no pancakes" villain="The Revolted Waffle" mainDungeon="" created="673221600" lastPlayed="967068000" folder="big_bobby/" />
+	<world name="Château d'eau" villain="Le Précurseur" created="1286661600" lastPlayed="1355266800" folder="stupid_name/" />
 </worlds>

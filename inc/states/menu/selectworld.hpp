@@ -12,7 +12,7 @@
 
 namespace states
 {
-    class MenuSelectWorld : public State
+    class MenuSelectWorld final : public State
     {
         using baseClass = State;
 

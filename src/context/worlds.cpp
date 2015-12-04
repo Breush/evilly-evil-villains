@@ -54,8 +54,6 @@ void Worlds::load()
         world.index = m_worlds.size();
         world.name = worldInfo.attribute(L"name").as_string();
         world.villain = worldInfo.attribute(L"villain").as_string();
-        world.dungeons = worldInfo.attribute(L"dungeons").as_uint();
-        world.mainDungeon = worldInfo.attribute(L"mainDungeon").as_string();
         world.created = static_cast<time_t>(worldInfo.attribute(L"created").as_uint());
         world.lastPlayed = static_cast<time_t>(worldInfo.attribute(L"lastPlayed").as_uint());
         world.folder = worldInfo.attribute(L"folder").as_string();
@@ -82,8 +80,6 @@ void Worlds::save()
 
         worldsInfo.append_attribute(L"name") = world.name.c_str();
         worldsInfo.append_attribute(L"villain") = world.villain.c_str();
-        worldsInfo.append_attribute(L"dungeons") = world.dungeons;
-        worldsInfo.append_attribute(L"mainDungeon") = world.mainDungeon.c_str();
         worldsInfo.append_attribute(L"created") = uint(world.created);
         worldsInfo.append_attribute(L"lastPlayed") = uint(world.lastPlayed);
         worldsInfo.append_attribute(L"folder") = world.folder.c_str();
@@ -99,7 +95,7 @@ void Worlds::save()
 const Worlds::World& Worlds::select(uint index)
 {
     massert(index < m_worlds.size(), "Index " << index << " is too big.");
-    m_selected = &get(index);
+    m_selected = &m_worlds[index];
     wdebug_context_1(L"Selected world #" << index << L" named " << m_selected->name);
     return *m_selected;
 }
@@ -107,19 +103,22 @@ const Worlds::World& Worlds::select(uint index)
 //----------------------//
 //----- Management -----//
 
-uint Worlds::add(std::wstring name, std::wstring villain)
+uint Worlds::add()
 {
-    wdebug_context_1(L"Creating world " << name << L" with villain " << villain);
+    wdebug_context_1(L"Creating new world.");
 
     World world;
-
     world.index = m_worlds.size();
-    world.name = std::move(name);
-    world.villain = std::move(villain);
-    world.dungeons = 0u;
-    world.mainDungeon = L"Unknown";
     world.created = time(nullptr);
     world.lastPlayed = world.created;
+
+    m_worlds.emplace_back(std::move(world));
+    return m_worlds.size() - 1u;
+}
+
+void Worlds::setNameCreation(World& world, std::wstring name)
+{
+    world.name = std::move(name);
 
     // Creating folder
     world.folder = world.name;
@@ -133,16 +132,19 @@ uint Worlds::add(std::wstring name, std::wstring villain)
         str << L"_" << ++iFolderPostfix;
         folderPostfix = str.str() + L"/";
 
-        // If it seems like we cannot create directories, just throw...
+        // If it seems like we cannot create directories, just throw an error then...
         if (iFolderPostfix > 42)
             throw std::runtime_error("Cannot create directories inside saves/.");
     }
 
     world.folder += folderPostfix;
-
-    m_worlds.emplace_back(std::move(world));
-    return m_worlds.size() - 1u;
 }
+
+void Worlds::remove(const World& world)
+{
+    std::erase_if(m_worlds, [&world] (const World& inWorld) { return &inWorld == &world; });
+}
+
 void Worlds::removeFromFolder(const std::wstring& folder)
 {
     std::erase_if(m_worlds, [&folder] (const World& world) { return world.folder == folder; });

@@ -36,14 +36,14 @@ MenuSelectWorld::MenuSelectWorld(StateStack& stack)
     m_list.centerOrigin();
     m_list.setSize(nuiSize * sf::Vector2f{0.75f, 0.65f});
     m_list.setRelativePosition({0.5f, 0.5f});
-    m_list.setColumnsTitles({_("Villain"), _("World name"), _("Main dungeon"), _("Last played")});
-    m_list.setColumnAlign(3, nui::Align::OPPOSITE, nui::Align::CENTER);
-    m_list.setColumnAdapt(3, nui::Adapt::FIT);
+    m_list.setColumnsTitles({_("Villain"), _("Dungeon name"), _("Last played")});
+    m_list.setColumnAlign(2u, nui::Align::OPPOSITE, nui::Align::CENTER);
+    m_list.setColumnAdapt(2u, nui::Adapt::FIT);
 
     // Load list of worlds
     context::worlds.load();
     for (const auto& world : context::worlds.get())
-        m_list.addLine({world.villain, world.name, world.mainDungeon, time2wstring(toString(_("%Y-%m-%d")), world.lastPlayed)});
+        m_list.addLine({world.villain, world.name, time2wstring(toString(_("%Y-%m-%d")), world.lastPlayed)});
     m_list.setActionCallback([this] { playOnSelectedWorld(); });
 
     // Stacker for buttons
@@ -57,7 +57,7 @@ MenuSelectWorld::MenuSelectWorld(StateStack& stack)
 
     m_buttons[2].setAction(_("Play"), [this] { playOnSelectedWorld(); });
     m_buttons[1].setAction(_("Back"), [this] { stackPop(); });
-    m_buttons[0].setAction(_("Create new world"), [this] { stackPush(StateID::MENU_CREATEWORLD); });
+    m_buttons[0].setAction(_("New game"), [this] { stackPush(StateID::MENU_NEWGAME); });
 }
 
 //-------------------//

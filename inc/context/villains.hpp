@@ -29,6 +29,7 @@ namespace context
         uint index;         //!< The index of the villain in the villains vector.
         std::wstring name;  //!< The name of the villain.
         Wallet doshWallet;  //!< Manage the dosh possessed by the villain.
+        bool man = true;   //!< Is the villain using man asset?
     };
 
     //! A XML loading class to get the villains data.

@@ -118,11 +118,11 @@ void GameDCB::onNameValidate()
 
 void GameDCB::confirmDungeonCreation()
 {
-    const auto& worldInfo = context::worlds.selected();
+    auto& worldInfo = context::worlds.selected();
 
     // State GAMEOVER if conviction gauge has not enough
     if (!m_gaugesManager.enoughConviction()) {
-        context::worlds.removeFromFolder(worldInfo.folder);
+        context::worlds.remove(worldInfo);
         context::worlds.save();
         stackClear(StateID::GAME_OVER);
         return;
@@ -139,6 +139,10 @@ void GameDCB::confirmDungeonCreation()
     //float interestRate = 1.05f + 1.f / static_cast<float>(1u + confusion);
     uint floorsCount = static_cast<uint>(1.f + 16.f * (trust + conviction) / 200.f);
     uint roomsByFloor = static_cast<uint>(2.f + 6.f * (trust * conviction) / 10000.f);
+
+    // Set up the world name to match dungeon one (will create the folder too)
+    context::worlds.setNameCreation(worldInfo, name);
+    context::worlds.save();
 
     // Create dungeon with these values
     dungeon::Data dungeonData;

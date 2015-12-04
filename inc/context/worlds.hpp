@@ -26,8 +26,6 @@ namespace context
             uint index;                 //!< The index of the world in the worlds vector.
             std::wstring name;          //!< The name of the world.
             std::wstring villain;       //!< The villain on this world.
-            uint dungeons;              //!< The number of dungeons in the world.
-            std::wstring mainDungeon;   //!< The name of the biggest of all dungeons on the world.
             time_t created;             //!< The timestamp of creation of the world.
             time_t lastPlayed;          //!< The timestamp of last time user played on.
             std::wstring folder;        //!< The sub-folder in which the world is saved.
@@ -57,11 +55,18 @@ namespace context
         //! @name Interaction
         //! @{
 
-        //! Add a world in memory (nothing saved yet) and create empty folder.
+        //! Add a world in memory (nothing saved yet).
+        //! One should use setNameCreation afterwards to not save an invalid world.
         //! @return The index of the new world.
-        uint add(std::wstring name, std::wstring villain);
+        uint add();
 
-        //! Find and the world of the specified folder.
+        //! Set the world name and create empty folder.
+        void setNameCreation(World& world, std::wstring name);
+
+        //! Find and remove the world.
+        void remove(const World& world);
+
+        //! Find and remove the world of the specified folder.
         void removeFromFolder(const std::wstring& folder);
 
         //! Find and remove all worlds associated with a villain.
@@ -83,6 +88,9 @@ namespace context
         const World& select(uint index);
 
         //! Get the current world information.
+        inline World& selected() { return *m_selected; }
+
+        //! Get the current world information (const).
         inline const World& selected() const { return *m_selected; }
 
         //! Get the vector of all worlds for read.
@@ -95,8 +103,8 @@ namespace context
 
     private:
 
-        std::vector<World> m_worlds;        //!< The vector of all worlds.
-        const World* m_selected = nullptr;  //!< The currently selected world.
+        std::vector<World> m_worlds;    //!< The vector of all worlds.
+        World* m_selected = nullptr;    //!< The currently selected world.
     };
 
     //! The static member from worlds context.

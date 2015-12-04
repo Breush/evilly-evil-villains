@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <villains>
-	<villain name="Breush" dosh="1742" />
-	<villain name="The Revolted Waffle" dosh="4520" />
-	<villain name="Le Précurseur" dosh="884" />
-	<villain name="Priorox" dosh="10000" />
+	<villain name="Breush" man="true" dosh="1742" />
+	<villain name="The Revolted Waffle" man="true" dosh="4520" />
+	<villain name="Le Précurseur" man="true" dosh="884" />
+	<villain name="Priorox" man="false" dosh="10000" />
 </villains>

@@ -26,6 +26,9 @@ namespace scene
         //! @name Wrappers
         //! @{
 
+        //! Wrapper to get the current texture.
+        inline const sf::Texture* texture() const { return m_rectangleShape.getTexture(); }
+
         //! Wrapper to set a texture.
         void setTexture(const std::string& textureID);
 
