@@ -113,6 +113,8 @@ void MenuNewGame::onVillainClicked(dungeon::VillainDisplay& clickedEntity)
 
 void MenuNewGame::refreshVillainsList()
 {
+    m_selectedVillainDisplay = nullptr;
+    m_buttons[1].setCallback(nullptr);
     m_villainsDisplays.clear();
     context::villains.load();
 
