@@ -70,4 +70,15 @@ void HubInn::handleEvent(const sf::Event& event)
 
 void HubInn::refreshColumns()
 {
+    const auto& monstersGenerics = m_data.monstersGenerics();
+    m_monsterLockers.resize(monstersGenerics.size());
+
+    auto pMonsterGeneric = std::begin(monstersGenerics);
+    for (uint i = 0u; i < monstersGenerics.size(); ++i, pMonsterGeneric++) {
+        auto& monsterLocker = m_monsterLockers[i];
+        monsterLocker = std::make_unique<hub::MonsterLocker>(m_data);
+        monsterLocker->setSource(pMonsterGeneric->first, pMonsterGeneric->second);
+        monsterLocker->setSize({0.4f * nuiLayer().size().x, 100.f});
+        m_columns[i % 2u].stackBack(*monsterLocker);
+    }
 }

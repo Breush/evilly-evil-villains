@@ -17,23 +17,22 @@ namespace pugi
 
 namespace dungeon
 {
+    //! All infos that we can find in each monster.
+    struct MonsterData
+    {
+        std::wstring name = L"(Unknown)";   //!< Translated name.
+        Cost unlockCost;                    //!< Unlocking price.
+        Cost baseCost;                      //!< Starting price.
+        Cost weeklyCost;                    //!< Salary.
+        sf::Vector2f speed;                 //!< Speed relative to dungeon room size.
+        float pauseDelay = 0.f;             //!< How many seconds to stay still if the monster stays in the room.
+        uint hireCountdown = 0u;            //!< How many seconds to wait after an hire occurs.
+    };
+
     //! All common info for each monster and should never change.
 
     class MonstersDB final
     {
-    public:
-
-        //! All infos that we can find in each monster.
-        struct MonsterData
-        {
-            std::wstring name = L"(Unknown)";   //!< Translated name.
-            Cost baseCost;                      //!< Starting price.
-            Cost weeklyCost;                    //!< Salary.
-            sf::Vector2f speed;                 //!< Speed relative to dungeon room size.
-            float pauseDelay = 0.f;             //!< How many seconds to stay still if the monster stays in the room.
-            uint hireCountdown = 0u;            //!< How many seconds to wait after an hire occurs.
-        };
-
     public:
 
         //! Constructor.

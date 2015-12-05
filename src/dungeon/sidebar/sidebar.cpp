@@ -102,6 +102,8 @@ void Sidebar::receive(const context::Event& event)
 
     if (devent.type == "trap_generic_changed")
         refreshTabTrapsContent();
+    else if (devent.type == "monster_generic_changed")
+        refreshTabMonstersContent();
 }
 
 //------------------------//
@@ -141,15 +143,15 @@ void Sidebar::refreshTabMonstersContent()
     monstersCages.clear();
 
     const auto& monstersList = m_data.monstersDB().get();
-    auto monstersCount = monstersList.size();
-    monstersCages.reserve(monstersCount);
-
     for (const auto& monsterPair : monstersList) {
         const auto& monsterID = monsterPair.first;
+        if (!m_data.monstersGenerics().at(monsterID).unlocked) continue;
         monstersCages.emplace_back(std::make_unique<MonsterCage>(monsterID, m_inter, m_data));
         auto& monsterCage = *monstersCages.back();
         monstersStacker.stackBack(monsterCage);
     }
+
+    refreshTabParameters();
 }
 
 void Sidebar::refreshTabTrapsContent()
@@ -163,9 +165,6 @@ void Sidebar::refreshTabTrapsContent()
     trapsButtons.clear();
 
     const auto& trapsGenerics = m_data.trapsGenerics();
-    auto trapsCount = trapsGenerics.size();
-    trapsButtons.reserve(trapsCount);
-
     for (const auto& trapGenericPair : trapsGenerics) {
         if (!trapGenericPair.second.unlocked) continue;
         const auto& trapID = trapGenericPair.first;
@@ -219,7 +218,6 @@ void Sidebar::refreshTabContents()
     refreshTabTrapsContent();
     refreshTabFacilitiesContent();
     refreshTabToolsContent();
-    refreshTabParameters();
 }
 
 void Sidebar::refreshTabParameters()

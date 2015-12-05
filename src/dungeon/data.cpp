@@ -164,6 +164,17 @@ void Data::loadDungeon(const std::wstring& file)
 
     //---- Monsters
 
+    // Generics
+    m_monstersGenerics.clear();
+    const auto& monstersGenericsNode = dungeon.child(L"monstersGenerics");
+    for (const auto& monsterData: m_monstersDB.get()) {
+        const auto& monsterID = monsterData.first;
+        const auto& monsterGenericNode = monstersGenericsNode.child(monsterID.c_str());
+        auto& monsterGeneric = m_monstersGenerics[monsterData.first];
+        monsterGeneric.common = &monsterData.second;
+        monsterGeneric.unlocked = monsterGenericNode.attribute(L"unlocked").as_bool();
+    }
+
     // TODO Make a monstersManager too?
 
     // Reserve
@@ -292,6 +303,13 @@ void Data::saveDungeon(const std::wstring& file)
     m_heroesManager.save(heroesNode);
 
     //---- Monsters
+
+    // Generics
+    auto monstersGenericsNode = dungeon.append_child(L"monstersGenerics");
+    for (const auto& monsterGenericPair : m_monstersGenerics) {
+        auto monsterGenericNode = monstersGenericsNode.append_child(monsterGenericPair.first.c_str());
+        monsterGenericNode.append_attribute(L"unlocked") = monsterGenericPair.second.unlocked;
+    }
 
     // Reserve
     auto monstersNode = dungeon.append_child(L"monsters");
@@ -895,6 +913,12 @@ void Data::moveMonsterFromReserve(const sf::Vector2u& coords, const std::wstring
     event->type = "monster_added";
     event->monster.id = pMonsterCage->type.c_str();
     EventEmitter::addEvent(std::move(event));
+}
+
+void Data::setMonsterGenericUnlocked(const std::wstring& monsterID, bool unlocked)
+{
+    m_monstersGenerics[monsterID].unlocked = unlocked;
+    EventEmitter::addEvent("monster_generic_changed");
 }
 
 //-------------------------//

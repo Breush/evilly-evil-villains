@@ -95,6 +95,13 @@ namespace dungeon
         bool unlocked = false;              //!< Is this trap type available?
     };
 
+    //! More generic but dungeon-dependent info about monsters type.
+    struct MonsterGeneric
+    {
+        const MonsterData* common = nullptr;    //!< All the common data.
+        bool unlocked = false;                  //!< Is this monster type available?
+    };
+
     // Forward declarations
 
     class Graph;
@@ -355,6 +362,9 @@ namespace dungeon
         //! Will emit an event if a change occured.
         void removeRoomMonsters(const sf::Vector2u& coords);
 
+        //! Set the monster generic unlocked state.
+        void setMonsterGenericUnlocked(const std::wstring& monsterID, bool unlocked);
+
         //! @}
 
         //------------------//
@@ -390,6 +400,9 @@ namespace dungeon
 
         //! Access the monsters data base.
         inline const MonstersDB& monstersDB() const { return m_monstersDB; }
+
+        //! Access the traps generics.
+        inline const std::unordered_map<std::wstring, MonsterGeneric>& monstersGenerics() const { return m_monstersGenerics; }
 
         //! Access the traps data base.
         inline const TrapsDB& trapsDB() const { return m_trapsDB; }
@@ -500,8 +513,9 @@ namespace dungeon
         FacilitiesDB m_facilitiesDB;    //!< All facilities immuable data.
         HeroesDB m_heroesDB;            //!< All heroes immuable data.
 
-        // More info
-        std::unordered_map<std::wstring, TrapGeneric> m_trapsGenerics;  //!< More general info about the traps.
+        // Generics
+        std::unordered_map<std::wstring, TrapGeneric> m_trapsGenerics;          //!< More info about the trap's types.
+        std::unordered_map<std::wstring, MonsterGeneric> m_monstersGenerics;    //!< More info about the monster's types.
     };
 }
 
