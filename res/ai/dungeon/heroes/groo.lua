@@ -32,8 +32,6 @@ end
 -- Called when this hero dies
 function _onDeath()
     local dosh = eev_getDataU32("dosh")
-    if dosh == 0 then return end
-
     local rx = eev_getDataFloat("rx")
     local ry = eev_getDataFloat("ry")
     local lootUID = eev_spawnDynamic("loot", rx, ry)
