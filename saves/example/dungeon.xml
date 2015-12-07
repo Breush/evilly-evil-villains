@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
-<dungeon name="The Mighty Example" time="4555" floorsCount="7" roomsByFloor="5" soul="3" fame="41">
+<dungeon name="The Mighty Example" time="4555" floorsCount="7" roomsByFloor="5">
+    <resources>
+        <soul value="3" />
+        <fame value="41" />
+        <debt perWeekDosh="20" weeksLeft="40" />
+    </resources>
 	<heroes nextWaveDelay="12">
 		<hero type="groo" status="running">
 		    <dosh type="uint32" value="10" />

@@ -42,6 +42,21 @@ void Data::update(const sf::Time& dt)
         gameTimeBuffer -= m_timeGameHour;
         m_time += 1u;
         EventEmitter::addEvent("time_changed");
+
+        // Debt
+        // TODO We probably want to let the generalWallet to manage debts (and multiple debts)
+        if (m_debtWeeksLeft > 0u) {
+            auto weekSecond = m_time % (24u * 7u);
+            if (weekSecond != 0u) continue;
+
+            m_debtWeeksLeft -= 1u;
+            Application::context().sounds.play("resources/interests");
+            if (!doshWallet().sub(m_debtPerWeek)) {
+                // TODO Game over if no more dosh
+            }
+
+            EventEmitter::addEvent("debt_changed");
+        }
     }
 
     // Monster reserve countdowns
@@ -147,9 +162,16 @@ void Data::loadDungeon(const std::wstring& file)
     m_time = dungeon.attribute(L"time").as_uint();
     m_floorsCount = dungeon.attribute(L"floorsCount").as_uint();
     m_roomsByFloor = dungeon.attribute(L"roomsByFloor").as_uint();
-    m_soulWallet.set(dungeon.attribute(L"soul").as_uint());
-    m_fameWallet.set(dungeon.attribute(L"fame").as_uint());
     wdebug_dungeon_1(L"Dungeon is " << m_name << L" of size " << m_floorsCount << L"x" << m_roomsByFloor << L".");
+
+    //---- Resources
+
+    const auto& resourcesNode = dungeon.child(L"resources");
+    m_soulWallet.set(resourcesNode.child(L"soul").attribute(L"value").as_uint());
+    m_fameWallet.set(resourcesNode.child(L"fame").attribute(L"value").as_uint());
+    const auto& debtNode = resourcesNode.child(L"debt");
+    m_debtPerWeek = debtNode.attribute(L"perWeekDosh").as_uint();
+    m_debtWeeksLeft = debtNode.attribute(L"weeksLeft").as_uint();
 
     //---- Dynamics
 
@@ -288,8 +310,15 @@ void Data::saveDungeon(const std::wstring& file)
     dungeon.append_attribute(L"time") = m_time;
     dungeon.append_attribute(L"floorsCount") = m_floorsCount;
     dungeon.append_attribute(L"roomsByFloor") = m_roomsByFloor;
-    dungeon.append_attribute(L"soul") = m_soulWallet.value();
-    dungeon.append_attribute(L"fame") = m_fameWallet.value();
+
+    //---- Resources
+
+    auto resourcesNode = dungeon.append_child(L"resources");
+    resourcesNode.append_child(L"soul").append_attribute(L"value") = m_soulWallet.value();
+    resourcesNode.append_child(L"fame").append_attribute(L"value") = m_fameWallet.value();
+    auto debtNode = resourcesNode.append_child(L"debt");
+    debtNode.append_attribute(L"perWeekDosh") = m_debtPerWeek;
+    debtNode.append_attribute(L"weeksLeft") = m_debtWeeksLeft;
 
     //---- Dynamics
 
@@ -915,6 +944,15 @@ void Data::setMonsterGenericUnlocked(const std::wstring& monsterID, bool unlocke
 {
     m_monstersGenerics[monsterID].unlocked = unlocked;
     EventEmitter::addEvent("monster_generic_changed");
+}
+
+//---------------------//
+//----- Resources -----//
+
+void Data::setDebt(uint debtPerWeek, uint debtWeeksDuration)
+{
+    m_debtPerWeek = debtPerWeek;
+    m_debtWeeksLeft = debtWeeksDuration;
 }
 
 //-------------------------//

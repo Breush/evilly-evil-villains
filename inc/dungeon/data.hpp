@@ -274,6 +274,9 @@ namespace dungeon
         //! @name Resources
         //! @{
 
+        //! Set a debt that will be payed weekly.
+        void setDebt(uint debtPerWeek, uint debtWeeksDuration);
+
         //! Access to the villain's dosh wallet.
         inline context::Wallet& doshWallet() { return m_villain->doshWallet; }
 
@@ -403,6 +406,10 @@ namespace dungeon
         context::Villain* m_villain = nullptr;  //!< The villain reference.
         context::Wallet m_fameWallet;           //!< The resource fame value.
         context::Wallet m_soulWallet;           //!< The resource soul value.
+
+        // Debt
+        uint m_debtPerWeek = 0u;    //!< Amount of dosh disappearing each week.
+        uint m_debtWeeksLeft = 0u;  //!< How long the debt is.
 
         // Managers
         HeroesManager m_heroesManager;      //!< Manage all heroes.

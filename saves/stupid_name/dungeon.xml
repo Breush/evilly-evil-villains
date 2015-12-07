@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
-<dungeon name="Château d'eau" floorsCount="17" roomsByFloor="2" fame="23">
+<dungeon name="Château d'eau" floorsCount="17" roomsByFloor="2">
+    <resources>
+        <soul value="0" />
+        <fame value="23" />
+        <debt perWeekDosh="200" weeksLeft="1" />
+    </resources>
 	<heroes />
 	<monsters />
 	<trapsGenerics>
