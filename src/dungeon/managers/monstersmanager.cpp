@@ -32,8 +32,6 @@ void MonstersManager::update(const sf::Time& dt)
             monster = std::make_unique<Monster>(*m_inter, *m_graph);
             monster->bindElementData(monsterInfo.data);
             m_inter->attachChild(*monster);
-
-            std::cerr << "Spawn" << std::endl;
         }
 
         // Remove the monster
