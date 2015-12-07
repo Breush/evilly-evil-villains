@@ -10,6 +10,9 @@
 #include "dungeon/databases/trapsdb.hpp"
 #include "dungeon/databases/facilitiesdb.hpp"
 #include "dungeon/databases/heroesdb.hpp"
+#include "dungeon/structs/direction.hpp"
+#include "dungeon/structs/monster.hpp"
+#include "dungeon/structs/room.hpp"
 #include "context/villains.hpp"
 
 #include <SFML/System/Time.hpp>
@@ -27,76 +30,6 @@ namespace pugi
 
 namespace dungeon
 {
-    // TODO Move these to their own file
-    //! Defines the possibly accessible relative directions from a room.
-    /*!
-     *  They are defined this way to be quickly masked.
-     *  So that (direction & 0xf - 1u) gives WEST -1 and EAST +1 (x axis)
-     *  And (direction >> 0x4 - 1u) gives SOUTH -1 and NORTH +1 (y axis)
-     */
-    enum Direction : uint8
-    {
-        EAST =  0x12,
-        WEST =  0x10,
-        NORTH = 0x21,
-        SOUTH = 0x01,
-    };
-
-    // TODO Make a wstring version of this for dungeon/commandable.cpp
-    inline Direction direction(const std::string& sDirection)
-    {
-        if (sDirection == "north")      return Direction::NORTH;
-        else if (sDirection == "south") return Direction::SOUTH;
-        else if (sDirection == "east")  return Direction::EAST;
-        else if (sDirection == "west")  return Direction::WEST;
-        else throw std::runtime_error("Unknown direction key " + sDirection);
-    }
-
-    inline Direction oppositeDirection(Direction direction)
-    {
-        switch (direction) {
-        case EAST:  return WEST;
-        case WEST:  return EAST;
-        case NORTH: return SOUTH;
-        case SOUTH: return NORTH;
-        default:    return NORTH;
-        }
-    }
-
-    //! A one-way access between two rooms.
-
-    struct Tunnel
-    {
-        sf::Vector2i coords;
-        bool relative = false;
-    };
-
-    //! A facility information.
-    struct FacilityInfo
-    {
-        const FacilitiesDB::FacilityData* common = nullptr; //!< All the common data.
-        ElementData data;                                   //!< The individual data.
-        std::vector<Tunnel> tunnels;                        //!< All tunnels that allow a way to an other room.
-        sf::Vector2u link = {-1u, -1u};                     //!< If these info are absolutely linked to another room.
-        bool isLink = false;                                //!< Are these info been created by a link?
-        bool barrier = false;                               //!< Is this block the room for passage?
-        uint treasure = -1u;                                //!< The treasure held.
-    };
-
-    //! More generic but dungeon-dependent info about traps type.
-    struct TrapGeneric
-    {
-        const TrapData* common = nullptr;   //!< All the common data.
-        bool unlocked = false;              //!< Is this trap type available?
-    };
-
-    //! More generic but dungeon-dependent info about monsters type.
-    struct MonsterGeneric
-    {
-        const MonsterData* common = nullptr;    //!< All the common data.
-        bool unlocked = false;                  //!< Is this monster type available?
-    };
-
     // Forward declarations
 
     class Graph;
@@ -115,36 +48,11 @@ namespace dungeon
         const uint onConstructRoomCost = 1100u; //!< The dosh cost for creating a room.
         const uint onDestroyRoomGain = 745u;    //!< The dosh gain when destroying a room.
 
-        //! Defines rooms state.
-        enum class RoomState
-        {
-            UNKNOWN,        //!< Error state.
-            EMPTY,          //!< Empty.
-            CONSTRUCTED,    //!< Constructed.
-        };
-
-        //! A room as in the xml specification.
-        struct Room
-        {
-            sf::Vector2u coords;                    //!< The floor/room coordinates of the room.
-            RoomState state = RoomState::UNKNOWN;   //!< The current state.
-
-            std::vector<FacilityInfo> facilities;   //!< All the facilities.
-            ElementData trap;                       //!< The trap protecting the room.
-        };
-
         //! A floor is a vector of rooms.
         struct Floor
         {
             uint pos;
             std::vector<Room> rooms;
-        };
-
-        //! A monster as stored in the xml.
-        struct MonsterInfo
-        {
-            float hp = 0.f;         //!< Current health point of the monster.
-            ElementData data;       //!< Type of monster, plus individual information.
         };
 
         //! A reserve slot about a monster.

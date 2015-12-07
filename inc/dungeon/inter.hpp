@@ -400,7 +400,6 @@ namespace dungeon
         struct Tile
         {
             sf::Vector2u coords;                                        //!< The coordinates of the tile (floor/room).
-            Data::Room* room = nullptr;                                 //!< The corresponding room within data.
             std::vector<std::unique_ptr<scene::RectangleShape>> layers; //!< All sprites to draw, from furthest to nearest.
             std::vector<std::unique_ptr<Facility>> facilities;          //!< The facilities in the tile.
             std::unique_ptr<Trap> trap = nullptr;                       //!< The trap, protecting the tile.

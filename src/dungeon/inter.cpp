@@ -242,8 +242,7 @@ void Inter::refreshFromData()
     for (uint room = 0u; room < roomsByFloor; ++room) {
         Tile tile;
         tile.coords = {floor, room};
-        tile.room = &m_data->room({floor, room});
-        m_tiles[{floor, room}] = std::move(tile);
+        m_tiles[tile.coords] = std::move(tile);
     }
 
     // Sets the new size
@@ -388,7 +387,7 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
     m_contextMenu.setTitle(roomName.str());
 
     // Room does not exists yet
-    if (room.state == Data::RoomState::EMPTY) {
+    if (room.state == RoomState::EMPTY) {
         // TODO Have a nice way to display money cost in context menu
         std::wstring text = _("Build room") + L" (-" + toWString(m_data->onConstructRoomCost) + L"d)";
         if (m_data->onConstructRoomCost <= m_data->villain().doshWallet.value())
@@ -684,7 +683,7 @@ void Inter::removeRoomFacilities(const sf::Vector2u& coords, bool loss)
 uint Inter::gainRemoveRoomTrap(const sf::Vector2u& coords) const
 {
     returnif (!m_data->isRoomConstructed(coords)) 0u;
-    const auto& trapData = m_data->room(coords).trap;
+    const auto& trapData = m_data->room(coords).trap.data;
     returnif (!trapData.exists()) 0u;
 
     // TODO Gain something proportionate to the current resistance?
@@ -698,7 +697,7 @@ void Inter::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID, 
     // TODO Have a isTileModifiable(coords) inside Inter
     returnif (!m_data->isRoomConstructed(coords));
     returnif (m_tiles[coords].movingLocked);
-    auto& trapData = m_data->room(coords).trap;
+    auto& trapData = m_data->room(coords).trap.data;
     returnif (trapData.exists() && trapData.type() == trapID);
 
     if (!free) {
@@ -864,7 +863,7 @@ void Inter::refreshTileDoshLabel(const sf::Vector2u& coords)
     auto& tile = m_tiles[coords];
 
     // Remove label if no room
-    if (room.state == Data::RoomState::EMPTY) {
+    if (room.state == RoomState::EMPTY) {
         tile.totalDoshLabel = nullptr;
         tile.harvestableDoshLabel = nullptr;
         return;
@@ -906,7 +905,7 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
     clearLayers(coords);
 
     // Room is somehow bugged
-    if (state == Data::RoomState::UNKNOWN) {
+    if (state == RoomState::UNKNOWN) {
         std::cerr << "/!\\ Found a room with unknown state at " << coords << "." << std::endl;
         std::cerr << "If that is a recurrent issue, please report this bug." << std::endl;
         addLayer(coords, "default");
@@ -914,7 +913,7 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
     }
 
     // Room is not constructed
-    if (state == Data::RoomState::EMPTY)
+    if (state == RoomState::EMPTY)
     {
         if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, WEST)))
             addLayer(coords, "dungeon/inter/void_west_transition", 150.f);
@@ -946,7 +945,7 @@ void Inter::refreshTileFacilities(const sf::Vector2u& coords)
     tile.facilities.clear();
 
     // Room is not constructed
-    returnif (room.state != Data::RoomState::CONSTRUCTED);
+    returnif (room.state != RoomState::CONSTRUCTED);
 
     // Facilities
     for (auto& facilityInfo : room.facilities) {
@@ -967,14 +966,12 @@ void Inter::refreshTileTraps(const sf::Vector2u& coords)
     // Reset
     tile.trap = nullptr;
 
-    // Room is not constructed
-    returnif (room.state != Data::RoomState::CONSTRUCTED);
-
-    // Trap or no trap
-    returnif (!room.trap.exists());
+    // Room is not constructed with a trap
+    returnif (room.state != RoomState::CONSTRUCTED);
+    returnif (!room.trap.data.exists());
 
     // Trap
-    tile.trap = std::make_unique<Trap>(coords, room.trap, *this);
+    tile.trap = std::make_unique<Trap>(coords, room.trap.data, *this);
     attachChild(*tile.trap);
 }
 

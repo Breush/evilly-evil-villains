@@ -48,7 +48,7 @@ context::Command Commandable::interpret(const std::vector<std::wstring>& tokens)
             logMessage = L"> [dungeon] Pushing room " + tokens[2u] + L"/" + tokens[3u] + L" " + tokens[1u] + L"\n";
             sf::Vector2u coords{to<uint>(tokens[2u]), to<uint>(tokens[3u])};
             auto animationTime = (nTokens >= 5u)? to<uint>(tokens[4u]) : 250u;
-            bool success = m_inter.pushRoom(coords, direction(toString(tokens[1u])), animationTime);
+            bool success = m_inter.pushRoom(coords, directionFromString(tokens[1u]), animationTime);
             logMessage += L"> [dungeon] --> ";
             logMessage += (success)? L"SUCCESS" : L"FAILURE";
         }

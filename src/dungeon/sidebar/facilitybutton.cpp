@@ -12,7 +12,7 @@ using namespace dungeon;
 //----------------------//
 //----- GrabButton -----//
 
-FacilityGrabButton::FacilityGrabButton(const FacilitiesDB::FacilityData& facilityData, std::wstring facilityID, Inter& inter)
+FacilityGrabButton::FacilityGrabButton(const FacilityData& facilityData, std::wstring facilityID, Inter& inter)
     : m_inter(inter)
     , m_facilityData(facilityData)
     , m_facilityID(std::move(facilityID))

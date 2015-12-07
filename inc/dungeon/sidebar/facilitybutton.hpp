@@ -21,7 +21,7 @@ namespace dungeon
     public:
 
         //! Constructor, affecting texture and look.
-        FacilityGrabButton(const FacilitiesDB::FacilityData& facilityData, std::wstring facilityID, Inter& inter);
+        FacilityGrabButton(const FacilityData& facilityData, std::wstring facilityID, Inter& inter);
 
         //! Default destructor.
         ~FacilityGrabButton() = default;
@@ -48,8 +48,8 @@ namespace dungeon
 
         Inter& m_inter;             //!< Reference to the dungeon inter.
 
-        const FacilitiesDB::FacilityData& m_facilityData;   //!< Reference to the data.
-        std::wstring m_facilityID;                          //!< The identifier for the facility.
+        const FacilityData& m_facilityData; //!< Reference to the data.
+        std::wstring m_facilityID;          //!< The identifier for the facility.
 
         // Grabbable
         std::wstring m_grabbableFacilityID;                 //!< The identifier for the facility to create when the grabbable is going.

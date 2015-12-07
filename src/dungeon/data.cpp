@@ -244,19 +244,19 @@ void Data::loadDungeon(const std::wstring& file)
 
             // Traps
             const auto& trapNode = roomNode.child(L"trap");
-            if (trapNode) room.trap.loadXML(trapNode);
+            if (trapNode) room.trap.data.loadXML(trapNode);
 
             // Facilities
             for (const auto& facilityNode : roomNode.children(L"facility")) {
                 room.facilities.emplace_back();
-                auto& facilityInfo = room.facilities.back();
-                facilityInfo.data.loadXML(facilityNode);
-                facilityInfo.isLink = facilityNode.attribute(L"isLink").as_bool();
-                facilityInfo.barrier = facilityNode.attribute(L"barrier").as_bool();
-                facilityInfo.common = &facilitiesDB().get(facilityInfo.data.type());
-                facilityInfo.treasure = facilityNode.attribute(L"treasure").as_uint(-1u);
-                facilityInfo.link.x = facilityNode.attribute(L"linkX").as_uint(-1u);
-                facilityInfo.link.y = facilityNode.attribute(L"linkY").as_uint(-1u);
+                auto& facility= room.facilities.back();
+                facility.data.loadXML(facilityNode);
+                facility.isLink = facilityNode.attribute(L"isLink").as_bool();
+                facility.barrier = facilityNode.attribute(L"barrier").as_bool();
+                facility.common = &facilitiesDB().get(facility.data.type());
+                facility.treasure = facilityNode.attribute(L"treasure").as_uint(-1u);
+                facility.link.x = facilityNode.attribute(L"linkX").as_uint(-1u);
+                facility.link.y = facilityNode.attribute(L"linkY").as_uint(-1u);
 
                 // Tunnels
                 for (auto tunnelNode : facilityNode.children(L"tunnel")) {
@@ -264,7 +264,7 @@ void Data::loadDungeon(const std::wstring& file)
                     tunnel.coords.x = tunnelNode.attribute(L"x").as_int();
                     tunnel.coords.y = tunnelNode.attribute(L"y").as_int();
                     tunnel.relative = tunnelNode.attribute(L"relative").as_bool();
-                    facilityInfo.tunnels.emplace_back(std::move(tunnel));
+                    facility.tunnels.emplace_back(std::move(tunnel));
                 }
             }
 
@@ -363,9 +363,9 @@ void Data::saveDungeon(const std::wstring& file)
             roomNode.append_attribute(L"state") = roomStateString.c_str();
 
             // Trap
-            if (room.trap.exists()) {
+            if (room.trap.data.exists()) {
                 auto trapNode = roomNode.append_child(L"trap");
-                room.trap.saveXML(trapNode);
+                room.trap.data.saveXML(trapNode);
             }
 
             // Facilities
@@ -567,7 +567,7 @@ sf::Vector2u Data::roomNeighbourCoords(const sf::Vector2u& coords, Direction dir
     return coords + roomDirectionVector2u(direction);
 }
 
-Data::Room& Data::roomNeighbour(const sf::Vector2u& coords, Direction direction)
+Room& Data::roomNeighbour(const sf::Vector2u& coords, Direction direction)
 {
     return room(roomNeighbourCoords(coords, direction));
 }
@@ -808,11 +808,11 @@ void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
     returnif (!isRoomConstructed(coords));
 
     auto& roomInfo = room(coords);
-    returnif (roomInfo.trap.exists() && roomInfo.trap.type() == trapID);
+    returnif (roomInfo.trap.data.exists() && roomInfo.trap.data.type() == trapID);
 
     // Destroy previous trap if any and set it to the new one
-    roomInfo.trap.clear();
-    roomInfo.trap.create(trapID);
+    roomInfo.trap.data.clear();
+    roomInfo.trap.data.create(trapID);
 
     addEvent("trap_changed", coords);
 }
@@ -822,11 +822,8 @@ void Data::removeRoomTrap(const sf::Vector2u& coords)
     returnif (!isRoomConstructed(coords));
 
     auto& roomInfo = room(coords);
-    returnif (!roomInfo.trap.exists());
-
-    // TODO Use trapsDB data (in Inter!)
-    // m_villain->doshWallet.add(traps::onDestroyGain(roomInfo.trap));
-    roomInfo.trap.clear();
+    returnif (!roomInfo.trap.data.exists());
+    roomInfo.trap.data.clear();
 
     addEvent("trap_changed", coords);
 }

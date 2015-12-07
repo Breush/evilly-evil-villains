@@ -18,22 +18,20 @@ namespace pugi
 
 namespace dungeon
 {
+    //! All infos that we can find in each facility.
+    struct FacilityData
+    {
+        std::wstring name = L"(Unknown)";   //!< Translated name.
+        bool entrance = false;              //!< Does this facility provide an entry point to the dungeon.
+        bool listed = true;                 //!< Is the facility constructible by the player?
+        Cost baseCost;                      //!< Construction price.
+        std::vector<Link> links;            //!< All the links upon creation.
+    };
+
     //! All common info for each facility and should never change.
 
     class FacilitiesDB final
     {
-    public:
-
-        //! All infos that we can find in each facility.
-        struct FacilityData
-        {
-            std::wstring name = L"(Unknown)";   //!< Translated name.
-            bool entrance = false;              //!< Does this facility provide an entry point to the dungeon.
-            bool listed = true;                 //!< Is the facility constructible by the player?
-            Cost baseCost;                      //!< Construction price.
-            std::vector<Link> links;            //!< All the links upon creation.
-        };
-
     public:
 
         //! Constructor.

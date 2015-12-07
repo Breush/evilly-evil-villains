@@ -338,7 +338,7 @@ void Element::lua_dungeonExplodeRoom(const uint x, const uint y)
 
 bool Element::lua_dungeonPushRoom(const uint x, const uint y, const std::string& sDirection, const uint animationDelay)
 {
-    return m_inter.pushRoom(sf::Vector2u{x, y}, direction(sDirection), animationDelay);
+    return m_inter.pushRoom(sf::Vector2u{x, y}, directionFromString(sDirection), animationDelay);
 }
 
 //----- Debug
