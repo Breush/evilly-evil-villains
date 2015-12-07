@@ -67,7 +67,6 @@ void EventEmitter::broadcast(uint count)
 
 void EventEmitter::addEvent(std::unique_ptr<Event> event)
 {
-    // std::cerr << "[DEBUG] Adding event: " << event->type << std::endl;
     m_events.emplace_back(std::move(event));
 }
 

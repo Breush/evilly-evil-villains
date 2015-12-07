@@ -19,6 +19,7 @@ MonsterCage::MonsterCage(std::wstring monsterID, Inter& inter, Data& data)
     , m_monsterID(std::move(monsterID))
 {
     const auto& monsterData = m_data.monstersDB().get(m_monsterID);
+    m_monsterGeneric = &data.monstersGenerics().at(m_monsterID);
 
     // Events
     setEmitter(&data);
@@ -183,12 +184,8 @@ std::unique_ptr<scene::Grabbable> MonsterCage::spawnGrabbable()
 
 void MonsterCage::hire()
 {
-    const auto& reserve = m_data.monstersInfo().reserve;
-    auto pCage = std::find_if(reserve, [this] (const Data::MonsterCageInfo& monsterCage) { return monsterCage.type == m_monsterID; });
-    returnif (pCage == std::end(reserve));
-
-    // Check that the monster can be hired
-    returnif (pCage->countdown != 0u);
+    returnif (m_monsterGeneric == nullptr);
+    returnif (m_monsterGeneric->countdown != 0u);
 
     m_inter.addMonsterToReserve(m_monsterID);
 }
@@ -198,15 +195,13 @@ void MonsterCage::hire()
 
 void MonsterCage::refreshHireBox()
 {
-    const auto& reserve = m_data.monstersInfo().reserve;
-    auto pCage = std::find_if(reserve, [this] (const Data::MonsterCageInfo& monsterCage) { return monsterCage.type == m_monsterID; });
-    returnif (pCage == std::end(reserve));
+    returnif (m_monsterGeneric == nullptr);
 
     // Text
-    m_hireBoxLabel.setText(L"*Hire*  " + toWString(pCage->countdown));
+    m_hireBoxLabel.setText(L"*Hire*  " + toWString(m_monsterGeneric->countdown));
 
     // Unlock
-    m_hireBoxLocked = (pCage->countdown > 0u);
+    m_hireBoxLocked = (m_monsterGeneric->countdown > 0u);
     refreshHireBoxVisualLock();
 }
 
@@ -222,9 +217,9 @@ void MonsterCage::refreshHireBoxVisualLock()
 
 void MonsterCage::refreshReservePuppetsCount()
 {
-    const auto& reserve = m_data.monstersInfo().reserve;
-    auto pCage = std::find_if(reserve, [this] (const Data::MonsterCageInfo& monsterCage) { return monsterCage.type == m_monsterID; });
-    uint monstersCount = (pCage == std::end(reserve))? 0u : pCage->monsters.size();
+    returnif (m_monsterGeneric == nullptr);
+
+    uint monstersCount = m_monsterGeneric->reserve;
     uint monstersCountBefore = m_puppets.size();
 
     returnif (monstersCountBefore == monstersCount);

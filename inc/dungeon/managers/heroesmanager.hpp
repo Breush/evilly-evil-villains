@@ -4,10 +4,6 @@
 #include "dungeon/graph.hpp"
 #include "dungeon/elements/hero.hpp"
 #include "context/event.hpp"
-#include "scene/wrappers/label.hpp"
-#include "scene/wrappers/animatedsprite.hpp"
-#include "scene/wrappers/rectangleshape.hpp"
-#include "ai/debug.hpp"
 
 namespace dungeon
 {

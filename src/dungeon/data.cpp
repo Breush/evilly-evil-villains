@@ -17,17 +17,9 @@ Data::Data()
     , m_roomsByFloor(0u)
     , m_timeGameHour(1.f)
 {
-    // Walleds
+    // Wallets
     m_soulWallet.setEvents(this, "soul_changed");
     m_fameWallet.setEvents(this, "fame_changed");
-
-    // Reload the monsters cages
-    m_monstersInfo.reserve.reserve(m_monstersDB.get().size());
-    for (const auto& monsterPair : m_monstersDB.get()) {
-        MonsterCageInfo monsterCageInfo;
-        monsterCageInfo.type = monsterPair.first;
-        m_monstersInfo.reserve.emplace_back(std::move(monsterCageInfo));
-    }
 }
 
 //-------------------//
@@ -65,13 +57,13 @@ void Data::update(const sf::Time& dt)
     while (reserveTimeBuffer >= 1.f) {
         reserveTimeBuffer -= 1.f;
 
-        for (auto& reserveInfo : m_monstersInfo.reserve) {
-            if (reserveInfo.countdown == 0u) continue;
-            reserveInfo.countdown -= 1u;
+        for (auto& monsterGenericPair : m_monstersGenerics) {
+            if (monsterGenericPair.second.countdown == 0u) continue;
+            monsterGenericPair.second.countdown -= 1u;
 
             auto event = std::make_unique<Event>();
             event->type = "reserve_countdown_changed";
-            event->monster.id = reserveInfo.type.c_str();
+            event->monster.id = monsterGenericPair.first.c_str();
             EventEmitter::addEvent(std::move(event));
         }
     }
@@ -81,6 +73,7 @@ void Data::update(const sf::Time& dt)
 
     // Managers
     m_heroesManager.update(dt);
+    m_monstersManager.update(dt);
     m_dynamicsManager.update(dt);
 }
 
@@ -194,40 +187,13 @@ void Data::loadDungeon(const std::wstring& file)
         auto& monsterGeneric = m_monstersGenerics[monsterData.first];
         monsterGeneric.common = &monsterData.second;
         monsterGeneric.unlocked = monsterGenericNode.attribute(L"unlocked").as_bool();
-    }
-
-    // TODO Make a monstersManager too?
-
-    // Reserve
-    const auto& monstersNode = dungeon.child(L"monsters");
-    const auto& reserveNode = monstersNode.child(L"reserve");
-    for (const auto& monsterCageNode : reserveNode.children(L"monsterCage")) {
-        std::wstring monsterID = monsterCageNode.attribute(L"type").as_string();
-        auto found = std::find_if(m_monstersInfo.reserve, [&monsterID] (const MonsterCageInfo& monsterCageInfo) { return monsterCageInfo.type == monsterID; });
-
-        // Ignore unknown monsterID
-        if (found == std::end(m_monstersInfo.reserve))
-            continue;
-
-        auto& monsterCageInfo = *found;
-        monsterCageInfo.countdown = monsterCageNode.attribute(L"countdown").as_uint();
-        for (const auto& monsterNode : monsterCageNode.children(L"monster")) {
-            MonsterInfo monsterInfo;
-            monsterInfo.data.loadXML(monsterNode);
-            monsterInfo.hp = monsterNode.attribute(L"hp").as_float(1.f);
-            monsterCageInfo.monsters.emplace_back(std::move(monsterInfo));
-        }
+        monsterGeneric.reserve = monsterGenericNode.attribute(L"reserve").as_uint();
+        monsterGeneric.countdown = monsterGenericNode.attribute(L"countdown").as_uint();
     }
 
     // Active
-    m_monstersInfo.active.clear();
-    const auto& activeNode = monstersNode.child(L"active");
-    for (const auto& monsterNode : activeNode.children(L"monster")) {
-        MonsterInfo monsterInfo;
-        monsterInfo.data.loadXML(monsterNode);
-        monsterInfo.hp = monsterNode.attribute(L"hp").as_float(1.f);
-        m_monstersInfo.active.emplace_back(std::move(monsterInfo));
-    }
+    const auto& monstersNode = dungeon.child(L"monsters");
+    m_monstersManager.load(monstersNode);
 
     //---- Traps
 
@@ -337,29 +303,13 @@ void Data::saveDungeon(const std::wstring& file)
     for (const auto& monsterGenericPair : m_monstersGenerics) {
         auto monsterGenericNode = monstersGenericsNode.append_child(monsterGenericPair.first.c_str());
         monsterGenericNode.append_attribute(L"unlocked") = monsterGenericPair.second.unlocked;
-    }
-
-    // Reserve
-    auto monstersNode = dungeon.append_child(L"monsters");
-    auto reserveNode = monstersNode.append_child(L"reserve");
-    for (const auto& monsterCage : m_monstersInfo.reserve) {
-        auto monsterCageNode = reserveNode.append_child(L"monsterCage");
-        monsterCageNode.append_attribute(L"type") = monsterCage.type.c_str();
-        monsterCageNode.append_attribute(L"countdown") = monsterCage.countdown;
-        for (const auto& monsterInfo : monsterCage.monsters) {
-            auto monsterNode = monsterCageNode.append_child(L"monster");
-            monsterInfo.data.saveXML(monsterNode);
-            monsterNode.append_attribute(L"hp") = monsterInfo.hp;
-        }
+        monsterGenericNode.append_attribute(L"reserve") = monsterGenericPair.second.reserve;
+        monsterGenericNode.append_attribute(L"countdown") = monsterGenericPair.second.countdown;
     }
 
     // Active
-    auto activeNode = monstersNode.append_child(L"active");
-    for (const auto& monsterInfo : m_monstersInfo.active) {
-        auto monsterNode = activeNode.append_child(L"monster");
-        monsterInfo.data.saveXML(monsterNode);
-        monsterNode.append_attribute(L"hp") = monsterInfo.hp;
-    }
+    auto monstersNode = dungeon.append_child(L"monsters");
+    m_monstersManager.save(monstersNode);
 
     //---- Traps
 
@@ -868,18 +818,7 @@ void Data::setTrapGenericUnlocked(const std::wstring& trapID, bool unlocked)
 
 void Data::removeRoomMonsters(const sf::Vector2u& coords)
 {
-    std::erase_if(m_monstersInfo.active, [this, coords] (const MonsterInfo& monsterInfo) {
-        sf::Vector2u monsterCoords;
-        monsterCoords.x = static_cast<uint>(monsterInfo.data.at(L"rx").as_float());
-        monsterCoords.y = static_cast<uint>(monsterInfo.data.at(L"ry").as_float());
-
-        if (monsterCoords == coords) {
-            EventEmitter::addEvent("monster_removed");
-            return true;
-        }
-
-        return false;
-    });
+    m_monstersManager.removeRoomMonsters(coords);
 }
 
 bool Data::addMonsterValid(const sf::Vector2u& coords, const std::wstring& monsterID)
@@ -890,26 +829,23 @@ bool Data::addMonsterValid(const sf::Vector2u& coords, const std::wstring& monst
 
 void Data::addMonsterToReserve(const std::wstring& monsterID, const uint countdownIncrease)
 {
-    auto& reserve = m_monstersInfo.reserve;
-    auto pMonsterCage = std::find_if(reserve, [&monsterID] (const MonsterCageInfo& monsterCage) { return monsterCage.type == monsterID; });
-    returnif (pMonsterCage == std::end(reserve));
+    auto monsterGenericPair = m_monstersGenerics.find(monsterID);
+    returnif (monsterGenericPair == std::end(m_monstersGenerics));
 
-    // Add a monster in there
-    pMonsterCage->monsters.emplace_back();
-    auto& monsterInfo = pMonsterCage->monsters.back();
-    monsterInfo.data.create(monsterID);
+    // Reserve
+    monsterGenericPair->second.reserve += 1u;
 
     auto event = std::make_unique<Event>();
     event->type = "monster_added";
-    event->monster.id = pMonsterCage->type.c_str();
+    event->monster.id = monsterGenericPair->first.c_str();
     EventEmitter::addEvent(std::move(event));
 
     // Increase the countdown
-    pMonsterCage->countdown += countdownIncrease;
+    monsterGenericPair->second.countdown += countdownIncrease;
 
     event = std::make_unique<Event>();
     event->type = "reserve_countdown_changed";
-    event->monster.id = pMonsterCage->type.c_str();
+    event->monster.id = monsterGenericPair->first.c_str();
     EventEmitter::addEvent(std::move(event));
 }
 
@@ -917,26 +853,24 @@ void Data::moveMonsterFromReserve(const sf::Vector2u& coords, const std::wstring
 {
     returnif (!addMonsterValid(coords, monsterID));
 
-    auto& reserve = m_monstersInfo.reserve;
-    auto pMonsterCage = std::find_if(reserve, [&monsterID] (const MonsterCageInfo& monsterCage) { return monsterCage.type == monsterID; });
+    auto monsterGenericPair = m_monstersGenerics.find(monsterID);
+    returnif (monsterGenericPair == std::end(m_monstersGenerics));
+    returnif (monsterGenericPair->second.reserve == 0u);
 
-    // No cage in reserve concerning this monster
-    returnif (pMonsterCage == std::end(reserve));
-
-    // Check if enough monsters in cage
-    auto monstersCount = pMonsterCage->monsters.size();
-    returnif (monstersCount == 0u);
-
-    // Now move
-    auto& monsterInfo = pMonsterCage->monsters.back();
-    monsterInfo.data[L"rx"].init_float(coords.x + 0.5f);
-    monsterInfo.data[L"ry"].init_float(coords.y + 0.5f);
-    m_monstersInfo.active.emplace_back(std::move(monsterInfo));
-    pMonsterCage->monsters.resize(monstersCount - 1u);
+    // Add the monster
+    m_monstersManager.addRoomMonster(coords, monsterID);
 
     auto event = std::make_unique<Event>();
     event->type = "monster_added";
-    event->monster.id = pMonsterCage->type.c_str();
+    event->monster.id = monsterGenericPair->first.c_str();
+    EventEmitter::addEvent(std::move(event));
+
+    // Reserve
+    monsterGenericPair->second.reserve -= 1u;
+
+    event = std::make_unique<Event>();
+    event->type = "reserve_countdown_changed";
+    event->monster.id = monsterGenericPair->first.c_str();
     EventEmitter::addEvent(std::move(event));
 }
 
@@ -962,6 +896,7 @@ void Data::useGraph(Graph& graph)
 {
     m_graph = &graph;
     m_heroesManager.useGraph(graph);
+    m_monstersManager.useGraph(graph);
 }
 
 //-------------------//

@@ -7,8 +7,8 @@
     </resources>
 	<heroes />
 	<monstersGenerics>
-		<sand_spirit unlocked="true" />
-		<creepim unlocked="true" />
+		<sand_spirit unlocked="true" number="0" countdown="0" />
+		<creepim unlocked="true" number="1" countdown="10" />
 	</monstersGenerics>
 	<monsters />
 	<trapsGenerics>

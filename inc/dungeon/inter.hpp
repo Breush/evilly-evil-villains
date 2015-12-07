@@ -5,7 +5,6 @@
 #include "dungeon/data.hpp"
 #include "dungeon/commandable.hpp"
 #include "dungeon/elements/trap.hpp"
-#include "dungeon/elements/monster.hpp"
 #include "dungeon/elements/facility.hpp"
 #include "nui/contextmenu.hpp"
 #include "nui/spinbox.hpp"
@@ -367,9 +366,6 @@ namespace dungeon
         //! Refresh display from current data.
         void refreshFromData();
 
-        //! Refresh all monsters from current data.
-        void refreshMonsters();
-
         //! Refresh all tiles, updating state from data.
         void refreshTiles();
 
@@ -415,7 +411,6 @@ namespace dungeon
 
         // Display
         sfe::Grid m_grid;                                   //!< The internal grid for overlay display.
-        std::vector<std::unique_ptr<Monster>> m_monsters;   //!< All monsters.
         std::unordered_map<sf::Vector2u, Tile> m_tiles;     //!< All tiles constituing the dungeon.
         sf::Vector2f m_roomScale = {1.f, 1.f};              //!< The room scale.
         sf::Vector2f m_refRoomSize;                         //!< The original room size.

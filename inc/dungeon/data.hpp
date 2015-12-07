@@ -4,12 +4,13 @@
 #include "tools/int.hpp"
 #include "dungeon/event.hpp"
 #include "dungeon/managers/heroesmanager.hpp"
+#include "dungeon/managers/monstersmanager.hpp"
 #include "dungeon/managers/dynamicsmanager.hpp"
 #include "dungeon/elements/elementdata.hpp"
-#include "dungeon/databases/monstersdb.hpp"
-#include "dungeon/databases/trapsdb.hpp"
 #include "dungeon/databases/facilitiesdb.hpp"
+#include "dungeon/databases/monstersdb.hpp"
 #include "dungeon/databases/heroesdb.hpp"
+#include "dungeon/databases/trapsdb.hpp"
 #include "dungeon/structs/direction.hpp"
 #include "dungeon/structs/monster.hpp"
 #include "dungeon/structs/room.hpp"
@@ -53,21 +54,6 @@ namespace dungeon
         {
             uint pos;
             std::vector<Room> rooms;
-        };
-
-        //! A reserve slot about a monster.
-        struct MonsterCageInfo
-        {
-            std::wstring type;                  //!< Type of monster.
-            uint countdown = 0u;                //!< How many seconds left before reactivation of Hire button.
-            std::vector<MonsterInfo> monsters;  //!< The monster in the reserve.
-        };
-
-        //! Holding monsters data.
-        struct MonstersInfo
-        {
-            std::vector<MonsterCageInfo> reserve;   //!< All the cages.
-            std::vector<MonsterInfo> active;        //!< The active monsters (in dungeon).
         };
 
     public:
@@ -304,16 +290,13 @@ namespace dungeon
         //! @name Getters
         //! @{
 
-        //! Access the list of all monsters inside dungeon and reserve.
-        inline MonstersInfo& monstersInfo() { return m_monstersInfo; }
-
         //! Access the facilities data base.
         inline const FacilitiesDB& facilitiesDB() const { return m_facilitiesDB; }
 
         //! Access the monsters data base.
         inline const MonstersDB& monstersDB() const { return m_monstersDB; }
 
-        //! Access the traps generics.
+        //! Access the monsters generics.
         inline const std::unordered_map<std::wstring, MonsterGeneric>& monstersGenerics() const { return m_monstersGenerics; }
 
         //! Access the traps data base.
@@ -327,6 +310,9 @@ namespace dungeon
 
         //! Access the associated villain.
         inline context::Villain& villain() { return *m_villain; }
+
+        //! Access the monsters manager.
+        inline MonstersManager& monstersManager() { return m_monstersManager; }
 
         //! Access the heroes manager.
         inline HeroesManager& heroesManager() { return m_heroesManager; }
@@ -413,11 +399,11 @@ namespace dungeon
 
         // Managers
         HeroesManager m_heroesManager;      //!< Manage all heroes.
+        MonstersManager m_monstersManager;  //!< Manage all monsters.
         DynamicsManager m_dynamicsManager;  //!< Manage all dynamic elements.
 
-        // Dungeon
+        // Dungeon structure
         std::vector<Floor> m_floors;    //!< A dungeon consists in a vector of floors.
-        MonstersInfo m_monstersInfo;    //!< A dungeon also has some list of monsters.
 
         // Time
         uint m_time = 0u;           //!< How much time the dungeon has been constructed, in in-game hours.

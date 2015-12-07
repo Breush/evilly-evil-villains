@@ -6,6 +6,10 @@
         <debt perWeekDosh="200" weeksLeft="1" />
     </resources>
 	<heroes />
+	<monstersGenerics>
+		<sand_spirit unlocked="true" reserve="1" countdown="0" />
+		<creepim unlocked="true" reserve="3" countdown="5" />
+	</monstersGenerics>
 	<monsters />
 	<trapsGenerics>
 		<pickpock unlocked="true" />

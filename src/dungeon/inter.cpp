@@ -103,7 +103,6 @@ void Inter::onSizeChanges()
     // Should only update position/size of elements inside
     // as no object changed inside
     refreshTiles();
-    refreshMonsters();
 }
 
 //------------------//
@@ -191,21 +190,12 @@ void Inter::receive(const context::Event& event)
         refreshTile(coords);
         refreshNeighboursLayers(coords);
     }
-    else if (event.type == "dungeon_graph_changed") {
-        refreshMonsters();
-    }
     else if (event.type == "facility_changed") {
         refreshTileFacilities(coords);
         refreshTileDoshLabel(coords);
     }
     else if (event.type == "trap_changed") {
         refreshTileTraps(coords);
-    }
-    else if (event.type == "monster_added") {
-        refreshMonsters();
-    }
-    else if (event.type == "monster_removed") {
-        refreshMonsters();
     }
     else if (event.type == "harvestable_dosh_changed") {
         refreshTileDoshLabel(coords);
@@ -219,6 +209,7 @@ void Inter::useData(Data& data)
 {
     m_data = &data;
     m_data->heroesManager().useInter(*this);
+    m_data->monstersManager().useInter(*this);
     m_data->dynamicsManager().useInter(*this);
 
     setEmitter(m_data);
@@ -248,7 +239,6 @@ void Inter::refreshFromData()
     // Sets the new size
     refreshSize();
     refreshTiles();
-    refreshMonsters();
 }
 
 //---------------------------//
@@ -804,28 +794,6 @@ void Inter::refreshSize()
     const auto& floorsCount = m_data->floorsCount();
     const auto roomSize = m_roomScale * m_refRoomSize;
     setSize({roomSize.x * roomsByFloor, roomSize.y * floorsCount});
-}
-
-void Inter::refreshMonsters()
-{
-    auto& activeMonsters = m_data->monstersInfo().active;
-    uint monstersCountBefore = m_monsters.size();
-    uint monstersCount = activeMonsters.size();
-    m_monsters.resize(monstersCount);
-
-    // Create new ones
-    for (uint i = monstersCountBefore; i < monstersCount; ++i) {
-        auto& monster = m_monsters[i];
-        monster = std::make_unique<Monster>(*this, m_data->graph());
-        attachChild(*monster);
-    }
-
-    // Reparameter them all
-    for (uint i = 0u; i < monstersCount; ++i) {
-        auto& monster = m_monsters.at(i);
-        auto& monsterInfo = activeMonsters.at(i);
-        monster->bindElementData(monsterInfo.data);
-    }
 }
 
 void Inter::refreshTiles()

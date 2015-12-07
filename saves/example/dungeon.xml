@@ -13,34 +13,22 @@
 		</hero>
 	</heroes>
 	<monstersGenerics>
-		<sand_spirit unlocked="false" />
-		<creepim unlocked="true" />
+		<sand_spirit unlocked="false" reserve="0" countdown="0" />
+		<creepim unlocked="true" reserve="3" countdown="5" />
 	</monstersGenerics>
 	<monsters>
-		<reserve>
-			<monsterCage type="creepim" countdown="0">
-				<monster type="creepim" />
-				<monster type="creepim" />
-				<monster type="creepim" />
-			</monsterCage>
-			<monsterCage type="sand_spirit" countdown="5">
-				<monster type="sand_spirit" />
-			</monsterCage>
-		</reserve>
-		<active>
-			<monster type="creepim">
-				<fusingTime type="float" value="0" />
-				<tx type="float" value="1.5" />
-				<ty type="float" value="3.5" />
-				<rx type="float" value="1.5" />
-				<ry type="float" value="4.53929043" />
-			</monster>
-			<monster type="creepim">
-				<fusingTime type="float" value="1.5617826" />
-				<rx type="float" value="2.5" />
-				<ry type="float" value="3.20000005" />
-			</monster>
-		</active>
+		<monster type="creepim">
+			<fusingTime type="float" value="0" />
+			<tx type="float" value="1.5" />
+			<ty type="float" value="3.5" />
+			<rx type="float" value="1.5" />
+			<ry type="float" value="4.5" />
+		</monster>
+		<monster type="creepim">
+			<fusingTime type="float" value="1.5" />
+			<rx type="float" value="2.5" />
+			<ry type="float" value="3.2" />
+		</monster>
 	</monsters>
 	<trapsGenerics>
 		<pickpock unlocked="true" />

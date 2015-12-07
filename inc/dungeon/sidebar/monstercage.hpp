@@ -6,6 +6,7 @@
 #include "scene/wrappers/richlabel.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
 #include "dungeon/sidebar/costbanner.hpp"
+#include "dungeon/structs/monster.hpp"
 #include "context/event.hpp"
 #include "ai/dumbpuppet.hpp"
 
@@ -99,10 +100,12 @@ namespace dungeon
 
     private:
 
-        Inter& m_inter;             //!< Reference to the dungeon inter.
-        Data& m_data;               //!< Reference to the whole data.
-        std::wstring m_monsterID;   //!< The monster to be managed in this cage.
+        Inter& m_inter;                                     //!< Reference to the dungeon inter.
+        Data& m_data;                                       //!< Reference to the whole data.
+        std::wstring m_monsterID;                           //!< The monster to be managed in this cage.
+        const MonsterGeneric* m_monsterGeneric = nullptr;   //!< Reference to the monster managed in this cage.
 
+        // Grabbable
         sf::Vector2f m_grabbablePosition;   //!< Retains the last mouse position knowned.
 
         // Reserve
@@ -117,6 +120,7 @@ namespace dungeon
         scene::RichLabel m_hireBoxLabel;            //!< Text for hire time.
         scene::RectangleShape m_hireBoxBackground;  //!< The hire time background.
 
+        // Countdown
         bool m_hireBoxLocked = false;   //!< Is the box countdown still counting?
         bool m_hireBoxSelected = false; //!< Is the box hovered?
 

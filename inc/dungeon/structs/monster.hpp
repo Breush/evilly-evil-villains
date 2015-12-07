@@ -13,12 +13,7 @@ namespace dungeon
     {
         const MonsterData* common = nullptr;    //!< All the common data.
         bool unlocked = false;                  //!< Is this monster type available?
-    };
-
-    //! A monster, fully described.
-    struct MonsterInfo
-    {
-        float hp = 0.f;         //!< Current health point of the monster.
-        ElementData data;       //!< Type of monster, plus individual information.
+        uint reserve = 0u;                      //!< How many monsters in the reserve?
+        uint countdown = 0u;                    //!< How many seconds to wait before allowing hire again.
     };
 }
