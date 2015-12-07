@@ -3,7 +3,7 @@
 #include "core/gettext.hpp"
 #include "core/application.hpp"
 #include "context/villains.hpp"
-#include "dungeon/heroesmanager.hpp"
+#include "dungeon/managers/heroesmanager.hpp"
 #include "tools/debug.hpp"
 #include "tools/event.hpp"
 #include "tools/tools.hpp"

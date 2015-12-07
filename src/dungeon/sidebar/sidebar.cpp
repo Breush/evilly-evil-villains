@@ -6,7 +6,7 @@
 #include "dungeon/sidebar/monstercage.hpp"
 #include "dungeon/sidebar/trapbutton.hpp"
 #include "dungeon/sidebar/facilitybutton.hpp"
-#include "dungeon/tools.hpp"
+#include "dungeon/sidebar/toolbutton.hpp"
 #include "dungeon/data.hpp"
 #include "scene/scene.hpp"
 #include "tools/platform-fixes.hpp" // make_unique

@@ -1,6 +1,6 @@
 #include "dungeon/elements/hero.hpp"
 
-#include "dungeon/heroesmanager.hpp"
+#include "dungeon/managers/heroesmanager.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/data.hpp"
 #include "tools/random.hpp"

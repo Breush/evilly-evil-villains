@@ -1,4 +1,4 @@
-#include "dungeon/dynamicsmanager.hpp"
+#include "dungeon/managers/dynamicsmanager.hpp"
 
 #include "dungeon/inter.hpp"
 
