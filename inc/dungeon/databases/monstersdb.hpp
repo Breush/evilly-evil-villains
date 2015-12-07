@@ -21,6 +21,7 @@ namespace dungeon
     struct MonsterData
     {
         std::wstring name = L"(Unknown)";   //!< Translated name.
+        Cost unlockRequirement;             //!< Unlocking requirement (not consumed).
         Cost unlockCost;                    //!< Unlocking price.
         Cost baseCost;                      //!< Starting price.
         Cost weeklyCost;                    //!< Salary.

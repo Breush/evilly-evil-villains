@@ -10,7 +10,7 @@
 #include "dungeon/databases/trapsdb.hpp"
 #include "dungeon/databases/facilitiesdb.hpp"
 #include "dungeon/databases/heroesdb.hpp"
-#include "context/wallet.hpp"
+#include "context/villains.hpp"
 
 #include <SFML/System/Time.hpp>
 
@@ -23,11 +23,6 @@
 namespace pugi
 {
     class xml_node;
-}
-
-namespace context
-{
-    class Villain;
 }
 
 namespace dungeon
@@ -370,6 +365,12 @@ namespace dungeon
         //------------------//
         //! @name Resources
         //! @{
+
+        //! Access to the villain's dosh wallet.
+        inline context::Wallet& doshWallet() { return m_villain->doshWallet; }
+
+        //! Access to the villain's dosh wallet (const).
+        inline const context::Wallet& doshWallet() const { return m_villain->doshWallet; }
 
         //! Access to the fame wallet.
         inline context::Wallet& fameWallet() { return m_fameWallet; }

@@ -22,6 +22,11 @@ MonsterLocker::MonsterLocker(dungeon::Data& data)
     m_rectangle.setOutlineColor(sf::Color::White);
     m_rectangle.setOutlineThickness(1.f);
 
+    // Requirement
+    m_rectangle.attachChild(m_requireCostBanner);
+    m_requireCostBanner.setRelativePosition({0.1f, 0.5f});
+    m_requireCostBanner.setRelativeOrigin({0.f, 0.5f});
+
     // Lock
     m_rectangle.attachChild(m_lockedText);
     m_lockedText.setPrestyle(scene::RichLabel::Prestyle::NUI);
@@ -82,7 +87,15 @@ void MonsterLocker::onSizeChanges()
 bool MonsterLocker::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vector2f&, const sf::Vector2f&)
 {
     returnif (!m_locked) true;
-    returnif (!m_data.villain().doshWallet.sub(m_monsterGeneric->common->unlockCost.dosh)) true;
+
+    // Unlock requirement
+    returnif (m_data.doshWallet().value() < m_monsterGeneric->common->unlockRequirement.dosh) true;
+    returnif (m_data.soulWallet().value() < m_monsterGeneric->common->unlockRequirement.soul) true;
+    returnif (m_data.fameWallet().value() < m_monsterGeneric->common->unlockRequirement.fame) true;
+
+    // Unlock cost
+    // TODO Full cost (soul/fame)
+    returnif (!m_data.doshWallet().sub(m_monsterGeneric->common->unlockCost.dosh)) true;
 
     // TODO See trap locker
     Application::context().sounds.play("resources/dosh_gain");
@@ -120,6 +133,8 @@ void MonsterLocker::setSource(const std::wstring& monsterID, const dungeon::Mons
     m_name.setText(monsterGeneric.common->name);
     m_lockedCostText.setText(L"*" + toWString(monsterGeneric.common->unlockCost.dosh) + L"*");
 
+    m_requireCostBanner.setCost(monsterGeneric.common->unlockRequirement);
+
     setLocked(!monsterGeneric.unlocked);
 }
 
@@ -137,5 +152,6 @@ void MonsterLocker::refreshFromLocking()
     m_sprite.setStarted(!m_locked);
     m_lockedText.setVisible(m_locked);
     m_lockedIcon.setVisible(m_locked);
-    m_rectangle.setFillColor(m_locked? sf::Color{0u, 0u, 0u, 220u} : sf::Color::Transparent);
+    m_requireCostBanner.setVisible(m_locked);
+    m_rectangle.setFillColor((m_locked)? sf::Color{0u, 0u, 0u, 220u} : sf::Color::Transparent);
 }

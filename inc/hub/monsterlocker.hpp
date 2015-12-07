@@ -4,6 +4,7 @@
 #include "scene/wrappers/richlabel.hpp"
 #include "scene/wrappers/animatedsprite.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
+#include "dungeon/sidebar/costbanner.hpp"
 
 // Forward declarations
 
@@ -85,6 +86,8 @@ namespace hub
         scene::RectangleShape m_lockedIcon;     //!< A closed lock image.
         scene::RichLabel m_lockedCostText;      //!< The text for the cost to unlock.
         scene::RectangleShape m_lockedDoshIcon; //!< The dosh image for the cost.
+
+        dungeon::CostBanner m_requireCostBanner;    //!< Shows the requirements.
 
         // Room part
         sf::Vector2f m_roomTextureSize;     //!< The reference texture size.

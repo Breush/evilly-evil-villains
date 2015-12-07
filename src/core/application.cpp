@@ -275,8 +275,7 @@ void Application::refreshFromConfig()
     i18n::init(toString(s_context.display.global.language));
 
     // Graphics
-    s_context.windowInfo.style = sf::Style::Default;
-    if (s_context.display.window.fullscreen) s_context.windowInfo.style |= sf::Style::Fullscreen;
+    s_context.windowInfo.style = (s_context.display.window.fullscreen)? sf::Style::Fullscreen : sf::Style::Default;
     s_context.recreateWindow();
 
     // Audio
