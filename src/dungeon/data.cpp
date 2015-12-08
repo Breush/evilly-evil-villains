@@ -506,11 +506,8 @@ bool Data::pushRoom(const sf::Vector2u& coords, Direction direction)
         targetCoords = movingCoords;
     }
 
-    // Set the start room to void
-    auto& startRoom = room(coords);
-    startRoom.state = RoomState::EMPTY;
-    removeRoomFacilitiesLinks(coords);
-    addEvent("room_changed", coords);
+    // Clean the starting room
+    destroyRoom(coords);
 
     EventEmitter::addEvent("dungeon_changed");
 
@@ -658,7 +655,7 @@ void Data::createRoomFacilitiesLinks(const sf::Vector2u& coords)
     returnif (!isRoomConstructed(coords));
     const auto& selectedRoom = room(coords);
 
-    // For each facility of the room, create its links
+    // For each facility in the room, create its links
     for (const auto& facility : selectedRoom.facilities)
         createFacilityLinks(coords, facility);
 
