@@ -48,6 +48,7 @@ void Application::Context::recreateWindow()
         window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
     window.setVerticalSyncEnabled(vsync);
     window.setMouseCursorVisible(false);
+    window.setFramerateLimit(120); // TODO Put that value in the config
 
     // Window info
     windowInfo.screenSize = sf::v2f(window.getSize());
