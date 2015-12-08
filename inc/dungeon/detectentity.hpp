@@ -72,6 +72,9 @@ namespace dungeon
         //! Factor applied to all range checks.
         inline void setDetectRangeFactor(const float detectRangeFactor) { m_detectRangeFactor = detectRangeFactor; }
 
+        //! The factor applied to all range checks.
+        inline float detectRangeFactor() const { return m_detectRangeFactor; }
+
         //! Set the UID of the entity, should be called by detector.
         inline void setUID(uint32 inUID) { m_UID = inUID; }
 

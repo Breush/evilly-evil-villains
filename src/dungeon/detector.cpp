@@ -60,10 +60,24 @@ uint32 Detector::isInRange(const DetectEntity& entity, const std::string& key, c
         if (pEntity->detectKey() != key || pEntity == &entity) continue;
 
         const auto distance = position - pEntity->localPosition();
-        const auto sqDistance = distance * distance;
-        if ((sqDistance.x + sqDistance.y) < sqRange)
+        const auto sqDistance = distance.x * distance.x + distance.y * distance.y;
+        if (sqDistance <= sqRange)
             return pEntity->UID();
     }
 
     return -1u;
+}
+
+void Detector::applyInRange(const sf::Vector2f& position, float range, DetectionLambda hurtEntityFunc)
+{
+    // Range squared
+    const auto sqRange = range * range;
+
+    // Check if any in range
+    for (const auto& pEntity : m_entities) {
+        const auto distance = position - pEntity->localPosition();
+        const auto sqDistance = distance.x * distance.x + distance.y * distance.y;
+        if (sqDistance <= sqRange)
+            hurtEntityFunc(*pEntity, std::sqrt(sqDistance));
+    }
 }

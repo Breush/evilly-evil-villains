@@ -3,8 +3,10 @@
 #include "tools/int.hpp"
 
 #include <SFML/System/NonCopyable.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <SFML/System/Time.hpp>
 
+#include <functional>
 #include <string>
 #include <vector>
 #include <list>
@@ -20,6 +22,9 @@ namespace dungeon
     class Detector final : private sf::NonCopyable
     {
         friend class DetectEntity;
+
+        //! A lambda signature for loops.
+        using DetectionLambda = std::function<void(DetectEntity& entity, float distance)>;
 
     public:
 
@@ -38,6 +43,9 @@ namespace dungeon
 
         //! Find an entity with the corresponding UID.
         const DetectEntity* find(const uint32 UID) const;
+
+        //! Apply a lambda for each entity in the range.
+        void applyInRange(const sf::Vector2f& position, float range, DetectionLambda hurtEntityFunc);
 
         //! @}
 

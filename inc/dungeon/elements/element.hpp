@@ -164,6 +164,9 @@ namespace dungeon
 
         //---- Elements control
 
+        //! Damage all elements within the range.
+        void lua_damageRange(const lua_Number rx, const lua_Number ry, const lua_Number relRange, const lua_Number basePower);
+
         //! Creates a dynamicElement of the type specified in the relative coordinates.
         //! @return the UID of the element created.
         uint32 lua_spawnDynamic(const std::string& dynamicID, const lua_Number rx, const lua_Number ry);

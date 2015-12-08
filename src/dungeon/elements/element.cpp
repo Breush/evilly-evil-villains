@@ -69,6 +69,7 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
 
     m_lua["eev_spawnDynamic"] = [this] (const std::string& shortDynamicID, const lua_Number rx, const lua_Number ry) { return lua_spawnDynamic(shortDynamicID, rx, ry); };
 
+    m_lua["eev_damageRange"] = [this] (const lua_Number rx, const lua_Number ry, const lua_Number relRange, const lua_Number basePower) { lua_damageRange(rx, ry, relRange, basePower); };
     m_lua["eev_damageUID"] = [this] (const uint32 UID, const lua_Number amount) { lua_damageUID(UID, amount); };
 
     m_lua["eev_borrowVillainDosh"] = [this] (const uint32 amount) { return lua_borrowVillainDosh(amount); };
@@ -323,6 +324,33 @@ void Element::lua_giveFame(const uint32 amount)
 
 //----- Elements control
 
+void Element::lua_damageRange(const lua_Number rx, const lua_Number ry, const lua_Number relRange, const lua_Number basePower)
+{
+    auto& data = m_inter.data();
+    float range = detectRangeFactor() * relRange;
+
+    auto hurtEntityFunc = [&data, range, basePower] (DetectEntity& entity, float distance) {
+        float damageDealt = static_cast<float>(basePower) * (1.f - distance / range);
+
+        // Damage monster
+        auto monster = dynamic_cast<Monster*>(&entity);
+        if (monster != nullptr) {
+            data.monstersManager().damage(monster, damageDealt);
+            return;
+        }
+
+        // Damage hero
+        auto hero = dynamic_cast<Hero*>(&entity);
+        if (hero != nullptr) {
+            data.heroesManager().damage(hero, damageDealt);
+            return;
+        }
+    };
+
+    sf::Vector2f relPos = m_inter.relTileLocalPosition({static_cast<float>(rx), static_cast<float>(ry)});
+    s_detector.applyInRange(relPos, range, hurtEntityFunc);
+}
+
 uint32 Element::lua_spawnDynamic(const std::string& dynamicID, const lua_Number rx, const lua_Number ry)
 {
     auto id = toWString(dynamicID);
@@ -345,14 +373,14 @@ void Element::lua_damageUID(const uint32 UID, const lua_Number amount)
     //    But does this means we need Facilities/Traps Managers too?
 
     // Damage monster
-    auto* monster = dynamic_cast<Monster*>(entity);
+    auto monster = dynamic_cast<Monster*>(entity);
     if (monster != nullptr) {
         m_inter.data().monstersManager().damage(monster, static_cast<float>(amount));
         return;
     }
 
     // Damage hero
-    auto* hero = dynamic_cast<Hero*>(entity);
+    auto hero = dynamic_cast<Hero*>(entity);
     if (hero != nullptr) {
         m_inter.data().heroesManager().damage(hero, static_cast<float>(amount));
         return;

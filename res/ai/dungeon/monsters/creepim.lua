@@ -74,7 +74,9 @@ function _update(dt)
     if fusing then
         -- The animation stopped, here we really explode
         if eev_isAnimationStopped() then
-            eev_dungeonExplodeRoom(eev_getCurrentRoomX(), eev_getCurrentRoomY())
+            local rx = eev_getDataFloat("rx")
+            local ry = eev_getDataFloat("ry")
+            eev_damageRange(rx, ry, 1.5, 100)
             fusingTime = 0
             fusing = false
 
