@@ -118,6 +118,7 @@ void HeroesManager::load(const pugi::xml_node& node)
         m_heroesInfo.emplace_back();
         auto& heroInfo = m_heroesInfo.back();
         heroInfo.data.loadXML(heroNode);
+        heroInfo.hp = heroNode.attribute(L"hp").as_float();
 
         std::wstring status = heroNode.attribute(L"status").as_string();
         if (status == L"spawning") {
@@ -142,6 +143,7 @@ void HeroesManager::save(pugi::xml_node node)
 
         auto heroNode = node.append_child(L"hero");
         heroInfo.data.saveXML(heroNode);
+        heroNode.append_attribute(L"hp") = heroInfo.hp;
 
         if (heroInfo.status == HeroStatus::TO_SPAWN) {
             heroNode.append_attribute(L"status") = L"spawning";
@@ -198,6 +200,24 @@ void HeroesManager::spawnHeroesGroup()
     refreshHeroesData();
 
     m_nextGroupDelay = 37.f + static_cast<float>(rand() % 120u);
+}
+
+//--------------------------//
+//----- Heroes control -----//
+
+void HeroesManager::damage(const Hero* hero, float amount)
+{
+    for (auto& heroInfo : m_heroesInfo) {
+        if (heroInfo.hero.get() != hero) continue;
+
+        heroInfo.hp -= amount;
+        if (heroInfo.hp <= 0.f) {
+            heroInfo.status = HeroStatus::TO_BE_REMOVED;
+            heroInfo.reward = true;
+        }
+
+        return;
+    }
 }
 
 //---------------------------//

@@ -57,6 +57,15 @@ namespace dungeon
 
         //! @}
 
+        //-----------------------//
+        //! @name Heroes control
+        //! @{
+
+        //! Damage the hero specified.
+        void damage(const Hero* hero, float amount);
+
+        //! @}
+
         //------------------------//
         //! @name Heroes feedback
         //! @{
@@ -114,9 +123,10 @@ namespace dungeon
         struct HeroInfo
         {
             std::unique_ptr<Hero> hero = nullptr;       //!< Hero pointer.
+            ElementData data;                           //!< All its data.
             HeroStatus status = HeroStatus::TO_SPAWN;   //!< Hero status.
             float spawnDelay = 0.f;                     //!< Seconds to wait before effective spawning.
-            ElementData data;                           //!< All its data.
+            float hp = 0.f;                             //!< How many HP the hero has left.
             bool reward = false;                        //!< Do the player get a reward when this hero is removed?
         };
 

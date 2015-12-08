@@ -57,9 +57,12 @@ namespace dungeon
 
         //! @}
 
-        //----------------------------//
-        //! @name Dungeon interaction
+        //-------------------------//
+        //! @name Monsters control
         //! @{
+
+        //! Damage the monster specified.
+        void damage(const Monster* monster, float amount);
 
         //! Remove the monsters in the room.
         void removeRoomMonsters(const sf::Vector2u& coords);
@@ -104,6 +107,7 @@ namespace dungeon
             std::unique_ptr<Monster> monster = nullptr;     //!< Hero pointer.
             MonsterStatus status = MonsterStatus::TO_SPAWN; //!< Hero status.
             ElementData data;                               //!< All its data.
+            float hp = 0.f;                                 //!< How many HP the monster has left.
         };
 
     private:

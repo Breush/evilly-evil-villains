@@ -78,6 +78,7 @@ void MonstersManager::load(const pugi::xml_node& node)
         m_monstersInfo.emplace_back();
         auto& monsterInfo = m_monstersInfo.back();
         monsterInfo.data.loadXML(monsterNode);
+        monsterInfo.hp = monsterNode.attribute(L"hp").as_float();
 
         std::wstring status = monsterNode.attribute(L"status").as_string();
         if (status == L"spawning") {
@@ -98,6 +99,7 @@ void MonstersManager::save(pugi::xml_node node)
 
         auto monsterNode = node.append_child(L"monster");
         monsterInfo.data.saveXML(monsterNode);
+        monsterNode.append_attribute(L"hp") = monsterInfo.hp;
 
         if (monsterInfo.status == MonsterStatus::TO_SPAWN) {
             monsterNode.append_attribute(L"status") = L"spawning";
@@ -123,8 +125,21 @@ void MonstersManager::useGraph(Graph& graph)
     m_graph = &graph;
 }
 
-//-------------------//
-//----- Control -----//
+//----------------------------//
+//----- Monsters control -----//
+
+void MonstersManager::damage(const Monster* monster, float amount)
+{
+    for (auto& monsterInfo : m_monstersInfo) {
+        if (monsterInfo.monster.get() != monster) continue;
+
+        monsterInfo.hp -= amount;
+        if (monsterInfo.hp <= 0.f)
+            monsterInfo.status = MonsterStatus::TO_BE_REMOVED;
+
+        return;
+    }
+}
 
 void MonstersManager::removeRoomMonsters(const sf::Vector2u& coords)
 {

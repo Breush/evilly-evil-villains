@@ -33,6 +33,7 @@
 	<trapsGenerics>
 		<pickpock unlocked="true" />
 		<trompe_loeil unlocked="false" />
+		<razor unlocked="true" />
 	</trapsGenerics>
 	<floor pos="0">
 		<room pos="0" state="constructed">

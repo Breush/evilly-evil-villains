@@ -168,6 +168,11 @@ namespace dungeon
         //! @return the UID of the element created.
         uint32 lua_spawnDynamic(const std::string& dynamicID, const lua_Number rx, const lua_Number ry);
 
+        //----- Elements control from UID
+
+        //! Inflicts some damage to the element with the corresponding UID.
+        void lua_damageUID(const uint32 UID, const lua_Number amount);
+
         //----- Dungeon
 
         //! Explode the corresponding room.

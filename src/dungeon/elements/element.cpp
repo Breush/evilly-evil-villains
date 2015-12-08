@@ -69,6 +69,8 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
 
     m_lua["eev_spawnDynamic"] = [this] (const std::string& shortDynamicID, const lua_Number rx, const lua_Number ry) { return lua_spawnDynamic(shortDynamicID, rx, ry); };
 
+    m_lua["eev_damageUID"] = [this] (const uint32 UID, const lua_Number amount) { lua_damageUID(UID, amount); };
+
     m_lua["eev_borrowVillainDosh"] = [this] (const uint32 amount) { return lua_borrowVillainDosh(amount); };
     m_lua["eev_giveDosh"] = [this] (const uint32 amount) { lua_giveDosh(amount); };
     m_lua["eev_giveSoul"] = [this] (const uint32 amount) { lua_giveSoul(amount); };
@@ -256,21 +258,21 @@ lua_Number Element::lua_initEmptyDataFloat(const std::string& s, const lua_Numbe
 
 void Element::lua_setUIDDataU32(const uint32 UID, const std::string& s, const uint32 value)
 {
-    auto ws = toWString(s);
     auto* entity = s_detector.find(UID);
     auto* element = dynamic_cast<Element*>(entity);
     returnif (element == nullptr);
 
+    auto ws = toWString(s);
     element->edata()[ws].as_uint32() = value;
 }
 
 uint32 Element::lua_getUIDDataU32(const uint32 UID, const std::string& s) const
 {
-    auto ws = toWString(s);
     const auto* entity = s_detector.find(UID);
     const auto* element = dynamic_cast<const Element*>(entity);
     returnif (element == nullptr) 0u;
 
+    auto ws = toWString(s);
     return element->edata().at(ws).as_uint32();
 }
 
@@ -326,6 +328,37 @@ uint32 Element::lua_spawnDynamic(const std::string& dynamicID, const lua_Number 
     auto id = toWString(dynamicID);
     sf::Vector2f relPos = m_inter.relTileLocalPosition({static_cast<float>(rx), static_cast<float>(ry)});
     return m_inter.spawnDynamic(relPos, id);
+}
+
+//----- Elements control from UID
+
+void Element::lua_damageUID(const uint32 UID, const lua_Number amount)
+{
+    auto* entity = s_detector.find(UID);
+    returnif (entity == nullptr);
+
+    // TODO There's some design decision to made here...
+    // Is this check against all types what we want?
+    // This does not look very sustainable.
+    // -> A solution might be a common interface for managers (all providing bool damage(Element*, float))
+    //    and checking the downcast compatibility (returning false if not ok).
+    //    But does this means we need Facilities/Traps Managers too?
+
+    // Damage monster
+    auto* monster = dynamic_cast<Monster*>(entity);
+    if (monster != nullptr) {
+        m_inter.data().monstersManager().damage(monster, static_cast<float>(amount));
+        return;
+    }
+
+    // Damage hero
+    auto* hero = dynamic_cast<Hero*>(entity);
+    if (hero != nullptr) {
+        m_inter.data().heroesManager().damage(hero, static_cast<float>(amount));
+        return;
+    }
+
+    // TODO Traps/facilities durability
 }
 
 //----- Dungeon

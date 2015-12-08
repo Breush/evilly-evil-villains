@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<trap id="razor" trName="Razor">
+    <data name="unlockCost" dosh="800" />
+    <data name="baseCost"   dosh="600" />
+    <data name="resistance" durability="10" />
+    <data name="repairCost" dosh="1.2" />
+</trap>
