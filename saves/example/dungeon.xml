@@ -6,7 +6,7 @@
         <debt perWeekDosh="20" weeksLeft="40" />
     </resources>
 	<heroes nextWaveDelay="12">
-		<hero type="groo" status="running">
+		<hero type="groo" hp="10" status="running">
 		    <dosh type="uint32" value="10" />
 			<rx type="float" value="0.5" />
 			<ry type="float" value="0.2" />
@@ -17,14 +17,14 @@
 		<creepim unlocked="true" reserve="3" countdown="5" />
 	</monstersGenerics>
 	<monsters>
-		<monster type="creepim">
+		<monster type="creepim" hp="23" status="running">
 			<fusingTime type="float" value="0" />
 			<tx type="float" value="1.5" />
 			<ty type="float" value="3.5" />
 			<rx type="float" value="1.5" />
 			<ry type="float" value="4.5" />
 		</monster>
-		<monster type="creepim">
+		<monster type="creepim" hp="15" status="running">
 			<fusingTime type="float" value="1.5" />
 			<rx type="float" value="2.5" />
 			<ry type="float" value="3.2" />

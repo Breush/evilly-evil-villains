@@ -58,13 +58,14 @@ void MonstersDB::add(const std::string& filename)
     for (const auto& dataNode : monsterNode) {
         std::wstring name = dataNode.attribute(L"name").as_string();
 
-        if (name == L"unlockRequirement")   readCostNode(monsterData.unlockRequirement, dataNode);
-        else if (name == L"unlockCost")     readCostNode(monsterData.unlockCost, dataNode);
-        else if (name == L"baseCost")       readCostNode(monsterData.baseCost, dataNode);
-        else if (name == L"weeklyCost")     readCostNode(monsterData.weeklyCost, dataNode);
-        else if (name == L"speed")          readSpeedNode(monsterData.speed, dataNode);
-        else if (name == L"pause")          monsterData.pauseDelay = dataNode.attribute(L"delay").as_float();
-        else if (name == L"hireCountdown")  monsterData.hireCountdown = dataNode.attribute(L"delay").as_uint();
+        if (name == L"startingHP")              monsterData.startingHP = dataNode.attribute(L"startingHP").as_float();
+        else if (name == L"unlockRequirement")  readCostNode(monsterData.unlockRequirement, dataNode);
+        else if (name == L"unlockCost")         readCostNode(monsterData.unlockCost, dataNode);
+        else if (name == L"baseCost")           readCostNode(monsterData.baseCost, dataNode);
+        else if (name == L"weeklyCost")         readCostNode(monsterData.weeklyCost, dataNode);
+        else if (name == L"speed")              readSpeedNode(monsterData.speed, dataNode);
+        else if (name == L"pause")              monsterData.pauseDelay = dataNode.attribute(L"delay").as_float();
+        else if (name == L"hireCountdown")      monsterData.hireCountdown = dataNode.attribute(L"delay").as_uint();
     }
 }
 

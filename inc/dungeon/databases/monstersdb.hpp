@@ -21,6 +21,7 @@ namespace dungeon
     struct MonsterData
     {
         std::wstring name = L"(Unknown)";   //!< Translated name.
+        float startingHP = 1.f;             //!< Health points when the monster is created.
         Cost unlockRequirement;             //!< Unlocking requirement (not consumed).
         Cost unlockCost;                    //!< Unlocking price.
         Cost baseCost;                      //!< Starting price.

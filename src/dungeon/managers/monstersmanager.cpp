@@ -156,11 +156,13 @@ void MonstersManager::removeRoomMonsters(const sf::Vector2u& coords)
 void MonstersManager::addRoomMonster(const sf::Vector2u& coords, const std::wstring& monsterID)
 {
     MonsterInfo monsterInfo;
+    const auto& monsterData = m_data->monstersDB().get(monsterID);
 
     monsterInfo.status = MonsterStatus::TO_SPAWN;
     monsterInfo.data.create(monsterID);
     monsterInfo.data[L"rx"].init_float(coords.x + 0.5f);
     monsterInfo.data[L"ry"].init_float(coords.y + 0.5f);
+    monsterInfo.hp = monsterData.startingHP;
 
     m_monstersInfo.emplace_back(std::move(monsterInfo));
 

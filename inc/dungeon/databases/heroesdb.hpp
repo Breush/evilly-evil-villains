@@ -26,6 +26,7 @@ namespace dungeon
         struct HeroData
         {
             std::wstring name = L"(Unknown)";   //!< Translated name.
+            float startingHP = 1.f;             //!< Health points when the hero is created.
             sf::Vector2f speed;                 //!< Speed relative to dungeon room size.
             float pauseDelay = 0.f;             //!< How many seconds to stay still if the hero stays in the room.
         };

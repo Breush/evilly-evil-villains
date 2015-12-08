@@ -190,8 +190,12 @@ void HeroesManager::spawnHeroesGroup()
 
         // FIXME We're spawning only Gr'oo right now...
         // We should make a more complex group theory
-        heroInfo.data.create(L"groo");
+        std::wstring heroID(L"groo");
+        const auto& heroData = m_data->heroesDB().get(heroID);
+
+        heroInfo.data.create(heroID);
         heroInfo.spawnDelay = delay;
+        heroInfo.hp = heroData.startingHP;
 
         delay += 3.f + static_cast<float>(rand() % 20u);
     }
