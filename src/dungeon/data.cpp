@@ -596,10 +596,36 @@ const FacilityInfo* Data::getFacility(const sf::Vector2u& coords, const std::wst
     return &(*found);
 }
 
-bool Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool isLink)
+bool Data::createRoomFacilityValid(const sf::Vector2u& coords, const std::wstring& facilityID)
 {
     returnif (!isRoomConstructed(coords)) false;
     returnif (hasFacility(coords, facilityID)) false;
+
+    // Check againt absolute constraints for this facility
+    bool excluded = false;
+    const auto& facilityData = facilitiesDB().get(facilityID);
+    for (const auto& constraint : facilityData.constraints) {
+        // Are the coordinates concerned by this constraint?
+        if (constraint.x.type == ConstraintParameter::Type::EQUAL)
+            if (static_cast<uint>(constraint.x.value) != coords.x) continue;
+
+        if (constraint.y.type == ConstraintParameter::Type::EQUAL)
+            if (static_cast<uint>(constraint.y.value) != coords.y) continue;
+
+        // If in include list, that's all right
+        if (constraint.mode == Constraint::Mode::INCLUDE)
+            return true;
+        // If in exclude list, wait till the end (it might be in include list too)
+        else if (constraint.mode == Constraint::Mode::EXCLUDE)
+            excluded = true;
+    }
+
+    return !excluded;
+}
+
+bool Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool isLink)
+{
+    returnif (!createRoomFacilityValid(coords, facilityID)) false;
 
     // Facility creation, indeed
     auto& roomInfo = room(coords);

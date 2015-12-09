@@ -21,11 +21,12 @@ namespace dungeon
     //! All infos that we can find in each facility.
     struct FacilityData
     {
-        std::wstring name = L"(Unknown)";   //!< Translated name.
-        bool entrance = false;              //!< Does this facility provide an entry point to the dungeon.
-        bool listed = true;                 //!< Is the facility constructible by the player?
-        Cost baseCost;                      //!< Construction price.
-        std::vector<Link> links;            //!< All the links upon creation.
+        std::wstring name = L"(Unknown)";       //!< Translated name.
+        bool entrance = false;                  //!< Does this facility provide an entry point to the dungeon.
+        bool listed = true;                     //!< Is the facility constructible by the player?
+        Cost baseCost;                          //!< Construction price.
+        std::vector<Link> links;                //!< All the links upon creation.
+        std::vector<Constraint> constraints;    //!< Construction constraints (absolute).
     };
 
     //! All common info for each facility and should never change.
@@ -72,6 +73,9 @@ namespace dungeon
 
         //! Read node and affect it to a cost variable.
         void readCostNode(Cost& cost, const pugi::xml_node& node);
+
+        //! Read node and affect it to a constraint variable.
+        void readConstraintNode(Constraint& constraint, const pugi::xml_node& node);
 
         //! Read attribute and affect it to a constraint parameter variable.
         void readConstraintParameterAttribute(ConstraintParameter& constraintParameter, const pugi::xml_attribute& attribute);

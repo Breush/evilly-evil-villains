@@ -66,6 +66,13 @@ void FacilitiesDB::add(const std::string& filename)
         if (name == L"baseCost")    readCostNode(facilityData.baseCost, dataNode);
     }
 
+    // Constraints
+    for (const auto& constraintNode : facilityNode.children(L"constraint")) {
+        Constraint constraint;
+        readConstraintNode(constraint, constraintNode);
+        facilityData.constraints.emplace_back(std::move(constraint));
+    }
+
     // Adding links
     for (const auto& linkNode : facilityNode.children(L"link")) {
         Link link;
@@ -83,17 +90,22 @@ void FacilitiesDB::add(const std::string& filename)
 
             for (const auto& constraintNode : linkNode.children(L"constraint")) {
                 Constraint constraint;
-                std::wstring mode = constraintNode.attribute(L"mode").as_string();
-                if (mode == L"include")         constraint.mode = Constraint::Mode::INCLUDE;
-                else if (mode == L"exclude")    constraint.mode = Constraint::Mode::EXCLUDE;
-                readConstraintParameterAttribute(constraint.x, constraintNode.attribute(L"x"));
-                readConstraintParameterAttribute(constraint.y, constraintNode.attribute(L"y"));
+                readConstraintNode(constraint, constraintNode);
                 link.constraints.emplace_back(std::move(constraint));
             }
         }
 
         facilityData.links.emplace_back(std::move(link));
     }
+}
+
+void FacilitiesDB::readConstraintNode(Constraint& constraint, const pugi::xml_node& node)
+{
+    std::wstring mode = node.attribute(L"mode").as_string();
+    if (mode == L"include")         constraint.mode = Constraint::Mode::INCLUDE;
+    else if (mode == L"exclude")    constraint.mode = Constraint::Mode::EXCLUDE;
+    readConstraintParameterAttribute(constraint.x, node.attribute(L"x"));
+    readConstraintParameterAttribute(constraint.y, node.attribute(L"y"));
 }
 
 void FacilitiesDB::readConstraintParameterAttribute(ConstraintParameter& constraintParameter, const pugi::xml_attribute& attribute)

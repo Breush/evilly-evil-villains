@@ -1,4 +1,6 @@
 <?xml version="1.0"?>
 <facility id="entrance" trName="Entrance" entrance="true">
     <data name="baseCost" dosh="50" />
+    <constraint mode="exclude" />
+    <constraint mode="include" x="0" relative="false" />
 </facility>

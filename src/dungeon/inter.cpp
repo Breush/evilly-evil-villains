@@ -460,6 +460,25 @@ void Inter::setPredictionMonster(const sf::Vector2f& relPos, const std::wstring&
         m_predictionSprite.setTiltColor({192u, 119u, 119u, 200u});
 }
 
+void Inter::setPredictionFacility(const sf::Vector2f& relPos, const std::wstring& facilityID)
+{
+    if (m_predictionID != facilityID) {
+        m_predictionID = facilityID;
+        m_predictionSprite.load(toString(L"dungeon/facilities/" + facilityID));
+        m_predictionSprite.setVisible(true);
+    }
+
+    auto rPosition = relPos / tileSize();
+    rPosition.x = std::floor(rPosition.x) + 0.5f;
+    rPosition.y = std::floor(rPosition.y) + 0.5f;
+    m_predictionSprite.setLocalPosition(rPosition * tileSize());
+
+    if (m_data->createRoomFacilityValid(tileFromLocalPosition(relPos), facilityID))
+        m_predictionSprite.setTiltColor({119u, 192u, 119u, 200u});
+    else
+        m_predictionSprite.setTiltColor({192u, 119u, 119u, 200u});
+}
+
 void Inter::resetPredictionLink()
 {
     m_predictionLink.setVisible(false);

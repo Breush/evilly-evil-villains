@@ -159,6 +159,9 @@ namespace dungeon
         //! @name Facilities
         //! @{
 
+        //! Is creating the facility a valid action? Checks against dungeon consistency.
+        bool createRoomFacilityValid(const sf::Vector2u& coords, const std::wstring& facilityID);
+
         //! Returns true if a facility exists in the specified coordinates.
         bool hasFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const;
 

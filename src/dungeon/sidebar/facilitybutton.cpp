@@ -29,14 +29,22 @@ FacilityGrabButton::FacilityGrabButton(const FacilityData& facilityData, std::ws
 
 void FacilityGrabButton::grabbableMoved(scene::Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f&)
 {
+    // Show the facility to create if inter is below
+    sf::Vector2f interRelPos(relPos);
+    returnif (entity == nullptr);
+    auto inter = entity->findParent<Inter>(interRelPos);
+
+    if (inter == nullptr) {
+        m_inter.resetPrediction();
+        m_inter.resetPredictionLink();
+        return;
+    }
+
+    m_inter.setPredictionFacility(interRelPos, m_facilityID);
+
     // Show link if linking
     returnif (m_explicitLinksCount == 0u || m_explicitLinksDone == 0u);
-
-    // Forward to dungeon::Inter if it is below
-    auto inter = dynamic_cast<Inter*>(entity);
-    returnif (inter == nullptr);
-
-    auto targetCoords = inter->tileFromLocalPosition(relPos);
+    auto targetCoords = inter->tileFromLocalPosition(interRelPos);
     inter->setPredictionLink(m_explicitLinkCoords, targetCoords);
 }
 
@@ -45,6 +53,7 @@ void FacilityGrabButton::grabbableButtonPressed(scene::Entity* entity, const sf:
     // If right button, deselect
     if (button == sf::Mouse::Right) {
         m_grabbableFacilityID = m_facilityID;
+        m_inter.resetPrediction();
         m_inter.resetPredictionLink();
         graph()->removeGrabbable();
         m_explicitLinksDone = 0u;
@@ -70,6 +79,8 @@ void FacilityGrabButton::grabbableButtonPressed(scene::Entity* entity, const sf:
     }
     else {
         // Checking constraints
+        // TODO Factor out that checking constraints function
+        // and merge it with the one from Data::createRoomFacilityValid()
         const auto& link = getCurrentExplicitLink();
         for (const auto& constraint : link.constraints) {
             if (constraint.mode == Constraint::Mode::EXCLUDE) {

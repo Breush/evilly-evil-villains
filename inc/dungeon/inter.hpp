@@ -90,6 +90,9 @@ namespace dungeon
         //! Set the prediction overlay to a monster.
         void setPredictionMonster(const sf::Vector2f& relPos, const std::wstring& monsterID);
 
+        //! Set the prediction overlay to a facility.
+        void setPredictionFacility(const sf::Vector2f& relPos, const std::wstring& facilityID);
+
         //! Remove the current link prediction.
         void resetPredictionLink();
 
