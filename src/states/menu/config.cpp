@@ -78,7 +78,7 @@ MenuConfig::MenuConfig(StateStack& stack)
 
     // Graphics
     m_areas[AreaID::GRAPHICS].form.add(m_resolutionBox);
-    auto refBitsPerPixel = sf::VideoMode::getFullscreenModes().at(0u).bitsPerPixel;
+    auto refBitsPerPixel = sf::VideoMode::getDesktopMode().bitsPerPixel;
     for (const auto& videoMode : std::reverse(sf::VideoMode::getFullscreenModes())) {
         // Best bits per pixels are at the end with std::reverse
         if (refBitsPerPixel != videoMode.bitsPerPixel) continue;

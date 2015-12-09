@@ -37,7 +37,8 @@ void Application::Context::recreateWindow()
 
     sf::ContextSettings contextSettings;
     contextSettings.antialiasingLevel = antialiasingLevel;
-    window.create(sf::VideoMode(resolution.x, resolution.y), title, style, contextSettings);
+    sf::VideoMode videoMode{static_cast<uint>(resolution.x), static_cast<uint>(resolution.y), sf::VideoMode::getDesktopMode().bitsPerPixel};
+    window.create(videoMode, title, style, contextSettings);
 
     if (!window.isOpen())
         throw std::runtime_error("Cannot initialize window.");
