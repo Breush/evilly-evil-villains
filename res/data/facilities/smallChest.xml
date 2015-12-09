@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<facility id="smallChest" trName="Small chest">
+<facility id="smallChest" trName="Small chest" lock="floor">
     <data name="baseCost" dosh="5" />
     <data name="maxTreasure" dosh="200" />
 </facility>

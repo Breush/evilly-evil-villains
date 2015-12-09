@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<trap id="trompe_loeil" trName="Trompe l'oeil">
+<trap id="trompe_loeil" trName="Trompe l'oeil" lock="full">
     <data name="unlockCost" dosh="1200" />
     <data name="baseCost"   dosh="150" />
     <data name="resistance" durability="55" />

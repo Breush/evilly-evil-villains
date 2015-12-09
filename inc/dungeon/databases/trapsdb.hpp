@@ -1,6 +1,7 @@
 #pragma once
 
 #include "context/cost.hpp"
+#include "dungeon/databases/lock.hpp"
 
 #include <string>
 #include <unordered_map>
@@ -12,6 +13,7 @@
 namespace pugi
 {
     class xml_node;
+    class xml_attribute;
 }
 
 namespace dungeon
@@ -30,6 +32,7 @@ namespace dungeon
         Cost baseCost;                      //!< Construction price.
         TrapResistance resistance;          //!< How much a trap can resist.
         RelCost repairCost;                 //!< Relative to damage repair cost.
+        Lock lock = LockFlag::NONE;         //!< What part of the room the trap blocks.
     };
 
     //! All common info for each trap and should never change.
@@ -70,6 +73,9 @@ namespace dungeon
 
         //! Load the xml file and add its data to the map.
         void add(const std::string& filename);
+
+        //! Read attribute and affect it to a lock variable.
+        void readLockAttribute(Lock& lock, const pugi::xml_attribute& attribute);
 
         //! Read node and affect it to a cost variable.
         void readCostNode(Cost& cost, const pugi::xml_node& node);

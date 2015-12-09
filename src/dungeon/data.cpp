@@ -231,8 +231,12 @@ void Data::loadDungeon(const std::wstring& file)
             wdebug_dungeon_3(L"Found room " << room.pos << L" of state " << roomStateString);
 
             // Traps
+            auto& trap = room.trap;
             const auto& trapNode = roomNode.child(L"trap");
-            if (trapNode) room.trap.data.loadXML(trapNode);
+            if (trapNode) {
+                trap.data.loadXML(trapNode);
+                trap.common = &trapsDB().get(trap.data.type());
+            }
 
             // Facilities
             for (const auto& facilityNode : roomNode.children(L"facility")) {
@@ -600,10 +604,23 @@ bool Data::createRoomFacilityValid(const sf::Vector2u& coords, const std::wstrin
 {
     returnif (!isRoomConstructed(coords)) false;
     returnif (hasFacility(coords, facilityID)) false;
+    const auto& selectedRoom = room(coords);
+    const auto& facilityData = facilitiesDB().get(facilityID);
+
+    // Check if no other facilities block the construction
+    Lock facilityLock = facilityData.lock;
+    for (const auto& facility : selectedRoom.facilities)
+        if ((facility.common->lock & facilityLock) != 0u)
+            return false;
+
+    // Check if the trap blocks the construction
+    const auto& trap = selectedRoom.trap;
+    if (trap.data.exists())
+        if ((trap.common->lock & facilityLock) != 0u)
+            return false;
 
     // Check againt absolute constraints for this facility
     bool excluded = false;
-    const auto& facilityData = facilitiesDB().get(facilityID);
     for (const auto& constraint : facilityData.constraints) {
         // Are the coordinates concerned by this constraint?
         if (constraint.x.type == ConstraintParameter::Type::EQUAL)
@@ -812,9 +829,15 @@ void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
     auto& roomInfo = room(coords);
     returnif (roomInfo.trap.data.exists() && roomInfo.trap.data.type() == trapID);
 
-    // Destroy previous trap if any and set it to the new one
+    // Destroy previous trap if any
     roomInfo.trap.data.clear();
+
+    // And and set it to the new one
     roomInfo.trap.data.create(trapID);
+    roomInfo.trap.common = &m_trapsDB.get(trapID);
+
+    // TODO Have a setRoomTrapValid()
+    // that checks for the lock
 
     addEvent("trap_changed", coords);
 }

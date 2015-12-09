@@ -2,6 +2,7 @@
 
 #include "context/cost.hpp"
 #include "dungeon/databases/link.hpp"
+#include "dungeon/databases/lock.hpp"
 
 #include <vector>
 #include <unordered_map>
@@ -27,6 +28,7 @@ namespace dungeon
         Cost baseCost;                          //!< Construction price.
         std::vector<Link> links;                //!< All the links upon creation.
         std::vector<Constraint> constraints;    //!< Construction constraints (absolute).
+        Lock lock = LockFlag::NONE;             //!< What part of the room the facility blocks.
     };
 
     //! All common info for each facility and should never change.
@@ -70,6 +72,9 @@ namespace dungeon
 
         //! Load the xml file and add its data to the map.
         void add(const std::string& filename);
+
+        //! Read attribute and affect it to a lock variable.
+        void readLockAttribute(Lock& lock, const pugi::xml_attribute& attribute);
 
         //! Read node and affect it to a cost variable.
         void readCostNode(Cost& cost, const pugi::xml_node& node);

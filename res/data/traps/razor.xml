@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<trap id="razor" trName="Razor">
+<trap id="razor" trName="Razor" lock="wall">
     <data name="unlockCost" dosh="800" />
     <data name="baseCost"   dosh="600" />
     <data name="resistance" durability="10" />

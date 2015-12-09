@@ -18,6 +18,7 @@ namespace dungeon
     //! A individual trap in the dungeon.
     struct TrapInfo
     {
-        ElementData data;   //!< Its data.
+        const TrapData* common = nullptr;   //!< All the common data.
+        ElementData data;                   //!< Its data.
     };
 }

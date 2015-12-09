@@ -53,6 +53,7 @@ void TrapsDB::add(const std::string& filename)
     auto& trapData = m_trapsData[id];
     std::wstring trName = trapNode.attribute(L"trName").as_string();
     trapData.name = _(toString(trName).c_str());
+    readLockAttribute(trapData.lock, trapNode.attribute(L"lock"));
 
     // Adding data
     for (const auto& dataNode : trapNode) {
@@ -63,6 +64,16 @@ void TrapsDB::add(const std::string& filename)
         else if (name == L"resistance") readResistanceNode(trapData.resistance, dataNode);
         else if (name == L"repairCost") readRelCostNode(trapData.repairCost, dataNode);
     }
+}
+
+void TrapsDB::readLockAttribute(Lock& lock, const pugi::xml_attribute& attribute)
+{
+    std::wstring lockString = attribute.as_string();
+
+    if (lockString == L"wall")          lock = LockFlag::WALL;
+    else if (lockString == L"floor")    lock = LockFlag::FLOOR;
+    else if (lockString == L"full")     lock = LockFlag::WALL | LockFlag::FLOOR;
+    else                                lock = LockFlag::NONE;
 }
 
 void TrapsDB::readCostNode(Cost& cost, const pugi::xml_node& node)

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<trap id="pickpock" trName="Pick-pock">
+<trap id="pickpock" trName="Pick-pock" lock="floor">
     <data name="unlockCost" dosh="50" />
     <data name="baseCost"   dosh="220" />
     <data name="resistance" durability="10" />
