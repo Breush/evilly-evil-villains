@@ -7,9 +7,14 @@
 -- A trap that deals damage to very close heroes.
 -- It looses some durability each time.
 -- It will boost heroes with razor_boost attribute (basically Birbilon).
+-- DPS: 2
 
 ------------
 -- Locals --
+
+local damaging = false      -- Are we damaging an entity?
+local damagingMark = false  -- Mark if some damage occured.
+local damagingCooldown = 0  -- Time to wait before next damage is possible
 
 ---------------
 -- Callbacks --
@@ -20,15 +25,19 @@ end
 
 -- Called once on object creation
 function _register()
-    eev_addCallback("cbEntityClose", "hero", "distance < 0.1")
-    eev_addCallback("cbEntityClose", "monster", "distance < 0.1")
+    eev_addCallback("cbEntityClose", "hero", "distance < 0.4")
+    eev_addCallback("cbEntityClose", "monster", "distance < 0.4")
 
     eev_setDepth(70)
 end
 
 -- Whenever a hero or a monster comes too close
 function cbEntityClose(UID)
-    eev_damageUID(UID, 0.1);
+    if not damaging then
+        eev_log("tick")
+        eev_damageUID(UID, 0.2)
+        damagingMark = true
+    end
 end
 
 -------------
@@ -36,6 +45,19 @@ end
 
 -- Regular call
 function _update(dt)
+    if damagingMark then
+        damagingMark = false
+        damagingCooldown = 0.1
+        damaging = true
+    end
+
+    -- Update the damaging cooldown
+    if damaging then
+        damagingCooldown = damagingCooldown - dt
+        if damagingCooldown <= 0 then
+            damaging = false
+        end
+    end
 end
 
 -------------

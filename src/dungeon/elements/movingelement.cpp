@@ -44,13 +44,12 @@ void MovingElement::updateAI(const sf::Time& dt)
 
 void MovingElement::updateRoutine(const sf::Time& dt)
 {
-    massert(m_edata != nullptr, "[dungeon::MovingElement] Some elementData was left uninitialized.");
-
     // Update to current position
     auto relPosition = m_inter.relTileFromLocalPosition(localPosition());
     m_edata->operator[](L"rx").as_float() = relPosition.x;
     m_edata->operator[](L"ry").as_float() = relPosition.y;
 
+    baseClass::updateRoutine(dt);
     // Forward to lua
     m_lua["_update"](dt.asSeconds());
 }

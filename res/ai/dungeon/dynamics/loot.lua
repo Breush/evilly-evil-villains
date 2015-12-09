@@ -46,3 +46,9 @@ function cbLeftClick()
     -- TODO Play some sound
 end
 
+-------------
+-- Routine --
+
+-- Regular call
+function _update(dt)
+end

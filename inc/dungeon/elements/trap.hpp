@@ -36,14 +36,6 @@ namespace dungeon
     protected:
 
         //----------------//
-        //! @name Routine
-        //! @{
-
-        void updateRoutine(const sf::Time& dt) final;
-
-        //! @}
-
-        //----------------//
         //! @name Lua API
         //! @{
 

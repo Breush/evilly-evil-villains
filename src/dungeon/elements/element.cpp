@@ -84,6 +84,15 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
     m_lua["eev_log"] = [this] (const std::string& str) { lua_log(str); };
 }
 
+//-------------------//
+//----- Routine -----//
+
+void Element::updateRoutine(const sf::Time& dt)
+{
+    // Forward to lua
+    m_lua["_update"](dt.asSeconds());
+}
+
 //------------------//
 //----- Events -----//
 

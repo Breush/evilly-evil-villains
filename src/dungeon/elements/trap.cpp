@@ -35,15 +35,6 @@ Trap::Trap(const sf::Vector2u& coords, ElementData& edata, Inter& inter)
     m_lua["_reinit"]();
 }
 
-//------------------//
-//---- Routine -----//
-
-void Trap::updateRoutine(const sf::Time& dt)
-{
-    // Forward to lua
-    m_lua["_update"](dt.asSeconds());
-}
-
 //--------------------//
 //---- Resources -----//
 
