@@ -34,6 +34,16 @@ namespace dungeon
 
         //! @}
 
+        //----------------//
+        //! @name Control
+        //! @{
+
+        // TODO A call to _onDamage would be cleverer
+        //! Display a damaged state for the monster.
+        void setDamaged(bool damaged);
+
+        //! @}
+
     protected:
 
         //---------------------//

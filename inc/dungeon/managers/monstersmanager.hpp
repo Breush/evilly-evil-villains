@@ -104,10 +104,16 @@ namespace dungeon
         //! Contains a Monster plus its status.
         struct MonsterInfo
         {
-            std::unique_ptr<Monster> monster = nullptr;     //!< Hero pointer.
-            MonsterStatus status = MonsterStatus::TO_SPAWN; //!< Hero status.
+            std::unique_ptr<Monster> monster = nullptr;     //!< Monster pointer.
+
+            // Saved states
             ElementData data;                               //!< All its data.
+            MonsterStatus status = MonsterStatus::TO_SPAWN; //!< Monster status.
             float hp = 0.f;                                 //!< How many HP the monster has left.
+
+            // Not saved states
+            bool damageFeedback = false;                    //!< Are we showing a damage animation?
+            float damageFeedbackTime = 0.f;                 //!< How long to wait for the damage state.
         };
 
     private:

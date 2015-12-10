@@ -58,7 +58,7 @@ void HeroesDB::add(const std::string& filename)
     for (const auto& dataNode : heroNode) {
         std::wstring name = dataNode.attribute(L"name").as_string();
 
-        if (name == L"startingHP")      heroData.startingHP = dataNode.attribute(L"startingHP").as_float();
+        if (name == L"startingHP")      heroData.startingHP = dataNode.attribute(L"value").as_float();
         else if (name == L"speed")      readSpeedNode(heroData.speed, dataNode);
         else if (name == L"pause")      heroData.pauseDelay = dataNode.attribute(L"delay").as_float();
     }

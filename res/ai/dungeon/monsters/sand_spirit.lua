@@ -17,6 +17,11 @@ end
 
 -- Called once on object creation
 function _register()
+    eev_addCallback("cbHeroClose", "hero", "distance < 0.7")
+end
+
+-- Whenever a hero comes too close
+function cbHeroClose(heroUID)
 end
 
 -------------

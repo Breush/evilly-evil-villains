@@ -21,6 +21,15 @@ namespace dungeon
         std::string detectKey() const final { return "monster"; }
         std::string _name() const final { return "dungeon::Monster"; }
 
+        //----------------//
+        //! @name Control
+        //! @{
+
+        //! Display a damaged state for the monster.
+        void setDamaged(bool damaged);
+
+        //! @}
+
     protected:
 
         //---------------------//

@@ -23,8 +23,20 @@ void HeroesManager::update(const sf::Time& dt)
     for (auto it = std::begin(m_heroesInfo); it != std::end(m_heroesInfo); ) {
         auto& heroInfo = *it;
 
+        // Hero is running
+        if (heroInfo.status == HeroStatus::RUNNING) {
+            // Hero is being damaged
+            if (heroInfo.damageFeedback) {
+                heroInfo.damageFeedbackTime -= dt.asSeconds();
+                if (heroInfo.damageFeedbackTime <= 0.f) {
+                    heroInfo.hero->setDamaged(false);
+                    heroInfo.damageFeedback = false;
+                }
+            }
+        }
+
         // Spawn hero or update delay before spawning
-        if (heroInfo.status == HeroStatus::TO_SPAWN) {
+        else if (heroInfo.status == HeroStatus::TO_SPAWN) {
             heroInfo.spawnDelay -= dt.asSeconds();
             if (heroInfo.spawnDelay > 0.f) continue;
             heroInfo.status = HeroStatus::RUNNING;
@@ -219,6 +231,11 @@ void HeroesManager::damage(const Hero* hero, float amount)
             heroInfo.status = HeroStatus::TO_BE_REMOVED;
             heroInfo.reward = true;
         }
+
+        // Player feedback
+        heroInfo.hero->setDamaged(true);
+        heroInfo.damageFeedbackTime = 0.05f;
+        heroInfo.damageFeedback = true;
 
         return;
     }

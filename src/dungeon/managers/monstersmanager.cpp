@@ -18,13 +18,25 @@ void MonstersManager::update(const sf::Time& dt)
 {
     returnif (m_graph == nullptr);
 
-    // Update heroes
+    // Update monsters
     bool monstersCountChanged = false;
     for (auto it = std::begin(m_monstersInfo); it != std::end(m_monstersInfo); ) {
         auto& monsterInfo = *it;
 
+        // Monster is running
+        if (monsterInfo.status == MonsterStatus::RUNNING) {
+            // Monster is being damaged
+            if (monsterInfo.damageFeedback) {
+                monsterInfo.damageFeedbackTime -= dt.asSeconds();
+                if (monsterInfo.damageFeedbackTime <= 0.f) {
+                    monsterInfo.monster->setDamaged(false);
+                    monsterInfo.damageFeedback = false;
+                }
+            }
+        }
+
         // Spawn monster
-        if (monsterInfo.status == MonsterStatus::TO_SPAWN) {
+        else if (monsterInfo.status == MonsterStatus::TO_SPAWN) {
             monsterInfo.status = MonsterStatus::RUNNING;
 
             // Create the monster object and add it as an Inter child
@@ -44,7 +56,7 @@ void MonstersManager::update(const sf::Time& dt)
         ++it;
     }
 
-    // Heroes count changed, update all reference to their data
+    // Monsters count changed, update all reference to their data
     // TODO See HeroesManager
     if (monstersCountChanged)
         refreshMonstersData();
@@ -136,6 +148,11 @@ void MonstersManager::damage(const Monster* monster, float amount)
         monsterInfo.hp -= amount;
         if (monsterInfo.hp <= 0.f)
             monsterInfo.status = MonsterStatus::TO_BE_REMOVED;
+
+        // Player feedback
+        monsterInfo.monster->setDamaged(true);
+        monsterInfo.damageFeedbackTime = 0.05f;
+        monsterInfo.damageFeedback = true;
 
         return;
     }

@@ -123,11 +123,17 @@ namespace dungeon
         struct HeroInfo
         {
             std::unique_ptr<Hero> hero = nullptr;       //!< Hero pointer.
+
+            // Saved states
             ElementData data;                           //!< All its data.
             HeroStatus status = HeroStatus::TO_SPAWN;   //!< Hero status.
             float spawnDelay = 0.f;                     //!< Seconds to wait before effective spawning.
             float hp = 0.f;                             //!< How many HP the hero has left.
             bool reward = false;                        //!< Do the player get a reward when this hero is removed?
+
+            // Not saved states
+            bool damageFeedback = false;                    //!< Are we showing a damage animation?
+            float damageFeedbackTime = 0.f;                 //!< How long to wait for the damage state.
         };
 
     private:

@@ -58,7 +58,7 @@ void MonstersDB::add(const std::string& filename)
     for (const auto& dataNode : monsterNode) {
         std::wstring name = dataNode.attribute(L"name").as_string();
 
-        if (name == L"startingHP")              monsterData.startingHP = dataNode.attribute(L"startingHP").as_float();
+        if (name == L"startingHP")              monsterData.startingHP = dataNode.attribute(L"value").as_float();
         else if (name == L"unlockRequirement")  readCostNode(monsterData.unlockRequirement, dataNode);
         else if (name == L"unlockCost")         readCostNode(monsterData.unlockCost, dataNode);
         else if (name == L"baseCost")           readCostNode(monsterData.baseCost, dataNode);

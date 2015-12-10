@@ -28,6 +28,15 @@ void Hero::onDeath()
     m_lua["_onDeath"]();
 }
 
+//-------------------//
+//----- Control -----//
+
+void Hero::setDamaged(bool damaged)
+{
+    // TODO we should probably select an animation
+    m_sprite.setTiltColor(damaged? sf::Color::Red : sf::Color::White);
+}
+
 //------------------------//
 //----- Element data -----//
 

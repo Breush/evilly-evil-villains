@@ -9,6 +9,15 @@ Monster::Monster(Inter& inter, Graph& graph)
 {
 }
 
+//-------------------//
+//----- Control -----//
+
+void Monster::setDamaged(bool damaged)
+{
+    // TODO we should probably select an animation
+    m_sprite.setTiltColor(damaged? sf::Color::Red : sf::Color::White);
+}
+
 //------------------------//
 //----- Element data -----//
 
