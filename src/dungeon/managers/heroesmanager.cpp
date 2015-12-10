@@ -38,7 +38,7 @@ void HeroesManager::update(const sf::Time& dt)
         // Spawn hero or update delay before spawning
         else if (heroInfo.status == HeroStatus::TO_SPAWN) {
             heroInfo.spawnDelay -= dt.asSeconds();
-            if (heroInfo.spawnDelay > 0.f) continue;
+            if (heroInfo.spawnDelay > 0.f) goto _continue;
             heroInfo.status = HeroStatus::RUNNING;
 
             // No entrance? Hero is disappointed
@@ -47,7 +47,7 @@ void HeroesManager::update(const sf::Time& dt)
                 heroInfo.status = HeroStatus::TO_BE_REMOVED;
                 Application::context().sounds.play("dungeon/heroes/no_entrance");
                 m_data->fameWallet().sub(2u);
-                continue;
+                goto _continue;
             }
 
             // Choose an entrance
@@ -73,6 +73,7 @@ void HeroesManager::update(const sf::Time& dt)
             continue;
         }
 
+        _continue:
         ++it;
     }
 
@@ -215,7 +216,7 @@ void HeroesManager::spawnHeroesGroup()
     // Refresh all element data, as pending reference might be lost
     refreshHeroesData();
 
-    m_nextGroupDelay = 37.f + static_cast<float>(rand() % 120u);
+    m_nextGroupDelay = delay + 10.f + static_cast<float>(rand() % 120u);
 }
 
 //--------------------------//

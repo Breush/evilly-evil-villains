@@ -60,7 +60,7 @@ namespace dungeon
         //! @{
 
         //! Will stop the entity to move and won't call for nextNode anymore.
-        void lua_stopMoving();
+        void lua_setMoving(bool moving);
 
         //! Returns true if the current direction is matching.
         bool lua_isLookingDirection(const std::string& direction) const;

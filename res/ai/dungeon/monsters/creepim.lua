@@ -49,7 +49,7 @@ end
 function startFusing(timeOffset)
     -- Stop doing anything else
     fusing = true
-    eev_stopMoving()
+    eev_setMoving(false)
 
     -- Select correct way to explode
     if eev_isLookingDirection("left") then

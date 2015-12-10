@@ -796,6 +796,7 @@ void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
 
     bool dungeonChanged = pFacility->common->entrance;
     dungeonChanged |= !pFacility->tunnels.empty();
+    dungeonChanged |= pFacility->barrier;
 
     removeFacilityLinks(coords, *pFacility);
     roomInfo.facilities.erase(pFacility);
