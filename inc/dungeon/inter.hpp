@@ -28,6 +28,18 @@ namespace dungeon
         //! A basic void callback.
         using Callback = std::function<void()>;
 
+        //! A tile of the dungeon.
+        struct Tile
+        {
+            sf::Vector2u coords;                                        //!< The coordinates of the tile (floor/room).
+            std::vector<std::unique_ptr<scene::RectangleShape>> layers; //!< All sprites to draw, from furthest to nearest.
+            std::vector<std::unique_ptr<Facility>> facilities;          //!< The facilities in the tile.
+            std::unique_ptr<Trap> trap = nullptr;                       //!< The trap, protecting the tile.
+            std::unique_ptr<scene::Label> totalDoshLabel;               //!< The total dosh inside the room.
+            std::unique_ptr<scene::Label> harvestableDoshLabel;         //!< The harvestable dosh.
+            bool movingLocked = false;                                  //!< Is the tile locked because it is moving?
+        };
+
         //! A moving room.
         struct MovingRoom
         {
@@ -36,6 +48,8 @@ namespace dungeon
             sf::Vector2u coords;                    //!< Which room to move (starting coords).
             sf::Vector2f velocity;                  //!< At which speed and direction to go.
             Callback onFinishCallback = nullptr;    //!< A function to execute when this animation finished.
+            std::vector<Monster*> monsters;         //!< The list of monsters to move.
+            std::vector<Hero*> heroes;              //!< The list of heroes to move.
         };
 
     public:
@@ -394,18 +408,6 @@ namespace dungeon
         void refreshOuterWalls();
 
         //! @}
-
-        //! A tile of the dungeon.
-        struct Tile
-        {
-            sf::Vector2u coords;                                        //!< The coordinates of the tile (floor/room).
-            std::vector<std::unique_ptr<scene::RectangleShape>> layers; //!< All sprites to draw, from furthest to nearest.
-            std::vector<std::unique_ptr<Facility>> facilities;          //!< The facilities in the tile.
-            std::unique_ptr<Trap> trap = nullptr;                       //!< The trap, protecting the tile.
-            std::unique_ptr<scene::Label> totalDoshLabel;               //!< The total dosh inside the room.
-            std::unique_ptr<scene::Label> harvestableDoshLabel;         //!< The harvestable dosh.
-            bool movingLocked = false;                                  //!< Is the tile locked because it is moving?
-        };
 
     private:
 

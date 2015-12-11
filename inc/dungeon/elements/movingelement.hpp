@@ -44,6 +44,15 @@ namespace dungeon
 
         //! @}
 
+        //------------------------//
+        //! @name Element control
+        //! @{
+
+        //! Are we allowed to move?
+        void setMoving(bool moving);
+
+        //! @}
+
     protected:
 
         //----------------//

@@ -1,31 +1,46 @@
 <?xml version="1.0"?>
-<dungeon name="Château d'eau" floorsCount="17" roomsByFloor="2">
-    <resources>
-        <soul value="0" />
-        <fame value="23" />
-        <debt perWeekDosh="200" weeksLeft="1" />
-    </resources>
-	<heroes />
+<dungeon name="Château d'eau" time="42" floorsCount="17" roomsByFloor="2">
+	<resources>
+		<soul value="0" />
+		<fame value="17" />
+		<debt perWeekDosh="200" weeksLeft="1" />
+	</resources>
+	<dynamics />
+	<heroes nextWaveDelay="94.6212006" />
 	<monstersGenerics>
 		<sand_spirit unlocked="true" reserve="1" countdown="0" />
-		<creepim unlocked="true" reserve="3" countdown="5" />
+		<creepim unlocked="true" reserve="2" countdown="0" />
 	</monstersGenerics>
-	<monsters />
+	<monsters>
+		<monster type="creepim" hp="50" status="running">
+			<fusingTime type="float" value="0" />
+			<tx type="float" value="1.5" />
+			<ty type="float" value="1.5" />
+			<ry type="float" value="1.5" />
+			<rx type="float" value="1.5" />
+		</monster>
+	</monsters>
 	<trapsGenerics>
 		<pickpock unlocked="true" />
 		<trompe_loeil unlocked="true" />
+		<razor unlocked="false" />
 	</trapsGenerics>
 	<floor pos="0">
 		<room pos="0" state="constructed" />
-		<room pos="1" state="constructed" />
+		<room pos="1" state="constructed">
+			<facility barrier="true" type="piston">
+				<direction type="uint32" value="0" />
+				<on type="bool" value="false" />
+			</facility>
+		</room>
 	</floor>
 	<floor pos="1">
-		<room pos="0" state="constructed" />
+		<room pos="0" state="void" />
 		<room pos="1" state="constructed" />
 	</floor>
 	<floor pos="2">
-		<room pos="0" state="constructed" />
-		<room pos="1" state="void" />
+		<room pos="0" state="void" />
+		<room pos="1" state="constructed" />
 	</floor>
 	<floor pos="3">
 		<room pos="0" state="constructed" />
@@ -37,11 +52,16 @@
 	</floor>
 	<floor pos="5">
 		<room pos="0" state="void" />
-		<room pos="1" state="constructed" />
+		<room pos="1" state="void" />
 	</floor>
 	<floor pos="6">
 		<room pos="0" state="constructed" />
-		<room pos="1" state="constructed" />
+		<room pos="1" state="constructed">
+			<facility barrier="true" type="piston">
+				<direction type="uint32" value="0" />
+				<on type="bool" value="true" />
+			</facility>
+		</room>
 	</floor>
 	<floor pos="7">
 		<room pos="0" state="constructed" />

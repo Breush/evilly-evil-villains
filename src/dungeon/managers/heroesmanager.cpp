@@ -51,10 +51,12 @@ void HeroesManager::update(const sf::Time& dt)
             }
 
             // Choose an entrance
-            auto startingNode = alea::rand(startingNodes);
-            auto coords = toNodeData(startingNode)->coords;
-            heroInfo.data[L"rx"].init_float(coords.x + 0.5f);
-            heroInfo.data[L"ry"].init_float(coords.y + 0.5f);
+            if (!heroInfo.spawnHard) {
+                auto startingNode = alea::rand(startingNodes);
+                auto coords = toNodeData(startingNode)->coords;
+                heroInfo.data[L"rx"].init_float(coords.x + 0.5f);
+                heroInfo.data[L"ry"].init_float(coords.y + 0.5f);
+            }
 
             // Create the hero object and add it as an Inter child
             auto& hero = heroInfo.hero;
@@ -65,6 +67,8 @@ void HeroesManager::update(const sf::Time& dt)
 
         // Remove the hero
         else if (heroInfo.status == HeroStatus::TO_BE_REMOVED) {
+            if (heroInfo.locked) goto _continue;
+
             if (heroInfo.reward && heroInfo.hero != nullptr)
                 heroInfo.hero->onDeath();
 
@@ -141,6 +145,7 @@ void HeroesManager::load(const pugi::xml_node& node)
         else if (status == L"running") {
             heroInfo.status = HeroStatus::TO_SPAWN;
             heroInfo.spawnDelay = 0.f;
+            heroInfo.spawnHard = true;
         }
     }
 
@@ -159,7 +164,7 @@ void HeroesManager::save(pugi::xml_node node)
         heroNode.append_attribute(L"hp") = heroInfo.hp;
 
         if (heroInfo.status == HeroStatus::TO_SPAWN) {
-            heroNode.append_attribute(L"status") = L"spawning";
+            heroNode.append_attribute(L"status") = heroInfo.spawnHard? L"running" : L"spawning";
             heroNode.append_attribute(L"spawnDelay") = heroInfo.spawnDelay;
         }
         else if (heroInfo.status == HeroStatus::RUNNING) {
@@ -238,6 +243,30 @@ void HeroesManager::damage(const Hero* hero, float amount)
         heroInfo.damageFeedbackTime = 0.05f;
         heroInfo.damageFeedback = true;
 
+        return;
+    }
+}
+
+void HeroesManager::listRoomHeroes(const sf::Vector2u& coords, std::vector<Hero*>& heroesList) const
+{
+    heroesList.clear();
+
+    for (auto& heroInfo : m_heroesInfo) {
+        if (heroInfo.status != HeroStatus::RUNNING) continue;
+        if (static_cast<uint>(heroInfo.data.at(L"rx").as_float()) != coords.x) continue;
+        if (static_cast<uint>(heroInfo.data.at(L"ry").as_float()) != coords.y) continue;
+
+        heroesList.emplace_back(heroInfo.hero.get());
+    }
+}
+
+void HeroesManager::setLocked(const Hero* hero, bool locked)
+{
+    for (auto& heroInfo : m_heroesInfo) {
+        if (heroInfo.hero.get() != hero) continue;
+        if (heroInfo.status != HeroStatus::RUNNING) continue;
+        heroInfo.hero->setMoving(!locked);
+        heroInfo.locked = locked;
         return;
     }
 }

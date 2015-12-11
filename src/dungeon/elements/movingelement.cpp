@@ -107,8 +107,7 @@ const Graph::NodeData* MovingElement::findNextNode(const Graph::NodeData* curren
 
 void MovingElement::lua_setMoving(bool moving)
 {
-    m_moving = moving;
-    lerpable()->setTargetPosition(localPosition());
+    setMoving(moving);
 }
 
 bool MovingElement::lua_isLookingDirection(const std::string& direction) const
@@ -120,6 +119,14 @@ bool MovingElement::lua_isLookingDirection(const std::string& direction) const
 
 //---------------------------//
 //----- Node management -----//
+
+void MovingElement::setMoving(bool moving)
+{
+    m_moving = moving;
+    setNewTargetPosition(localPosition());
+    lerpable()->setPositionLerping(moving);
+    if (moving) updateFromGraph();
+}
 
 void MovingElement::setCurrentNode(const ai::Node* node)
 {

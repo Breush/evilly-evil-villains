@@ -48,11 +48,13 @@ void MonstersManager::update(const sf::Time& dt)
 
         // Remove the monster
         else if (monsterInfo.status == MonsterStatus::TO_BE_REMOVED) {
+            if (monsterInfo.locked) goto _continue;
             it = m_monstersInfo.erase(it);
             monstersCountChanged = true;
             continue;
         }
 
+        _continue:
         ++it;
     }
 
@@ -184,6 +186,30 @@ void MonstersManager::addRoomMonster(const sf::Vector2u& coords, const std::wstr
     m_monstersInfo.emplace_back(std::move(monsterInfo));
 
     refreshMonstersData();
+}
+
+void MonstersManager::listRoomMonsters(const sf::Vector2u& coords, std::vector<Monster*>& monstersList) const
+{
+    monstersList.clear();
+
+    for (auto& monsterInfo : m_monstersInfo) {
+        if (monsterInfo.status != MonsterStatus::RUNNING) continue;
+        if (static_cast<uint>(monsterInfo.data.at(L"rx").as_float()) != coords.x) continue;
+        if (static_cast<uint>(monsterInfo.data.at(L"ry").as_float()) != coords.y) continue;
+
+        monstersList.emplace_back(monsterInfo.monster.get());
+    }
+}
+
+void MonstersManager::setLocked(const Monster* monster, bool locked)
+{
+    for (auto& monsterInfo : m_monstersInfo) {
+        if (monsterInfo.monster.get() != monster) continue;
+        if (monsterInfo.status != MonsterStatus::RUNNING) continue;
+        monsterInfo.monster->setMoving(!locked);
+        monsterInfo.locked = locked;
+        return;
+    }
 }
 
 //---------------//

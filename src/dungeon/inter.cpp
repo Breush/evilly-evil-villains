@@ -71,11 +71,8 @@ void Inter::updateRoutine(const sf::Time& dt)
         // Time update
         movingRoom.animationTime += timeElapsed;
         auto adaptedTimeElapsed = timeElapsed;
-        if (movingRoom.animationTime >= movingRoom.animationDelay) {
+        if (movingRoom.animationTime >= movingRoom.animationDelay)
             adaptedTimeElapsed -= (movingRoom.animationTime - movingRoom.animationDelay);
-            if (movingRoom.onFinishCallback != nullptr) movingRoom.onFinishCallback();
-            tile.movingLocked = false;
-        }
 
         // Move all it contains
         const auto offset = movingRoom.velocity * adaptedTimeElapsed;
@@ -85,8 +82,19 @@ void Inter::updateRoutine(const sf::Time& dt)
         if (tile.totalDoshLabel != nullptr)         tile.totalDoshLabel->localMove(offset);
         if (tile.harvestableDoshLabel != nullptr)   tile.harvestableDoshLabel->localMove(offset);
 
-        // TODO Move entities (monsters/heroes)
-        // -> How to inform heroes manager?
+        // Move moving elements (monsters/heroes)
+        for (auto& monster : movingRoom.monsters)   monster->localMove(offset);
+        for (auto& hero : movingRoom.heroes)        hero->localMove(offset);
+
+        // The end
+        if (movingRoom.animationTime >= movingRoom.animationDelay) {
+            // Unlock them all
+            tile.movingLocked = false;
+            for (auto monster : movingRoom.monsters)    m_data->monstersManager().setLocked(monster, false);
+            for (auto hero :    movingRoom.heroes)      m_data->heroesManager().setLocked(hero, false);
+
+            if (movingRoom.onFinishCallback != nullptr) movingRoom.onFinishCallback();
+        }
     }
 
     // Remove all the rooms which finished their animation
@@ -567,11 +575,17 @@ bool Inter::pushRoom(const sf::Vector2u& coords, Direction direction, uint anima
         movingRoom.animationDelay = animationDelayS;
         movingRoom.coords = movingCoords;
         movingRoom.velocity = velocity;
-        m_movingRooms.emplace_back(std::move(movingRoom));
 
-        // Lock it
+        // Find moving elements
+        m_data->monstersManager().listRoomMonsters(movingCoords, movingRoom.monsters);
+        m_data->heroesManager().listRoomHeroes(movingCoords, movingRoom.heroes);
+
+        // Lock them all
         m_tiles[movingCoords].movingLocked = true;
+        for (auto monster : movingRoom.monsters)    m_data->monstersManager().setLocked(monster, true);
+        for (auto hero : movingRoom.heroes)         m_data->heroesManager().setLocked(hero, true);
 
+        m_movingRooms.emplace_back(std::move(movingRoom));
         movingCoords = targetCoords;
     }
 

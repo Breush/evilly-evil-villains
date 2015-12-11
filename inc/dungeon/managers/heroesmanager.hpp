@@ -16,6 +16,33 @@ namespace dungeon
 
     class HeroesManager final : public context::EventReceiver
     {
+        //! Basic hero status, modifications occurs during update.
+        enum class HeroStatus
+        {
+            RUNNING,        //!< Hero is running inside the dungeon, standard status.
+            TO_BE_REMOVED,  //!< Hero will be removed during next update.
+            TO_SPAWN,       //!< Hero will spawn, delay indicated into data.
+        };
+
+        //! Contains an Hero plus its status.
+        struct HeroInfo
+        {
+            std::unique_ptr<Hero> hero = nullptr;       //!< Hero pointer.
+
+            // Saved states
+            ElementData data;                           //!< All its data.
+            HeroStatus status = HeroStatus::TO_SPAWN;   //!< Hero status.
+            float spawnDelay = 0.f;                     //!< Seconds to wait before effective spawning.
+            float hp = 0.f;                             //!< How many HP the hero has left.
+            bool reward = false;                        //!< Do the player get a reward when this hero is removed?
+
+            // Not saved states
+            bool spawnHard = false;                     //!< Is the spawn point already defined?
+            bool locked = false;                        //!< Can the hero be removed?
+            bool damageFeedback = false;                //!< Are we showing a damage animation?
+            float damageFeedbackTime = 0.f;             //!< How long to wait for the damage state.
+        };
+
     public:
 
         //! Constructor.
@@ -64,6 +91,12 @@ namespace dungeon
         //! Damage the hero specified.
         void damage(const Hero* hero, float amount);
 
+        //! Whether to lock a hero from other changes (won't be removed).
+        void setLocked(const Hero* hero, bool locked);
+
+        //! Set the list to the room heroes.
+        void listRoomHeroes(const sf::Vector2u& coords, std::vector<Hero*>& heroesList) const;
+
         //! @}
 
         //------------------------//
@@ -88,6 +121,15 @@ namespace dungeon
 
         //! @}
 
+        //--------------------------//
+        //! @name Heroes management
+        //! @{
+
+        //! Create the hero pointer and bind it to its data.
+        void createHeroObject(HeroInfo& heroInfo);
+
+        //! @}
+
         //--------------------------------//
         //! @name Artificial intelligence
         //! @{
@@ -108,33 +150,6 @@ namespace dungeon
         void refreshHeroesData();
 
         //! @}
-
-    private:
-
-        //! Basic hero status, modifications occurs during update.
-        enum class HeroStatus
-        {
-            RUNNING,        //!< Hero is running inside the dungeon, standard status.
-            TO_BE_REMOVED,  //!< Hero will be removed during next update.
-            TO_SPAWN,       //!< Hero will spawn, delay indicated into data.
-        };
-
-        //! Contains an Hero plus its status.
-        struct HeroInfo
-        {
-            std::unique_ptr<Hero> hero = nullptr;       //!< Hero pointer.
-
-            // Saved states
-            ElementData data;                           //!< All its data.
-            HeroStatus status = HeroStatus::TO_SPAWN;   //!< Hero status.
-            float spawnDelay = 0.f;                     //!< Seconds to wait before effective spawning.
-            float hp = 0.f;                             //!< How many HP the hero has left.
-            bool reward = false;                        //!< Do the player get a reward when this hero is removed?
-
-            // Not saved states
-            bool damageFeedback = false;                    //!< Are we showing a damage animation?
-            float damageFeedbackTime = 0.f;                 //!< How long to wait for the damage state.
-        };
 
     private:
 

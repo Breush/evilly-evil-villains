@@ -5,7 +5,7 @@
     <data name="unlockCost" dosh="50" />
     <data name="baseCost" dosh="150" soul="1" />
     <data name="weeklyCost" dosh="25" />
-    <data name="speed" vx="0.51" vy="0." />
+    <data name="speed" vx="0.51" vy="0.2" />
     <data name="pause" delay="1." />
     <data name="hireCountdown" delay="10" />
 </monster>

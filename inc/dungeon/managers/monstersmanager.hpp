@@ -70,6 +70,12 @@ namespace dungeon
         //! Add the monster in the room.
         void addRoomMonster(const sf::Vector2u& coords, const std::wstring& monsterID);
 
+        //! Whether to lock a monster from other changes (won't be removed).
+        void setLocked(const Monster* monster, bool locked);
+
+        //! Set the list to the room monsters.
+        void listRoomMonsters(const sf::Vector2u& coords, std::vector<Monster*>& monstersList) const;
+
         //! @}
 
     protected:
@@ -112,6 +118,7 @@ namespace dungeon
             float hp = 0.f;                                 //!< How many HP the monster has left.
 
             // Not saved states
+            bool locked = false;                            //!< Can the monster be removed?
             bool damageFeedback = false;                    //!< Are we showing a damage animation?
             float damageFeedbackTime = 0.f;                 //!< How long to wait for the damage state.
         };
