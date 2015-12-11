@@ -41,17 +41,18 @@ void HeroesManager::update(const sf::Time& dt)
             if (heroInfo.spawnDelay > 0.f) goto _continue;
             heroInfo.status = HeroStatus::RUNNING;
 
-            // No entrance? Hero is disappointed
-            const auto& startingNodes = m_graph->startingNodes();
-            if (startingNodes.empty()) {
-                heroInfo.status = HeroStatus::TO_BE_REMOVED;
-                Application::context().sounds.play("dungeon/heroes/no_entrance");
-                m_data->fameWallet().sub(2u);
-                goto _continue;
-            }
-
-            // Choose an entrance
+            // If we are really spawning it (choosing an entrance, etc.)
             if (!heroInfo.spawnHard) {
+                // No entrance? Hero is disappointed
+                const auto& startingNodes = m_graph->startingNodes();
+                if (startingNodes.empty()) {
+                    heroInfo.status = HeroStatus::TO_BE_REMOVED;
+                    Application::context().sounds.play("dungeon/heroes/no_entrance");
+                    m_data->fameWallet().sub(2u);
+                    goto _continue;
+                }
+
+                // Choose an entrance
                 auto startingNode = alea::rand(startingNodes);
                 auto coords = toNodeData(startingNode)->coords;
                 heroInfo.data[L"rx"].init_float(coords.x + 0.5f);
