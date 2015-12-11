@@ -55,6 +55,8 @@ namespace dungeon
 
         void updateRoutine(const sf::Time& dt) override;
 
+        bool isPointOverable(const sf::Vector2f& relPos) const noexcept final;
+
         //! @}
 
         //---------------//

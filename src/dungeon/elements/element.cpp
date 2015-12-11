@@ -93,6 +93,13 @@ void Element::updateRoutine(const sf::Time& dt)
     m_lua["_update"](dt.asSeconds());
 }
 
+bool Element::isPointOverable(const sf::Vector2f& relPos) const noexcept
+{
+    // Is the position over the hitbox of this element?
+    auto position = relPos - getOrigin();
+    return m_sprite.hitbox().contains(position);
+}
+
 //------------------//
 //----- Events -----//
 
@@ -120,13 +127,6 @@ bool Element::handleMouseButtonPressed(const sf::Mouse::Button button, const sf:
 
 bool Element::handleMouseMoved(const sf::Vector2f& relPos, const sf::Vector2f&)
 {
-    // Is the mouse over the hitbox of this element?
-    auto position = relPos - getOrigin();
-    if (!m_sprite.hitbox().contains(position)) {
-        hideMouseOverlay();
-        return false;
-    }
-
     showMouseOverlay(relPos);
     return true;
 }

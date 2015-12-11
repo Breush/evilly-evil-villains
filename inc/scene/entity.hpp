@@ -224,6 +224,9 @@ namespace scene
         //! Draws all parts of the entity.
         void drawParts(sf::RenderTarget& target, sf::RenderStates states) const;
 
+        //! Is the relative position to be considered.
+        virtual bool isPointOverable(const sf::Vector2f& relPos) const noexcept { return true; }
+
         //! Called whenever the position/rotation/scale changed.
         virtual void onTransformChanges() {}
 

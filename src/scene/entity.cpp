@@ -250,9 +250,13 @@ Entity* Entity::firstOver(const sf::Vector2f& position)
     bounds = getTransform().transformRect(bounds);
     bounds = tools::intersect(m_globalClipArea, bounds);
     returnif (bounds.width < 0.f || bounds.height < 0.f) nullptr;
-    returnif (bounds.contains(position)) this;
+    returnif (!bounds.contains(position)) nullptr;
 
-    return nullptr;
+    // Do we really consider we are over this entity
+    auto relPos = getInverseTransform().transformPoint(position);
+    returnif (!isPointOverable(relPos)) nullptr;
+
+    return this;
 }
 
 //---------------------------//
