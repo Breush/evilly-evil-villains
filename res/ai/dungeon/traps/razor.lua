@@ -34,6 +34,8 @@ end
 -- Whenever a hero or a monster comes too close
 function cbEntityClose(UID)
     if not damaging then
+        eev_selectAnimation("attack")
+        eev_restartAnimation()
         eev_damageUID(UID, 0.2)
         damagingMark = true
     end
@@ -46,7 +48,7 @@ end
 function _update(dt)
     if damagingMark then
         damagingMark = false
-        damagingCooldown = 0.2
+        damagingCooldown = 0.5
         damaging = true
     end
 

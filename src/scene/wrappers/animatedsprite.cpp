@@ -96,6 +96,7 @@ void AnimatedSprite::restart()
 
     refreshSpriterEntityTransform();
     m_spriterEntity->setCurrentTime(0.);
+    m_spriterEntity->isPlaying = true;
 
     // Setting the hitbox to some default if none
     m_hasHitbox = (m_spriterEntity->getObjectInstance("hitbox") != nullptr);
