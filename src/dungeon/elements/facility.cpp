@@ -1,5 +1,6 @@
 #include "dungeon/elements/facility.hpp"
 
+#include "dungeon/elements/movingelement.hpp"
 #include "dungeon/data.hpp"
 #include "dungeon/inter.hpp"
 #include "tools/string.hpp"
@@ -46,6 +47,14 @@ Facility::Facility(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dunge
     m_lua["_register"]();
 
     m_lua["_reinit"]();
+}
+
+//-----------------------------//
+//----- Elements callback -----//
+
+void Facility::movingElementEnterTunnel(MovingElement& movingElement)
+{
+    std::cerr << "Entity " << movingElement.UID() << " entered our tunnel!" << std::endl;
 }
 
 //---------------------------//

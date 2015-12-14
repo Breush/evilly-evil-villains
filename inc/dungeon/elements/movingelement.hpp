@@ -24,6 +24,13 @@ namespace dungeon
             bool exit = false;      //!< Whether the hero can exit the dungeon by this node or not.
         };
 
+        //! The way to the next room.
+        struct NodeWay
+        {
+            const Graph::NodeData* nodeData = nullptr;              //!< The target node.
+            const Graph::NeighbourData* neighbourData = nullptr;    //!< The graph neighbour that get us here (if any).
+        };
+
     public:
 
         //! Constructor.
@@ -90,10 +97,10 @@ namespace dungeon
         void reinit();
 
         //! Updates the AI.
-        const Graph::NodeData* findNextNode(const Graph::NodeData* currentNode);
+        NodeWay findNextNode(const Graph::NodeData* currentNode);
 
         //! Select the node to move the hero to.
-        void setCurrentNode(const ai::Node* node);
+        void setCurrentNode(const NodeWay& nodeWay);
 
         //! Get all weight information from a node.
         Weight getWeight(const Graph::NodeData* node);
@@ -134,13 +141,12 @@ namespace dungeon
         // Graph evaluation for AI
         uint m_tick = 0u;                                       //!< The current tick (how many nodes has been visited so far).
         std::unordered_map<sf::Vector2u, NodeInfo> m_nodeInfos; //!< Remembers the visits of a certain node.
-        std::vector<int> m_evaluations;                         //!< Stores the evaluations of the rooms, mainly used for debug.
 
         // Artificial intelligence
-        const ai::Node* m_currentNode = nullptr;    //!< The current room where is this monster.
-        bool m_left = false;                        //!< Is the creepim looking left?
-        bool m_moving = true;                       //!< Is the monster still tries to evaluate next room?
-        float m_pauseTime = -1.f;                   //!< Current time waiting for delay.
-        float m_pauseDelay = 0.f;                   //!< How many seconds to stay still if not going to next node.
+        const Graph::NodeData* m_currentNode = nullptr; //!< The current room where is this monster.
+        bool m_left = false;                            //!< Is the creepim looking left?
+        bool m_moving = true;                           //!< Is the monster still tries to evaluate next room?
+        float m_pauseTime = -1.f;                       //!< Current time waiting for delay.
+        float m_pauseDelay = 0.f;                       //!< How many seconds to stay still if not going to next node.
     };
 }

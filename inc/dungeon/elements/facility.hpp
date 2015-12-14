@@ -7,6 +7,7 @@ namespace dungeon
     // Forward declarations
 
     class FacilityInfo;
+    class MovingElement;
 
     //! A generic facility interface.
 
@@ -24,6 +25,24 @@ namespace dungeon
 
         std::string detectKey() const final { return "facility"; }
         std::string _name() const final { return "dungeon::Facility"; }
+
+        //---------------------------//
+        //! @name Elements callbacks
+        //! @{
+
+        //! Warning about a element entering this facility tunnel.
+        void movingElementEnterTunnel(MovingElement& movingElement);
+
+        //! @}
+
+        //----------------------------//
+        //! @name Getters and setters
+        //! @{
+
+        //! Access the info used.
+        inline const FacilityInfo& info() const { return m_facilityInfo; }
+
+        //! @}
 
     protected:
 

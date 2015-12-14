@@ -52,13 +52,13 @@ void Hero::rebindElementData()
 
 void Hero::lua_getOut()
 {
-    returnif (!toNodeData(m_currentNode)->entrance);
+    returnif (!m_currentNode->entrance);
     m_manager.heroGetsOut(this);
 }
 
 uint Hero::lua_stealTreasure()
 {
-    auto maxStolenDosh = std::min(100u, toNodeData(m_currentNode)->treasure);
+    auto maxStolenDosh = std::min(100u, m_currentNode->treasure);
     auto stolenDosh = 1u + rand() % maxStolenDosh;
-    return m_manager.heroStealsTreasure(this, toNodeData(m_currentNode)->coords, stolenDosh);
+    return m_manager.heroStealsTreasure(this, m_currentNode->coords, stolenDosh);
 }

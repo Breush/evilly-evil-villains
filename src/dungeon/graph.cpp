@@ -14,7 +14,15 @@ const ai::Node* Graph::node(const sf::Vector2u& coords) const
     if (coords.x >= m_floorsCount || coords.y >= m_roomsByFloor)
         return nullptr;
 
-    return m_nodes.at(coords.x).at(coords.y).node;
+    return m_nodes[coords.x][coords.y].node;
+}
+
+const Graph::NodeData* Graph::nodeData(const sf::Vector2u& coords) const
+{
+    if (coords.x >= m_floorsCount || coords.y >= m_roomsByFloor)
+        return nullptr;
+
+    return &m_nodes[coords.x][coords.y];
 }
 
 //------------------//
@@ -41,6 +49,24 @@ void Graph::useData(Data& data)
 
     setEmitter(m_data);
     reconstructFromData();
+}
+
+//------------------------------//
+//----- Graph construction -----//
+
+void Graph::addNodeNeighbour(NodeData& nodeData, sf::Vector2u& neighbourCoords, const std::wstring& tunnelFacilityID)
+{
+    auto& neighbourNodeData = m_nodes[neighbourCoords.x][neighbourCoords.y];
+
+    auto neighbourData = std::make_unique<NeighbourData>();
+    neighbourData->tunnelFacilityID = tunnelFacilityID;
+
+    ai::Neighbour neighbour;
+    neighbour.node = neighbourNodeData.node;
+    neighbour.data = neighbourData.get();
+    nodeData.node->neighbours.emplace_back(std::move(neighbour));
+
+    nodeData.neighbours.emplace_back(std::move(neighbourData));
 }
 
 //-----------------------------------//
@@ -123,7 +149,7 @@ void Graph::updateFromData()
                 if (tunnel.relative) tunnelCoords += coords;
 
                 if (m_data->isRoomWalkable(tunnelCoords))
-                    node.neighbours.emplace_back(m_nodes.at(tunnelCoords.x).at(tunnelCoords.y).node);
+                    addNodeNeighbour(nodeData, tunnelCoords, facilityInfo.data.type());
             }
         }
 
@@ -131,7 +157,7 @@ void Graph::updateFromData()
         for (auto direction : {EAST, WEST}) {
             auto neighbourCoords = m_data->roomNeighbourCoords(coords, direction);
             if (m_data->isRoomWalkable(neighbourCoords))
-                node.neighbours.emplace_back(m_nodes.at(neighbourCoords.x).at(neighbourCoords.y).node);
+                addNodeNeighbour(nodeData, neighbourCoords);
         }
     }
 

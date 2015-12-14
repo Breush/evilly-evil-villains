@@ -36,10 +36,8 @@ void MovingElement::updateAI(const sf::Time& dt)
     }
 
     // Get next room
-    if (m_currentNode != nullptr) {
-        const auto& nodeData = toNodeData(m_currentNode);
-        setCurrentNode(findNextNode(nodeData)->node);
-    }
+    if (m_currentNode != nullptr)
+        setCurrentNode(findNextNode(m_currentNode));
 }
 
 void MovingElement::updateRoutine(const sf::Time& dt)
@@ -57,10 +55,12 @@ void MovingElement::updateRoutine(const sf::Time& dt)
 //-------------------------------//
 //----- Graph AI evaluation -----//
 
-const Graph::NodeData* MovingElement::findNextNode(const Graph::NodeData* currentNode)
+MovingElement::NodeWay MovingElement::findNextNode(const Graph::NodeData* currentNode)
 {
+    NodeWay nodeWay;
+
     // That's not a node...
-    returnif (currentNode == nullptr) nullptr;
+    returnif (currentNode == nullptr) nodeWay;
 
     // First visit to this node
     if (m_nodeInfos[currentNode->coords].visits == 0u)
@@ -70,22 +70,18 @@ const Graph::NodeData* MovingElement::findNextNode(const Graph::NodeData* curren
     m_nodeInfos[currentNode->coords].lastVisit = m_tick++;
 
     // No neighbours
-    returnif (currentNode->node->neighbours.size() == 0u) currentNode;
+    nodeWay.nodeData = currentNode;
+    returnif (currentNode->node->neighbours.size() == 0u) nodeWay;
 
     // Consider that the current room might be the best node
-    std::vector<const Graph::NodeData*> bestNodes;
+    std::vector<NodeWay> bestNodes;
     int maxEvaluation = call("_evaluateReference", currentNode);
-    bestNodes.push_back(currentNode);
-
-    // Register evaluations
-    m_evaluations.clear();
-    m_evaluations.emplace_back(maxEvaluation);
+    bestNodes.emplace_back(std::move(nodeWay));
 
     // Get the evaluation from lua
     for (const auto& neighbour : currentNode->node->neighbours) {
-        auto neighbourData = reinterpret_cast<const Graph::NodeData*>(neighbour->data);
-        int evaluation = call("_evaluate", neighbourData);
-        m_evaluations.emplace_back(evaluation);
+        auto nodeData = reinterpret_cast<const Graph::NodeData*>(neighbour.node->data);
+        int evaluation = call("_evaluate", nodeData);
 
         // Found a new limit for the best nodes
         if (evaluation > maxEvaluation) {
@@ -94,8 +90,12 @@ const Graph::NodeData* MovingElement::findNextNode(const Graph::NodeData* curren
         }
 
         // This node is among the best ones
-        if (evaluation == maxEvaluation)
-            bestNodes.emplace_back(neighbourData);
+        if (evaluation == maxEvaluation) {
+            auto neighbourData = reinterpret_cast<const Graph::NeighbourData*>(neighbour.data);
+            nodeWay.nodeData = nodeData;
+            nodeWay.neighbourData = neighbourData;
+            bestNodes.emplace_back(std::move(nodeWay));
+        }
     }
 
     // Return a new node randomly from the best ones
@@ -128,17 +128,28 @@ void MovingElement::setMoving(bool moving)
     if (moving) updateFromGraph();
 }
 
-void MovingElement::setCurrentNode(const ai::Node* node)
+void MovingElement::setCurrentNode(const NodeWay& nodeWay)
 {
     bool firstNode = (m_currentNode == nullptr);
 
-    // We're staying in the same room, pausing
-    if (!firstNode && m_currentNode == node) {
-        m_pauseTime = 0.f;
-        return;
+    if (!firstNode) {
+        // We're staying in the same room, pausing
+        if (m_currentNode == nodeWay.nodeData) {
+            m_pauseTime = 0.f;
+            return;
+        }
+        else if (nodeWay.neighbourData != nullptr)
+        {
+            const auto& tunnelFacilityID = nodeWay.neighbourData->tunnelFacilityID;
+
+            // We are going to take a tunnel, warn the facility
+            if (!tunnelFacilityID.empty()) {
+                m_inter.findRoomFacility(m_currentNode->coords, tunnelFacilityID)->movingElementEnterTunnel(*this);
+            }
+        }
     }
 
-    m_currentNode = node;
+    m_currentNode = nodeWay.nodeData;
 
     if (!firstNode && m_currentNode != nullptr)
         refreshPositionFromNode();
@@ -151,25 +162,19 @@ void MovingElement::updateFromGraph()
 {
     sf::Vector2f relCoords(m_edata->operator[](L"tx").as_float(), m_edata->operator[](L"ty").as_float());
     auto coords = sf::v2u(relCoords);
-    auto node = m_graph.node(coords);
+    auto nodeData = m_graph.nodeData(coords);
 
     // If the target is no more valid, find new one
     // by resetting the current node to the current position
-    if (node == nullptr || toNodeData(node)->constructed == false) {
+    if (nodeData == nullptr || nodeData->constructed == false) {
         setNewTargetPosition(localPosition());
         relCoords.x = m_edata->operator[](L"tx").as_float();
         relCoords.y = m_edata->operator[](L"ty").as_float();
         coords = sf::v2u(relCoords);
     }
 
-    // Refresh the target position
-    m_currentNode = m_graph.node(coords);
-}
-
-const Graph::NodeData* MovingElement::toNodeData(const ai::Node* node)
-{
-    returnif (node == nullptr) nullptr;
-    return reinterpret_cast<const Graph::NodeData*>(node->data);
+    // Refresh the pointer
+    m_currentNode = nodeData;
 }
 
 //-----------------------------------//
@@ -279,7 +284,7 @@ void MovingElement::refreshPositionFromNode()
 {
     returnif (m_currentNode == nullptr);
 
-    const auto& targetCoords = toNodeData(m_currentNode)->coords;
+    const auto& targetCoords = m_currentNode->coords;
     const auto tileLocalPosition = m_inter.tileLocalPosition(targetCoords);
     const auto monsterTilePosition = 0.5f * m_inter.tileSize();
     setNewTargetPosition(tileLocalPosition + monsterTilePosition);

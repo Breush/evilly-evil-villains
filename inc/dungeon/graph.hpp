@@ -9,12 +9,19 @@ namespace dungeon
     // Forward declarations
 
     class Data;
+    class FacilityInfo;
 
     //! The abstract structure of a dungeon.
 
     class Graph final : public ai::Graph, public context::EventReceiver
     {
     public:
+
+        //! The abstraction of a passage between two dungeon rooms.
+        struct NeighbourData
+        {
+            std::wstring tunnelFacilityID;  //!< The ID of the facility providing this way (empty if not a tunnel way).
+        };
 
         //! The abstraction of a room in a dungeon.
         /*!
@@ -31,6 +38,8 @@ namespace dungeon
             uint altitude = 0u;         //!< How high is the node.
             uint treasure = 0u;         //!< How many money there is stored in the node (total).
             bool entrance = false;      //!< Whether the node is an entrance or not.
+
+            std::vector<std::unique_ptr<NeighbourData>> neighbours; //!< Extra info about its neighbourhood.
         };
 
     public:
@@ -57,6 +66,9 @@ namespace dungeon
         //! Simple getter to access nodes.
         const ai::Node* node(const sf::Vector2u& coords) const;
 
+        //! Simple getter to access nodes data.
+        const NodeData* nodeData(const sf::Vector2u& coords) const;
+
         //! @}
 
     protected:
@@ -66,6 +78,15 @@ namespace dungeon
         //! @{
 
         void receive(const context::Event& event) final;
+
+        //! @}
+
+        //---------------------------//
+        //! @name Graph construction
+        //! @{
+
+        //! Add a neighbour to a node.
+        void addNodeNeighbour(NodeData& nodeData, sf::Vector2u& neighbourCoords, const std::wstring& tunnelFacilityID = L"");
 
         //! @}
 

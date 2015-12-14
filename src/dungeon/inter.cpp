@@ -623,6 +623,16 @@ void Inter::setRoomsByFloor(uint value)
 //----------------------//
 //----- Facilities -----//
 
+Facility* Inter::findRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID)
+{
+    for (auto& facility : m_tiles[coords].facilities)
+        if (facility->info().data.type() == facilityID)
+            return facility.get();
+
+    // Not found
+    return nullptr;
+}
+
 bool Inter::hasRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const
 {
     return m_data->hasFacility(coords, facilityID);

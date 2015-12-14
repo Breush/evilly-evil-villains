@@ -169,6 +169,9 @@ namespace dungeon
         //! @name Facilities
         //! @{
 
+        //! Get the handle to the facility in that room if any.
+        Facility* findRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID);
+
         //! Return true if a facility exists in this room.
         bool hasRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const;
 
