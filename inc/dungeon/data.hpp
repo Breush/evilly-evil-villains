@@ -207,6 +207,9 @@ namespace dungeon
         //! Set the specified room facility's barrier.
         void setRoomFacilityBarrier(const sf::Vector2u& coords, const std::wstring& facilityID, bool activated);
 
+        //! Set the specified room facility's treasure.
+        void setRoomFacilityTreasure(const sf::Vector2u& coords, const std::wstring& facilityID, uint32 amount);
+
         //! Add a tunnel to the specificed room facility.
         void addFacilityTunnel(FacilityInfo& facilityInfo, const sf::Vector2i& tunnelCoords, bool relative);
 

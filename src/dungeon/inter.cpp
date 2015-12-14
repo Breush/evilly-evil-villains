@@ -684,6 +684,11 @@ void Inter::setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& 
     m_data->setRoomFacilityLink(coords, facilityID, linkCoords);
 }
 
+void Inter::setRoomFacilityTreasure(const sf::Vector2u& coords, const std::wstring& facilityID, uint32 amount)
+{
+    m_data->setRoomFacilityTreasure(coords, facilityID, amount);
+}
+
 void Inter::setRoomFacilityBarrier(const sf::Vector2u& coords, const std::wstring& facilityID, bool activated)
 {
     m_data->setRoomFacilityBarrier(coords, facilityID, activated);

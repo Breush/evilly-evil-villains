@@ -25,7 +25,7 @@ void Graph::receive(const context::Event& event)
     returnif (m_data == nullptr || m_nodes.empty());
 
     const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
-    if (event.type == "facility_changed")
+    if (event.type == "treasure_changed")
         refreshTreasure(m_nodes.at(devent.room.x).at(devent.room.y));
     else if (event.type == "dungeon_changed")
         updateFromData();
@@ -46,11 +46,6 @@ void Graph::useData(Data& data)
 //-----------------------------------//
 //----- Internal changes update -----//
 
-// FIXME BUG This refresh is called on facility_changed
-// but the treasure entity has not been created (in Inter),
-// so the treasure will not be refreshed unless an other event is
-// launched from the Treasure constructor. (From Lua!)
-// -> Make it react to a treasure_changed event.
 void Graph::refreshTreasure(NodeData& nodeData)
 {
     nodeData.treasure = 0u;

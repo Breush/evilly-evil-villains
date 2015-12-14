@@ -798,6 +798,15 @@ void Data::setRoomFacilityBarrier(const sf::Vector2u& coords, const std::wstring
     EventEmitter::addEvent("dungeon_changed");
 }
 
+void Data::setRoomFacilityTreasure(const sf::Vector2u& coords, const std::wstring& facilityID, uint32 amount)
+{
+    auto pFacilityInfo = getFacility(coords, facilityID);
+    returnif (pFacilityInfo == nullptr);
+
+    pFacilityInfo->treasure = amount;
+    addEvent("treasure_changed", coords);
+}
+
 void Data::addFacilityTunnel(FacilityInfo& facilityInfo, const sf::Vector2i& tunnelCoords, bool relative)
 {
     Tunnel tunnel;
@@ -820,12 +829,15 @@ void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     dungeonChanged |= !pFacility->tunnels.empty();
     dungeonChanged |= pFacility->barrier;
 
+    bool treasureChanged = pFacility->treasure != -1u;
+
     removeFacilityLinks(coords, *pFacility);
     roomInfo.facilities.erase(pFacility);
 
+    // Events
     addEvent("facility_changed", coords);
-    if (dungeonChanged)
-        EventEmitter::addEvent("dungeon_changed");
+    if (dungeonChanged)     EventEmitter::addEvent("dungeon_changed");
+    if (treasureChanged)    EventEmitter::addEvent("treasure_changed");
 
     updateRoomHide(coords);
 }

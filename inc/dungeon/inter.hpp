@@ -190,6 +190,9 @@ namespace dungeon
         //! Set the specified room facility's barrier.
         void setRoomFacilityBarrier(const sf::Vector2u& coords, const std::wstring& facilityID, bool activated);
 
+        //! Set the specified room facility's treasure.
+        void setRoomFacilityTreasure(const sf::Vector2u& coords, const std::wstring& facilityID, uint32 amount);
+
         //! Find the room below the specified relative position and remove all the facilities in it if any.
         inline void removeRoomFacilities(const sf::Vector2f& relPos) { removeRoomFacilities(tileFromLocalPosition(relPos)); }
 

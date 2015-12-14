@@ -73,8 +73,7 @@ bool Facility::lua_hasTreasure() const
 
 void Facility::lua_setTreasure(const uint32 value)
 {
-    // TODO Should be done via data interface, so that an event can occur
-    m_facilityInfo.treasure = value;
+    m_inter.setRoomFacilityTreasure(m_coords, m_facilityInfo.data.type(), value);
 }
 
 bool Facility::lua_isLink()
