@@ -72,7 +72,7 @@ void Selector::refreshHitboxSelected(const sf::Vector2f& relPos)
         auto boxBounds = m_sprite.findBox(boxName + "_hitbox") + m_sprite.getPosition();
         returnif (!boxBounds.contains(relPos)) false;
         returnif (m_selectedBox == boxName) true;
-        m_sprite.select(toWString(boxName) + L"_selected");
+        m_sprite.select(boxName + "_selected");
         m_selectedLabel.setText(_(boxName.c_str()));
         m_selectedBox = boxName;
         return true;
@@ -88,6 +88,6 @@ void Selector::refreshHitboxSelected(const sf::Vector2f& relPos)
     // If none found, select default animation
     returnif (m_selectedBox == "none");
     m_selectedLabel.setText(L"");
-    m_sprite.select(L"none");
+    m_sprite.select("none");
     m_selectedBox = "none";
 }

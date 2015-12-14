@@ -138,13 +138,21 @@ void MovingElement::setCurrentNode(const NodeWay& nodeWay)
             m_pauseTime = 0.f;
             return;
         }
-        else if (nodeWay.neighbourData != nullptr)
-        {
-            const auto& tunnelFacilityID = nodeWay.neighbourData->tunnelFacilityID;
 
+        // We are getting out of a tunnel, warn the orgin facility
+        if (m_inTunnel) {
+            m_inter.findRoomFacility(m_tunnelOriginCoords, m_tunnelOriginFacilityID)->movingElementLeaveTunnel(*this);
+            m_inTunnel = false;
+        }
+
+        if (nodeWay.neighbourData != nullptr)
+        {
             // We are going to take a tunnel, warn the facility
-            if (!tunnelFacilityID.empty()) {
-                m_inter.findRoomFacility(m_currentNode->coords, tunnelFacilityID)->movingElementEnterTunnel(*this);
+            m_tunnelOriginFacilityID = nodeWay.neighbourData->tunnelFacilityID;
+            if (!m_tunnelOriginFacilityID.empty()) {
+                m_inTunnel = true;
+                m_tunnelOriginCoords = m_currentNode->coords;
+                m_inter.findRoomFacility(m_tunnelOriginCoords, m_tunnelOriginFacilityID)->movingElementEnterTunnel(*this);
             }
         }
     }
@@ -294,24 +302,17 @@ void MovingElement::refreshPositionFromNode()
 
 void MovingElement::refreshAnimation()
 {
+    returnif (m_inTunnel);
+
     // Select correct animation (right/left)
     // TODO Have a state machine and interface with physics module
     // Maybe the state machine animated sprite makes its own class
     if (lerpable()->targetPosition().x > localPosition().x) {
-        m_sprite.select(L"rwalk");
-        setDepth(50.f); // Doing this every time is not efficient...
+        m_sprite.select("rwalk");
         m_left = false;
     }
     else if (lerpable()->targetPosition().x < localPosition().x) {
-        m_sprite.select(L"lwalk");
-        setDepth(50.f);
+        m_sprite.select("lwalk");
         m_left = true;
-    }
-
-    // FIXME This work with ladder but not with stairs...
-    // -> Might do a callback to Lua for a isUsingTunnel() or so.
-    if (lerpable()->targetPosition().y != localPosition().y) {
-        m_sprite.select(L"climb");
-        setDepth(90.f);
     }
 }

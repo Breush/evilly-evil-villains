@@ -47,6 +47,15 @@ namespace dungeon
 
         //! @}
 
+        //------------------//
+        //! @name Animation
+        //! @{
+
+        //! Select the animation in the element.
+        void selectAnimation(const std::string& animationString);
+
+        //! @}
+
     protected:
 
         //----------------//
@@ -93,12 +102,6 @@ namespace dungeon
 
         //! Add action callback whenever a right click happens.
         void lua_setRightClickAction(const std::string& luaKey, const std::string& actionName);
-
-        //! Set the depth of the entity.
-        void lua_setDepth(const lua_Number inDepth);
-
-        //! Control the visibility of the entity.
-        void lua_setVisible(bool isVisible);
 
         //----- Element data
 
@@ -157,6 +160,11 @@ namespace dungeon
         //! Restart the current animation from the beginning.
         void lua_restartAnimation();
 
+        //----- Animation from UID
+
+        //! Select an animation to play for the specified UID.
+        void lua_selectAnimationUID(const uint32 UID, const std::string& animationKey);
+
         //----- Villain
 
         //! Borrow money from the reserve.
@@ -181,10 +189,19 @@ namespace dungeon
         //! @return the UID of the element created.
         uint32 lua_spawnDynamic(const std::string& dynamicID, const lua_Number rx, const lua_Number ry);
 
+        //! Set the depth of the entity.
+        void lua_setDepth(const lua_Number inDepth);
+
+        //! Control the visibility of the entity.
+        void lua_setVisible(bool isVisible);
+
         //----- Elements control from UID
 
         //! Inflicts some damage to the element with the corresponding UID.
         void lua_damageUID(const uint32 UID, const lua_Number amount);
+
+        //! Set the depth of the entity with the corresponding UID.
+        void lua_setDepthUID(const uint32 UID, const lua_Number inDepth);
 
         //----- Dungeon
 

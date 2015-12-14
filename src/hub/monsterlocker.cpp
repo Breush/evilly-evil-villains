@@ -129,7 +129,7 @@ void MonsterLocker::setSource(const std::wstring& monsterID, const dungeon::Mons
     m_monsterGeneric = &monsterGeneric;
 
     m_sprite.load("dungeon/monsters/" + toString(monsterID));
-    m_sprite.select(L"presentation");
+    m_sprite.select("presentation");
     m_name.setText(monsterGeneric.common->name);
     m_lockedCostText.setText(L"*" + toWString(monsterGeneric.common->unlockCost.dosh) + L"*");
 

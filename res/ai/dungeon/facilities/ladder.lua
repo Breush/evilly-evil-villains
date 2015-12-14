@@ -35,6 +35,17 @@ function _register()
     eev_setDepth(99)
 end
 
+-- Called whenever an entity enters in one of our tunnel
+function _onEntityEnterTunnel(UID)
+    eev_setDepthUID(UID, 90)
+    eev_selectAnimationUID(UID, "climb")
+end
+
+-- Called whenever an entity leaves in one of our tunnel
+function _onEntityLeaveTunnel(UID)
+    eev_setDepthUID(UID, 50)
+end
+
 -------------
 -- Routine --
 

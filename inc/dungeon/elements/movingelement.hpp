@@ -142,6 +142,11 @@ namespace dungeon
         uint m_tick = 0u;                                       //!< The current tick (how many nodes has been visited so far).
         std::unordered_map<sf::Vector2u, NodeInfo> m_nodeInfos; //!< Remembers the visits of a certain node.
 
+        // Tunnel state
+        bool m_inTunnel = false;                //!< Is the element inside a tunnel?
+        sf::Vector2u m_tunnelOriginCoords;      //!< The origin coordinates of the facility that created the tunnel.
+        std::wstring m_tunnelOriginFacilityID;  //!< The origin id of the facility that created the tunnel.
+
         // Artificial intelligence
         const Graph::NodeData* m_currentNode = nullptr; //!< The current room where is this monster.
         bool m_left = false;                            //!< Is the creepim looking left?

@@ -70,12 +70,12 @@ void AnimatedSprite::load(const std::string& id)
     restart();
 }
 
-void AnimatedSprite::select(const std::wstring& animationName)
+void AnimatedSprite::select(const std::string& animationName)
 {
     returnif ((m_spriterEntity == nullptr) || (m_currentAnimationName == animationName));
 
     // Note: If the animation does not exists, it is just ignored
-    m_spriterEntity->setCurrentAnimation(toString(animationName));
+    m_spriterEntity->setCurrentAnimation(animationName);
     m_currentAnimationName = animationName;
 
     restart();

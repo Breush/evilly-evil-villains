@@ -44,7 +44,7 @@ namespace scene
         void load(const std::string& id);
 
         //! Selects the animation to be played.
-        void select(const std::wstring& animationName);
+        void select(const std::string& animationName);
 
         //! Advance the animation of a certain time.
         void forward(const sf::Time& offset);
@@ -107,7 +107,7 @@ namespace scene
 
         // Animation
         SpriterEngine::EntityInstance* m_spriterEntity = nullptr;   //!< The entity itself.
-        std::wstring m_currentAnimationName;                        //!< Current animation name.
+        std::string m_currentAnimationName;                         //!< Current animation name.
         bool m_started = true;                                      //!< Whether the animation should run or not.
 
         // Color

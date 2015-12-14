@@ -48,7 +48,17 @@ end
 
 -- Called once on object creation
 function _register()
-    eev_setDepth(99)
+    eev_setDepth(110)
+end
+
+-- Called whenever an entity enters in one of our tunnel
+function _onEntityEnterTunnel(UID)
+    eev_setDepthUID(UID, 105)
+end
+
+-- Called whenever an entity leaves in one of our tunnel
+function _onEntityLeaveTunnel(UID)
+    eev_setDepthUID(UID, 50)
 end
 
 -------------

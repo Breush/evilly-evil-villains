@@ -116,7 +116,7 @@ void TrapLocker::setSource(const std::wstring& trapID, const dungeon::TrapGeneri
     m_trapGeneric = &trapGeneric;
 
     m_sprite.load("dungeon/traps/" + toString(trapID));
-    m_sprite.select(L"presentation");
+    m_sprite.select("presentation");
     m_name.setText(trapGeneric.common->name);
     m_lockedCostText.setText(L"*" + toWString(trapGeneric.common->unlockCost.dosh) + L"*");
 

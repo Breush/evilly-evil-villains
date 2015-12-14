@@ -23,9 +23,9 @@ void DumbPuppet::updateAI(const sf::Time&)
     lerpable()->setTargetPosition(targetPosition);
 
     if (localPosition().x < targetPosition.x)
-        m_sprite.select(L"rwalk");
+        m_sprite.select("rwalk");
     else
-        m_sprite.select(L"lwalk");
+        m_sprite.select("lwalk");
 }
 
 //-------------------//

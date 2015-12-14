@@ -44,9 +44,6 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
     m_lua["eev_setLeftClickAction"] = eev_setLeftClickAction;
     m_lua["eev_setRightClickAction"] = eev_setRightClickAction;
 
-    m_lua["eev_setDepth"] = [this] (const lua_Number inDepth) { lua_setDepth(inDepth); };
-    m_lua["eev_setVisible"] = [this] (bool isVisible) { lua_setVisible(isVisible); };
-
     m_lua["eev_setDataBool"] = [this] (const std::string& s, const bool value) { return lua_setDataBool(s, value); };
     m_lua["eev_getDataBool"] = [this] (const std::string& s) { return lua_getDataBool(s); };
     m_lua["eev_initEmptyDataBool"] = [this] (const std::string& s, const bool value) { return lua_initEmptyDataBool(s, value); };
@@ -67,10 +64,15 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
     m_lua["eev_restartAnimation"] = [this] { lua_restartAnimation(); };
     m_lua["eev_forwardAnimation"] = [this] (const lua_Number offset) { lua_forwardAnimation(offset); };
 
+    m_lua["eev_selectAnimationUID"] = [this] (const uint32 UID, const std::string& animationKey) { lua_selectAnimationUID(UID, animationKey); };
+
     m_lua["eev_spawnDynamic"] = [this] (const std::string& shortDynamicID, const lua_Number rx, const lua_Number ry) { return lua_spawnDynamic(shortDynamicID, rx, ry); };
+    m_lua["eev_setDepth"] = [this] (const lua_Number inDepth) { lua_setDepth(inDepth); };
+    m_lua["eev_setVisible"] = [this] (bool isVisible) { lua_setVisible(isVisible); };
 
     m_lua["eev_damageRange"] = [this] (const lua_Number rx, const lua_Number ry, const lua_Number relRange, const lua_Number basePower) { lua_damageRange(rx, ry, relRange, basePower); };
     m_lua["eev_damageUID"] = [this] (const uint32 UID, const lua_Number amount) { lua_damageUID(UID, amount); };
+    m_lua["eev_setDepthUID"] = [this] (const uint32 UID, const lua_Number inDepth) { lua_setDepthUID(UID, inDepth); };
 
     m_lua["eev_borrowVillainDosh"] = [this] (const uint32 amount) { return lua_borrowVillainDosh(amount); };
     m_lua["eev_giveDosh"] = [this] (const uint32 amount) { lua_giveDosh(amount); };
@@ -136,6 +138,14 @@ void Element::handleMouseLeft()
     hideMouseOverlay();
 }
 
+//---------------------//
+//----- Animation -----//
+
+void Element::selectAnimation(const std::string& animationString)
+{
+    m_sprite.select(animationString);
+}
+
 //-------------------------//
 //----- Mouse overlay -----//
 
@@ -178,16 +188,6 @@ void Element::lua_setRightClickAction(const std::string& luaKey, const std::stri
     m_rightClickAction.name = actionName;
     m_rightClickAction.callback = [this, luaKey] { m_lua[luaKey.c_str()](); };
     m_mouseOverlay.setRight(_(m_rightClickAction.name.c_str()));
-}
-
-void Element::lua_setDepth(const lua_Number inDepth)
-{
-    setDepth(static_cast<float>(inDepth));
-}
-
-void Element::lua_setVisible(bool isVisible)
-{
-    setVisible(isVisible);
 }
 
 //----- Element data
@@ -290,7 +290,7 @@ uint32 Element::lua_getUIDDataU32(const uint32 UID, const std::string& s) const
 
 void Element::lua_selectAnimation(const std::string& animationKey)
 {
-    m_sprite.select(toWString(animationKey));
+    selectAnimation(animationKey);
 }
 
 bool Element::lua_isAnimationStopped() const
@@ -307,6 +307,18 @@ void Element::lua_forwardAnimation(const lua_Number offset)
 {
     m_sprite.forward(sf::seconds(static_cast<float>(offset)));
 }
+
+//----- Animation from UID
+
+void Element::lua_selectAnimationUID(const uint32 UID, const std::string& animationKey)
+{
+    auto* entity = s_detector.find(UID);
+    auto* element = dynamic_cast<Element*>(entity);
+    returnif (element == nullptr);
+
+    element->selectAnimation(animationKey);
+}
+
 
 //----- Villain
 
@@ -367,6 +379,16 @@ uint32 Element::lua_spawnDynamic(const std::string& dynamicID, const lua_Number 
     return m_inter.spawnDynamic(relPos, id);
 }
 
+void Element::lua_setDepth(const lua_Number inDepth)
+{
+    setDepth(static_cast<float>(inDepth));
+}
+
+void Element::lua_setVisible(bool isVisible)
+{
+    setVisible(isVisible);
+}
+
 //----- Elements control from UID
 
 void Element::lua_damageUID(const uint32 UID, const lua_Number amount)
@@ -396,6 +418,14 @@ void Element::lua_damageUID(const uint32 UID, const lua_Number amount)
     }
 
     // TODO Traps/facilities durability
+}
+
+void Element::lua_setDepthUID(const uint32 UID, const lua_Number inDepth)
+{
+    auto* entity = s_detector.find(UID);
+    returnif (entity == nullptr);
+
+    entity->setDepth(static_cast<float>(inDepth));
 }
 
 //----- Dungeon

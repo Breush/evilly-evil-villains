@@ -33,6 +33,9 @@ namespace dungeon
         //! Warning about a element entering this facility tunnel.
         void movingElementEnterTunnel(MovingElement& movingElement);
 
+        //! Warning about a element leaving this facility tunnel.
+        void movingElementLeaveTunnel(MovingElement& movingElement);
+
         //! @}
 
         //----------------------------//

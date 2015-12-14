@@ -54,7 +54,12 @@ Facility::Facility(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dunge
 
 void Facility::movingElementEnterTunnel(MovingElement& movingElement)
 {
-    std::cerr << "Entity " << movingElement.UID() << " entered our tunnel!" << std::endl;
+    m_lua["_onEntityEnterTunnel"](movingElement.UID());
+}
+
+void Facility::movingElementLeaveTunnel(MovingElement& movingElement)
+{
+    m_lua["_onEntityLeaveTunnel"](movingElement.UID());
 }
 
 //---------------------------//
