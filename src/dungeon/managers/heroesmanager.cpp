@@ -106,17 +106,7 @@ void HeroesManager::receive(const context::Event& event)
 
     // FIXME This event should slowly kills the hero via asphyxia
     if (devent.type == "room_destroyed") {
-        // Remove all heroes in that room
-        for (auto& heroInfo : m_heroesInfo) {
-            sf::Vector2u heroCoords;
-            heroCoords.x = static_cast<uint>(heroInfo.data[L"rx"].as_float());
-            heroCoords.y = static_cast<uint>(heroInfo.data[L"ry"].as_float());
-
-            if (heroCoords == coords) {
-                heroInfo.status = HeroStatus::TO_BE_REMOVED;
-                heroInfo.reward = true;
-            }
-        }
+        removeRoomHeroes(coords);
     }
     else if (devent.type == "dungeon_graph_changed") {
         refreshHeroesData();
@@ -269,6 +259,22 @@ void HeroesManager::setLocked(const Hero* hero, bool locked)
         heroInfo.hero->setMoving(!locked);
         heroInfo.locked = locked;
         return;
+    }
+}
+
+void HeroesManager::removeRoomHeroes(const sf::Vector2u& coords)
+{
+    for (auto& heroInfo : m_heroesInfo) {
+        if (heroInfo.status != HeroStatus::RUNNING) continue;
+
+        sf::Vector2u heroCoords;
+        heroCoords.x = static_cast<uint>(heroInfo.data[L"rx"].as_float());
+        heroCoords.y = static_cast<uint>(heroInfo.data[L"ry"].as_float());
+
+        if (heroCoords == coords) {
+            heroInfo.status = HeroStatus::TO_BE_REMOVED;
+            heroInfo.reward = true;
+        }
     }
 }
 

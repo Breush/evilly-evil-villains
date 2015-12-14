@@ -32,6 +32,7 @@
 #else
     #include <iostream>
     #include <cstdlib>
+    #include <stdexcept>
 
     // Generic, if LEVEL >= BASE then execute
     #define debug_generic(...) \
@@ -51,7 +52,7 @@
             std::cerr << "Assertion failed: " << #bool_expr << std::endl;\
             std::cerr << "    File: " << __FILE__ << " l." << __LINE__ << std::endl;\
             std::cerr << "    Function: " << __func__ << std::endl;\
-            exit(1);\
+            throw std::runtime_error("Assertion failed.");\
         } } while (false)
 
     #define massert(bool_expr, ...) \
@@ -60,7 +61,7 @@
             std::cerr << "Message: " << __VA_ARGS__ << std::endl;\
             std::cerr << "    File: " << __FILE__ << " l." << __LINE__ << std::endl;\
             std::cerr << "    Function: " << __func__ << std::endl;\
-            exit(1);\
+            throw std::runtime_error("Assertion failed.");\
         } } while (false)
 
     #define wassert(bool_expr, ...) \
@@ -69,7 +70,7 @@
             std::wcout << L"Message: " << __VA_ARGS__ << std::endl;\
             std::wcout << L"    File: " << __FILE__ << L" l." << __LINE__ << std::endl;\
             std::wcout << L"    Function: " << __func__ << std::endl;\
-            exit(1);\
+            throw std::runtime_error("Assertion failed.");\
         } } while (false)
 #endif
 

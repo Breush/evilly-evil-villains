@@ -97,6 +97,9 @@ namespace dungeon
         //! Set the list to the room heroes.
         void listRoomHeroes(const sf::Vector2u& coords, std::vector<Hero*>& heroesList) const;
 
+        //! Mark all heroes in that room to be removed.
+        void removeRoomHeroes(const sf::Vector2u& coords);
+
         //! @}
 
         //------------------------//

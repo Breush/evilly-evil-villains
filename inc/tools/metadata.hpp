@@ -38,59 +38,59 @@ public:
     inline MetaData_t& setType(std::wstring type) { m_type = std::move(type); return m_data; }
     inline const std::wstring& type() const { return m_type; }
 
-    inline bool& operator=(const bool& rhs)  { return m_data.as_bool = rhs; }
+    inline bool& operator=(const bool& rhs) { massert(m_type == L"bool", "Writting incompatible value to MetaData."); return m_data.as_bool = rhs; }
 
-    inline int8& operator= (const int8& rhs)  { return m_data.as_int8  = rhs; }
-    inline int16& operator=(const int16& rhs) { return m_data.as_int16 = rhs; }
-    inline int32& operator=(const int32& rhs) { return m_data.as_int32 = rhs; }
-    inline int64& operator=(const int64& rhs) { return m_data.as_int64 = rhs; }
+    inline int8& operator= (const int8& rhs)  { massert(m_type == L"int8",  "Writting incompatible value to MetaData."); return m_data.as_int8  = rhs; }
+    inline int16& operator=(const int16& rhs) { massert(m_type == L"int16", "Writting incompatible value to MetaData."); return m_data.as_int16 = rhs; }
+    inline int32& operator=(const int32& rhs) { massert(m_type == L"int32", "Writting incompatible value to MetaData."); return m_data.as_int32 = rhs; }
+    inline int64& operator=(const int64& rhs) { massert(m_type == L"int64",  "Writting incompatible value to MetaData."); return m_data.as_int64 = rhs; }
 
-    inline uint8& operator= (const uint8& rhs)  { return m_data.as_uint8  = rhs; }
-    inline uint16& operator=(const uint16& rhs) { return m_data.as_uint16 = rhs; }
-    inline uint32& operator=(const uint32& rhs) { return m_data.as_uint32 = rhs; }
-    inline uint64& operator=(const uint64& rhs) { return m_data.as_uint64 = rhs; }
+    inline uint8& operator= (const uint8& rhs)  { massert(m_type == L"uint8",  "Writting incompatible value to MetaData."); return m_data.as_uint8  = rhs; }
+    inline uint16& operator=(const uint16& rhs) { massert(m_type == L"uint16", "Writting incompatible value to MetaData."); return m_data.as_uint16 = rhs; }
+    inline uint32& operator=(const uint32& rhs) { massert(m_type == L"uint32", "Writting incompatible value to MetaData."); return m_data.as_uint32 = rhs; }
+    inline uint64& operator=(const uint64& rhs) { massert(m_type == L"uint64", "Writting incompatible value to MetaData."); return m_data.as_uint64 = rhs; }
 
-    inline float&  operator=(const float& rhs)  { return m_data.as_float  = rhs; }
-    inline double& operator=(const double& rhs) { return m_data.as_double = rhs; }
+    inline float&  operator=(const float& rhs)  { massert(m_type == L"float",  "Writting incompatible value to MetaData."); return m_data.as_float  = rhs; }
+    inline double& operator=(const double& rhs) { massert(m_type == L"double", "Writting incompatible value to MetaData."); return m_data.as_double = rhs; }
 
-    inline Vec2<uint8>& operator=(const Vec2<uint8>& rhs) { return m_data.as_v2uint8 = rhs; }
-    inline Vec2<float>& operator=(const Vec2<float>& rhs) { return m_data.as_v2float = rhs; }
+    inline Vec2<uint8>& operator=(const Vec2<uint8>& rhs) { massert(m_type == L"v2uint8", "Writting incompatible value to MetaData."); return m_data.as_v2uint8 = rhs; }
+    inline Vec2<float>& operator=(const Vec2<float>& rhs) { massert(m_type == L"v2float", "Writting incompatible value to MetaData."); return m_data.as_v2float = rhs; }
 
-    inline const bool&  as_bool()  const { return m_data.as_bool; }
+    inline const bool&  as_bool()  const { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_bool; }
 
-    inline const int8&  as_int8()  const { return m_data.as_int8; }
-    inline const int16& as_int16() const { return m_data.as_int16; }
-    inline const int32& as_int32() const { return m_data.as_int32; }
-    inline const int64& as_int64() const { return m_data.as_int64; }
+    inline const int8&  as_int8()  const { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_int8; }
+    inline const int16& as_int16() const { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_int16; }
+    inline const int32& as_int32() const { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_int32; }
+    inline const int64& as_int64() const { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_int64; }
 
-    inline const uint8&  as_uint8()  const { return m_data.as_uint8; }
-    inline const uint16& as_uint16() const { return m_data.as_uint16; }
-    inline const uint32& as_uint32() const { return m_data.as_uint32; }
-    inline const uint64& as_uint64() const { return m_data.as_uint64; }
+    inline const uint8&  as_uint8()  const { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_uint8; }
+    inline const uint16& as_uint16() const { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_uint16; }
+    inline const uint32& as_uint32() const { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_uint32; }
+    inline const uint64& as_uint64() const { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_uint64; }
 
-    inline const float&  as_float()  const { return m_data.as_float; }
-    inline const double& as_double() const { return m_data.as_double; }
+    inline const float&  as_float()  const { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_float; }
+    inline const double& as_double() const { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_double; }
 
-    inline const Vec2<uint8>& as_v2uint8() const { return m_data.as_v2uint8; }
-    inline const Vec2<float>& as_v2float() const { return m_data.as_v2float; }
+    inline const Vec2<uint8>& as_v2uint8() const { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_v2uint8; }
+    inline const Vec2<float>& as_v2float() const { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_v2float; }
 
-    inline bool&  as_bool() { return m_data.as_bool; }
+    inline bool&  as_bool() { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_bool; }
 
-    inline int8&  as_int8()  { return m_data.as_int8; }
-    inline int16& as_int16() { return m_data.as_int16; }
-    inline int32& as_int32() { return m_data.as_int32; }
-    inline int64& as_int64() { return m_data.as_int64; }
+    inline int8&  as_int8()  { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_int8; }
+    inline int16& as_int16() { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_int16; }
+    inline int32& as_int32() { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_int32; }
+    inline int64& as_int64() { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_int64; }
 
-    inline uint8&  as_uint8()  { return m_data.as_uint8; }
-    inline uint16& as_uint16() { return m_data.as_uint16; }
-    inline uint32& as_uint32() { return m_data.as_uint32; }
-    inline uint64& as_uint64() { return m_data.as_uint64; }
+    inline uint8&  as_uint8()  { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_uint8; }
+    inline uint16& as_uint16() { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_uint16; }
+    inline uint32& as_uint32() { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_uint32; }
+    inline uint64& as_uint64() { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_uint64; }
 
-    inline float&  as_float()  { return m_data.as_float; }
-    inline double& as_double() { return m_data.as_double; }
+    inline float&  as_float()  { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_float; }
+    inline double& as_double() { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_double; }
 
-    inline Vec2<uint8>& as_v2uint8() { return m_data.as_v2uint8; }
-    inline Vec2<float>& as_v2float() { return m_data.as_v2float; }
+    inline Vec2<uint8>& as_v2uint8() { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_v2uint8; }
+    inline Vec2<float>& as_v2float() { massert(!m_type.empty(), "Accessing uninitialized MetaData."); return m_data.as_v2float; }
 
     inline void init_bool(bool value) { m_type = L"bool";  m_data.as_bool = value; }
 
