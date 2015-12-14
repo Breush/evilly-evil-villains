@@ -88,6 +88,9 @@ namespace context
 
     public:
 
+        //! Default constructor.
+        EventReceiver() = default;
+
         //! Destructor.
         virtual ~EventReceiver();
 

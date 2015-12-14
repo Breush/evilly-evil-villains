@@ -31,9 +31,14 @@ union MetaData_t
     Vec2<float> as_v2float;
 };
 
-class MetaData
+//! A class that can handle and remember a variable of various types.
+
+class MetaData final
 {
 public:
+
+    //! Default constructor.
+    MetaData() = default;
 
     inline MetaData_t& setType(std::wstring type) { m_type = std::move(type); return m_data; }
     inline const std::wstring& type() const { return m_type; }

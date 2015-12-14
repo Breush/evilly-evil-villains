@@ -359,12 +359,9 @@ void Entity::clearParts()
 void Entity::addPart(sf::Drawable* drawable)
 {
     // Do not re-add part
-    for (auto& part : m_parts) {
-        if (part.drawable == drawable) {
+    for (auto& part : m_parts)
+        if (part.drawable == drawable)
             throw std::logic_error("Trying to add a part that was already added.");
-            return;
-        }
-    }
 
     m_parts.push_back({drawable, nullptr, false});
 }

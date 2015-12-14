@@ -14,6 +14,9 @@ namespace resources
     {
     public:
 
+        //! Default constructor.
+        Holder() = default;
+
         //----------------//
         //! @name Storage
         //! @{
