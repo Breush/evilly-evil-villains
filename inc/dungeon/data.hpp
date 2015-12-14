@@ -127,7 +127,7 @@ namespace dungeon
         bool isRoomConstructed(const sf::Vector2u& coords) const;
 
         //! Whether a specific room allows walking.
-        bool isRoomWalkable(const sf::Vector2u &coords) const;
+        bool isRoomWalkable(const sf::Vector2u& coords) const;
 
         //! Construct a room.
         void constructRoom(const sf::Vector2u& coords);
@@ -366,6 +366,15 @@ namespace dungeon
 
         //! Set the graph to be linked with these data.
         void useGraph(Graph& graph);
+
+        //! @}
+
+        //--------------//
+        //! @name Rooms
+        //! @{
+
+        //! Refresh the room hide flags from all elements inside and send an event if changed.
+        void updateRoomHide(const sf::Vector2u& coords);
 
         //! @}
 

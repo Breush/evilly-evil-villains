@@ -1,6 +1,7 @@
 #pragma once
 
 #include "dungeon/structs/facility.hpp"
+#include "dungeon/structs/roomflag.hpp"
 #include "dungeon/structs/trap.hpp"
 
 namespace dungeon
@@ -18,6 +19,7 @@ namespace dungeon
     {
         sf::Vector2u coords;                    //!< The floor/room coordinates of the room.
         RoomState state = RoomState::UNKNOWN;   //!< The current state.
+        uint8 hide = RoomFlag::NONE;            //!< What parts of the room are hidden.
 
         // Elements
         std::vector<FacilityInfo> facilities;   //!< All the facilities.

@@ -198,6 +198,9 @@ void Inter::receive(const context::Event& event)
         refreshTile(coords);
         refreshNeighboursLayers(coords);
     }
+    else if (event.type == "room_hide_changed") {
+        refreshTileLayers(coords);
+    }
     else if (event.type == "facility_changed") {
         refreshTileFacilities(coords);
         refreshTileDoshLabel(coords);
@@ -905,14 +908,6 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
     // Reset
     clearLayers(coords);
 
-    // Room is somehow bugged
-    if (state == RoomState::UNKNOWN) {
-        std::cerr << "/!\\ Found a room with unknown state at " << coords << "." << std::endl;
-        std::cerr << "If that is a recurrent issue, please report this bug." << std::endl;
-        addLayer(coords, "default");
-        return;
-    }
-
     // Room is not constructed
     if (state == RoomState::EMPTY)
     {
@@ -926,9 +921,17 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
         return;
     }
 
-    // Add room textures
-    addLayer(coords, "dungeon/inter/inner_wall", 100.f);
-    addLayer(coords, "dungeon/inter/floor", 75.f);
+    // Room is somehow bugged
+    else if (state == RoomState::UNKNOWN) {
+        std::cerr << "/!\\ Found a room with unknown state at " << coords << "." << std::endl;
+        std::cerr << "If that is a recurrent issue, please report this bug." << std::endl;
+        addLayer(coords, "default");
+        return;
+    }
+
+    // Add room textures if not hidden
+    if (!(room.hide & RoomFlag::WALL))  addLayer(coords, "dungeon/inter/inner_wall", 100.f);
+    if (!(room.hide & RoomFlag::FLOOR)) addLayer(coords, "dungeon/inter/floor", 75.f);
 
     if (!m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, EAST)))
         addLayer(coords, "dungeon/inter/right_wall", 75.f);

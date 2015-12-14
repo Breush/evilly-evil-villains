@@ -249,6 +249,7 @@ void Data::loadDungeon(const std::wstring& file)
                 facility.treasure = facilityNode.attribute(L"treasure").as_uint(-1u);
                 facility.link.x = facilityNode.attribute(L"linkX").as_uint(-1u);
                 facility.link.y = facilityNode.attribute(L"linkY").as_uint(-1u);
+                room.hide |= facility.common->hide;
 
                 // Tunnels
                 for (auto tunnelNode : facilityNode.children(L"tunnel")) {
@@ -423,7 +424,7 @@ bool Data::isRoomConstructed(const sf::Vector2u& coords) const
     return (room(coords).state != RoomState::EMPTY);
 }
 
-bool Data::isRoomWalkable(const sf::Vector2u &coords) const
+bool Data::isRoomWalkable(const sf::Vector2u& coords) const
 {
     returnif (coords.x >= m_floorsCount) false;
     returnif (coords.y >= m_roomsByFloor) false;
@@ -468,6 +469,8 @@ void Data::destroyRoom(const sf::Vector2u& coords)
 
     addEvent("room_destroyed", coords);
     EventEmitter::addEvent("dungeon_changed");
+
+    updateRoomHide(coords);
 }
 
 bool Data::pushRoom(const sf::Vector2u& coords, Direction direction)
@@ -574,6 +577,23 @@ uint Data::roomTreasureDosh(const sf::Vector2u& coords)
     return treasureDosh;
 }
 
+void Data::updateRoomHide(const sf::Vector2u& coords)
+{
+    uint8 newHide = RoomFlag::NONE;
+
+    auto& roomInfo = room(coords);
+    if (roomInfo.state == RoomState::CONSTRUCTED)
+        // Update the hide state from all facilities
+        for (const auto& facilityInfo : roomInfo.facilities) {
+            newHide |= facilityInfo.common->hide;
+    }
+
+    // Send an event if changed
+    returnif (roomInfo.hide == newHide);
+    roomInfo.hide = newHide;
+    addEvent("room_hide_changed", coords);
+}
+
 //----------------------//
 //----- Facilities -----//
 
@@ -608,7 +628,7 @@ bool Data::createRoomFacilityValid(const sf::Vector2u& coords, const std::wstrin
     const auto& facilityData = facilitiesDB().get(facilityID);
 
     // Check if no other facilities block the construction
-    Lock facilityLock = facilityData.lock;
+    uint8 facilityLock = facilityData.lock;
     for (const auto& facility : selectedRoom.facilities)
         if ((facility.common->lock & facilityLock) != 0u)
             return false;
@@ -657,6 +677,8 @@ bool Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     addEvent("facility_changed", coords);
     if (facility.common->entrance)
         EventEmitter::addEvent("dungeon_changed");
+
+    updateRoomHide(coords);
 
     return true;
 }
@@ -804,13 +826,15 @@ void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     addEvent("facility_changed", coords);
     if (dungeonChanged)
         EventEmitter::addEvent("dungeon_changed");
+
+    updateRoomHide(coords);
 }
 
 void Data::removeRoomFacilities(const sf::Vector2u& coords)
 {
     returnif (!isRoomConstructed(coords));
 
-    // Note: variable facilities here is a copy, so that progressive
+    // OPTIM The variable facilities here is a copy, so that progressive
     // removals won't change that.
     // A more optimized version could exist, but is it necessary?
     const auto& roomInfo = room(coords);

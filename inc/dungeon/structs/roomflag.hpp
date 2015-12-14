@@ -4,14 +4,12 @@
 
 namespace dungeon
 {
-    //! Define flags for the locking state of an element.
+    //! Define flags for selectiong some parts of a room.
 
-    enum LockFlag : uint8
+    enum RoomFlag : uint8
     {
         NONE    = 0x0,
         FLOOR   = 0x1,
         WALL    = 0x2,
     };
-
-    using Lock = uint8;
 }

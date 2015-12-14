@@ -57,7 +57,8 @@ void FacilitiesDB::add(const std::string& filename)
     facilityData.name = _(toString(trName).c_str());
     facilityData.listed = facilityNode.attribute(L"listed").as_bool(true);
     facilityData.entrance = facilityNode.attribute(L"entrance").as_bool();
-    readLockAttribute(facilityData.lock, facilityNode.attribute(L"lock"));
+    readRoomFlagsAttribute(facilityData.lock, facilityNode.attribute(L"lock"));
+    readRoomFlagsAttribute(facilityData.hide, facilityNode.attribute(L"hide"));
     if (facilityData.listed) ++m_listedCount;
 
     // Adding data
@@ -100,14 +101,14 @@ void FacilitiesDB::add(const std::string& filename)
     }
 }
 
-void FacilitiesDB::readLockAttribute(Lock& lock, const pugi::xml_attribute& attribute)
+void FacilitiesDB::readRoomFlagsAttribute(uint8& lock, const pugi::xml_attribute& attribute)
 {
     std::wstring lockString = attribute.as_string();
 
-    if (lockString == L"wall")          lock = LockFlag::WALL;
-    else if (lockString == L"floor")    lock = LockFlag::FLOOR;
-    else if (lockString == L"full")     lock = LockFlag::WALL | LockFlag::FLOOR;
-    else                                lock = LockFlag::NONE;
+    if (lockString == L"wall")          lock = RoomFlag::WALL;
+    else if (lockString == L"floor")    lock = RoomFlag::FLOOR;
+    else if (lockString == L"full")     lock = RoomFlag::WALL | RoomFlag::FLOOR;
+    else                                lock = RoomFlag::NONE;
 }
 
 void FacilitiesDB::readConstraintNode(Constraint& constraint, const pugi::xml_node& node)
