@@ -71,19 +71,14 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    const auto& screenSize = Application::context().windowInfo.screenSize;
     const sf::Shader* initialShader = states.shader;
     sf::FloatRect glClipArea;
 
     // Clipping if needed
     if (m_globalClipping)
     {
-        glEnable(GL_SCISSOR_TEST);
-
         glClipArea = tools::mapRectCoordsToPixel(target, m_globalClipArea);
-        glClipArea.top = screenSize.y - (glClipArea.height + glClipArea.top); // SFML - GL compatibility
-
-        glScissor(glClipArea.left, glClipArea.top, glClipArea.width, glClipArea.height);
+        target.setClippingArea(sf::IntRect(glClipArea.left, glClipArea.top, glClipArea.width, glClipArea.height));
     }
 
     // Drawing parts
@@ -99,13 +94,11 @@ void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
             sf::FloatRect r(part.clippingRect);
             r = states.transform.transformRect(r);
             r = tools::mapRectCoordsToPixel(target, r);
-            r.top = screenSize.y - (r.height + r.top);
 
             // If entity has already a clipping value, intersects
             if (m_globalClipping) r = tools::intersect(r, glClipArea);
-            else glEnable(GL_SCISSOR_TEST);
 
-            glScissor(r.left, r.top, r.width, r.height);
+            target.setClippingArea(sf::IntRect(r.left, r.top, r.width, r.height));
         }
 
         // Effectively drawing this object
@@ -113,19 +106,19 @@ void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
 
         // Disable part clipping
         if (part.clipping && !m_globalClipping)
-            glDisable(GL_SCISSOR_TEST);
+            target.clearClippingArea();
     }
 
     // Reset the global clipping
     if (m_globalClipping)
-        glScissor(glClipArea.left, glClipArea.top, glClipArea.width, glClipArea.height);
+        target.setClippingArea(sf::IntRect(glClipArea.left, glClipArea.top, glClipArea.width, glClipArea.height));
 
     // Extra drawing hook
     drawInternal(target, states);
 
     // End of clipping
     if (m_globalClipping)
-        glDisable(GL_SCISSOR_TEST);
+        target.clearClippingArea();
 }
 
 void Entity::update(const sf::Time& dt)
