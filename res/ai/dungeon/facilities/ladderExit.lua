@@ -32,12 +32,16 @@ end
 -- Called whenever an entity enters in one of our tunnel
 function _onEntityEnterTunnel(UID)
     eev_setDepthUID(UID, 90)
+    eev_setDetectActiveUID(UID, false)
+    eev_setDetectVisibleUID(UID, false)
     eev_selectAnimationUID(UID, "climb")
 end
 
 -- Called whenever an entity leaves in one of our tunnel
 function _onEntityLeaveTunnel(UID)
     eev_setDepthUID(UID, 50)
+    eev_setDetectActiveUID(UID, true)
+    eev_setDetectVisibleUID(UID, true)
 end
 
 -------------

@@ -66,13 +66,15 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
 
     m_lua["eev_selectAnimationUID"] = [this] (const uint32 UID, const std::string& animationKey) { lua_selectAnimationUID(UID, animationKey); };
 
+    m_lua["eev_damageRange"] = [this] (const lua_Number rx, const lua_Number ry, const lua_Number relRange, const lua_Number basePower) { lua_damageRange(rx, ry, relRange, basePower); };
     m_lua["eev_spawnDynamic"] = [this] (const std::string& shortDynamicID, const lua_Number rx, const lua_Number ry) { return lua_spawnDynamic(shortDynamicID, rx, ry); };
     m_lua["eev_setDepth"] = [this] (const lua_Number inDepth) { lua_setDepth(inDepth); };
     m_lua["eev_setVisible"] = [this] (bool isVisible) { lua_setVisible(isVisible); };
 
-    m_lua["eev_damageRange"] = [this] (const lua_Number rx, const lua_Number ry, const lua_Number relRange, const lua_Number basePower) { lua_damageRange(rx, ry, relRange, basePower); };
     m_lua["eev_damageUID"] = [this] (const uint32 UID, const lua_Number amount) { lua_damageUID(UID, amount); };
     m_lua["eev_setDepthUID"] = [this] (const uint32 UID, const lua_Number inDepth) { lua_setDepthUID(UID, inDepth); };
+    m_lua["eev_setDetectVisibleUID"] = [this] (const uint32 UID, bool detectVisible) { lua_setDetectVisibleUID(UID, detectVisible); };
+    m_lua["eev_setDetectActiveUID"] = [this] (const uint32 UID, bool detectActive) { lua_setDetectActiveUID(UID, detectActive); };
 
     m_lua["eev_borrowVillainDosh"] = [this] (const uint32 amount) { return lua_borrowVillainDosh(amount); };
     m_lua["eev_giveDosh"] = [this] (const uint32 amount) { lua_giveDosh(amount); };
@@ -426,6 +428,22 @@ void Element::lua_setDepthUID(const uint32 UID, const lua_Number inDepth)
     returnif (entity == nullptr);
 
     entity->setDepth(static_cast<float>(inDepth));
+}
+
+void Element::lua_setDetectVisibleUID(const uint32 UID, bool detectVisible)
+{
+    auto* entity = s_detector.find(UID);
+    returnif (entity == nullptr);
+
+    entity->setDetectVisible(detectVisible);
+}
+
+void Element::lua_setDetectActiveUID(const uint32 UID, bool detectActive)
+{
+    auto* entity = s_detector.find(UID);
+    returnif (entity == nullptr);
+
+    entity->setDetectActive(detectActive);
 }
 
 //----- Dungeon

@@ -26,9 +26,10 @@ void DetectEntity::update(const sf::Time& dt)
     uint32 UID;
 
     // Run callbacks which condition are met
-    for (const auto& signal : m_detectSignals)
-        if ((UID = signal.condition()) != -1u)
-            signal.callback(UID);
+    if (m_detectActive)
+        for (const auto& signal : m_detectSignals)
+            if ((UID = signal.condition()) != -1u)
+                signal.callback(UID);
 
     baseClass::update(dt);
 }

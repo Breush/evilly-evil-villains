@@ -45,7 +45,7 @@ namespace dungeon
         const DetectEntity* find(const uint32 UID) const;
 
         //! Apply a lambda for each entity in the range.
-        void applyInRange(const sf::Vector2f& position, float range, DetectionLambda hurtEntityFunc);
+        void applyInRange(const sf::Vector2f& position, float range, DetectionLambda rangeEntityFunc);
 
         //! @}
 

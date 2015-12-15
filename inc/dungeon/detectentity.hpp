@@ -39,6 +39,18 @@ namespace dungeon
         //! The UID of the entity.
         inline uint32 UID() const { return m_UID; }
 
+        //! Whether this entity is to be considered in signal checks.
+        inline bool detectVisible() const { return m_detectVisible; }
+
+        //! Whether this entity does signal checks.
+        inline bool detectActive() const { return m_detectActive; }
+
+        //! Set whether this entity is to be considered in range checks.
+        inline void setDetectVisible(bool detectVisible) { m_detectVisible = detectVisible; }
+
+        //! Set whether this entity does range checks.
+        inline void setDetectActive(bool detectActive) { m_detectActive = detectActive; }
+
         //! @}
 
     protected:
@@ -96,5 +108,7 @@ namespace dungeon
         std::vector<DetectSignal> m_detectSignals;
 
         float m_detectRangeFactor = 1.f;    //!< Factor applied to all range checks.
+        bool m_detectVisible = true;        //!< Is this entity to be considered in signal checks?
+        bool m_detectActive = true;         //!< Is this entity doing signal checks?
     };
 }

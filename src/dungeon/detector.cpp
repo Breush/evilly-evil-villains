@@ -57,6 +57,7 @@ uint32 Detector::isInRange(const DetectEntity& entity, const std::string& key, c
     // Check if any in range for all corresponding key
     const auto& position = entity.localPosition();
     for (const auto& pEntity : m_entities) {
+        if (!pEntity->detectVisible()) continue;
         if (pEntity->detectKey() != key || pEntity == &entity) continue;
 
         const auto distance = position - pEntity->localPosition();
@@ -68,16 +69,18 @@ uint32 Detector::isInRange(const DetectEntity& entity, const std::string& key, c
     return -1u;
 }
 
-void Detector::applyInRange(const sf::Vector2f& position, float range, DetectionLambda hurtEntityFunc)
+void Detector::applyInRange(const sf::Vector2f& position, float range, DetectionLambda rangeEntityFunc)
 {
     // Range squared
     const auto sqRange = range * range;
 
     // Check if any in range
     for (const auto& pEntity : m_entities) {
+        if (!pEntity->detectVisible()) continue;
+
         const auto distance = position - pEntity->localPosition();
         const auto sqDistance = distance.x * distance.x + distance.y * distance.y;
         if (sqDistance <= sqRange)
-            hurtEntityFunc(*pEntity, std::sqrt(sqDistance));
+            rangeEntityFunc(*pEntity, std::sqrt(sqDistance));
     }
 }
