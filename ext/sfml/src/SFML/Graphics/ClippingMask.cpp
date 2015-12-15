@@ -25,67 +25,81 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Graphics/RenderTextureImplDefault.hpp>
-#include <SFML/Graphics/GLCheck.hpp>
-#include <SFML/Graphics/TextureSaver.hpp>
-#include <SFML/Window/Context.hpp>
-#include <SFML/System/Err.hpp>
+#include <SFML/Graphics/ClippingMask.hpp>
 
 
 namespace sf
 {
-namespace priv
-{
 ////////////////////////////////////////////////////////////
-RenderTextureImplDefault::RenderTextureImplDefault() :
-m_context(0),
-m_width  (0),
-m_height (0)
+ClippingMask::ClippingMask() :
+m_drawables(),
+m_mode     (Mode::Inclusive)
 {
-
 }
 
 
 ////////////////////////////////////////////////////////////
-RenderTextureImplDefault::~RenderTextureImplDefault()
+ClippingMask::ClippingMask(Mode theMode) :
+m_drawables(),
+m_mode     (theMode)
 {
-    // Destroy the context
-    delete m_context;
 }
 
 
 ////////////////////////////////////////////////////////////
-bool RenderTextureImplDefault::create(unsigned int width, unsigned int height, unsigned int, bool depthBuffer, bool stencilBuffer)
+std::size_t ClippingMask::getDrawableCount() const
 {
-    // Store the dimensions
-    m_width = width;
-    m_height = height;
-
-    // Create the in-memory OpenGL context
-    m_context = new Context(ContextSettings(depthBuffer ? 32 : 0, stencilBuffer ? 8 : 0), width, height);
-
-    return true;
+    return m_drawables.size();
 }
 
 
 ////////////////////////////////////////////////////////////
-bool RenderTextureImplDefault::activate(bool active)
+const Drawable*& ClippingMask::operator [](std::size_t index)
 {
-    return m_context->setActive(active);
+    return m_drawables[index];
 }
 
 
 ////////////////////////////////////////////////////////////
-void RenderTextureImplDefault::updateTexture(unsigned int textureId)
+const Drawable* const& ClippingMask::operator [](std::size_t index) const
 {
-    // Make sure that the current texture binding will be preserved
-    priv::TextureSaver save;
-
-    // Copy the rendered pixels to the texture
-    glCheck(glBindTexture(GL_TEXTURE_2D, textureId));
-    glCheck(glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, m_width, m_height));
+    return m_drawables[index];
 }
 
-} // namespace priv
+
+////////////////////////////////////////////////////////////
+void ClippingMask::clear()
+{
+    m_drawables.clear();
+}
+
+
+////////////////////////////////////////////////////////////
+void ClippingMask::append(const Drawable& drawable)
+{
+    m_drawables.push_back(&drawable);
+}
+
+
+////////////////////////////////////////////////////////////
+void ClippingMask::remove(const Drawable& drawable)
+{
+    m_drawables.erase(std::remove(m_drawables.begin(), m_drawables.end(), &drawable), m_drawables.end());
+}
+
+
+////////////////////////////////////////////////////////////
+ClippingMask::Mode ClippingMask::getMode() const
+{
+    return m_mode;
+}
+
+
+////////////////////////////////////////////////////////////
+void ClippingMask::setMode(Mode theMode)
+{
+    m_mode = theMode;
+}
+
 
 } // namespace sf
