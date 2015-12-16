@@ -62,9 +62,18 @@ function _onEntityEnterTunnel(UID)
     local linkY = eev_getLinkRoomY()
     local roomX = eev_getCurrentRoomX()
     local roomY = eev_getCurrentRoomY()
+
+    if linkY < roomY then
+        -- We go left
+        roomY = roomY + 0.15625
+    else
+        -- We go right
+        linkY = linkY + 0.15625
+    end
+
     eev_resetClipAreasUID(UID)
-    eev_addClipAreaUID(UID, roomX, roomY, 1, 1)
-    eev_addClipAreaUID(UID, linkX, linkY, 1, 1)
+    eev_addClipAreaUID(UID, roomX + 0.33333, roomY, 0.84375, 0.66667)
+    eev_addClipAreaUID(UID, linkX + 0.33333, linkY, 0.84375, 0.66667)
 
     -- FIXME What happens to the entity clipped if this tunnel entrance is destroyed while in it?
 end
