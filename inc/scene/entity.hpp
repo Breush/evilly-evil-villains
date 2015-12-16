@@ -135,12 +135,6 @@ namespace scene
         //! Set the shader applied to the whole entity.
         void setShader(const std::string& shaderID);
 
-        //! Returns true if the global clipping is activated.
-        inline bool globalClipping() const { return m_globalClipping; }
-
-        //! Returns the global clip area of the entity.
-        inline sf::FloatRect globalClipArea() const { return m_globalClipArea; }
-
         //! Tries to find a parent of the type specified, the relPos will be updated to the relative position
         //! of the parent. If none, return nullptr and relPos is still changed.
         //! The type specified should inherit from Entity.
@@ -154,6 +148,24 @@ namespace scene
             relPos += m_localPosition - getOrigin();
             return m_parent->findParent<T>(relPos);
         }
+
+        //! @}
+
+        //-----------------//
+        //! @name Clipping
+        //! @{
+
+        //! Set a unique clipping area for the entity.
+        void setClipArea(const sf::FloatRect& clipArea);
+
+        //! Remove all clipping area from the entity.
+        void resetClipAreas();
+
+        //! Add a clipping area to the entity.
+        void addClipArea(const sf::FloatRect& clipArea);
+
+        //! Detect whether a point is still visible after clipping.
+        bool isPointInClipAreas(const sf::Vector2f& position);
 
         //! @}
 
@@ -197,10 +209,6 @@ namespace scene
         //! Displayed size is size() * scale().
         PARAMG(sf::Vector2f, m_scale, scale)
 
-        //! Specifies what is drawn for the entity (also affects children).
-        //! Set clipArea width or height to a negative value to draw it all.
-        PARAMGSU(sf::FloatRect, m_clipArea, clipArea, setClipArea, refreshClipArea)
-
         //! Whether the entity and its children will be drawn, and therefore detectable.
         PARAMGS(bool, m_visible, visible, setVisible)
 
@@ -221,8 +229,12 @@ namespace scene
         //! Extra hook for drawing something else than drawables.
         virtual void drawInternal(sf::RenderTarget& target, sf::RenderStates states) const {}
 
-        //! Draws all parts of the entity.
+        //! Really draw the entity parts with no global clipping.
         void drawParts(sf::RenderTarget& target, sf::RenderStates states) const;
+
+        //! Really draw the entity parts with a global clipping.
+        //! Note: There is some code duplication with overload function for performances.
+        void drawParts(sf::RenderTarget& target, sf::RenderStates states, const sf::FloatRect& clipArea) const;
 
         //! Is the relative position to be considered.
         virtual bool isPointOverable(const sf::Vector2f& relPos) const noexcept { return true; }
@@ -442,8 +454,11 @@ namespace scene
         //! Refresh the relative position of children.
         void refreshChildrenRelativePosition();
 
-        //! Refresh the clip area and update children.
-        void refreshClipArea();
+        //! Refresh a specific clip area.
+        void refreshClipArea(const uint index);
+
+        //! Refresh all clip areas.
+        void refreshClipAreas();
 
         //! Moves the entity to keep it between m_insideLocalRect coordinates.
         //! @return true if m_localPosition has been modified.
@@ -530,12 +545,6 @@ namespace scene
         //! Whether the entity is currently focused.
         bool m_focused = false;
 
-        //! Whether the size has changed since last update.
-        bool m_sizeChanges = true;
-
-        //! Whether the local transformations has changed since last update.
-        bool m_localChanges = true;
-
         //! Whether the position of the entity should be computed relatively.
         bool m_relativePositioning = false;
 
@@ -545,13 +554,15 @@ namespace scene
         //! The target status to visible, if mark is on.
         bool m_visibleMark;
 
-        //! The visual part of the entity, taking parent clip area in account.
-        sf::FloatRect m_globalClipArea = {0.f, 0.f, -1.f, -1.f};
-
         //! The entity will be kept between this limits if width/height is not negative.
         sf::FloatRect m_insideLocalRect = {0.f, 0.f, -1.f, -1.f};
 
-        //! Whether or not this entity has a valid globalClipArea.
-        bool m_globalClipping = false;
+        // Clipping
+        std::vector<sf::FloatRect> m_clipAreas;         //!< Specifies what is drawn for the entity (also affects children).
+        std::vector<sf::FloatRect> m_globalClipAreas;   //!< The visual part of the entity, taking parent clip area in account.
+
+        // Dirty flags
+        bool m_sizeChanges = true;  //!< Whether the size has changed since last update.
+        bool m_localChanges = true; //!< Whether the local transformations has changed since last update.
     };
 }

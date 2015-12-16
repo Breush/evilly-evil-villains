@@ -18,6 +18,11 @@ namespace sf
         return Vector2u(uint(v.x), uint(v.y));
     }
 
+    template<typename T> FloatRect toFloatRect(const Rect<T>& r)
+    {
+        return FloatRect(float(r.left), float(r.top), float(r.width), float(r.height));
+    }
+
     //-----------------------------------//
     //----- Operators vector-vector -----//
 

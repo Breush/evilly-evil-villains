@@ -19,6 +19,8 @@ namespace sf
     template<typename T> Vector2i v2i(const Vector2<T>& v);
     template<typename T> Vector2u v2u(const Vector2<T>& v);
 
+    template<typename T> FloatRect toFloatRect(const Rect<T>& r);
+
     // Operators vector-vector
     template<typename T> Vector2<T> operator/(const Vector2<T>& v1, const Vector2<T>& v2);
     template<typename T> Vector2<T> operator*(const Vector2<T>& v1, const Vector2<T>& v2);

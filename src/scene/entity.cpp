@@ -23,7 +23,6 @@ Entity::Entity(bool isLerpable)
     , m_localScale(1.f, 1.f)
     , m_size(0.f, 0.f)
     , m_scale(1.f, 1.f)
-    , m_clipArea(0.f, 0.f, -1.f, -1.f)
     , m_visible(true)
     , m_transparent(false)
     , m_graph(nullptr)
@@ -51,74 +50,130 @@ Entity::~Entity()
 void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     returnif (!m_visible);
+
     states.transform = getTransform();
+    states.shader = m_shader;
 
-    // Draw itself
-    if (!m_transparent) {
-        const auto initialShader = states.shader;
-        if (m_shader != nullptr) states.shader = m_shader;
+    // No personnal global clipping
+    // Note: if any, the previous clipping area will still be applied
+    if (m_globalClipAreas.empty())
+    {
+        // Draw self
+        if (!m_transparent) {
+            drawParts(target, states);
+            drawInternal(target, states);
+        }
 
-        // Sub-parts
-        drawParts(target, states);
+        // Draw children - DFS
+        for (auto& child : m_children)
+            child->draw(target, states);
 
-        states.shader = initialShader;
+        return;
     }
 
-    // Draw children - DFS
-    for (auto& child : m_children)
-        target.draw(*child, states);
+    // Was there a previous clipping?
+    const auto& parentClippingAreaInt = target.getClippingArea();
+    auto parentClippingArea = sf::toFloatRect(parentClippingAreaInt);
+    bool parentClipping = (parentClippingAreaInt != sf::IntRect());
+
+    // Multiple global clipping
+    for (const auto& globalClipArea : m_globalClipAreas)
+    {
+        sf::FloatRect clipArea;
+        clipArea = tools::mapRectCoordsToPixel(target, globalClipArea);
+        if (parentClipping) clipArea = tools::intersect(parentClippingArea, clipArea);
+
+        // Fully clipped
+        // TODO Add a pre-clipping test: does it worth it to draw itself?
+        // i.e. Are we invisible because of the clip area?
+        if (clipArea.width <= 0.f || clipArea.height <= 0.f) continue;
+
+        target.setClippingArea(sf::IntRect(clipArea.left, clipArea.top, clipArea.width, clipArea.height));
+
+        // Draw self
+        if (!m_transparent) {
+            drawParts(target, states, clipArea);
+            drawInternal(target, states);
+        }
+
+        // Draw children - DFS
+        for (auto& child : m_children)
+            child->draw(target, states);
+    }
+
+    // Reset previous clipping
+    // Note: If there was no clipping, the setClippingArea(sf::IntRect())
+    // is the behavior of clearClippingArea()
+    target.setClippingArea(parentClippingAreaInt);
 }
 
 void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
 {
     const sf::Shader* initialShader = states.shader;
-    sf::FloatRect glClipArea;
-
-    // Clipping if needed
-    if (m_globalClipping)
-    {
-        glClipArea = tools::mapRectCoordsToPixel(target, m_globalClipArea);
-        target.setClippingArea(sf::IntRect(glClipArea.left, glClipArea.top, glClipArea.width, glClipArea.height));
-    }
 
     // Drawing parts
     for (auto& part : m_parts)
     {
         // Setting shader if needed
-        if (part.shader != nullptr) states.shader = part.shader;
-        else states.shader = initialShader;
+        if (part.shader != nullptr)
+            states.shader = part.shader;
 
         // Part clipping
         if (part.clipping) {
-            // Part clipping rect
-            sf::FloatRect r(part.clippingRect);
-            r = states.transform.transformRect(r);
-            r = tools::mapRectCoordsToPixel(target, r);
+            sf::FloatRect partClipArea(part.clippingRect);
+            partClipArea = states.transform.transformRect(partClipArea);
+            partClipArea = tools::mapRectCoordsToPixel(target, partClipArea);
 
-            // If entity has already a clipping value, intersects
-            if (m_globalClipping) r = tools::intersect(r, glClipArea);
-
-            target.setClippingArea(sf::IntRect(r.left, r.top, r.width, r.height));
+            if (partClipArea.width <= 0.f || partClipArea.height <= 0.f) continue;
+            target.setClippingArea(sf::IntRect(partClipArea.left, partClipArea.top, partClipArea.width, partClipArea.height));
         }
 
-        // Effectively drawing this object
+        // Effectively drawing this part
         target.draw(*part.drawable, states);
 
-        // Disable part clipping
-        if (part.clipping && !m_globalClipping)
+        // Restore the previous clipping
+        if (part.clipping)
             target.clearClippingArea();
+
+        // Reset the shader
+        if (part.shader != nullptr)
+            states.shader = initialShader;
     }
+}
 
-    // Reset the global clipping
-    if (m_globalClipping)
-        target.setClippingArea(sf::IntRect(glClipArea.left, glClipArea.top, glClipArea.width, glClipArea.height));
+void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states, const sf::FloatRect& clipArea) const
+{
+    const sf::Shader* initialShader = states.shader;
 
-    // Extra drawing hook
-    drawInternal(target, states);
+    // Drawing parts
+    for (auto& part : m_parts)
+    {
+        // Setting shader if needed
+        if (part.shader != nullptr)
+            states.shader = part.shader;
 
-    // End of clipping
-    if (m_globalClipping)
-        target.clearClippingArea();
+        // Part clipping
+        if (part.clipping) {
+            sf::FloatRect partClipArea(part.clippingRect);
+            partClipArea = states.transform.transformRect(partClipArea);
+            partClipArea = tools::mapRectCoordsToPixel(target, partClipArea);
+            partClipArea = tools::intersect(partClipArea, clipArea);
+
+            if (partClipArea.width <= 0.f || partClipArea.height <= 0.f) continue;
+            target.setClippingArea(sf::IntRect(partClipArea.left, partClipArea.top, partClipArea.width, partClipArea.height));
+        }
+
+        // Effectively drawing this part
+        target.draw(*part.drawable, states);
+
+        // Restore the previous clipping
+        if (part.clipping)
+            target.setClippingArea(sf::IntRect(clipArea.left, clipArea.top, clipArea.width, clipArea.height));
+
+        // Reset the shader
+        if (part.shader != nullptr)
+            states.shader = initialShader;
+    }
 }
 
 void Entity::update(const sf::Time& dt)
@@ -149,7 +204,7 @@ void Entity::updateChanges()
 
     // Update internal state if local changes
     if (m_localChanges) {
-        refreshClipArea();
+        refreshClipAreas();
 
         onTransformChanges();
         m_localChanges = false;
@@ -239,14 +294,13 @@ Entity* Entity::firstOver(const sf::Vector2f& position)
     // Children are not over, maybe I am
     // Note: transparency does not affect detectability
     returnif (!m_detectable || !m_visible) nullptr;
-    sf::FloatRect bounds({0.f, 0.f}, size());
-    bounds = getTransform().transformRect(bounds);
-    bounds = tools::intersect(m_globalClipArea, bounds);
-    returnif (bounds.width < 0.f || bounds.height < 0.f) nullptr;
-    returnif (!bounds.contains(position)) nullptr;
 
-    // Do we really consider we are over this entity
+    // Gross check to see if we are hitting this entity
     auto relPos = getInverseTransform().transformPoint(position);
+    returnif (relPos.x < 0.f || relPos.y < 0.f || relPos.x >= m_size.x || relPos.y >= m_size.y) nullptr;
+
+    // Is the point really visible?
+    returnif (!isPointInClipAreas(position)) nullptr;
     returnif (!isPointOverable(relPos)) nullptr;
 
     return this;
@@ -461,6 +515,43 @@ void Entity::setShader(const std::string& shaderID)
     else m_shader = &Application::context().shaders.get(shaderID);
 }
 
+//--------------------//
+//----- Clipping -----//
+
+void Entity::setClipArea(const sf::FloatRect& clipArea)
+{
+    resetClipAreas();
+    addClipArea(clipArea);
+}
+
+void Entity::resetClipAreas()
+{
+    m_clipAreas.clear();
+    m_globalClipAreas.clear();
+}
+
+void Entity::addClipArea(const sf::FloatRect& clipArea)
+{
+    returnif (clipArea.width < 0.f || clipArea.height < 0.f);
+
+    m_clipAreas.emplace_back(clipArea);
+    m_globalClipAreas.emplace_back();
+
+    refreshClipArea(m_clipAreas.size() - 1u);
+}
+
+bool Entity::isPointInClipAreas(const sf::Vector2f& position)
+{
+    returnif (m_globalClipAreas.empty()) true;
+
+    for (const auto& globalClipArea : m_globalClipAreas)
+        returnif (globalClipArea.contains(position)) true;
+
+    return false;
+}
+
+//! @}
+
 //------------------------------------//
 //----- Refresh on local changes -----//
 
@@ -570,20 +661,16 @@ void Entity::refreshChildrenRelativePosition()
         child->refreshRelativePosition();
 }
 
-void Entity::refreshClipArea()
+void Entity::refreshClipArea(const uint index)
 {
-    m_globalClipArea = m_clipArea;
+    m_globalClipAreas[index] = getTransform().transformRect(m_clipAreas[index]);
+}
 
-    if (m_globalClipArea.width >= 0.f && m_globalClipArea.height >= 0.f)
-        m_globalClipArea = getTransform().transformRect(m_globalClipArea);
-
-    if (m_parent != nullptr)
-        m_globalClipArea = tools::intersect(m_globalClipArea,m_parent->globalClipArea());
-
-    m_globalClipping = (m_globalClipArea.width >= 0.f && m_globalClipArea.height >= 0.f);
-
-    for (auto& child : m_children)
-        child->refreshClipArea();
+void Entity::refreshClipAreas()
+{
+    auto clipAreasCount = m_clipAreas.size();
+    for (uint i = 0u; i < clipAreasCount; ++i)
+        refreshClipArea(i);
 }
 
 bool Entity::refreshKeepInsideLocalRect()
@@ -666,7 +753,7 @@ void Entity::setParent(Entity* inParent)
     if (m_parent != nullptr) {
         refreshFromLocal();
         refreshRelativePosition();
-        refreshClipArea();
+        refreshClipAreas();
     }
 }
 
