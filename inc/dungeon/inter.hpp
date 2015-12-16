@@ -267,6 +267,9 @@ namespace dungeon
         //! Returns the top-left coordinates in pixels of the tile situated at these relative coordinates.
         sf::Vector2f relTileLocalPosition(const sf::Vector2f& relCoords) const;
 
+        //! Returns the rectangle coordinates and size converted.
+        sf::FloatRect relTileLocalPosition(const sf::FloatRect& relCoords) const;
+
         //! The size in pixels of the tiles.
         sf::Vector2f tileSize() const { return m_grid.cellSize(); }
 

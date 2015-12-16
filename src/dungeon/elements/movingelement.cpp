@@ -141,7 +141,9 @@ void MovingElement::setCurrentNode(const NodeWay& nodeWay)
 
         // We are getting out of a tunnel, warn the orgin facility
         if (m_inTunnel) {
-            m_inter.findRoomFacility(m_tunnelOriginCoords, m_tunnelOriginFacilityID)->movingElementLeaveTunnel(*this);
+            auto tunnelOriginFacility = m_inter.findRoomFacility(m_tunnelOriginCoords, m_tunnelOriginFacilityID);
+            if (tunnelOriginFacility != nullptr) tunnelOriginFacility->movingElementLeaveTunnel(*this);
+            else resetClipAreas();
             m_inTunnel = false;
         }
 

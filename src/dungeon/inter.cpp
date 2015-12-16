@@ -269,10 +269,24 @@ sf::Vector2u Inter::tileFromLocalPosition(const sf::Vector2f& pos) const
 
 sf::Vector2f Inter::relTileLocalPosition(const sf::Vector2f& relCoords) const
 {
+    const auto& factor = tileSize();
+
     sf::Vector2f pos;
-    pos.x = relCoords.y * tileSize().x;
-    pos.y = size().y - relCoords.x * tileSize().y;
+    pos.x = relCoords.y * factor.x;
+    pos.y = size().y - relCoords.x * factor.y;
     return pos;
+}
+
+sf::FloatRect Inter::relTileLocalPosition(const sf::FloatRect& relRect) const
+{
+    const auto& factor = tileSize();
+
+    sf::FloatRect rect;
+    rect.left = relRect.top * factor.x;
+    rect.top = size().y - (relRect.left + relRect.height) * factor.y;
+    rect.width = relRect.width * factor.x;
+    rect.height = relRect.height * factor.y;
+    return rect;
 }
 
 sf::Vector2f Inter::relTileFromLocalPosition(const sf::Vector2f& pos) const

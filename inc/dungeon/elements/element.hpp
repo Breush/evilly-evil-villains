@@ -209,6 +209,12 @@ namespace dungeon
         //! Set whether the entity with the corresponding UID detects others.
         void lua_setDetectActiveUID(const uint32 UID, bool detectActive);
 
+        //! Cancel all clip areas of the entity with the corresponding UID.
+        void lua_resetClipAreasUID(const uint32 UID);
+
+        //! Add a clip area to the entity with the corresponding UID.
+        void lua_addClipAreaUID(const uint32 UID, const lua_Number rx, const lua_Number ry, const lua_Number rw, const lua_Number rh);
+
         //----- Dungeon
 
         //! Explode the corresponding room.

@@ -42,6 +42,18 @@ namespace scene
         friend class Layer;
         friend class Graph;
 
+        //! Decides how a clip area is handled.
+        struct ClipArea
+        {
+            ClipArea(const sf::FloatRect& inArea, const bool inAbsolute)
+                : area(inArea)
+                , absolute(inAbsolute)
+            {}
+
+            sf::FloatRect area;     //!< The area to clip.
+            bool absolute = false;  //!< Are the left/top in area absolute coordinates?
+        };
+
     public:
 
         //! Constructor.
@@ -162,7 +174,7 @@ namespace scene
         void resetClipAreas();
 
         //! Add a clipping area to the entity.
-        void addClipArea(const sf::FloatRect& clipArea);
+        void addClipArea(const sf::FloatRect& clipArea, bool absolute = false);
 
         //! Detect whether a point is still visible after clipping.
         bool isPointInClipAreas(const sf::Vector2f& position);
@@ -558,7 +570,7 @@ namespace scene
         sf::FloatRect m_insideLocalRect = {0.f, 0.f, -1.f, -1.f};
 
         // Clipping
-        std::vector<sf::FloatRect> m_clipAreas;         //!< Specifies what is drawn for the entity (also affects children).
+        std::vector<ClipArea> m_clipAreas;              //!< Specifies what is drawn for the entity (also affects children).
         std::vector<sf::FloatRect> m_globalClipAreas;   //!< The visual part of the entity, taking parent clip area in account.
 
         // Dirty flags

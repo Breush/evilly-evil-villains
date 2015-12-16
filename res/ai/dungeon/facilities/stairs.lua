@@ -56,6 +56,17 @@ function _onEntityEnterTunnel(UID)
     eev_setDepthUID(UID, 105)
     eev_setDetectActiveUID(UID, false)
     eev_setDetectVisibleUID(UID, false)
+
+    -- Add the both exits clipping
+    local linkX = eev_getLinkRoomX()
+    local linkY = eev_getLinkRoomY()
+    local roomX = eev_getCurrentRoomX()
+    local roomY = eev_getCurrentRoomY()
+    eev_resetClipAreasUID(UID)
+    eev_addClipAreaUID(UID, roomX, roomY, 1, 1)
+    eev_addClipAreaUID(UID, linkX, linkY, 1, 1)
+
+    -- FIXME What happens to the entity clipped if this tunnel entrance is destroyed while in it?
 end
 
 -- Called whenever an entity leaves in one of our tunnel
@@ -63,6 +74,7 @@ function _onEntityLeaveTunnel(UID)
     eev_setDepthUID(UID, 50)
     eev_setDetectActiveUID(UID, true)
     eev_setDetectVisibleUID(UID, true)
+    eev_resetClipAreasUID(UID)
 end
 
 -------------

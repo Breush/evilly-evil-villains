@@ -530,12 +530,12 @@ void Entity::resetClipAreas()
     m_globalClipAreas.clear();
 }
 
-void Entity::addClipArea(const sf::FloatRect& clipArea)
+void Entity::addClipArea(const sf::FloatRect& clipArea, bool absolute)
 {
     returnif (clipArea.width < 0.f || clipArea.height < 0.f);
 
-    m_clipAreas.emplace_back(clipArea);
-    m_globalClipAreas.emplace_back();
+    m_clipAreas.emplace_back(clipArea, absolute);
+    m_globalClipAreas.emplace_back(clipArea);
 
     refreshClipArea(m_clipAreas.size() - 1u);
 }
@@ -663,7 +663,8 @@ void Entity::refreshChildrenRelativePosition()
 
 void Entity::refreshClipArea(const uint index)
 {
-    m_globalClipAreas[index] = getTransform().transformRect(m_clipAreas[index]);
+    returnif (m_clipAreas[index].absolute);
+    m_globalClipAreas[index] = getTransform().transformRect(m_clipAreas[index].area);
 }
 
 void Entity::refreshClipAreas()

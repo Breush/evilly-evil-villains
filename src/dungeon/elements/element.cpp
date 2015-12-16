@@ -75,6 +75,8 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
     m_lua["eev_setDepthUID"] = [this] (const uint32 UID, const lua_Number inDepth) { lua_setDepthUID(UID, inDepth); };
     m_lua["eev_setDetectVisibleUID"] = [this] (const uint32 UID, bool detectVisible) { lua_setDetectVisibleUID(UID, detectVisible); };
     m_lua["eev_setDetectActiveUID"] = [this] (const uint32 UID, bool detectActive) { lua_setDetectActiveUID(UID, detectActive); };
+    m_lua["eev_resetClipAreasUID"] = [this] (const uint32 UID) { lua_resetClipAreasUID(UID); };
+    m_lua["eev_addClipAreaUID"] = [this] (const uint32 UID, const lua_Number rx, const lua_Number ry, const lua_Number rw, const lua_Number rh) { lua_addClipAreaUID(UID, rx, ry, rw, rh); };
 
     m_lua["eev_borrowVillainDosh"] = [this] (const uint32 amount) { return lua_borrowVillainDosh(amount); };
     m_lua["eev_giveDosh"] = [this] (const uint32 amount) { lua_giveDosh(amount); };
@@ -444,6 +446,25 @@ void Element::lua_setDetectActiveUID(const uint32 UID, bool detectActive)
     returnif (entity == nullptr);
 
     entity->setDetectActive(detectActive);
+}
+
+void Element::lua_resetClipAreasUID(const uint32 UID)
+{
+    auto* entity = s_detector.find(UID);
+    returnif (entity == nullptr);
+
+    entity->resetClipAreas();
+}
+
+void Element::lua_addClipAreaUID(const uint32 UID, const lua_Number rx, const lua_Number ry, const lua_Number rw, const lua_Number rh)
+{
+    auto* entity = s_detector.find(UID);
+    returnif (entity == nullptr);
+
+    sf::FloatRect clipArea(rx, ry, rw, rh);
+    clipArea = m_inter.relTileLocalPosition(clipArea);
+    clipArea = m_inter.getTransform().transformRect(clipArea);
+    entity->addClipArea(clipArea, true);
 }
 
 //----- Dungeon
