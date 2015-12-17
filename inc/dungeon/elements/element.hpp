@@ -203,6 +203,9 @@ namespace dungeon
         //! Set the depth of the entity with the corresponding UID.
         void lua_setDepthUID(const uint32 UID, const lua_Number inDepth);
 
+        //! Set the visibility of the entity with the corresponding UID.
+        void lua_setVisibleUID(const uint32 UID, const bool isVisible);
+
         //! Set whether the entity with the corresponding UID is detectable by others.
         void lua_setDetectVisibleUID(const uint32 UID, bool detectVisible);
 

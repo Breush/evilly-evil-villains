@@ -18,13 +18,22 @@ namespace dungeon
     public:
 
         //! Constructor.
-        Facility(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dungeon::Inter& inter);
+        Facility(const sf::Vector2u& coords, ElementData& edata, Inter& inter);
 
         //! Default destructor.
         ~Facility() = default;
 
         std::string detectKey() const final { return "facility"; }
         std::string _name() const final { return "dungeon::Facility"; }
+
+        //---------------------//
+        //! @name Element data
+        //! @{
+
+        //! Binds the element data.
+        void bindFacilityInfo(FacilityInfo& facilityInfo);
+
+        //! @}
 
         //---------------------------//
         //! @name Elements callbacks
@@ -38,15 +47,6 @@ namespace dungeon
 
         //! @}
 
-        //----------------------------//
-        //! @name Getters and setters
-        //! @{
-
-        //! Access the info used.
-        inline const FacilityInfo& info() const { return m_facilityInfo; }
-
-        //! @}
-
     protected:
 
         //----------------//
@@ -55,6 +55,10 @@ namespace dungeon
 
         //! Does a facility with the specified ID exists in the same room?
         bool lua_hasSiblingFacility(const std::string& facilityID) const;
+
+        //! If the facility with the specified exists in the same room we are in, returns its UID.
+        //! If not, returns an unknown value.
+        uint32 lua_getSiblingFacility(const std::string& facilityID) const;
 
         //! Get the current room x coordinate.
         uint32 lua_getCurrentRoomX() const;
@@ -107,7 +111,8 @@ namespace dungeon
 
     private:
 
-        sf::Vector2u m_coords;          //!< The room in which the facility is set.
-        FacilityInfo& m_facilityInfo;   //!< The facility data reference.
+        sf::Vector2u m_coords;                  //!< The room in which the facility is set.
+        FacilityInfo* m_facilityInfo = nullptr; //!< The facility data reference.
+        std::wstring m_elementID;               //!< The last facility ID known.
     };
 }

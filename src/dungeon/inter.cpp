@@ -640,7 +640,7 @@ void Inter::setRoomsByFloor(uint value)
 Facility* Inter::findRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID)
 {
     for (auto& facility : m_tiles[coords].facilities)
-        if (facility->info().data.type() == facilityID)
+        if (facility->edata().type() == facilityID)
             return facility.get();
 
     // Not found
@@ -971,21 +971,24 @@ void Inter::refreshTileFacilities(const sf::Vector2u& coords)
     returnif (coords.x >= m_data->floorsCount());
     returnif (coords.y >= m_data->roomsByFloor());
 
-    auto& room = m_data->room(coords);
-    auto& tile = m_tiles[coords];
+    auto& roomFacilities = m_data->room(coords).facilities;
+    auto& tileFacilities = m_tiles[coords].facilities;
 
     // Reset
-    tile.facilities.clear();
-
-    // Room is not constructed
-    returnif (room.state != RoomState::CONSTRUCTED);
+    tileFacilities.clear();
 
     // Facilities
-    for (auto& facilityInfo : room.facilities) {
-        auto facility = std::make_unique<Facility>(coords, facilityInfo, *this);
-        tile.facilities.emplace_back(std::move(facility));
-        attachChild(*tile.facilities.back());
+    for (auto& facilityInfo : roomFacilities) {
+        auto facility = std::make_unique<Facility>(coords, facilityInfo.data, *this);
+        tileFacilities.emplace_back(std::move(facility));
+        attachChild(*tileFacilities.back());
     }
+
+    // Now rebind the data
+    // Note: this is delayed so that facilities requiring sibling facility to be present will work fine
+    auto facilitiesCount = roomFacilities.size();
+    for (uint i = 0u; i < facilitiesCount; ++i)
+        tileFacilities[i]->bindFacilityInfo(roomFacilities[i]);
 }
 
 void Inter::refreshTileTraps(const sf::Vector2u& coords)

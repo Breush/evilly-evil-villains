@@ -73,6 +73,7 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
 
     m_lua["eev_damageUID"] = [this] (const uint32 UID, const lua_Number amount) { lua_damageUID(UID, amount); };
     m_lua["eev_setDepthUID"] = [this] (const uint32 UID, const lua_Number inDepth) { lua_setDepthUID(UID, inDepth); };
+    m_lua["eev_setVisibleUID"] = [this] (const uint32 UID, bool isVisible) { lua_setVisibleUID(UID, isVisible); };
     m_lua["eev_setDetectVisibleUID"] = [this] (const uint32 UID, bool detectVisible) { lua_setDetectVisibleUID(UID, detectVisible); };
     m_lua["eev_setDetectActiveUID"] = [this] (const uint32 UID, bool detectActive) { lua_setDetectActiveUID(UID, detectActive); };
     m_lua["eev_resetClipAreasUID"] = [this] (const uint32 UID) { lua_resetClipAreasUID(UID); };
@@ -430,6 +431,14 @@ void Element::lua_setDepthUID(const uint32 UID, const lua_Number inDepth)
     returnif (entity == nullptr);
 
     entity->setDepth(static_cast<float>(inDepth));
+}
+
+void Element::lua_setVisibleUID(const uint32 UID, const bool isVisible)
+{
+    auto* entity = s_detector.find(UID);
+    returnif (entity == nullptr);
+
+    entity->setVisible(isVisible);
 }
 
 void Element::lua_setDetectVisibleUID(const uint32 UID, bool detectVisible)

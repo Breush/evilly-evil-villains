@@ -672,13 +672,16 @@ bool Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     facility.isLink = isLink;
     facility.common = &facilitiesDB().get(facilityID);
 
-    createFacilityLinks(coords, facility);
 
     addEvent("facility_changed", coords);
     if (facility.common->entrance)
         EventEmitter::addEvent("dungeon_changed");
 
     updateRoomHide(coords);
+
+    // Keep last, as this function could change the pending reference to facility
+    // by creating a implicit link in the same room we are.
+    createFacilityLinks(coords, facility);
 
     return true;
 }
@@ -705,7 +708,7 @@ void Data::setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& f
 
 void Data::createFacilityLinks(const sf::Vector2u& coords, const FacilityInfo& facility)
 {
-    const auto& facilityData = facilitiesDB().get(facility.data.type());
+    const auto& facilityData = *facility.common;
     for (const auto& link : facilityData.links) {
         // Create implicit links, ignore the explicit ones
         if (link.style == Link::Style::IMPLICIT) {
@@ -719,10 +722,14 @@ void Data::createRoomFacilitiesLinks(const sf::Vector2u& coords)
 {
     returnif (!isRoomConstructed(coords));
     const auto& selectedRoom = room(coords);
+    const auto& selectedRoomFacilities = selectedRoom.facilities;
 
     // For each facility in the room, create its links
-    for (const auto& facility : selectedRoom.facilities)
-        createFacilityLinks(coords, facility);
+    // Note: as a facility implicit could create a facility in that same room,
+    // we need to keep the original count for this facility.
+    auto facilitiesCount = selectedRoomFacilities.size();
+    for (uint i = 0u; i < facilitiesCount; ++i)
+        createFacilityLinks(coords, selectedRoomFacilities[i]);
 
     // Note: The following code block seems a bit fat,
     // but beside keeping up-to-date a list of facilities

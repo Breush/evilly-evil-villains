@@ -1,79 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r4.1">
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r5">
     <folder id="0" name="res/tex/dungeon/facilities/stairs">
-        <file id="0" name="res/tex/dungeon/facilities/stairs/up_left.png" width="256" height="256" pivot_x="0" pivot_y="1"/>
-        <file id="1" name="res/tex/dungeon/facilities/stairs/up_right.png" width="256" height="256" pivot_x="0" pivot_y="1"/>
-        <file id="2" name="res/tex/dungeon/facilities/stairs/down_left.png" width="256" height="256" pivot_x="0" pivot_y="1"/>
-        <file id="3" name="res/tex/dungeon/facilities/stairs/down_right.png" width="256" height="256" pivot_x="0" pivot_y="1"/>
-        <file id="4" name="res/tex/dungeon/facilities/stairs/dead_end.png" width="256" height="256" pivot_x="0" pivot_y="1"/>
+        <file id="0" name="res/tex/dungeon/facilities/stairs/stairs_wall_up_left.png" width="256" height="255" pivot_x="0" pivot_y="1"/>
+        <file id="1" name="res/tex/dungeon/facilities/stairs/column.png" width="40" height="256" pivot_x="0" pivot_y="1"/>
+        <file id="2" name="res/tex/dungeon/facilities/stairs/stairs_wall_up_right.png" width="256" height="256" pivot_x="0" pivot_y="1"/>
+        <file id="3" name="res/tex/dungeon/facilities/stairs/wall_down_left.png" width="256" height="246" pivot_x="0" pivot_y="1"/>
+        <file id="4" name="res/tex/dungeon/facilities/stairs/wall_down_right.png" width="256" height="256" pivot_x="0" pivot_y="1"/>
+        <file id="5" name="res/tex/dungeon/facilities/stairs/dead_end.png" width="256" height="256" pivot_x="0" pivot_y="1"/>
     </folder>
     <entity id="0" name="stairs">
-        <obj_info name="stairs_000" realname="stairs" type="sprite">
+        <obj_info name="stairs_dl" realname="dl" type="sprite">
             <frames>
                 <i folder="0" file="0"/>
-                <i folder="0" file="1"/>
                 <i folder="0" file="2"/>
                 <i folder="0" file="3"/>
                 <i folder="0" file="4"/>
+                <i folder="0" file="5"/>
             </frames>
         </obj_info>
         <animation id="0" name="lup" length="1000" interval="100" looping="false">
             <mainline>
                 <key id="0">
-                    <object_ref id="0" name="up_left" folder="0" file="0" abs_x="-128" abs_y="192" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="0" name="dl" folder="0" file="0" abs_x="-128" abs_y="192" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
                 </key>
             </mainline>
-            <timeline id="0" obj="2" name="up_left">
+            <timeline id="0" obj="0" name="dl">
                 <key id="0" spin="0">
-                    <object folder="0" file="0" x="-128" y="192"/>
+                    <object folder="0" file="0" x="-128" y="192" angle="0"/>
                 </key>
             </timeline>
         </animation>
         <animation id="1" name="rup" length="1000" interval="100" looping="false">
             <mainline>
                 <key id="0">
-                    <object_ref id="0" name="up_left" folder="0" file="1" abs_x="-128" abs_y="192" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="0" name="dl" folder="0" file="2" abs_x="-128" abs_y="192" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
                 </key>
             </mainline>
-            <timeline id="0" obj="2" name="up_left">
+            <timeline id="0" obj="0" name="dl">
                 <key id="0" spin="0">
-                    <object folder="0" file="1" x="-128" y="192"/>
+                    <object folder="0" file="2" x="-128" y="192" angle="0"/>
                 </key>
             </timeline>
         </animation>
         <animation id="2" name="ldown" length="1000" interval="100" looping="false">
             <mainline>
                 <key id="0">
-                    <object_ref id="0" name="up_left" folder="0" file="2" abs_x="-128" abs_y="192" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="0" name="dl" folder="0" file="3" abs_x="-128" abs_y="192" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
                 </key>
             </mainline>
-            <timeline id="0" obj="2" name="up_left">
+            <timeline id="0" obj="0" name="dl">
                 <key id="0" spin="0">
-                    <object folder="0" file="2" x="-128" y="192"/>
+                    <object folder="0" file="3" x="-128" y="192" angle="0"/>
                 </key>
             </timeline>
         </animation>
         <animation id="3" name="rdown" length="1000" interval="100" looping="false">
             <mainline>
                 <key id="0">
-                    <object_ref id="0" name="up_left" folder="0" file="3" abs_x="-128" abs_y="192" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="0" name="dl" folder="0" file="4" abs_x="-128" abs_y="192" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
                 </key>
             </mainline>
-            <timeline id="0" obj="2" name="up_left">
+            <timeline id="0" obj="0" name="dl">
                 <key id="0" spin="0">
-                    <object folder="0" file="3" x="-128" y="192"/>
+                    <object folder="0" file="4" x="-128" y="192" angle="0"/>
                 </key>
             </timeline>
         </animation>
-        <animation id="0" name="dead_end" length="1000" interval="100" looping="false">
+        <animation id="4" name="dead_end" length="1000" interval="100" looping="false">
             <mainline>
                 <key id="0">
-                    <object_ref id="0" name="dead_end" folder="0" file="4" abs_x="-128" abs_y="192" abs_angle="360" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="0" name="dl" folder="0" file="5" abs_x="-128" abs_y="192" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
                 </key>
             </mainline>
-            <timeline id="0" obj="2" name="dead_end">
+            <timeline id="0" obj="0" name="dl">
                 <key id="0" spin="0">
-                    <object folder="0" file="4" x="-128" y="192"/>
+                    <object folder="0" file="5" x="-128" y="192" angle="0"/>
                 </key>
             </timeline>
         </animation>

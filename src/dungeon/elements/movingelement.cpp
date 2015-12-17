@@ -253,7 +253,7 @@ void MovingElement::bindElementData(ElementData& edata)
     // Reparameter from inter
     setDetectRangeFactor(m_inter.tileSize().x);
 
-    // First time or new monsterID
+    // First time or new elementID
     if (firstTime) {
         // Animated sprite
         m_sprite.load(m_folder + sElementID);

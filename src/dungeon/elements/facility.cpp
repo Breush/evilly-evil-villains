@@ -1,31 +1,31 @@
 #include "dungeon/elements/facility.hpp"
 
 #include "dungeon/elements/movingelement.hpp"
+#include "dungeon/detector.hpp"
 #include "dungeon/data.hpp"
 #include "dungeon/inter.hpp"
 #include "tools/string.hpp"
 
 using namespace dungeon;
 
-Facility::Facility(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dungeon::Inter& inter)
+Facility::Facility(const sf::Vector2u& coords, ElementData& edata, dungeon::Inter& inter)
     : baseClass(inter)
     , m_coords(coords)
-    , m_facilityInfo(facilityInfo)
 {
-    m_edata = &m_facilityInfo.data;
+    m_edata = &edata;
 
-    const auto& facilityID = m_edata->type();
-    auto sFacilityID = toString(facilityID);
-
-    // Initializing
+    // Update from inter
     sf::Vector2f facilityPosition = m_inter.tileLocalPosition(coords) + 0.5f * m_inter.tileSize();
     setLocalPosition(facilityPosition);
 
-    // Decorum
-    m_sprite.load("dungeon/facilities/" + sFacilityID);
+    // Display reload
+    m_elementID = m_edata->type();
+    auto sElementID = toString(m_elementID);
+    m_sprite.load("dungeon/facilities/" + sElementID);
 
     // Lua API
     m_lua["eev_hasSiblingFacility"] = [this] (const std::string& facilityID) { return lua_hasSiblingFacility(facilityID); };
+    m_lua["eev_getSiblingFacility"] = [this] (const std::string& facilityID) { return lua_getSiblingFacility(facilityID); };
     m_lua["eev_getCurrentRoomX"] = [this] { return lua_getCurrentRoomX(); };
     m_lua["eev_getCurrentRoomY"] = [this] { return lua_getCurrentRoomY(); };
     m_lua["eev_hasTreasure"] = [this] { return lua_hasTreasure(); };
@@ -41,11 +41,20 @@ Facility::Facility(const sf::Vector2u& coords, FacilityInfo& facilityInfo, dunge
     m_lua["eev_removeTunnels"] = [this] { lua_removeTunnels(); };
 
     // Load lua file
-    std::string luaFilename = "res/ai/dungeon/facilities/" + sFacilityID + ".lua";
+    std::string luaFilename = "res/ai/dungeon/facilities/" + sElementID + ".lua";
     if (!m_lua.load(luaFilename))
         throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
     m_lua["_register"]();
+}
 
+//------------------------//
+//----- Element data -----//
+
+void Facility::bindFacilityInfo(FacilityInfo& facilityInfo)
+{
+    m_facilityInfo = &facilityInfo;
+
+    // Lua update
     m_lua["_reinit"]();
 }
 
@@ -70,6 +79,13 @@ bool Facility::lua_hasSiblingFacility(const std::string& facilityID) const
     return m_inter.hasRoomFacility(m_coords, toWString(facilityID));
 }
 
+uint32 Facility::lua_getSiblingFacility(const std::string& facilityID) const
+{
+    auto pFacility = m_inter.findRoomFacility(m_coords, toWString(facilityID));
+    returnif (pFacility == nullptr) 0u;
+    return pFacility->UID();
+}
+
 uint32 Facility::lua_getCurrentRoomX() const
 {
     return m_coords.x;
@@ -82,55 +98,55 @@ uint32 Facility::lua_getCurrentRoomY() const
 
 bool Facility::lua_hasTreasure() const
 {
-    return m_facilityInfo.treasure != -1u;
+    return m_facilityInfo->treasure != -1u;
 }
 
 void Facility::lua_setTreasure(const uint32 value)
 {
-    m_inter.setRoomFacilityTreasure(m_coords, m_facilityInfo.data.type(), value);
+    m_inter.setRoomFacilityTreasure(m_coords, m_elementID, value);
 }
 
 bool Facility::lua_isLink()
 {
-    return m_facilityInfo.isLink;
+    return m_facilityInfo->isLink;
 }
 
 bool Facility::lua_hasLink() const
 {
-    return (m_facilityInfo.link.x != -1u) && (m_facilityInfo.link.y != -1u);
+    return (m_facilityInfo->link.x != -1u) && (m_facilityInfo->link.y != -1u);
 }
 
 uint32 Facility::lua_getLinkRoomX() const
 {
-    return m_facilityInfo.link.x;
+    return m_facilityInfo->link.x;
 }
 
 uint32 Facility::lua_getLinkRoomY() const
 {
-    return m_facilityInfo.link.y;
+    return m_facilityInfo->link.y;
 }
 
 bool Facility::lua_hasTunnel() const
 {
-    return !m_facilityInfo.tunnels.empty();
+    return !m_facilityInfo->tunnels.empty();
 }
 
 void Facility::lua_addTunnel(const int32 x, const int32 y, bool relative)
 {
-    m_inter.data().addFacilityTunnel(m_facilityInfo, {x, y}, relative);
+    m_inter.data().addFacilityTunnel(*m_facilityInfo, {x, y}, relative);
 }
 
 bool Facility::lua_hasBarrier() const
 {
-    return m_facilityInfo.barrier;
+    return m_facilityInfo->barrier;
 }
 
 void Facility::lua_setBarrier(bool activated)
 {
-    m_inter.setRoomFacilityBarrier(m_coords, m_facilityInfo.data.type(), activated);
+    m_inter.setRoomFacilityBarrier(m_coords, m_elementID, activated);
 }
 
 void Facility::lua_removeTunnels()
 {
-    m_facilityInfo.tunnels.clear();
+    m_facilityInfo->tunnels.clear();
 }
