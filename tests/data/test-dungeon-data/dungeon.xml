@@ -1,19 +1,27 @@
 <?xml version="1.0"?>
-<dungeon name="Dungeon" time="23" floorsCount="3" roomsByFloor="4" fame="0">
+<dungeon name="Dungeon" time="23" floorsCount="3" roomsByFloor="4">
+	<resources>
+		<soul value="3" />
+		<fame value="41" />
+		<debt perWeekDosh="20" weeksLeft="40" />
+	</resources>
+	<dynamics />
 	<heroes nextWaveDelay="0" />
+	<monstersGenerics>
+		<sand_spirit unlocked="false" reserve="0" countdown="0" />
+		<creepim unlocked="true" reserve="3" countdown="5" />
+	</monstersGenerics>
 	<monsters>
-		<reserve>
-			<monsterCage type="sand_spirit" countdown="44">
-				<monster type="sand_spirit" />
-				<monster type="sand_spirit" />
-			</monsterCage>
-		</reserve>
-		<active>
-			<monster type="creepim">
-				<rx type="float" value="1.5" />
-			</monster>
-		</active>
+		<monster type="creepim" hp="23" status="spawning">
+			<fusingTime type="float" value="0" />
+		</monster>
+		<monster type="creepim" hp="15" status="spawning" />
 	</monsters>
+	<trapsGenerics>
+		<pickpock unlocked="true" />
+		<trompe_loeil unlocked="false" />
+		<razor unlocked="true" />
+	</trapsGenerics>
 	<floor pos="0">
 		<room pos="0" state="constructed" />
 		<room pos="1" state="constructed" />
