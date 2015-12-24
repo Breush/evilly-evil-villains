@@ -42,7 +42,7 @@ function cbHeroClose(heroUID)
             -- TODO How to animate the hero grabbed?
 
             -- Steal
-            local doshStolen = math.min(maxDosh - dosh, heroDosh)
+            local doshStolen = math.min(maxDosh - currentDosh, heroDosh)
             eev_setUIDDataU32(heroUID, "dosh", heroDosh - doshStolen)
             currentDosh = currentDosh + doshStolen
             eev_setDataU32("dosh", currentDosh)
