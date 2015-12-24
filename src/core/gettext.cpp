@@ -48,6 +48,7 @@ void i18n::init(const std::string& language)
 
     // General initialization
     setlocale(LC_ALL, "");
+    setlocale(LC_MESSAGES, "");
 
     // Really needed for pugixml... otherwise parsing issues with floating points
     setlocale(LC_NUMERIC, "C");
