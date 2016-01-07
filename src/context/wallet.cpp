@@ -19,6 +19,12 @@ void Wallet::set(const uint value)
     }
 }
 
+bool Wallet::required(uint subValue)
+{
+    subValue *= m_factor;
+    return m_value >= subValue;
+}
+
 bool Wallet::add(uint addValue)
 {
     addValue *= m_factor;

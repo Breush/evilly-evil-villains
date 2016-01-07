@@ -89,9 +89,9 @@ bool MonsterLocker::handleMouseButtonPressed(const sf::Mouse::Button, const sf::
     returnif (!m_locked) true;
 
     // Unlock requirement
-    returnif (m_data.doshWallet().value() < m_monsterGeneric->common->unlockRequirement.dosh) true;
-    returnif (m_data.soulWallet().value() < m_monsterGeneric->common->unlockRequirement.soul) true;
-    returnif (m_data.fameWallet().value() < m_monsterGeneric->common->unlockRequirement.fame) true;
+    returnif (!m_data.doshWallet().required(m_monsterGeneric->common->unlockRequirement.dosh)) true;
+    returnif (!m_data.soulWallet().required(m_monsterGeneric->common->unlockRequirement.soul)) true;
+    returnif (!m_data.fameWallet().required(m_monsterGeneric->common->unlockRequirement.fame)) true;
 
     // Unlock cost
     // TODO Full cost (soul/fame)

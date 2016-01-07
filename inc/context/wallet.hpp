@@ -36,6 +36,10 @@ namespace context
         //! Set the value to a specific one.
         void set(const uint value);
 
+        //! Do we have enough to sub?
+        //! This takes in account the current factor.
+        bool required(uint subValue);
+
         //! Add some value to the wallet.
         //! Prevents overflow and returns false if occured.
         bool add(uint addValue);
