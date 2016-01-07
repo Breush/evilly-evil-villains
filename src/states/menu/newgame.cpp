@@ -3,6 +3,7 @@
 #include "core/gettext.hpp"
 #include "context/villains.hpp"
 #include "context/worlds.hpp"
+#include "dungeon/data.hpp"
 #include "tools/tools.hpp"
 #include "tools/debug.hpp"
 #include "tools/string.hpp"
@@ -33,12 +34,21 @@ MenuNewGame::MenuNewGame(StateStack& stack)
     m_title.setRelativePosition({0.5f, 0.05f});
     m_title.centerOrigin();
 
+    // Global stacker
+    nuiRoot.attachChild(m_stacker);
+    m_stacker.setRelativePosition({0.5f, 0.5f});
+    m_stacker.centerOrigin();
+
     // Scroll area
-    nuiRoot.attachChild(m_scrollArea);
-    m_scrollArea.setContent(m_globalStacker);
-    m_scrollArea.setRelativePosition({0.5f, 0.5f});
+    m_stacker.stackBack(m_scrollArea);
+    m_scrollArea.setContent(m_scrollAreaStacker);
     m_scrollArea.setSize(nuiSize * sf::Vector2f{0.8f, 0.65f});
-    m_scrollArea.centerOrigin();
+
+    // Game-mode box
+    m_stacker.stackBack(m_gamemodeBox, nui::Align::CENTER);
+    m_gamemodeBox.add(_("Story mode"));
+    m_gamemodeBox.add(_("Rich man mode"));
+    // m_gamemodeBox.add(_("Hardcore mode"));
 
     // Buttons
     nuiRoot.attachChild(m_buttonsStacker);
@@ -87,13 +97,44 @@ void MenuNewGame::startPlay()
 {
     returnif (m_selectedVillainDisplay == nullptr);
     const auto& villain = m_selectedVillainDisplay->source()->name;
+    auto gamemode = static_cast<context::Gamemode>(m_gamemodeBox.selectedChoice() + 1u);
 
     // World data
     auto newWorldID = context::worlds.add();
-    context::worlds.select(newWorldID);
-    context::worlds.selected().villain = villain;
+    auto& worldInfo = context::worlds.select(newWorldID);
+    worldInfo.villain = villain;
+    worldInfo.gamemode = gamemode;
 
-    stackClear(StateID::GAME_DCB);
+    // Decide what to do given the gamemode
+    if (gamemode == context::Gamemode::STORY) {
+        stackClear(StateID::GAME_DCB);
+    }
+    else if (gamemode == context::Gamemode::RICHMAN) {
+        // Max dimensions for a dungeon
+        uint floorsCount = 12;
+        uint roomsByFloor = 7;
+
+        // TODO Have a state so that the player can change this name?
+        // Set up the world name to match dungeon one (will create the folder too)
+        const auto& name = _("Croesus Home");
+        context::worlds.setNameCreation(worldInfo, name);
+        context::worlds.save();
+
+        // Create dungeon with these values
+        dungeon::Data dungeonData;
+        dungeonData.setName(name);
+        dungeonData.setFloorsCount(floorsCount);
+        dungeonData.setRoomsByFloor(roomsByFloor);
+        dungeonData.fameWallet().set(-1u);
+        dungeonData.soulWallet().set(-1u);
+        dungeonData.constructRoomsAll();
+        dungeonData.createFiles(worldInfo.folder);
+
+        stackClear(StateID::GAME_DUNGEON_DESIGN);
+    }
+    else if (gamemode == context::Gamemode::HARDCORE) {
+        throw std::runtime_error("Hardcore Gamemode has not been implemented yet.");
+    }
 }
 
 void MenuNewGame::onVillainClicked(dungeon::VillainDisplay& clickedEntity)
@@ -126,7 +167,7 @@ void MenuNewGame::refreshVillainsList()
         pVillainDisplay->setSize({256.f, m_scrollArea.size().y - 15.f});
         pVillainDisplay->setClickCallback([this] (dungeon::VillainDisplay& clickedEntity) { onVillainClicked(clickedEntity); });
         m_villainsDisplays.emplace_back(std::move(pVillainDisplay));
-        m_globalStacker.stackBack(*m_villainsDisplays.back());
+        m_scrollAreaStacker.stackBack(*m_villainsDisplays.back());
     }
 
     // New villain
@@ -134,5 +175,5 @@ void MenuNewGame::refreshVillainsList()
     pVillainDisplay->setSize({256.f, m_scrollArea.size().y - 15.f});
     pVillainDisplay->setClickCallback([this] (dungeon::VillainDisplay&) { stackPush(StateID::MENU_CREATEVILLAIN); });
     m_villainsDisplays.emplace_back(std::move(pVillainDisplay));
-    m_globalStacker.stackBack(*m_villainsDisplays.back());
+    m_scrollAreaStacker.stackBack(*m_villainsDisplays.back());
 }

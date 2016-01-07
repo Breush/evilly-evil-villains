@@ -7,6 +7,7 @@
 #include "nui/form.hpp"
 #include "nui/scrollarea.hpp"
 #include "nui/choicebox.hpp"
+#include "nui/vstacker.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/button.hpp"
 #include "dungeon/villaindisplay.hpp"
@@ -72,9 +73,11 @@ namespace states
         scene::RectangleGradient m_background;  //!< The background.
 
         // NUI
+        nui::VStacker m_stacker;                                    //!< Global stacker.
         nui::ScrollArea m_scrollArea;                               //!< The scroll area.
-        nui::HStacker m_globalStacker;                              //!< Stacking the content inside the scroll area.
+        nui::HStacker m_scrollAreaStacker;                          //!< Stacking the content inside the scroll area.
         std::vector<dungeon::VillainDisplayPtr> m_villainsDisplays; //!< The villains shown.
+        nui::ChoiceBox m_gamemodeBox;                               //!< The game mode.
 
         nui::HStacker m_buttonsStacker;         //!< The stacker for buttons.
         std::array<nui::Button, 2u> m_buttons;  //!< The buttons (cancel/ok).

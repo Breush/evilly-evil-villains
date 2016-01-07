@@ -132,6 +132,9 @@ namespace dungeon
         //! Construct a room.
         void constructRoom(const sf::Vector2u& coords);
 
+        //! Construct all rooms, in memory, no events launched.
+        void constructRoomsAll();
+
         //! Destroy a room.
         void destroyRoom(const sf::Vector2u& coords);
 

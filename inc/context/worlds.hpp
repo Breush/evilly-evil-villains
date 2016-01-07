@@ -10,6 +10,16 @@
 
 namespace context
 {
+    //! Types of available game modes.
+    enum Gamemode
+    {
+        UNKNOWN     = 0u,
+        STORY       = 1u,
+        RICHMAN     = 2u,
+        HARDCORE    = 3u,
+        COUNT       = 4u,      //!< Keep last.
+    };
+
     //! A XML loading class to get the worlds data.
     /*!
      *  This class allow you to select a world within
@@ -23,12 +33,13 @@ namespace context
         //! Defines world attributes.
         struct World
         {
-            uint index;                 //!< The index of the world in the worlds vector.
-            std::wstring name;          //!< The name of the world.
-            std::wstring villain;       //!< The villain on this world.
-            time_t created;             //!< The timestamp of creation of the world.
-            time_t lastPlayed;          //!< The timestamp of last time user played on.
-            std::wstring folder;        //!< The sub-folder in which the world is saved.
+            uint index;                             //!< The index of the world in the worlds vector.
+            std::wstring name;                      //!< The name of the world.
+            std::wstring villain;                   //!< The villain on this world.
+            Gamemode gamemode = Gamemode::UNKNOWN;  //!< The currently played gamemode.
+            time_t created;                         //!< The timestamp of creation of the world.
+            time_t lastPlayed;                      //!< The timestamp of last time user played on.
+            std::wstring folder;                    //!< The sub-folder in which the world is saved.
         };
 
     public:
@@ -85,7 +96,7 @@ namespace context
         //! @{
 
         //! Get the vector of all worlds for read.
-        const World& select(uint index);
+        World& select(uint index);
 
         //! Get the current world information.
         inline World& selected() { return *m_selected; }

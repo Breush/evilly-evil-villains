@@ -452,6 +452,13 @@ void Data::constructRoom(const sf::Vector2u& coords)
     EventEmitter::addEvent("dungeon_changed");
 }
 
+void Data::constructRoomsAll()
+{
+    for (auto& floor : m_floors)
+    for (auto& room : floor.rooms)
+        room.state = RoomState::CONSTRUCTED;
+}
+
 void Data::destroyRoom(const sf::Vector2u& coords)
 {
     returnif (!isRoomConstructed(coords));

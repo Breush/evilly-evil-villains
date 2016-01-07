@@ -157,8 +157,8 @@ void GameDCB::confirmDungeonCreation()
     dungeonData.createFiles(worldInfo.folder);
 
     // Add loan to villain ressources
-    auto villain = context::villains.getFromWorldFolder(worldInfo.folder);
-    villain->doshWallet.add(loanValue);
+    auto& villain = *context::villains.getFromVillainName(worldInfo.villain);
+    villain.doshWallet.add(loanValue);
     context::villains.save();
 
     stackClear(StateID::GAME_DUNGEON_DESIGN);

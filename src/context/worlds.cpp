@@ -92,7 +92,7 @@ void Worlds::save()
 //-------------------------------//
 //----- Setters and getters -----//
 
-const Worlds::World& Worlds::select(uint index)
+Worlds::World& Worlds::select(uint index)
 {
     massert(index < m_worlds.size(), "Index " << index << " is too big.");
     m_selected = &m_worlds[index];
