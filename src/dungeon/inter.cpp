@@ -2,6 +2,7 @@
 
 #include "core/gettext.hpp"
 #include "core/application.hpp"
+#include "context/worlds.hpp"
 #include "context/villains.hpp"
 #include "dungeon/managers/heroesmanager.hpp"
 #include "tools/debug.hpp"
@@ -682,7 +683,7 @@ bool Inter::createRoomFacility(const sf::Vector2u& coords, const std::wstring& f
     returnif (m_tiles[coords].movingLocked) false;
 
     auto cost = facilitiesDB().get(facilityID).baseCost.dosh;
-    if (!free) returnif (villain().doshWallet.value() < cost) false;
+    if (!free) returnif (!villain().doshWallet.required(cost)) false;
 
     bool created = m_data->createRoomFacility(coords, facilityID);
     returnif (!created) false;
@@ -694,7 +695,7 @@ bool Inter::createRoomFacility(const sf::Vector2u& coords, const std::wstring& f
 bool Inter::createRoomFacilityLinked(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords, const std::wstring& linkFacilityID, bool free)
 {
     auto cost = facilitiesDB().get(facilityID).baseCost.dosh;
-    if (!free) returnif (villain().doshWallet.value() < cost) false;
+    if (!free) returnif (!villain().doshWallet.required(cost)) false;
 
     bool created = m_data->createRoomFacilityLinked(coords, facilityID, linkCoords, linkFacilityID);
     returnif (!created) false;
@@ -786,12 +787,12 @@ void Inter::addMonsterToReserve(const std::wstring& monsterID)
 {
     // Increase countdown
     const auto& monsterData = monstersDB().get(monsterID);
-    const auto& hireCountdown = monsterData.hireCountdown;
+    const auto& hireCountdown = (context::worlds.selected().gamemode == context::Gamemode::RICHMAN)? 0u : monsterData.hireCountdown;
 
     // Check for cost
-    returnif (m_data->villain().doshWallet.value() < monsterData.baseCost.dosh);
-    returnif (m_data->soulWallet().value() < monsterData.baseCost.soul);
-    returnif (m_data->fameWallet().value() < monsterData.baseCost.fame);
+    returnif (!m_data->villain().doshWallet.required(monsterData.baseCost.dosh));
+    returnif (!m_data->soulWallet().required(monsterData.baseCost.soul));
+    returnif (!m_data->fameWallet().required(monsterData.baseCost.fame));
 
     // Do pay
     // TODO Let some globalWallet manage all resources
