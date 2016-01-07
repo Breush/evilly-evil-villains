@@ -456,10 +456,8 @@ void Data::destroyRoom(const sf::Vector2u& coords)
 {
     returnif (!isRoomConstructed(coords));
 
-    // Note: removeRoomFacilities() manage to remove also
-    // implicit links if any silently, and that's all right.
-
     // Clear elements
+    removeRoomFacilitiesLinks(coords);
     removeRoomFacilities(coords);
     removeRoomTrap(coords);
     removeRoomMonsters(coords);
