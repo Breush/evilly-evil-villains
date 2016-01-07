@@ -125,8 +125,6 @@ void MenuNewGame::startPlay()
         dungeonData.setName(name);
         dungeonData.setFloorsCount(floorsCount);
         dungeonData.setRoomsByFloor(roomsByFloor);
-        dungeonData.fameWallet().set(-1u);
-        dungeonData.soulWallet().set(-1u);
         dungeonData.constructRoomsAll();
         dungeonData.createFiles(worldInfo.folder);
 

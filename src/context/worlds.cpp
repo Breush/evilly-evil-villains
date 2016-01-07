@@ -54,6 +54,7 @@ void Worlds::load()
         world.index = m_worlds.size();
         world.name = worldInfo.attribute(L"name").as_string();
         world.villain = worldInfo.attribute(L"villain").as_string();
+        world.gamemode = static_cast<Gamemode>(worldInfo.attribute(L"gamemode").as_uint());
         world.created = static_cast<time_t>(worldInfo.attribute(L"created").as_uint());
         world.lastPlayed = static_cast<time_t>(worldInfo.attribute(L"lastPlayed").as_uint());
         world.folder = worldInfo.attribute(L"folder").as_string();
@@ -80,8 +81,9 @@ void Worlds::save()
 
         worldsInfo.append_attribute(L"name") = world.name.c_str();
         worldsInfo.append_attribute(L"villain") = world.villain.c_str();
-        worldsInfo.append_attribute(L"created") = uint(world.created);
-        worldsInfo.append_attribute(L"lastPlayed") = uint(world.lastPlayed);
+        worldsInfo.append_attribute(L"gamemode") = static_cast<uint>(world.gamemode);
+        worldsInfo.append_attribute(L"created") = static_cast<uint>(world.created);
+        worldsInfo.append_attribute(L"lastPlayed") = static_cast<uint>(world.lastPlayed);
         worldsInfo.append_attribute(L"folder") = world.folder.c_str();
     }
 

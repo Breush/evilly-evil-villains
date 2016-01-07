@@ -19,8 +19,10 @@ void Wallet::set(const uint value)
     }
 }
 
-bool Wallet::add(const uint addValue)
+bool Wallet::add(uint addValue)
 {
+    addValue *= m_factor;
+
     // Overflow
     if (m_value + addValue < m_value) {
         set(-1u);
@@ -32,8 +34,10 @@ bool Wallet::add(const uint addValue)
     return true;
 }
 
-bool Wallet::sub(const uint subValue)
+bool Wallet::sub(uint subValue)
 {
+    subValue *= m_factor;
+
     // Impossible to substract
     returnif (m_value < subValue) false;
 
@@ -42,8 +46,11 @@ bool Wallet::sub(const uint subValue)
     return true;
 }
 
-bool Wallet::addsub(const uint addValue, const uint subValue)
+bool Wallet::addsub(uint addValue, uint subValue)
 {
+    addValue *= m_factor;
+    subValue *= m_factor;
+
     // Impossible to substract
     returnif (m_value + addValue < subValue) false;
 
@@ -58,11 +65,16 @@ bool Wallet::addsub(const uint addValue, const uint subValue)
     return true;
 }
 
-//-----------------------------//
-//----- Events management -----//
+//-------------------//
+//----- Control -----//
 
 void Wallet::setEvents(context::EventEmitter* emitter, std::string eventType)
 {
     m_emitter = emitter;
     m_eventType = std::move(eventType);
+}
+
+void Wallet::setFactor(uint factor)
+{
+    m_factor = factor;
 }

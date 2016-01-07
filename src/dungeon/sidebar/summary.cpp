@@ -3,6 +3,7 @@
 #include "core/gettext.hpp"
 #include "core/application.hpp"
 #include "context/villains.hpp"
+#include "context/worlds.hpp"
 #include "dungeon/data.hpp"
 #include "tools/string.hpp"
 
@@ -148,18 +149,33 @@ void Summary::refreshTimeBar()
 
 void Summary::refreshDoshBar()
 {
-    auto dosh = m_data->villain().doshWallet.value();
-    m_bars[BAR_DOSH].text.setString(toWString(dosh));
+    std::wstring text(L"∞");
+    if (context::worlds.selected().gamemode != context::Gamemode::RICHMAN) {
+        auto dosh = m_data->villain().doshWallet.value();
+        text = toWString(dosh);
+    }
+
+    m_bars[BAR_DOSH].text.setString(text);
 }
 
 void Summary::refreshSoulBar()
 {
-    auto soul = m_data->soulWallet().value();
-    m_bars[BAR_SOUL].text.setString(toWString(soul));
+    std::wstring text(L"∞");
+    if (context::worlds.selected().gamemode != context::Gamemode::RICHMAN) {
+        auto soul = m_data->soulWallet().value();
+        text = toWString(soul);
+    }
+
+    m_bars[BAR_SOUL].text.setString(text);
 }
 
 void Summary::refreshFameBar()
 {
-    auto fame = m_data->fameWallet().value();
-    m_bars[BAR_FAME].text.setString(toWString(fame));
+    std::wstring text(L"∞");
+    if (context::worlds.selected().gamemode != context::Gamemode::RICHMAN) {
+        auto fame = m_data->fameWallet().value();
+        text = toWString(fame);
+    }
+
+    m_bars[BAR_FAME].text.setString(text);
 }

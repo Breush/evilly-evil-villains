@@ -38,31 +38,35 @@ namespace context
 
         //! Add some value to the wallet.
         //! Prevents overflow and returns false if occured.
-        bool add(const uint addValue);
+        bool add(uint addValue);
 
         //! Tries to sub some value from the current one in the wallet.
         //! Does nothing if impossible and returns false.
-        bool sub(const uint subValue);
+        bool sub(uint subValue);
 
         //! Tries to add and sub some value to the wallet.
         //! Does nothing if impossible and returns false.
         //! Prevents overflow and returns false if occured.
-        bool addsub(const uint addValue, const uint subValue);
+        bool addsub(uint addValue, uint subValue);
 
         //! @}
 
-        //--------------------------//
-        //! @name Events management
+        //----------------//
+        //! @name Control
         //!
 
         //! Sets what to use for events.
         void setEvents(EventEmitter* emitter, std::string eventType);
+
+        //! Set a factor applied to each modification (except set).
+        void setFactor(uint factor);
 
         //! @}
 
     private:
 
         uint m_value = 0u;  //!< The value, instead.
+        uint m_factor = 1u; //!< Multiplicative factor applied to each modification.
 
         EventEmitter* m_emitter = nullptr; //!< The emitter to use on changes.
         std::string m_eventType;           //!< The type of events to use on changes.

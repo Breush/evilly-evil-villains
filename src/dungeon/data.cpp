@@ -1,5 +1,6 @@
 #include "dungeon/data.hpp"
 
+#include "context/worlds.hpp"
 #include "dungeon/debug.hpp"
 #include "dungeon/graph.hpp"
 #include "dungeon/elements/hero.hpp"
@@ -86,6 +87,7 @@ std::wstring Data::load(const std::wstring& folder)
 
     context::villains.load();
     m_villain = context::villains.getFromWorldFolder(folder);
+    uint walletsFactor = (context::worlds.selected().gamemode == context::Gamemode::RICHMAN)? 0u : 1u;
 
     // We keep that case possible for tests.
     if (m_villain == nullptr) {
@@ -95,7 +97,11 @@ std::wstring Data::load(const std::wstring& folder)
     }
     else {
         m_villain->doshWallet.setEvents(this, "dosh_changed");
+        m_villain->doshWallet.setFactor(walletsFactor);
     }
+
+    m_fameWallet.setFactor(walletsFactor);
+    m_soulWallet.setFactor(walletsFactor);
 
     #if DEBUG_GLOBAL > 0
         std::wstring mainDungeonFilename = L"saves/" + folder + L"dungeon_saved.xml";
