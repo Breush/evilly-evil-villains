@@ -14,8 +14,8 @@ EventReceiver::~EventReceiver()
 {
 #if DEBUG_GLOBAL > 0
     if (m_lock) {
-        std::cerr << "ERROR: Receiver is locked, you can not destroy it, please delay that somehow.";
-        std::cerr << " If an exception follows, this message might not be relevant." << std::endl;
+        std::cerr << "ERROR: Receiver is locked, you can not destroy it, please delay that somehow." << std::endl;
+        std::cerr << "       If an exception follows, this message might not be relevant." << std::endl;
     }
 #endif
 

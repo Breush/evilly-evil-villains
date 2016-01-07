@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <worlds>
-	<world name="The Mighty Example" gamemode="1" villain="Breush" created="1388530800" lastPlayed="1422831600" folder="example/" />
-	<world name="No woman, no pancakes" gamemode="2" villain="The Revolted Waffle" mainDungeon="" created="673221600" lastPlayed="967068000" folder="big_bobby/" />
-	<world name="Château d'eau" gamemode="1" villain="Le Précurseur" created="1286661600" lastPlayed="1355266800" folder="stupid_name/" />
+	<world name="The Mighty Example" villain="Breush" gamemode="1" created="1388530800" lastPlayed="1422831600" folder="example/" />
+	<world name="No woman, no pancakes" villain="The Revolted Waffle" gamemode="2" created="673221600" lastPlayed="967068000" folder="big_bobby/" />
+	<world name="Château d'eau" villain="Le Précurseur" gamemode="1" created="1286661600" lastPlayed="1355266800" folder="stupid_name/" />
+	<world name="Rich-man land" villain="Priorox" gamemode="2" created="1452182481" lastPlayed="1452182485" folder="richmanland/" />
 </worlds>

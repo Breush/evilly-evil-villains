@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<dungeon name="Croesus Home" time="0" floorsCount="12" roomsByFloor="7">
+	<resources>
+		<soul value="0" />
+		<fame value="0" />
+		<debt perWeekDosh="0" weeksLeft="0" />
+	</resources>
+	<dynamics />
+	<heroes nextWaveDelay="-1" />
+	<monstersGenerics />
+	<monsters />
+	<trapsGenerics />
+	<floor pos="0">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="constructed" />
+		<room pos="6" state="constructed" />
+	</floor>
+	<floor pos="1">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="constructed" />
+		<room pos="6" state="constructed" />
+	</floor>
+	<floor pos="2">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="constructed" />
+		<room pos="6" state="constructed" />
+	</floor>
+	<floor pos="3">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="constructed" />
+		<room pos="6" state="constructed" />
+	</floor>
+	<floor pos="4">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="constructed" />
+		<room pos="6" state="constructed" />
+	</floor>
+	<floor pos="5">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="constructed" />
+		<room pos="6" state="constructed" />
+	</floor>
+	<floor pos="6">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="constructed" />
+		<room pos="6" state="constructed" />
+	</floor>
+	<floor pos="7">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="constructed" />
+		<room pos="6" state="constructed" />
+	</floor>
+	<floor pos="8">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="constructed" />
+		<room pos="6" state="constructed" />
+	</floor>
+	<floor pos="9">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="constructed" />
+		<room pos="6" state="constructed" />
+	</floor>
+	<floor pos="10">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="constructed" />
+		<room pos="6" state="constructed" />
+	</floor>
+	<floor pos="11">
+		<room pos="0" state="constructed" />
+		<room pos="1" state="constructed" />
+		<room pos="2" state="constructed" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
+		<room pos="5" state="constructed" />
+		<room pos="6" state="constructed" />
+	</floor>
+</dungeon>

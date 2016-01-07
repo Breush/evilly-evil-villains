@@ -33,9 +33,11 @@ Sidebar::Sidebar(scene::Scene& inScene, Inter& inter, Data& data)
     m_globalStacker.stackBack(m_minimap, nui::Align::CENTER);
 
     // Tabs
-    m_tabContents[TabsID::MONSTERS].stacker.setPadding(0.f);
     for (auto& tabContent : m_tabContents)
         tabContent.scrollArea.setContent(tabContent.stacker);
+
+    auto& monstersStacker = m_tabContents[TabsID::MONSTERS].stacker;
+    monstersStacker.setPadding(0.f);
 
     // Minimap
     m_minimap.setCallbackAction([this] (const sf::Vector2f& position) { m_scene.setViewCenter(position); });
@@ -62,6 +64,15 @@ void Sidebar::init()
     m_tabHolder.stackBack(_("Traps"),       "dungeon/sidebar/tab/traps",       m_tabContents[TabsID::TRAPS].scrollArea);
     m_tabHolder.stackBack(_("Facilities"),  "dungeon/sidebar/tab/facilities",  m_tabContents[TabsID::FACILITIES].scrollArea);
     m_tabHolder.stackBack(_("Tools"),       "dungeon/sidebar/tab/tools",       m_tabContents[TabsID::TOOLS].scrollArea);
+
+    // Monsters
+    auto& monstersCages = m_tabContents[TabsID::MONSTERS].monsterCages;
+    const auto& monstersList = m_data.monstersGenerics();
+    for (const auto& monsterPair : monstersList) {
+        const auto& monsterID = monsterPair.first;
+        auto monsterCage = std::make_unique<MonsterCage>(monsterID, m_inter, m_data);
+        monstersCages.emplace_back(std::move(monsterCage));
+    }
 }
 
 //-------------------//
@@ -140,15 +151,11 @@ void Sidebar::refreshTabMonstersContent()
     auto& monstersStacker = m_tabContents[TabsID::MONSTERS].stacker;
     auto& monstersCages = m_tabContents[TabsID::MONSTERS].monsterCages;
     monstersStacker.unstackAll();
-    monstersCages.clear();
 
-    const auto& monstersList = m_data.monstersDB().get();
-    for (const auto& monsterPair : monstersList) {
-        const auto& monsterID = monsterPair.first;
-        if (!m_data.monstersGenerics().at(monsterID).unlocked) continue;
-        monstersCages.emplace_back(std::make_unique<MonsterCage>(monsterID, m_inter, m_data));
-        auto& monsterCage = *monstersCages.back();
-        monstersStacker.stackBack(monsterCage);
+    // Show only the cages with unlocked monsters
+    for (const auto& monsterCage : monstersCages) {
+        if (!monsterCage->monsterGeneric().unlocked) continue;
+        monstersStacker.stackBack(*monsterCage);
     }
 
     refreshTabParameters();

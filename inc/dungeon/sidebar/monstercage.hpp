@@ -39,6 +39,15 @@ namespace dungeon
 
         std::string _name() const final { return "dungeon::MonsterCage"; }
 
+        //---------------------------//
+        //! @name Getters and setters
+        //! @{
+
+        //! Get the monster generic used for this monster.
+        inline const MonsterGeneric& monsterGeneric() const { return *m_monsterGeneric; }
+
+        //! @}
+
     protected:
 
         //----------------//
