@@ -325,6 +325,31 @@ namespace scene
         //! @name Events
         //! @{
 
+        //----- Global Events
+
+        //! Decides whether an entity is elligible for getting global events.
+        virtual bool handleGlobalEvents() const { return false; }
+
+        //! If entity is elligible for global events, this dispatches the keyboard events.
+        virtual void handleGlobalKeyboardEvent(const sf::Event& event) {}
+
+        //! If entity is elligible for global events, this dispatches the joystick events.
+        virtual void handleGlobalJoystickEvent(const sf::Event& event) {}
+
+        //! If entity is elligible for global events, this is called when mouse moves.
+        virtual void handleGlobalMouseMoved(const sf::Vector2f& nuiPos) {}
+
+        //! If entity is elligible for global events, this is called when a mouse button is pressed.
+        virtual void handleGlobalMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& nuiPos) {}
+
+        //! If entity is elligible for global events, this is called when a mouse button is released.
+        virtual void handleGlobalMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& nuiPos) {}
+
+        //! If entity is elligible for global events, this is called when mouse wheel moves.
+        virtual void handleGlobalMouseWheelMoved(const int delta, const sf::Vector2f& nuiPos) {}
+
+        //----- Entity-wise events
+
         //! If entity is focused, this dispatches the keyboard events.
         //! Returns true if focus is kept by the entity.
         virtual bool handleKeyboardEvent(const sf::Event& event) { return false; }

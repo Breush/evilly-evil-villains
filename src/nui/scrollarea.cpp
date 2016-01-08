@@ -42,24 +42,27 @@ void ScrollArea::refreshNUI(const config::NUIGuides& cNUI)
 //------------------//
 //----- Events -----//
 
-bool ScrollArea::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
+void ScrollArea::handleGlobalMouseMoved(const sf::Vector2f& nuiPos)
 {
     if (m_vBarGrabbed) {
-        m_offset.y = m_offsetStartGrabbing.y + (m_mouseStartGrabbing.y - mousePos.y);
+        m_offset.y = m_offsetStartGrabbing.y + (m_mouseStartGrabbing.y - nuiPos.y);
         refreshContentStatus();
-        return true;
     }
 
-    if (m_hBarGrabbed) {
-        m_offset.x = m_offsetStartGrabbing.x + (m_mouseStartGrabbing.x - mousePos.x);
+    else if (m_hBarGrabbed) {
+        m_offset.x = m_offsetStartGrabbing.x + (m_mouseStartGrabbing.x - nuiPos.x);
         refreshContentStatus();
-        return true;
     }
-
-    return false;
 }
 
-bool ScrollArea::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
+void ScrollArea::handleGlobalMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f&)
+{
+    returnif (button != sf::Mouse::Left);
+    m_vBarGrabbed = false;
+    m_hBarGrabbed = false;
+}
+
+bool ScrollArea::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
     returnif (button != sf::Mouse::Left) false;
 
@@ -67,7 +70,7 @@ bool ScrollArea::handleMouseButtonPressed(const sf::Mouse::Button button, const 
     sf::FloatRect vLocalBounds({0.f, 0.f}, m_vBar.getSize());
     if (vLocalBounds.contains(m_vBar.getInverseTransform().transformPoint(mousePos))) {
         m_offsetStartGrabbing = m_offset;
-        m_mouseStartGrabbing = mousePos;
+        m_mouseStartGrabbing = nuiPos;
         m_vBarGrabbed = true;
         return true;
     }
@@ -76,26 +79,12 @@ bool ScrollArea::handleMouseButtonPressed(const sf::Mouse::Button button, const 
     sf::FloatRect hLocalBounds({0.f, 0.f}, m_hBar.getSize());
     if (hLocalBounds.contains(m_hBar.getInverseTransform().transformPoint(mousePos))) {
         m_offsetStartGrabbing = m_offset;
-        m_mouseStartGrabbing = mousePos;
+        m_mouseStartGrabbing = nuiPos;
         m_hBarGrabbed = true;
         return true;
     }
 
     return false;
-}
-
-bool ScrollArea::handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f&)
-{
-    returnif (button != sf::Mouse::Left) false;
-    m_vBarGrabbed = false;
-    m_hBarGrabbed = false;
-    return true;
-}
-
-void ScrollArea::handleMouseLeft()
-{
-    m_vBarGrabbed = false;
-    m_hBarGrabbed = false;
 }
 
 bool ScrollArea::handleMouseWheelMoved(const int delta, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)

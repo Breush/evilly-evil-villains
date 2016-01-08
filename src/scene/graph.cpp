@@ -58,6 +58,9 @@ void Graph::handleEvent(const sf::Event& event)
     // Window events are not considered
     returnif (isWindow(event));
 
+    // Send event to all handlers.
+    broadcastGlobalEvent(event);
+
     // Delegate for mouse
     if (isMouse(event)) {
         // Keep event if in grab mode
@@ -159,6 +162,63 @@ void Graph::focusHandleEvent(const sf::Event& event)
 
 //------------------//
 //----- Events -----//
+
+void Graph::broadcastGlobalEvent(const sf::Event& event)
+{
+    // FIXME There is a risk that some global handler will modify
+    // the list of global handlers, causing some strange bugs.
+    // A simple copy of the initial list might not work because of
+    // pointers to unallowed.
+    // One way to work around would be a for (i = 0; i < .size(); ++i)
+    // so that is the size of the list changes, we will notice.
+    // ---
+    // I let it this way because the usage of global event is (and should be)
+    // really rare. And all it does (in ScrollArea) are graphic updates, and never detach an entity.
+    // So this case never happen so far.
+
+    // Mouse event
+    if (isMouse(event)) {
+        sf::Vector2i mousePos(mousePosition(event));
+        sf::Vector2f nuiPos(nuiPosition(mousePos));
+
+        switch (event.type) {
+        case sf::Event::MouseMoved:
+            for (auto globalHandler : m_globalHandlers)
+                globalHandler->handleGlobalMouseMoved(nuiPos);
+            break;
+
+        case sf::Event::MouseButtonPressed:
+            for (auto globalHandler : m_globalHandlers)
+                globalHandler->handleGlobalMouseButtonPressed(event.mouseButton.button, nuiPos);
+            break;
+
+        case sf::Event::MouseButtonReleased:
+            for (auto globalHandler : m_globalHandlers)
+                globalHandler->handleGlobalMouseButtonReleased(event.mouseButton.button, nuiPos);
+            break;
+
+        case sf::Event::MouseWheelMoved:
+            for (auto globalHandler : m_globalHandlers)
+                globalHandler->handleGlobalMouseWheelMoved(event.mouseWheel.delta, nuiPos);
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    // Keyboard event
+    else if (isKeyboard(event)) {
+        for (auto globalHandler : m_globalHandlers)
+            globalHandler->handleGlobalKeyboardEvent(event);
+    }
+
+    // Joystick event
+    else if (isJoystick(event)) {
+        for (auto globalHandler : m_globalHandlers)
+            globalHandler->handleGlobalJoystickEvent(event);
+    }
+}
 
 void Graph::handleMouseWheelPressedEvent(const sf::Event& event)
 {
@@ -382,6 +442,10 @@ void Graph::detachedEntity(Entity* entity)
     // Cancel hovering if it was
     if (m_hoveredEntity == entity)
         setHoveredEntity(nullptr);
+
+    // Erase from the global handlers if it is one of them
+    if (entity->handleGlobalEvents())
+        std::erase_if(m_globalHandlers, [entity] (Entity* inEntity) { return inEntity == entity; });
 }
 
 void Graph::attachedEntity(Entity* entity)
@@ -389,4 +453,8 @@ void Graph::attachedEntity(Entity* entity)
     // Attribute focus if there is not yet
     if (m_focusedEntity == nullptr && entity->focusable())
         setFocusedEntity(entity);
+
+    // Add to the global handlers if it is one of them
+    if (entity->handleGlobalEvents())
+        m_globalHandlers.emplace_back(entity);
 }

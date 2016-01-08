@@ -50,11 +50,11 @@ namespace nui
         //! @name Events
         //! @{
 
-        bool handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        inline bool handleGlobalEvents() const final { return true; }
+        void handleGlobalMouseMoved(const sf::Vector2f& nuiPos) final;
+        void handleGlobalMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& nuiPos) final;
         bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
-        bool handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
         bool handleMouseWheelMoved(const int delta, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
-        void handleMouseLeft() final;
 
         //! @}
 

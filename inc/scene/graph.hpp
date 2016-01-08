@@ -81,6 +81,9 @@ namespace scene
         //! @name Events
         //! @{
 
+        //! Broadcast an event to all global handlers.
+        void broadcastGlobalEvent(const sf::Event& event);
+
         //! Called when the event is a mouse wheel pressed and if no entity used it.
         void handleMouseWheelPressedEvent(const sf::Event& event);
 
@@ -172,6 +175,9 @@ namespace scene
 
         // Mouse detection
         Entity* m_hoveredEntity = nullptr;  //!< The currently hovered entity.
+
+        // Global events
+        std::list<Entity*> m_globalHandlers;    //!< All the registered entities to global events.
 
         // Grabbing
         bool m_grabbing = false;                            //!< Whether the grabbing scene is active or not.
