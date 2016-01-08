@@ -14,7 +14,6 @@ using namespace nui;
 ChoiceBox::ChoiceBox()
     : baseClass()
     , m_arrowsShowed(true)
-    , m_linesShowed(true)
 {
     setFocusable(true);
 
@@ -22,13 +21,12 @@ ChoiceBox::ChoiceBox()
     sf::Font& font = Application::context().fonts.get("nui");
     m_text.setFont(font);
 
-    // Add all parts
-    addPart(&m_text);
+    // Setting the sprite
+    m_buttonSprite.setTexture(Application::context().textures.get("nui/choicebox/button"));
 
-    if (m_linesShowed) {
-        addPart(&m_topLine);
-        addPart(&m_botLine);
-    }
+    // Add all parts
+    addPart(&m_buttonSprite);
+    addPart(&m_text);
 
     if (m_arrowsShowed) {
         addPart(&m_lArrow);
@@ -53,14 +51,12 @@ void ChoiceBox::refreshNUI(const config::NUIGuides& cNUI)
 {
     baseClass::refreshNUI(cNUI);
 
-    m_fontVSpace = cNUI.fontVSpace;
+    m_fontSize = cNUI.fontSize;
     m_arrowOffset = 2.f * cNUI.hPadding;
-    m_lineOffset = cNUI.hPadding;
     m_arrowSize = cNUI.hintSize;
-    m_lineSize = cNUI.borderThick;
 
     // Update text
-    m_text.setCharacterSize(cNUI.fontSize);
+    m_text.setCharacterSize(m_fontSize);
 
     updateSize();
 }
@@ -83,24 +79,6 @@ void ChoiceBox::showArrows(bool enabled)
     else {
         removePart(&m_lArrow);
         removePart(&m_rArrow);
-    }
-}
-
-void ChoiceBox::showLines(bool enabled)
-{
-    returnif (m_linesShowed == enabled);
-    m_linesShowed = enabled;
-
-    // Newly enabled
-    if (m_linesShowed) {
-        addPart(&m_topLine);
-        addPart(&m_botLine);
-        refresh();
-    }
-    // Newly disabled
-    else {
-        removePart(&m_topLine);
-        removePart(&m_botLine);
     }
 }
 
@@ -320,7 +298,6 @@ bool ChoiceBox::handleKeyboardEvent(const sf::Event& event)
 void ChoiceBox::refresh()
 {
     refreshText();
-    refreshLines();
     refreshArrows();
 }
 
@@ -338,18 +315,9 @@ void ChoiceBox::refreshText()
 
     // Position
     // Note: baseline of text is set to characterSize.y.
-    sf::Vector2f textOrigin(boundsSize(m_text).x / 2.f, m_text.getCharacterSize());
+    auto textBounds = boundsSize(m_text);
+    sf::Vector2f textOrigin(0.5f * textBounds.x, 0.75f * m_fontSize);
     m_text.setOrigin(textOrigin);
-}
-
-void ChoiceBox::refreshLines()
-{
-    returnif (!m_linesShowed);
-
-    m_topLine.setLength(m_buttonSize.x);
-    m_botLine.setLength(m_buttonSize.x);
-    m_topLine.setPosition(0.f, 0.f);
-    m_botLine.setPosition(0.f, m_buttonSize.y - 1.f);
 }
 
 void ChoiceBox::refreshArrows()
@@ -369,7 +337,8 @@ void ChoiceBox::updateButtonSize()
     bool emptyText = true;
 
     // Getting max size of all choices
-    m_buttonSize = {0.f, m_fontVSpace};
+    auto buttonTextureSize = sf::v2f(m_buttonSprite.getTexture()->getSize());
+    m_buttonSize = buttonTextureSize;
 
     for (auto& choice : m_choices) {
         auto text(m_text);
@@ -386,16 +355,14 @@ void ChoiceBox::updateButtonSize()
     // Max text size is the current button size, i.e. without decoration
     m_maxTextSize = m_buttonSize;
 
-    // Lines
-    if (m_linesShowed)
-        m_buttonSize.y += 2 * (m_lineOffset + m_lineSize);
-
     // Arrows
     if (m_arrowsShowed)
-        m_buttonSize.x += 2 * (m_arrowOffset + m_arrowSize);
+        m_buttonSize.x += 2 * m_arrowOffset;
 
-    // Reposition text
-    m_text.setPosition(m_buttonSize.x * 0.5f, m_buttonSize.y * 0.66f);
+    // Reposition
+    m_buttonSprite.setPosition({0.f, 0.f});
+    m_buttonSprite.setScale(m_buttonSize / buttonTextureSize);
+    m_text.setPosition(m_buttonSize.x * 0.5f, m_buttonSize.y * 0.5f);
 }
 
 void ChoiceBox::updateSize()

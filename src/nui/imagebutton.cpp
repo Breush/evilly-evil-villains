@@ -7,9 +7,6 @@ using namespace nui;
 
 ImageButton::ImageButton()
 {
-    // Display style
-    showLines(false);
-
     // Image
     addPart(&m_image);
 }
@@ -77,9 +74,6 @@ void ImageButton::refreshElementsPositions()
 
     // Re-positioning
     const sf::Vector2f offset((size().x - maxTextSize().x) / 2.f, m_imageSize.y + m_vPadding);
+    buttonSprite().move(offset);
     text().move(offset);
-    if (linesShowed()) {
-        topLine().move(offset);
-        botLine().move(offset);
-    }
 }

@@ -94,9 +94,6 @@ namespace nui
         //! Whether the show arrows.
         void showArrows(bool enabled);
 
-        //! Whether the show lines.
-        void showLines(bool enabled);
-
         //! @}
 
         //--------------------------//
@@ -105,9 +102,6 @@ namespace nui
 
         //! Whether the show interactive arrows.
         PARAMG(bool, m_arrowsShowed, arrowsShowed)
-
-        //! Whether the show top and bottom lines.
-        PARAMG(bool, m_linesShowed, linesShowed)
 
         //! @}
 
@@ -150,14 +144,11 @@ namespace nui
         //! @name Internal state updates
         //! @{
 
-        //! Refresh all text, lines and arrows positions.
+        //! Refresh all text and arrows positions.
         void refresh();
 
         //! Refresh text position.
         void refreshText();
-
-        //! Refresh lines position.
-        void refreshLines();
 
         //! Refresh arrows position.
         void refreshArrows();
@@ -178,11 +169,8 @@ namespace nui
         //! The currently displayed text.
         sfe::RichText& text() { return m_text; }
 
-        //! The currently displayed top line (if any).
-        sfe::HLine& topLine() { return m_topLine; }
-
-        //! The currently displayed bottom line (if any).
-        sfe::HLine& botLine() { return m_botLine; }
+        //! The displayed button background.
+        sf::Sprite& buttonSprite() { return m_buttonSprite; }
 
         //! The current size allocated to display the text.
         const sf::Vector2f& maxTextSize() const { return m_maxTextSize; }
@@ -210,11 +198,10 @@ namespace nui
         //! Whether the choice has changed since last update.
         bool m_choiceChanged = true;
 
-        sfe::RichText m_text;   //!< The displayed text.
-        sfe::HLine m_topLine;   //!< The displayed top line.
-        sfe::HLine m_botLine;   //!< The displayed bottom line.
-        sfe::LArrow m_lArrow;   //!< The displayed left arrow.
-        sfe::RArrow m_rArrow;   //!< The displayed right arrow.
+        sf::Sprite m_buttonSprite;  //!< The background.
+        sfe::RichText m_text;       //!< The displayed text.
+        sfe::LArrow m_lArrow;       //!< The displayed left arrow.
+        sfe::RArrow m_rArrow;       //!< The displayed right arrow.
 
         //! The max displayed size of all choices.
         sf::Vector2f m_maxTextSize;
@@ -223,9 +210,7 @@ namespace nui
         sf::Vector2f m_buttonSize;
 
         float m_arrowOffset = 0.f;  //!< The gap between arrows and text.
-        float m_lineOffset = 0.f;   //!< The gap between lines and text.
         float m_arrowSize = 0.f;    //!< The width of the arrows.
-        float m_lineSize = 0.f;     //!< The thickness of the lines.
-        float m_fontVSpace = 0.f;   //!< The vertical space reserved for the text.
+        float m_fontSize = 0.f;     //!< The font size used.
     };
 }
