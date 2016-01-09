@@ -45,8 +45,8 @@ namespace nui
         //! @name Events
         //! @{
 
+        bool handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
         bool handleKeyboardEvent(const sf::Event& event) final;
-        bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
 
         //! @}
     };

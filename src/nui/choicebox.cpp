@@ -21,8 +21,8 @@ ChoiceBox::ChoiceBox()
     sf::Font& font = Application::context().fonts.get("nui");
     m_text.setFont(font);
 
-    // Setting the sprite
-    m_buttonSprite.setTexture(Application::context().textures.get("nui/choicebox/button"));
+    // Button
+    m_buttonSprite.setTexture(Application::context().textures.get("nui/choicebox/button-idle"));
 
     // Add all parts
     addPart(&m_buttonSprite);
@@ -193,8 +193,28 @@ void ChoiceBox::setChoiceCallback(uint choice, Callback callback)
 //------------------------//
 //----- Mouse events -----//
 
+void ChoiceBox::handleGlobalMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f&)
+{
+    returnif (!m_pressed);
+    returnif (button != sf::Mouse::Left);
+
+    m_pressed = false;
+    m_buttonSprite.setTexture(Application::context().textures.get("nui/choicebox/button-idle"));
+}
+
 bool ChoiceBox::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
+    returnif (button != sf::Mouse::Left) false;
+
+    m_pressed = true;
+    m_buttonSprite.setTexture(Application::context().textures.get("nui/choicebox/button-pressed"));
+
+    return true;
+}
+
+bool ChoiceBox::handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
+{
+    returnif (!m_pressed) false;
     returnif (button != sf::Mouse::Left) false;
 
     // Without arrows: choices loop
@@ -234,6 +254,7 @@ bool ChoiceBox::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2
     // Text is being hovered
     returnif (m_selectedChoice == -1u || m_choices[m_selectedChoice].callback == nullptr) true;
     setPartShader(&m_text, "nui/hover");
+    setPartShader(&m_buttonSprite, "nui/hover");
     return true;
 }
 

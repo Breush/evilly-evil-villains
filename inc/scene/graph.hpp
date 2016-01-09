@@ -81,6 +81,9 @@ namespace scene
         //! @name Events
         //! @{
 
+        //! Broadcast an event to the entity under the mouse or focused for keyboard/joystick.
+        void broadcastEvent(const sf::Event& event);
+
         //! Broadcast an event to all global handlers.
         void broadcastGlobalEvent(const sf::Event& event);
 

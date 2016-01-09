@@ -58,44 +58,11 @@ void Graph::handleEvent(const sf::Event& event)
     // Window events are not considered
     returnif (isWindow(event));
 
-    // Send event to all handlers.
+    // Send event to the entity hovered/focused
+    broadcastEvent(event);
+
+    // Send event to all global handlers
     broadcastGlobalEvent(event);
-
-    // Delegate for mouse
-    if (isMouse(event)) {
-        // Keep event if in grab mode
-        if (event.type == sf::Event::MouseMoved)
-            returnif (handleMouseMovedEvent(event));
-
-        // Set focus on click
-        bool entityKeptEvent = false;
-        auto entity = handleMouseEvent(event, entityKeptEvent);
-        if (entity != nullptr) {
-            if (event.type == sf::Event::MouseButtonPressed)
-                setFocusedEntity(entity);
-            returnif (entityKeptEvent);
-        }
-
-        // Let this graph manage special events
-        if (event.type == sf::Event::MouseWheelMoved)
-            handleMouseWheelMovedEvent(event);
-        else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Button::Middle)
-            handleMouseWheelPressedEvent(event);
-        else if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Button::Middle)
-            handleMouseWheelReleasedEvent(event);
-
-        return;
-    }
-
-    // Keyboard or Joystick
-    returnif (m_focusedEntity == nullptr);
-
-    bool focusKept = false;
-    if (isKeyboard(event)) focusKept = m_focusedEntity->handleKeyboardEvent(event);
-    else focusKept = m_focusedEntity->handleJoystickEvent(event);
-    returnif (focusKept);
-
-    focusHandleEvent(event);
 }
 
 void Graph::refreshWindow(const config::WindowInfo& cWindow)
@@ -162,6 +129,45 @@ void Graph::focusHandleEvent(const sf::Event& event)
 
 //------------------//
 //----- Events -----//
+
+void Graph::broadcastEvent(const sf::Event& event)
+{
+    // Delegate for mouse
+    if (isMouse(event)) {
+        // Keep event if in grab mode
+        if (event.type == sf::Event::MouseMoved)
+            returnif (handleMouseMovedEvent(event));
+
+        // Set focus on click
+        bool entityKeptEvent = false;
+        auto entity = handleMouseEvent(event, entityKeptEvent);
+        if (entity != nullptr) {
+            if (event.type == sf::Event::MouseButtonPressed)
+                setFocusedEntity(entity);
+            returnif (entityKeptEvent);
+        }
+
+        // Let this graph manage special events
+        if (event.type == sf::Event::MouseWheelMoved)
+            handleMouseWheelMovedEvent(event);
+        else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Button::Middle)
+            handleMouseWheelPressedEvent(event);
+        else if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Button::Middle)
+            handleMouseWheelReleasedEvent(event);
+
+        return;
+    }
+
+    // Keyboard or Joystick
+    returnif (m_focusedEntity == nullptr);
+
+    bool focusKept = false;
+    if (isKeyboard(event)) focusKept = m_focusedEntity->handleKeyboardEvent(event);
+    else focusKept = m_focusedEntity->handleJoystickEvent(event);
+    returnif (focusKept);
+
+    focusHandleEvent(event);
+}
 
 void Graph::broadcastGlobalEvent(const sf::Event& event)
 {

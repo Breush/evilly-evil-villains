@@ -121,8 +121,11 @@ namespace nui
         //! @name Events
         //! @{
 
+        inline bool handleGlobalEvents() const final { return true; }
+        void handleGlobalMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& nuiPos) override;
         bool handleKeyboardEvent(const sf::Event& event) override;
         bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
+        bool handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
         bool handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) override;
         void handleMouseLeft() final;
 
@@ -166,6 +169,9 @@ namespace nui
         //! @name Getters for inherited classes
         //! @{
 
+        //!< Whether the button is being pressed.
+        bool& pressed() { return m_pressed; }
+
         //! The currently displayed text.
         sfe::RichText& text() { return m_text; }
 
@@ -197,6 +203,8 @@ namespace nui
 
         //! Whether the choice has changed since last update.
         bool m_choiceChanged = true;
+
+        bool m_pressed = false; //!< Whether the button is being pressed.
 
         sf::Sprite m_buttonSprite;  //!< The background.
         sfe::RichText m_text;       //!< The displayed text.
