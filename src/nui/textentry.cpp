@@ -14,19 +14,25 @@ TextEntry::TextEntry()
 {
     setFocusable(true);
 
-    addPart(&m_background);
-    m_background.setFillColor(sf::Color::White);
+    // Background
+    addPart(&m_backgroundLeft);
+    addPart(&m_backgroundRight);
+    addPart(&m_backgroundMiddle);
+
+    m_backgroundLeft.setTexture(&Application::context().textures.get("nui/textentry/background_left"));
+    m_backgroundRight.setTexture(&Application::context().textures.get("nui/textentry/background_right"));
+    m_backgroundMiddle.setTexture(&Application::context().textures.get("nui/textentry/background_middle"));
+
+    addPart(&m_selectRect);
+    m_selectRect.setFillColor({220u, 180u, 160u, 160u});
 
     addPart(&m_text);
     m_text.setFont(Application::context().fonts.get("nui"));
-    m_text.setColor(sf::Color::Black);
+    m_text.setColor(sf::Color::White);
 
     addPart(&m_cursor);
     m_cursor.setShade(0.f);
-    m_cursor.setColor(sf::Color::Black);
-
-    addPart(&m_selectRect);
-    m_selectRect.setFillColor({100u, 60u, 40u, 60u});
+    m_cursor.setColor(sf::Color::White);
 
     m_cursorText = m_text;
     m_selectText = m_text;
@@ -37,13 +43,35 @@ TextEntry::TextEntry()
 
 void TextEntry::onSizeChanges()
 {
-    m_background.setSize(size());
+    // Background
+    auto backgroundLeftTextureSize = sf::v2f(m_backgroundLeft.getTexture()->getSize());
+    auto backgroundRightTextureSize = sf::v2f(m_backgroundRight.getTexture()->getSize());
+    auto backgroundMiddleTextureSize = sf::v2f(m_backgroundMiddle.getTexture()->getSize());
+    float scaleFactor = size().y / backgroundMiddleTextureSize.y;
+
+    m_backgroundLeft.setSize(backgroundLeftTextureSize * scaleFactor);
+    m_backgroundRight.setSize(backgroundLeftTextureSize * scaleFactor);
+    m_backgroundMiddle.setSize({size().x - (backgroundLeftTextureSize.x + backgroundRightTextureSize.x) * scaleFactor, size().y});
+    m_backgroundMiddle.setTextureRect({0, 0, m_backgroundMiddle.getSize().x / backgroundMiddleTextureSize.x, backgroundMiddleTextureSize.y});
+
+    m_backgroundMiddle.setPosition(backgroundLeftTextureSize.x * scaleFactor, 0.f);
+    m_backgroundRight.setPosition(size().x - backgroundRightTextureSize.x * scaleFactor, 0.f);
+
+    // Cursor
+    float vOffset = -m_textPadding / 2.f;
     m_cursor.setLength(size().y - m_textPadding);
+    m_cursor.setOrigin(0.f, vOffset);
 
+    // Text
     m_textWidthLimit = size().x - 2.f * m_textPadding;
-
     setPartClippingRect(&m_text, {m_textPadding, 0.f, m_textWidthLimit, size().y});
+    m_text.setOrigin(0.f, vOffset);
+
+    // Select rect
     setPartClippingRect(&m_selectRect, {m_textPadding, 0.f, m_textWidthLimit, size().y});
+    m_selectRect.setOrigin(0.f, vOffset);
+
+
     updateDynamicText();
 }
 
@@ -52,12 +80,19 @@ void TextEntry::updateSize()
     if (m_length != -1u)
         m_width = m_length * m_fontHSpace + 2.f * m_textPadding;
 
-    setSize({m_width, m_fontVSpace + 2.f * m_textPadding});
+    setSize({m_width, m_fontVSpace + m_textPadding});
 }
 
 void TextEntry::updateRoutine(const sf::Time& dt)
 {
-    returnif (!focused());
+    // Do not blink if not focused
+    if (!focused()) {
+        if (m_cursorOn) {
+            removePart(&m_cursor);
+            m_cursorOn = false;
+        }
+        return;
+    }
 
     // Blinking cursor if focus is on
     m_cursorBlinkTime += dt.asSeconds();
@@ -77,7 +112,7 @@ void TextEntry::refreshNUI(const config::NUIGuides& cNUI)
     m_cursorText.setCharacterSize(cNUI.fontSize);
     m_selectText.setCharacterSize(cNUI.fontSize);
 
-    m_textPadding = (cNUI.hPadding + cNUI.vPadding) / 2.f;
+    m_textPadding = cNUI.hPadding + cNUI.vPadding;
     m_fontVSpace = cNUI.fontVSpace;
     m_fontHSpace = cNUI.fontHSpace;
 
@@ -145,6 +180,7 @@ bool TextEntry::handleKeyboardEvent(const sf::Event& event)
     else if (event.type == sf::Event::TextEntered) {
         returnif (event.text.unicode == 1) false;           // Error
         returnif (event.text.unicode == 27) false;          // Escape
+        returnif (event.text.unicode == 9) false;           // Tab
         if (event.text.unicode == 13) {                     // Return
             if (m_onValidateCallback != nullptr)
                 m_onValidateCallback();
@@ -392,14 +428,14 @@ void TextEntry::refreshText(bool sendCallback)
 void TextEntry::refreshSelection()
 {
     m_selectText.setString(m_selectString);
-    m_selectRect.setSize({boundsSize(m_selectText).x, size().y - 2.f * m_textPadding});
+    m_selectRect.setSize({boundsSize(m_selectText).x, size().y - m_textPadding});
     refreshSelectionPosition();
 }
 
 void TextEntry::refreshSelectionPosition()
 {
-    if (m_selectL2R) m_selectRect.setPosition(m_textPadding + m_selectShiftStart - m_textShift, m_textPadding);
-    else m_selectRect.setPosition(m_textPadding - boundsSize(m_selectText).x + m_selectShiftStart - m_textShift, m_textPadding);
+    if (m_selectL2R) m_selectRect.setPosition(m_textPadding + m_selectShiftStart - m_textShift, 0.f);
+    else m_selectRect.setPosition(m_textPadding - boundsSize(m_selectText).x + m_selectShiftStart - m_textShift, 0.f);
 }
 
 void TextEntry::updateDynamicText()
@@ -425,8 +461,8 @@ void TextEntry::updateDynamicText()
     }
 
     // Positions
-    m_text.setPosition(m_textPadding - m_textShift, m_textPadding);
-    m_cursor.setPosition({m_textPadding - m_textShift + cursorTextSize.x + 0.1f * m_textPadding, 0.5f * m_textPadding});
+    m_text.setPosition(m_textPadding - m_textShift, 0.f);
+    m_cursor.setPosition({m_textPadding - m_textShift + cursorTextSize.x + 0.1f * m_textPadding, 0.f});
     refreshSelectionPosition();
 }
 

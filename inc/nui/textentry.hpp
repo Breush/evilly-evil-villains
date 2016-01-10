@@ -35,13 +35,13 @@ namespace nui
         //! @{
 
         //! The current string.
-        inline std::wstring text() const { return m_textString.toWideString(); };
+        inline std::wstring text() const { return m_textString.toWideString(); }
 
         //! The current string before the cursor position.
-        inline std::wstring textBeforeCursor() const { return m_cursorString.toWideString(); };
+        inline std::wstring textBeforeCursor() const { return m_cursorString.toWideString(); }
 
         //! The current string after the cursor position.
-        inline std::wstring textAfterCursor() const { return m_textString.substring(m_cursorString.getSize()); };
+        inline std::wstring textAfterCursor() const { return m_textString.substring(m_cursorString.getSize()); }
 
         //! Set the cursor to an absolute position.
         void setCursorPosition(uint position);
@@ -171,7 +171,10 @@ namespace nui
 
     private:
 
-        sf::RectangleShape m_background;    //< The background.
+        // Background
+        sf::RectangleShape m_backgroundLeft;    //!< The left part of the background.
+        sf::RectangleShape m_backgroundRight;   //!< The right part of the background.
+        sf::RectangleShape m_backgroundMiddle;  //!< The middle part of the background.
 
         // Text
         sf::String m_textString;        //!< The effective current string.
