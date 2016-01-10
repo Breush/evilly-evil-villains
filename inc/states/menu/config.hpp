@@ -5,6 +5,7 @@
 #include "nui/rangeselector.hpp"
 #include "nui/scrollarea.hpp"
 #include "nui/choicebox.hpp"
+#include "nui/checkbox.hpp"
 #include "nui/vstacker.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/button.hpp"
@@ -101,8 +102,8 @@ namespace states
         // Graphics
         std::vector<Resolution> m_resolutions;      //!< Available resolutions.
         nui::ChoiceBox m_resolutionBox;             //!< Screen resolutions.
-        nui::ChoiceBox m_fullscreenBox;             //!< Fullscreen switch.
-        nui::ChoiceBox m_vsyncBox;                  //!< VSync switch.
+        nui::CheckBox m_fullscreenBox;              //!< Fullscreen switch.
+        nui::CheckBox m_vsyncBox;                   //!< VSync switch.
         nui::RangeSelector m_antialiasingSelector;  //!< Antialiasing level selector.
 
         // Audio

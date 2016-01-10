@@ -92,12 +92,8 @@ MenuConfig::MenuConfig(StateStack& stack)
     }
 
     m_areas[AreaID::GRAPHICS].form.add(m_fullscreenBox);
-    m_fullscreenBox.showArrows(false);
-    m_fullscreenBox.add({L"", L""});
 
     m_areas[AreaID::GRAPHICS].form.add(m_vsyncBox);
-    m_vsyncBox.showArrows(false);
-    m_vsyncBox.add({L"", L""});
 
     m_areas[AreaID::GRAPHICS].form.add(m_antialiasingSelector);
     m_antialiasingSelector.setRange(0u, 4u);
@@ -187,12 +183,6 @@ void MenuConfig::refreshWindow(const config::WindowInfo& cWindow)
     m_areas[AreaID::AUDIO].form.setText(1u, _("Music volume"));
     m_areas[AreaID::AUDIO].form.setText(2u, _("Sounds volume"));
 
-    m_fullscreenBox.setChoiceText(0u, _("ON"));
-    m_fullscreenBox.setChoiceText(1u, _("OFF"));
-
-    m_vsyncBox.setChoiceText(0u, _("ON"));
-    m_vsyncBox.setChoiceText(1u, _("OFF"));
-
     m_buttons[0u].setText(_("Back"));
     m_buttons[1u].setText(_("Apply changes"));
 
@@ -247,8 +237,8 @@ void MenuConfig::refreshFormsFromConfig()
         }
     }
 
-    m_fullscreenBox.selectChoice(display.window.fullscreen? 0u : 1u);
-    m_vsyncBox.selectChoice(display.window.vsync? 0u : 1u);
+    m_fullscreenBox.setStatus(display.window.fullscreen);
+    m_vsyncBox.setStatus(display.window.vsync);
     m_antialiasingSelector.setValue(display.window.antialiasingLevel);
 
     // Audio
@@ -271,8 +261,8 @@ void MenuConfig::applyChanges()
 
     // Graphics
     display.window.resolution = sf::v2f(m_resolutions.at(m_resolutionBox.selectedChoice()));
-    display.window.fullscreen = (m_fullscreenBox.selectedChoice() == 0u);
-    display.window.vsync = (m_vsyncBox.selectedChoice() == 0u);
+    display.window.fullscreen = m_fullscreenBox.status();
+    display.window.vsync = m_vsyncBox.status();
     display.window.antialiasingLevel = m_antialiasingSelector.value();
 
     // Audio
