@@ -16,7 +16,6 @@ ScrollArea::ScrollArea()
     m_vBarStart.setTexture(vBarStartTexture);
     m_vBarMiddle.setTexture(&vBarMiddleTexture);
     m_vBarEnd.setTexture(vBarEndTexture);
-    m_vBarMiddle.setTextureRect(sf::IntRect{{0, 0}, sf::v2i(vBarMiddleTexture.getSize())});
     m_vBarMiddle.setOrigin(0.f, -static_cast<float>(vBarStartTexture.getSize().y));
     m_vBarEnd.setOrigin(0.f, static_cast<float>(vBarEndTexture.getSize().y));
 
@@ -26,7 +25,6 @@ ScrollArea::ScrollArea()
     m_hBarStart.setTexture(hBarStartTexture);
     m_hBarMiddle.setTexture(&hBarMiddleTexture);
     m_hBarEnd.setTexture(hBarEndTexture);
-    m_hBarMiddle.setTextureRect(sf::IntRect{{0, 0}, sf::v2i(hBarMiddleTexture.getSize())});
     m_hBarMiddle.setOrigin(-static_cast<float>(hBarStartTexture.getSize().x), 0.f);
     m_hBarEnd.setOrigin(static_cast<float>(hBarEndTexture.getSize().x), 0.f);
 
@@ -126,8 +124,10 @@ bool ScrollArea::handleMouseWheelMoved(const int delta, const sf::Vector2f& mous
 
 void ScrollArea::setContent(scene::Entity& entity)
 {
+    if (m_content != nullptr) detachChild(*m_content);
     m_content = &entity;
     attachChild(*m_content);
+
     refreshBars();
     refreshContentStatus();
 }

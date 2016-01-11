@@ -9,6 +9,7 @@
 #include "nui/vstacker.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/button.hpp"
+#include "nui/frame.hpp"
 #include "nui/form.hpp"
 #include "scene/wrappers/label.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
@@ -47,9 +48,7 @@ namespace states
         //! @name Routine
         //! @{
 
-        bool update(const sf::Time& dt) final;
         void handleEvent(const sf::Event& event) final;
-        void refreshNUI(const config::NUIGuides& cNUI) final;
         void refreshWindow(const config::WindowInfo& cWindow) final;
 
         //! @}
@@ -82,7 +81,7 @@ namespace states
             nui::VStacker stacker;              //!< Stacker for title and scroll area.
             nui::ScrollArea scrollArea;         //!< Area for configuration.
             nui::Form form;                     //!< The form inside the scroll area.
-            scene::RectangleShape background;   //!< Area delimiter.
+            nui::Frame frame;                   //!< Area delimiter.
         };
 
     private:

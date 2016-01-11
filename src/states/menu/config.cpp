@@ -33,27 +33,24 @@ MenuConfig::MenuConfig(StateStack& stack)
 
     // Configuration areas
     for (auto& area : m_areas) {
-        nuiRoot.attachChild(area.stacker);
+        nuiRoot.attachChild(area.frame);
+        area.frame.setContent(area.stacker);
+
         area.stacker.stackBack(area.title, nui::Align::CENTER);
         area.stacker.stackBack(area.scrollArea, nui::Align::CENTER);
-
-        nuiRoot.attachChild(area.background);
-        area.background.setDepth(100.f);
-        area.background.setFillColor({0u, 0u, 0u, 128u});
-        area.background.setOutlineColor(sf::Color::White);
 
         area.scrollArea.setContent(area.form);
         area.title.setPrestyle(scene::Label::Prestyle::NUI_TITLE);
     }
 
     // Stackers
-    m_areas[AreaID::GENERAL].stacker.setRelativeOrigin({0.5f, 0.f});
-    m_areas[AreaID::GRAPHICS].stacker.setRelativeOrigin({0.5f, 0.f});
-    m_areas[AreaID::AUDIO].stacker.setRelativeOrigin({0.5f, 1.f});
+    m_areas[AreaID::GENERAL].frame.setRelativeOrigin({0.5f, 0.f});
+    m_areas[AreaID::GRAPHICS].frame.setRelativeOrigin({0.5f, 0.f});
+    m_areas[AreaID::AUDIO].frame.setRelativeOrigin({0.5f, 1.f});
 
-    m_areas[AreaID::GENERAL].stacker.setRelativePosition({0.25f, 0.15f});
-    m_areas[AreaID::GRAPHICS].stacker.setRelativePosition({0.75f, 0.15f});
-    m_areas[AreaID::AUDIO].stacker.setRelativePosition({0.75f, 0.85f});
+    m_areas[AreaID::GENERAL].frame.setRelativePosition({0.25f, 0.15f});
+    m_areas[AreaID::GRAPHICS].frame.setRelativePosition({0.75f, 0.15f});
+    m_areas[AreaID::AUDIO].frame.setRelativePosition({0.75f, 0.85f});
 
     // General
     m_areas[AreaID::GENERAL].form.add(m_languageBox);
@@ -129,34 +126,6 @@ MenuConfig::MenuConfig(StateStack& stack)
 //-------------------//
 //----- Routine -----//
 
-bool MenuConfig::update(const sf::Time& dt)
-{
-    bool returnValue = baseClass::update(dt);
-
-    // Note: stacker size recomputation was delayed to this update
-    if (m_refreshBackgrounds) {
-        for (auto& area : m_areas) {
-            area.background.setSize(area.stacker.size());
-            area.background.setLocalPosition(area.stacker.localPosition());
-            area.background.setOrigin(area.stacker.getOrigin());
-        }
-
-        m_refreshBackgrounds = false;
-    }
-
-    return returnValue;
-}
-
-void MenuConfig::refreshNUI(const config::NUIGuides& cNUI)
-{
-    baseClass::refreshNUI(cNUI);
-
-    // Area backgrounds
-    for (auto& area : m_areas)
-        area.background.setOutlineThickness(cNUI.borderThick);
-    m_refreshBackgrounds = true;
-}
-
 void MenuConfig::refreshWindow(const config::WindowInfo& cWindow)
 {
     const auto& resolution = cWindow.resolution;
@@ -190,9 +159,9 @@ void MenuConfig::refreshWindow(const config::WindowInfo& cWindow)
     m_background.setSize(resolution);
 
     // Repositioning stackers and resizing elements
-    m_areas[AreaID::GENERAL].scrollArea.setSize({0.48f * resolution.x, 0.66f * resolution.y});
-    m_areas[AreaID::GRAPHICS].scrollArea.setSize({0.48f * resolution.x, 0.28f * resolution.y});
-    m_areas[AreaID::AUDIO].scrollArea.setSize({0.48f * resolution.x, 0.28f * resolution.y});
+    m_areas[AreaID::GENERAL].scrollArea.setSize({0.45f * resolution.x, 0.60f * resolution.y});
+    m_areas[AreaID::GRAPHICS].scrollArea.setSize({0.45f * resolution.x, 0.25f * resolution.y});
+    m_areas[AreaID::AUDIO].scrollArea.setSize({0.45f * resolution.x, 0.25f * resolution.y});
 
     // Area size might have change
     m_refreshBackgrounds = true;
