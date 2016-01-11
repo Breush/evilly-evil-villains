@@ -52,6 +52,7 @@
 			<facility type="stairs" linkX="1" linkY="3">
 				<tunnel x="1" y="3" />
 			</facility>
+			<facility isLink="true" type="stairsFront" />
 		</room>
 	</floor>
 	<floor pos="1">
@@ -73,6 +74,7 @@
 			<facility type="stairs" linkX="0" linkY="4">
 				<tunnel x="0" y="4" />
 			</facility>
+			<facility isLink="true" type="stairsFront" />
 		</room>
 		<room pos="4" state="constructed" />
 	</floor>
