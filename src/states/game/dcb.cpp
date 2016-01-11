@@ -77,7 +77,7 @@ GameDCB::GameDCB(StateStack& stack)
 
     // Button
     m_answerBox.attachChild(m_okButton);
-    m_okButton.setAction(_("OK"), [this] { onNameValidate(); });
+    m_okButton.set(_("OK"), [this] { onNameValidate(); });
     m_okButton.setLocalPosition(m_nameEntry.localPosition() + sf::Vector2f{m_nameEntry.size().x / 2.f + 10.f, 0.f});
     m_okButton.setRelativeOrigin({0.f, 0.5f});
 

@@ -3,7 +3,7 @@
 #include "states/state.hpp"
 #include "states/identifiers.hpp"
 #include "nui/vstacker.hpp"
-#include "nui/button.hpp"
+#include "nui/pushbutton.hpp"
 #include "nui/list.hpp"
 #include "nui/popdialog.hpp"
 #include "scene/wrappers/label.hpp"
@@ -74,7 +74,7 @@ namespace states
         nui::List m_list;                       //!< The list of villains.
         nui::VStacker m_stacker;                //!< The buttons stacker.
         nui::PopDialog m_popDialog;             //!< To inform about errors.
-        std::array<nui::Button, 3> m_buttons;   //!< Create / Delete / Back
+        std::array<nui::PushButton, 3> m_buttons;   //!< Create / Delete / Back
 
         // Background and title
         scene::Label m_title;                 //!< The title of the menu page.

@@ -58,7 +58,7 @@ MenuNewGame::MenuNewGame(StateStack& stack)
     for (auto& button : m_buttons)
         m_buttonsStacker.stackBack(button, nui::Align::OPPOSITE);
 
-    m_buttons[0].setAction(_("Back"), [this] { stackPop(); });
+    m_buttons[0].set(_("Back"), [this] { stackPop(); });
     m_buttons[1].setText(_("Start playing"));
 
     refreshVillainsList();
@@ -144,7 +144,7 @@ void MenuNewGame::onVillainClicked(dungeon::VillainDisplay& clickedEntity)
         pVillainDisplay->setSelected(pVillainDisplay.get() == &clickedEntity);
 
     // Enable the start button
-    m_buttons[1].setCallback([this] { startPlay(); });
+    m_buttons[1].setValidateCallback([this] { startPlay(); });
 }
 
 //---------------//
@@ -153,7 +153,7 @@ void MenuNewGame::onVillainClicked(dungeon::VillainDisplay& clickedEntity)
 void MenuNewGame::refreshVillainsList()
 {
     m_selectedVillainDisplay = nullptr;
-    m_buttons[1].setCallback(nullptr);
+    m_buttons[1].setValidateCallback(nullptr);
     m_villainsDisplays.clear();
     context::villains.load();
 

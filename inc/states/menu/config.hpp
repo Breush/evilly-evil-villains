@@ -8,7 +8,7 @@
 #include "nui/checkbox.hpp"
 #include "nui/vstacker.hpp"
 #include "nui/hstacker.hpp"
-#include "nui/button.hpp"
+#include "nui/pushbutton.hpp"
 #include "nui/frame.hpp"
 #include "nui/form.hpp"
 #include "scene/wrappers/label.hpp"
@@ -89,7 +89,7 @@ namespace states
         // NUI
         std::array<Area, AreaID::COUNT> m_areas;    //!< All the areas of configuration.
         nui::HStacker m_buttonsStacker;             //!< Stacker for buttons.
-        std::array<nui::Button, 2u> m_buttons;      //!< Buttons.
+        std::array<nui::PushButton, 2u> m_buttons;      //!< Buttons.
 
         // General
         nui::ChoiceBox m_languageBox;                   //!< Select the language.

@@ -94,9 +94,9 @@ void PopDialog::setMessage(const std::wstring& message)
 
 void PopDialog::addButton(std::wstring text, Callback callback)
 {
-    auto button = std::make_unique<nui::Button>();
+    auto button = std::make_unique<nui::PushButton>();
 
-    button->setAction(text, callback);
+    button->set(text, callback);
     m_buttonsStacker.stackBack(*button);
 
     m_buttons.emplace_back(std::move(button));

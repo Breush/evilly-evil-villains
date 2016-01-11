@@ -5,7 +5,7 @@
 #include "nui/scrollarea.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/vstacker.hpp"
-#include "nui/button.hpp"
+#include "nui/pushbutton.hpp"
 #include "hub/monsterlocker.hpp"
 #include "scene/wrappers/rectanglegradient.hpp"
 #include "scene/wrappers/label.hpp"
@@ -69,7 +69,7 @@ namespace states
         nui::ScrollArea m_scrollArea;               //!< The scroll area.
         nui::HStacker m_globalStacker;              //!< Stacker inside the scrollarea.
         std::array<nui::VStacker, 2u> m_columns;    //!< The stackers forming the columns.
-        nui::Button m_button;                       //!< Back button.
+        nui::PushButton m_button;                       //!< Back button.
 
         // Lockers
         std::vector<hub::MonsterLockerPtr> m_monsterLockers;    //!< Monsters list.

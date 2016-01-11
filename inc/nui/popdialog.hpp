@@ -3,7 +3,7 @@
 #include "scene/entity.hpp"
 #include "nui/vstacker.hpp"
 #include "nui/hstacker.hpp"
-#include "nui/button.hpp"
+#include "nui/pushbutton.hpp"
 #include "scene/wrappers/label.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
 
@@ -104,6 +104,6 @@ namespace nui
         scene::Label m_message;                                   //!< The displayed message.
         nui::VStacker m_mainStacker;                            //!< Stacks for message box.
         nui::HStacker m_buttonsStacker;                         //!< Stacks all buttons.
-        std::vector<std::unique_ptr<nui::Button>> m_buttons;    //!< All buttons, defined by user.
+        std::vector<std::unique_ptr<nui::PushButton>> m_buttons;    //!< All buttons, defined by user.
     };
 }

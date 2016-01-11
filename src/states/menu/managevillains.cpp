@@ -49,9 +49,9 @@ MenuManageVillains::MenuManageVillains (StateStack& stack)
     for (auto& button : m_buttons)
         m_stacker.stackBack(button, nui::Align::OPPOSITE);
 
-    m_buttons[0].setAction(_("Create new Villain"), [this] { stackPush(StateID::MENU_CREATEVILLAIN); });
-    m_buttons[1].setAction(_("Delete selected Villain"), [this] { deleteSelectedVillain(); });
-    m_buttons[2].setAction(_("Back"), [this] { stackPop(); });
+    m_buttons[0].set(_("Create new Villain"), [this] { stackPush(StateID::MENU_CREATEVILLAIN); });
+    m_buttons[1].set(_("Delete selected Villain"), [this] { deleteSelectedVillain(); });
+    m_buttons[2].set(_("Back"), [this] { stackPop(); });
 }
 
 //-------------------//

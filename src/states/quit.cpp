@@ -26,12 +26,12 @@ Quit::Quit(StateStack& stack)
 
     // Buttons
     nuiRoot.attachChild(m_noButton);
-    m_noButton.setAction(_("No, sorry, it is a mistake."), [this]() { stackPop(); });
+    m_noButton.set(_("No, sorry, it is a mistake."), [this]() { stackPop(); });
     m_noButton.setRelativePosition({0.5f, 0.5f});
     m_noButton.centerOrigin();
 
     nuiRoot.attachChild(m_yesButton);
-    m_yesButton.setAction(_("Yes, I will lose everything not saved."), [this]() { stackClear(); });
+    m_yesButton.set(_("Yes, I will lose everything not saved."), [this]() { stackClear(); });
     m_yesButton.setRelativePosition({0.5f, 0.6f});
     m_yesButton.centerOrigin();
 }

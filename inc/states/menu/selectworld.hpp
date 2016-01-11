@@ -4,7 +4,7 @@
 #include "states/identifiers.hpp"
 #include "nui/list.hpp"
 #include "nui/hstacker.hpp"
-#include "nui/button.hpp"
+#include "nui/pushbutton.hpp"
 #include "scene/wrappers/rectanglegradient.hpp"
 #include "scene/wrappers/label.hpp"
 
@@ -55,9 +55,9 @@ namespace states
     private:
 
         // NUI
-        nui::List m_list;                       //!< List of worlds.
-        nui::HStacker m_stacker;                //!< Stacker for buttons.
-        std::array<nui::Button, 3u> m_buttons;  //!< Buttons Create/Back/Play.
+        nui::List m_list;                           //!< List of worlds.
+        nui::HStacker m_stacker;                    //!< Stacker for buttons.
+        std::array<nui::PushButton, 3u> m_buttons;  //!< Buttons Create/Back/Play.
 
         // Decorum
         scene::Label m_title;                   //!< Title.

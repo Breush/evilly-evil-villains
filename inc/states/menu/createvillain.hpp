@@ -3,7 +3,7 @@
 #include "states/state.hpp"
 #include "states/identifiers.hpp"
 #include "nui/vstacker.hpp"
-#include "nui/button.hpp"
+#include "nui/pushbutton.hpp"
 #include "nui/form.hpp"
 #include "nui/textentry.hpp"
 #include "nui/popdialog.hpp"
@@ -63,7 +63,7 @@ namespace states
         nui::VStacker m_stacker;                //!< The buttons stacker.
         nui::TextEntry m_villainNameEntry;      //!< The entry for villain name.
         nui::PopDialog m_popDialog;             //!< To inform about errors.
-        std::array<nui::Button, 2> m_buttons;   //!< Create / Back
+        std::array<nui::PushButton, 2> m_buttons;   //!< Create / Back
 
         // Background and title
         scene::Label m_title;                   //!< The title of the menu page.

@@ -4,7 +4,7 @@
 
 namespace nui
 {
-    //! A button to execute actions.
+    //! @deprecated (Better use nui::PushButton) A button to execute actions.
     /*!
      *  This button shows a specific text and executes action on click.
      *  It derives from nui::ChoiceBox for its display style.

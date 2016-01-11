@@ -33,9 +33,9 @@ GamePause::GamePause(StateStack& stack)
     m_stacker.setRelativePosition({0.5f, 0.5f});
     m_stacker.centerOrigin();
 
-    m_continueButton.setCallback([this]() { stackPop(); });
-    m_mainMenuButton.setCallback([this]() { stackClear(StateID::MENU_MAIN); });
-    m_configButton.setCallback  ([this]() { stackPush(StateID::MENU_CONFIG); });
+    m_continueButton.setValidateCallback([this]() { stackPop(); });
+    m_mainMenuButton.setValidateCallback([this]() { stackClear(StateID::MENU_MAIN); });
+    m_configButton.setValidateCallback  ([this]() { stackPush(StateID::MENU_CONFIG); });
 
     Application::setPaused(true);
 }

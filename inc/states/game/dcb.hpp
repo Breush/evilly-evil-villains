@@ -7,7 +7,7 @@
 #include "dcb/answerbox.hpp"
 #include "dcb/bubble.hpp"
 #include "dcb/controller.hpp"
-#include "nui/button.hpp"
+#include "nui/pushbutton.hpp"
 #include "nui/textentry.hpp"
 
 namespace states
@@ -46,7 +46,7 @@ namespace states
     private:
 
         nui::TextEntry m_nameEntry;         //!< The entry for the dungeon name.
-        nui::Button m_okButton;             //!< The only one button in the world.
+        nui::PushButton m_okButton;             //!< The only one button in the world.
 
         dcb::Bubble m_bubble;               //!< The message.
         dcb::AnswerBox m_answerBox;         //!< The box with all possible answers.

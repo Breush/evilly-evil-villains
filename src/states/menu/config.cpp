@@ -117,8 +117,8 @@ MenuConfig::MenuConfig(StateStack& stack)
     for (auto& button : m_buttons)
         m_buttonsStacker.stackBack(button, nui::Align::OPPOSITE);
 
-    m_buttons[0u].setCallback([this] { stackPop(); });
-    m_buttons[1u].setCallback([this] { applyChanges(); });
+    m_buttons[0u].setValidateCallback([this] { stackPop(); });
+    m_buttons[1u].setValidateCallback([this] { applyChanges(); });
 
     refreshFormsFromConfig();
 }

@@ -2,7 +2,7 @@
 
 #include "states/state.hpp"
 #include "states/identifiers.hpp"
-#include "nui/button.hpp"
+#include "nui/pushbutton.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
 #include "scene/wrappers/label.hpp"
 
@@ -45,8 +45,8 @@ namespace states
         scene::Label m_title;                 //!< Title.
 
         // NUI
-        nui::Button m_noButton;             //!< Cancel button.
-        nui::Button m_yesButton;            //!< Accept button.
+        nui::PushButton m_noButton;             //!< Cancel button.
+        nui::PushButton m_yesButton;            //!< Accept button.
     };
 }
 

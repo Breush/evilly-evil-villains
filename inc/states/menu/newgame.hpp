@@ -9,7 +9,7 @@
 #include "nui/choicebox.hpp"
 #include "nui/vstacker.hpp"
 #include "nui/hstacker.hpp"
-#include "nui/button.hpp"
+#include "nui/pushbutton.hpp"
 #include "dungeon/villaindisplay.hpp"
 
 #include <array>
@@ -80,6 +80,6 @@ namespace states
         nui::ChoiceBox m_gamemodeBox;                               //!< The game mode.
 
         nui::HStacker m_buttonsStacker;         //!< The stacker for buttons.
-        std::array<nui::Button, 2u> m_buttons;  //!< The buttons (cancel/ok).
+        std::array<nui::PushButton, 2u> m_buttons;  //!< The buttons (cancel/ok).
     };
 }

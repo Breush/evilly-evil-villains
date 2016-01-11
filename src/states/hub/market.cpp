@@ -31,7 +31,7 @@ HubMarket::HubMarket(StateStack& stack, dungeon::Data& data)
     nuiRoot.attachChild(m_button);
     m_button.setRelativeOrigin({0.5f, 1.f});
     m_button.setRelativePosition({0.5f, 0.95f});
-    m_button.setAction(_("Back"), [this] { stackPop(); });
+    m_button.set(_("Back"), [this] { stackPop(); });
 
     // Scroll area
     nuiRoot.attachChild(m_scrollArea);

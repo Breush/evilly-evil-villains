@@ -40,9 +40,8 @@ Terminal::Terminal(StateStack& stack)
     nuiRoot.attachChild(m_pauseButton);
     m_pauseButton.setRelativeOrigin({1.f, 0.f});
     m_pauseButton.setRelativePosition({0.99f, 0.02f});
-    m_pauseButton.setText(L"Pause/Unpause");
+    m_pauseButton.set(L"Pause/Unpause", [this] { onPauseButtonPressed(); });
     m_pauseButton.setFocusable(false);
-    m_pauseButton.setCallback([this] { onPauseButtonPressed(); });
 
     // Initialize historic
     m_historicPos = 0u;

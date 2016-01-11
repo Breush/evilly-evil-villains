@@ -47,8 +47,8 @@ MenuCreateVillain::MenuCreateVillain(StateStack& stack)
     for (auto& button : m_buttons)
         m_stacker.stackBack(button, nui::Align::OPPOSITE);
 
-    m_buttons[0].setAction(_("Create!"), [this] { createVillain(); });
-    m_buttons[1].setAction(_("Back"), [this] { stackPop(); });
+    m_buttons[0].set(_("Create!"), [this] { createVillain(); });
+    m_buttons[1].set(_("Back"), [this] { stackPop(); });
 }
 
 //------------------//

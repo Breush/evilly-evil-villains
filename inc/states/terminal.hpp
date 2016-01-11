@@ -6,7 +6,7 @@
 #include "scene/wrappers/rectangleshape.hpp"
 #include "scene/wrappers/wraplabel.hpp"
 #include "nui/textentry.hpp"
-#include "nui/button.hpp"
+#include "nui/pushbutton.hpp"
 
 #include <deque>
 #include <memory>
@@ -116,7 +116,7 @@ namespace states
         scene::RectangleShape m_background;         //!< Background.
         scene::RectangleShape m_messagesBackground; //!< Background for the messages.
         nui::TextEntry m_entry;                     //!< The command entry.
-        nui::Button m_pauseButton;                  //!< Pause/unpause button.
+        nui::PushButton m_pauseButton;                  //!< Pause/unpause button.
         float m_width = 0.f;                        //!< The width.
         float m_currentHeight = 0.f;                //!< The height.
         float m_characterSize = 0.f;                //!< The font size.
