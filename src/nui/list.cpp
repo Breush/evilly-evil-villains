@@ -16,6 +16,48 @@ List::List()
     attachChild(m_table);
     m_table.overridePadding(-1.f, 0.f);
 
+    // Header
+    const auto& headerLeftTexture = Application::context().textures.get("nui/list/header_left");
+    const auto& headerRightTexture = Application::context().textures.get("nui/list/header_right");
+    const auto& headerMiddleTexture = Application::context().textures.get("nui/list/header_middle");
+
+    m_headerLeft.setTexture(headerLeftTexture);
+    m_headerRight.setTexture(headerRightTexture);
+    m_headerMiddle.setTexture(&headerMiddleTexture);
+
+    m_headerMiddle.setPosition(headerLeftTexture.getSize().x, 0.f);
+    m_headerRight.setOrigin(headerRightTexture.getSize().x, 0.f);
+
+    m_headerLeftSize = sf::v2f(headerLeftTexture.getSize());
+
+    // Fill
+    const auto& fillLeftTexture = Application::context().textures.get("nui/list/fill_left");
+    const auto& fillRightTexture = Application::context().textures.get("nui/list/fill_right");
+    const auto& fillMiddleTexture = Application::context().textures.get("nui/list/fill_middle");
+
+    m_fillLeft.setTexture(&fillLeftTexture);
+    m_fillRight.setTexture(&fillRightTexture);
+    m_fillMiddle.setTexture(&fillMiddleTexture);
+
+    m_fillRight.setOrigin(fillRightTexture.getSize().x, 0.f);
+
+    m_fillMiddleSize = sf::v2f(fillMiddleTexture.getSize());
+
+    // Bottom
+    const auto& bottomLeftTexture = Application::context().textures.get("nui/list/bottom_left");
+    const auto& bottomRightTexture = Application::context().textures.get("nui/list/bottom_right");
+    const auto& bottomMiddleTexture = Application::context().textures.get("nui/list/bottom_middle");
+
+    m_footerLeft.setTexture(&bottomLeftTexture);
+    m_footerRight.setTexture(&bottomRightTexture);
+    m_footerMiddle.setTexture(&bottomMiddleTexture);
+
+    m_footerLeft.setOrigin(0.f, bottomLeftTexture.getSize().y);
+    m_footerMiddle.setOrigin(0.f, bottomMiddleTexture.getSize().y);
+    m_footerRight.setOrigin(bottomRightTexture.getSize().x, bottomRightTexture.getSize().y);
+
+    m_footerRightSize = sf::v2f(bottomRightTexture.getSize());
+
     // Highlight
     m_selectionHighlight.setFillColor({255u, 255u, 255u, 32u});
     m_hoverHighlight.setFillColor(sf::Color::Transparent);
@@ -43,7 +85,6 @@ void List::refreshNUI(const config::NUIGuides& cNUI)
 {
     baseClass::refreshNUI(cNUI);
 
-    m_headerOffset = 3.f * cNUI.fontHSpace;
     m_lineHeight = cNUI.borderThick + cNUI.fontVSpace + 2.f * cNUI.vPadding;
     m_table.setDimensions(0u, m_columns.size(), m_lineHeight);
 
@@ -277,35 +318,55 @@ void List::refreshBordersPosition()
 {
     returnif (!m_columns.size());
 
-    m_hBorders.resize(3u);
     m_vBorders.resize(m_columns.size() + 1u);
 
     clearParts();
-    addPart(&m_selectionHighlight);
-    addPart(&m_hoverHighlight);
+
+    // Header
+    addPart(&m_headerLeft);
+    addPart(&m_headerRight);
+    addPart(&m_headerMiddle);
+
+    float fillWidth = size().x - m_headerLeftSize.x - m_footerRightSize.x;
+    m_headerRight.setPosition({size().x, 0.f});
+    m_headerMiddle.setSize({fillWidth, m_lineHeight});
+    m_headerLeft.setScale(1.f, m_lineHeight / m_headerLeftSize.y);
+    m_headerRight.setScale(1.f, m_lineHeight / m_headerLeftSize.y);
+
+    // Fill
+    addPart(&m_fillLeft);
+    addPart(&m_fillRight);
+    addPart(&m_fillMiddle);
+
+    float fillHeight = size().y - m_lineHeight - m_footerRightSize.y;
+    m_fillLeft.setPosition(0.f, m_lineHeight);
+    m_fillRight.setPosition(size().x, m_lineHeight);
+    m_fillMiddle.setPosition(m_headerLeftSize.x, m_lineHeight);
+    m_fillLeft.setSize({m_headerLeftSize.x, fillHeight});
+    m_fillRight.setSize({m_headerLeftSize.x, fillHeight});
+    m_fillMiddle.setSize({fillWidth, fillHeight});
+
+    // Bottom
+    addPart(&m_footerLeft);
+    addPart(&m_footerRight);
+    addPart(&m_footerMiddle);
+
+    m_footerLeft.setPosition({0.f, size().y});
+    m_footerRight.setPosition({size().x, size().y});
+    m_footerMiddle.setPosition({m_headerLeftSize.x, size().y});
+    m_footerLeft.setSize(m_footerRightSize);
+    m_footerRight.setSize(m_footerRightSize);
+    m_footerMiddle.setSize({fillWidth, m_footerRightSize.y});
 
     // Vertical
-    for (uint c = 0u; c <= m_columns.size(); ++c) {
+    for (uint c = 1u; c <= m_columns.size() - 1u; ++c) {
         m_vBorders[c].setShade(0.1f);
         m_vBorders[c].setLength(size().y - m_lineHeight);
         m_vBorders[c].setPosition(m_table.colOffset(c), m_lineHeight);
         addPart(&m_vBorders[c]);
     }
 
-    // Horizontal
-    for (uint r = 0u; r < 3u; ++r) {
-        m_hBorders[r].setShade(0.05f);
-        m_hBorders[r].setLength(size().x);
-        m_hBorders[r].setPosition(0.f, m_table.rowOffset(r));
-        addPart(&m_hBorders[r]);
-    }
-
-    // Header offset
-    m_hBorders[0].move(-m_headerOffset, 0.f);
-    m_hBorders[1].move(-m_headerOffset, 0.f);
-    m_hBorders[0].setLength(m_hBorders[0].length() + 2.f * m_headerOffset);
-    m_hBorders[1].setLength(m_hBorders[1].length() + 2.f * m_headerOffset);
-
-    // Correction for last horizontal
-    m_hBorders.back().setPosition(0.f, size().y);
+    // Highlights
+    addPart(&m_selectionHighlight);
+    addPart(&m_hoverHighlight);
 }

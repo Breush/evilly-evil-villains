@@ -6,6 +6,7 @@
 #include "sfe/line.hpp"
 #include "nui/tablelayout.hpp"
 
+#include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
 #include <initializer_list>
@@ -167,18 +168,37 @@ namespace nui
         std::vector<ColumnInfo> m_columns;  //!< The columns.
         std::vector<LineInfo> m_lines;      //!< The lines.
 
-        std::vector<sfe::HLine> m_hBorders;         //!< The horizontal borders.
+        // Header
+        sf::Sprite m_headerLeft;            //!< The left part of the header.
+        sf::Sprite m_headerRight;           //!< The right part of the header.
+        sf::RectangleShape m_headerMiddle;  //!< The (repeated) middle part of the header.
+        sf::Vector2f m_headerLeftSize;      //!< The header left size.
+
+        // Fill
+        sf::RectangleShape m_fillLeft;      //!< The left part of filling.
+        sf::RectangleShape m_fillRight;     //!< The right part of filling.
+        sf::RectangleShape m_fillMiddle;    //!< The middle part of filling.
+        sf::Vector2f m_fillMiddleSize;      //!< The fill middle size.
+
+        // Bottom
+        sf::RectangleShape m_footerLeft;    //!< The left part of the footer.
+        sf::RectangleShape m_footerRight;   //!< The right part of the footer.
+        sf::RectangleShape m_footerMiddle;  //!< The middle part of the footer.
+        sf::Vector2f m_footerRightSize;     //!< The footer right size.
+
+        // Highlights
         std::vector<sfe::VLine> m_vBorders;         //!< The vertical borders.
         sf::RectangleShape m_selectionHighlight;    //!< The current selection is highlighted.
         sf::RectangleShape m_hoverHighlight;        //!< When the mouse is over.
 
-        float m_headerOffset = 0.f; //!< How much the header line goes out the size.
+        // Validation
+        Callback m_callback = nullptr;      //!< The callback on validation.
+        float m_doubleClickDelay = -1.f;    //!< Double-click timer, keep negative for long-passed first click.
+
+        // Decorum
         float m_lineHeight = 0.f;   //!< The height of a line.
         uint m_selectedLine = -1u;  //!< The selected line.
         uint m_hoveredLine = -1u;   //!< The hovered line.
-
-        Callback m_callback = nullptr;      //!< The callback on validation.
-        float m_doubleClickDelay = -1.f;    //!< Double-click timer, keep negative for long-passed first click.
     };
 }
 

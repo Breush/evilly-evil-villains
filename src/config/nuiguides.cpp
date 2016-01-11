@@ -9,7 +9,7 @@ void NUIGuides::recompute(const Display::NUI& cDisplayNUI)
     const auto& nuiSize = cDisplayNUI.size;
     const auto& fontFactor = cDisplayNUI.fontFactor;
 
-    hPadding = 2.f + 4.f * nuiSize;
+    hPadding = 4.f + 4.f * nuiSize;
     vPadding = 3.f + 6.f * nuiSize;
 
     borderThick = 1.f;
