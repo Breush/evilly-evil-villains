@@ -35,6 +35,15 @@ namespace nui
 
         //! @}
 
+        //----------------------------//
+        //! @name Getters and setters
+        //! @{
+
+        //! Get the bar thickness.
+        inline float barThick() const { return m_barMiddleThick; }
+
+        //! @}
+
     protected:
 
         //----------------//

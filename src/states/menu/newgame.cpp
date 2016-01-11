@@ -162,7 +162,7 @@ void MenuNewGame::refreshVillainsList()
     for (const auto& villain : villainsList) {
         auto pVillainDisplay = std::make_unique<dungeon::VillainDisplay>();
         pVillainDisplay->setSource(villain);
-        pVillainDisplay->setSize({256.f, m_scrollArea.size().y - 15.f});
+        pVillainDisplay->setSize({256.f, m_scrollArea.size().y - m_scrollArea.barThick()});
         pVillainDisplay->setClickCallback([this] (dungeon::VillainDisplay& clickedEntity) { onVillainClicked(clickedEntity); });
         m_villainsDisplays.emplace_back(std::move(pVillainDisplay));
         m_scrollAreaStacker.stackBack(*m_villainsDisplays.back());
@@ -170,7 +170,7 @@ void MenuNewGame::refreshVillainsList()
 
     // New villain
     auto pVillainDisplay = std::make_unique<dungeon::VillainDisplay>();
-    pVillainDisplay->setSize({256.f, m_scrollArea.size().y - 15.f});
+    pVillainDisplay->setSize({256.f, m_scrollArea.size().y - m_scrollArea.barThick()});
     pVillainDisplay->setClickCallback([this] (dungeon::VillainDisplay&) { stackPush(StateID::MENU_CREATEVILLAIN); });
     m_villainsDisplays.emplace_back(std::move(pVillainDisplay));
     m_scrollAreaStacker.stackBack(*m_villainsDisplays.back());

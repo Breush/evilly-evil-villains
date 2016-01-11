@@ -36,31 +36,25 @@ void RangeSelector::refreshNUI(const config::NUIGuides& cNUI)
 //------------------//
 //----- Events -----//
 
+void RangeSelector::handleGlobalMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f&)
+{
+    returnif (button != sf::Mouse::Left);
+    m_grabbing = false;
+}
+
+void RangeSelector::handleGlobalMouseMoved(const sf::Vector2f& nuiPos)
+{
+    returnif (!m_grabbing);
+    auto mousePos = getInverseTransform().transformPoint(nuiPos);
+    setClosestValue(mousePos.x);
+}
+
 bool RangeSelector::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
     returnif (button != sf::Mouse::Left) false;
     setClosestValue(mousePos.x);
     m_grabbing = true;
     return true;
-}
-
-bool RangeSelector::handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
-{
-    returnif (button != sf::Mouse::Left) false;
-    m_grabbing = false;
-    return true;
-}
-
-bool RangeSelector::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
-{
-    returnif (!m_grabbing) false;
-    setClosestValue(mousePos.x);
-    return true;
-}
-
-void RangeSelector::handleMouseLeft()
-{
-    m_grabbing = false;
 }
 
 //-------------------------//
@@ -70,7 +64,9 @@ void RangeSelector::setClosestValue(const float relX)
 {
     const float distance = size().x / (m_max - m_min);
     auto closestValue = std::round(relX / distance);
-    setValue(m_min + static_cast<uint>(closestValue));
+
+    if (closestValue < 0.f) setValue(m_min);
+    else setValue(m_min + static_cast<uint>(closestValue));
 }
 
 void RangeSelector::setValue(uint inValue)
