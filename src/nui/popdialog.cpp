@@ -58,9 +58,6 @@ void PopDialog::refreshNUI(const config::NUIGuides& cNUI)
     refreshBoxBackground();
 }
 
-//------------------//
-//----- Events -----//
-
 //-------------------//
 //----- Control -----//
 

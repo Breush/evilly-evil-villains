@@ -120,6 +120,9 @@ bool PushButton::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector
     returnif (m_validateCallback == nullptr) true;
 
     setPartShader(&m_text, "nui/hover");
+    setPartShader(&m_left, "nui/hover");
+    setPartShader(&m_middle, "nui/hover");
+    setPartShader(&m_right, "nui/hover");
     return true;
 }
 
