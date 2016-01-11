@@ -10,8 +10,44 @@ using namespace nui;
 ScrollArea::ScrollArea()
 {
     // Bars
-    m_hBar.setFillColor(sf::Color::White);
-    m_vBar.setFillColor(sf::Color::White);
+    const auto& vBarStartTexture = Application::context().textures.get("nui/scrollarea/vbar_start");
+    const auto& vBarMiddleTexture = Application::context().textures.get("nui/scrollarea/vbar_middle");
+    const auto& vBarEndTexture = Application::context().textures.get("nui/scrollarea/vbar_end");
+    m_vBarStart.setTexture(vBarStartTexture);
+    m_vBarMiddle.setTexture(&vBarMiddleTexture);
+    m_vBarEnd.setTexture(vBarEndTexture);
+    m_vBarMiddle.setTextureRect(sf::IntRect{{0, 0}, sf::v2i(vBarMiddleTexture.getSize())});
+    m_vBarMiddle.setOrigin(0.f, -static_cast<float>(vBarStartTexture.getSize().y));
+    m_vBarEnd.setOrigin(0.f, static_cast<float>(vBarEndTexture.getSize().y));
+
+    const auto& hBarStartTexture = Application::context().textures.get("nui/scrollarea/hbar_start");
+    const auto& hBarMiddleTexture = Application::context().textures.get("nui/scrollarea/hbar_middle");
+    const auto& hBarEndTexture = Application::context().textures.get("nui/scrollarea/hbar_end");
+    m_hBarStart.setTexture(hBarStartTexture);
+    m_hBarMiddle.setTexture(&hBarMiddleTexture);
+    m_hBarEnd.setTexture(hBarEndTexture);
+    m_hBarMiddle.setTextureRect(sf::IntRect{{0, 0}, sf::v2i(hBarMiddleTexture.getSize())});
+    m_hBarMiddle.setOrigin(-static_cast<float>(hBarStartTexture.getSize().x), 0.f);
+    m_hBarEnd.setOrigin(static_cast<float>(hBarEndTexture.getSize().x), 0.f);
+
+    m_barMiddleThick = vBarMiddleTexture.getSize().x;
+    m_barMiddleStep = vBarStartTexture.getSize().y + vBarEndTexture.getSize().y;
+
+    // Grabbers
+    const auto vGrabberTextureString = "nui/scrollarea/vgrabber";
+    const auto& vGrabberTexture = Application::context().textures.get(vGrabberTextureString);
+    m_vGrabberSize = sf::v2f(vGrabberTexture.getSize());
+    m_vGrabber.setTexture(vGrabberTextureString);
+    m_hGrabber.setTexture(vGrabberTextureString);
+    m_hGrabber.setLocalRotation(90.f);
+    m_hGrabber.setOrigin({0.f, static_cast<float>(vGrabberTexture.getSize().y)});
+
+    attachChild(m_vGrabber);
+    attachChild(m_hGrabber);
+    m_vGrabber.setVisible(false);
+    m_hGrabber.setVisible(false);
+    m_vGrabber.setDepth(-50.f);
+    m_hGrabber.setDepth(-50.f);
 }
 
 //-------------------//
@@ -24,8 +60,10 @@ void ScrollArea::onSizeChanges()
     refreshContentStatus();
 }
 
-void ScrollArea::onChildSizeChanges(scene::Entity&)
+void ScrollArea::onChildSizeChanges(scene::Entity& entity)
 {
+    returnif (m_content != &entity);
+
     refreshBars();
     refreshContentStatus();
 }
@@ -33,10 +71,8 @@ void ScrollArea::onChildSizeChanges(scene::Entity&)
 void ScrollArea::refreshNUI(const config::NUIGuides& cNUI)
 {
     baseClass::refreshNUI(cNUI);
-
-    m_barThick = 2.f * cNUI.largeBorderThick;
-
-    refreshBars();
+    // TODO Remember and use some NUI size factor
+    // refreshBars();
 }
 
 //------------------//
@@ -44,15 +80,8 @@ void ScrollArea::refreshNUI(const config::NUIGuides& cNUI)
 
 void ScrollArea::handleGlobalMouseMoved(const sf::Vector2f& nuiPos)
 {
-    if (m_vBarGrabbed) {
-        m_offset.y = m_offsetStartGrabbing.y + (m_mouseStartGrabbing.y - nuiPos.y);
-        refreshContentStatus();
-    }
-
-    else if (m_hBarGrabbed) {
-        m_offset.x = m_offsetStartGrabbing.x + (m_mouseStartGrabbing.x - nuiPos.x);
-        refreshContentStatus();
-    }
+    if (m_vBarGrabbed || m_hBarGrabbed)
+        refreshOffsetFromPosition(nuiPos);
 }
 
 void ScrollArea::handleGlobalMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f&)
@@ -67,20 +96,16 @@ bool ScrollArea::handleMouseButtonPressed(const sf::Mouse::Button button, const 
     returnif (button != sf::Mouse::Left) false;
 
     // Detect if mouse is over vertical bar
-    sf::FloatRect vLocalBounds({0.f, 0.f}, m_vBar.getSize());
-    if (vLocalBounds.contains(m_vBar.getInverseTransform().transformPoint(mousePos))) {
-        m_offsetStartGrabbing = m_offset;
-        m_mouseStartGrabbing = nuiPos;
+    if (m_vGrabber.visible() && mousePos.x >= m_availableSize.x) {
         m_vBarGrabbed = true;
+        refreshOffsetFromPosition(nuiPos);
         return true;
     }
 
     // Detect if mouse is over horizontal bar
-    sf::FloatRect hLocalBounds({0.f, 0.f}, m_hBar.getSize());
-    if (hLocalBounds.contains(m_hBar.getInverseTransform().transformPoint(mousePos))) {
-        m_offsetStartGrabbing = m_offset;
-        m_mouseStartGrabbing = nuiPos;
+    if (m_hGrabber.visible() && mousePos.y >= m_availableSize.y) {
         m_hBarGrabbed = true;
+        refreshOffsetFromPosition(nuiPos);
         return true;
     }
 
@@ -110,35 +135,73 @@ void ScrollArea::setContent(scene::Entity& entity)
 //-----------------------------------//
 //----- Internal changes update -----//
 
+void ScrollArea::refreshOffsetFromPosition(const sf::Vector2f& nuiPos)
+{
+    auto relPos = getInverseTransform().transformPoint(nuiPos);
+    auto freeContentSize = m_content->size() - m_availableSize;
+
+    if (m_vBarGrabbed) {
+        auto vBarPosition = relPos.y - m_vGrabberSize.y / 2.f;
+        auto vPercent = vBarPosition / (m_availableSize.y - m_vGrabberSize.y);
+        m_offset.y = - vPercent * freeContentSize.y;
+    }
+
+    else if (m_hBarGrabbed) {
+        auto hBarPosition = relPos.x - m_vGrabberSize.y / 2.f;
+        auto hPercent = hBarPosition / (m_availableSize.x - m_vGrabberSize.y);
+        m_offset.x = - hPercent * freeContentSize.x;
+    }
+
+    refreshContentStatus();
+}
+
 void ScrollArea::refreshBars()
 {
     returnif (m_content == nullptr);
 
-    // Bar visibility and length
-    auto freeContentSize = m_content->size() - size();
     clearParts();
+    m_vGrabber.setVisible(false);
+    m_hGrabber.setVisible(false);
+
+    // Bar visibility
+    auto freeContentSize = m_content->size() - size() - m_vGrabberSize.x;
+    m_availableSize = size();
 
     if (freeContentSize.x > 0.f) {
-        addPart(&m_hBar);
-        m_barsLength.x = size().x * (1.f - freeContentSize.x / m_content->size().x);
+        addPart(&m_hBarStart);
+        addPart(&m_hBarMiddle);
+        addPart(&m_hBarEnd);
+        m_hGrabber.setVisible(true);
+        m_availableSize.y -= m_vGrabberSize.x;
     }
 
     if (freeContentSize.y > 0.f) {
-        addPart(&m_vBar);
-        m_barsLength.y = size().y * (1.f - freeContentSize.y / m_content->size().y);
+        addPart(&m_vBarStart);
+        addPart(&m_vBarMiddle);
+        addPart(&m_vBarEnd);
+        m_vGrabber.setVisible(true);
+        m_availableSize.x -= m_vGrabberSize.x;
     }
 
+    // Bar lengths
+    m_vBarMiddle.setSize({m_barMiddleThick, m_availableSize.y - m_barMiddleStep});
+    m_hBarMiddle.setSize({m_availableSize.x - m_barMiddleStep, m_barMiddleThick});
+
     // Bar offsets
-    m_hBar.setSize({m_barsLength.x, m_barThick});
-    m_vBar.setSize({m_barThick, m_barsLength.y});
-    m_barsOffset = {size().y - m_barThick, size().x - m_barThick};
+    m_vBarStart.setPosition({m_availableSize.x, 0.f});
+    m_vBarMiddle.setPosition({m_availableSize.x, 0.f});
+    m_vBarEnd.setPosition(m_availableSize);
+
+    m_hBarStart.setPosition({0.f, m_availableSize.y});
+    m_hBarMiddle.setPosition({0.f, m_availableSize.y});
+    m_hBarEnd.setPosition(m_availableSize);
 }
 
 void ScrollArea::refreshContentStatus()
 {
     returnif (m_content == nullptr);
 
-    auto freeContentSize = m_content->size() - size();
+    auto freeContentSize = m_content->size() - m_availableSize;
     m_offset.x = std::max(m_offset.x, -freeContentSize.x);
     m_offset.y = std::max(m_offset.y, -freeContentSize.y);
     m_offset.x = std::min(m_offset.x, 0.f);
@@ -146,10 +209,10 @@ void ScrollArea::refreshContentStatus()
 
     // Set content position
     m_content->setLocalPosition(m_offset);
-    m_content->setClipArea({-m_offset.x, -m_offset.y, size().x, size().y});
+    m_content->setClipArea({-m_offset.x, -m_offset.y, m_availableSize.x, m_availableSize.y});
 
-    // Recompute bars position
-    auto barsPosition = - (size() - m_barsLength) * m_offset / freeContentSize;
-    m_hBar.setPosition({barsPosition.x, m_barsOffset.x});
-    m_vBar.setPosition({m_barsOffset.y, barsPosition.y});
+    // Recompute grabbers position
+    auto barsPosition = - (m_availableSize - m_vGrabberSize.y) * m_offset / freeContentSize;
+    m_hGrabber.setLocalPosition({barsPosition.x, m_availableSize.y});
+    m_vGrabber.setLocalPosition({m_availableSize.x, barsPosition.y});
 }
