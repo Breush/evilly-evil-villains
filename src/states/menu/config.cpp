@@ -34,13 +34,8 @@ MenuConfig::MenuConfig(StateStack& stack)
     // Configuration areas
     for (auto& area : m_areas) {
         nuiRoot.attachChild(area.frame);
-        area.frame.setContent(area.stacker);
-
-        area.stacker.stackBack(area.title, nui::Align::CENTER);
-        area.stacker.stackBack(area.scrollArea, nui::Align::CENTER);
-
+        area.frame.setContent(area.scrollArea);
         area.scrollArea.setContent(area.form);
-        area.title.setPrestyle(scene::Label::Prestyle::NUI_TITLE);
     }
 
     // Stackers
@@ -133,21 +128,20 @@ void MenuConfig::refreshWindow(const config::WindowInfo& cWindow)
     // Translated strings
     m_title.setText(_("Configuration"));
 
-    m_areas[AreaID::GENERAL].title.setText(_("General"));
-    m_areas[AreaID::GRAPHICS].title.setText(_("Graphics"));
-    m_areas[AreaID::AUDIO].title.setText(_("Audio"));
-
+    m_areas[AreaID::GENERAL].frame.setTitle(_("General"));
     m_areas[AreaID::GENERAL].form.setText(0u, _("Language"));
     m_areas[AreaID::GENERAL].form.setText(1u, _("Interface size"));
     m_areas[AreaID::GENERAL].form.setText(2u, _("Font size (%)"));
     m_areas[AreaID::GENERAL].form.setText(3u, _("Scrolling speed"));
     m_areas[AreaID::GENERAL].form.setText(4u, _("Zoom speed"));
 
+    m_areas[AreaID::GRAPHICS].frame.setTitle(_("Graphics"));
     m_areas[AreaID::GRAPHICS].form.setText(0u, _("Resolution"));
     m_areas[AreaID::GRAPHICS].form.setText(1u, _("Fullscreen"));
     m_areas[AreaID::GRAPHICS].form.setText(2u, _("V-sync"));
     m_areas[AreaID::GRAPHICS].form.setText(3u, _("Antialiasing level"));
 
+    m_areas[AreaID::AUDIO].frame.setTitle(_("Audio"));
     m_areas[AreaID::AUDIO].form.setText(0u, _("Global volume"));
     m_areas[AreaID::AUDIO].form.setText(1u, _("Music volume"));
     m_areas[AreaID::AUDIO].form.setText(2u, _("Sounds volume"));
@@ -159,9 +153,9 @@ void MenuConfig::refreshWindow(const config::WindowInfo& cWindow)
     m_background.setSize(resolution);
 
     // Repositioning stackers and resizing elements
-    m_areas[AreaID::GENERAL].scrollArea.setSize({0.45f * resolution.x, 0.60f * resolution.y});
-    m_areas[AreaID::GRAPHICS].scrollArea.setSize({0.45f * resolution.x, 0.25f * resolution.y});
-    m_areas[AreaID::AUDIO].scrollArea.setSize({0.45f * resolution.x, 0.25f * resolution.y});
+    m_areas[AreaID::GENERAL].scrollArea.setSize({0.45f * resolution.x, 0.645f * resolution.y});
+    m_areas[AreaID::GRAPHICS].scrollArea.setSize({0.45f * resolution.x, 0.29f * resolution.y});
+    m_areas[AreaID::AUDIO].scrollArea.setSize({0.45f * resolution.x, 0.29f * resolution.y});
 
     // Area size might have change
     m_refreshBackgrounds = true;

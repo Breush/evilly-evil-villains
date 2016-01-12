@@ -6,7 +6,6 @@
 #include "nui/scrollarea.hpp"
 #include "nui/choicebox.hpp"
 #include "nui/checkbox.hpp"
-#include "nui/vstacker.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/pushbutton.hpp"
 #include "nui/frame.hpp"
@@ -77,11 +76,9 @@ namespace states
         //! Area parts.
         struct Area
         {
-            scene::Label title;                 //!< Area title.
-            nui::VStacker stacker;              //!< Stacker for title and scroll area.
-            nui::ScrollArea scrollArea;         //!< Area for configuration.
-            nui::Form form;                     //!< The form inside the scroll area.
-            nui::Frame frame;                   //!< Area delimiter.
+            nui::Frame frame;           //!< Area delimiter.
+            nui::ScrollArea scrollArea; //!< Area for configuration.
+            nui::Form form;             //!< The form inside the scroll area.
         };
 
     private:

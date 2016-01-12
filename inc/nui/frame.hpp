@@ -2,6 +2,7 @@
 
 #include "scene/entity.hpp"
 
+#include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
@@ -30,6 +31,10 @@ namespace nui
         //! The entity used as content.
         void setContent(scene::Entity& entity);
 
+        //! The frame's title.
+        //! Set it to an empty string to remove title.
+        void setTitle(const std::wstring& title);
+
         //! @}
 
     protected:
@@ -38,9 +43,10 @@ namespace nui
         //! @name Routine
         //! @{
 
-        void onChildDetached(scene::Entity& child) final;
         void onSizeChanges() final;
+        void onChildDetached(scene::Entity& child) final;
         void onChildSizeChanges(scene::Entity& child) final;
+        void refreshNUI(const config::NUIGuides& cNUI) final;
 
         //! Updates the total size of the frame.
         void updateSize() ;
@@ -51,8 +57,14 @@ namespace nui
         //! @name ICU
         //! @{
 
+        //! Refresh everything.
+        void refresh();
+
         //! Refresh frame and content positions from current size.
         void refreshFrame();
+
+        //! Refresh the title box and text positions.
+        void refreshTitle();
 
         //! @}
 
@@ -74,5 +86,18 @@ namespace nui
         sf::RectangleShape m_fill;  //!< The background.
 
         sf::Vector2f m_cornerSize;  //!< Top-left corner size.
+
+        // Title
+        sf::Text m_titleText;               //!< Title text.
+        sf::RectangleShape m_titleLeft;     //!< Title background left part.
+        sf::RectangleShape m_titleMiddle;   //!< Title background middle part.
+        sf::RectangleShape m_titleRight;    //!< Title background right part.
+        float m_titleLeftWidth = 0.f;       //!< Title background left texture width.
+        float m_titleRightWidth = 0.f;      //!< Title background right texture width.
+
+        // Decorum
+        float m_fontSize = 0.f; //!< Font size as defined in NUI guides.
+        float m_vPadding = 0.f; //!< Vertical padding as defined in NUI guides.
+        float m_hPadding = 0.f; //!< Horizontal padding as defined in NUI guides.
     };
 }
