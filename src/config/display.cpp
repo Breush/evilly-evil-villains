@@ -92,7 +92,7 @@ void Display::save()
 
     // Window
     group = config.append_child(L"group");
-    param.append_attribute(L"name") = L"window";
+    group.append_attribute(L"name") = L"window";
 
     param = group.append_child(L"param");
     param.append_attribute(L"name") = L"vsync";
@@ -113,7 +113,7 @@ void Display::save()
 
     // NUI
     group = config.append_child(L"group");
-    param.append_attribute(L"name") = L"nui";
+    group.append_attribute(L"name") = L"nui";
 
     param = group.append_child(L"param");
     param.append_attribute(L"name") = L"size";
@@ -125,7 +125,7 @@ void Display::save()
 
     // Global
     group = config.append_child(L"group");
-    param.append_attribute(L"name") = L"global";
+    group.append_attribute(L"name") = L"global";
 
     param = group.append_child(L"param");
     param.append_attribute(L"name") = L"language";

@@ -29,8 +29,8 @@ void i18n::init(const std::string& language)
     close();
 
     // Force a specific language to the environment
-    auto sLang = "LANG=" + language;
-    auto sLanguage = "LANGUAGE=" + language;
+    auto sLang = "LANG=" + language + ".utf8";
+    auto sLanguage = "LANGUAGE=" + language + ".utf8";
 
     s_lang = new char[sLang.size() + 1u];
     s_language = new char[sLanguage.size() + 1u];
