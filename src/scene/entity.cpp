@@ -285,6 +285,10 @@ void Entity::detachChildren()
 
 Entity* Entity::firstOver(const sf::Vector2f& position)
 {
+    // Invisible, so are the children
+    // Note: transparency does not affect detectability
+    returnif (!m_visible) nullptr;
+
     // Reversed-DFS search for first children over position
     for (const auto& child : std::reverse(m_children)) {
         Entity* entity = child->firstOver(position);
@@ -292,8 +296,7 @@ Entity* Entity::firstOver(const sf::Vector2f& position)
     }
 
     // Children are not over, maybe I am
-    // Note: transparency does not affect detectability
-    returnif (!m_detectable || !m_visible) nullptr;
+    returnif (!m_detectable) nullptr;
 
     // Gross check to see if we are hitting this entity
     auto relPos = getInverseTransform().transformPoint(position);
