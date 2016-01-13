@@ -120,7 +120,7 @@ bool DropDownSelector::handleMouseButtonPressed(const sf::Mouse::Button button, 
 {
     returnif (button != sf::Mouse::Left) false;
 
-    float yOffset = mousePos.y - m_tableLayout.localPosition().y;
+    float yOffset = mousePos.y - m_lastKnownOffset;
     uint choiceID = static_cast<uint>(yOffset / m_lineHeight);
     if (choiceID >= m_choices.size()) choiceID = m_choices.size() - 1u;
 
@@ -131,7 +131,10 @@ bool DropDownSelector::handleMouseButtonPressed(const sf::Mouse::Button button, 
 
 bool DropDownSelector::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
-    float yOffset = mousePos.y - m_tableLayout.localPosition().y;
+    m_lastKnownOffsetChanged = m_tableLayout.localPosition().y != m_lastKnownOffset;
+    if (m_lastKnownOffsetChanged) m_lastKnownOffset = m_tableLayout.localPosition().y;
+
+    float yOffset = mousePos.y - m_lastKnownOffset;
     uint choiceID = static_cast<uint>(yOffset / m_lineHeight);
     if (choiceID >= m_choices.size()) choiceID = m_choices.size() - 1u;
 
@@ -173,19 +176,21 @@ void DropDownSelector::clear()
 
 void DropDownSelector::hoverChoice(uint choiceID)
 {
-    returnif (m_hoveredChoiceID == choiceID);
+    returnif (m_hoveredChoiceID == choiceID && !m_lastKnownOffsetChanged);
 
     // Remove previous hovering
     clearHoveredChoice();
 
     returnif (choiceID >= m_choices.size());
-    m_hoveredChoiceID = choiceID;
 
-    // Set shader effect
-    m_choices[choiceID].label->setShader("nui/hover");
+    if (m_hoveredChoiceID != choiceID) {
+        m_hoveredChoiceID = choiceID;
+        m_choices[choiceID].label->setShader("nui/hover");
+        Application::context().sounds.play("select");
+    }
 
     // Set highlight
-    float yOffset = choiceID * m_lineHeight + m_tableLayout.localPosition().y;
+    float yOffset = choiceID * m_lineHeight + m_lastKnownOffset;
     setHoverRect({0.4f * m_hPadding, yOffset, size().x - 1.2f * m_hPadding, m_lineHeight});
 }
 

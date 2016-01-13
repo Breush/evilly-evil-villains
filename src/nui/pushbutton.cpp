@@ -63,7 +63,7 @@ void PushButton::setText(const std::wstring& text)
 void PushButton::setValidateCallback(const ValidateCallback validateCallback)
 {
     m_validateCallback = std::move(validateCallback);
-    updateSize();
+    refresh();
 }
 
 void PushButton::set(const std::wstring& text, const ValidateCallback validateCallback)
@@ -98,6 +98,12 @@ bool PushButton::handleMouseButtonPressed(const sf::Mouse::Button button, const 
 {
     returnif (button != sf::Mouse::Left) false;
 
+    if (m_validateCallback == nullptr) {
+        Application::context().sounds.play("refuse");
+        return true;
+    }
+
+    Application::context().sounds.play("accept");
     m_pressed = true;
     refresh();
 
@@ -115,9 +121,11 @@ bool PushButton::handleMouseButtonReleased(const sf::Mouse::Button button, const
 
 bool PushButton::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
-    resetPartsShader();
-
+    returnif (m_hovered) true;
     returnif (m_validateCallback == nullptr) true;
+
+    Application::context().sounds.play("select");
+    m_hovered = true;
 
     setPartShader(&m_text, "nui/hover");
     setPartShader(&m_left, "nui/hover");
@@ -128,6 +136,7 @@ bool PushButton::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector
 
 void PushButton::handleMouseLeft()
 {
+    m_hovered = false;
     resetPartsShader();
 }
 
@@ -155,6 +164,9 @@ void PushButton::refresh()
     const auto& middleTexture = Application::context().textures.get(m_pressed? "nui/pushbutton/push_middle" : "nui/pushbutton/pop_middle");
     const auto& rightTexture = Application::context().textures.get(m_pressed? "nui/pushbutton/push_right" : "nui/pushbutton/pop_right");
 
+    float leftTextureWidth = leftTexture.getSize().x;
+    float rightTextureWidth = rightTexture.getSize().x;
+
     m_left.setTexture(&leftTexture);
     m_middle.setTexture(&middleTexture);
     m_right.setTexture(&rightTexture);
@@ -163,7 +175,22 @@ void PushButton::refresh()
     m_middle.setPosition(leftTexture.getSize().x, 0.f);
     m_right.setPosition(size().x - rightTexture.getSize().x, 0.f);
 
-    m_left.setSize({static_cast<float>(leftTexture.getSize().x), size().y});
-    m_middle.setSize({size().x - static_cast<float>(leftTexture.getSize().x + rightTexture.getSize().x), size().y});
-    m_right.setSize({static_cast<float>(rightTexture.getSize().x), size().y});
+    m_left.setSize({leftTextureWidth, size().y});
+    m_middle.setSize({size().x - (leftTextureWidth + rightTextureWidth), size().y});
+    m_right.setSize({rightTextureWidth, size().y});
+
+    // Activity
+    if (m_validateCallback == nullptr) {
+        auto grey = sf::Color{120u, 120u, 120u, 255u};
+        m_left.setFillColor(grey);
+        m_middle.setFillColor(grey);
+        m_right.setFillColor(grey);
+        m_text.setColor(grey);
+    }
+    else {
+        m_left.setFillColor(sf::Color::White);
+        m_middle.setFillColor(sf::Color::White);
+        m_right.setFillColor(sf::Color::White);
+        m_text.setColor(sf::Color::White);
+    }
 }

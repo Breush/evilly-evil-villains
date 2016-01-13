@@ -103,8 +103,9 @@ namespace nui
         // Callback
         ValidateCallback m_validateCallback = nullptr;  //!< The action to execute when clicked.
 
-        // Pressed state
+        // States
         bool m_pressed = false; //!< Is the button currently pressed?
+        bool m_hovered = false; //!< Is the button currently hovered?
 
         // Decorum
         float m_fontSize = 0.f; //!< Font size as defined in the NUI guides.

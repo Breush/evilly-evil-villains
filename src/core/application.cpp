@@ -167,6 +167,10 @@ void Application::processInput()
     sf::Event event;
 
     while (s_context.window.pollEvent(event)) {
+        // Discard mouse moved events as we create them each frame anyway
+        if (event.type == sf::Event::MouseMoved)
+            continue;
+
         // Keyboard
         if (event.type == sf::Event::KeyPressed) {
             // Switch visual debug mode
@@ -229,6 +233,18 @@ void Application::processInput()
         m_stateStack.handleEvent(event);
         m_cursor.handleEvent(event);
     }
+
+    // Update mouse
+    // We create a MouseMoved event each frame,
+    // so that any mouse-related overlay will be updated
+    const auto& mousePosition = sf::Mouse::getPosition(s_context.window);
+
+    sf::Event mouseMovedEvent;
+    mouseMovedEvent.type = sf::Event::MouseMoved;
+    mouseMovedEvent.mouseMove.x = mousePosition.x;
+    mouseMovedEvent.mouseMove.y = mousePosition.y;
+    m_stateStack.handleEvent(mouseMovedEvent);
+    m_cursor.handleEvent(mouseMovedEvent);
 }
 
 void Application::update(const sf::Time& dt)

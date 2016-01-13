@@ -112,8 +112,10 @@ namespace nui
         std::vector<ChoiceInfo> m_choices;  //!< All the choices.
 
         // Content
-        nui::ScrollArea m_scrollArea;       //!< Scroll area.
-        nui::TableLayout m_tableLayout;     //!< Table layout to position the labels.
+        nui::ScrollArea m_scrollArea;           //!< Scroll area.
+        nui::TableLayout m_tableLayout;         //!< Table layout to position the labels.
+        float m_lastKnownOffset = 0.f;          //!< Table layout offset, due to scroll area.
+        bool m_lastKnownOffsetChanged = false;  //!< Whether the last known offset changed since last update.
 
         // Fill
         sf::RectangleShape m_fillLeft;      //!< Fill left part.
