@@ -110,11 +110,23 @@ bool ScrollArea::handleMouseButtonPressed(const sf::Mouse::Button button, const 
     return false;
 }
 
-bool ScrollArea::handleMouseWheelMoved(const int delta, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
+bool ScrollArea::handleMouseWheelMoved(const int delta, const sf::Vector2f&, const sf::Vector2f&)
 {
     const auto& scrollingFactor = Application::context().display.global.scrollingFactor;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) m_offset += {delta * scrollingFactor, 0.f};
-    else m_offset += {0.f, delta * scrollingFactor};
+    const float offset = delta * scrollingFactor;
+
+    // Scroll in the direction of scrolling if there is just one
+    if (m_hGrabber.visible() && !m_vGrabber.visible())
+        m_offset += {offset, 0.f};
+    else if (!m_hGrabber.visible() && m_vGrabber.visible())
+        m_offset += {0.f, offset};
+
+    // Else, the user can use shift to scroll horizontally
+    else {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) m_offset += {offset, 0.f};
+        else m_offset += {0.f, offset};
+    }
+
     refreshContentStatus();
     return true;
 }
