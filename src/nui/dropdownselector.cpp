@@ -13,6 +13,7 @@ DropDownSelector::DropDownSelector(DropDownList& dropDownList)
     // Content
     attachChild(m_scrollArea);
     m_scrollArea.setContent(m_tableLayout);
+    m_scrollArea.setMouseLeftCallback([this] { handleMouseLeft(); });
 
     // Fill
     addPart(&m_fillLeft);
@@ -101,10 +102,19 @@ void DropDownSelector::updateSize()
     // Content
     m_tableLayout.setSize({0.f, listHeight});
     m_scrollArea.setSize({newSize.x, smallListHeight});
+
+    // Highlights
+    setPartClippingRect(&m_hoverHighlight, {0.f, 0.f, newSize.x, smallListHeight});
 }
 
 //------------------//
 //----- Events -----//
+
+void DropDownSelector::handleGlobalMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f&)
+{
+    returnif (button == sf::Mouse::Middle);
+    m_dropDownList.undropList();
+}
 
 bool DropDownSelector::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
@@ -207,13 +217,6 @@ void DropDownSelector::refresh()
 {
     // Content
     m_tableLayout.setColAdapt(0u, Adapt::FIXED, size().x);
-
-    /*// Texts
-    float choicePosition = m_vPadding;
-    for (auto& choice : m_choices) {
-        choice.text.setPosition(m_hPadding, choicePosition);
-        choicePosition += m_lineHeight;
-    }*/
 
     // Fill
     m_fillLeft.setPosition(0.f, 0.f);

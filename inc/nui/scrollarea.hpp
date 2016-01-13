@@ -5,6 +5,8 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
+#include <functional>
+
 namespace nui
 {
     //! An area with scroll-bars (if needed) that keeps its specific size.
@@ -15,6 +17,8 @@ namespace nui
     class ScrollArea final : public scene::Entity
     {
         using baseClass = scene::Entity;
+
+        using MouseLeftCallback = std::function<void()>;
 
     public:
 
@@ -32,6 +36,15 @@ namespace nui
 
         //! The entity used as content.
         void setContent(scene::Entity& entity);
+
+        //! @}
+
+        //-----------------//
+        //! @name Callback
+        //! @{
+
+        //! Hook the handleMouseLeft event to a user-defined function.
+        void setMouseLeftCallback(MouseLeftCallback mouseLeftCallback);
 
         //! @}
 
@@ -65,6 +78,7 @@ namespace nui
         void handleGlobalMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& nuiPos) final;
         bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
         bool handleMouseWheelMoved(const int delta, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseLeft() final;
 
         //! @}
 
@@ -89,6 +103,9 @@ namespace nui
         scene::Entity* m_content = nullptr;         //!< The entity used as content.
         sf::Vector2f m_offset = {0.f, 0.f};         //!< The start for the visible top-left corner of the entity.
         sf::Vector2f m_availableSize = {0.f, 0.f};  //!< The visible size of the content.
+
+        // Callbacks
+        MouseLeftCallback m_mouseLeftCallback = nullptr;    //!< Hook to the mouse left event.
 
         // Bars
         sf::Sprite m_vBarStart;             //!< The vertical bar start.

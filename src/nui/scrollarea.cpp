@@ -119,6 +119,12 @@ bool ScrollArea::handleMouseWheelMoved(const int delta, const sf::Vector2f& mous
     return true;
 }
 
+void ScrollArea::handleMouseLeft()
+{
+    if (m_mouseLeftCallback != nullptr)
+        m_mouseLeftCallback();
+}
+
 //------------------------------//
 //----- Content management -----//
 
@@ -130,6 +136,14 @@ void ScrollArea::setContent(scene::Entity& entity)
 
     refreshBars();
     refreshContentStatus();
+}
+
+//---------------------//
+//----- Callbacks -----//
+
+void ScrollArea::setMouseLeftCallback(MouseLeftCallback mouseLeftCallback)
+{
+    m_mouseLeftCallback = mouseLeftCallback;
 }
 
 //-----------------------------------//

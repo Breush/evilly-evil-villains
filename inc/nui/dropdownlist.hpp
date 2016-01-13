@@ -89,8 +89,6 @@ namespace nui
         //! @name Events
         //! @{
 
-        inline bool handleGlobalEvents() const final { return true; }
-        void handleGlobalMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& nuiPos) final;
         bool handleKeyboardEvent(const sf::Event& event) final;
         bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
         bool handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
@@ -113,7 +111,9 @@ namespace nui
         uint m_selectedChoiceID = -1u;      //!< The currently selected choice.
 
         // Selector
-        DropDownSelector m_selector;    //!< The choice selector.
+        DropDownSelector m_selector;            //!< The choice selector.
+        bool m_markForSelectorAttach = false;   //!< Delayer for selector attaching.
+        bool m_markForSelectorDetach = false;   //!< Delayer for selector detaching.
 
         // Text
         sfe::RichText m_text;   //!< The displayed text.
@@ -126,7 +126,6 @@ namespace nui
         float m_rightWidth = 0.f;           //!< Width of the right part.
 
         // Dropped state
-        bool m_justDropped = false; //!< Is the list just been activated?
         bool m_dropped = false;     //!< Is the list dropped?
 
         // Decorum

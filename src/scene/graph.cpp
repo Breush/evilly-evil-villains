@@ -176,7 +176,7 @@ void Graph::broadcastGlobalEvent(const sf::Event& event)
     // A simple copy of the initial list might not work because of
     // pointers to unallowed.
     // One way to work around would be a for (i = 0; i < .size(); ++i)
-    // so that is the size of the list changes, we will notice.
+    // so that is the size of the list increases, it's ok.
     // ---
     // I let it this way because the usage of global event is (and should be)
     // really rare. And all it does (in ScrollArea) are graphic updates, and never detach an entity.
@@ -408,6 +408,9 @@ void Graph::setHoveredEntity(Entity* hoveredEntity)
         m_hoveredEntity->handleMouseLeft();
 
     m_hoveredEntity = hoveredEntity;
+
+    debug_nui_2(if (m_hoveredEntity != nullptr));
+    mdebug_nui_2("Hover: " << m_hoveredEntity->_name());
 }
 
 //---------------------------//

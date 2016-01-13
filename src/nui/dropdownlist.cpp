@@ -43,8 +43,17 @@ DropDownList::DropDownList()
 
 void DropDownList::updateRoutine(const sf::Time& dt)
 {
-    // Remove flags
-    m_justDropped = false;
+    returnif (parent() == nullptr);
+
+    if (m_markForSelectorAttach && !parent()->hasChild(m_selector)) {
+        parent()->attachChild(m_selector);
+        m_markForSelectorAttach = false;
+    }
+
+    if (m_markForSelectorDetach && parent()->hasChild(m_selector)) {
+        parent()->detachChild(m_selector);
+        m_markForSelectorDetach = false;
+    }
 }
 
 void DropDownList::onSizeChanges()
@@ -88,13 +97,6 @@ void DropDownList::updateSize()
 
 //------------------//
 //----- Events -----//
-
-void DropDownList::handleGlobalMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f&)
-{
-    returnif (button == sf::Mouse::Middle);
-    returnif (m_justDropped);
-    undropList();
-}
 
 bool DropDownList::handleKeyboardEvent(const sf::Event& event)
 {
@@ -223,20 +225,17 @@ void DropDownList::select(uint choiceID)
 void DropDownList::dropList()
 {
     returnif (m_dropped);
-    returnif (parent() == nullptr);
 
     m_dropped = true;
-    m_justDropped = true;
-    parent()->attachChild(m_selector);
+    m_markForSelectorAttach = true;
 }
 
 void DropDownList::undropList()
 {
     returnif (!m_dropped);
-    returnif (parent() == nullptr);
 
     m_dropped = false;
-    parent()->detachChild(m_selector);
+    m_markForSelectorDetach = true;
 }
 
 //---------------//
