@@ -73,6 +73,7 @@ MenuConfig::MenuConfig(StateStack& stack)
     auto refBitsPerPixel = sf::VideoMode::getDesktopMode().bitsPerPixel;
     for (const auto& videoMode : sf::VideoMode::getFullscreenModes()) {
         if (refBitsPerPixel != videoMode.bitsPerPixel) continue;
+        if (static_cast<float>(videoMode.width) / static_cast<float>(videoMode.height) < 1.3f) continue;
 
         Resolution resolution{videoMode.width, videoMode.height};
         m_resolutions.emplace_back(resolution);

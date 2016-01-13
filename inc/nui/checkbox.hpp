@@ -19,7 +19,7 @@ namespace nui
         //! Default destructor.
         virtual ~CheckBox() = default;
 
-        virtual std::string _name() const override { return "nui::ChoiceBox"; }
+        virtual std::string _name() const override { return "nui::CheckBox"; }
 
         //---------------//
         //! @name Status

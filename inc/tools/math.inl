@@ -9,7 +9,31 @@ inline std::wstring aspectRatio(T w, T h)
 {
     auto g = gcd(w, h);
     std::wstringstream s;
-    s << (w/g) << L':' << (h/g);
+
+    auto a = w/g;
+    auto b = h/g;
+
+    // We want 16:10 ratio to appear as such and not 8:5
+    if (a == 8 && (g % 2 == 0)) {
+        a *= 2;
+        b *= 2;
+    }
+
+    // 85:48 ratio as 1360x768 is officially an almost 16:9
+    else if (a == 85 && b == 48) {
+        s << L'≈';
+        a = 16;
+        b = 9;
+    }
+
+    // 25:16 ratio as 1600x1024 is officially an almost 16:10
+    else if (a == 25 && b == 16) {
+        s << L'≈';
+        a = 16;
+        b = 10;
+    }
+
+    s << a << L':' << b;
     return s.str();
 }
 

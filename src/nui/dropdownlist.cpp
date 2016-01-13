@@ -104,12 +104,12 @@ bool DropDownList::handleKeyboardEvent(const sf::Event& event)
 
     if (event.key.code == sf::Keyboard::Down) {
         undropList();
-        selectPrevious();
+        selectNext();
         return true;
     }
     else if (event.key.code == sf::Keyboard::Up) {
         undropList();
-        selectNext();
+        selectPrevious();
         return true;
     }
 
