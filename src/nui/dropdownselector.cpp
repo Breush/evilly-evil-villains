@@ -13,7 +13,7 @@ DropDownSelector::DropDownSelector(DropDownList& dropDownList)
     // Content
     attachChild(m_scrollArea);
     m_scrollArea.setContent(m_tableLayout);
-    m_scrollArea.setMouseLeftCallback([this] { handleMouseLeft(); });
+    m_scrollArea.setMouseLeftCallback([this] { handleScrollAreaMouseLeft(); });
 
     // Fill
     addPart(&m_fillLeft);
@@ -131,6 +131,8 @@ bool DropDownSelector::handleMouseButtonPressed(const sf::Mouse::Button button, 
 
 bool DropDownSelector::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
+    returnif (!m_scrollArea.localBounds().contains(mousePos)) true;
+
     m_lastKnownOffsetChanged = m_tableLayout.localPosition().y != m_lastKnownOffset;
     if (m_lastKnownOffsetChanged) m_lastKnownOffset = m_tableLayout.localPosition().y;
 
@@ -143,7 +145,7 @@ bool DropDownSelector::handleMouseMoved(const sf::Vector2f& mousePos, const sf::
     return true;
 }
 
-void DropDownSelector::handleMouseLeft()
+void DropDownSelector::handleScrollAreaMouseLeft()
 {
     clearHoveredChoice();
 }

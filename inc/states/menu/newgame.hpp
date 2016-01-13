@@ -6,7 +6,7 @@
 #include "scene/wrappers/label.hpp"
 #include "nui/form.hpp"
 #include "nui/scrollarea.hpp"
-#include "nui/choicebox.hpp"
+#include "nui/dropdownlist.hpp"
 #include "nui/vstacker.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/pushbutton.hpp"
@@ -77,7 +77,7 @@ namespace states
         nui::ScrollArea m_scrollArea;                               //!< The scroll area.
         nui::HStacker m_scrollAreaStacker;                          //!< Stacking the content inside the scroll area.
         std::vector<dungeon::VillainDisplayPtr> m_villainsDisplays; //!< The villains shown.
-        nui::ChoiceBox m_gamemodeBox;                               //!< The game mode.
+        nui::DropDownList m_gamemodeList;                           //!< The game mode.
 
         nui::HStacker m_buttonsStacker;         //!< The stacker for buttons.
         std::array<nui::PushButton, 2u> m_buttons;  //!< The buttons (cancel/ok).

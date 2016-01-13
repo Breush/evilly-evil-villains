@@ -39,16 +39,16 @@ MenuNewGame::MenuNewGame(StateStack& stack)
     m_stacker.setRelativePosition({0.5f, 0.5f});
     m_stacker.centerOrigin();
 
+    // Game-mode box
+    m_stacker.stackBack(m_gamemodeList, nui::Align::CENTER);
+    m_gamemodeList.add(_("Story mode"));
+    m_gamemodeList.add(_("Rich man mode"));
+    // m_gamemodeBox.add(_("Hardcore mode"));
+
     // Scroll area
     m_stacker.stackBack(m_scrollArea);
     m_scrollArea.setContent(m_scrollAreaStacker);
     m_scrollArea.setSize(nuiSize * sf::Vector2f{0.8f, 0.65f});
-
-    // Game-mode box
-    m_stacker.stackBack(m_gamemodeBox, nui::Align::CENTER);
-    m_gamemodeBox.add(_("Story mode"));
-    m_gamemodeBox.add(_("Rich man mode"));
-    // m_gamemodeBox.add(_("Hardcore mode"));
 
     // Buttons
     nuiRoot.attachChild(m_buttonsStacker);
@@ -97,7 +97,7 @@ void MenuNewGame::startPlay()
 {
     returnif (m_selectedVillainDisplay == nullptr);
     const auto& villain = m_selectedVillainDisplay->source()->name;
-    auto gamemode = static_cast<context::Gamemode>(m_gamemodeBox.selectedChoice() + 1u);
+    auto gamemode = static_cast<context::Gamemode>(m_gamemodeList.selected() + 1u);
 
     // World data
     auto newWorldID = context::worlds.add();

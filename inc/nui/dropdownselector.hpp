@@ -69,7 +69,9 @@ namespace nui
         void handleGlobalMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& nuiPos) final;
         bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
         bool handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
-        void handleMouseLeft() final;
+
+        //! Called whenever the mouse leaves the scroll area.
+        void handleScrollAreaMouseLeft();
 
         //! @}
 
