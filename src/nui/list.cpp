@@ -58,7 +58,7 @@ List::List()
 
     m_footerRightSize = sf::v2f(bottomRightTexture.getSize());
 
-    // Highlight
+    // Highlights
     m_selectionHighlight.setFillColor({255u, 255u, 255u, 32u});
     m_hoverHighlight.setFillColor(sf::Color::Transparent);
 }
@@ -255,18 +255,16 @@ void List::hoverLine(uint line)
     // Remove previous hovering
     clearHoveredLine();
 
-    // Set newly hovered line
-    if (line < m_lines.size()) {
-        m_hoveredLine = line;
+    returnif (line >= m_lines.size());
+    m_hoveredLine = line;
 
-        // Set shader effect
-        for (auto& cell : m_lines[line].cells)
-            cell.label->setShader("nui/hover");
+    // Set shader effect
+    for (auto& cell : m_lines[line].cells)
+        cell.label->setShader("nui/hover");
 
-        // Set highlight
-        float yLine = (line + 1u) * m_lineHeight;
-        setHoverRect({0.f, yLine, size().x, m_lineHeight});
-    }
+    // Set highlight
+    float yLine = (line + 1u) * m_lineHeight;
+    setHoverRect({0.f, yLine, size().x, m_lineHeight});
 }
 
 void List::clearHoveredLine()
@@ -281,7 +279,6 @@ void List::clearHoveredLine()
     m_hoverHighlight.setFillColor(sf::Color::Transparent);
 
     m_hoveredLine = -1u;
-
 }
 
 void List::setHoverRect(const sf::FloatRect& rect)

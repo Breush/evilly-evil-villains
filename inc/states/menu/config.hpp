@@ -3,11 +3,11 @@
 #include "states/state.hpp"
 #include "states/identifiers.hpp"
 #include "nui/rangeselector.hpp"
+#include "nui/dropdownlist.hpp"
 #include "nui/scrollarea.hpp"
-#include "nui/choicebox.hpp"
+#include "nui/pushbutton.hpp"
 #include "nui/checkbox.hpp"
 #include "nui/hstacker.hpp"
-#include "nui/pushbutton.hpp"
 #include "nui/frame.hpp"
 #include "nui/form.hpp"
 #include "scene/wrappers/label.hpp"
@@ -89,7 +89,7 @@ namespace states
         std::array<nui::PushButton, 2u> m_buttons;      //!< Buttons.
 
         // General
-        nui::ChoiceBox m_languageBox;                   //!< Select the language.
+        nui::DropDownList m_languageList;               //!< Select the language.
         nui::RangeSelector m_uiSizeSelector;            //!< Size of the interface.
         nui::RangeSelector m_uiFontFactorSelector;      //!< Font factor of the interface.
         nui::RangeSelector m_scrollingFactorSelector;   //!< Scrolling speed.
@@ -97,7 +97,7 @@ namespace states
 
         // Graphics
         std::vector<Resolution> m_resolutions;      //!< Available resolutions.
-        nui::ChoiceBox m_resolutionBox;             //!< Screen resolutions.
+        nui::DropDownList m_resolutionList;         //!< Screen resolutions.
         nui::CheckBox m_fullscreenBox;              //!< Fullscreen switch.
         nui::CheckBox m_vsyncBox;                   //!< VSync switch.
         nui::RangeSelector m_antialiasingSelector;  //!< Antialiasing level selector.

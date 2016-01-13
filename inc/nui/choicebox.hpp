@@ -12,7 +12,7 @@
 
 namespace nui
 {
-    //! A multi-choices interactive box.
+    //! @deprecated A multi-choices interactive box.
     /*!
      *  This multi-choices button makes a excellent
      *  UI object to let the user choose between

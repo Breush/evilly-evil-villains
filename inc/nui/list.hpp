@@ -190,6 +190,8 @@ namespace nui
         std::vector<sfe::VLine> m_vBorders;         //!< The vertical borders.
         sf::RectangleShape m_selectionHighlight;    //!< The current selection is highlighted.
         sf::RectangleShape m_hoverHighlight;        //!< When the mouse is over.
+        uint m_selectedLine = -1u;                  //!< The selected line.
+        uint m_hoveredLine = -1u;                   //!< The hovered line.
 
         // Validation
         Callback m_callback = nullptr;      //!< The callback on validation.
@@ -197,8 +199,6 @@ namespace nui
 
         // Decorum
         float m_lineHeight = 0.f;   //!< The height of a line.
-        uint m_selectedLine = -1u;  //!< The selected line.
-        uint m_hoveredLine = -1u;   //!< The hovered line.
     };
 }
 

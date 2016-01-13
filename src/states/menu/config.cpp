@@ -48,10 +48,10 @@ MenuConfig::MenuConfig(StateStack& stack)
     m_areas[AreaID::AUDIO].frame.setRelativePosition({0.75f, 0.85f});
 
     // General
-    m_areas[AreaID::GENERAL].form.add(m_languageBox);
+    m_areas[AreaID::GENERAL].form.add(m_languageList);
     for (auto& fileInfo : listFiles("res/po"))
         if (fileInfo.isDirectory)
-            m_languageBox.add(toWString(replace(fileInfo.name, std::string("_"), std::string("\\_"))));
+            m_languageList.add(toWString(replace(fileInfo.name, std::string("_"), std::string("\\_"))));
 
     m_areas[AreaID::GENERAL].form.add(m_uiSizeSelector);
     m_uiSizeSelector.setRange(1u, 4u);
@@ -69,10 +69,9 @@ MenuConfig::MenuConfig(StateStack& stack)
     m_zoomSpeedSelector.setRange(1u, 9u);
 
     // Graphics
-    m_areas[AreaID::GRAPHICS].form.add(m_resolutionBox);
+    m_areas[AreaID::GRAPHICS].form.add(m_resolutionList);
     auto refBitsPerPixel = sf::VideoMode::getDesktopMode().bitsPerPixel;
-    for (const auto& videoMode : std::reverse(sf::VideoMode::getFullscreenModes())) {
-        // Best bits per pixels are at the end with std::reverse
+    for (const auto& videoMode : sf::VideoMode::getFullscreenModes()) {
         if (refBitsPerPixel != videoMode.bitsPerPixel) continue;
 
         Resolution resolution{videoMode.width, videoMode.height};
@@ -80,7 +79,7 @@ MenuConfig::MenuConfig(StateStack& stack)
 
         std::wstring sResolution = toWString(resolution.x) + L'x' + toWString(resolution.y);
         sResolution += L" (" + aspectRatio(resolution.x, resolution.y) + L')';
-        m_resolutionBox.add(sResolution);
+        m_resolutionList.add(sResolution);
     }
 
     m_areas[AreaID::GRAPHICS].form.add(m_fullscreenBox);
@@ -184,7 +183,7 @@ void MenuConfig::refreshFormsFromConfig()
     auto& audio = Application::context().sound;
 
     // General
-    m_languageBox.selectChoice(replace(display.global.language, std::wstring(L"_"), std::wstring(L"\\_")));
+    m_languageList.select(replace(display.global.language, std::wstring(L"_"), std::wstring(L"\\_")));
     m_uiSizeSelector.setValue(display.nui.size);
     m_uiFontFactorSelector.setValue(static_cast<uint>(display.nui.fontFactor * 100.f));
     m_scrollingFactorSelector.setValue(static_cast<uint>(display.global.scrollingFactor));
@@ -195,7 +194,7 @@ void MenuConfig::refreshFormsFromConfig()
     for (uint i = 0u; i < m_resolutions.size(); ++i) {
         const auto& availableResolution = m_resolutions[i];
         if (availableResolution == resolution) {
-            m_resolutionBox.selectChoice(i);
+            m_resolutionList.select(i);
             break;
         }
     }
@@ -216,14 +215,14 @@ void MenuConfig::applyChanges()
     auto& audio = Application::context().sound;
 
     // General
-    display.global.language = replace(m_languageBox.selectedChoiceText(), std::wstring(L"\\_"), std::wstring(L"_"));
+    display.global.language = replace(m_languageList.selectedText(), std::wstring(L"\\_"), std::wstring(L"_"));
     display.nui.size = m_uiSizeSelector.value();
     display.nui.fontFactor = m_uiFontFactorSelector.value() / 100.f;
     display.global.scrollingFactor = m_scrollingFactorSelector.value();
     display.global.zoomSpeed = m_zoomSpeedSelector.value() / 100.f;
 
     // Graphics
-    display.window.resolution = sf::v2f(m_resolutions.at(m_resolutionBox.selectedChoice()));
+    display.window.resolution = sf::v2f(m_resolutions.at(m_resolutionList.selected()));
     display.window.fullscreen = m_fullscreenBox.status();
     display.window.vsync = m_vsyncBox.status();
     display.window.antialiasingLevel = m_antialiasingSelector.value();

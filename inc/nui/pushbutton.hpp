@@ -80,6 +80,7 @@ namespace nui
         void handleMouseLeft() final;
 
         //! @}
+
         //------------//
         //! @name ICU
         //! @{
