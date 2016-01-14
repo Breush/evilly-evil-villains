@@ -195,10 +195,10 @@ void Frame::refreshTitle()
 
     sf::Vector2f titleOffset;
     titleOffset.x = m_hPadding;
-    titleOffset.y = -0.3f * titleSize.y;
+    titleOffset.y = -0.4f * titleSize.y;
 
-    m_titleText.setOrigin(0.5f * textWidth, m_fontSize);
-    m_titleText.setPosition(titleOffset.x + 0.5f * titleSize.x, titleOffset.y + m_vPadding + 0.75f * m_fontSize);
+    m_titleText.setOrigin(0.5f * textWidth, 0.1f * m_fontSize);
+    m_titleText.setPosition(titleOffset.x + 0.5f * titleSize.x, titleOffset.y + m_vPadding);
 
     m_titleLeft.setPosition(titleOffset);
     m_titleMiddle.setPosition(titleOffset);

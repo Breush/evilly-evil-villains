@@ -1,18 +1,22 @@
 #pragma once
 
 #include "scene/entity.hpp"
+#include "nui/frame.hpp"
 #include "nui/vstacker.hpp"
 #include "nui/hstacker.hpp"
 #include "nui/pushbutton.hpp"
 #include "scene/wrappers/label.hpp"
-#include "scene/wrappers/rectangleshape.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
-#include <memory> // std::unique_ptr
+
+#include <memory>
 
 namespace nui
 {
     //! A dialog to print a message to the user and force him to answer.
+    /*!
+     *  Used for important messages such as definitive delete.
+     */
 
     class PopDialog final : public scene::Entity
     {
@@ -70,7 +74,6 @@ namespace nui
         //! @{
 
         void onSizeChanges() final;
-        void onChildSizeChanges(scene::Entity& child) final;
         void refreshNUI(const config::NUIGuides& cNUI) final;
 
         //! @}
@@ -97,13 +100,14 @@ namespace nui
         // State
         Callback m_exitCallback = nullptr;  //!< The function called on outside click or when escape is pressed.
 
-        // Decorum
-        sf::RectangleShape m_background;                        //!< Background.
-        scene::RectangleShape m_boxBackground;                    //!< Background for message box.
-        scene::Label m_title;                                     //!< The title of the message box.
-        scene::Label m_message;                                   //!< The displayed message.
-        nui::VStacker m_mainStacker;                            //!< Stacks for message box.
-        nui::HStacker m_buttonsStacker;                         //!< Stacks all buttons.
+        // Content
+        nui::Frame m_frame;                                         //!< Frame for the message box.
+        scene::Label m_message;                                     //!< The displayed message.
+        nui::VStacker m_mainStacker;                                //!< Stacks for message box.
+        nui::HStacker m_buttonsStacker;                             //!< Stacks all buttons.
         std::vector<std::unique_ptr<nui::PushButton>> m_buttons;    //!< All buttons, defined by user.
+
+        // Background
+        sf::RectangleShape m_background;    //!< Background.
     };
 }

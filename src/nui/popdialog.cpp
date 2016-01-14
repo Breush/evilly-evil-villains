@@ -14,21 +14,19 @@ PopDialog::PopDialog()
 
     // Backgrounds
     addPart(&m_background);
-    attachChild(m_boxBackground);
     m_background.setFillColor({0u, 0u, 0u, 100u});
-    m_boxBackground.setFillColor({50u, 50u, 50u, 200u});
 
-    // Texts
-    attachChild(m_mainStacker);
-    m_mainStacker.centerOrigin();
-    m_mainStacker.setRelativePosition({0.5f, 0.5f});
-    m_mainStacker.stackBack(m_title);
+    // Box
+    attachChild(m_frame);
+    m_frame.setContent(m_mainStacker);
+    m_frame.centerOrigin();
+    m_frame.setRelativePosition({0.5f, 0.5f});
+
+    // Box content
     m_mainStacker.stackBack(m_message);
-    m_title.setPrestyle(scene::Label::Prestyle::NUI_TITLE);
-    m_message.setPrestyle(scene::Label::Prestyle::NUI);
-
-    // Buttons
     m_mainStacker.stackBack(m_buttonsStacker, nui::Align::OPPOSITE);
+
+    m_message.setPrestyle(scene::Label::Prestyle::NUI);
 }
 
 PopDialog::~PopDialog()
@@ -44,18 +42,11 @@ void PopDialog::onSizeChanges()
     m_background.setSize(size());
 }
 
-void PopDialog::onChildSizeChanges(scene::Entity&)
-{
-    refreshBoxBackground();
-}
-
 void PopDialog::refreshNUI(const config::NUIGuides& cNUI)
 {
     baseClass::refreshNUI(cNUI);
 
     m_message.setCharacterSize(cNUI.fontSize);
-
-    refreshBoxBackground();
 }
 
 //-------------------//
@@ -73,7 +64,6 @@ void PopDialog::close()
 
 void PopDialog::reset()
 {
-    m_title.setText(L"");
     m_message.setText(L"");
     m_buttonsStacker.unstackAll();
     m_buttons.clear();
@@ -81,7 +71,7 @@ void PopDialog::reset()
 
 void PopDialog::setTitle(const std::wstring& title)
 {
-    m_title.setText(title);
+    m_frame.setTitle(title);
 }
 
 void PopDialog::setMessage(const std::wstring& message)
@@ -114,14 +104,4 @@ bool PopDialog::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vect
     // If inside the message box, the background get this event, and is not here
     m_exitCallback();
     return true;
-}
-
-//-----------------------------------//
-//----- Internal change updates -----//
-
-void PopDialog::refreshBoxBackground()
-{
-    m_boxBackground.setSize(m_mainStacker.size());
-    m_boxBackground.setLocalPosition(m_mainStacker.localPosition());
-    m_boxBackground.setOrigin(m_mainStacker.getOrigin());
 }

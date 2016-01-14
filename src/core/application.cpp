@@ -80,7 +80,8 @@ void cleanExtraFiles()
 //----- Application -----//
 
 Application::Application()
-    : m_initialState(StateID::SPLASHSCREEN)
+    //: m_initialState(StateID::SPLASHSCREEN)
+    : m_initialState(StateID::MENU_MANAGEVILLAINS)
 {
     // Context
     s_context.windowInfo.title = "Evilly Evil Villains";
