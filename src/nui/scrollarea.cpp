@@ -190,7 +190,7 @@ void ScrollArea::refreshBars()
     m_hGrabber.setVisible(false);
 
     // Bar visibility
-    auto freeContentSize = m_content->size() - size() - m_vGrabberSize.x;
+    auto freeContentSize = m_content->size() - size();
     m_availableSize = size();
 
     if (freeContentSize.x > 0.f) {

@@ -60,12 +60,17 @@ void Slider::refreshNUI(const config::NUIGuides& cNUI)
 void Slider::handleGlobalMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f&)
 {
     returnif (button != sf::Mouse::Left);
+
+    returnif (!m_grabbing);
     m_grabbing = false;
+
+    setPartShader(&m_indicator, "");
 }
 
 void Slider::handleGlobalMouseMoved(const sf::Vector2f& nuiPos)
 {
     returnif (!m_grabbing);
+
     auto mousePos = getInverseTransform().transformPoint(nuiPos);
     setClosestValue(mousePos.x);
 }
@@ -78,6 +83,18 @@ bool Slider::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::
     return true;
 }
 
+bool Slider::handleMouseMoved(const sf::Vector2f&, const sf::Vector2f&)
+{
+    setPartShader(&m_indicator, "nui/hover");
+    return true;
+}
+
+void Slider::handleMouseLeft()
+{
+    returnif (m_grabbing);
+    setPartShader(&m_indicator, "");
+}
+
 //-------------------------//
 //----- Configuration -----//
 
@@ -86,8 +103,12 @@ void Slider::setClosestValue(const float relX)
     const float distance = size().x / (m_max - m_min);
     auto closestValue = std::round(relX / distance);
 
-    if (closestValue < 0.f) setValue(m_min);
-    else setValue(m_min + static_cast<uint>(closestValue));
+    uint value = m_min;
+    if (closestValue >= 0.f)
+        value += static_cast<uint>(closestValue);
+
+    if (value != m_value)
+        setValue(value);
 }
 
 void Slider::setValue(uint inValue)
@@ -95,7 +116,7 @@ void Slider::setValue(uint inValue)
     if (inValue >= m_max) m_value = m_max;
     else if (inValue <= m_min) m_value = m_min;
     else m_value = inValue;
-    refreshElements();
+    refreshIndicator();
 }
 
 void Slider::setRange(uint min, float max)

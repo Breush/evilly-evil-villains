@@ -8,11 +8,11 @@
 	</group>
 	<group type="nui">
 		<param name="size" value="2" />
-		<param name="fontFactor" value="1." />
+		<param name="fontFactor" value="1" />
 	</group>
 	<group type="global">
 		<param name="language" code="en_EN" />
-		<param name="scrollingFactor" value="20.f" />
+		<param name="scrollingFactor" value="20" />
 		<param name="zoomSpeed" value="0.05f" />
 	</group>
 </config>

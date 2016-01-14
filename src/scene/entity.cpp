@@ -434,7 +434,7 @@ void Entity::setPartShader(sf::Drawable* drawable, const std::string& shaderID)
 
     for (auto& part : m_parts) {
         if (part.drawable == drawable) {
-            part.shader = &Application::context().shaders.get(shaderID);
+            part.shader = shaderID.empty()? nullptr : &Application::context().shaders.get(shaderID);
             return;
         }
     }

@@ -65,7 +65,7 @@ Display::Display()
             nui.size = param.attribute(L"value").as_uint();
         }
         else if (name == L"fontFactor") {
-            nui.fontFactor = param.attribute(L"value").as_uint();
+            nui.fontFactor = param.attribute(L"value").as_float();
         }
 
         // Global
@@ -92,7 +92,7 @@ void Display::save()
 
     // Window
     group = config.append_child(L"group");
-    group.append_attribute(L"name") = L"window";
+    group.append_attribute(L"type") = L"window";
 
     param = group.append_child(L"param");
     param.append_attribute(L"name") = L"vsync";
@@ -113,7 +113,7 @@ void Display::save()
 
     // NUI
     group = config.append_child(L"group");
-    group.append_attribute(L"name") = L"nui";
+    group.append_attribute(L"type") = L"nui";
 
     param = group.append_child(L"param");
     param.append_attribute(L"name") = L"size";
@@ -125,7 +125,7 @@ void Display::save()
 
     // Global
     group = config.append_child(L"group");
-    group.append_attribute(L"name") = L"global";
+    group.append_attribute(L"type") = L"global";
 
     param = group.append_child(L"param");
     param.append_attribute(L"name") = L"language";
