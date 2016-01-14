@@ -199,6 +199,7 @@ namespace nui
 
         // Decorum
         float m_lineHeight = 0.f;   //!< The height of a line.
+        float m_hPadding = 0.f;     //!< Horizontal padding as defined in the NUI guides.
     };
 }
 

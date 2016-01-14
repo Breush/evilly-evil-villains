@@ -85,6 +85,8 @@ void List::refreshNUI(const config::NUIGuides& cNUI)
 {
     baseClass::refreshNUI(cNUI);
 
+    m_hPadding = cNUI.hPadding;
+
     m_lineHeight = cNUI.borderThick + cNUI.fontVSpace + 2.f * cNUI.vPadding;
     m_table.setDimensions(0u, m_columns.size(), m_lineHeight);
 
@@ -263,8 +265,8 @@ void List::hoverLine(uint line)
         cell.label->setShader("nui/hover");
 
     // Set highlight
-    float yLine = (line + 1u) * m_lineHeight;
-    setHoverRect({0.f, yLine, size().x, m_lineHeight});
+    float yOffset = (line + 1u) * m_lineHeight;
+    setHoverRect({0.4f * m_hPadding, yOffset, size().x - 1.2f * m_hPadding, m_lineHeight});
 }
 
 void List::clearHoveredLine()
@@ -297,8 +299,8 @@ void List::selectLine(uint line)
     assert(line < m_lines.size());
     m_selectedLine = line;
 
-    float yLine = (line + 1u) * m_lineHeight;
-    setSelectionRect({0.f, yLine, size().x, m_lineHeight});
+    float yOffset = (line + 1u) * m_lineHeight;
+    setSelectionRect({0.4f * m_hPadding, yOffset, size().x - 1.2f * m_hPadding, m_lineHeight});
 }
 
 void List::setSelectionRect(const sf::FloatRect& rect)
