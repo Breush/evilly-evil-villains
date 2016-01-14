@@ -36,6 +36,7 @@ void PushButton::refreshNUI(const config::NUIGuides& cNUI)
     m_fontSize = cNUI.fontSize;
     m_hPadding = cNUI.hPadding;
     m_vPadding = cNUI.vPadding;
+    m_imageHintSize = 1.5f * m_fontSize;
     m_text.setCharacterSize(m_fontSize);
 
     updateSize();
@@ -45,10 +46,28 @@ void PushButton::updateSize()
 {
     sf::Vector2f newSize;
     newSize.x = boundsSize(m_text).x + 2.f * m_hPadding;
+    if (m_imageActive) newSize.x += m_imageHintSize + m_hPadding;
     newSize.x = std::max(10.f * m_hPadding, newSize.x);
     newSize.y = m_fontSize + 2.f * m_vPadding;
     setSize(newSize);
     refresh();
+}
+
+void PushButton::updateImageTexture()
+{
+    // Remove image part if it was there before
+    if (m_imageActive)
+        removePart(&m_image);
+
+    m_imageActive = !m_imageTextureID.empty();
+
+    // Set the texture and add the image part if we need it now
+    if (m_imageActive) {
+        m_image.setTexture(&Application::context().textures.get(m_imageTextureID));
+        addPart(&m_image);
+    }
+
+    updateSize();
 }
 
 //-------------------//
@@ -60,10 +79,23 @@ void PushButton::setText(const std::wstring& text)
     updateSize();
 }
 
+void PushButton::setImage(const std::string& textureID)
+{
+    m_imageTextureID = textureID;
+    updateImageTexture();
+}
+
 void PushButton::setValidateCallback(const ValidateCallback validateCallback)
 {
     m_validateCallback = std::move(validateCallback);
     refresh();
+}
+
+void PushButton::set(const std::wstring& text, const std::string& imageTextureID)
+{
+    m_text.setString(text);
+    m_imageTextureID = imageTextureID;
+    updateImageTexture();
 }
 
 void PushButton::set(const std::wstring& text, const ValidateCallback validateCallback)
@@ -131,6 +163,7 @@ bool PushButton::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector
     setPartShader(&m_left, "nui/hover");
     setPartShader(&m_middle, "nui/hover");
     setPartShader(&m_right, "nui/hover");
+    if (m_imageActive) setPartShader(&m_image, "nui/hover");
     return true;
 }
 
@@ -158,6 +191,14 @@ void PushButton::refresh()
     auto textBounds = boundsSize(m_text);
     m_text.setOrigin(0.5f * textBounds.x, m_fontSize);
     m_text.setPosition(0.5f * size().x, m_vPadding + 0.75f * m_fontSize);
+    if (m_imageActive) m_text.move(0.5f * (m_imageHintSize + m_hPadding), 0.f);
+
+    // Image
+    if (m_imageActive) {
+        m_image.setSize({m_imageHintSize, m_imageHintSize});
+        m_image.setPosition({m_hPadding, 0.45f * size().y});
+        m_image.setOrigin({0.f, 0.5f * m_imageHintSize});
+    }
 
     // Button
     const auto& leftTexture = Application::context().textures.get(m_pressed? "nui/pushbutton/push_left" : "nui/pushbutton/pop_left");

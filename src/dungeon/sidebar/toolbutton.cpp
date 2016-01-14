@@ -17,23 +17,23 @@ ToolGrabButton::ToolGrabButton(const std::wstring& text, ToolID toolID)
 {
     switch (m_toolID) {
         case ToolID::ROOMS_BUILDER:
-            m_textureID = "dungeon/tools/rooms_builder_icon";
+            m_imageTextureID = "dungeon/tools/rooms_builder_icon";
             break;
 
         case ToolID::ROOMS_DESTROYER:
-            m_textureID = "dungeon/tools/rooms_destroyer_icon";
+            m_imageTextureID = "dungeon/tools/rooms_destroyer_icon";
             break;
 
         case ToolID::TRAPS_REMOVER:
-            m_textureID = "dungeon/tools/traps_remover_icon";
+            m_imageTextureID = "dungeon/tools/traps_remover_icon";
             break;
 
         case ToolID::FACILITIES_REMOVER:
-            m_textureID = "dungeon/tools/facilities_remover_icon";
+            m_imageTextureID = "dungeon/tools/facilities_remover_icon";
             break;
     }
 
-    setVisual(text, m_textureID);
+    set(text, m_imageTextureID);
 }
 
 void ToolGrabButton::grabbableButtonPressed(scene::Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
@@ -72,7 +72,7 @@ void ToolGrabButton::grabbableButtonPressed(scene::Entity* entity, const sf::Mou
 
 std::unique_ptr<scene::Grabbable> ToolGrabButton::spawnGrabbable()
 {
-    return std::make_unique<ToolGrabbable>(*this, m_textureID);
+    return std::make_unique<ToolGrabbable>(*this, m_imageTextureID);
 }
 
 //---------------------//

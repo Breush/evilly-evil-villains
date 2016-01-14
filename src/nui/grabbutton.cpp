@@ -6,12 +6,7 @@
 
 using namespace nui;
 
-//------------------//
-//----- Events -----//
-
-bool GrabButton::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f&)
+GrabButton::GrabButton()
 {
-    returnif (button != sf::Mouse::Left) false;
-    graph()->setGrabbable(spawnGrabbable());
-    return true;
+    setValidateCallback([this] { graph()->setGrabbable(spawnGrabbable()); });
 }

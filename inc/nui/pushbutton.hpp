@@ -11,7 +11,7 @@ namespace nui
      *  This button shows a specific text and executes action on click.
      */
 
-    class PushButton final : public nui::Entity
+    class PushButton : public nui::Entity
     {
         using baseClass = nui::Entity;
 
@@ -24,7 +24,7 @@ namespace nui
         PushButton();
 
         //! Default destructor.
-        ~PushButton() = default;
+        virtual ~PushButton() = default;
 
         virtual std::string _name() const override { return "nui::PushButton"; }
 
@@ -35,8 +35,14 @@ namespace nui
         //! Set the displayed text.
         void setText(const std::wstring& text);
 
+        //! Set the displayed image.
+        void setImage(const std::string& textureID);
+
         //! Set the action to do when button is pressed.
         void setValidateCallback(const ValidateCallback validateCallback);
+
+        //! Set the action to do when button is pressed.
+        void set(const std::wstring& text, const std::string& imageTextureID);
 
         //! Set the action and the text.
         void set(const std::wstring& text, const ValidateCallback validateCallback);
@@ -63,6 +69,9 @@ namespace nui
 
         //! Update the absolute size.
         void updateSize();
+
+        //! Update the image texture.
+        void updateImageTexture();
 
         //! @}
 
@@ -95,6 +104,11 @@ namespace nui
         // Text
         sf::Text m_text;    //!< The displayed text.
 
+        // Image
+        sf::RectangleShape m_image;     //!< The displayed image.
+        std::string m_imageTextureID;   //!< The displayed image textureID (empty if none).
+        bool m_imageActive = false;     //!< Is there an image currently displayed?
+
         // Sprites
         sf::RectangleShape m_left;      //!< Left part of the button.
         sf::RectangleShape m_middle;    //!< Middle part of the button.
@@ -108,9 +122,10 @@ namespace nui
         bool m_hovered = false; //!< Is the button currently hovered?
 
         // Decorum
-        float m_fontSize = 0.f; //!< Font size as defined in the NUI guides.
-        float m_vPadding = 0.f; //!< Vertical padding as defined in the NUI guides.
-        float m_hPadding = 0.f; //!< Horizontal padding as defined in the NUI guides.
+        float m_fontSize = 0.f;         //!< Font size as defined in the NUI guides.
+        float m_vPadding = 0.f;         //!< Vertical padding as defined in the NUI guides.
+        float m_hPadding = 0.f;         //!< Horizontal padding as defined in the NUI guides.
+        float m_imageHintSize = 0.f;    //!< Forced image width.
     };
 }
 

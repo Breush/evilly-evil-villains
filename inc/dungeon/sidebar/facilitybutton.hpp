@@ -53,7 +53,7 @@ namespace dungeon
 
         // Grabbable
         std::wstring m_grabbableFacilityID;                 //!< The identifier for the facility to create when the grabbable is going.
-        std::string m_textureID;                            //!< The texture of the grabbable and button.
+        std::string m_imageTextureID;                            //!< The texture of the grabbable and button.
 
         // Explicit links
         sf::Vector2u m_explicitLinkCoords;  //!< Memory for the coords to link to.

@@ -43,7 +43,7 @@ namespace dungeon
 
     private:
 
-        std::string m_textureID;    //!< The texture of the grabbable and button.
+        std::string m_imageTextureID;    //!< The texture of the grabbable and button.
         std::wstring m_trapID;      //!< The trap to be constructed in the dungeon inter.
     };
 

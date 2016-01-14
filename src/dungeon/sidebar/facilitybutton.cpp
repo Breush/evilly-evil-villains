@@ -18,8 +18,8 @@ FacilityGrabButton::FacilityGrabButton(const FacilityData& facilityData, std::ws
     , m_facilityID(std::move(facilityID))
 {
     m_grabbableFacilityID = m_facilityID;
-    m_textureID = "dungeon/facilities/" + toString(m_facilityID) + "/icon";
-    setVisual(m_facilityData.name, m_textureID);
+    m_imageTextureID = "dungeon/facilities/" + toString(m_facilityID) + "/icon";
+    set(m_facilityData.name, m_imageTextureID);
 
     // Explicit links (m_explicitLinksCount is constructed to 0u)
     for (const auto& link : m_facilityData.links)
@@ -127,13 +127,13 @@ const Link& FacilityGrabButton::getCurrentExplicitLink() const
 
 std::unique_ptr<scene::Grabbable> FacilityGrabButton::spawnGrabbable()
 {
-    return std::make_unique<FacilityGrabbable>(*this, m_textureID);
+    return std::make_unique<FacilityGrabbable>(*this, m_imageTextureID);
 }
 
 void FacilityGrabButton::setGrabbableFacilityID(const std::wstring& facilityID)
 {
     m_grabbableFacilityID = facilityID;
-    m_textureID = "dungeon/facilities/" + toString(m_grabbableFacilityID) + "/icon";
+    m_imageTextureID = "dungeon/facilities/" + toString(m_grabbableFacilityID) + "/icon";
     graph()->setGrabbable(spawnGrabbable());
 }
 

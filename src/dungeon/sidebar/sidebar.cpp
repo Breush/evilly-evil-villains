@@ -177,7 +177,7 @@ void Sidebar::refreshTabTrapsContent()
         const auto& trapID = trapGenericPair.first;
         trapsButtons.emplace_back(std::make_unique<TrapGrabButton>(trapGenericPair.second.common->name, trapID));
         auto& trapButton = *trapsButtons.back();
-        trapsStacker.stackBack(trapButton, nui::Align::CENTER);
+        trapsStacker.stackBack(trapButton);
     }
 }
 
@@ -197,7 +197,7 @@ void Sidebar::refreshTabFacilitiesContent()
         const auto& facilityID = facilityPair.first;
         facilitiesButtons.emplace_back(std::make_unique<FacilityGrabButton>(facilityPair.second, facilityID, m_inter));
         auto& facilityButton = *facilitiesButtons.back();
-        facilitiesStacker.stackBack(facilityButton, nui::Align::CENTER);
+        facilitiesStacker.stackBack(facilityButton);
     }
 }
 
@@ -216,7 +216,7 @@ void Sidebar::refreshTabToolsContent()
     toolsButtons.emplace_back(std::make_unique<ToolGrabButton>(_("Facilities remover"), dungeon::ToolID::FACILITIES_REMOVER));
 
     for (auto& toolsButton : toolsButtons)
-        toolsStacker.stackBack(*toolsButton, nui::Align::CENTER);
+        toolsStacker.stackBack(*toolsButton);
 }
 
 void Sidebar::refreshTabContents()

@@ -47,7 +47,7 @@ namespace dungeon
 
     private:
 
-        std::string m_textureID;    //!< The texture of the grabbable and button.
+        std::string m_imageTextureID;    //!< The texture of the grabbable and button.
         ToolID m_toolID;            //!< The tool.
     };
 

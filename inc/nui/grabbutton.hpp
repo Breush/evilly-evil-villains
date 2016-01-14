@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nui/imagebutton.hpp"
+#include "nui/pushbutton.hpp"
 #include "scene/grabbable.hpp"
 
 #include <memory>
@@ -9,33 +9,22 @@ namespace nui
 {
     //! An abstract button with an image to spawn a grabbed object.
     /*!
-     *  This class exists so that one can make a container (like std::vector)
-     *  of pointers. The derived class needs to implement spawnGrabbable()
+     *  The derived class needs to implement spawnGrabbable()
      *  and grabbableReleased().
      */
 
-    class GrabButton : public ImageButton, public scene::GrabbableSpawner
+    class GrabButton : public PushButton, public scene::GrabbableSpawner
     {
-        using baseClass = ImageButton;
+        using baseClass = PushButton;
 
     public:
 
-        //! Default constructor.
-        GrabButton() = default;
+        //! Constructor.
+        GrabButton();
 
         //! Default destructor.
         virtual ~GrabButton() = default;
 
         std::string _name() const final { return "nui::GrabButton"; }
-
-    protected:
-
-        //---------------//
-        //! @name Events
-        //! @{
-
-        bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
-
-        //! @}
     };
 }
