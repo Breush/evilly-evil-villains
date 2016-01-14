@@ -8,6 +8,7 @@
 
 #include "core/debug.hpp"
 #include "tools/filesystem.hpp"
+#include "tools/tools.hpp"
 
 #include <pugixml/pugixml.hpp>
 
@@ -20,6 +21,7 @@
 
 static char* s_lang = nullptr;
 static char* s_language = nullptr;
+static std::string s_loadedLanguage;
 
 static std::vector<i18n::LanguageInfo> s_languagesList;
 
@@ -28,7 +30,10 @@ static std::vector<i18n::LanguageInfo> s_languagesList;
 
 void i18n::init(const std::string& language)
 {
+    returnif (s_loadedLanguage == language);
+
     mdebug_core_1("Setting language to " << language);
+    s_loadedLanguage = language;
 
     // Free memory if any
     close();

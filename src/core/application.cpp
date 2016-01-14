@@ -290,18 +290,22 @@ void Application::render()
 //-----------------------------//
 //----- Window management -----//
 
-void Application::refreshFromConfig()
+void Application::refreshFromConfig(bool refreshWindow, bool refreshAudio)
 {
     // Language
     i18n::init(toString(s_context.display.global.language));
 
-    // Graphics
-    s_context.windowInfo.style = (s_context.display.window.fullscreen)? sf::Style::Fullscreen : sf::Style::Default;
-    s_context.recreateWindow();
+    // Window
+    if (refreshWindow) {
+        s_context.windowInfo.style = (s_context.display.window.fullscreen)? sf::Style::Fullscreen : sf::Style::Default;
+        s_context.recreateWindow();
+    }
 
     // Audio
-    refreshSounds();
-    refreshMusics();
+    if (refreshAudio) {
+        refreshSounds();
+        refreshMusics();
+    }
 
     // Marking the need for future refresh of NUI/Window
     s_needRefresh = true;

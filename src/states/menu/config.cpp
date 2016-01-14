@@ -220,17 +220,29 @@ void MenuConfig::applyChanges()
     display.global.zoomSpeed = m_zoomSpeedSlider.value() / 100.f;
 
     // Graphics
-    display.window.resolution = sf::v2f(m_resolutions.at(m_resolutionList.selected()));
-    display.window.fullscreen = m_fullscreenBox.status();
-    display.window.vsync = m_vsyncBox.status();
-    display.window.antialiasingLevel = m_antialiasingSlider.value();
+    auto resolution = sf::v2f(m_resolutions.at(m_resolutionList.selected()));
+    auto fullscreen = m_fullscreenBox.status();
+    auto vsync = m_vsyncBox.status();
+    auto antialiasingLevel = m_antialiasingSlider.value();
+
+    bool windowRefresh = (display.window.resolution != resolution)
+                      || (display.window.fullscreen != fullscreen)
+                      || (display.window.vsync != vsync)
+                      || (display.window.antialiasingLevel != antialiasingLevel);
+
+    display.window.resolution = resolution;
+    display.window.fullscreen = fullscreen;
+    display.window.vsync = vsync;
+    display.window.antialiasingLevel = antialiasingLevel;
 
     // Audio
+    // TODO It might be good UX to let the user hear the audio differences live,
+    // and not delay the update until here.
     audio.globalRelVolume = m_globalVolumeSlider.value() / 100.f;
     audio.musicVolume = m_musicVolumeSlider.value();
     audio.soundVolume = m_soundVolumeSlider.value();
 
     audio.save();
     display.save();
-    Application::refreshFromConfig();
+    Application::refreshFromConfig(windowRefresh, true);
 }

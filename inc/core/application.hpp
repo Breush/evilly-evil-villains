@@ -95,8 +95,8 @@ public:
     //! @name Config
     //! @{
 
-    //! Refresh the window/display/sound from the current config.
-    static void refreshFromConfig();
+    //! Refresh the NUI/window/sound from the current config.
+    static void refreshFromConfig(bool refreshWindow = true, bool refreshAudio = true);
 
     //! Acces the visual debug informations.
     static inline VisualDebug& visualDebug() { return s_visualDebug; }
