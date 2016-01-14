@@ -80,6 +80,10 @@ namespace nui
         //! Set the child alignment in position (row, col).
         void setChildAlign(uint row, uint col, Align hAlign, Align vAlign);
 
+        //! Whether the children clipping is allowed.
+        //! If false, this setting will deactivate all clipping.
+        inline void setChildrenClipping(bool childrenClipping) { m_childrenClipping = childrenClipping; }
+
         //! Remove all children and detached them.
         void removeChildren();
 
@@ -175,7 +179,8 @@ namespace nui
 
     private:
 
-        bool m_autoSize = false;    //!< Whether or not the table adapt its whole size to its content.
+        bool m_autoSize = false;        //!< Whether or not the table adapt its whole size to its content.
+        bool m_childrenClipping = true; //!< Are we allowed to clip the children to their cell's size?
 
         uint m_colsDimension = 0u;  //!< The number of rows.
         uint m_rowsDimension = 0u;  //!< The number of columns.

@@ -14,6 +14,7 @@ DropDownSelector::DropDownSelector(DropDownList& dropDownList)
     attachChild(m_scrollArea);
     m_scrollArea.setContent(m_tableLayout);
     m_scrollArea.setMouseLeftCallback([this] { handleScrollAreaMouseLeft(); });
+    m_tableLayout.setChildrenClipping(false);
 
     // Fill
     addPart(&m_fillLeft);

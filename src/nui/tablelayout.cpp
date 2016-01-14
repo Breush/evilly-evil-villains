@@ -166,12 +166,14 @@ void TableLayout::positionChild(uint row, uint col, float x, float y)
     child.entity.setLocalPosition({x + ox, y + oy});
 
     // Clip child if too big
-    sf::FloatRect clipArea{0.f, 0.f, -1.f, -1.f};
-    if (ox + m_hPadding > dx) clipArea.width  = m_cols[col].width  - (ox + m_hPadding);
-    if (oy + m_vPadding > dy) clipArea.height = m_rows[row].height - (oy + m_vPadding);
-    if (clipArea.width >= 0.f && clipArea.height < 0.f) clipArea.height = child.entity.size().y;
-    if (clipArea.width < 0.f && clipArea.height >= 0.f) clipArea.width  = child.entity.size().x;
-    child.entity.setClipArea(clipArea);
+    if (m_childrenClipping) {
+        sf::FloatRect clipArea{0.f, 0.f, -1.f, -1.f};
+        if (ox + m_hPadding > dx) clipArea.width  = m_cols[col].width  - (ox + m_hPadding);
+        if (oy + m_vPadding > dy) clipArea.height = m_rows[row].height - (oy + m_vPadding);
+        if (clipArea.width >= 0.f && clipArea.height < 0.f) clipArea.height = child.entity.size().y;
+        if (clipArea.width < 0.f && clipArea.height >= 0.f) clipArea.width  = child.entity.size().x;
+        child.entity.setClipArea(clipArea);
+    }
 }
 
 void TableLayout::setAutoSize(bool autoSize)
