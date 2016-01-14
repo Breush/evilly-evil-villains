@@ -52,20 +52,20 @@ MenuConfig::MenuConfig(StateStack& stack)
     for (const auto& language : i18n::languagesList())
         m_languageList.add(language.name);
 
-    m_areas[AreaID::GENERAL].form.add(m_uiSizeSelector);
-    m_uiSizeSelector.setRange(1u, 4u);
+    m_areas[AreaID::GENERAL].form.add(m_uiSizeSlider);
+    m_uiSizeSlider.setRange(1u, 4u);
 
-    m_areas[AreaID::GENERAL].form.add(m_uiFontFactorSelector);
-    m_uiFontFactorSelector.setVisibleSteps(2u);
-    m_uiFontFactorSelector.setRange(50u, 150u);
+    m_areas[AreaID::GENERAL].form.add(m_uiFontFactorSlider);
+    m_uiFontFactorSlider.setVisibleSteps(2u);
+    m_uiFontFactorSlider.setRange(50u, 150u);
 
-    m_areas[AreaID::GENERAL].form.add(m_scrollingFactorSelector);
-    m_scrollingFactorSelector.setVisibleSteps(3u);
-    m_scrollingFactorSelector.setRange(5u, 50u);
+    m_areas[AreaID::GENERAL].form.add(m_scrollingFactorSlider);
+    m_scrollingFactorSlider.setVisibleSteps(3u);
+    m_scrollingFactorSlider.setRange(5u, 50u);
 
-    m_areas[AreaID::GENERAL].form.add(m_zoomSpeedSelector);
-    m_zoomSpeedSelector.setVisibleSteps(2u);
-    m_zoomSpeedSelector.setRange(1u, 9u);
+    m_areas[AreaID::GENERAL].form.add(m_zoomSpeedSlider);
+    m_zoomSpeedSlider.setVisibleSteps(2u);
+    m_zoomSpeedSlider.setRange(1u, 9u);
 
     // Graphics
     m_areas[AreaID::GRAPHICS].form.add(m_resolutionList);
@@ -86,21 +86,21 @@ MenuConfig::MenuConfig(StateStack& stack)
 
     m_areas[AreaID::GRAPHICS].form.add(m_vsyncBox);
 
-    m_areas[AreaID::GRAPHICS].form.add(m_antialiasingSelector);
-    m_antialiasingSelector.setRange(0u, 4u);
+    m_areas[AreaID::GRAPHICS].form.add(m_antialiasingSlider);
+    m_antialiasingSlider.setRange(0u, 4u);
 
     // Audio
-    m_areas[AreaID::AUDIO].form.add(m_globalVolumeSelector);
-    m_globalVolumeSelector.setVisibleSteps(4u);
-    m_globalVolumeSelector.setRange(0u, 100u);
+    m_areas[AreaID::AUDIO].form.add(m_globalVolumeSlider);
+    m_globalVolumeSlider.setVisibleSteps(4u);
+    m_globalVolumeSlider.setRange(0u, 100u);
 
-    m_areas[AreaID::AUDIO].form.add(m_musicVolumeSelector);
-    m_musicVolumeSelector.setVisibleSteps(4u);
-    m_musicVolumeSelector.setRange(0u, 100u);
+    m_areas[AreaID::AUDIO].form.add(m_musicVolumeSlider);
+    m_musicVolumeSlider.setVisibleSteps(4u);
+    m_musicVolumeSlider.setRange(0u, 100u);
 
-    m_areas[AreaID::AUDIO].form.add(m_soundVolumeSelector);
-    m_soundVolumeSelector.setVisibleSteps(4u);
-    m_soundVolumeSelector.setRange(0u, 100u);
+    m_areas[AreaID::AUDIO].form.add(m_soundVolumeSlider);
+    m_soundVolumeSlider.setVisibleSteps(4u);
+    m_soundVolumeSlider.setRange(0u, 100u);
 
     // Stacker for buttons
     nuiRoot.attachChild(m_buttonsStacker);
@@ -156,9 +156,6 @@ void MenuConfig::refreshWindow(const config::WindowInfo& cWindow)
     m_areas[AreaID::GRAPHICS].scrollArea.setSize({0.45f * resolution.x, 0.29f * resolution.y});
     m_areas[AreaID::AUDIO].scrollArea.setSize({0.45f * resolution.x, 0.29f * resolution.y});
 
-    // Area size might have change
-    m_refreshBackgrounds = true;
-
     baseClass::refreshWindow(cWindow);
 }
 
@@ -185,10 +182,10 @@ void MenuConfig::refreshFormsFromConfig()
     // General
     auto languageIndex = i18n::languageIndexFromCode(display.global.language);
     m_languageList.select(languageIndex);
-    m_uiSizeSelector.setValue(display.nui.size);
-    m_uiFontFactorSelector.setValue(static_cast<uint>(display.nui.fontFactor * 100.f));
-    m_scrollingFactorSelector.setValue(static_cast<uint>(display.global.scrollingFactor));
-    m_zoomSpeedSelector.setValue(static_cast<uint>(display.global.zoomSpeed * 100.f));
+    m_uiSizeSlider.setValue(display.nui.size);
+    m_uiFontFactorSlider.setValue(static_cast<uint>(display.nui.fontFactor * 100.f));
+    m_scrollingFactorSlider.setValue(static_cast<uint>(display.global.scrollingFactor));
+    m_zoomSpeedSlider.setValue(static_cast<uint>(display.global.zoomSpeed * 100.f));
 
     // Graphics
     auto resolution = sf::v2u(display.window.resolution);
@@ -202,12 +199,12 @@ void MenuConfig::refreshFormsFromConfig()
 
     m_fullscreenBox.setStatus(display.window.fullscreen);
     m_vsyncBox.setStatus(display.window.vsync);
-    m_antialiasingSelector.setValue(display.window.antialiasingLevel);
+    m_antialiasingSlider.setValue(display.window.antialiasingLevel);
 
     // Audio
-    m_globalVolumeSelector.setValue(static_cast<uint>(audio.globalRelVolume * 100.f));
-    m_musicVolumeSelector.setValue(static_cast<uint>(audio.musicVolume));
-    m_soundVolumeSelector.setValue(static_cast<uint>(audio.soundVolume));
+    m_globalVolumeSlider.setValue(static_cast<uint>(audio.globalRelVolume * 100.f));
+    m_musicVolumeSlider.setValue(static_cast<uint>(audio.musicVolume));
+    m_soundVolumeSlider.setValue(static_cast<uint>(audio.soundVolume));
 }
 
 void MenuConfig::applyChanges()
@@ -217,21 +214,21 @@ void MenuConfig::applyChanges()
 
     // General
     display.global.language = i18n::languagesList().at(m_languageList.selected()).code;
-    display.nui.size = m_uiSizeSelector.value();
-    display.nui.fontFactor = m_uiFontFactorSelector.value() / 100.f;
-    display.global.scrollingFactor = m_scrollingFactorSelector.value();
-    display.global.zoomSpeed = m_zoomSpeedSelector.value() / 100.f;
+    display.nui.size = m_uiSizeSlider.value();
+    display.nui.fontFactor = m_uiFontFactorSlider.value() / 100.f;
+    display.global.scrollingFactor = m_scrollingFactorSlider.value();
+    display.global.zoomSpeed = m_zoomSpeedSlider.value() / 100.f;
 
     // Graphics
     display.window.resolution = sf::v2f(m_resolutions.at(m_resolutionList.selected()));
     display.window.fullscreen = m_fullscreenBox.status();
     display.window.vsync = m_vsyncBox.status();
-    display.window.antialiasingLevel = m_antialiasingSelector.value();
+    display.window.antialiasingLevel = m_antialiasingSlider.value();
 
     // Audio
-    audio.globalRelVolume = m_globalVolumeSelector.value() / 100.f;
-    audio.musicVolume = m_musicVolumeSelector.value();
-    audio.soundVolume = m_soundVolumeSelector.value();
+    audio.globalRelVolume = m_globalVolumeSlider.value() / 100.f;
+    audio.musicVolume = m_musicVolumeSlider.value();
+    audio.soundVolume = m_soundVolumeSlider.value();
 
     audio.save();
     display.save();

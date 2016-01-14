@@ -10,17 +10,17 @@ namespace nui
 {
     //! An interactive selector for a number.
 
-    class RangeSelector final : public nui::Entity
+    class Slider final : public nui::Entity
     {
         using baseClass = nui::Entity;
 
     public:
 
         //! Constructor.
-        RangeSelector();
+        Slider();
 
         //! Default destructor.
-        ~RangeSelector() final = default;
+        ~Slider() final = default;
 
         std::string _name() const final { return "nui::RangeSelector"; }
 
@@ -86,6 +86,12 @@ namespace nui
         //! Refresh all elements positions.
         void refreshElements();
 
+        //! Refresh the bar display.
+        void refreshBar();
+
+        //! Refresh the visible traces.
+        void refreshTraces();
+
         //! Refresh the current value indicator.
         void refreshIndicator();
 
@@ -100,18 +106,33 @@ namespace nui
 
     private:
 
+        // Configuration
+        uint m_visibleSteps = -1u;  //!< How many step to show.
         uint m_value = 0u;  //!< The current value.
         uint m_min = 0u;    //!< The min for the range.
         uint m_max = 0u;    //!< The max for the range.
 
-        uint m_visibleSteps = -1u;  //!< How many step to show.
-
+        // States
         bool m_grabbing = false;    //!< Whether we are currently grabbing the indicator.
 
-        // Decorum
-        std::vector<Trace> m_traces;    //!< The traces.
-        sf::RectangleShape m_mainLine;  //!< The main line.
+        // Bar
+        sf::RectangleShape m_barLeft;   //!< Bar left part.
+        sf::RectangleShape m_barMiddle; //!< Bar middle part.
+        sf::RectangleShape m_barRight;  //!< Bar right part.
+        float m_barLeftWidth = 0.f;     //!< Bar left part width.
+        float m_barRightWidth = 0.f;    //!< Bar right part width.
+
+        // Traces
+        std::vector<Trace> m_traces;                    //!< The traces.
+        const sf::Texture* m_traceTexture = nullptr;    //!< Texture used for the traces' lines.
+        float m_traceWidth = 0.f;                       //!< Trace line texture width.
+
+        // Indicator
         sf::RectangleShape m_indicator; //!< The current value indicator.
+        float m_indicatorWidth = 0.f;   //!< The indicator texture width.
+
+        // Decorum
+        float m_barOffset = 0.f;        //!< Bar vertical offset.
         float m_widthHint = 0.f;        //!< The width hint for the object.
         float m_heightHint = 0.f;       //!< The height hint for the object.
         float m_fontSize = 0.f;         //!< Font size.

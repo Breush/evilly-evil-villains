@@ -2,12 +2,12 @@
 
 #include "states/state.hpp"
 #include "states/identifiers.hpp"
-#include "nui/rangeselector.hpp"
 #include "nui/dropdownlist.hpp"
 #include "nui/scrollarea.hpp"
 #include "nui/pushbutton.hpp"
 #include "nui/checkbox.hpp"
 #include "nui/hstacker.hpp"
+#include "nui/slider.hpp"
 #include "nui/frame.hpp"
 #include "nui/form.hpp"
 #include "scene/wrappers/label.hpp"
@@ -89,26 +89,23 @@ namespace states
         std::array<nui::PushButton, 2u> m_buttons;      //!< Buttons.
 
         // General
-        nui::DropDownList m_languageList;               //!< Select the language.
-        nui::RangeSelector m_uiSizeSelector;            //!< Size of the interface.
-        nui::RangeSelector m_uiFontFactorSelector;      //!< Font factor of the interface.
-        nui::RangeSelector m_scrollingFactorSelector;   //!< Scrolling speed.
-        nui::RangeSelector m_zoomSpeedSelector;         //!< Zoom speed.
+        nui::DropDownList m_languageList;       //!< Select the language.
+        nui::Slider m_uiSizeSlider;             //!< Size of the interface.
+        nui::Slider m_uiFontFactorSlider;       //!< Font factor of the interface.
+        nui::Slider m_scrollingFactorSlider;    //!< Scrolling speed.
+        nui::Slider m_zoomSpeedSlider;          //!< Zoom speed.
 
         // Graphics
-        std::vector<Resolution> m_resolutions;      //!< Available resolutions.
-        nui::DropDownList m_resolutionList;         //!< Screen resolutions.
-        nui::CheckBox m_fullscreenBox;              //!< Fullscreen switch.
-        nui::CheckBox m_vsyncBox;                   //!< VSync switch.
-        nui::RangeSelector m_antialiasingSelector;  //!< Antialiasing level selector.
+        std::vector<Resolution> m_resolutions;  //!< Available resolutions.
+        nui::DropDownList m_resolutionList;     //!< Screen resolutions.
+        nui::CheckBox m_fullscreenBox;          //!< Fullscreen switch.
+        nui::CheckBox m_vsyncBox;               //!< VSync switch.
+        nui::Slider m_antialiasingSlider;       //!< Antialiasing level selector.
 
         // Audio
-        nui::RangeSelector m_globalVolumeSelector;  //!< Relative global volume selector.
-        nui::RangeSelector m_musicVolumeSelector;   //!< Music volume selector.
-        nui::RangeSelector m_soundVolumeSelector;   //!< Sound volume selector.
-
-        // Dirty flags
-        bool m_refreshBackgrounds = false;  //!< Should we refresh the background of areas?
+        nui::Slider m_globalVolumeSlider;   //!< Relative global volume selector.
+        nui::Slider m_musicVolumeSlider;    //!< Music volume selector.
+        nui::Slider m_soundVolumeSlider;    //!< Sound volume selector.
 
         // Background and title
         scene::Label m_title;                   //!< The title of the menu page.
