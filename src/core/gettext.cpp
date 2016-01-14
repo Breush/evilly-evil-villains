@@ -7,6 +7,9 @@
 #include "core/gettext.hpp"
 
 #include "core/debug.hpp"
+#include "tools/filesystem.hpp"
+
+#include <pugixml/pugixml.hpp>
 
 #include <cstdlib>
 #include <cstring>
@@ -17,6 +20,8 @@
 
 static char* s_lang = nullptr;
 static char* s_language = nullptr;
+
+static std::vector<i18n::LanguageInfo> s_languagesList;
 
 //---------------------------//
 //----- Internalization -----//
@@ -66,4 +71,41 @@ void i18n::close()
 
     s_lang = nullptr;
     s_language = nullptr;
+}
+
+//--------------------------//
+//----- Languages list -----//
+
+void i18n::initLanguagesList()
+{
+    s_languagesList.clear();
+
+    for (auto& fileInfo : listFiles("res/po")) {
+        if (!fileInfo.isDirectory) continue;
+
+        pugi::xml_document doc;
+        if (!doc.load_file((fileInfo.fullName + "/info.xml").c_str())) continue;
+        const auto& translationNode = doc.child(L"translation");
+        const auto& languageNode = translationNode.child(L"language");
+
+        i18n::LanguageInfo language;
+        language.code = languageNode.attribute(L"code").as_string();
+        language.name = languageNode.attribute(L"name").as_string();
+        s_languagesList.emplace_back(std::move(language));
+    }
+}
+
+const std::vector<i18n::LanguageInfo>& i18n::languagesList()
+{
+    return s_languagesList;
+}
+
+uint i18n::languageIndexFromCode(const std::wstring& code)
+{
+    auto languagesCount = s_languagesList.size();
+    for (uint i = 0u ; i < languagesCount; ++i)
+        if (s_languagesList[i].code == code)
+            return i;
+
+    return -1u;
 }

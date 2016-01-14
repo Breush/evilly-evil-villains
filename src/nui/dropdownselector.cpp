@@ -94,7 +94,7 @@ void DropDownSelector::updateSize()
 
     // Compute the new size
     sf::Vector2f newSize;
-    newSize.x = maxTextBoundsWidth + m_hPadding + m_rightWidth;
+    newSize.x = maxTextBoundsWidth + 1.5f * m_hPadding + m_rightWidth;
     newSize.x = std::max(6.f * m_hPadding + m_rightWidth, newSize.x);
     newSize.y = smallListHeight + 0.5f * m_vPadding;
     setSize(newSize);

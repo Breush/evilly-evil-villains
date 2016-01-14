@@ -212,7 +212,7 @@ void DropDownList::select(uint choiceID)
     returnif (m_selectedChoiceID == choiceID);
 
     auto choicesCount = m_selector.choicesCount();
-    massert(choiceID < choicesCount, "Choice " << choiceID << " out of range.");
+    returnif (choiceID >= choicesCount);
 
     // Setting new choice
     m_selectedChoiceID = choiceID;

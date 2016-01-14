@@ -49,9 +49,8 @@ MenuConfig::MenuConfig(StateStack& stack)
 
     // General
     m_areas[AreaID::GENERAL].form.add(m_languageList);
-    for (auto& fileInfo : listFiles("res/po"))
-        if (fileInfo.isDirectory)
-            m_languageList.add(toWString(replace(fileInfo.name, std::string("_"), std::string("\\_"))));
+    for (const auto& language : i18n::languagesList())
+        m_languageList.add(language.name);
 
     m_areas[AreaID::GENERAL].form.add(m_uiSizeSelector);
     m_uiSizeSelector.setRange(1u, 4u);
@@ -184,7 +183,8 @@ void MenuConfig::refreshFormsFromConfig()
     auto& audio = Application::context().sound;
 
     // General
-    m_languageList.select(replace(display.global.language, std::wstring(L"_"), std::wstring(L"\\_")));
+    auto languageIndex = i18n::languageIndexFromCode(display.global.language);
+    m_languageList.select(languageIndex);
     m_uiSizeSelector.setValue(display.nui.size);
     m_uiFontFactorSelector.setValue(static_cast<uint>(display.nui.fontFactor * 100.f));
     m_scrollingFactorSelector.setValue(static_cast<uint>(display.global.scrollingFactor));
@@ -216,7 +216,7 @@ void MenuConfig::applyChanges()
     auto& audio = Application::context().sound;
 
     // General
-    display.global.language = replace(m_languageList.selectedText(), std::wstring(L"\\_"), std::wstring(L"_"));
+    display.global.language = i18n::languagesList().at(m_languageList.selected()).code;
     display.nui.size = m_uiSizeSelector.value();
     display.nui.fontFactor = m_uiFontFactorSelector.value() / 100.f;
     display.global.scrollingFactor = m_scrollingFactorSelector.value();

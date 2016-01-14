@@ -84,6 +84,7 @@ Application::Application()
 {
     // Context
     s_context.windowInfo.title = "Evilly Evil Villains";
+    i18n::initLanguagesList();
     refreshFromConfig();
 
     // Load all on start (except textures)
