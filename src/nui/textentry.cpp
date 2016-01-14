@@ -52,7 +52,6 @@ void TextEntry::onSizeChanges()
     m_backgroundLeft.setSize(backgroundLeftTextureSize * scaleFactor);
     m_backgroundRight.setSize(backgroundLeftTextureSize * scaleFactor);
     m_backgroundMiddle.setSize({size().x - (backgroundLeftTextureSize.x + backgroundRightTextureSize.x) * scaleFactor, size().y});
-    m_backgroundMiddle.setTextureRect({0, 0, m_backgroundMiddle.getSize().x / backgroundMiddleTextureSize.x, backgroundMiddleTextureSize.y});
 
     m_backgroundMiddle.setPosition(backgroundLeftTextureSize.x * scaleFactor, 0.f);
     m_backgroundRight.setPosition(size().x - backgroundRightTextureSize.x * scaleFactor, 0.f);

@@ -110,10 +110,17 @@ void DropDownSelector::updateSize()
 //------------------//
 //----- Events -----//
 
-void DropDownSelector::handleGlobalMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f&)
+void DropDownSelector::handleGlobalMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& nuiPos)
 {
     returnif (button == sf::Mouse::Middle);
-    m_dropDownList.undropList();
+
+    // TODO This will just work if this entity is in the nui view.
+    // One work-around would be to pass view relative coordinates too (or only those)
+
+    // If we are not in the bounds, just hide the list
+    auto mousePos = getInverseTransform().transformPoint(nuiPos);
+    if (!localBounds().contains(mousePos))
+        m_dropDownList.undropList();
 }
 
 bool DropDownSelector::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
@@ -125,6 +132,7 @@ bool DropDownSelector::handleMouseButtonPressed(const sf::Mouse::Button button, 
     if (choiceID >= m_choices.size()) choiceID = m_choices.size() - 1u;
 
     m_dropDownList.select(choiceID);
+    m_dropDownList.undropList();
 
     return true;
 }
@@ -180,12 +188,17 @@ void DropDownSelector::hoverChoice(uint choiceID)
 {
     returnif (m_hoveredChoiceID == choiceID && !m_lastKnownOffsetChanged);
 
-    // Remove previous hovering
-    clearHoveredChoice();
+    // Is this even valid?
+    if (choiceID >= m_choices.size()) {
+        clearHoveredChoice();
+        return;
+    }
 
-    returnif (choiceID >= m_choices.size());
-
+    // We changed hovered choice
     if (m_hoveredChoiceID != choiceID) {
+        if (m_hoveredChoiceID != -1u)
+            m_choices[m_hoveredChoiceID].label->setShader("");
+
         m_hoveredChoiceID = choiceID;
         m_choices[choiceID].label->setShader("nui/hover");
         Application::context().sounds.play("select");
@@ -200,10 +213,7 @@ void DropDownSelector::clearHoveredChoice()
 {
     returnif (m_hoveredChoiceID == -1u);
 
-    // Remove shader effect
     m_choices[m_hoveredChoiceID].label->setShader("");
-
-    // Remove highlight
     m_hoverHighlight.setFillColor(sf::Color::Transparent);
 
     m_hoveredChoiceID = -1u;

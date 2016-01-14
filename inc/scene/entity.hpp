@@ -141,8 +141,11 @@ namespace scene
          */
         void setKeepInsideLocalRect(const sf::FloatRect& localRect);
 
-        //! The local positions (origin taken in acount) and size.
+        //! Returns the entity size with a rect.
         sf::FloatRect localBounds();
+
+        //! Returns the localBounds transformed to global coordinates.
+        sf::FloatRect globalBounds();
 
         //! Set the shader applied to the whole entity.
         void setShader(const std::string& shaderID);

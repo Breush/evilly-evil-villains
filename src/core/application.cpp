@@ -121,6 +121,7 @@ void Application::run()
 
         // Inputs
         processInput();
+        synchronizeMouse();
 
         // Update until frame limit is hit
         while (lag >= m_updateTime) {
@@ -234,9 +235,10 @@ void Application::processInput()
         m_cursor.handleEvent(event);
     }
 
-    // Update mouse
-    // We create a MouseMoved event each frame,
-    // so that any mouse-related overlay will be updated
+}
+
+void Application::synchronizeMouse()
+{
     const auto& mousePosition = sf::Mouse::getPosition(s_context.window);
 
     sf::Event mouseMovedEvent;

@@ -484,7 +484,12 @@ void Entity::centerOrigin()
 
 sf::FloatRect Entity::localBounds()
 {
-    return {m_localPosition.x - getOrigin().x, m_localPosition.y - getOrigin().y, m_size.x, m_size.y};
+    return {0.f, 0.f, m_size.x, m_size.y};
+}
+
+sf::FloatRect Entity::globalBounds()
+{
+    return getInverseTransform().transformRect(localBounds());
 }
 
 void Entity::setSize(const sf::Vector2f& inSize)

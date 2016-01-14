@@ -129,6 +129,13 @@ protected:
      */
     void processInput();
 
+    //! Synchonize mouse position.
+    /*!
+     *  As we want to know the hovered entity at each frame,
+     *  we generate a MouseMoved event with the current position of the mouse.
+     */
+    void synchronizeMouse();
+
     //! Update the game logic.
     /*!
      *  Dispatch the time (normally fixed) to main components:

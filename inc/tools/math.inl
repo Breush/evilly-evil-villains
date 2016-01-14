@@ -20,7 +20,9 @@ inline std::wstring aspectRatio(T w, T h)
     }
 
     // 85:48 ratio as 1360x768 is officially an almost 16:9
-    else if (a == 85 && b == 48) {
+    // 683:384 ratio as 1366x768 also
+    else if ((a == 85 && b == 48)
+             || (a == 683 && b == 384)) {
         s << L'≈';
         a = 16;
         b = 9;
