@@ -27,10 +27,12 @@ void Summary::init()
         m_stacker.stackBack(*bar);
     }
 
+    m_bars[BAR_TIME]->setLogo("resources/time");
     m_bars[BAR_DOSH]->setLogo("resources/dosh");
     m_bars[BAR_SOUL]->setLogo("resources/soul");
     m_bars[BAR_FAME]->setLogo("resources/fame");
 
+    m_bars[BAR_TIME]->setColor(sf::Color::White);
     m_bars[BAR_DOSH]->setColor({190u, 171u, 21u});
     m_bars[BAR_SOUL]->setColor({102u, 190u, 21u});
     m_bars[BAR_FAME]->setColor({102u, 151u, 196u});
