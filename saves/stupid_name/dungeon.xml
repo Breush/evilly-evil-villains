@@ -58,7 +58,7 @@
 		<room pos="0" state="constructed" />
 		<room pos="1" state="constructed">
 			<facility barrier="true" type="piston">
-				<direction type="uint32" value="0" />
+				<direction type="uint32" value="1" />
 				<on type="bool" value="true" />
 			</facility>
 		</room>

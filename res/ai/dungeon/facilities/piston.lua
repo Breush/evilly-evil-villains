@@ -110,6 +110,8 @@ function orientPiston()
     elseif direction == EAST then   direction = SOUTH
     end
 
+    eev_setDataU32("direction", direction)
+
     -- Deactivate the piston
     on = eev_setDataBool("on", false)
     refreshDisplay(true)
@@ -120,20 +122,20 @@ end
 
 function refreshDisplay(forward)
     if direction == NORTH then
-        if on then  eev_selectAnimation("north_extend");
-        else        eev_selectAnimation("north_retract");
+        if on then  eev_selectAnimation("north_extend")
+        else        eev_selectAnimation("north_retract")
         end
     elseif direction == SOUTH then
-        if on then  eev_selectAnimation("south_extend");
-        else        eev_selectAnimation("south_retract");
+        if on then  eev_selectAnimation("south_extend")
+        else        eev_selectAnimation("south_retract")
         end
     elseif direction == WEST then
-        if on then  eev_selectAnimation("west_extend");
-        else        eev_selectAnimation("west_retract");
+        if on then  eev_selectAnimation("west_extend")
+        else        eev_selectAnimation("west_retract")
         end
     elseif direction == EAST then
-        if on then  eev_selectAnimation("east_extend");
-        else        eev_selectAnimation("east_retract");
+        if on then  eev_selectAnimation("east_extend")
+        else        eev_selectAnimation("east_retract")
         end
     end
 
