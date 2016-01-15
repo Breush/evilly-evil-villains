@@ -6,13 +6,20 @@ using namespace dungeon;
 
 SummaryBar::SummaryBar()
 {
-    setDetectable(false);
-
     // Background
     addPart(&m_backgroundLeft);
     addPart(&m_backgroundRight);
     addPart(&m_backgroundMiddle);
 
+    // Content
+    addPart(&m_text);
+    addPart(&m_logo);
+
+    m_text.setFont(Application::context().fonts.get("nui"));
+}
+
+void SummaryBar::init()
+{
     const auto& backgroundLeftTexture = Application::context().textures.get("dungeon/sidebar/summary/bar/background_left");
     const auto& backgroundMiddleTexture = Application::context().textures.get("dungeon/sidebar/summary/bar/background_middle");
     const auto& backgroundRightTexture = Application::context().textures.get("dungeon/sidebar/summary/bar/background_right");
@@ -26,11 +33,7 @@ SummaryBar::SummaryBar()
 
     m_backgroundRight.setOrigin(m_backgroundRightWidth, 0.f);
 
-    // Content
-    addPart(&m_text);
-    addPart(&m_logo);
-
-    m_text.setFont(Application::context().fonts.get("nui"));
+    refresh();
 }
 
 //-------------------//

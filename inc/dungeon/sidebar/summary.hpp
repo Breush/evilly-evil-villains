@@ -39,10 +39,10 @@ namespace dungeon
         //! Default destructor.
         ~Summary() = default;
 
+        std::string _name() const final { return "dungeon::Summary"; }
+
         //! Initialize after textures are loaded.
         void init();
-
-        std::string _name() const final { return "dungeon::Summary"; }
 
         //---------------------//
         //! @name Dungeon data

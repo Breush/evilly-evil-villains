@@ -1,6 +1,6 @@
 #pragma once
 
-#include "scene/entity.hpp"
+#include "nui/entity.hpp"
 
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -9,7 +9,7 @@ namespace dungeon
 {
     //! A summary bar showing a ressource value and logo.
 
-    class SummaryBar final : public scene::Entity
+    class SummaryBar final : public nui::Entity
     {
         using baseClass = scene::Entity;
 
@@ -22,6 +22,9 @@ namespace dungeon
         ~SummaryBar() = default;
 
         std::string _name() const final { return "dungeon::SummaryBar"; }
+
+        //! Initialize after textures are loaded.
+        void init();
 
         //----------------//
         //! @name Control

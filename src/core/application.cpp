@@ -175,6 +175,12 @@ void Application::processInput()
 
         // Keyboard
         if (event.type == sf::Event::KeyPressed) {
+            // Force refresh
+            if (event.key.code == sf::Keyboard::F2) {
+                s_needRefresh = true;
+                continue;
+            }
+
             // Switch visual debug mode
             if (event.key.code == sf::Keyboard::F3) {
                 s_visualDebug.switchVisible();

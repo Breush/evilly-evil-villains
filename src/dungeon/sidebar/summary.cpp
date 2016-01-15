@@ -17,15 +17,19 @@ Summary::Summary()
     m_frame.setContent(m_stacker);
     m_frame.setContentSizeChangedCallback([this] { updateSize(); });
     m_stacker.setPadding(0.f);
-}
 
-void Summary::init()
-{
     // Bars
     for (auto& bar : m_bars) {
         bar = std::make_unique<SummaryBar>();
         m_stacker.stackBack(*bar);
     }
+}
+
+void Summary::init()
+{
+    // Bars
+    for (auto& bar : m_bars)
+        bar->init();
 
     m_bars[BAR_TIME]->setLogo("resources/time");
     m_bars[BAR_DOSH]->setLogo("resources/dosh");
@@ -49,6 +53,13 @@ void Summary::onSizeChanges()
 void Summary::refreshNUI(const config::NUIGuides& cNUI)
 {
     baseClass::refreshNUI(cNUI);
+
+    // Translations
+    m_bars[BAR_TIME]->setTooltip(_("Date and Time"));
+    m_bars[BAR_DOSH]->setTooltip(_("Dosh"));
+    m_bars[BAR_SOUL]->setTooltip(_("Souls"));
+    m_bars[BAR_FAME]->setTooltip(_("Fame"));
+
     updateSize();
 }
 

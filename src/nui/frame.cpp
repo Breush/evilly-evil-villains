@@ -75,13 +75,10 @@ Frame::Frame()
 //-------------------//
 //----- Routine -----//
 
-void Frame::onSizeChanges()
+void Frame::onChildDetached(scene::Entity& child)
 {
-    refresh();
-}
+    returnif (m_content != &child);
 
-void Frame::onChildDetached(scene::Entity&)
-{
     m_content = nullptr;
     updateSize();
 }
@@ -136,6 +133,8 @@ void Frame::updateSize()
 
         setSize(newSize);
     }
+
+    refresh();
 }
 
 //------------------------------//
@@ -169,7 +168,7 @@ void Frame::setTitle(const std::wstring& title)
         addPart(&m_titleText);
     }
 
-    refreshTitle();
+    updateSize();
 }
 
 void Frame::setContentSizeChangedCallback(ContentSizeChangedCallback contentSizeChangedCallback)

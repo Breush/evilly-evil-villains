@@ -1,8 +1,7 @@
 #pragma once
 
+#include "nui/tooltip.hpp"
 #include "scene/entity.hpp"
-#include "scene/wrappers/rectangleshape.hpp"
-#include "scene/wrappers/richlabel.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
@@ -30,8 +29,8 @@ namespace nui
         //! @{
 
         //! Set the tooltip.
-        //! Have to be detectable for the tooltip to work.
-        void setTooltip(std::wstring tooltipString);
+        //! The entity has to be detectable for the tooltip to work.
+        void setTooltip(const std::wstring& tooltipString);
 
         //! @}
 
@@ -44,7 +43,6 @@ namespace nui
         void onFocusChanged() final;
         void update(const sf::Time& dt) final;
         void drawInternal(sf::RenderTarget& target, sf::RenderStates states) const final;
-        virtual void refreshNUI(const config::NUIGuides& cNUI) override;
 
         //! @}
 
@@ -57,15 +55,6 @@ namespace nui
 
         //! @}
 
-        //--------------------------------//
-        //! @name Internal change updates
-        //! @{
-
-        //! Refresh the tooltip background.
-        void refreshTooltipBackground();
-
-        //! @}
-
     private:
 
         // Focusing
@@ -74,8 +63,7 @@ namespace nui
         float m_focusAnimation = 0.f;           //!< Current delay of focus animation.
 
         // Tooltip
-        scene::RichLabel m_tooltipText;                     //!< The tooltip label.
-        scene::RectangleShape m_tooltipBackground;          //!< The tooltip background.
+        nui::Tooltip m_tooltip;                             //!< The tooltip indeed.
         bool m_tooltipEnabled = false;                      //!< Whether the tooltip is not empty.
         bool m_showTooltip = false;                         //!< Whether the tooltip is currently shown.
         sf::Time m_tooltipTime;                             //!< Current time before showing tooltip.

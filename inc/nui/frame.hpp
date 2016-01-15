@@ -63,7 +63,6 @@ namespace nui
         //! @name Routine
         //! @{
 
-        void onSizeChanges() final;
         void onChildDetached(scene::Entity& child) final;
         void onChildSizeChanges(scene::Entity& child) final;
         void refreshNUI(const config::NUIGuides& cNUI) final;
