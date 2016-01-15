@@ -90,6 +90,9 @@ void Sidebar::refreshNUI(const config::NUIGuides& cNUI)
 
 void Sidebar::onSizeChanges()
 {
+    // Summary
+    m_summary.setWidth(size().x);
+
     // TODO Correctly adapt the background to the size
     // So that there is no streching
     m_background.setSize({size().x - 2.f, size().y});

@@ -2,10 +2,11 @@
 
 #include "scene/entity.hpp"
 #include "context/event.hpp"
+#include "dungeon/sidebar/summarybar.hpp"
+#include "nui/vstacker.hpp"
+#include "nui/frame.hpp"
 
-#include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/Text.hpp>
-
+#include <memory>
 #include <array>
 
 namespace dungeon
@@ -30,13 +31,6 @@ namespace dungeon
     {
         using baseClass = scene::Entity;
 
-        //! The bar containing information of a resource.
-        struct Bar
-        {
-            sf::RectangleShape logo;    //!< The logo beside text.
-            sf::Text text;              //!< The text (usually numbers).
-        };
-
     public:
 
         //! Constructor.
@@ -59,6 +53,15 @@ namespace dungeon
 
         //! @}
 
+        //----------------//
+        //! @name Control
+        //! @{
+
+        //! Set the width used.
+        void setWidth(float width);
+
+        //! @}
+
     protected:
 
         //----------------//
@@ -68,22 +71,25 @@ namespace dungeon
         void onSizeChanges() final;
         void refreshNUI(const config::NUIGuides& cNUI) final;
 
+        //! Set the perfect size for a correct display.
+        void updateSize();
+
         //! @}
 
-        //-----------------------//
-        //! @name Dungeon events
+        //---------------//
+        //! @name Events
         //! @{
 
         void receive(const context::Event& event) final;
 
         //! @}
 
-        //--------------------------------//
-        //! @name Internal change updates
+        //------------//
+        //! @name ICU
         //! @{
 
-        //! Set the perfect size for a correct display.
-        void updateSize();
+        //! Refresh the decorum to the newly set size.
+        void refresh();
 
         //! To be called whenever the dungeon data changed.
         void refreshFromData();
@@ -104,20 +110,14 @@ namespace dungeon
 
     private:
 
-        //! The data of the dungeon to be read from.
-        Data* m_data;
+        Data* m_data;   //!< The data of the dungeon to be read from.
 
-        //! Dungeon name.
-        sf::Text m_dungeonName;
+        // Content
+        nui::Frame m_frame;                                         //!< The box around.
+        nui::VStacker m_stacker;                                    //!< The bars' stacker.
+        std::array<std::unique_ptr<SummaryBar>, BAR_COUNT> m_bars;  //!< The bars specifing a ressource.
 
-        //! The bars containing elements.
-        std::array<Bar, BAR_COUNT> m_bars;
-
-        float m_fontSize = 0.f;     //!< The character size of texts.
-        float m_barWidth = 0.f;     //!< The estimated width of an info bar.
-        float m_barHeight = 0.f;    //!< The estimated height of an info bar.
-        float m_hPadding = 0.f;     //!< The horizontal padding.
-        float m_vPadding = 0.f;     //!< The vertical padding.
-        float m_barImageSide = 0.f; //!< The size of the image in a bar.
+        // Control
+        float m_width = 0.f;    //!< The width of the entity, as defined by the user.
     };
 }

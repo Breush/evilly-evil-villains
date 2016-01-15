@@ -43,9 +43,9 @@ MenuConfig::MenuConfig(StateStack& stack)
     m_areas[AreaID::GRAPHICS].frame.setRelativeOrigin({0.5f, 0.f});
     m_areas[AreaID::AUDIO].frame.setRelativeOrigin({0.5f, 1.f});
 
-    m_areas[AreaID::GENERAL].frame.setRelativePosition({0.25f, 0.15f});
-    m_areas[AreaID::GRAPHICS].frame.setRelativePosition({0.75f, 0.15f});
-    m_areas[AreaID::AUDIO].frame.setRelativePosition({0.75f, 0.85f});
+    m_areas[AreaID::GENERAL].frame.setRelativePosition({0.25f, 0.14f});
+    m_areas[AreaID::GRAPHICS].frame.setRelativePosition({0.75f, 0.14f});
+    m_areas[AreaID::AUDIO].frame.setRelativePosition({0.75f, 0.87f});
 
     // General
     m_areas[AreaID::GENERAL].form.add(m_languageList);
@@ -152,9 +152,9 @@ void MenuConfig::refreshWindow(const config::WindowInfo& cWindow)
     m_background.setSize(resolution);
 
     // Repositioning stackers and resizing elements
-    m_areas[AreaID::GENERAL].scrollArea.setSize({0.45f * resolution.x, 0.645f * resolution.y});
-    m_areas[AreaID::GRAPHICS].scrollArea.setSize({0.45f * resolution.x, 0.29f * resolution.y});
-    m_areas[AreaID::AUDIO].scrollArea.setSize({0.45f * resolution.x, 0.29f * resolution.y});
+    m_areas[AreaID::GENERAL].scrollArea.setSize({0.45f * resolution.x, 0.64f * resolution.y});
+    m_areas[AreaID::GRAPHICS].scrollArea.setSize({0.45f * resolution.x, 0.27f * resolution.y});
+    m_areas[AreaID::AUDIO].scrollArea.setSize({0.45f * resolution.x, 0.27f * resolution.y});
 
     baseClass::refreshWindow(cWindow);
 }

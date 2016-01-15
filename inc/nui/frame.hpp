@@ -6,6 +6,8 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
+#include <functional>
+
 namespace nui
 {
     //! A decorative frame that goes around an other entity.
@@ -13,6 +15,8 @@ namespace nui
     class Frame final : public scene::Entity
     {
         using baseClass = scene::Entity;
+
+        using ContentSizeChangedCallback = std::function<void()>;
 
     public:
 
@@ -34,6 +38,22 @@ namespace nui
         //! The frame's title.
         //! Set it to an empty string to remove title.
         void setTitle(const std::wstring& title);
+
+        //! Set a callback to call whenever the content size changes.
+        void setContentSizeChangedCallback(ContentSizeChangedCallback contentSizeChangedCallback);
+
+        //! @}
+
+        //----------------//
+        //! @name Display
+        //! @{
+
+        //! Force a size for the entity, and possibly by forcing content size.
+        //! User can set a negative size to return to the default auto-size behavior.
+        void setFitSize(const sf::Vector2f& fitSize, bool forceContentSize = false);
+
+        //! Access the paddings used.
+        inline sf::Vector2f paddings() { return {m_hPadding, m_vPadding}; }
 
         //! @}
 
@@ -66,11 +86,21 @@ namespace nui
         //! Refresh the title box and text positions.
         void refreshTitle();
 
+        //! Refresh the content (in case of active fit size).
+        void refreshContent();
+
         //! @}
 
     private:
 
-        scene::Entity* m_content = nullptr;         //!< The entity used as content.
+        scene::Entity* m_content = nullptr;     //!< The entity used as content.
+
+        // Callbacks
+        ContentSizeChangedCallback m_contentSizeChangedCallback = nullptr;  //!< Called whenever the content size changes.
+
+        // Fit size
+        sf::Vector2f m_fitSize = {-1.f, -1.f};  //!< The final size wanted by the user.
+        bool m_forceContentSize = false;        //!< If fit size if active, do we want to strech the content size?
 
         // Frame
         sf::Sprite m_topLeft;       //!< Top-left frame corner.
@@ -96,8 +126,10 @@ namespace nui
         float m_titleRightWidth = 0.f;      //!< Title background right texture width.
 
         // Decorum
-        float m_fontSize = 0.f; //!< Font size as defined in NUI guides.
-        float m_vPadding = 0.f; //!< Vertical padding as defined in NUI guides.
-        float m_hPadding = 0.f; //!< Horizontal padding as defined in NUI guides.
+        float m_fontSize = 0.f;     //!< Font size as defined in NUI guides.
+        float m_vPadding = 0.f;     //!< Vertical padding as defined in NUI guides.
+        float m_hPadding = 0.f;     //!< Horizontal padding as defined in NUI guides.
+        float m_titleHeight = 0.f;  //!< Title height.
+        sf::Vector2f m_titleOffset; //!< Title position offset.
     };
 }

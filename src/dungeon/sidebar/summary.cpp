@@ -1,7 +1,6 @@
 #include "dungeon/sidebar/summary.hpp"
 
 #include "core/gettext.hpp"
-#include "core/application.hpp"
 #include "context/villains.hpp"
 #include "context/worlds.hpp"
 #include "dungeon/data.hpp"
@@ -13,32 +12,28 @@ using namespace dungeon;
 
 Summary::Summary()
 {
-    const auto& font = Application::context().fonts.get("nui");
-
-    // Dungeon name
-    addPart(&m_dungeonName);
-    m_dungeonName.setFont(font);
-    m_dungeonName.setColor(sf::Color::White);
-    m_dungeonName.setStyle(sf::Text::Bold | sf::Text::Underlined);
-
-    // Bars
-    for (auto& bar : m_bars) {
-        addPart(&bar.logo);
-        addPart(&bar.text);
-        bar.text.setFont(font);
-    }
-
-    m_bars[BAR_DOSH].text.setColor({190u, 171u, 21u});
-    m_bars[BAR_SOUL].text.setColor({102u, 190u, 21u});
-    m_bars[BAR_FAME].text.setColor({102u, 151u, 196u});
+    // Frame
+    attachChild(m_frame);
+    m_frame.setContent(m_stacker);
+    m_frame.setContentSizeChangedCallback([this] { updateSize(); });
+    m_stacker.setPadding(0.f);
 }
 
 void Summary::init()
 {
     // Bars
-    m_bars[BAR_DOSH].logo.setTexture(&Application::context().textures.get("resources/dosh"));
-    m_bars[BAR_SOUL].logo.setTexture(&Application::context().textures.get("resources/soul"));
-    m_bars[BAR_FAME].logo.setTexture(&Application::context().textures.get("resources/fame"));
+    for (auto& bar : m_bars) {
+        bar = std::make_unique<SummaryBar>();
+        m_stacker.stackBack(*bar);
+    }
+
+    m_bars[BAR_DOSH]->setLogo("resources/dosh");
+    m_bars[BAR_SOUL]->setLogo("resources/soul");
+    m_bars[BAR_FAME]->setLogo("resources/fame");
+
+    m_bars[BAR_DOSH]->setColor({190u, 171u, 21u});
+    m_bars[BAR_SOUL]->setColor({102u, 190u, 21u});
+    m_bars[BAR_FAME]->setColor({102u, 151u, 196u});
 }
 
 //-------------------//
@@ -46,58 +41,22 @@ void Summary::init()
 
 void Summary::onSizeChanges()
 {
-    m_dungeonName.setPosition(size().x / 2.f, m_vPadding);
-}
-
-void Summary::updateSize()
-{
-    auto maxWidth = std::max(m_barWidth, 2.f * m_hPadding + boundsSize(m_dungeonName).x);
-    setSize({maxWidth, m_vPadding + (BAR_COUNT + 1.f) * m_barHeight});
+    refresh();
 }
 
 void Summary::refreshNUI(const config::NUIGuides& cNUI)
 {
     baseClass::refreshNUI(cNUI);
-
-    m_barImageSide = cNUI.fontVSpace;
-    m_fontSize = cNUI.fontSize;
-    m_hPadding = cNUI.hPadding;
-    m_vPadding = cNUI.vPadding;
-    m_barWidth = 3.f * m_hPadding + m_barImageSide + 10.f * cNUI.fontHSpace;
-    m_barHeight = m_vPadding + m_barImageSide;
-
-    // Dungeon name
-    m_dungeonName.setCharacterSize(m_fontSize);
-
-    // Dungeon bars
-    auto x = m_hPadding;
-    auto y = m_vPadding;
-
-    for (auto& bar : m_bars) {
-        y += m_barHeight;
-
-        bar.logo.setSize({m_barImageSide, m_barImageSide});
-        bar.logo.setPosition(x, y);
-
-        bar.text.setCharacterSize(m_fontSize);
-        bar.text.setPosition(x + m_barImageSide + m_hPadding, y);
-    }
-
     updateSize();
 }
 
-//------------------------//
-//----- Dungeon data -----//
-
-void Summary::useData(Data& data)
+void Summary::updateSize()
 {
-    m_data = &data;
-    setEmitter(&data);
-    refreshFromData();
+    setSize({m_width, m_stacker.size().y + 2.f * m_frame.paddings().y});
 }
 
-//--------------------------//
-//----- Dungeon events -----//
+//------------------//
+//----- Events -----//
 
 void Summary::receive(const context::Event& event)
 {
@@ -113,20 +72,48 @@ void Summary::receive(const context::Event& event)
         refreshFameBar();
 }
 
-//-----------------------------------//
-//----- Internal change updates -----//
+//------------------------//
+//----- Dungeon data -----//
+
+void Summary::useData(Data& data)
+{
+    m_data = &data;
+    setEmitter(&data);
+    refreshFromData();
+}
+
+//-------------------//
+//----- Control -----//
+
+void Summary::setWidth(float width)
+{
+    m_width = width;
+    updateSize();
+}
+
+//---------------//
+//----- ICU -----//
+
+void Summary::refresh()
+{
+    // Frame
+    m_frame.setFitSize(size());
+
+    // Bars
+    float barWidth = m_width - 2.f * m_frame.paddings().x;
+    for (auto& bar : m_bars)
+        if (bar != nullptr)
+            bar->setWidth(barWidth);
+}
 
 void Summary::refreshFromData()
 {
-    m_dungeonName.setString(m_data->name());
-    m_dungeonName.setOrigin(boundsSize(m_dungeonName).x / 2.f, 0.f);
+    m_frame.setTitle(m_data->name());
 
     refreshTimeBar();
     refreshDoshBar();
     refreshSoulBar();
     refreshFameBar();
-
-    updateSize();
 }
 
 void Summary::refreshTimeBar()
@@ -144,7 +131,7 @@ void Summary::refreshTimeBar()
     std::wstringstream str;
     str << std::setfill(L'0') << std::setw(2) << day << L' ' << months[month] << L' ' << year;
 
-    m_bars[BAR_TIME].text.setString(str.str());
+    m_bars[BAR_TIME]->setText(str.str());
 }
 
 void Summary::refreshDoshBar()
@@ -155,7 +142,7 @@ void Summary::refreshDoshBar()
         text = toWString(dosh);
     }
 
-    m_bars[BAR_DOSH].text.setString(text);
+    m_bars[BAR_DOSH]->setText(text);
 }
 
 void Summary::refreshSoulBar()
@@ -166,7 +153,7 @@ void Summary::refreshSoulBar()
         text = toWString(soul);
     }
 
-    m_bars[BAR_SOUL].text.setString(text);
+    m_bars[BAR_SOUL]->setText(text);
 }
 
 void Summary::refreshFameBar()
@@ -177,5 +164,5 @@ void Summary::refreshFameBar()
         text = toWString(fame);
     }
 
-    m_bars[BAR_FAME].text.setString(text);
+    m_bars[BAR_FAME]->setText(text);
 }

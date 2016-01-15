@@ -69,7 +69,6 @@ Frame::Frame()
     m_titleLeftWidth = static_cast<float>(titleLeftTexture.getSize().x);
     m_titleRightWidth = static_cast<float>(titleRightTexture.getSize().x);
 
-    m_titleMiddle.setOrigin(-m_titleLeftWidth, 0.f);
     m_titleRight.setOrigin(m_titleRightWidth, 0.f);
 }
 
@@ -90,6 +89,12 @@ void Frame::onChildDetached(scene::Entity&)
 void Frame::onChildSizeChanges(scene::Entity& child)
 {
     returnif (m_content != &child);
+
+    if (m_contentSizeChangedCallback != nullptr)
+        m_contentSizeChangedCallback();
+
+    returnif (m_forceContentSize);
+
     updateSize();
 }
 
@@ -98,8 +103,12 @@ void Frame::refreshNUI(const config::NUIGuides& cNUI)
     baseClass::refreshNUI(cNUI);
 
     m_hPadding = cNUI.hPadding * 2.f;
-    m_vPadding = cNUI.vPadding / 2.f;
+    m_vPadding = cNUI.vPadding * 2.f;
     m_fontSize = cNUI.fontSize;
+
+    m_titleHeight = m_fontSize + 0.5f * m_vPadding;
+    m_titleOffset.x = m_hPadding;
+    m_titleOffset.y = 0.4f * m_titleHeight;
 
     m_titleText.setCharacterSize(m_fontSize);
 
@@ -108,10 +117,25 @@ void Frame::refreshNUI(const config::NUIGuides& cNUI)
 
 void Frame::updateSize()
 {
-    if (m_content == nullptr)
-        setSize(2.f * m_cornerSize);
-    else
-        setSize(m_content->size() + 2.f * m_cornerSize);
+    // Fit size
+    if (m_fitSize.x >= 0.f && m_fitSize.y >= 0.f) {
+        setSize(m_fitSize);
+    }
+
+    // Auto size
+    else {
+        sf::Vector2f newSize;
+        newSize.x = 2.f * m_hPadding;
+        newSize.y = 2.f * m_vPadding;
+
+        if (!m_titleText.getString().isEmpty())
+            newSize.y += m_titleOffset.y;
+
+        if (m_content != nullptr)
+            newSize += m_content->size();
+
+        setSize(newSize);
+    }
 }
 
 //------------------------------//
@@ -148,6 +172,21 @@ void Frame::setTitle(const std::wstring& title)
     refreshTitle();
 }
 
+void Frame::setContentSizeChangedCallback(ContentSizeChangedCallback contentSizeChangedCallback)
+{
+    m_contentSizeChangedCallback = contentSizeChangedCallback;
+}
+
+//-------------------//
+//----- Display -----//
+
+void Frame::setFitSize(const sf::Vector2f& fitSize, bool forceContentSize)
+{
+    m_fitSize = fitSize;
+    m_forceContentSize = forceContentSize;
+    updateSize();
+}
+
 //---------------//
 //----- ICU -----//
 
@@ -155,56 +194,72 @@ void Frame::refresh()
 {
     refreshTitle();
     refreshFrame();
+    refreshContent();
 }
 
 void Frame::refreshFrame()
 {
-    m_topLeft.setPosition(0.f, 0.f);
-    m_topRight.setPosition(size().x, 0.f);
+    float frameOffsetY = 0.f;
+    if (!m_titleText.getString().isEmpty())
+        frameOffsetY += m_titleOffset.y;
+
+    m_topLeft.setPosition(0.f, frameOffsetY);
+    m_topRight.setPosition(size().x, frameOffsetY);
     m_bottomLeft.setPosition(0.f, size().y);
     m_bottomRight.setPosition(size().x, size().y);
 
-    m_top.setPosition(m_cornerSize.x, 0.f);
-    m_left.setPosition(0.f, m_cornerSize.y);
-    m_right.setPosition(size().x, m_cornerSize.y);
+    float fillWidth = size().x - 2.f * m_cornerSize.x;
+    float fillHeight = size().y - 2.f * m_cornerSize.y - frameOffsetY;
+
+    m_fill.setPosition(m_cornerSize.x, m_cornerSize.y + frameOffsetY);
+    m_fill.setSize({fillWidth, fillHeight});
+
+    m_top.setPosition(m_cornerSize.x, frameOffsetY);
+    m_left.setPosition(0.f, m_cornerSize.y + frameOffsetY);
+    m_right.setPosition(size().x, m_cornerSize.y + frameOffsetY);
     m_bottom.setPosition(m_cornerSize.x, size().y);
 
-    m_fill.setPosition(m_cornerSize);
-
-    m_top.setSize({size().x - 2.f * m_cornerSize.x, m_cornerSize.y});
-    m_left.setSize({m_cornerSize.x, size().y - 2.f * m_cornerSize.y});
-    m_right.setSize({m_cornerSize.x, size().y - 2.f * m_cornerSize.y});
-    m_bottom.setSize({size().x - 2.f * m_cornerSize.x, m_cornerSize.y});
-
-    m_fill.setSize(size() - 2.f * m_cornerSize);
-
-    returnif (m_content == nullptr);
-
-    m_content->setLocalPosition(m_cornerSize);
+    m_top.setSize({fillWidth, m_cornerSize.y});
+    m_left.setSize({m_cornerSize.x, fillHeight});
+    m_right.setSize({m_cornerSize.x, fillHeight});
+    m_bottom.setSize({fillWidth, m_cornerSize.y});
 }
 
 void Frame::refreshTitle()
 {
     returnif (m_titleText.getString().isEmpty());
 
-    sf::Vector2f titleSize;
     auto textWidth = boundsSize(m_titleText).x;
-    titleSize.x = textWidth + 2.f * m_hPadding;
-    titleSize.y = m_fontSize + 2.f * m_vPadding;
-    titleSize.x = std::max(5.f * m_hPadding, titleSize.x);
+    float titleWidth = textWidth + 2.f * m_hPadding;
+    titleWidth = std::max(5.f * m_hPadding, titleWidth);
 
-    sf::Vector2f titleOffset;
-    titleOffset.x = m_hPadding;
-    titleOffset.y = -0.4f * titleSize.y;
-
+    float titleVPadding = 0.5f * (m_titleHeight - m_fontSize);
     m_titleText.setOrigin(0.5f * textWidth, 0.1f * m_fontSize);
-    m_titleText.setPosition(titleOffset.x + 0.5f * titleSize.x, titleOffset.y + m_vPadding);
+    m_titleText.setPosition(m_titleOffset.x + 0.5f * titleWidth, titleVPadding);
 
-    m_titleLeft.setPosition(titleOffset);
-    m_titleMiddle.setPosition(titleOffset);
-    m_titleRight.setPosition(titleOffset.x + titleSize.x, titleOffset.y);
+    m_titleLeft.setPosition(m_titleOffset.x, 0.f);
+    m_titleMiddle.setPosition(m_titleOffset.x + m_titleLeftWidth, 0.f);
+    m_titleRight.setPosition(m_titleOffset.x + titleWidth, 0.f);
 
-    m_titleLeft.setSize({m_titleLeftWidth, titleSize.y});
-    m_titleMiddle.setSize({titleSize.x - (m_titleLeftWidth + m_titleRightWidth), titleSize.y});
-    m_titleRight.setSize({m_titleRightWidth, titleSize.y});
+    m_titleLeft.setSize({m_titleLeftWidth, m_titleHeight});
+    m_titleMiddle.setSize({titleWidth - (m_titleLeftWidth + m_titleRightWidth), m_titleHeight});
+    m_titleRight.setSize({m_titleRightWidth, m_titleHeight});
+}
+
+void Frame::refreshContent()
+{
+    returnif (m_content == nullptr);
+
+    float frameOffsetY = 0.f;
+    if (!m_titleText.getString().isEmpty())
+        frameOffsetY += m_titleOffset.y;
+
+    m_content->setLocalPosition({m_hPadding, m_vPadding + frameOffsetY});
+
+    returnif (!m_forceContentSize);
+
+    auto contentSize = size();
+    contentSize.x -= 2.f * m_hPadding;
+    contentSize.y -= 2.f * m_vPadding - frameOffsetY;
+    m_content->setSize(contentSize);
 }
