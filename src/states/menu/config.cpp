@@ -15,8 +15,6 @@ using namespace states;
 MenuConfig::MenuConfig(StateStack& stack)
     : baseClass(stack)
 {
-    // TODO Add translatable tooltips to explain each options
-
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
 
@@ -147,6 +145,22 @@ void MenuConfig::refreshWindow(const config::WindowInfo& cWindow)
 
     m_buttons[0u].setText(_("Back"));
     m_buttons[1u].setText(_("Apply changes"));
+
+    // Translated tooltips
+    m_areas[AreaID::GENERAL].form.setTooltip(0u, _("The language to use for all texts."));
+    m_areas[AreaID::GENERAL].form.setTooltip(1u, _("The global size of the User Interface.\nIf you play with a small resolution,\nyou might want to set it smaller."));
+    m_areas[AreaID::GENERAL].form.setTooltip(2u, _("The size factor to apply to all texts.\nThis is a good option for video makers,\nas any text will become bigger."));
+    m_areas[AreaID::GENERAL].form.setTooltip(3u, _("The speed when map-scrolling\nduring dungeon design."));
+    m_areas[AreaID::GENERAL].form.setTooltip(4u, _("The speed when zooming in and out\nduring dungeon design."));
+
+    m_areas[AreaID::GRAPHICS].form.setTooltip(0u, _("Fixed resolution of the game.\nIn fullscreen mode, this will change\nyour desktop resolution for the duration of the game."));
+    m_areas[AreaID::GRAPHICS].form.setTooltip(1u, _("Whether we are in fullscreen\nor in windowed mode."));
+    m_areas[AreaID::GRAPHICS].form.setTooltip(2u, _("Vertical synchronisation.\nIf active, the game tries to match you monitor refresh rate.\nThis is usually a good thing to enable because it fixes screen tearing.\nHowever, on older computers, this can be a source of inputs lag."));
+    m_areas[AreaID::GRAPHICS].form.setTooltip(3u, _("0 to deactivate anti-aliasing.\nIf active, the game smoothes the edges.\nOn older computers, this can be a source of render lag or have no effect."));
+
+    m_areas[AreaID::AUDIO].form.setTooltip(0u, _("General volume factor."));
+    m_areas[AreaID::AUDIO].form.setTooltip(1u, _("Music volume factor."));
+    m_areas[AreaID::AUDIO].form.setTooltip(2u, _("Sounds volume factor."));
 
     // Background
     m_background.setSize(resolution);

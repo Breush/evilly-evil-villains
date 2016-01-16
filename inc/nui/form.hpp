@@ -1,8 +1,8 @@
 #pragma once
 
 #include "scene/entity.hpp"
-#include "scene/wrappers/label.hpp"
 #include "nui/tablelayout.hpp"
+#include "nui/text.hpp"
 
 #include <vector>
 
@@ -37,6 +37,9 @@ namespace nui
         //! Set the label of a line.
         void setText(uint line, std::wstring text);
 
+        //! Set the tooltip associated to the text.
+        void setTooltip(uint line, const std::wstring& tooltip);
+
         //! @}
 
     protected:
@@ -46,12 +49,16 @@ namespace nui
         //! @{
 
         void onChildSizeChanges(scene::Entity& child) final;
+        void refreshNUI(const config::NUIGuides& cNUI) final;
 
         //! @}
 
     private:
 
-        nui::TableLayout m_table;                             //!< The layout.
-        std::vector<std::unique_ptr<scene::Label>> m_labels;  //!< The labels.
+        nui::TableLayout m_table;                           //!< The layout.
+        std::vector<std::unique_ptr<nui::Text>> m_labels;   //!< The labels.
+
+        // Decorum
+        float m_fontSize = 0.f; //!< Font size as defined in the NUI guides.
     };
 }

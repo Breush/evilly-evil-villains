@@ -1,19 +1,60 @@
 #include "nui/tooltip.hpp"
 
+#include "core/application.hpp"
+#include "tools/vector.hpp"
+#include "tools/string.hpp"
+
 using namespace nui;
 
 Tooltip::Tooltip()
 {
-    attachChild(m_background);
-    m_background.setFillColor({0u, 0u, 0u, 222u});
-    m_background.setOutlineColor(sf::Color::White);
-    m_background.setOutlineThickness(1.f);
-    m_background.setDepth(-999.f);
+    // Corners
+    addPart(&m_topLeft);
+    addPart(&m_topRight);
+    addPart(&m_bottomLeft);
+    addPart(&m_bottomRight);
 
-    m_background.attachChild(m_text);
-    m_text.setFont("nui");
-    m_text.setColor(sf::Color::White);
-    m_text.setLocalPosition({5.f, 5.f});
+    const auto& topLeftTexture = Application::context().textures.get("nui/tooltip/top_left");
+
+    m_topLeft.setTexture(topLeftTexture);
+    m_topRight.setTexture(topLeftTexture);
+    m_bottomLeft.setTexture(topLeftTexture);
+    m_bottomRight.setTexture(topLeftTexture);
+
+    m_topRight.setScale(-1.f, 1.f);
+    m_bottomLeft.setScale(1.f, -1.f);
+    m_bottomRight.setScale(-1.f, -1.f);
+
+    m_cornerSize = sf::v2f(topLeftTexture.getSize());
+
+    // Borders
+    addPart(&m_top);
+    addPart(&m_left);
+    addPart(&m_right);
+    addPart(&m_bottom);
+
+    const auto& topTexture = Application::context().textures.get("nui/tooltip/top");
+    const auto& leftTexture = Application::context().textures.get("nui/tooltip/left");
+
+    m_top.setTexture(&topTexture);
+    m_left.setTexture(&leftTexture);
+    m_right.setTexture(&leftTexture);
+    m_bottom.setTexture(&topTexture);
+
+    m_right.setScale(-1.f, 1.f);
+    m_bottom.setScale(1.f, -1.f);
+
+    // Fill
+    addPart(&m_fill);
+
+    const auto& fillTexture = Application::context().textures.get("nui/tooltip/fill");
+
+    m_fill.setTexture(&fillTexture);
+
+    // Text
+    addPart(&m_text);
+    m_text.setFont(Application::context().fonts.get("nui"));
+    m_text.setColor({210, 210, 210}); // Light grey
 }
 
 //-------------------//
@@ -23,8 +64,23 @@ void Tooltip::refreshNUI(const config::NUIGuides& cNUI)
 {
     baseClass::refreshNUI(cNUI);
 
-    m_text.setCharacterSize(cNUI.fontSize);
+    m_hPadding = cNUI.hPadding;
+    m_vPadding = cNUI.vPadding;
 
+    m_text.setCharacterSize(0.8f * cNUI.fontSize);
+
+    updateSize();
+}
+
+void Tooltip::updateSize()
+{
+    auto textSize = boundsSize(m_text);
+
+    sf::Vector2f newSize;
+    newSize.x = textSize.x + 2.f * m_hPadding;
+    newSize.y = textSize.y + 2.f * m_vPadding;
+
+    setSize(newSize);
     refresh();
 }
 
@@ -33,8 +89,8 @@ void Tooltip::refreshNUI(const config::NUIGuides& cNUI)
 
 void Tooltip::setText(const std::wstring& text)
 {
-    m_text.setText(text);
-    refresh();
+    m_text.setString(text);
+    updateSize();
 }
 
 //---------------//
@@ -42,7 +98,28 @@ void Tooltip::setText(const std::wstring& text)
 
 void Tooltip::refresh()
 {
-    auto backgroundSize = m_text.size() + 10.f;
-    m_background.setSize(backgroundSize);
-    m_background.setOrigin({0.5f * backgroundSize.x, backgroundSize.y + 5.f});
+    // Frame
+    m_topLeft.setPosition(0.f, 0.f);
+    m_topRight.setPosition(size().x, 0.f);
+    m_bottomLeft.setPosition(0.f, size().y);
+    m_bottomRight.setPosition(size().x, size().y);
+
+    float fillWidth = size().x - 2.f * m_cornerSize.x;
+    float fillHeight = size().y - 2.f * m_cornerSize.y;
+
+    m_fill.setPosition(m_cornerSize.x, m_cornerSize.y);
+    m_fill.setSize({fillWidth, fillHeight});
+
+    m_top.setPosition(m_cornerSize.x, 0.f);
+    m_left.setPosition(0.f, m_cornerSize.y);
+    m_right.setPosition(size().x, m_cornerSize.y);
+    m_bottom.setPosition(m_cornerSize.x, size().y);
+
+    m_top.setSize({fillWidth, m_cornerSize.y});
+    m_left.setSize({m_cornerSize.x, fillHeight});
+    m_right.setSize({m_cornerSize.x, fillHeight});
+    m_bottom.setSize({fillWidth, m_cornerSize.y});
+
+    // Text
+    m_text.setPosition({m_hPadding, m_vPadding});
 }

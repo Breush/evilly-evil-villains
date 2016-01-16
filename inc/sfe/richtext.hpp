@@ -48,7 +48,7 @@ namespace sfe
         void setString(const sf::String& source);
 
         //! Get the source string.
-        inline const sf::String& getString() const { return m_sourceString; };
+        inline const sf::String& getString() const { return m_sourceString; }
 
         //! Set the default color.
         void setColor(const sf::Color& color);

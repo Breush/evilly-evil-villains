@@ -3,6 +3,7 @@
 #include "nui/entity.hpp"
 #include "nui/scrollarea.hpp"
 #include "nui/tablelayout.hpp"
+#include "scene/wrappers/richlabel.hpp"
 
 namespace nui
 {

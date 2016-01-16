@@ -1,5 +1,6 @@
 #include "nui/pushbutton.hpp"
 
+#include "core/application.hpp"
 #include "tools/tools.hpp"
 #include "tools/string.hpp"
 

@@ -1,5 +1,6 @@
 #include "dungeon/data.hpp"
 
+#include "core/application.hpp"
 #include "context/worlds.hpp"
 #include "dungeon/debug.hpp"
 #include "dungeon/graph.hpp"
