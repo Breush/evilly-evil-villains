@@ -21,6 +21,7 @@ VillainDisplay::VillainDisplay()
     attachChild(m_image);
     m_image.setRelativePosition({0.5f, 1.f});
     m_image.setRelativeOrigin({0.5f, 1.f});
+    m_image.setDepth3D(5.f);
 
     // Villain name
     attachChild(m_villainName);
@@ -39,6 +40,15 @@ void VillainDisplay::onSizeChanges()
     refreshImageSize();
 }
 
+void VillainDisplay::updateRoutine(const sf::Time& dt)
+{
+    returnif (!m_hovered && !m_selected);
+
+    m_yawTime += dt.asSeconds();
+    float yaw = 45.f * std::sin(m_yawTime);
+    m_image.setYaw(yaw);
+}
+
 //------------------//
 //----- Events -----//
 
@@ -49,6 +59,18 @@ bool VillainDisplay::handleMouseButtonPressed(const sf::Mouse::Button button, co
         return true;
     }
     return false;
+}
+
+bool VillainDisplay::handleMouseMoved(const sf::Vector2f&, const sf::Vector2f&)
+{
+    returnif (m_hovered) true;
+    m_hovered = true;
+    return false;
+}
+
+void VillainDisplay::handleMouseLeft()
+{
+    m_hovered = false;
 }
 
 //-------------------//
@@ -72,7 +94,7 @@ void VillainDisplay::setSelected(bool selected)
 
 void VillainDisplay::refreshImageSize()
 {
-    auto texture = m_image.texture();
+    auto texture = m_image.getTexture();
     returnif (texture == nullptr);
 
     auto textureSize = sf::v2f(texture->getSize());
@@ -80,6 +102,7 @@ void VillainDisplay::refreshImageSize()
 
     m_image.setSize(textureSize);
     m_image.setScale({scaleFactor, scaleFactor});
+    m_image.setOrigin3D({0.5f * textureSize.x, 0.5f * textureSize.y, 0.f});
 }
 
 void VillainDisplay::refreshFromSource()

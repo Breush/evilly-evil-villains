@@ -1,7 +1,7 @@
 #pragma once
 
 #include "scene/entity.hpp"
-#include "scene/wrappers/rectangleshape.hpp"
+#include "scene/wrappers/sprite3d.hpp"
 #include "scene/wrappers/richlabel.hpp"
 #include "context/villains.hpp"
 
@@ -59,6 +59,7 @@ namespace dungeon
         //! @{
 
         void onSizeChanges() final;
+        void updateRoutine(const sf::Time& dt) final;
 
         //! @}
 
@@ -67,6 +68,8 @@ namespace dungeon
         //! @{
 
         bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        bool handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        void handleMouseLeft() final;
 
         //! @}
 
@@ -87,13 +90,17 @@ namespace dungeon
         const context::Villain* m_source = nullptr; //!< The source.
         bool m_selected = false;                    //!< Is it displayed as selected?
 
+        // Hovering
+        bool m_hovered = false; //!< Is the entity hovered?
+        float m_yawTime = 0.f;  //!< The time passed yawing.
+
         // Callbacks
         ClickCallback m_clickCallback = nullptr;    //!< Called whenever a click occured.
 
         // Decorum
         sf::RectangleShape m_background;    //!< The background.
-        scene::RectangleShape m_image;      //!< The image to display.
         scene::RichLabel m_villainName;     //!< The villain name.
+        scene::Sprite3D m_image;            //!< The image to display.
     };
 
     using VillainDisplayPtr = std::unique_ptr<VillainDisplay>;
