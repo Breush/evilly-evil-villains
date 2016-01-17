@@ -10,81 +10,24 @@ ContextMenu::ContextMenu()
 {
     setVisible(false);
 
-    // Background
-    m_background.setTexture(&Application::context().textures.get("nui/contextmenu"));
-
-    // Title
-    m_title.setFont(Application::context().fonts.get("nui"));
-    m_title.setStyle(sf::Text::Bold);
-    m_title.setColor(sf::Color::White);
+    // Content
+    attachChild(m_frame);
+    m_frame.setContent(m_stacker);
+    m_stacker.setPadding(0.f);
 }
 
 //-------------------//
 //----- Routine -----//
 
-void ContextMenu::onSizeChanges()
+void ContextMenu::onChildSizeChanges(scene::Entity& child)
 {
-    returnif (m_title.getString().isEmpty());
-
-    // Reset
-    clearParts();
-
-    // Background
-    addPart(&m_background);
-    m_background.setSize(size());
-
-    // Title
-    if (!m_title.getString().isEmpty())
-        addPart(&m_title);
-
-    // Choices
-    for (auto& choice : m_choices)
-        addPart(&choice.text);
+    returnif (&m_frame != &child);
+    updateSize();
 }
 
 void ContextMenu::updateSize()
 {
-    // Getting size and setting positions
-    auto xOffset = m_padding;
-    auto yOffset = m_padding;
-
-    sf::Vector2f border(2.f * m_padding, 2.f * m_padding);
-
-    // Title
-    if (!m_title.getString().isEmpty()) {
-        auto bounds = m_title.getLocalBounds();
-        m_title.setPosition(xOffset, yOffset);
-        border.x = std::max(border.x, 2.f * m_padding + bounds.left + bounds.width);
-        border.y += m_choiceHeight;
-        yOffset += m_choiceHeight;
-    }
-
-    // Choices
-    for (auto& choice : m_choices) {
-        auto bounds = choice.text.getLocalBounds();
-        choice.text.setPosition(xOffset, yOffset);
-        border.x = std::max(border.x, 2.f * m_padding + bounds.left + bounds.width);
-        border.y += m_choiceHeight;
-        yOffset += m_choiceHeight;
-    }
-
-    setSize(border);
-}
-
-void ContextMenu::refreshNUI(const config::NUIGuides& cNUI)
-{
-    baseClass::refreshNUI(cNUI);
-
-    m_fontSize = cNUI.fontSize;
-    m_padding = cNUI.hPadding;
-    m_choiceHeight = m_padding + cNUI.fontVSpace;
-
-    // Update font size
-    m_title.setCharacterSize(m_fontSize);
-    for (auto& choiceInfo : m_choices)
-        choiceInfo.text.setCharacterSize(m_fontSize);
-
-    updateSize();
+    setSize(m_frame.size());
 }
 
 //------------------------//
@@ -92,18 +35,18 @@ void ContextMenu::refreshNUI(const config::NUIGuides& cNUI)
 
 void ContextMenu::handleGlobalEvent(const sf::Event& event)
 {
-    // Hide on click anywhere
     if (event.type == sf::Event::MouseButtonPressed && visible())
         markForVisible(false);
 }
 
 bool ContextMenu::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
-    uint choice = choiceFromCoords(mousePos);
+    uint selectedChoiceID = choiceIDFromPosition(mousePos);
+    returnif (selectedChoiceID >= m_choices.size()) false;
 
-    if (choice < m_choices.size() && m_choices[choice].callback != nullptr) {
+    if (m_choices[selectedChoiceID].callback != nullptr) {
         Application::context().sounds.play("accept");
-        m_choices[choice].callback();
+        m_choices[selectedChoiceID].callback();
     }
     else {
         Application::context().sounds.play("refuse");
@@ -115,29 +58,44 @@ bool ContextMenu::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Ve
 
 bool ContextMenu::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f&)
 {
-    uint choice = choiceFromCoords(mousePos);
+    uint hoveredChoiceID = choiceIDFromPosition(mousePos);
 
-    resetPartsShader();
-    if (choice < m_choices.size() && m_choices[choice].callback != nullptr)
-        setPartShader(&m_choices[choice].text, "nui/hover");
+    if (m_hoveredChoiceID != -1u)
+        m_choices[m_hoveredChoiceID].label->setShader("");
+    m_hoveredChoiceID = hoveredChoiceID;
+
+    returnif (hoveredChoiceID >= m_choices.size()) false;
+    returnif (m_choices[hoveredChoiceID].callback == nullptr) true;
+
+    m_choices[hoveredChoiceID].label->setShader("nui/hover");
 
     return true;
 }
 
 void ContextMenu::handleMouseLeft()
 {
-    resetPartsShader();
+    m_hoveredChoiceID = -1u;
 }
 
 //-------------------//
 //----- Choices -----//
 
-uint ContextMenu::choiceFromCoords(const sf::Vector2f& coords) const
+void ContextMenu::setTitle(const std::wstring& title)
 {
-    if (m_title.getString().isEmpty())
-        return (coords.y - m_padding) / m_choiceHeight;
-    else
-        return (coords.y - m_padding) / m_choiceHeight - 1;
+    m_frame.setTitle(title);
+}
+
+void ContextMenu::addChoice(const std::wstring& text, Callback callback)
+{
+    ChoiceInfo choiceInfo;
+
+    choiceInfo.label = std::make_unique<scene::Label>();
+    choiceInfo.label->setText(text);
+    choiceInfo.label->setPrestyle(scene::Label::Prestyle::NUI);
+    choiceInfo.callback = callback;
+
+    m_choices.emplace_back(std::move(choiceInfo));
+    m_stacker.stackBack(*m_choices.back().label);
 }
 
 void ContextMenu::clearChoices()
@@ -145,27 +103,16 @@ void ContextMenu::clearChoices()
     m_choices.clear();
 }
 
-void ContextMenu::setTitle(const std::wstring& title)
+uint ContextMenu::choiceIDFromPosition(const sf::Vector2f& relPos) const
 {
-    m_title.setString(title);
-    updateSize();
-}
+    float yOffset = m_stacker.localPosition().y;
+    float yOffsetPrevious = yOffset;
 
-void ContextMenu::addChoice(const std::wstring& text, Callback callback)
-{
-    ChoiceInfo choiceInfo;
+    for (uint choiceID = 0u; choiceID < m_choices.size(); ++choiceID) {
+        yOffset += m_choices[choiceID].label->size().y;
+        returnif (relPos.y > yOffsetPrevious && relPos.y <= yOffset) choiceID;
+        yOffsetPrevious = yOffset;
+    }
 
-    choiceInfo.text.setString(text);
-    choiceInfo.callback = callback;
-
-    // Getting font from holder
-    sf::Font& font = Application::context().fonts.get("nui");
-    choiceInfo.text.setFont(font);
-    choiceInfo.text.setCharacterSize(m_fontSize);
-
-    if (callback == nullptr) choiceInfo.text.setColor(sf::Color(150, 150, 150));
-    else choiceInfo.text.setColor(sf::Color::White);
-
-    m_choices.emplace_back(std::move(choiceInfo));
-    updateSize();
+    return -1u;
 }

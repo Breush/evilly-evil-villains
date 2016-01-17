@@ -1,9 +1,9 @@
 #pragma once
 
 #include "scene/entity.hpp"
-
-#include <SFML/Graphics/Text.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
+#include "scene/wrappers/label.hpp"
+#include "nui/frame.hpp"
+#include "nui/vstacker.hpp"
 
 #include <sstream>
 #include <functional>
@@ -24,13 +24,6 @@ namespace nui
 
         //! Type for function callback when a choice is clicked.
         using Callback = std::function<void()>;
-
-        //! A choice is a sf::Text and a function callback.
-        struct ChoiceInfo
-        {
-            sf::Text text;      //!< The text to display when choice is selected.
-            Callback callback;  //!< The callback function to call when choice accepted.
-        };
 
     public:
 
@@ -55,8 +48,8 @@ namespace nui
         //! Remove all choices from the list.
         void clearChoices();
 
-        //! The choice hovered at specific coordinates.
-        uint choiceFromCoords(const sf::Vector2f& coords) const;
+        //! The choice hovered at specific position.
+        uint choiceIDFromPosition(const sf::Vector2f& relPos) const;
 
         //! @}
 
@@ -75,8 +68,10 @@ namespace nui
         //! @name Routine
         //! @{
 
-        void onSizeChanges() final;
-        void refreshNUI(const config::NUIGuides& cNUI) final;
+        void onChildSizeChanges(scene::Entity& child);
+
+        //! Update the absolute size.
+        void updateSize();
 
         //! @}
 
@@ -90,34 +85,23 @@ namespace nui
 
         //! @}
 
-        //-------------------------------//
-        //! @name Internal state updates
-        //! @{
-
-        //! Update the absolute size.
-        void updateSize();
-
-        //! @}
+        //! A choice is a sf::Text and a function callback.
+        struct ChoiceInfo
+        {
+            std::unique_ptr<scene::Label> label;    //!< The text to display when choice is selected.
+            Callback callback;                      //!< The callback function to call when choice accepted.
+        };
 
     private:
 
-        //! The background used, can have a texture.
-        sf::RectangleShape m_background;
+        std::vector<ChoiceInfo> m_choices;  //!< The list of all choices.
 
-        //! The title displayed.
-        sf::Text m_title;
+        // Content
+        nui::Frame m_frame;         //!< Context menu frame.
+        nui::VStacker m_stacker;    //!< Stack all the choices.
 
-        //! The list of all choices.
-        std::vector<ChoiceInfo> m_choices;
-
-        //! The size of the font.
-        float m_fontSize;
-
-        //! The global padding.
-        float m_padding;
-
-        //! The height of a choice.
-        float m_choiceHeight;
+        // Hovering
+        uint m_hoveredChoiceID = -1u;   //!< The hovered choice.
     };
 }
 
