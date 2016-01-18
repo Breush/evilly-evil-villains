@@ -39,13 +39,25 @@ namespace sfe
         void setString(const std::wstring& string);
 
         //! Get the source string.
-        inline const sf::String& getString() const { return m_wrapString; };
+        inline const sf::String& getString() const { return m_wrapString; }
 
         //! Set the default color.
-        void setColor(const sf::Color& color);
+        void setFillColor(const sf::Color& color);
 
         //! Get the default color.
-        inline const sf::Color& getColor() const { return m_text.getColor(); }
+        inline const sf::Color& getFillColor() const { return m_text.getFillColor(); }
+
+        //! Set the outline color.
+        void setOutlineColor(const sf::Color& color);
+
+        //! Get the outline color.
+        inline const sf::Color& getOutlineColor() const { return m_text.getOutlineColor(); }
+
+        //! Set the outline thickness.
+        void setOutlineThickness(float thickness);
+
+        //! Get the outline thickness.
+        inline float getOutlineThickness() const { return m_text.getOutlineThickness(); }
 
         //! Set the default character size.
         void setCharacterSize(uint characterSize);

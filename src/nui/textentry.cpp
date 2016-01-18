@@ -28,7 +28,7 @@ TextEntry::TextEntry()
 
     addPart(&m_text);
     m_text.setFont(Application::context().fonts.get("nui"));
-    m_text.setColor(sf::Color::White);
+    m_text.setFillColor(sf::Color::White);
 
     addPart(&m_cursor);
     m_cursor.setShade(0.f);

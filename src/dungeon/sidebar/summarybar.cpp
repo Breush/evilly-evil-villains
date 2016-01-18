@@ -77,9 +77,9 @@ void SummaryBar::setLogo(const std::string& textureID)
     m_logo.setTexture(textureID.empty()? nullptr : &Application::context().textures.get(textureID));
 }
 
-void SummaryBar::setColor(const sf::Color& color)
+void SummaryBar::setTextColor(const sf::Color& color)
 {
-    m_text.setColor(color);
+    m_text.setFillColor(color);
 }
 
 void SummaryBar::setWidth(float width)

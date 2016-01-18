@@ -37,7 +37,7 @@ namespace dungeon
         void setLogo(const std::string& textureID);
 
         //! Set the color of the text.
-        void setColor(const sf::Color& color);
+        void setTextColor(const sf::Color& color);
 
         //! Set the width used.
         void setWidth(float width);

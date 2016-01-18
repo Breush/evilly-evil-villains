@@ -55,7 +55,7 @@ Frame::Frame()
 
     // Title
     m_titleText.setFont(Application::context().fonts.get("nui"));
-    m_titleText.setColor(sf::Color::White);
+    m_titleText.setFillColor(sf::Color::White);
     m_titleText.setStyle(sf::Text::Bold);
 
     const auto& titleLeftTexture = Application::context().textures.get("nui/frame/title_left");

@@ -40,7 +40,7 @@ void Form::add(std::wstring text, scene::Entity& child)
     m_labels.emplace_back(std::make_unique<nui::Text>());
     m_labels[line]->setString(text);
     m_labels[line]->setFont("nui");
-    m_labels[line]->setColor(sf::Color::White);
+    m_labels[line]->setFillColor(sf::Color::White);
     m_labels[line]->setCharacterSize(m_fontSize);
 
     m_table.setDimensions(m_labels.size(), 2u);

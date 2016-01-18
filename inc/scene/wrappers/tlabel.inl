@@ -42,9 +42,21 @@ namespace scene
     }
 
     template<class Text_t>
-    void TLabel<Text_t>::setColor(const sf::Color& color)
+    void TLabel<Text_t>::setFillColor(const sf::Color& color)
     {
-        m_text.setColor(color);
+        m_text.setFillColor(color);
+    }
+
+    template<class Text_t>
+    void TLabel<Text_t>::setOutlineColor(const sf::Color& color)
+    {
+        m_text.setOutlineColor(color);
+    }
+
+    template<class Text_t>
+    void TLabel<Text_t>::setOutlineThickness(float thickness)
+    {
+        m_text.setOutlineThickness(thickness);
     }
 
     template<class Text_t>
@@ -92,65 +104,65 @@ namespace scene
 
         case Prestyle::NUI:
             m_text.setFont(Application::context().fonts.get("nui"));
-            m_text.setColor(sf::Color::White);
+            m_text.setFillColor(sf::Color::White);
             m_text.setCharacterSize(m_fontSize);
             break;
 
         case Prestyle::NUI_SOBER:
             m_text.setFont(Application::context().fonts.get("mono"));
-            m_text.setColor(sf::Color::Black);
+            m_text.setFillColor(sf::Color::Black);
             m_text.setCharacterSize(m_fontSize);
             break;
 
         case Prestyle::NUI_TITLE:
             m_text.setFont(Application::context().fonts.get("nui"));
-            m_text.setColor(sf::Color::White);
+            m_text.setFillColor(sf::Color::White);
             m_text.setStyle(sf::Text::Bold);
             m_text.setCharacterSize(m_fontSize);
             break;
 
         case Prestyle::NUI_SMALL:
             m_text.setFont(Application::context().fonts.get("nui"));
-            m_text.setColor(sf::Color::White);
+            m_text.setFillColor(sf::Color::White);
             m_text.setCharacterSize(0.7f * m_fontSize);
             break;
 
         case Prestyle::NUI_SMALL_TITLE:
             m_text.setFont(Application::context().fonts.get("nui"));
-            m_text.setColor(sf::Color::White);
+            m_text.setFillColor(sf::Color::White);
             m_text.setStyle(sf::Text::Bold);
             m_text.setCharacterSize(0.7f * m_fontSize);
             break;
 
         case Prestyle::NUI_SMALL_SOBER:
             m_text.setFont(Application::context().fonts.get("mono"));
-            m_text.setColor(sf::Color::White);
+            m_text.setFillColor(sf::Color::White);
             m_text.setCharacterSize(0.7f * m_fontSize);
             break;
 
         case Prestyle::MENU_TITLE:
             m_text.setFont(Application::context().fonts.get("horror"));
             m_text.setStyle(sf::Text::Style::Bold);
-            m_text.setColor(sf::Color::White);
+            m_text.setFillColor(sf::Color::White);
             m_text.setCharacterSize(1.6f * m_fontSize);
             break;
 
         case Prestyle::MENU_POPUP_TITLE:
             m_text.setFont(Application::context().fonts.get("horror"));
             m_text.setStyle(sf::Text::Bold);
-            m_text.setColor(sf::Color::White);
+            m_text.setFillColor(sf::Color::White);
             m_text.setCharacterSize(3.2f * m_fontSize);
             break;
 
         case Prestyle::MENU_SOBER:
             m_text.setFont(Application::context().fonts.get("mono"));
-            m_text.setColor(sf::Color::White);
+            m_text.setFillColor(sf::Color::White);
             m_text.setCharacterSize(1.1f * m_fontSize);
             break;
 
         case Prestyle::MENU_SOBER_LIGHT:
             m_text.setFont(Application::context().fonts.get("mono"));
-            m_text.setColor({255u, 255u, 255u, 128u});
+            m_text.setFillColor({255u, 255u, 255u, 128u});
             m_text.setCharacterSize(m_fontSize);
             break;
         }

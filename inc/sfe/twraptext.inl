@@ -26,9 +26,21 @@ namespace sfe
     }
 
     template<class Text_t>
-    void WrapText<Text_t>::setColor(const sf::Color& color)
+    void WrapText<Text_t>::setFillColor(const sf::Color& color)
     {
-        m_text.setColor(color);
+        m_text.setFillColor(color);
+    }
+
+    template<class Text_t>
+    void WrapText<Text_t>::setOutlineColor(const sf::Color& color)
+    {
+        m_text.setOutlineColor(color);
+    }
+
+    template<class Text_t>
+    void WrapText<Text_t>::setOutlineThickness(float thickness)
+    {
+        m_text.setOutlineThickness(thickness);
     }
 
     template<class Text_t>

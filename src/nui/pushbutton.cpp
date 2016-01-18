@@ -227,12 +227,12 @@ void PushButton::refresh()
         m_left.setFillColor(grey);
         m_middle.setFillColor(grey);
         m_right.setFillColor(grey);
-        m_text.setColor(grey);
+        m_text.setFillColor(grey);
     }
     else {
         m_left.setFillColor(sf::Color::White);
         m_middle.setFillColor(sf::Color::White);
         m_right.setFillColor(sf::Color::White);
-        m_text.setColor(sf::Color::White);
+        m_text.setFillColor(sf::Color::White);
     }
 }

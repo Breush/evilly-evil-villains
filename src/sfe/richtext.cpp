@@ -37,10 +37,22 @@ void RichText::setFont(const sf::Font& font)
     refreshFont();
 }
 
-void RichText::setColor(const sf::Color& color)
+void RichText::setFillColor(const sf::Color& color)
 {
-    m_defaultColor = color;
+    m_fillColor = color;
     refreshColors();
+}
+
+void RichText::setOutlineColor(const sf::Color& color)
+{
+    m_outlineColor = color;
+    refreshOutline();
+}
+
+void RichText::setOutlineThickness(float thickness)
+{
+    m_outlineThickness = thickness;
+    refreshOutline();
 }
 
 void RichText::setStyle(uint32 style)
@@ -64,7 +76,7 @@ void RichText::refreshFont()
 void RichText::refreshColors()
 {
     for (auto& textInfo : m_textsInfo)
-        textInfo.text.setColor(interpretColor(textInfo.colorKey));
+        textInfo.text.setFillColor(interpretColor(textInfo.colorKey));
 }
 
 void RichText::refreshStyle()
@@ -77,6 +89,16 @@ void RichText::refreshCharacterSize()
 {
     for (auto& textInfo : m_textsInfo)
         textInfo.text.setCharacterSize(m_characterSize);
+    refreshPositions();
+}
+
+void RichText::refreshOutline()
+{
+    for (auto& textInfo : m_textsInfo) {
+        textInfo.text.setOutlineColor(m_outlineColor);
+        textInfo.text.setOutlineThickness(m_outlineThickness);
+    }
+
     refreshPositions();
 }
 
@@ -156,7 +178,9 @@ void RichText::reparseSource()
     for (auto& textInfo : m_textsInfo) {
         textInfo.text.setString(textInfo.string);
         textInfo.text.setStyle(textInfo.style | m_defaultStyle);
-        textInfo.text.setColor(interpretColor(textInfo.colorKey));
+        textInfo.text.setFillColor(interpretColor(textInfo.colorKey));
+        textInfo.text.setOutlineColor(m_outlineColor);
+        textInfo.text.setOutlineThickness(m_outlineThickness);
         textInfo.text.setCharacterSize(m_characterSize);
         if (m_font != nullptr) textInfo.text.setFont(*m_font);
     }
@@ -209,7 +233,7 @@ void RichText::createChunk(TextInfo*& pTextInfo)
 
 sf::Color RichText::interpretColor(const sf::String& colorKey) const
 {
-    returnif (colorKey.getSize() == 0u) m_defaultColor;
+    returnif (colorKey.getSize() == 0u) m_fillColor;
 
     // Hexidecimal key (no color name starting with an F!)
     if (colorKey[0u] == L'0' || colorKey[0u] == L'f') {
@@ -229,5 +253,5 @@ sf::Color RichText::interpretColor(const sf::String& colorKey) const
     else if (colorKey == L"white")      return sf::Color::White;
     else if (colorKey == L"yellow")     return sf::Color::Yellow;
 
-    return m_defaultColor;
+    return m_fillColor;
 }

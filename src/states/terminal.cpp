@@ -153,7 +153,7 @@ void Terminal::addMessage(std::wstring text, sf::Color color)
     message.label->setText(std::move(text));
     message.label->setFont("mono");
     message.label->setCharacterSize(m_characterSize);
-    message.label->setColor(std::move(color));
+    message.label->setFillColor(std::move(color));
     message.label->fitWidth(m_width);
 
     m_messages.emplace_back(std::move(message));

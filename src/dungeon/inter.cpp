@@ -839,7 +839,7 @@ void Inter::configureDoshLabel(std::unique_ptr<scene::Label>& doshLabel, const u
     if (doshLabel == nullptr) {
         doshLabel = std::make_unique<scene::Label>();
         doshLabel->setPrestyle(scene::Label::Prestyle::NUI);
-        doshLabel->setColor(color);
+        doshLabel->setFillColor(color);
         attachChild(*doshLabel);
     }
 

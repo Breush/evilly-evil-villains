@@ -28,9 +28,19 @@ void Text::setString(const sf::String& source)
     updateSize();
 }
 
-void Text::setColor(const sf::Color& color)
+void Text::setFillColor(const sf::Color& color)
 {
-    m_text.setColor(color);
+    m_text.setFillColor(color);
+}
+
+void Text::setOutlineColor(const sf::Color& color)
+{
+    m_text.setOutlineColor(color);
+}
+
+void Text::setOutlineThickness(float thickness)
+{
+    m_text.setOutlineThickness(thickness);
 }
 
 void Text::setCharacterSize(uint characterSize)

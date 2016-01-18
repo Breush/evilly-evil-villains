@@ -36,10 +36,10 @@ void Summary::init()
     m_bars[BAR_SOUL]->setLogo("resources/soul");
     m_bars[BAR_FAME]->setLogo("resources/fame");
 
-    m_bars[BAR_TIME]->setColor(sf::Color::White);
-    m_bars[BAR_DOSH]->setColor({190u, 171u, 21u});
-    m_bars[BAR_SOUL]->setColor({102u, 190u, 21u});
-    m_bars[BAR_FAME]->setColor({102u, 151u, 196u});
+    m_bars[BAR_TIME]->setTextColor(sf::Color::White);
+    m_bars[BAR_DOSH]->setTextColor({190u, 171u, 21u});
+    m_bars[BAR_SOUL]->setTextColor({102u, 190u, 21u});
+    m_bars[BAR_FAME]->setTextColor({102u, 151u, 196u});
 }
 
 //-------------------//

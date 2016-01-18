@@ -84,7 +84,7 @@ void AnswerBox::showAnswer(uint answerID)
     // Affects new answer
     for (const auto& answer : m_answers[answerID]) {
         auto text = std::make_unique<scene::WrapLabel<sfe::RichText>>();
-        text->setColor(sf::Color::White);
+        text->setFillColor(sf::Color::White);
         text->setText(answer);
         text->setFont("nui");
         m_texts.emplace_back(std::move(text));

@@ -51,10 +51,22 @@ namespace sfe
         inline const sf::String& getString() const { return m_sourceString; }
 
         //! Set the default color.
-        void setColor(const sf::Color& color);
+        void setFillColor(const sf::Color& color);
 
         //! Get the default color.
-        inline const sf::Color& getColor() const { return m_defaultColor; }
+        inline const sf::Color& getColor() const { return m_fillColor; }
+
+        //! Set the outline color.
+        void setOutlineColor(const sf::Color& color);
+
+        //! Get the outline color.
+        inline const sf::Color& getOutlineColor() const { return m_outlineColor; }
+
+        //! Set the outline thickness.
+        void setOutlineThickness(float thickness);
+
+        //! Get the outline thickness.
+        inline float getOutlineThickness() const { return m_outlineThickness; }
 
         //! Set the default character size.
         void setCharacterSize(uint characterSize);
@@ -126,6 +138,9 @@ namespace sfe
         //! Refresh the style of all elements.
         void refreshStyle();
 
+        //! Refresh the outlines.
+        void refreshOutline();
+
         //! Refresh the character size of all elements.
         void refreshCharacterSize();
 
@@ -145,10 +160,14 @@ namespace sfe
         sf::String m_sourceString;      //!< The source string, with markup.
         sf::FloatRect m_localBounds;    //!< Local bounds.
 
-        sf::Color m_defaultColor = sf::Color::White;    //!< The color to use when none is specified.
-        uint32 m_defaultStyle = sf::Text::Regular;      //!< The style used when none is specified.
-        uint m_characterSize = 0u;                      //!< Size of all texts.
-        const sf::Font* m_font = nullptr;               //!< Font of all texts.
+        sf::Color m_fillColor = sf::Color::White;   //!< The color to use when none is specified.
+        uint32 m_defaultStyle = sf::Text::Regular;  //!< The style used when none is specified.
+        uint m_characterSize = 0u;                  //!< Size of all texts.
+        const sf::Font* m_font = nullptr;           //!< Font of all texts.
+
+        // Outline
+        sf::Color m_outlineColor;       //!< The outline color
+        float m_outlineThickness = 0.f; //!< The outline thickness.
     };
 }
 

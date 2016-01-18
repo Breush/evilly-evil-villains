@@ -35,7 +35,7 @@ DropDownList::DropDownList()
     // Text
     addPart(&m_text);
     m_text.setFont(Application::context().fonts.get("nui"));
-    m_text.setColor(sf::Color::White);
+    m_text.setFillColor(sf::Color::White);
 }
 
 //-------------------//

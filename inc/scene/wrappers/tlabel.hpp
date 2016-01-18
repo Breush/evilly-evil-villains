@@ -51,7 +51,13 @@ namespace scene
         void setFont(const std::string& fontID);
 
         //! Set text color.
-        void setColor(const sf::Color& color);
+        void setFillColor(const sf::Color& color);
+
+        //! Set text outline color.
+        void setOutlineColor(const sf::Color& color);
+
+        //! Set text outline thickness.
+        void setOutlineThickness(float thickness);
 
         //! Set character size.
         void setCharacterSize(uint characterSize);

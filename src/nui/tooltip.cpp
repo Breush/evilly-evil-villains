@@ -54,7 +54,7 @@ Tooltip::Tooltip()
     // Text
     addPart(&m_text);
     m_text.setFont(Application::context().fonts.get("nui"));
-    m_text.setColor({210, 210, 210}); // Light grey
+    m_text.setFillColor({210, 210, 210}); // Light grey
 }
 
 //-------------------//
