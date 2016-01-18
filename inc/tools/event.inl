@@ -13,7 +13,7 @@ inline bool isMouse(const sf::Event& e)
     return (e.type == sf::Event::MouseMoved)
            || (e.type == sf::Event::MouseButtonPressed)
            || (e.type == sf::Event::MouseButtonReleased)
-           || (e.type == sf::Event::MouseWheelMoved);
+           || (e.type == sf::Event::MouseWheelScrolled);
 }
 
 inline bool isKeyboard(const sf::Event& e)
@@ -39,8 +39,8 @@ inline sf::Vector2i mousePosition(const sf::Event& event)
     else if (event.type == sf::Event::MouseButtonPressed
              || event.type == sf::Event::MouseButtonReleased)
         return sf::Vector2i(event.mouseButton.x, event.mouseButton.y);
-    else if (event.type == sf::Event::MouseWheelMoved)
-        return sf::Vector2i(event.mouseWheel.x, event.mouseWheel.y);
+    else if (event.type == sf::Event::MouseWheelScrolled)
+        return sf::Vector2i(event.mouseWheelScroll.x, event.mouseWheelScroll.y);
 
     return sf::Vector2i();
 }

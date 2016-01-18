@@ -110,22 +110,20 @@ bool ScrollArea::handleMouseButtonPressed(const sf::Mouse::Button button, const 
     return false;
 }
 
-bool ScrollArea::handleMouseWheelMoved(const int delta, const sf::Vector2f&, const sf::Vector2f&)
+bool ScrollArea::handleMouseWheelScrolled(sf::Mouse::Wheel wheel, float delta, const sf::Vector2f&, const sf::Vector2f&)
 {
     const auto& scrollingFactor = Application::context().display.global.scrollingFactor;
     const float offset = delta * scrollingFactor;
 
-    // Scroll in the direction of scrolling if there is just one
-    if (m_hGrabber.visible() && !m_vGrabber.visible())
-        m_offset += {offset, 0.f};
-    else if (!m_hGrabber.visible() && m_vGrabber.visible())
-        m_offset += {0.f, offset};
+    // It's an horizontal scrolling if the wheel is the horizontal one,
+    // or if it's the only bar visible.
+    // Otherwise, using shift + vertical wheel can do the trick.
+    bool horizontalScrolling = (wheel == sf::Mouse::HorizontalWheel);
+    if (m_hGrabber.visible() ^ m_vGrabber.visible())    horizontalScrolling = (m_hGrabber.visible() && !m_vGrabber.visible());
+    else                                                horizontalScrolling = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
 
-    // Else, the user can use shift to scroll horizontally
-    else {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) m_offset += {offset, 0.f};
-        else m_offset += {0.f, offset};
-    }
+    if (horizontalScrolling)    m_offset += {offset, 0.f};
+    else                        m_offset += {0.f, offset};
 
     refreshContentStatus();
     return true;

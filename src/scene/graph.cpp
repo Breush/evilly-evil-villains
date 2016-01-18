@@ -148,8 +148,8 @@ void Graph::broadcastEvent(const sf::Event& event)
         }
 
         // Let this graph manage special events
-        if (event.type == sf::Event::MouseWheelMoved)
-            handleMouseWheelMovedEvent(event);
+        if (event.type == sf::Event::MouseWheelScrolled)
+            handleMouseWheelScrolledEvent(event);
         else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Button::Middle)
             handleMouseWheelPressedEvent(event);
         else if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Button::Middle)
@@ -203,9 +203,9 @@ void Graph::broadcastGlobalEvent(const sf::Event& event)
                 globalHandler->handleGlobalMouseButtonReleased(event.mouseButton.button, nuiPos);
             break;
 
-        case sf::Event::MouseWheelMoved:
+        case sf::Event::MouseWheelScrolled:
             for (auto globalHandler : m_globalHandlers)
-                globalHandler->handleGlobalMouseWheelMoved(event.mouseWheel.delta, nuiPos);
+                globalHandler->handleGlobalMouseWheelScrolled(event.mouseWheelScroll.wheel, event.mouseWheelScroll.delta, nuiPos);
             break;
 
         default:
@@ -244,7 +244,7 @@ bool Graph::handleMouseMovedEvent(const sf::Event& event)
     return false;
 }
 
-void Graph::handleMouseWheelMovedEvent(const sf::Event& event)
+void Graph::handleMouseWheelScrolledEvent(const sf::Event& event)
 {
     float delta = static_cast<float>(event.mouseWheel.delta);
     const auto& scrollingFactor = Application::context().display.global.scrollingFactor;
@@ -381,8 +381,8 @@ Entity* Graph::handleMouseEvent(const sf::Event& event, bool& entityKeptEvent)
             entityKeptEvent = entity->handleMouseButtonReleased(event.mouseButton.button, relPos, nuiPos);
             break;
 
-        case sf::Event::MouseWheelMoved:
-            entityKeptEvent = entity->handleMouseWheelMoved(event.mouseWheel.delta, relPos, nuiPos);
+        case sf::Event::MouseWheelScrolled:
+            entityKeptEvent = entity->handleMouseWheelScrolled(event.mouseWheelScroll.wheel, event.mouseWheelScroll.delta, relPos, nuiPos);
             break;
 
         default:

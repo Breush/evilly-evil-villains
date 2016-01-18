@@ -348,8 +348,8 @@ namespace scene
         //! If entity is elligible for global events, this is called when a mouse button is released.
         virtual void handleGlobalMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& nuiPos) {}
 
-        //! If entity is elligible for global events, this is called when mouse wheel moves.
-        virtual void handleGlobalMouseWheelMoved(const int delta, const sf::Vector2f& nuiPos) {}
+        //! If entity is elligible for global events, this is called when mouse wheel is scrolled.
+        virtual void handleGlobalMouseWheelScrolled(sf::Mouse::Wheel wheel, float delta, const sf::Vector2f& nuiPos) {}
 
         //----- Entity-wise events
 
@@ -384,13 +384,13 @@ namespace scene
          */
         virtual bool handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) { return false; }
 
-        //! If entity is detectable, this is called when mouse wheel moves over the entity.
+        //! If entity is detectable, this is called when mouse wheel is scrolled over the entity.
         /*!
          *  @param delta    The relative delta step of the mouse wheel.
          *  @param mousePos The position of the mouse relative to entity coordinates.
          *  @param nuiPos   The absolute position of the mouse in the NUI layer.
          */
-        virtual bool handleMouseWheelMoved(const int delta, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) { return false; }
+        virtual bool handleMouseWheelScrolled(sf::Mouse::Wheel wheel, float delta, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) { return false; }
 
         //! If entity is detectable, this is called when mouse leaves the entity.
         virtual void handleMouseLeft() {}

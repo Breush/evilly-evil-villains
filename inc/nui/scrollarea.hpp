@@ -77,7 +77,7 @@ namespace nui
         void handleGlobalMouseMoved(const sf::Vector2f& nuiPos) final;
         void handleGlobalMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& nuiPos) final;
         bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
-        bool handleMouseWheelMoved(const int delta, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
+        bool handleMouseWheelScrolled(sf::Mouse::Wheel wheel, float delta, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
         void handleMouseLeft() final;
 
         //! @}

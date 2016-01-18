@@ -94,7 +94,7 @@ namespace scene
         void handleMouseWheelReleasedEvent(const sf::Event& event);
 
         //! Called when the event is a mouse wheel moved and if no entity used it.
-        void handleMouseWheelMovedEvent(const sf::Event& event);
+        void handleMouseWheelScrolledEvent(const sf::Event& event);
 
         //! Called when the event is a mouse moved, before any entity uses it,
         //! have to return true to keep event.
