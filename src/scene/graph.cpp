@@ -246,7 +246,7 @@ bool Graph::handleMouseMovedEvent(const sf::Event& event)
 
 void Graph::handleMouseWheelScrolledEvent(const sf::Event& event)
 {
-    float delta = static_cast<float>(event.mouseWheel.delta);
+    float delta = event.mouseWheelScroll.delta;
     const auto& scrollingFactor = Application::context().display.global.scrollingFactor;
 
     // With Control pressed, zoom
