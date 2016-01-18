@@ -2,7 +2,9 @@
 
 #include "states/state.hpp"
 #include "states/identifiers.hpp"
-#include "nui/choicebox.hpp"
+#include "nui/hstacker.hpp"
+#include "nui/vstacker.hpp"
+#include "nui/pushbutton.hpp"
 #include "nui/reactimage.hpp"
 #include "scene/wrappers/label.hpp"
 #include "scene/wrappers/sprite.hpp"
@@ -46,6 +48,13 @@ namespace states
 
         //! @}
 
+        //! An option in the screen.
+        struct Choice
+        {
+            std::wstring key;                           //!< Key to ReactImage.
+            std::unique_ptr<nui::PushButton> button;    //!< Button to activate the choice.
+        };
+
     private:
 
         // Fading
@@ -53,10 +62,10 @@ namespace states
         sf::Time m_fadingTime = sf::Time::Zero;             //!< Current time for fading effect.
         const sf::Time m_fadingDelay = sf::seconds(1.75f);  //!< How much time to wait for fading.
 
-        // NUI
-        nui::ChoiceBox m_choiceBox;             //!< The box containing choices.
-        nui::ReactImage m_reactImage;           //!< The reactive image.
-        std::vector<std::wstring> m_choices;    //!< The list of choices.
+        // Content
+        nui::HStacker m_buttonsStacker; //!< Containing the buttons.
+        nui::ReactImage m_reactImage;   //!< The reactive image.
+        std::vector<Choice> m_choices;  //!< The list of choices.
 
         // Decorum
         scene::Sprite m_background;       //!< Background.

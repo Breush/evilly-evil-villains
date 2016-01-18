@@ -12,7 +12,6 @@ using namespace states;
 
 MenuMain::MenuMain(StateStack& stack)
     : baseClass(stack)
-    , m_choices{L"V", L"I", L"L", L"Y", L"S"}
 {
     // During menus, enable key repeat
     Application::context().window.setKeyRepeatEnabled(true);
@@ -36,7 +35,7 @@ MenuMain::MenuMain(StateStack& stack)
     // Version label
     nuiRoot.attachChild(m_versionLabel);
     std::wstringstream versionString;
-    versionString << EEV_VERSION_SWEET_NAME_WS << L" ";
+    versionString << L"Evilly Evil Villains - " << EEV_VERSION_SWEET_NAME_WS << L" ";
     versionString << EEV_VERSION_MAJ << L"." << EEV_VERSION_MIN << L"-" << EEV_VERSION_REV_WS;
     m_versionLabel.setText(versionString.str());
     m_versionLabel.setPrestyle(scene::Label::Prestyle::MENU_SOBER);
@@ -50,15 +49,26 @@ MenuMain::MenuMain(StateStack& stack)
     auto configuration = [this]() { stackPush(StateID::MENU_CONFIG); };
     auto quitGame      = [this]() { stackClear(); };
 
-    // Menu choice box (be sure not to mess with order)
-    nuiRoot.attachChild(m_choiceBox);
-    m_choiceBox.centerOrigin();
-    m_choiceBox.setRelativePosition({0.5f, 0.9f});
-    m_choiceBox.add(L"", singlePlayer);
-    m_choiceBox.add(L"", multiPlayer);
-    m_choiceBox.add(L"", villains);
-    m_choiceBox.add(L"", configuration);
-    m_choiceBox.add(L"", quitGame);
+    // Stacker
+    nuiRoot.attachChild(m_buttonsStacker);
+    m_buttonsStacker.setRelativeOrigin({0.5f, 1.f});
+    m_buttonsStacker.setRelativePosition({0.5f, 0.95f});
+
+    // Choices
+    m_choices.push_back({L"V", std::make_unique<nui::PushButton>()});
+    m_choices.push_back({L"I", std::make_unique<nui::PushButton>()});
+    m_choices.push_back({L"L", std::make_unique<nui::PushButton>()});
+    m_choices.push_back({L"Y", std::make_unique<nui::PushButton>()});
+    m_choices.push_back({L"S", std::make_unique<nui::PushButton>()});
+
+    m_choices[0u].button->setValidateCallback(singlePlayer);
+    m_choices[1u].button->setValidateCallback(multiPlayer);
+    m_choices[2u].button->setValidateCallback(villains);
+    m_choices[3u].button->setValidateCallback(configuration);
+    m_choices[4u].button->setValidateCallback(quitGame);
+
+    for (auto& choice : m_choices)
+        m_buttonsStacker.stackBack(*choice.button);
 
     // Menu react image
     nuiRoot.attachChild(m_reactImage);
@@ -74,11 +84,11 @@ MenuMain::MenuMain(StateStack& stack)
 
     // Setting callbacks
     m_reactImage.loadFromFile("res/tex/menu/main/logo.xml");
-    m_reactImage.setReactCallback(m_choices[0], singlePlayer);
-    m_reactImage.setReactCallback(m_choices[1], multiPlayer);
-    m_reactImage.setReactCallback(m_choices[2], villains);
-    m_reactImage.setReactCallback(m_choices[3], configuration);
-    m_reactImage.setReactCallback(m_choices[4], quitGame);
+    m_reactImage.setReactCallback(m_choices[0].key, singlePlayer);
+    m_reactImage.setReactCallback(m_choices[1].key, multiPlayer);
+    m_reactImage.setReactCallback(m_choices[2].key, villains);
+    m_reactImage.setReactCallback(m_choices[3].key, configuration);
+    m_reactImage.setReactCallback(m_choices[4].key, quitGame);
     m_reactImage.setActiveReact(L"V", false);
 }
 
@@ -98,24 +108,6 @@ bool MenuMain::update(const sf::Time& dt)
         uint8 opacity = static_cast<uint8>(255.f * (1.f - m_fadingTime / m_fadingDelay));
         m_fadingRectangle.setFillColor({0u, 0u, 0u, opacity});
         m_fadingTime += dt;
-    }
-
-    // Checking if choiceBox changed
-    if (m_choiceBox.choiceChanged()) {
-        m_reactImage.setActiveReact(m_choices[m_choiceBox.selectedChoice()]);
-    }
-
-    // Checking if reactImage changed
-    else if (m_reactImage.activeReactChanged()) {
-        const auto* activeKey = m_reactImage.activeReactKey();
-        if (activeKey != nullptr) {
-            for (uint i = 0; i < m_choices.size(); ++i) {
-                if (m_choices[i] == *activeKey) {
-                    m_choiceBox.selectChoice(i);
-                    break;
-                }
-            }
-        }
     }
 
     return State::update(dt);
@@ -139,11 +131,11 @@ void MenuMain::refreshWindow(const config::WindowInfo& cWindow)
     float maxSide = std::max(resolution.x, resolution.y);
 
     // Translated strings
-    m_choiceBox.setChoiceText(0u, _("Victim and alone"));
-    m_choiceBox.setChoiceText(1u, _("I sometimes have friends"));
-    m_choiceBox.setChoiceText(2u, _("Looking at who I am"));
-    m_choiceBox.setChoiceText(3u, _("Yet I want to choose"));
-    m_choiceBox.setChoiceText(4u, _("Someone who runs away"));
+    m_choices[0u].button->setText(_("Solo"));
+    m_choices[1u].button->setText(_("Multiplayer"));
+    m_choices[2u].button->setText(_("Villains..."));
+    m_choices[3u].button->setText(_("Options..."));
+    m_choices[4u].button->setText(_("Quit"));
 
     // Fading
     m_fadingRectangle.setSize(resolution);
