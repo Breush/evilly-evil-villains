@@ -10,6 +10,8 @@ using namespace nui;
 Slider::Slider()
     : m_length(10.f)
 {
+    setFocusable(true);
+
     // Bars
     const auto& barLeftTexture = Application::context().textures.get("nui/slider/bar_left");
     const auto& barMiddleTexture = Application::context().textures.get("nui/slider/bar_middle");
@@ -100,6 +102,22 @@ void Slider::handleMouseLeft()
 {
     returnif (m_grabbing);
     setPartShader(&m_indicator, "");
+}
+
+bool Slider::handleKeyboardEvent(const sf::Event& event)
+{
+    returnif (event.type != sf::Event::KeyPressed) false;
+
+    if (event.key.code == sf::Keyboard::Left) {
+        if (m_value != m_min) setValue(m_value - 1u);
+        return true;
+    }
+    else if (event.key.code == sf::Keyboard::Right) {
+        if (m_value != m_max) setValue(m_value + 1u);
+        return true;
+    }
+
+    return false;
 }
 
 //-------------------------//

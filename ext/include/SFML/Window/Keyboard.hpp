@@ -109,6 +109,7 @@ public:
         Return,       ///< The Return key
         BackSpace,    ///< The Backspace key
         Tab,          ///< The Tabulation key
+        BackTab,      ///< The Inverse Tabulation key
         PageUp,       ///< The Page up key
         PageDown,     ///< The Page down key
         End,          ///< The End key

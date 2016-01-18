@@ -103,20 +103,35 @@ void Graph::focusHandleEvent(const sf::Event& event)
     // Just manage pressed keys
     returnif (event.type != sf::Event::KeyPressed);
 
+    bool changeFocus = false;
+    bool focusToNext = false;
+
+    // Note: BackTab is not generated for every OS,
+    // but in those where it is not generated, Tab is.
+    if (event.key.code == sf::Keyboard::Tab) {
+        changeFocus = true;
+        focusToNext = !sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
+    }
+    else if (event.key.code == sf::Keyboard::BackTab) {
+        changeFocus = true;
+        focusToNext = false;
+    }
+    else {
+        focusToNext = (event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::Down);
+        changeFocus = focusToNext || (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::Up);
+    }
+
+    returnif (!changeFocus);
+
     // Find next entity
-    if (event.key.code == sf::Keyboard::Right
-        || event.key.code == sf::Keyboard::Down
-        || event.key.code == sf::Keyboard::Tab) {
-        // Simply get next or restart from the beginning
+    if (focusToNext) {
         Entity* nextFocused = m_focusedEntity->nextFocusable();
         if (nextFocused != nullptr) setFocusedEntity(nextFocused);
         else setFocusedEntity(m_nuiLayer.root().nextFocusable());
     }
 
     // Find previous entity
-    else if (event.key.code == sf::Keyboard::Left
-        || event.key.code == sf::Keyboard::Up) {
-        // Simply get previous or restart from ths end
+    else {
         Entity* previousFocused = m_focusedEntity->previousFocusable();
         if (previousFocused != nullptr) setFocusedEntity(previousFocused);
         else {

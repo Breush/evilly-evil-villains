@@ -93,6 +93,7 @@ namespace nui
         bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
         bool handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos);
         void handleMouseLeft();
+        bool handleKeyboardEvent(const sf::Event& event) final;
 
         //! @}
 

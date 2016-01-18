@@ -268,6 +268,7 @@ namespace
             case XK_KP_Enter:     return sf::Keyboard::Return;
             case XK_BackSpace:    return sf::Keyboard::BackSpace;
             case XK_Tab:          return sf::Keyboard::Tab;
+            case XK_ISO_Left_Tab: return sf::Keyboard::BackTab;
             case XK_Prior:        return sf::Keyboard::PageUp;
             case XK_Next:         return sf::Keyboard::PageDown;
             case XK_End:          return sf::Keyboard::End;
