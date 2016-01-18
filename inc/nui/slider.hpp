@@ -1,10 +1,11 @@
 #pragma once
 
 #include "nui/entity.hpp"
-#include "tools/int.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
+
+#include <functional>
 
 namespace nui
 {
@@ -13,6 +14,8 @@ namespace nui
     class Slider final : public nui::Entity
     {
         using baseClass = nui::Entity;
+
+        using ValueChangedCallback = std::function<void(uint)>;
 
     public:
 
@@ -44,6 +47,18 @@ namespace nui
         //! Set it to -1u to make it show all.
         void setVisibleSteps(uint visibleSteps);
 
+        //! Change the color of the indicator;
+        void setIndicatorTiltColor(const sf::Color& tiltColor);
+
+        //! @}
+
+        //------------------//
+        //! @name Callbacks
+        //! @{
+
+        //! Set a callback to call each time the value changed.
+        void setValueChangedCallback(ValueChangedCallback valueChangedCallback);
+
         //! @}
 
         //--------------------------//
@@ -63,6 +78,9 @@ namespace nui
         void onSizeChanges() final;
         void refreshNUI(const config::NUIGuides& cNUI) final;
 
+        //! Update the absolute size.
+        void updateSize();
+
         //! @}
 
         //---------------//
@@ -78,12 +96,9 @@ namespace nui
 
         //! @}
 
-        //--------------------------------//
-        //! @name Internal change updates
+        //------------//
+        //! @name ICU
         //! @{
-
-        //! Set the size of the bar, given the length and nui configuration.
-        void updateSize();
 
         //! Refresh all elements positions.
         void refreshElements();
@@ -113,6 +128,9 @@ namespace nui
         uint m_value = 0u;  //!< The current value.
         uint m_min = 0u;    //!< The min for the range.
         uint m_max = 0u;    //!< The max for the range.
+
+        // Callbacks
+        ValueChangedCallback m_valueChangedCallback;    //!< Called each time the value changed.
 
         // States
         bool m_grabbing = false;    //!< Whether we are currently grabbing the indicator.

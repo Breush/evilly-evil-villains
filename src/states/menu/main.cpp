@@ -25,7 +25,6 @@ MenuMain::MenuMain(StateStack& stack)
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
     m_background.setTexture("menu/main/background");
-    // m_background.setShader("menu/background");
 
     // Copyright label
     nuiRoot.attachChild(m_copyrightLabel);
@@ -153,8 +152,6 @@ void MenuMain::refreshWindow(const config::WindowInfo& cWindow)
     auto textureSize = sf::v2f(Application::context().textures.get("menu/main/background").getSize());
     auto scaleFactor = maxSide / textureSize.x;
     m_background.setLocalScale({scaleFactor, scaleFactor});
-    if (sf::Shader::isAvailable())
-        Application::context().shaders.get("menu/background").setParameter("textureSize", scaleFactor * textureSize);
 
     baseClass::refreshWindow(cWindow);
 }

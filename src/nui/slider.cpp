@@ -32,6 +32,7 @@ Slider::Slider()
     const auto& indicatorTexture = Application::context().textures.get("nui/slider/indicator");
     m_indicator.setTexture(&indicatorTexture);
     m_indicatorWidth = indicatorTexture.getSize().x;
+    m_indicator.setFillColor(sf::Color::Green);
 }
 
 //-------------------//
@@ -47,11 +48,17 @@ void Slider::refreshNUI(const config::NUIGuides& cNUI)
     baseClass::refreshNUI(cNUI);
 
     m_widthHint = 1.f + cNUI.hintSize;
-    m_heightHint = cNUI.hintSize * 3.f;
+    m_heightHint = cNUI.hintSize * 2.f;
     m_fontSize = std::floor(0.9f * cNUI.fontSize);
-    m_barOffset = std::floor(0.8f * m_fontSize);
+    m_barOffset = std::floor(m_fontSize);
 
     updateSize();
+}
+
+void Slider::updateSize()
+{
+    float realOffset = (m_visibleSteps == 0u)? 0.f : m_barOffset;
+    setSize({m_length * m_widthHint, m_heightHint + realOffset});
 }
 
 //------------------//
@@ -113,9 +120,15 @@ void Slider::setClosestValue(const float relX)
 
 void Slider::setValue(uint inValue)
 {
-    if (inValue >= m_max) m_value = m_max;
-    else if (inValue <= m_min) m_value = m_min;
-    else m_value = inValue;
+    if (inValue >= m_max) inValue = m_max;
+    else if (inValue <= m_min) inValue = m_min;
+
+    returnif (m_value == inValue);
+
+    m_value = inValue;
+    if (m_valueChangedCallback)
+        m_valueChangedCallback(m_value);
+
     refreshIndicator();
 }
 
@@ -130,16 +143,24 @@ void Slider::setRange(uint min, float max)
 void Slider::setVisibleSteps(uint visibleSteps)
 {
     m_visibleSteps = visibleSteps;
-    refreshElements();
+    updateSize();
 }
 
-//-------------------//
-//----- Changes -----//
-
-void Slider::updateSize()
+void Slider::setIndicatorTiltColor(const sf::Color& tiltColor)
 {
-    setSize({m_length * m_widthHint, m_heightHint + m_barOffset});
+    m_indicator.setFillColor(tiltColor);
 }
+
+//---------------------//
+//----- Callbacks -----//
+
+void Slider::setValueChangedCallback(ValueChangedCallback valueChangedCallback)
+{
+    m_valueChangedCallback = valueChangedCallback;
+}
+
+//---------------//
+//----- ICU -----//
 
 void Slider::refreshElements()
 {
@@ -165,18 +186,22 @@ void Slider::refreshElements()
 
 void Slider::refreshBar()
 {
-    m_barLeft.setPosition(0.f, m_barOffset);
-    m_barMiddle.setPosition(m_barLeftWidth, m_barOffset);
-    m_barRight.setPosition(size().x, m_barOffset);
+    float realOffset = (m_visibleSteps == 0u)? 0.f : m_barOffset;
+    float barHeight = size().y - realOffset;
 
-    float barHeight = size().y - m_barOffset;
+    m_barLeft.setPosition(0.f, realOffset);
+    m_barMiddle.setPosition(m_barLeftWidth, realOffset);
+    m_barRight.setPosition(size().x, realOffset);
+
     m_barLeft.setSize({m_barLeftWidth, barHeight});
-    m_barMiddle.setSize({size().x - (m_barLeftWidth = m_barRightWidth), barHeight});
+    m_barMiddle.setSize({size().x - (m_barLeftWidth + m_barRightWidth), barHeight});
     m_barRight.setSize({m_barRightWidth, barHeight});
 }
 
 void Slider::refreshTraces()
 {
+    returnif (m_visibleSteps == 0u);
+
     float offset = 0.f;
     float barHeight = size().y - m_barOffset;
     uint traceValue = m_min;
@@ -215,8 +240,10 @@ void Slider::refreshIndicator()
     const float distance = size().x / (m_max - m_min);
     const float position = (m_value - m_min) * distance;
 
-    float barHeight = size().y - m_barOffset;
+    float realOffset = (m_visibleSteps == 0u)? 0.f : m_barOffset;
+    float barHeight = size().y - realOffset;
+
     m_indicator.setSize({m_indicatorWidth, barHeight});
-    m_indicator.setPosition({position, m_barOffset});
+    m_indicator.setPosition({position, realOffset});
     m_indicator.setOrigin({0.5f * m_indicatorWidth, 0.f});
 }
