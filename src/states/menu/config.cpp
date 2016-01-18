@@ -88,17 +88,14 @@ MenuConfig::MenuConfig(StateStack& stack)
     m_antialiasingSlider.setRange(0u, 4u);
 
     // Audio
-    m_areas[AreaID::AUDIO].form.add(m_globalVolumeSlider);
-    m_globalVolumeSlider.setVisibleSteps(4u);
-    m_globalVolumeSlider.setRange(0u, 100u);
+    for (uint sliderIndex = 0u; sliderIndex < m_volumeSliders.size(); ++sliderIndex) {
+        auto& volumeSlider = m_volumeSliders[sliderIndex];
 
-    m_areas[AreaID::AUDIO].form.add(m_musicVolumeSlider);
-    m_musicVolumeSlider.setVisibleSteps(4u);
-    m_musicVolumeSlider.setRange(0u, 100u);
-
-    m_areas[AreaID::AUDIO].form.add(m_soundVolumeSlider);
-    m_soundVolumeSlider.setVisibleSteps(4u);
-    m_soundVolumeSlider.setRange(0u, 100u);
+        m_areas[AreaID::AUDIO].form.add(volumeSlider);
+        volumeSlider.setVisibleSteps(4u);
+        volumeSlider.setRange(0u, 100u);
+        volumeSlider.setValueChangedCallback([this, sliderIndex] (uint) { onVolumeSliderChanged(sliderIndex); });
+    }
 
     // Stacker for buttons
     nuiRoot.attachChild(m_buttonsStacker);
@@ -216,15 +213,14 @@ void MenuConfig::refreshFormsFromConfig()
     m_antialiasingSlider.setValue(display.window.antialiasingLevel);
 
     // Audio
-    m_globalVolumeSlider.setValue(static_cast<uint>(audio.globalRelVolume * 100.f));
-    m_musicVolumeSlider.setValue(static_cast<uint>(audio.musicVolume));
-    m_soundVolumeSlider.setValue(static_cast<uint>(audio.soundVolume));
+    m_volumeSliders[0u].setValue(static_cast<uint>(audio.globalRelVolume * 100.f), false);
+    m_volumeSliders[1u].setValue(static_cast<uint>(audio.musicVolume), false);
+    m_volumeSliders[2u].setValue(static_cast<uint>(audio.soundVolume), false);
 }
 
 void MenuConfig::applyChanges()
 {
     auto& display = Application::context().display;
-    auto& audio = Application::context().sound;
 
     // General
     display.global.language = i18n::languagesList().at(m_languageList.selected()).code;
@@ -250,13 +246,24 @@ void MenuConfig::applyChanges()
     display.window.antialiasingLevel = antialiasingLevel;
 
     // Audio
-    // TODO It might be good UX to let the user hear the audio differences live,
-    // and not delay the update until here.
-    audio.globalRelVolume = m_globalVolumeSlider.value() / 100.f;
-    audio.musicVolume = m_musicVolumeSlider.value();
-    audio.soundVolume = m_soundVolumeSlider.value();
+    // So far, it's all updated directly
+
+    display.save();
+    Application::refreshFromConfig(windowRefresh, false);
+}
+
+void MenuConfig::onVolumeSliderChanged(uint sliderIndex)
+{
+    auto& audio = Application::context().sound;
+
+    if (sliderIndex == 0u)      audio.globalRelVolume = m_volumeSliders[0u].value() / 100.f;
+    else if (sliderIndex == 1u) audio.musicVolume = m_volumeSliders[1u].value();
+    else if (sliderIndex == 2u) audio.soundVolume = m_volumeSliders[2u].value();
 
     audio.save();
-    display.save();
-    Application::refreshFromConfig(windowRefresh, true);
+    Application::refreshFromConfig(false, true);
+
+    // Play testing sound so that the user can hear the level of sounds
+    if (sliderIndex == 2u)
+        Application::context().sounds.play("select");
 }

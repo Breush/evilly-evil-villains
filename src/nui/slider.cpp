@@ -136,7 +136,7 @@ void Slider::setClosestValue(const float relX)
         setValue(value);
 }
 
-void Slider::setValue(uint inValue)
+void Slider::setValue(uint inValue, bool sensitive)
 {
     if (inValue >= m_max) inValue = m_max;
     else if (inValue <= m_min) inValue = m_min;
@@ -144,7 +144,7 @@ void Slider::setValue(uint inValue)
     returnif (m_value == inValue);
 
     m_value = inValue;
-    if (m_valueChangedCallback)
+    if (sensitive && m_valueChangedCallback)
         m_valueChangedCallback(m_value);
 
     refreshIndicator();

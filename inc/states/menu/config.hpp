@@ -14,6 +14,8 @@
 #include "scene/wrappers/rectangleshape.hpp"
 #include "scene/wrappers/rectanglegradient.hpp"
 
+#include <array>
+
 namespace states
 {
     //! The menu state to configure various options.
@@ -62,6 +64,9 @@ namespace states
         //! Apply the last changes.
         void applyChanges();
 
+        //! A slider value changed.
+        void onVolumeSliderChanged(uint sliderIndex);
+
         //! @}
 
         //! The different sections of the screen.
@@ -103,9 +108,7 @@ namespace states
         nui::Slider m_antialiasingSlider;       //!< Antialiasing level selector.
 
         // Audio
-        nui::Slider m_globalVolumeSlider;   //!< Relative global volume selector.
-        nui::Slider m_musicVolumeSlider;    //!< Music volume selector.
-        nui::Slider m_soundVolumeSlider;    //!< Sound volume selector.
+        std::array<nui::Slider, 3u> m_volumeSliders;    //!< Global/Music/Sounds volume sliders.
 
         // Background and title
         scene::Label m_title;                   //!< The title of the menu page.

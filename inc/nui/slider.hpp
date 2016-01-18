@@ -35,7 +35,8 @@ namespace nui
         void setRange(uint min, float max);
 
         //! Set the current value.
-        void setValue(uint inValue);
+        //! Set sensitive to false to disable callback.
+        void setValue(uint inValue, bool sensitive = true);
 
         //! Get the current value.
         inline uint value() const { return m_value; }
