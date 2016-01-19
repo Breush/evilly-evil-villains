@@ -8,6 +8,8 @@ using namespace nui;
 
 Tooltip::Tooltip()
 {
+    setDetectable(false);
+
     // Corners
     addPart(&m_topLeft);
     addPart(&m_topRight);
