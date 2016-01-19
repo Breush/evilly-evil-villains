@@ -140,9 +140,21 @@ void Inter::handleGlobalEvent(const sf::Event& event)
 
         // Dosh control
         else if (event.key.code == sf::Keyboard::Numpad9)
-            m_data->villain().doshWallet.add(500);
+            m_data->doshWallet().add(500);
         else if (event.key.code == sf::Keyboard::Numpad3)
-            m_data->villain().doshWallet.sub(500);
+            m_data->doshWallet().sub(500);
+
+        // Soul control
+        else if (event.key.code == sf::Keyboard::Numpad8)
+            m_data->soulWallet().add(50);
+        else if (event.key.code == sf::Keyboard::Numpad2)
+            m_data->soulWallet().sub(50);
+
+        // Fame control
+        else if (event.key.code == sf::Keyboard::Numpad7)
+            m_data->fameWallet().add(50);
+        else if (event.key.code == sf::Keyboard::Numpad1)
+            m_data->fameWallet().sub(50);
     }
 
     refreshOuterWalls();
