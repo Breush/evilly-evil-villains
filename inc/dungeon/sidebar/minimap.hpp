@@ -12,6 +12,7 @@
 namespace scene
 {
     class Layer;
+    class Graph;
 }
 
 // FIXME A mini-representation (not a view)
@@ -31,7 +32,7 @@ namespace dungeon
     public:
 
         //! Constructor.
-        Minimap();
+        Minimap(const scene::Graph& graph);
 
         //! Default destructor.
         ~Minimap() = default;
@@ -78,10 +79,10 @@ namespace dungeon
         //! @name Events
         //! @{
 
+        inline bool handleGlobalEvents() const final { return true; }
+        void handleGlobalMouseMoved(const sf::Vector2f& nuiPos) final;
+        void handleGlobalMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& nuiPos) final;
         bool handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
-        bool handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
-        bool handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos) final;
-        void handleMouseLeft() final;
 
         //! @}
 
@@ -114,6 +115,7 @@ namespace dungeon
         // View elements
         scene::Layer* m_layer = nullptr;    //!< The layer to use for the minimap.
         sf::View m_view;                    //!< The minimap view.
+        const sf::View& m_nuiView;          //!< Reference to the NUI view.
 
         // Action
         CallbackAction m_callbackAction = nullptr;  //!< Called when minimap is clicked.

@@ -15,12 +15,12 @@ using namespace states;
 GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     : State(stack)
     , m_dungeonInter(m_contextMenu)
-    , m_dungeonSidebar(scene(), m_dungeonInter, m_dungeonData)
+    , m_dungeonSidebar(sceneGraph(), m_dungeonInter, m_dungeonData)
 {
     // Creating scene
     sf::Vector2f sceneSize(1200.f, 2700.f);
     scene().setSize(sceneSize);
-    auto& nuiRoot = nuiLayer().root();
+    auto& nuiRoot =     nuiLayer().root();
     auto& frontRoot =   scene().addLayer("FRONT",   m_depthFront).root();
     auto& closeRoot =   scene().addLayer("CLOSE",   m_depthClose).root();
     auto& dungeonRoot = scene().addLayer("DUNGEON", m_depthClose).root();

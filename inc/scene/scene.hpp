@@ -102,6 +102,9 @@ namespace scene
         //! Retrieve a layer given its key.
         inline Layer& layer(const std::string& key) { return *m_layersMap[key]; }
 
+        //! Retrieve a layer given its key (const).
+        inline const Layer& layer(const std::string& key) const { return *m_layersMap.at(key); }
+
         //! Get all the layers of the scene.
         inline const std::list<std::shared_ptr<Layer>>& layers() const { return m_layers; }
 

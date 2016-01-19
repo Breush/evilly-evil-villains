@@ -8,15 +8,16 @@
 #include "dungeon/sidebar/facilitybutton.hpp"
 #include "dungeon/sidebar/toolbutton.hpp"
 #include "dungeon/data.hpp"
-#include "scene/scene.hpp"
+#include "scene/graph.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 
 using namespace dungeon;
 
-Sidebar::Sidebar(scene::Scene& inScene, Inter& inter, Data& data)
+Sidebar::Sidebar(scene::Graph& graph, Inter& inter, Data& data)
     : m_inter(inter)
     , m_data(data)
-    , m_scene(inScene)
+    , m_scene(graph.scene())
+    , m_minimap(graph)
 {
     // Background
     attachChild(m_background);

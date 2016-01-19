@@ -72,6 +72,9 @@ namespace states
         //! @name Getters
         //! @{
 
+        //! Get the scene graph.
+        inline scene::Graph& sceneGraph() { return m_sceneGraph; }
+
         //! Get the scene from the graph.
         inline scene::Scene& scene() { return m_sceneGraph.scene(); }
 

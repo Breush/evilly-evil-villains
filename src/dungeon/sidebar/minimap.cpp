@@ -1,13 +1,15 @@
 #include "dungeon/sidebar/minimap.hpp"
 
 #include "core/application.hpp"
+#include "scene/graph.hpp"
 #include "scene/layer.hpp"
 #include "tools/vector.hpp"
 #include "tools/tools.hpp"
 
 using namespace dungeon;
 
-Minimap::Minimap()
+Minimap::Minimap(const scene::Graph& graph)
+    : m_nuiView(graph.nuiLayer().view())
 {
     // Background
     addPart(&m_background);
@@ -68,31 +70,25 @@ void Minimap::refreshNUI(const config::NUIGuides& cNUI)
 //------------------//
 //----- Events -----//
 
-bool Minimap::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f& nuiPos)
+void Minimap::handleGlobalMouseMoved(const sf::Vector2f& nuiPos)
+{
+    returnif (!m_grabbing);
+    doAction(nuiPos);
+}
+
+void Minimap::handleGlobalMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f& nuiPos)
+{
+    returnif (!m_grabbing);
+    returnif (button != sf::Mouse::Left);
+    m_grabbing = false;
+}
+
+bool Minimap::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
     returnif (button != sf::Mouse::Left) false;
     m_grabbing = true;
     doAction(nuiPos);
     return true;
-}
-
-bool Minimap::handleMouseButtonReleased(const sf::Mouse::Button button, const sf::Vector2f&, const sf::Vector2f&)
-{
-    returnif (button != sf::Mouse::Left) false;
-    m_grabbing = false;
-    return true;
-}
-
-bool Minimap::handleMouseMoved(const sf::Vector2f&, const sf::Vector2f& nuiPos)
-{
-    returnif (!m_grabbing) false;
-    doAction(nuiPos);
-    return true;
-}
-
-void Minimap::handleMouseLeft()
-{
-    m_grabbing = false;
 }
 
 //------------------//
@@ -104,7 +100,7 @@ void Minimap::doAction(const sf::Vector2f& nuiPos)
     returnif (m_callbackAction == nullptr);
 
     const auto& window = Application::context().window;
-    auto pixel = window.mapCoordsToPixel(nuiPos);
+    auto pixel = window.mapCoordsToPixel(nuiPos, m_nuiView);
     auto viewCoordsClicked = window.mapPixelToCoords(pixel, m_view);
     m_callbackAction(viewCoordsClicked);
 }

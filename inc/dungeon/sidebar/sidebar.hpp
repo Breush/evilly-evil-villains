@@ -17,6 +17,7 @@
 namespace scene
 {
     class Scene;
+    class Graph;
 }
 
 namespace dungeon
@@ -34,7 +35,7 @@ namespace dungeon
     public:
 
         //! Constructor.
-        Sidebar(scene::Scene& inScene, Inter& inter, Data& data);
+        Sidebar(scene::Graph& graph, Inter& inter, Data& data);
 
         //! Destructor.
         ~Sidebar();

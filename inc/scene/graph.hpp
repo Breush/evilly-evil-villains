@@ -55,8 +55,14 @@ namespace scene
         //! The NUI layer.
         inline Layer& nuiLayer() { return m_nuiLayer; }
 
+        //! The NUI layer (const).
+        inline const Layer& nuiLayer() const { return m_nuiLayer; }
+
         //! The scene (multiple layers).
         inline Scene& scene() { return m_scene; }
+
+        //! The scene (multiple layers) (const).
+        inline const Scene& scene() const { return m_scene; }
 
         //! @}
 
