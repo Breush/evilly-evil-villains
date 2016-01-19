@@ -69,7 +69,7 @@ void Selector::refreshHitboxSelected(const sf::Vector2f& relPos)
 {
     auto findAndSelect = [this, &relPos] (const std::string& boxName)
     {
-        auto boxBounds = m_sprite.findBox(boxName + "_hitbox") + m_sprite.getPosition();
+        auto boxBounds = m_sprite.findBox(boxName + "_hitbox") + m_sprite.localPosition() - m_sprite.getOrigin();
         returnif (!boxBounds.contains(relPos)) false;
         returnif (m_selectedBox == boxName) true;
         m_sprite.select(boxName + "_selected");
