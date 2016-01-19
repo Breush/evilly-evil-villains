@@ -18,8 +18,19 @@ void DynamicsManager::update(const sf::Time& dt)
     for (auto it = std::begin(m_dynamicsInfo); it != std::end(m_dynamicsInfo); ) {
         auto& dynamicInfo = *it;
 
+        // Spawn dynamic
+        if (dynamicInfo.status == DynamicStatus::TO_SPAWN) {
+            dynamicInfo.status = DynamicStatus::RUNNING;
+
+            // Create the dynamic object and add it as an Inter child
+            auto& dynamic = dynamicInfo.dynamic;
+            dynamic = std::make_unique<Dynamic>(*m_inter);
+            dynamic->bindElementData(dynamicInfo.data);
+            m_inter->attachChild(*dynamic);
+        }
+
         // Remove the dynamic
-        if (dynamicInfo.status == DynamicStatus::TO_BE_REMOVED) {
+        else if (dynamicInfo.status == DynamicStatus::TO_BE_REMOVED) {
             it = m_dynamicsInfo.erase(it);
             dynamicsCountChanged = true;
             continue;
@@ -37,12 +48,8 @@ void DynamicsManager::update(const sf::Time& dt)
 //------------------//
 //----- Events -----//
 
-void DynamicsManager::receive(const context::Event& event)
+void DynamicsManager::receive(const context::Event&)
 {
-    /*
-    const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
-    sf::Vector2u coords = {devent.room.x, devent.room.y};
-    */
 }
 
 //----------------------------//
@@ -55,15 +62,15 @@ void DynamicsManager::load(const pugi::xml_node& node)
     for (const auto& dynamicNode : node.children(L"dynamic")) {
         m_dynamicsInfo.emplace_back();
         auto& dynamicInfo = m_dynamicsInfo.back();
+        dynamicInfo.status = DynamicStatus::TO_SPAWN;
         dynamicInfo.data.loadXML(dynamicNode);
     }
-
-    refreshDynamicsData();
 }
 
 void DynamicsManager::save(pugi::xml_node node)
 {
     for (const auto& dynamicInfo : m_dynamicsInfo) {
+        if (dynamicInfo.status == DynamicStatus::TO_BE_REMOVED) continue;
         auto dynamicNode = node.append_child(L"dynamic");
         dynamicInfo.data.saveXML(dynamicNode);
     }

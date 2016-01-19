@@ -90,6 +90,7 @@ namespace dungeon
         {
             RUNNING,        //!< Dynamic is ok, standard status.
             TO_BE_REMOVED,  //!< Dynamic will be removed.
+            TO_SPAWN,       //!< Dynamic will be created.
         };
 
         //! Contains an Dynamic plus its status.

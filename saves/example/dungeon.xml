@@ -5,6 +5,15 @@
         <fame value="41" />
         <debt perWeekDosh="20" weeksLeft="40" />
     </resources>
+	<dynamics>
+		<dynamic type="loot">
+			<fame type="uint32" value="0" />
+			<soul type="uint32" value="1" />
+			<dosh type="uint32" value="150" />
+			<ry type="float" value="0.5" />
+			<rx type="float" value="4.5" />
+		</dynamic>
+	</dynamics>
 	<heroes nextWaveDelay="12">
 		<hero type="groo" hp="10" status="running">
 		    <dosh type="uint32" value="10" />
