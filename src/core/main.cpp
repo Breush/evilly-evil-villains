@@ -88,6 +88,7 @@ int main(int argc, char *argv[])
 
     // Steam state
     mdebug_core_1("Steam interfacing: " << (steamActivated? "Enabled" : "Disabled"));
+    if (!steamActivated) mdebug_core_1("Steam loading errors have been saved to steam.log");
 
     //----- Application -----//
 
@@ -101,9 +102,9 @@ int main(int argc, char *argv[])
         str << std::endl << "Here's the call stack when the exception occured:" << std::endl;
         str << callStack.toString();
 
-        // TODO Have a way to export all debug message to the file?
         // Show message in the console and in a file
         std::cerr << str.str() << std::endl;
+        std::cerr << "This message has also been saved to error.log." << std::endl;
         std::ofstream ofs;
         ofs.open("error.log");
         ofs << str.str();

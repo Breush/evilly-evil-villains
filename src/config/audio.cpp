@@ -1,4 +1,4 @@
-#include "config/sound.hpp"
+#include "config/audio.hpp"
 
 #include "config/debug.hpp"
 #include "tools/filesystem.hpp"
@@ -9,20 +9,20 @@
 
 using namespace config;
 
-Sound::Sound()
+Audio::Audio()
 {
     pugi::xml_document doc;
 
     #if DEBUG_GLOBAL > 0
-        std::wstring file(L"config/sound_saved.xml");
-        if (!fileExists(file)) file = L"config/sound.xml";
+        std::wstring file(L"config/audio_saved.xml");
+        if (!fileExists(file)) file = L"config/audio.xml";
     #else
-        std::wstring file(L"config/sound.xml");
+        std::wstring file(L"config/audio.xml");
     #endif
 
     // Create file if not existing yet
     if (!fileExists(file)) {
-        wdebug_config_1(L"Sound config file does not seem to exist yet. Using default parameters.");
+        wdebug_config_1(L"Audio config file does not seem to exist yet. Using default parameters.");
         createDirectory(L"config");
         return;
     }
@@ -30,8 +30,8 @@ Sound::Sound()
     // Checks if we read the file OK
     doc.load_file(file.c_str());
     const auto& config = doc.child(L"config");
-    if (!config || config.attribute(L"type").as_string() != std::wstring(L"sound")) {
-        wdebug_config_1(L"Could not find valid sound config file. Using default parameters.");
+    if (!config || config.attribute(L"type").as_string() != std::wstring(L"audio")) {
+        wdebug_config_1(L"Could not find valid audio config file. Using default parameters.");
         return;
     }
 
@@ -49,14 +49,14 @@ Sound::Sound()
     effectiveSoundVolume = globalRelVolume * soundVolume;
 }
 
-void Sound::save()
+void Audio::save()
 {
     pugi::xml_node param;
 
     // Creating XML
     pugi::xml_document doc;
     auto config = doc.append_child(L"config");
-    config.append_attribute(L"type") = L"sound";
+    config.append_attribute(L"type") = L"audio";
 
     // Global
     param = config.append_child(L"param");
@@ -70,13 +70,13 @@ void Sound::save()
 
     // Sound
     param = config.append_child(L"sound");
-    param.append_attribute(L"name") = L"nui";
+    param.append_attribute(L"name") = L"sound";
     param.append_attribute(L"size") = soundVolume;
 
     #if DEBUG_GLOBAL > 0
-        doc.save_file("config/sound_saved.xml");
+        doc.save_file("config/audio_saved.xml");
     #else
-        doc.save_file("config/sound.xml");
+        doc.save_file("config/audio.xml");
     #endif
 
     // Compute new effective values

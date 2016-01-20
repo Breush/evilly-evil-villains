@@ -188,7 +188,7 @@ void MenuConfig::handleEvent(const sf::Event& event)
 void MenuConfig::refreshFormsFromConfig()
 {
     auto& display = Application::context().display;
-    auto& audio = Application::context().sound;
+    auto& audio = Application::context().audio;
 
     // General
     auto languageIndex = i18n::languageIndexFromCode(display.global.language);
@@ -254,7 +254,7 @@ void MenuConfig::applyChanges()
 
 void MenuConfig::onVolumeSliderChanged(uint sliderIndex)
 {
-    auto& audio = Application::context().sound;
+    auto& audio = Application::context().audio;
 
     if (sliderIndex == 0u)      audio.globalRelVolume = m_volumeSliders[0u].value() / 100.f;
     else if (sliderIndex == 1u) audio.musicVolume = m_volumeSliders[1u].value();

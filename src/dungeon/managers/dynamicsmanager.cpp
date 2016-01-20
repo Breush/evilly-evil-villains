@@ -48,8 +48,13 @@ void DynamicsManager::update(const sf::Time& dt)
 //------------------//
 //----- Events -----//
 
-void DynamicsManager::receive(const context::Event&)
+void DynamicsManager::receive(const context::Event& event)
 {
+    const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
+
+    if (devent.type == "dungeon_graph_changed") {
+        refreshDynamicsData();
+    }
 }
 
 //----------------------------//
@@ -119,5 +124,6 @@ void DynamicsManager::remove(const Dynamic* pDynamic)
 void DynamicsManager::refreshDynamicsData()
 {
     for (auto& dynamicInfo : m_dynamicsInfo)
-        dynamicInfo.dynamic->bindElementData(dynamicInfo.data);
+        if (dynamicInfo.status == DynamicStatus::RUNNING)
+            dynamicInfo.dynamic->bindElementData(dynamicInfo.data);
 }

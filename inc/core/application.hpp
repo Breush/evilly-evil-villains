@@ -11,7 +11,7 @@
 #include "config/windowinfo.hpp"
 #include "config/nuiguides.hpp"
 #include "config/display.hpp"
-#include "config/sound.hpp"
+#include "config/audio.hpp"
 #include "tools/int.hpp"
 
 #include <SFML/System/Time.hpp>
@@ -55,7 +55,7 @@ public:
         resources::AnimationHolder  animations; //!< The animations, parsed SCML files.
 
         config::Display     display;    //!< The display configuration.
-        config::Sound       sound;      //!< The sound configuration.
+        config::Audio       audio;      //!< The audio configuration.
         config::NUIGuides   nuiGuides;  //!< Guidelines for NUI elements.
         config::WindowInfo  windowInfo; //!< Extra informations for window parameters.
     };

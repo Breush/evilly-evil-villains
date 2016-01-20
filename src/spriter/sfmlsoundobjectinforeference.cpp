@@ -11,10 +11,7 @@ SfmlSoundObjectInfoReference::SfmlSoundObjectInfoReference(std::string soundID)
 
 void SfmlSoundObjectInfoReference::playTrigger()
 {
-    if (getTriggerCount() > 0)
-    {
+    if (getTriggerCount() > 0) {
         Application::context().sounds.play(m_soundID);
-
-        // TODO Use volume
     }
 }

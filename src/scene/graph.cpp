@@ -186,7 +186,7 @@ void Graph::broadcastEvent(const sf::Event& event)
 
 void Graph::broadcastGlobalEvent(const sf::Event& event)
 {
-    // FIXME There is a risk that some global handler will modify
+    // Note: There is a risk that some global handler will modify
     // the list of global handlers, causing some strange bugs.
     // A simple copy of the initial list might not work because of
     // pointers to unallowed.
@@ -196,6 +196,7 @@ void Graph::broadcastGlobalEvent(const sf::Event& event)
     // I let it this way because the usage of global event is (and should be)
     // really rare. And all it does (in ScrollArea) are graphic updates, and never detach an entity.
     // So this case never happen so far.
+    // In the DropDownSelector, the removal of the object (a global handler) is delayed to the next update.
 
     // Mouse event
     if (isMouse(event)) {

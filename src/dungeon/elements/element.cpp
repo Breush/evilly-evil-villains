@@ -64,6 +64,8 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
     m_lua["eev_restartAnimation"] = [this] { lua_restartAnimation(); };
     m_lua["eev_forwardAnimation"] = [this] (const lua_Number offset) { lua_forwardAnimation(offset); };
 
+    m_lua["eev_soundPlay"] = [this] (const std::string& soundID) { lua_soundPlay(soundID); };
+
     m_lua["eev_selectAnimationUID"] = [this] (const uint32 UID, const std::string& animationKey) { lua_selectAnimationUID(UID, animationKey); };
 
     m_lua["eev_damageRange"] = [this] (const lua_Number rx, const lua_Number ry, const lua_Number relRange, const lua_Number basePower) { lua_damageRange(rx, ry, relRange, basePower); };
@@ -324,6 +326,12 @@ void Element::lua_selectAnimationUID(const uint32 UID, const std::string& animat
     element->selectAnimation(animationKey);
 }
 
+//----- Audio
+
+void Element::lua_soundPlay(const std::string& soundID)
+{
+    Application::context().sounds.play(soundID);
+}
 
 //----- Villain
 

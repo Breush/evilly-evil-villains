@@ -925,8 +925,11 @@ void Data::removeRoomMonsters(const sf::Vector2u& coords)
 
 bool Data::addMonsterValid(const sf::Vector2u& coords, const std::wstring& monsterID)
 {
-    // TODO Why would we care about monsterID?
-    return isRoomConstructed(coords);
+    // Note: We do not care about monsterID.
+    // But, one day, we might.
+    // For instance, it might be impossible to place a monster directly on some trap.
+
+    return isRoomWalkable(coords);
 }
 
 void Data::addMonsterToReserve(const std::wstring& monsterID, const uint countdownIncrease)

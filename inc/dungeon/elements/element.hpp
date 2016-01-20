@@ -165,6 +165,11 @@ namespace dungeon
         //! Select an animation to play for the specified UID.
         void lua_selectAnimationUID(const uint32 UID, const std::string& animationKey);
 
+        //----- Audio
+
+        //! Play a sound file.
+        void lua_soundPlay(const std::string& soundID);
+
         //----- Villain
 
         //! Borrow money from the reserve.

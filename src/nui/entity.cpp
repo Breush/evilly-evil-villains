@@ -65,6 +65,7 @@ void Entity::update(const sf::Time& dt)
 
     // Tooltip
     if (m_showTooltip && m_tooltipTime < m_tooltipDelay) {
+        // This is affected too by the game factor...
         m_tooltipTime += dt;
         if (m_tooltipTime >= m_tooltipDelay)
             root()->attachChild(m_tooltip);

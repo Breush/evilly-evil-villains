@@ -2,10 +2,10 @@
 
 namespace config
 {
-    struct Sound
+    struct Audio
     {
         //! Load the corresponding config file.
-        Sound();
+        Audio();
 
         //! Save the data to the corresponding config file.
         void save();

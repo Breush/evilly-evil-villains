@@ -29,7 +29,7 @@ void Application::loadSounds()
 void Application::refreshSounds()
 {
     const auto& resolution = s_context.windowInfo.resolution;
-    const auto& effectiveSoundVolume = s_context.sound.effectiveSoundVolume;
+    const auto& effectiveSoundVolume = s_context.audio.effectiveSoundVolume;
 
     s_context.sounds.setListenerPosition(resolution / 2.f);
     s_context.sounds.setVolume(effectiveSoundVolume);

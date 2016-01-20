@@ -210,12 +210,14 @@ void Entity::updateChanges()
         m_localChanges = false;
     }
 
-    // Propagate to parent
+    // Size has changed
     if (m_sizeChanges) {
+        // Propagate to parent
         if (m_parent != nullptr)
             m_parent->onChildSizeChanges(*this);
 
-        // TODO Why not onSizeChanges() here?
+        // Note: we do not put onSizeChanges() here
+        // because it is ensured that the size changes are in sync.
         m_sizeChanges = false;
     }
 

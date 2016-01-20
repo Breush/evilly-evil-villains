@@ -40,10 +40,11 @@ function cbLeftClick()
     eev_giveSoul(eev_getDataU32("soul"))
     eev_giveFame(eev_getDataU32("fame"))
 
+    -- Play some sound
+    eev_soundPlay("resources/dosh_gain")
+
     -- Destroy itself
     eev_dynamicRemoveSelf()
-
-    -- TODO Play some sound
 end
 
 -------------

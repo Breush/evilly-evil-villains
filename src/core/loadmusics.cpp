@@ -10,5 +10,5 @@ void Application::loadMusics()
 
 void Application::refreshMusics()
 {
-    s_context.musics.setVolume(s_context.sound.effectiveMusicVolume);
+    s_context.musics.setVolume(s_context.audio.effectiveMusicVolume);
 }
