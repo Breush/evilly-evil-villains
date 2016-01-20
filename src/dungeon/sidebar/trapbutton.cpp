@@ -43,7 +43,7 @@ std::unique_ptr<scene::Grabbable> TrapGrabButton::spawnGrabbable()
 TrapGrabbable::TrapGrabbable(scene::GrabbableSpawner& spawner, const std::wstring& trapID)
     : baseClass(spawner)
 {
-    auto textureID = "dungeon/traps/" + toString(trapID) + "/icon";
+    auto textureID = "vanilla/traps/" + toString(trapID) + "/icon";
 
     addPart(&m_sprite);
     m_sprite.setTexture(&Application::context().textures.get(textureID));
