@@ -25,7 +25,7 @@ void Layer::init(Graph* graph)
 
 void Layer::update(const sf::Time& dt, const float factor)
 {
-    m_root.update(factor * dt);
+    m_root.update(dt, factor);
 }
 
 void Layer::draw(sf::RenderTarget& target, sf::RenderStates states) const

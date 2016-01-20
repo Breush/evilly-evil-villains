@@ -41,7 +41,7 @@ namespace nui
         //! @{
 
         void onFocusChanged() final;
-        void update(const sf::Time& dt) final;
+        void update(const sf::Time& dt, const float factor) final;
         void drawInternal(sf::RenderTarget& target, sf::RenderStates states) const final;
 
         //! @}

@@ -176,16 +176,18 @@ void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states, const 
     }
 }
 
-void Entity::update(const sf::Time& dt)
+void Entity::update(const sf::Time& dt, const float factor)
 {
-    updateRoutine(dt);
-    updateLerpable(dt);
-    updateAI(dt);
+    auto dtGame = dt * factor;
+
+    updateRoutine(dtGame);
+    updateLerpable(dtGame);
+    updateAI(dtGame);
     updateChanges();
 
     // Update children - DFS
     for (auto& child : m_children)
-        child->update(dt);
+        child->update(dt, factor);
 }
 
 void Entity::updateLerpable(const sf::Time& dt)

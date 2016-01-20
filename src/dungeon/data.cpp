@@ -856,7 +856,7 @@ void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     // Events
     addEvent("facility_changed", coords);
     if (dungeonChanged)     EventEmitter::addEvent("dungeon_changed");
-    if (treasureChanged)    EventEmitter::addEvent("treasure_changed");
+    if (treasureChanged)    addEvent("treasure_changed", coords);
 
     updateRoomHide(coords);
 }

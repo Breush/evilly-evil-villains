@@ -283,7 +283,7 @@ namespace scene
          *  Direct override is not encouraged, one should use updateRoutine().
          *  This is made virtual for nui::Entity to add specific extra steps.
          */
-        virtual void update(const sf::Time& dt);
+        virtual void update(const sf::Time& dt, const float factor);
 
         //! Update state at each frame given a time-step.
         /*!

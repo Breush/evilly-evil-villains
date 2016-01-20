@@ -53,11 +53,10 @@ void Entity::drawInternal(sf::RenderTarget& target, sf::RenderStates states) con
     target.draw(m_focusSprite, states);
 }
 
-void Entity::update(const sf::Time& dt)
+void Entity::update(const sf::Time& dt, const float factor)
 {
     // Focus
     if (focused()) {
-        // TODO This became affected by game time factor, is it what we want?
         m_focusAnimation += 60.f * dt.asSeconds();
         const auto& focusSize = m_focusSprite.getSize();
         m_focusSprite.setTextureRect(sf::IntRect(-m_focusAnimation, -m_focusAnimation, focusSize.x, focusSize.y));
@@ -65,13 +64,12 @@ void Entity::update(const sf::Time& dt)
 
     // Tooltip
     if (m_showTooltip && m_tooltipTime < m_tooltipDelay) {
-        // This is affected too by the game factor...
         m_tooltipTime += dt;
         if (m_tooltipTime >= m_tooltipDelay)
             root()->attachChild(m_tooltip);
     }
 
-    baseClass::update(dt);
+    baseClass::update(dt, factor);
 }
 
 //------------------//

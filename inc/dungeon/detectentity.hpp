@@ -59,7 +59,7 @@ namespace dungeon
         //! @name Routine
         //! @{
 
-        void update(const sf::Time &dt) final;
+        void update(const sf::Time &dt, const float factor) final;
 
         //! @}
 

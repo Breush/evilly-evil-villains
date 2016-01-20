@@ -50,7 +50,7 @@ void Graph::update(const sf::Time& dt, const float factor)
 
     // The grabbable
     if (m_grabbable != nullptr)
-        m_grabbable->update(dt);
+        m_grabbable->update(dt, factor);
 }
 
 void Graph::handleEvent(const sf::Event& event)

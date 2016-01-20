@@ -21,7 +21,7 @@ DetectEntity::~DetectEntity()
 //------------------//
 //---- Routine -----//
 
-void DetectEntity::update(const sf::Time& dt)
+void DetectEntity::update(const sf::Time& dt, const float factor)
 {
     uint32 UID;
 
@@ -31,7 +31,7 @@ void DetectEntity::update(const sf::Time& dt)
             if ((UID = signal.condition()) != -1u)
                 signal.callback(UID);
 
-    baseClass::update(dt);
+    baseClass::update(dt, factor);
 }
 
 //--------------------//
