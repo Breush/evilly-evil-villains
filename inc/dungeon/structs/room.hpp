@@ -6,6 +6,23 @@
 
 namespace dungeon
 {
+    //! Room coords.
+    //! Maximum size is therefore 256x256.
+    using RoomCoords = sf::Vector2<uint8>;
+
+    //! Room direction vector.
+    using RoomDirection = sf::Vector2<int8>;
+
+    //! Room relative coords.
+    //! Converting to unsigned integer gives you the RoomCoords.
+    using RoomRelCoords = sf::Vector2<float>;
+
+    //! Room rectangle in relative coords.
+    using RoomRelRect = sf::FloatRect;
+
+    inline RoomCoords toCoords(const RoomRelCoords& relCoords) { return {static_cast<uint8>(relCoords.x), static_cast<uint8>(relCoords.y)}; }
+    inline RoomRelCoords toRelCoords(const RoomCoords& coords) { return {static_cast<float>(coords.x), static_cast<float>(coords.y)}; }
+
     //! Possible rooms state.
     enum class RoomState
     {
@@ -17,7 +34,7 @@ namespace dungeon
     //! A room has coordinates in the dungeon and a few elements (facilities/trap).
     struct Room
     {
-        sf::Vector2u coords;                    //!< The floor/room coordinates of the room.
+        RoomCoords coords;                      //!< The floor/room coordinates of the room.
         RoomState state = RoomState::UNKNOWN;   //!< The current state.
         uint8 hide = RoomFlag::NONE;            //!< What parts of the room are hidden.
 

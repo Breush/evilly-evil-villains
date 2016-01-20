@@ -5,17 +5,22 @@ namespace sf
 
     template<typename T> Vector2f v2f(const Vector2<T>& v)
     {
-        return Vector2f(float(v.x), float(v.y));
+        return Vector2f(static_cast<float>(v.x), static_cast<float>(v.y));
     }
 
     template<typename T> Vector2i v2i(const Vector2<T>& v)
     {
-        return Vector2i(int(v.x), int(v.y));
+        return Vector2i(static_cast<int>(v.x), static_cast<int>(v.y));
     }
 
     template<typename T> Vector2u v2u(const Vector2<T>& v)
     {
-        return Vector2u(uint(v.x), uint(v.y));
+        return Vector2u(static_cast<uint>(v.x), static_cast<uint>(v.y));
+    }
+
+    template<typename T> Vector2u8 v2u8(const Vector2<T>& v)
+    {
+        return Vector2u8(static_cast<uint8>(v.x), static_cast<uint8>(v.y));
     }
 
     template<typename T> FloatRect toFloatRect(const Rect<T>& r)
@@ -165,6 +170,14 @@ namespace tools
 
 namespace std
 {
+    template <> struct hash<sf::Vector2<uint8>>
+    {
+        uint8 operator()(const sf::Vector2<uint8>& key) const
+        {
+            return (key.x + key.y) * (key.x + key.y + 1u) / 2u + key.y;
+        }
+    };
+
     template <> struct hash<sf::Vector2u>
     {
         uint32 operator()(const sf::Vector2u& key) const

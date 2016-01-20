@@ -413,7 +413,7 @@ void Data::correctFloorsRooms()
 //-------------------//
 //----- Emitter -----//
 
-void Data::addEvent(std::string eventType, const sf::Vector2u& coords)
+void Data::addEvent(std::string eventType, const RoomCoords& coords)
 {
     auto event = std::make_unique<Event>();
     event->type = std::move(eventType);
@@ -424,14 +424,14 @@ void Data::addEvent(std::string eventType, const sf::Vector2u& coords)
 //-----------------//
 //----- Rooms -----//
 
-bool Data::isRoomConstructed(const sf::Vector2u& coords) const
+bool Data::isRoomConstructed(const RoomCoords& coords) const
 {
     returnif (coords.x >= m_floorsCount) false;
     returnif (coords.y >= m_roomsByFloor) false;
     return (room(coords).state != RoomState::EMPTY);
 }
 
-bool Data::isRoomWalkable(const sf::Vector2u& coords) const
+bool Data::isRoomWalkable(const RoomCoords& coords) const
 {
     returnif (coords.x >= m_floorsCount) false;
     returnif (coords.y >= m_roomsByFloor) false;
@@ -445,7 +445,7 @@ bool Data::isRoomWalkable(const sf::Vector2u& coords) const
     return true;
 }
 
-void Data::constructRoom(const sf::Vector2u& coords)
+void Data::constructRoom(const RoomCoords& coords)
 {
     returnif (coords.x >= m_floorsCount);
     returnif (coords.y >= m_roomsByFloor);
@@ -466,7 +466,7 @@ void Data::constructRoomsAll()
         room.state = RoomState::CONSTRUCTED;
 }
 
-void Data::destroyRoom(const sf::Vector2u& coords)
+void Data::destroyRoom(const RoomCoords& coords)
 {
     returnif (!isRoomConstructed(coords));
 
@@ -485,7 +485,7 @@ void Data::destroyRoom(const sf::Vector2u& coords)
     updateRoomHide(coords);
 }
 
-bool Data::pushRoom(const sf::Vector2u& coords, Direction direction)
+bool Data::pushRoom(const RoomCoords& coords, Direction direction)
 {
     returnif (coords.x >= m_floorsCount)  false;
     returnif (coords.y >= m_roomsByFloor) false;
@@ -501,7 +501,7 @@ bool Data::pushRoom(const sf::Vector2u& coords, Direction direction)
 
     // We're all right, let's move the rooms
     auto antiDirection = oppositeDirection(direction);
-    sf::Vector2u targetCoords = voidCoords;
+    RoomCoords targetCoords = voidCoords;
     while (targetCoords != coords) {
         // Remove previous links if any (and explicit ones are broken)
         auto movingCoords = roomNeighbourCoords(targetCoords, antiDirection);
@@ -533,7 +533,7 @@ bool Data::pushRoom(const sf::Vector2u& coords, Direction direction)
     return true;
 }
 
-uint Data::stealRoomTreasure(const sf::Vector2u& coords, uint wantedDosh)
+uint Data::stealRoomTreasure(const RoomCoords& coords, uint wantedDosh)
 {
     auto& roomInfo = room(coords);
 
@@ -557,27 +557,27 @@ uint Data::stealRoomTreasure(const sf::Vector2u& coords, uint wantedDosh)
     return stolenDosh;
 }
 
-sf::Vector2u Data::roomNeighbourCoords(const sf::Vector2u& coords, Direction direction)
+RoomCoords Data::roomNeighbourCoords(const RoomCoords& coords, Direction direction)
 {
     return coords + roomDirectionVector2u(direction);
 }
 
-Room& Data::roomNeighbour(const sf::Vector2u& coords, Direction direction)
+Room& Data::roomNeighbour(const RoomCoords& coords, Direction direction)
 {
     return room(roomNeighbourCoords(coords, direction));
 }
 
-sf::Vector2u Data::roomDirectionVector2u(Direction direction)
+RoomCoords Data::roomDirectionVector2u(Direction direction)
 {
-    return {(direction >> 0x4) - 1u, (direction & 0xf) - 1u};
+    return {static_cast<uint8>((direction >> 0x4) - 1_u8), static_cast<uint8>((direction & 0xf) - 1_u8)};
 }
 
-sf::Vector2i Data::roomDirectionVector2i(Direction direction)
+RoomDirection Data::roomDirectionVector2i(Direction direction)
 {
-    return {(direction >> 0x4) - 1, (direction & 0xf) - 1};
+    return {static_cast<int8>((direction >> 0x4) - 1_i8), static_cast<int8>((direction & 0xf) - 1_i8)};
 }
 
-uint Data::roomTreasureDosh(const sf::Vector2u& coords)
+uint Data::roomTreasureDosh(const RoomCoords& coords)
 {
     uint treasureDosh = 0u;
     auto& roomInfo = room(coords);
@@ -589,7 +589,7 @@ uint Data::roomTreasureDosh(const sf::Vector2u& coords)
     return treasureDosh;
 }
 
-void Data::updateRoomHide(const sf::Vector2u& coords)
+void Data::updateRoomHide(const RoomCoords& coords)
 {
     uint8 newHide = RoomFlag::NONE;
 
@@ -609,12 +609,12 @@ void Data::updateRoomHide(const sf::Vector2u& coords)
 //----------------------//
 //----- Facilities -----//
 
-bool Data::hasFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const
+bool Data::hasFacility(const RoomCoords& coords, const std::wstring& facilityID) const
 {
     return getFacility(coords, facilityID) != nullptr;
 }
 
-FacilityInfo* Data::getFacility(const sf::Vector2u& coords, const std::wstring& facilityID)
+FacilityInfo* Data::getFacility(const RoomCoords& coords, const std::wstring& facilityID)
 {
     returnif (!isRoomConstructed(coords)) nullptr;
     auto& roomInfo = room(coords);
@@ -623,7 +623,7 @@ FacilityInfo* Data::getFacility(const sf::Vector2u& coords, const std::wstring& 
     return &(*found);
 }
 
-const FacilityInfo* Data::getFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const
+const FacilityInfo* Data::getFacility(const RoomCoords& coords, const std::wstring& facilityID) const
 {
     returnif (!isRoomConstructed(coords)) nullptr;
     const auto& roomInfo = room(coords);
@@ -632,7 +632,7 @@ const FacilityInfo* Data::getFacility(const sf::Vector2u& coords, const std::wst
     return &(*found);
 }
 
-bool Data::createRoomFacilityValid(const sf::Vector2u& coords, const std::wstring& facilityID)
+bool Data::createRoomFacilityValid(const RoomCoords& coords, const std::wstring& facilityID)
 {
     returnif (!isRoomConstructed(coords)) false;
     returnif (hasFacility(coords, facilityID)) false;
@@ -672,7 +672,7 @@ bool Data::createRoomFacilityValid(const sf::Vector2u& coords, const std::wstrin
     return !excluded;
 }
 
-bool Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool isLink)
+bool Data::createRoomFacility(const RoomCoords& coords, const std::wstring& facilityID, bool isLink)
 {
     returnif (!createRoomFacilityValid(coords, facilityID)) false;
 
@@ -698,7 +698,7 @@ bool Data::createRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     return true;
 }
 
-bool Data::createRoomFacilityLinked(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords, const std::wstring& linkFacilityID)
+bool Data::createRoomFacilityLinked(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords, const std::wstring& linkFacilityID)
 {
     returnif (!createRoomFacility(coords, facilityID)) false;
     returnif (!hasFacility(linkCoords, linkFacilityID)) true;
@@ -709,7 +709,7 @@ bool Data::createRoomFacilityLinked(const sf::Vector2u& coords, const std::wstri
     return true;
 }
 
-void Data::setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords)
+void Data::setRoomFacilityLink(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords)
 {
     auto pFacilityInfo = getFacility(coords, facilityID);
     returnif (pFacilityInfo == nullptr);
@@ -718,19 +718,19 @@ void Data::setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& f
     addEvent("facility_changed", coords);
 }
 
-void Data::createFacilityLinks(const sf::Vector2u& coords, const FacilityInfo& facility)
+void Data::createFacilityLinks(const RoomCoords& coords, const FacilityInfo& facility)
 {
     const auto& facilityData = *facility.common;
     for (const auto& link : facilityData.links) {
         // Create implicit links, ignore the explicit ones
         if (link.style == Link::Style::IMPLICIT) {
-            sf::Vector2u linkCoords(coords.x + link.x, coords.y + link.y);
+            RoomCoords linkCoords(coords.x + link.x, coords.y + link.y);
             createRoomFacility(linkCoords, link.id, true);
         }
     }
 }
 
-void Data::createRoomFacilitiesLinks(const sf::Vector2u& coords)
+void Data::createRoomFacilitiesLinks(const RoomCoords& coords)
 {
     returnif (!isRoomConstructed(coords));
     const auto& selectedRoom = room(coords);
@@ -757,7 +757,7 @@ void Data::createRoomFacilitiesLinks(const sf::Vector2u& coords)
         const auto& facilityInfo = *facility.common;
         for (const auto& link : facilityInfo.links) {
             if (link.style == Link::Style::IMPLICIT) {
-                sf::Vector2u linkCoords(room.coords.x + link.x, room.coords.y + link.y);
+                RoomCoords linkCoords(room.coords.x + link.x, room.coords.y + link.y);
                 if (linkCoords == coords)
                     createRoomFacility(coords, link.id, true);
             }
@@ -765,22 +765,22 @@ void Data::createRoomFacilitiesLinks(const sf::Vector2u& coords)
     }
 }
 
-void Data::removeRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID)
+void Data::removeRoomFacilityLink(const RoomCoords& coords, const std::wstring& facilityID)
 {
     auto pFacilityInfo = getFacility(coords, facilityID);
     returnif (pFacilityInfo == nullptr);
 
-    pFacilityInfo->link = {-1u, -1u};
+    pFacilityInfo->link = {0xff_u8, 0xff_u8};
     addEvent("facility_changed", coords);
 }
 
-void Data::removeFacilityLinks(const sf::Vector2u& coords, FacilityInfo& facility)
+void Data::removeFacilityLinks(const RoomCoords& coords, FacilityInfo& facility)
 {
     const auto& facilityData = facilitiesDB().get(facility.data.type());
     for (const auto& link : facilityData.links) {
         // Remove all implicit links
         if (link.style == Link::Style::IMPLICIT) {
-            sf::Vector2u linkCoords(coords.x + link.x, coords.y + link.y);
+            RoomCoords linkCoords(coords.x + link.x, coords.y + link.y);
             removeRoomFacility(linkCoords, link.id);
         }
 
@@ -791,10 +791,10 @@ void Data::removeFacilityLinks(const sf::Vector2u& coords, FacilityInfo& facilit
     }
 
     // Also break this facility explicit link if any
-    facility.link = {-1u, -1u};
+    facility.link = {0xff_u8, 0xff_u8};
 }
 
-void Data::removeRoomFacilitiesLinks(const sf::Vector2u& coords)
+void Data::removeRoomFacilitiesLinks(const RoomCoords& coords)
 {
     returnif (!isRoomConstructed(coords));
     auto& selectedRoom = room(coords);
@@ -807,7 +807,7 @@ void Data::removeRoomFacilitiesLinks(const sf::Vector2u& coords)
     std::erase_if(selectedRoom.facilities, [] (const FacilityInfo& facility) { return facility.isLink; });
 }
 
-void Data::setRoomFacilityBarrier(const sf::Vector2u& coords, const std::wstring& facilityID, bool activated)
+void Data::setRoomFacilityBarrier(const RoomCoords& coords, const std::wstring& facilityID, bool activated)
 {
     auto pFacilityInfo = getFacility(coords, facilityID);
     returnif (pFacilityInfo == nullptr);
@@ -817,7 +817,7 @@ void Data::setRoomFacilityBarrier(const sf::Vector2u& coords, const std::wstring
     EventEmitter::addEvent("dungeon_changed");
 }
 
-void Data::setRoomFacilityTreasure(const sf::Vector2u& coords, const std::wstring& facilityID, uint32 amount)
+void Data::setRoomFacilityTreasure(const RoomCoords& coords, const std::wstring& facilityID, uint32 amount)
 {
     auto pFacilityInfo = getFacility(coords, facilityID);
     returnif (pFacilityInfo == nullptr);
@@ -836,7 +836,7 @@ void Data::addFacilityTunnel(FacilityInfo& facilityInfo, const sf::Vector2i& tun
     EventEmitter::addEvent("dungeon_changed");
 }
 
-void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID)
+void Data::removeRoomFacility(const RoomCoords& coords, const std::wstring& facilityID)
 {
     returnif (!isRoomConstructed(coords));
 
@@ -861,7 +861,7 @@ void Data::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& fa
     updateRoomHide(coords);
 }
 
-void Data::removeRoomFacilities(const sf::Vector2u& coords)
+void Data::removeRoomFacilities(const RoomCoords& coords)
 {
     returnif (!isRoomConstructed(coords));
 
@@ -878,7 +878,7 @@ void Data::removeRoomFacilities(const sf::Vector2u& coords)
 //-----------------//
 //----- Traps -----//
 
-void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
+void Data::setRoomTrap(const RoomCoords& coords, const std::wstring& trapID)
 {
     returnif (!isRoomConstructed(coords));
 
@@ -898,7 +898,7 @@ void Data::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID)
     addEvent("trap_changed", coords);
 }
 
-void Data::removeRoomTrap(const sf::Vector2u& coords)
+void Data::removeRoomTrap(const RoomCoords& coords)
 {
     returnif (!isRoomConstructed(coords));
 
@@ -918,12 +918,12 @@ void Data::setTrapGenericUnlocked(const std::wstring& trapID, bool unlocked)
 //--------------------//
 //----- Monsters -----//
 
-void Data::removeRoomMonsters(const sf::Vector2u& coords)
+void Data::removeRoomMonsters(const RoomCoords& coords)
 {
     m_monstersManager.removeRoomMonsters(coords);
 }
 
-bool Data::addMonsterValid(const sf::Vector2u& coords, const std::wstring& monsterID)
+bool Data::addMonsterValid(const RoomCoords& coords, const std::wstring& monsterID)
 {
     // Note: We do not care about monsterID.
     // But, one day, we might.
@@ -954,7 +954,7 @@ void Data::addMonsterToReserve(const std::wstring& monsterID, const uint countdo
     EventEmitter::addEvent(std::move(event));
 }
 
-void Data::moveMonsterFromReserve(const sf::Vector2u& coords, const std::wstring& monsterID)
+void Data::moveMonsterFromReserve(const RoomCoords& coords, const std::wstring& monsterID)
 {
     returnif (!addMonsterValid(coords, monsterID));
 

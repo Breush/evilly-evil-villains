@@ -1,6 +1,7 @@
 #pragma once
 
 #include "dungeon/elements/element.hpp"
+#include "dungeon/structs/room.hpp"
 
 namespace dungeon
 {
@@ -18,7 +19,7 @@ namespace dungeon
     public:
 
         //! Constructor.
-        Facility(const sf::Vector2u& coords, ElementData& edata, Inter& inter);
+        Facility(const RoomCoords& coords, ElementData& edata, Inter& inter);
 
         //! Default destructor.
         ~Facility() = default;
@@ -111,7 +112,7 @@ namespace dungeon
 
     private:
 
-        sf::Vector2u m_coords;                  //!< The room in which the facility is set.
+        RoomCoords m_coords;                    //!< The room in which the facility is set.
         FacilityInfo* m_facilityInfo = nullptr; //!< The facility data reference.
         std::wstring m_elementID;               //!< The last facility ID known.
     };

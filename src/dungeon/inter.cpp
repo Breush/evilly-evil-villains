@@ -184,7 +184,7 @@ bool Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::V
 
 bool Inter::handleMouseMoved(const sf::Vector2f& relPos, const sf::Vector2f&)
 {
-    auto coords = tileFromLocalPosition(relPos);
+    auto coords = roomCoordsFromPosition(relPos);
     setHoveredTile(coords);
     return true;
 }
@@ -197,7 +197,7 @@ void Inter::handleMouseLeft()
 void Inter::receive(const context::Event& event)
 {
     const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
-    sf::Vector2u coords(devent.room.x, devent.room.y);
+    RoomCoords coords(devent.room.x, devent.room.y);
 
     if (event.type == "room_destroyed") {
         refreshTile(coords);
@@ -256,8 +256,8 @@ void Inter::refreshFromData()
     // Room tiles
     clearTiles();
 
-    for (uint floor = 0u; floor < floorsCount; ++floor)
-    for (uint room = 0u; room < roomsByFloor; ++room) {
+    for (uint8 floor = 0u; floor < floorsCount; ++floor)
+    for (uint8 room = 0u; room < roomsByFloor; ++room) {
         Tile tile;
         tile.coords = {floor, room};
         m_tiles[tile.coords] = std::move(tile);
@@ -271,19 +271,22 @@ void Inter::refreshFromData()
 //---------------------------//
 //----- Tile management -----//
 
-sf::Vector2f Inter::tileLocalPosition(const sf::Vector2u& coords) const
+sf::Vector2f Inter::positionFromRoomCoords(const RoomCoords& coords) const
 {
     return m_grid.cellPosition(m_data->floorsCount() - coords.x - 1u, coords.y);
 }
 
-sf::Vector2u Inter::tileFromLocalPosition(const sf::Vector2f& pos) const
+RoomCoords Inter::roomCoordsFromPosition(const sf::Vector2f& position) const
 {
-    auto coords = m_grid.rowColumnFromCoords(pos);
-    coords.x = m_data->floorsCount() - coords.x - 1u;
+    auto gridCoords = m_grid.coordsFromPosition(position);
+
+    RoomCoords coords;
+    coords.x = m_data->floorsCount() - gridCoords.x - 1u;
+    coords.y = gridCoords.y;
     return coords;
 }
 
-sf::Vector2f Inter::relTileLocalPosition(const sf::Vector2f& relCoords) const
+sf::Vector2f Inter::positionFromRelCoords(const RoomRelCoords& relCoords) const
 {
     const auto& factor = tileSize();
 
@@ -293,7 +296,7 @@ sf::Vector2f Inter::relTileLocalPosition(const sf::Vector2f& relCoords) const
     return pos;
 }
 
-sf::FloatRect Inter::relTileLocalPosition(const sf::FloatRect& relRect) const
+sf::FloatRect Inter::rectFromRelRect(const RoomRelRect& relRect) const
 {
     const auto& factor = tileSize();
 
@@ -305,21 +308,21 @@ sf::FloatRect Inter::relTileLocalPosition(const sf::FloatRect& relRect) const
     return rect;
 }
 
-sf::Vector2f Inter::relTileFromLocalPosition(const sf::Vector2f& pos) const
+RoomRelCoords Inter::relCoordsFromPosition(const sf::Vector2f& position) const
 {
-    sf::Vector2f relCoords;
-    relCoords.x = (size().y - pos.y) / tileSize().y;
-    relCoords.y = pos.x / tileSize().x;
+    RoomRelCoords relCoords;
+    relCoords.x = (size().y - position.y) / tileSize().y;
+    relCoords.y = position.x / tileSize().x;
     return relCoords;
 }
 
-void Inter::addLayer(const sf::Vector2u& coords, const std::string& textureID, float depth)
+void Inter::addLayer(const RoomCoords& coords, const std::string& textureID, float depth)
 {
     auto& tile = m_tiles[coords];
 
     auto layer = std::make_unique<scene::RectangleShape>();
     layer->setTexture(textureID);
-    layer->setLocalPosition(tileLocalPosition(coords));
+    layer->setLocalPosition(positionFromRoomCoords(coords));
     layer->setSize(tileSize());
     layer->setDepth(depth);
 
@@ -327,7 +330,7 @@ void Inter::addLayer(const sf::Vector2u& coords, const std::string& textureID, f
     attachChild(*tile.layers.back());
 }
 
-void Inter::clearLayers(const sf::Vector2u& coords)
+void Inter::clearLayers(const RoomCoords& coords)
 {
     auto& tile = m_tiles.at(coords);
     tile.layers.clear();
@@ -348,10 +351,10 @@ void Inter::clearTiles()
 
 void Inter::selectTile(const sf::Vector2f& pos)
 {
-    selectTile(tileFromLocalPosition(pos));
+    selectTile(roomCoordsFromPosition(pos));
 }
 
-void Inter::selectTile(const sf::Vector2u& coords)
+void Inter::selectTile(const RoomCoords& coords)
 {
     deselectTile();
     m_selectedTile = &m_tiles.at(coords);
@@ -376,7 +379,7 @@ void Inter::deselectTile()
 //------------------------//
 //----- Hovered tile -----//
 
-void Inter::setHoveredTile(const sf::Vector2u& coords)
+void Inter::setHoveredTile(const RoomCoords& coords)
 {
     returnif (coords.x >= m_data->floorsCount());
     returnif (coords.y >= m_data->roomsByFloor());
@@ -407,7 +410,7 @@ void Inter::resetHoveredTile()
 //------------------------//
 //----- Augmented UI -----//
 
-void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& nuiPos)
+void Inter::showTileContextMenu(const RoomCoords& coords, const sf::Vector2f& nuiPos)
 {
     auto& room = m_data->room(coords);
     m_contextMenu.clearChoices();
@@ -444,7 +447,7 @@ void Inter::showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& 
     m_contextMenu.markForVisible(true);
 }
 
-void Inter::showEditTreasureDialog(const sf::Vector2u& coords)
+void Inter::showEditTreasureDialog(const RoomCoords& coords)
 {
     // Find the reference in dungeon data
     // TODO We can currently only edit one type of treasure...
@@ -460,7 +463,7 @@ void Inter::showEditTreasureDialog(const sf::Vector2u& coords)
     m_treasureEditSpinBox.entry().giveFocus();
     m_treasureEditSpinBox.setVisible(true);
     m_treasureEditSpinBox.set(treasureDosh);
-    m_treasureEditSpinBox.setLocalPosition(tileLocalPosition(coords));
+    m_treasureEditSpinBox.setLocalPosition(positionFromRoomCoords(coords));
     m_treasureEditSpinBox.setMaxLimit(treasureDosh + m_data->villain().doshWallet.value());
     m_treasureEditSpinBox.setOnValueChangeCallback([this, coords, &treasureDosh] (uint32 oldValue, uint32 newValue) {
         // Sub or add (doshWallet will send an event)
@@ -495,7 +498,7 @@ void Inter::setPredictionMonster(const sf::Vector2f& relPos, const std::wstring&
     rPosition.y = std::floor(rPosition.y) + 0.5f;
     m_predictionSprite.setLocalPosition(rPosition * tileSize());
 
-    if (m_data->addMonsterValid(tileFromLocalPosition(relPos), monsterID))
+    if (m_data->addMonsterValid(roomCoordsFromPosition(relPos), monsterID))
         m_predictionSprite.setTiltColor({119u, 192u, 119u, 200u});
     else
         m_predictionSprite.setTiltColor({192u, 119u, 119u, 200u});
@@ -514,7 +517,7 @@ void Inter::setPredictionFacility(const sf::Vector2f& relPos, const std::wstring
     rPosition.y = std::floor(rPosition.y) + 0.5f;
     m_predictionSprite.setLocalPosition(rPosition * tileSize());
 
-    if (m_data->createRoomFacilityValid(tileFromLocalPosition(relPos), facilityID))
+    if (m_data->createRoomFacilityValid(roomCoordsFromPosition(relPos), facilityID))
         m_predictionSprite.setTiltColor({119u, 192u, 119u, 200u});
     else
         m_predictionSprite.setTiltColor({192u, 119u, 119u, 200u});
@@ -525,11 +528,11 @@ void Inter::resetPredictionLink()
     m_predictionLink.setVisible(false);
 }
 
-void Inter::setPredictionLink(const sf::Vector2u& coords, const sf::Vector2u& linkCoords)
+void Inter::setPredictionLink(const RoomCoords& coords, const RoomCoords& linkCoords)
 {
     m_predictionLink.setVisible(true);
-    auto limitStart = tileLocalPosition(coords) + tileSize() / 2.f;
-    auto limitEnd   = tileLocalPosition(linkCoords) + tileSize() / 2.f;
+    auto limitStart = positionFromRoomCoords(coords) + tileSize() / 2.f;
+    auto limitEnd   = positionFromRoomCoords(linkCoords) + tileSize() / 2.f;
     m_predictionLink.setLimits(limitStart, limitEnd);
 }
 
@@ -548,7 +551,7 @@ void Inter::setRoomWidth(const float roomWidth)
 //---------------------//
 //----- Structure -----//
 
-void Inter::constructRoom(const sf::Vector2u& coords, bool free)
+void Inter::constructRoom(const RoomCoords& coords, bool free)
 {
     returnif (m_data->isRoomConstructed(coords));
     returnif (m_tiles[coords].movingLocked);
@@ -557,7 +560,7 @@ void Inter::constructRoom(const sf::Vector2u& coords, bool free)
     m_data->constructRoom(coords);
 }
 
-void Inter::destroyRoom(const sf::Vector2u& coords, bool loss)
+void Inter::destroyRoom(const RoomCoords& coords, bool loss)
 {
     returnif (!m_data->isRoomConstructed(coords));
     returnif (m_tiles[coords].movingLocked);
@@ -572,7 +575,7 @@ void Inter::destroyRoom(const sf::Vector2u& coords, bool loss)
     m_data->destroyRoom(coords);
 }
 
-bool Inter::pushRoom(const sf::Vector2u& coords, Direction direction, uint animationDelay)
+bool Inter::pushRoom(const RoomCoords& coords, Direction direction, uint animationDelay)
 {
     const auto& floorsCount = m_data->floorsCount();
     const auto& roomsByFloor = m_data->roomsByFloor();
@@ -651,7 +654,7 @@ void Inter::setRoomsByFloor(uint value)
 //----------------------//
 //----- Facilities -----//
 
-Facility* Inter::findRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID)
+Facility* Inter::findRoomFacility(const RoomCoords& coords, const std::wstring& facilityID)
 {
     for (auto& facility : m_tiles[coords].facilities)
         if (facility->edata().type() == facilityID)
@@ -661,12 +664,12 @@ Facility* Inter::findRoomFacility(const sf::Vector2u& coords, const std::wstring
     return nullptr;
 }
 
-bool Inter::hasRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const
+bool Inter::hasRoomFacility(const RoomCoords& coords, const std::wstring& facilityID) const
 {
     return m_data->hasFacility(coords, facilityID);
 }
 
-uint Inter::gainRemoveRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const
+uint Inter::gainRemoveRoomFacility(const RoomCoords& coords, const std::wstring& facilityID) const
 {
     const auto pFacilityInfo = m_data->getFacility(coords, facilityID);
     returnif (pFacilityInfo == nullptr) 0u;
@@ -679,7 +682,7 @@ uint Inter::gainRemoveRoomFacility(const sf::Vector2u& coords, const std::wstrin
     return gainedDosh;
 }
 
-uint Inter::gainRemoveRoomFacilities(const sf::Vector2u& coords) const
+uint Inter::gainRemoveRoomFacilities(const RoomCoords& coords) const
 {
     returnif (!m_data->isRoomConstructed(coords)) 0u;
     const auto& facilitiesData = m_data->room(coords).facilities;
@@ -691,7 +694,7 @@ uint Inter::gainRemoveRoomFacilities(const sf::Vector2u& coords) const
     return gainedDosh;
 }
 
-bool Inter::createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool free)
+bool Inter::createRoomFacility(const RoomCoords& coords, const std::wstring& facilityID, bool free)
 {
     returnif (m_tiles[coords].movingLocked) false;
 
@@ -705,7 +708,7 @@ bool Inter::createRoomFacility(const sf::Vector2u& coords, const std::wstring& f
     return true;
 }
 
-bool Inter::createRoomFacilityLinked(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords, const std::wstring& linkFacilityID, bool free)
+bool Inter::createRoomFacilityLinked(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords, const std::wstring& linkFacilityID, bool free)
 {
     auto cost = facilitiesDB().get(facilityID).baseCost.dosh;
     if (!free) returnif (!villain().doshWallet.required(cost)) false;
@@ -717,29 +720,29 @@ bool Inter::createRoomFacilityLinked(const sf::Vector2u& coords, const std::wstr
     return true;
 }
 
-void Inter::setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords)
+void Inter::setRoomFacilityLink(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords)
 {
     m_data->setRoomFacilityLink(coords, facilityID, linkCoords);
 }
 
-void Inter::setRoomFacilityTreasure(const sf::Vector2u& coords, const std::wstring& facilityID, uint32 amount)
+void Inter::setRoomFacilityTreasure(const RoomCoords& coords, const std::wstring& facilityID, uint32 amount)
 {
     m_data->setRoomFacilityTreasure(coords, facilityID, amount);
 }
 
-void Inter::setRoomFacilityBarrier(const sf::Vector2u& coords, const std::wstring& facilityID, bool activated)
+void Inter::setRoomFacilityBarrier(const RoomCoords& coords, const std::wstring& facilityID, bool activated)
 {
     m_data->setRoomFacilityBarrier(coords, facilityID, activated);
 }
 
-void Inter::removeRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool loss)
+void Inter::removeRoomFacility(const RoomCoords& coords, const std::wstring& facilityID, bool loss)
 {
     returnif (m_tiles[coords].movingLocked);
     if (!loss) villain().doshWallet.add(gainRemoveRoomFacility(coords, facilityID));
     m_data->removeRoomFacility(coords, facilityID);
 }
 
-void Inter::removeRoomFacilities(const sf::Vector2u& coords, bool loss)
+void Inter::removeRoomFacilities(const RoomCoords& coords, bool loss)
 {
     returnif (m_tiles[coords].movingLocked);
     if (!loss) villain().doshWallet.add(gainRemoveRoomFacilities(coords));
@@ -749,7 +752,7 @@ void Inter::removeRoomFacilities(const sf::Vector2u& coords, bool loss)
 //-----------------//
 //----- Traps -----//
 
-uint Inter::gainRemoveRoomTrap(const sf::Vector2u& coords) const
+uint Inter::gainRemoveRoomTrap(const RoomCoords& coords) const
 {
     returnif (!m_data->isRoomConstructed(coords)) 0u;
     const auto& trapData = m_data->room(coords).trap.data;
@@ -761,7 +764,7 @@ uint Inter::gainRemoveRoomTrap(const sf::Vector2u& coords) const
     return static_cast<uint>(trapInfo.repairCost.dosh * trapInfo.resistance.durability);
 }
 
-void Inter::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID, bool free)
+void Inter::setRoomTrap(const RoomCoords& coords, const std::wstring& trapID, bool free)
 {
     // TODO Have a isTileModifiable(coords) inside Inter
     returnif (!m_data->isRoomConstructed(coords));
@@ -781,7 +784,7 @@ void Inter::setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID, 
     m_data->setRoomTrap(coords, trapID);
 }
 
-void Inter::removeRoomTrap(const sf::Vector2u& coords, bool loss)
+void Inter::removeRoomTrap(const RoomCoords& coords, bool loss)
 {
     returnif (m_tiles[coords].movingLocked);
     if (!loss) villain().doshWallet.add(gainRemoveRoomTrap(coords));
@@ -793,7 +796,7 @@ void Inter::removeRoomTrap(const sf::Vector2u& coords, bool loss)
 
 void Inter::moveMonsterFromReserve(const sf::Vector2f& relPos, const std::wstring& monsterID)
 {
-    m_data->moveMonsterFromReserve(tileFromLocalPosition(relPos), monsterID);
+    m_data->moveMonsterFromReserve(roomCoordsFromPosition(relPos), monsterID);
 }
 
 void Inter::addMonsterToReserve(const std::wstring& monsterID)
@@ -821,13 +824,13 @@ void Inter::addMonsterToReserve(const std::wstring& monsterID)
 
 uint32 Inter::spawnDynamic(const sf::Vector2f& relPos, const std::wstring& dynamicID)
 {
-    return m_data->dynamicsManager().create(relTileFromLocalPosition(relPos), dynamicID);
+    return m_data->dynamicsManager().create(relCoordsFromPosition(relPos), dynamicID);
 }
 
 //----------------//
 //----- Dosh -----//
 
-void Inter::harvestTileDosh(const sf::Vector2u& coords)
+void Inter::harvestTileDosh(const RoomCoords& coords)
 {
     returnif (m_tiles[coords].movingLocked);
     auto& trap = m_tiles[coords].trap;
@@ -881,7 +884,7 @@ void Inter::refreshTiles()
         refreshTile(tile.second.coords);
 }
 
-void Inter::refreshTile(const sf::Vector2u& coords)
+void Inter::refreshTile(const RoomCoords& coords)
 {
     returnif (coords.x >= m_data->floorsCount());
     returnif (coords.y >= m_data->roomsByFloor());
@@ -892,7 +895,7 @@ void Inter::refreshTile(const sf::Vector2u& coords)
     refreshTileFacilities(coords);
 }
 
-void Inter::refreshNeighboursLayers(const sf::Vector2u& coords)
+void Inter::refreshNeighboursLayers(const RoomCoords& coords)
 {
     refreshTileLayers(m_data->roomNeighbourCoords(coords, WEST));
     refreshTileLayers(m_data->roomNeighbourCoords(coords, SOUTH));
@@ -900,13 +903,13 @@ void Inter::refreshNeighboursLayers(const sf::Vector2u& coords)
     refreshTileLayers(m_data->roomNeighbourCoords(coords, NORTH));
 }
 
-void Inter::refreshTileDoshLabel(const sf::Vector2u& coords)
+void Inter::refreshTileDoshLabel(const RoomCoords& coords)
 {
     returnif (coords.x >= m_data->floorsCount());
     returnif (coords.y >= m_data->roomsByFloor());
 
     const auto& room = m_data->room(coords);
-    const auto& localPosition = tileLocalPosition(coords);
+    const auto& localPosition = positionFromRoomCoords(coords);
     auto& tile = m_tiles[coords];
 
     // Remove label if no room
@@ -938,7 +941,7 @@ void Inter::refreshTileDoshLabel(const sf::Vector2u& coords)
     }
 }
 
-void Inter::refreshTileLayers(const sf::Vector2u& coords)
+void Inter::refreshTileLayers(const RoomCoords& coords)
 {
     // TODO Do not refresh is locked because of moving
 
@@ -980,7 +983,7 @@ void Inter::refreshTileLayers(const sf::Vector2u& coords)
         addLayer(coords, "dungeon/inter/right_wall", 75.f);
 }
 
-void Inter::refreshTileFacilities(const sf::Vector2u& coords)
+void Inter::refreshTileFacilities(const RoomCoords& coords)
 {
     returnif (coords.x >= m_data->floorsCount());
     returnif (coords.y >= m_data->roomsByFloor());
@@ -1005,7 +1008,7 @@ void Inter::refreshTileFacilities(const sf::Vector2u& coords)
         tileFacilities[i]->bindFacilityInfo(roomFacilities[i]);
 }
 
-void Inter::refreshTileTraps(const sf::Vector2u& coords)
+void Inter::refreshTileTraps(const RoomCoords& coords)
 {
     returnif (coords.x >= m_data->floorsCount());
     returnif (coords.y >= m_data->roomsByFloor());

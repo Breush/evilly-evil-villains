@@ -56,7 +56,7 @@ namespace dungeon
         std::string m_imageTextureID;                            //!< The texture of the grabbable and button.
 
         // Explicit links
-        sf::Vector2u m_explicitLinkCoords;  //!< Memory for the coords to link to.
+        RoomCoords m_explicitLinkCoords;    //!< Memory for the coords to link to.
         uint m_explicitLinksCount = 0u;     //!< Number of explicit links.
         uint m_explicitLinksDone = 0u;      //!< How many explicit links have we done so far.
     };

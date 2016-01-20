@@ -102,7 +102,7 @@ void HeroesManager::update(const sf::Time& dt)
 void HeroesManager::receive(const context::Event& event)
 {
     const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
-    sf::Vector2u coords = {devent.room.x, devent.room.y};
+    RoomCoords coords = {devent.room.x, devent.room.y};
 
     // FIXME This event should slowly kills the hero via asphyxia
     if (devent.type == "room_destroyed") {
@@ -238,7 +238,7 @@ void HeroesManager::damage(const Hero* hero, float amount)
     }
 }
 
-void HeroesManager::listRoomHeroes(const sf::Vector2u& coords, std::vector<Hero*>& heroesList) const
+void HeroesManager::listRoomHeroes(const RoomCoords& coords, std::vector<Hero*>& heroesList) const
 {
     heroesList.clear();
 
@@ -262,12 +262,12 @@ void HeroesManager::setLocked(const Hero* hero, bool locked)
     }
 }
 
-void HeroesManager::removeRoomHeroes(const sf::Vector2u& coords)
+void HeroesManager::removeRoomHeroes(const RoomCoords& coords)
 {
     for (auto& heroInfo : m_heroesInfo) {
         if (heroInfo.status != HeroStatus::RUNNING) continue;
 
-        sf::Vector2u heroCoords;
+        RoomCoords heroCoords;
         heroCoords.x = static_cast<uint>(heroInfo.data[L"rx"].as_float());
         heroCoords.y = static_cast<uint>(heroInfo.data[L"ry"].as_float());
 
@@ -299,7 +299,7 @@ void HeroesManager::heroGetsOut(Hero* hero)
     hero->setVisible(false);
 }
 
-uint HeroesManager::heroStealsTreasure(Hero*, const sf::Vector2u& coords, const uint stolenDosh)
+uint HeroesManager::heroStealsTreasure(Hero*, const RoomCoords& coords, const uint stolenDosh)
 {
     return m_data->stealRoomTreasure(coords, stolenDosh);
 }

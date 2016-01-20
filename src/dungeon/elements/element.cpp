@@ -87,8 +87,7 @@ Element::Element(dungeon::Inter& inter, bool isLerpable)
     m_lua["eev_giveFame"] = [this] (const uint32 amount) { lua_giveFame(amount); };
 
     m_lua["eev_dungeonExplodeRoom"] = [this] (const uint x, const uint y) { lua_dungeonExplodeRoom(x, y); };
-    m_lua["eev_dungeonPushRoom"] = [this] (const uint x, const uint y, const std::string& direction, const uint animationDelay)
-        { return lua_dungeonPushRoom(x, y, direction, animationDelay); };
+    m_lua["eev_dungeonPushRoom"] = [this] (const uint x, const uint y, const std::string& direction, const uint animationDelay) { return lua_dungeonPushRoom(x, y, direction, animationDelay); };
 
     m_lua["eev_log"] = [this] (const std::string& str) { lua_log(str); };
 }
@@ -381,14 +380,14 @@ void Element::lua_damageRange(const lua_Number rx, const lua_Number ry, const lu
         }
     };
 
-    sf::Vector2f relPos = m_inter.relTileLocalPosition({static_cast<float>(rx), static_cast<float>(ry)});
+    sf::Vector2f relPos = m_inter.positionFromRelCoords({static_cast<float>(rx), static_cast<float>(ry)});
     s_detector.applyInRange(relPos, range, hurtEntityFunc);
 }
 
 uint32 Element::lua_spawnDynamic(const std::string& dynamicID, const lua_Number rx, const lua_Number ry)
 {
     auto id = toWString(dynamicID);
-    sf::Vector2f relPos = m_inter.relTileLocalPosition({static_cast<float>(rx), static_cast<float>(ry)});
+    sf::Vector2f relPos = m_inter.positionFromRelCoords({static_cast<float>(rx), static_cast<float>(ry)});
     return m_inter.spawnDynamic(relPos, id);
 }
 
@@ -479,7 +478,7 @@ void Element::lua_addClipAreaUID(const uint32 UID, const lua_Number rx, const lu
     returnif (entity == nullptr);
 
     sf::FloatRect clipArea(rx, ry, rw, rh);
-    clipArea = m_inter.relTileLocalPosition(clipArea);
+    clipArea = m_inter.rectFromRelRect(clipArea);
     clipArea = m_inter.getTransform().transformRect(clipArea);
     entity->addClipArea(clipArea, true);
 }
@@ -489,12 +488,12 @@ void Element::lua_addClipAreaUID(const uint32 UID, const lua_Number rx, const lu
 void Element::lua_dungeonExplodeRoom(const uint x, const uint y)
 {
     // Note: It's an explosion, we do not get any money back
-    m_inter.destroyRoom(sf::Vector2u{x, y}, true);
+    m_inter.destroyRoom({static_cast<uint8>(x), static_cast<uint8>(y)}, true);
 }
 
 bool Element::lua_dungeonPushRoom(const uint x, const uint y, const std::string& sDirection, const uint animationDelay)
 {
-    return m_inter.pushRoom(sf::Vector2u{x, y}, directionFromString(sDirection), animationDelay);
+    return m_inter.pushRoom(RoomCoords{static_cast<uint8>(x), static_cast<uint8>(y)}, directionFromString(sDirection), animationDelay);
 }
 
 //----- Debug

@@ -10,10 +10,10 @@ namespace dungeon
     class Monster;
 
     //! The position of a room.
-    struct RoomCoords
+    struct RoomCoordsEvent
     {
-        uint x;
-        uint y;
+        uint8 x;
+        uint8 y;
     };
 
     //! A dungeon event.
@@ -22,7 +22,7 @@ namespace dungeon
         union
         {
             int delta;              //!< The difference between previous and current value of resources.
-            RoomCoords room;        //!< The coordinates of a room whenever it is constructed/destroyed.
+            RoomCoordsEvent room;   //!< The coordinates of a room whenever it is constructed/destroyed.
             const wchar_t* message; //!< An additional information.
 
             //! When a monster changed.

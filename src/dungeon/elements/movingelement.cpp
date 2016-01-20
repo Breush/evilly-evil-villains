@@ -43,7 +43,7 @@ void MovingElement::updateAI(const sf::Time& dt)
 void MovingElement::updateRoutine(const sf::Time& dt)
 {
     // Update to current position
-    auto relPosition = m_inter.relTileFromLocalPosition(localPosition());
+    auto relPosition = m_inter.relCoordsFromPosition(localPosition());
     m_edata->operator[](L"rx").as_float() = relPosition.x;
     m_edata->operator[](L"ry").as_float() = relPosition.y;
 
@@ -170,8 +170,8 @@ void MovingElement::setCurrentNode(const NodeWay& nodeWay)
 
 void MovingElement::updateFromGraph()
 {
-    sf::Vector2f relCoords(m_edata->operator[](L"tx").as_float(), m_edata->operator[](L"ty").as_float());
-    auto coords = sf::v2u(relCoords);
+    RoomRelCoords relCoords(m_edata->operator[](L"tx").as_float(), m_edata->operator[](L"ty").as_float());
+    auto coords = toCoords(relCoords);
     auto nodeData = m_graph.nodeData(coords);
 
     // If the target is no more valid, find new one
@@ -180,7 +180,8 @@ void MovingElement::updateFromGraph()
         setNewTargetPosition(localPosition());
         relCoords.x = m_edata->operator[](L"tx").as_float();
         relCoords.y = m_edata->operator[](L"ty").as_float();
-        coords = sf::v2u(relCoords);
+        coords = toCoords(relCoords);
+        nodeData = m_graph.nodeData(coords);
     }
 
     // Refresh the pointer
@@ -279,8 +280,8 @@ void MovingElement::refreshPosition()
 {
     returnif (m_edata == nullptr);
 
-    sf::Vector2f position = m_inter.relTileLocalPosition({m_edata->operator[](L"rx").as_float(), m_edata->operator[](L"ry").as_float()});
-    sf::Vector2f targetPosition  = m_inter.relTileLocalPosition({m_edata->operator[](L"tx").as_float(), m_edata->operator[](L"ty").as_float()});
+    sf::Vector2f position = m_inter.positionFromRelCoords({m_edata->operator[](L"rx").as_float(), m_edata->operator[](L"ry").as_float()});
+    sf::Vector2f targetPosition  = m_inter.positionFromRelCoords({m_edata->operator[](L"tx").as_float(), m_edata->operator[](L"ty").as_float()});
     lerpable()->setTargetPosition(targetPosition);
     setLocalPosition(position);
 }
@@ -292,7 +293,7 @@ void MovingElement::setNewTargetPosition(const sf::Vector2f& targetPosition)
 {
     lerpable()->setTargetPosition(targetPosition);
 
-    auto relTargetPosition = m_inter.relTileFromLocalPosition(targetPosition);
+    auto relTargetPosition = m_inter.relCoordsFromPosition(targetPosition);
     m_edata->operator[](L"tx").as_float() = relTargetPosition.x;
     m_edata->operator[](L"ty").as_float() = relTargetPosition.y;
 }
@@ -302,7 +303,7 @@ void MovingElement::refreshPositionFromNode()
     returnif (m_currentNode == nullptr);
 
     const auto& targetCoords = m_currentNode->coords;
-    const auto tileLocalPosition = m_inter.tileLocalPosition(targetCoords);
+    const auto tileLocalPosition = m_inter.positionFromRoomCoords(targetCoords);
     const auto monsterTilePosition = 0.5f * m_inter.tileSize();
     setNewTargetPosition(tileLocalPosition + monsterTilePosition);
 

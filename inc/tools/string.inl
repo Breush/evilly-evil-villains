@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "tools/debug.hpp"
+#include "tools/int.hpp"
 
 //------------------------------//
 //----- wstring <-> string -----//
@@ -69,6 +70,15 @@ inline T to(const std::wstring& ws)
     T t;
     ss >> t;
     return t;
+}
+
+template<>
+inline uint8 to(const std::wstring& ws)
+{
+    std::wstringstream ss(ws);
+    uint t;
+    ss >> t;
+    return static_cast<uint8>(t);
 }
 
 //-----------------------//

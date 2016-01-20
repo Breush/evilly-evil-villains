@@ -31,7 +31,7 @@ namespace dungeon
         //! A tile of the dungeon.
         struct Tile
         {
-            sf::Vector2u coords;                                        //!< The coordinates of the tile (floor/room).
+            RoomCoords coords;                                          //!< The coordinates of the tile (floor/room).
             std::vector<std::unique_ptr<scene::RectangleShape>> layers; //!< All sprites to draw, from furthest to nearest.
             std::vector<std::unique_ptr<Facility>> facilities;          //!< The facilities in the tile.
             std::unique_ptr<Trap> trap = nullptr;                       //!< The trap, protecting the tile.
@@ -45,7 +45,7 @@ namespace dungeon
         {
             float animationTime = 0.f;              //!< Current time of animation (milliseconds).
             float animationDelay = 0.f;             //!< Total time of animation (milliseconds).
-            sf::Vector2u coords;                    //!< Which room to move (starting coords).
+            RoomCoords coords;                      //!< Which room to move (starting coords).
             sf::Vector2f velocity;                  //!< At which speed and direction to go.
             Callback onFinishCallback = nullptr;    //!< A function to execute when this animation finished.
             std::vector<Monster*> monsters;         //!< The list of monsters to move.
@@ -90,7 +90,7 @@ namespace dungeon
         //! @{
 
         //! Harvest the harvetable dosh in the specified tile.
-        void harvestTileDosh(const sf::Vector2u& coords);
+        void harvestTileDosh(const RoomCoords& coords);
 
         //! @}
 
@@ -111,7 +111,7 @@ namespace dungeon
         void resetPredictionLink();
 
         //! Show a link prediction between two rooms.
-        void setPredictionLink(const sf::Vector2u& coords, const sf::Vector2u& linkCoords);
+        void setPredictionLink(const RoomCoords& coords, const RoomCoords& linkCoords);
 
         //! @}
 
@@ -132,24 +132,24 @@ namespace dungeon
         //! @{
 
         //! Find the room below the specified relative position and construct it if possible.
-        inline void constructRoom(const sf::Vector2f& relPos) { constructRoom(tileFromLocalPosition(relPos)); }
+        inline void constructRoom(const sf::Vector2f& relPos) { constructRoom(roomCoordsFromPosition(relPos)); }
 
         //! Construct the room, after cheking against price if not free.
-        void constructRoom(const sf::Vector2u& coords, bool free = false);
+        void constructRoom(const RoomCoords& coords, bool free = false);
 
         //! Find the room below the specified relative position and remove it if any.
-        inline void destroyRoom(const sf::Vector2f& relPos) { destroyRoom(tileFromLocalPosition(relPos)); }
+        inline void destroyRoom(const sf::Vector2f& relPos) { destroyRoom(roomCoordsFromPosition(relPos)); }
 
         //! Remove the room at coords if any, without gaining money if loss is enabled.
-        void destroyRoom(const sf::Vector2u& coords, bool loss = false);
+        void destroyRoom(const RoomCoords& coords, bool loss = false);
 
         //! Find the room below the specified relative position and push it.
         inline bool pushRoom(const sf::Vector2f& relPos, Direction direction, uint animationTime)
-            { return pushRoom(tileFromLocalPosition(relPos), direction, animationTime); }
+            { return pushRoom(roomCoordsFromPosition(relPos), direction, animationTime); }
 
         //! Push the room at coords if any.
         //! @return true on success or if no room and false if action is impossible.
-        bool pushRoom(const sf::Vector2u& coords, Direction direction, uint animationDelay = 0u);
+        bool pushRoom(const RoomCoords& coords, Direction direction, uint animationDelay = 0u);
 
         //! Change the number of floors.
         void adaptFloorsCount(int relativeValue);
@@ -170,40 +170,40 @@ namespace dungeon
         //! @{
 
         //! Get the handle to the facility in that room if any.
-        Facility* findRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID);
+        Facility* findRoomFacility(const RoomCoords& coords, const std::wstring& facilityID);
 
         //! Return true if a facility exists in this room.
-        bool hasRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const;
+        bool hasRoomFacility(const RoomCoords& coords, const std::wstring& facilityID) const;
 
         //! How much money do you get back if you're removing the facility in the specified room.
-        uint gainRemoveRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const;
+        uint gainRemoveRoomFacility(const RoomCoords& coords, const std::wstring& facilityID) const;
 
         //! How much money do you get back if you're removing all the facilities in the specified room.
-        uint gainRemoveRoomFacilities(const sf::Vector2u& coords) const;
+        uint gainRemoveRoomFacilities(const RoomCoords& coords) const;
 
         //! Find the room and forward change to data.
-        bool createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool free = false);
+        bool createRoomFacility(const RoomCoords& coords, const std::wstring& facilityID, bool free = false);
 
         //! Create a facility, and try to link it to another one.
-        bool createRoomFacilityLinked(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords, const std::wstring& linkFacilityID, bool free = false);
+        bool createRoomFacilityLinked(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords, const std::wstring& linkFacilityID, bool free = false);
 
         //! Set the room facility link to specific coordinates.
-        void setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords);
+        void setRoomFacilityLink(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords);
 
         //! Set the specified room facility's barrier.
-        void setRoomFacilityBarrier(const sf::Vector2u& coords, const std::wstring& facilityID, bool activated);
+        void setRoomFacilityBarrier(const RoomCoords& coords, const std::wstring& facilityID, bool activated);
 
         //! Set the specified room facility's treasure.
-        void setRoomFacilityTreasure(const sf::Vector2u& coords, const std::wstring& facilityID, uint32 amount);
+        void setRoomFacilityTreasure(const RoomCoords& coords, const std::wstring& facilityID, uint32 amount);
 
         //! Find the room below the specified relative position and remove all the facilities in it if any.
-        inline void removeRoomFacilities(const sf::Vector2f& relPos) { removeRoomFacilities(tileFromLocalPosition(relPos)); }
+        inline void removeRoomFacilities(const sf::Vector2f& relPos) { removeRoomFacilities(roomCoordsFromPosition(relPos)); }
 
         //! Remove all the facilities in the room.
-        void removeRoomFacilities(const sf::Vector2u& coords, bool loss = false);
+        void removeRoomFacilities(const RoomCoords& coords, bool loss = false);
 
         //! Remove a specific facility in the room if possible.
-        void removeRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool loss);
+        void removeRoomFacility(const RoomCoords& coords, const std::wstring& facilityID, bool loss);
 
         //! @}
 
@@ -212,20 +212,20 @@ namespace dungeon
         //! @{
 
         //! How much money do you get back if you're removing the trap in the specified room.
-        uint gainRemoveRoomTrap(const sf::Vector2u& coords) const;
+        uint gainRemoveRoomTrap(const RoomCoords& coords) const;
 
         //! Find the room below the specified relative position and forward change to data.
-        inline void setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID) { setRoomTrap(tileFromLocalPosition(relPos), trapID); }
+        inline void setRoomTrap(const sf::Vector2f& relPos, const std::wstring& trapID) { setRoomTrap(roomCoordsFromPosition(relPos), trapID); }
 
         //! Set the room trap, after cheking against price if not free.
         //! This will remove the previous trap if any.
-        void setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID, bool free = false);
+        void setRoomTrap(const RoomCoords& coords, const std::wstring& trapID, bool free = false);
 
         //! Find the room below the specified relative position and remove the trap in it if any.
-        inline void removeRoomTrap(const sf::Vector2f& relPos) { removeRoomTrap(tileFromLocalPosition(relPos)); }
+        inline void removeRoomTrap(const sf::Vector2f& relPos) { removeRoomTrap(roomCoordsFromPosition(relPos)); }
 
         //! Remove the room trap, without gaining money if loss is enabled.
-        void removeRoomTrap(const sf::Vector2u& coords, bool loss = false);
+        void removeRoomTrap(const RoomCoords& coords, bool loss = false);
 
         //! @}
 
@@ -256,19 +256,19 @@ namespace dungeon
         //! @{
 
         //! Return the coordinates (floor/room) of the room below.
-        sf::Vector2u tileFromLocalPosition(const sf::Vector2f& pos) const;
+        RoomCoords roomCoordsFromPosition(const sf::Vector2f& position) const;
 
         //! Returns the top-left coordinates in pixels of the tile situated at these coordinates.
-        sf::Vector2f tileLocalPosition(const sf::Vector2u& coords) const;
+        sf::Vector2f positionFromRoomCoords(const RoomCoords& coords) const;
 
         //! Return the relative coordinates (floor/room) of the room below.
-        sf::Vector2f relTileFromLocalPosition(const sf::Vector2f& pos) const;
+        RoomRelCoords relCoordsFromPosition(const sf::Vector2f& position) const;
 
         //! Returns the top-left coordinates in pixels of the tile situated at these relative coordinates.
-        sf::Vector2f relTileLocalPosition(const sf::Vector2f& relCoords) const;
+        sf::Vector2f positionFromRelCoords(const RoomRelCoords& relCoords) const;
 
         //! Returns the rectangle coordinates and size converted.
-        sf::FloatRect relTileLocalPosition(const sf::FloatRect& relCoords) const;
+        sf::FloatRect rectFromRelRect(const RoomRelRect& relCoords) const;
 
         //! The size in pixels of the tiles.
         sf::Vector2f tileSize() const { return m_grid.cellSize(); }
@@ -324,10 +324,10 @@ namespace dungeon
         //! @{
 
         //! Remove all layers from the tile.
-        void clearLayers(const sf::Vector2u& coords);
+        void clearLayers(const RoomCoords& coords);
 
         //! Add a layer to the tile.
-        void addLayer(const sf::Vector2u& coords,  const std::string& textureID, float depth = 50.f);
+        void addLayer(const RoomCoords& coords,  const std::string& textureID, float depth = 50.f);
 
         //! Remove all tiles.
         void clearTiles();
@@ -342,7 +342,7 @@ namespace dungeon
         void selectTile(const sf::Vector2f& pos);
 
         //! Select the select at specified coordinates.
-        void selectTile(const sf::Vector2u& coords);
+        void selectTile(const RoomCoords& coords);
 
         //! Deselect the selected tile (and remove all visual effects).
         void deselectTile();
@@ -354,7 +354,7 @@ namespace dungeon
         //! @{
 
         //! Set the currently hovered tile.
-        void setHoveredTile(const sf::Vector2u& coords);
+        void setHoveredTile(const RoomCoords& coords);
 
         //! Remove all hover effects.
         void resetHoveredTile();
@@ -366,10 +366,10 @@ namespace dungeon
         //! @{
 
         //! Pop the context menu for the specified tile coordinates at the position.
-        void showTileContextMenu(const sf::Vector2u& coords, const sf::Vector2f& nuiPos);
+        void showTileContextMenu(const RoomCoords& coords, const sf::Vector2f& nuiPos);
 
         //! Edit the treasure dosh in the specified room coordinates.
-        void showEditTreasureDialog(const sf::Vector2u& coords);
+        void showEditTreasureDialog(const RoomCoords& coords);
 
         //! @}
 
@@ -396,22 +396,22 @@ namespace dungeon
         void refreshTiles();
 
         //! Refresh the specified tile, updating state from data.
-        void refreshTile(const sf::Vector2u& coords);
+        void refreshTile(const RoomCoords& coords);
 
         //! Refresh the layers of the existing neighbours, updating state from data.
-        void refreshNeighboursLayers(const sf::Vector2u& coords);
+        void refreshNeighboursLayers(const RoomCoords& coords);
 
         //! Refresh the layers (and their texture) of the specified tile.
-        void refreshTileLayers(const sf::Vector2u& coords);
+        void refreshTileLayers(const RoomCoords& coords);
 
         //! Refresh the facilities (as tile entities) of the specified tile.
-        void refreshTileFacilities(const sf::Vector2u& coords);
+        void refreshTileFacilities(const RoomCoords& coords);
 
         //! Refresh the traps (as tile entities) of the specified tile.
-        void refreshTileTraps(const sf::Vector2u& coords);
+        void refreshTileTraps(const RoomCoords& coords);
 
         //! Refresh the dosh label (value and position) of the specified tile.
-        void refreshTileDoshLabel(const sf::Vector2u& coords);
+        void refreshTileDoshLabel(const RoomCoords& coords);
 
         //! Refresh the outer walls size + position.
         void refreshOuterWalls();
@@ -424,10 +424,10 @@ namespace dungeon
         Commandable m_commandable;              //!< The interpreter.
 
         // Display
-        sfe::Grid m_grid;                                   //!< The internal grid for overlay display.
-        std::unordered_map<sf::Vector2u, Tile> m_tiles;     //!< All tiles constituing the dungeon.
-        sf::Vector2f m_roomScale = {1.f, 1.f};              //!< The room scale.
-        sf::Vector2f m_refRoomSize;                         //!< The original room size.
+        sfe::Grid m_grid;                               //!< The internal grid for overlay display.
+        std::unordered_map<RoomCoords, Tile> m_tiles;   //!< All tiles constituing the dungeon.
+        sf::Vector2f m_roomScale = {1.f, 1.f};          //!< The room scale.
+        sf::Vector2f m_refRoomSize;                     //!< The original room size.
 
         // Decorum
         std::array<sf::RectangleShape, 2u> m_outerWalls;    //!< Sprites for left/right outer walls.

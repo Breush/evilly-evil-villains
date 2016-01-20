@@ -65,16 +65,16 @@ namespace dungeon
         void damage(const Monster* monster, float amount);
 
         //! Remove the monsters in the room.
-        void removeRoomMonsters(const sf::Vector2u& coords);
+        void removeRoomMonsters(const RoomCoords& coords);
 
         //! Add the monster in the room.
-        void addRoomMonster(const sf::Vector2u& coords, const std::wstring& monsterID);
+        void addRoomMonster(const RoomCoords& coords, const std::wstring& monsterID);
 
         //! Whether to lock a monster from other changes (won't be removed).
         void setLocked(const Monster* monster, bool locked);
 
         //! Set the list to the room monsters.
-        void listRoomMonsters(const sf::Vector2u& coords, std::vector<Monster*>& monstersList) const;
+        void listRoomMonsters(const RoomCoords& coords, std::vector<Monster*>& monstersList) const;
 
         //! @}
 

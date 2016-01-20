@@ -45,7 +45,7 @@ namespace sfe
         void setRowsColumns(const uint& inRows, const uint& inColumns);
 
         //! Get row/column coordinates from relative coords.
-        sf::Vector2u rowColumnFromCoords(const sf::Vector2f& coords) const;
+        sf::Vector2u coordsFromPosition(const sf::Vector2f& position) const;
 
         //! Get relative coords from row/column coords.
         sf::Vector2f cellPosition(uint row, uint column) const;

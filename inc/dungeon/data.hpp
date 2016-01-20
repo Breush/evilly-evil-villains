@@ -95,7 +95,7 @@ namespace dungeon
         //! @{
 
         //! Quick tool to emit an dungeon event with coords informations.
-        void addEvent(std::string eventType, const sf::Vector2u& coords);
+        void addEvent(std::string eventType, const RoomCoords& coords);
 
         //! @}
 
@@ -104,57 +104,57 @@ namespace dungeon
         //! @{
 
         //! Easy getter to access a room.
-        inline Room& room(const sf::Vector2u& coords) { return m_floors[coords.x].rooms[coords.y]; }
+        inline Room& room(const RoomCoords& coords) { return m_floors[coords.x].rooms[coords.y]; }
 
         //! Easy getter to access a room (const).
-        inline const Room& room(const sf::Vector2u& coords) const { return m_floors[coords.x].rooms[coords.y]; }
+        inline const Room& room(const RoomCoords& coords) const { return m_floors[coords.x].rooms[coords.y]; }
 
         //! Return the next room from the specified one.
         /*!
          *  Note: this function does not check accessibility.
          *  The next room should not be out of the limits of the dungeon.
          */
-        Room& roomNeighbour(const sf::Vector2u& roomCoord, Direction direction);
+        Room& roomNeighbour(const RoomCoords& roomCoord, Direction direction);
 
         //! Returns a unit vector symbolizing the direction (int).
-        sf::Vector2i roomDirectionVector2i(Direction direction);
+        RoomDirection roomDirectionVector2i(Direction direction);
 
         //! Returns a unit vector symbolizing the direction (uint).
-        sf::Vector2u roomDirectionVector2u(Direction direction);
+        RoomCoords roomDirectionVector2u(Direction direction);
 
         //! Whether a specific room is in constructed state.
         //! If coords are outside of boundaries, returns false.
-        bool isRoomConstructed(const sf::Vector2u& coords) const;
+        bool isRoomConstructed(const RoomCoords& coords) const;
 
         //! Whether a specific room allows walking.
-        bool isRoomWalkable(const sf::Vector2u& coords) const;
+        bool isRoomWalkable(const RoomCoords& coords) const;
 
         //! Construct a room.
-        void constructRoom(const sf::Vector2u& coords);
+        void constructRoom(const RoomCoords& coords);
 
         //! Construct all rooms, in memory, no events launched.
         void constructRoomsAll();
 
         //! Destroy a room.
-        void destroyRoom(const sf::Vector2u& coords);
+        void destroyRoom(const RoomCoords& coords);
 
         //! Push the room at coords if any.
         //! @return true on success or if no room and false if action is impossible.
-        bool pushRoom(const sf::Vector2u& coords, Direction direction);
+        bool pushRoom(const RoomCoords& coords, Direction direction);
 
         //! Remove some dosh from the room.
         //! Returns the amount stolen, between 0u and wantedDosh;
-        uint stealRoomTreasure(const sf::Vector2u& coords, uint wantedDosh);
+        uint stealRoomTreasure(const RoomCoords& coords, uint wantedDosh);
 
         //! Return the coordinates of the next room from the specified one.
         /*!
          *  Note: this function does not check accessibility.
          *  The results might be beyond dungeon boundaries.
          */
-        sf::Vector2u roomNeighbourCoords(const sf::Vector2u& coords, Direction direction);
+        RoomCoords roomNeighbourCoords(const RoomCoords& coords, Direction direction);
 
         //! Gets the dosh contained in the treasure facility if any (returns 0u if no treasure facility).
-        uint roomTreasureDosh(const sf::Vector2u& coords);
+        uint roomTreasureDosh(const RoomCoords& coords);
 
         //! @}
 
@@ -163,40 +163,40 @@ namespace dungeon
         //! @{
 
         //! Is creating the facility a valid action? Checks against dungeon consistency.
-        bool createRoomFacilityValid(const sf::Vector2u& coords, const std::wstring& facilityID);
+        bool createRoomFacilityValid(const RoomCoords& coords, const std::wstring& facilityID);
 
         //! Returns true if a facility exists in the specified coordinates.
-        bool hasFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const;
+        bool hasFacility(const RoomCoords& coords, const std::wstring& facilityID) const;
 
         //! Quick access to facility info.
         //! Returns nullptr if not found or invalid coordinates.
-        FacilityInfo* getFacility(const sf::Vector2u& coords, const std::wstring& facilityID);
+        FacilityInfo* getFacility(const RoomCoords& coords, const std::wstring& facilityID);
 
         //! Quick access to facility info (const).
         //! Returns nullptr if not found or invalid coordinates.
-        const FacilityInfo* getFacility(const sf::Vector2u& coords, const std::wstring& facilityID) const;
+        const FacilityInfo* getFacility(const RoomCoords& coords, const std::wstring& facilityID) const;
 
         //! Add the specified facility to the dungeon if it does not exists yet.
         //! Will emit an event if a change occured.
-        bool createRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID, bool isLink = false);
+        bool createRoomFacility(const RoomCoords& coords, const std::wstring& facilityID, bool isLink = false);
 
         //! Create a facility, and try to link it to another one.
-        bool createRoomFacilityLinked(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords, const std::wstring& linkFacilityID);
+        bool createRoomFacilityLinked(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords, const std::wstring& linkFacilityID);
 
         //! Set the room facility link to specific coordinates.
-        void setRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID, const sf::Vector2u& linkCoords);
+        void setRoomFacilityLink(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords);
 
         //! Remove the room facility link if any.
-        void removeRoomFacilityLink(const sf::Vector2u& coords, const std::wstring& facilityID);
+        void removeRoomFacilityLink(const RoomCoords& coords, const std::wstring& facilityID);
 
         //! Remove all links (leaving/entering) of a facility.
-        void removeFacilityLinks(const sf::Vector2u& coords, FacilityInfo& facility);
+        void removeFacilityLinks(const RoomCoords& coords, FacilityInfo& facility);
 
         //! Remove all links (leaving/entering) of all facilities in the room.
-        void removeRoomFacilitiesLinks(const sf::Vector2u& coords);
+        void removeRoomFacilitiesLinks(const RoomCoords& coords);
 
         //! Create all links (leaving/entering) of a facility.
-        void createFacilityLinks(const sf::Vector2u& coords, const FacilityInfo& facility);
+        void createFacilityLinks(const RoomCoords& coords, const FacilityInfo& facility);
 
         //! Create all links (leaving/entering) of all facilities in the room.
         /*! One can except the following code
@@ -205,24 +205,24 @@ namespace dungeon
          *  to delete only explicit links.
          *  Because implicit links in/out will be destroyed and recreated.
          */
-        void createRoomFacilitiesLinks(const sf::Vector2u& coords);
+        void createRoomFacilitiesLinks(const RoomCoords& coords);
 
         //! Set the specified room facility's barrier.
-        void setRoomFacilityBarrier(const sf::Vector2u& coords, const std::wstring& facilityID, bool activated);
+        void setRoomFacilityBarrier(const RoomCoords& coords, const std::wstring& facilityID, bool activated);
 
         //! Set the specified room facility's treasure.
-        void setRoomFacilityTreasure(const sf::Vector2u& coords, const std::wstring& facilityID, uint32 amount);
+        void setRoomFacilityTreasure(const RoomCoords& coords, const std::wstring& facilityID, uint32 amount);
 
         //! Add a tunnel to the specificed room facility.
         void addFacilityTunnel(FacilityInfo& facilityInfo, const sf::Vector2i& tunnelCoords, bool relative);
 
         //! Remove the specified facility from the dungeon.
         //! Will emit an event if a change occured.
-        void removeRoomFacility(const sf::Vector2u& coords, const std::wstring& facilityID);
+        void removeRoomFacility(const RoomCoords& coords, const std::wstring& facilityID);
 
         //! Remove all the facilities from the room specified.
         //! Will emit an event if a change occured.
-        void removeRoomFacilities(const sf::Vector2u& coords);
+        void removeRoomFacilities(const RoomCoords& coords);
 
         //! @}
 
@@ -232,11 +232,11 @@ namespace dungeon
 
         //! Set the trap of the specified room.
         //! Will emit an event if a change occured.
-        void setRoomTrap(const sf::Vector2u& coords, const std::wstring& trapID);
+        void setRoomTrap(const RoomCoords& coords, const std::wstring& trapID);
 
         //! Remove the trap of the specified room (if any).
         //! Will emit an event if a change occured.
-        void removeRoomTrap(const sf::Vector2u& coords);
+        void removeRoomTrap(const RoomCoords& coords);
 
         //! Set the trap generic unlocked state.
         void setTrapGenericUnlocked(const std::wstring& trapID, bool unlocked);
@@ -248,17 +248,17 @@ namespace dungeon
         //! @{
 
         //! Is adding the monster a valid action? Checks against dungeon consistency.
-        bool addMonsterValid(const sf::Vector2u& coords, const std::wstring& monsterID);
+        bool addMonsterValid(const RoomCoords& coords, const std::wstring& monsterID);
 
         //! Add the specified type of monster to the reserve.
         void addMonsterToReserve(const std::wstring& monsterID, const uint countdownIncrease = 0u);
 
         //! Move the specified type of monster from reserve into the dungeon.
-        void moveMonsterFromReserve(const sf::Vector2u& coords, const std::wstring& monsterID);
+        void moveMonsterFromReserve(const RoomCoords& coords, const std::wstring& monsterID);
 
         //! Remove all the monsters from the room specified.
         //! Will emit an event if a change occured.
-        void removeRoomMonsters(const sf::Vector2u& coords);
+        void removeRoomMonsters(const RoomCoords& coords);
 
         //! Set the monster generic unlocked state.
         void setMonsterGenericUnlocked(const std::wstring& monsterID, bool unlocked);
@@ -380,7 +380,7 @@ namespace dungeon
         //! @{
 
         //! Refresh the room hide flags from all elements inside and send an event if changed.
-        void updateRoomHide(const sf::Vector2u& coords);
+        void updateRoomHide(const RoomCoords& coords);
 
         //! @}
 

@@ -10,6 +10,7 @@
 namespace sf
 {
     // Typedef
+    using Vector2u8  = Vector2<uint8>;
     using Vector2u16 = Vector2<uint16>;
     using Vector2u32 = Vector2<uint32>;
     using Vector2u64 = Vector2<uint64>;
@@ -18,6 +19,7 @@ namespace sf
     template<typename T> Vector2f v2f(const Vector2<T>& v);
     template<typename T> Vector2i v2i(const Vector2<T>& v);
     template<typename T> Vector2u v2u(const Vector2<T>& v);
+    template<typename T> Vector2u8 v2u8(const Vector2<T>& v);
 
     template<typename T> FloatRect toFloatRect(const Rect<T>& r);
 

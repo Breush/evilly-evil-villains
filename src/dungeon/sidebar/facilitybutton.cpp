@@ -44,7 +44,7 @@ void FacilityGrabButton::grabbableMoved(scene::Entity* entity, const sf::Vector2
 
     // Show link if linking
     returnif (m_explicitLinksCount == 0u || m_explicitLinksDone == 0u);
-    auto targetCoords = inter->tileFromLocalPosition(interRelPos);
+    auto targetCoords = inter->roomCoordsFromPosition(interRelPos);
     inter->setPredictionLink(m_explicitLinkCoords, targetCoords);
 }
 
@@ -72,7 +72,7 @@ void FacilityGrabButton::grabbableButtonPressed(scene::Entity* entity, const sf:
     // + We might want link patterns:
     //  - All linked to the first one
     //  - Linked as a chain (possibliy a circle)
-    auto coords = inter->tileFromLocalPosition(interRelPos);
+    auto coords = inter->roomCoordsFromPosition(interRelPos);
     if (m_explicitLinksDone == 0u) {
         m_explicitLinkCoords = coords;
         returnif (!inter->createRoomFacility(coords, m_grabbableFacilityID));

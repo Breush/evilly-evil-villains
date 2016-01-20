@@ -9,7 +9,7 @@ using namespace dungeon;
 //-----------------------//
 //----- Interaction -----//
 
-const ai::Node* Graph::node(const sf::Vector2u& coords) const
+const ai::Node* Graph::node(const RoomCoords& coords) const
 {
     if (coords.x >= m_floorsCount || coords.y >= m_roomsByFloor)
         return nullptr;
@@ -17,7 +17,7 @@ const ai::Node* Graph::node(const sf::Vector2u& coords) const
     return m_nodes[coords.x][coords.y].node;
 }
 
-const Graph::NodeData* Graph::nodeData(const sf::Vector2u& coords) const
+const Graph::NodeData* Graph::nodeData(const RoomCoords& coords) const
 {
     if (coords.x >= m_floorsCount || coords.y >= m_roomsByFloor)
         return nullptr;
@@ -56,7 +56,7 @@ void Graph::useData(Data& data)
 //------------------------------//
 //----- Graph construction -----//
 
-void Graph::addNodeNeighbour(NodeData& nodeData, sf::Vector2u& neighbourCoords, const std::wstring& tunnelFacilityID)
+void Graph::addNodeNeighbour(NodeData& nodeData, const RoomCoords& neighbourCoords, const std::wstring& tunnelFacilityID)
 {
     auto& neighbourNodeData = m_nodes[neighbourCoords.x][neighbourCoords.y];
 
@@ -104,8 +104,8 @@ void Graph::reconstructFromData()
     }
 
     // Affect invariable attributes
-    for (uint floorIndex = 0u; floorIndex < m_floorsCount; ++floorIndex)
-    for (uint roomIndex = 0u; roomIndex < m_roomsByFloor; ++roomIndex) {
+    for (uint8 floorIndex = 0u; floorIndex < m_floorsCount; ++floorIndex)
+    for (uint8 roomIndex = 0u; roomIndex < m_roomsByFloor; ++roomIndex) {
         auto& nodeData = m_nodes.at(floorIndex).at(roomIndex);
         nodeData.coords = {floorIndex, roomIndex};
         nodeData.altitude = floorIndex + 1u;
@@ -147,7 +147,7 @@ void Graph::updateFromData()
 
             // Tunnels
             for (const auto& tunnel : facilityInfo.tunnels) {
-                sf::Vector2u tunnelCoords = sf::v2u(tunnel.coords);
+                auto tunnelCoords = sf::v2u8(tunnel.coords);
                 if (tunnel.relative) tunnelCoords += coords;
 
                 if (m_data->isRoomWalkable(tunnelCoords))

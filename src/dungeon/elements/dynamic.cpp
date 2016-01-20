@@ -34,7 +34,7 @@ void Dynamic::bindElementData(ElementData& edata)
     auto sElementID = toString(m_elementID);
 
     // Initial position
-    sf::Vector2f position = m_inter.relTileLocalPosition({m_edata->operator[](L"rx").as_float(), m_edata->operator[](L"ry").as_float()});
+    sf::Vector2f position = m_inter.positionFromRelCoords({m_edata->operator[](L"rx").as_float(), m_edata->operator[](L"ry").as_float()});
     setLocalPosition(position);
 
     // Reparameter from inter

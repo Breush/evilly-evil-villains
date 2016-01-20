@@ -3,6 +3,7 @@
 #include "ai/graph.hpp"
 #include "tools/vector.hpp"
 #include "context/event.hpp"
+#include "dungeon/structs/room.hpp"
 
 namespace dungeon
 {
@@ -32,7 +33,7 @@ namespace dungeon
         {
             ai::Node* node = nullptr;   //!< Reference to the node.
 
-            sf::Vector2u coords;        //!< The original room coordinates from data.
+            RoomCoords coords;          //!< The original room coordinates from data.
             bool constructed = false;   //!< True if node is a constructed room.
 
             uint altitude = 0u;         //!< How high is the node.
@@ -64,10 +65,10 @@ namespace dungeon
         //! @{
 
         //! Simple getter to access nodes.
-        const ai::Node* node(const sf::Vector2u& coords) const;
+        const ai::Node* node(const RoomCoords& coords) const;
 
         //! Simple getter to access nodes data.
-        const NodeData* nodeData(const sf::Vector2u& coords) const;
+        const NodeData* nodeData(const RoomCoords& coords) const;
 
         //! @}
 
@@ -86,7 +87,7 @@ namespace dungeon
         //! @{
 
         //! Add a neighbour to a node.
-        void addNodeNeighbour(NodeData& nodeData, sf::Vector2u& neighbourCoords, const std::wstring& tunnelFacilityID = L"");
+        void addNodeNeighbour(NodeData& nodeData, const RoomCoords& neighbourCoords, const std::wstring& tunnelFacilityID = L"");
 
         //! @}
 
@@ -113,7 +114,7 @@ namespace dungeon
         //! The references to nodes, convert coords to nodes.
         std::vector<std::vector<NodeData>> m_nodes;
 
-        uint m_floorsCount = 0u;    //!< Number of nodes.
-        uint m_roomsByFloor = 0u;   //!< Number of nodes.
+        uint8 m_floorsCount = 0u;   //!< Number of nodes.
+        uint8 m_roomsByFloor = 0u;  //!< Number of nodes.
     };
 }

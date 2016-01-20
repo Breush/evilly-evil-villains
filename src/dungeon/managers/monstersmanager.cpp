@@ -70,7 +70,7 @@ void MonstersManager::update(const sf::Time& dt)
 void MonstersManager::receive(const context::Event& event)
 {
     const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
-    sf::Vector2u coords = {devent.room.x, devent.room.y};
+    RoomCoords coords = {devent.room.x, devent.room.y};
 
     // TODO See HeroesManager
     if (devent.type == "room_destroyed") {
@@ -160,10 +160,10 @@ void MonstersManager::damage(const Monster* monster, float amount)
     }
 }
 
-void MonstersManager::removeRoomMonsters(const sf::Vector2u& coords)
+void MonstersManager::removeRoomMonsters(const RoomCoords& coords)
 {
     for (auto& monsterInfo : m_monstersInfo) {
-        sf::Vector2u monsterCoords;
+        RoomCoords monsterCoords;
         monsterCoords.x = static_cast<uint>(monsterInfo.data[L"rx"].as_float());
         monsterCoords.y = static_cast<uint>(monsterInfo.data[L"ry"].as_float());
 
@@ -172,7 +172,7 @@ void MonstersManager::removeRoomMonsters(const sf::Vector2u& coords)
     }
 }
 
-void MonstersManager::addRoomMonster(const sf::Vector2u& coords, const std::wstring& monsterID)
+void MonstersManager::addRoomMonster(const RoomCoords& coords, const std::wstring& monsterID)
 {
     MonsterInfo monsterInfo;
     const auto& monsterData = m_data->monstersDB().get(monsterID);
@@ -188,7 +188,7 @@ void MonstersManager::addRoomMonster(const sf::Vector2u& coords, const std::wstr
     refreshMonstersData();
 }
 
-void MonstersManager::listRoomMonsters(const sf::Vector2u& coords, std::vector<Monster*>& monstersList) const
+void MonstersManager::listRoomMonsters(const RoomCoords& coords, std::vector<Monster*>& monstersList) const
 {
     monstersList.clear();
 

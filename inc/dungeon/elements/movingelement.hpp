@@ -143,11 +143,11 @@ namespace dungeon
 
         // Graph evaluation for AI
         uint m_tick = 0u;                                       //!< The current tick (how many nodes has been visited so far).
-        std::unordered_map<sf::Vector2u, NodeInfo> m_nodeInfos; //!< Remembers the visits of a certain node.
+        std::unordered_map<RoomCoords, NodeInfo> m_nodeInfos;   //!< Remembers the visits of a certain node.
 
         // Tunnel state
         bool m_inTunnel = false;                //!< Is the element inside a tunnel?
-        sf::Vector2u m_tunnelOriginCoords;      //!< The origin coordinates of the facility that created the tunnel.
+        RoomCoords m_tunnelOriginCoords;        //!< The origin coordinates of the facility that created the tunnel.
         std::wstring m_tunnelOriginFacilityID;  //!< The origin id of the facility that created the tunnel.
 
         // Artificial intelligence

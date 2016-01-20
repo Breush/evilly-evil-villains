@@ -23,7 +23,7 @@ context::Command Commandable::interpret(const std::vector<std::wstring>& tokens)
         if (tokens[0u] == L"construct" && tokens[1u] == L"room") {
             logMessage = L"> [dungeon] Constructing room " + tokens[2u] + L"/" + tokens[3u];
             bool free = (nTokens >= 5u) && (tokens[4u] == L"free");
-            sf::Vector2u coords{to<uint>(tokens[2u]), to<uint>(tokens[3u])};
+            RoomCoords coords{to<uint8>(tokens[2u]), to<uint8>(tokens[3u])};
             m_inter.constructRoom(coords, free);
         }
 
@@ -31,7 +31,7 @@ context::Command Commandable::interpret(const std::vector<std::wstring>& tokens)
         else if (tokens[0u] == L"destroy" && tokens[1u] == L"room") {
             logMessage = L"> [dungeon] Destroying room " + tokens[2u] + L"/" + tokens[3u];
             bool loss = (nTokens >= 5u) && (tokens[4u] == L"loss");
-            sf::Vector2u coords{to<uint>(tokens[2u]), to<uint>(tokens[3u])};
+            RoomCoords coords{to<uint8>(tokens[2u]), to<uint8>(tokens[3u])};
             m_inter.destroyRoom(coords, loss);
         }
 
@@ -39,14 +39,14 @@ context::Command Commandable::interpret(const std::vector<std::wstring>& tokens)
         else if (tokens[0u] == L"remove" && tokens[1u] == L"room") {
             logMessage = L"> [dungeon] Removing trap from room " + tokens[2u] + L"/" + tokens[3u];
             bool loss = (nTokens >= 5u) && (tokens[4u] == L"loss");
-            sf::Vector2u coords{to<uint>(tokens[2u]), to<uint>(tokens[3u])};
+            RoomCoords coords{to<uint8>(tokens[2u]), to<uint8>(tokens[3u])};
             m_inter.removeRoomTrap(coords, loss);
         }
 
         // Push room
         else if (tokens[0u] == L"pushRoom") {
             logMessage = L"> [dungeon] Pushing room " + tokens[2u] + L"/" + tokens[3u] + L" " + tokens[1u] + L"\n";
-            sf::Vector2u coords{to<uint>(tokens[2u]), to<uint>(tokens[3u])};
+            RoomCoords coords{to<uint8>(tokens[2u]), to<uint8>(tokens[3u])};
             auto animationTime = (nTokens >= 5u)? to<uint>(tokens[4u]) : 250u;
             bool success = m_inter.pushRoom(coords, directionFromString(tokens[1u]), animationTime);
             logMessage += L"> [dungeon] --> ";
@@ -59,7 +59,7 @@ context::Command Commandable::interpret(const std::vector<std::wstring>& tokens)
         if (tokens[0u] == L"set" && tokens[1u] == L"trap") {
             logMessage = L"> [dungeon] Setting trap " + tokens[2u] + L" in room " + tokens[3u] + L"/" + tokens[4u];
             bool free = (nTokens >= 6u) && (tokens[5u] == L"free");
-            sf::Vector2u coords{to<uint>(tokens[3u]), to<uint>(tokens[4u])};
+            RoomCoords coords{to<uint8>(tokens[3u]), to<uint8>(tokens[4u])};
             m_inter.setRoomTrap(coords, tokens[2u], free);
         }
 
@@ -67,7 +67,7 @@ context::Command Commandable::interpret(const std::vector<std::wstring>& tokens)
         else if (tokens[0u] == L"create" && tokens[1u] == L"facility") {
             logMessage = L"> [dungeon] Setting trap " + tokens[2u] + L" in room " + tokens[3u] + L"/" + tokens[4u];
             bool free = (nTokens >= 6u) && (tokens[5u] == L"free");
-            sf::Vector2u coords{to<uint>(tokens[3u]), to<uint>(tokens[4u])};
+            RoomCoords coords{to<uint8>(tokens[3u]), to<uint8>(tokens[4u])};
             m_inter.createRoomFacility(coords, tokens[2u], free);
         }
 
@@ -75,7 +75,7 @@ context::Command Commandable::interpret(const std::vector<std::wstring>& tokens)
         else if (tokens[0u] == L"remove" && tokens[1u] == L"facility") {
             logMessage = L"> [dungeon] Removing facility " + tokens[2u] + L" from room " + tokens[3u] + L"/" + tokens[4u];
             bool loss = (nTokens >= 6u) && (tokens[5u] == L"free");
-            sf::Vector2u coords{to<uint>(tokens[3u]), to<uint>(tokens[4u])};
+            RoomCoords coords{to<uint8>(tokens[3u]), to<uint8>(tokens[4u])};
             m_inter.removeRoomFacility(coords, tokens[2u], loss);
         }
     }

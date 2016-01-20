@@ -6,7 +6,7 @@
 using namespace dungeon;
 using namespace std::placeholders;
 
-Trap::Trap(const sf::Vector2u& coords, ElementData& edata, Inter& inter)
+Trap::Trap(const RoomCoords& coords, ElementData& edata, Inter& inter)
     : baseClass(inter)
     , m_coords(coords)
 {
@@ -17,7 +17,7 @@ Trap::Trap(const sf::Vector2u& coords, ElementData& edata, Inter& inter)
     auto sTrapID = toString(trapID);
 
     // Initializing
-    sf::Vector2f trapPosition = m_inter.tileLocalPosition(coords) + 0.5f * m_inter.tileSize();
+    sf::Vector2f trapPosition = m_inter.positionFromRoomCoords(coords) + 0.5f * m_inter.tileSize();
     setLocalPosition(trapPosition);
 
     // Decorum

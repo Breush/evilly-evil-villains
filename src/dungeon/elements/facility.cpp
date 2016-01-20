@@ -8,14 +8,14 @@
 
 using namespace dungeon;
 
-Facility::Facility(const sf::Vector2u& coords, ElementData& edata, dungeon::Inter& inter)
+Facility::Facility(const RoomCoords& coords, ElementData& edata, dungeon::Inter& inter)
     : baseClass(inter)
     , m_coords(coords)
 {
     m_edata = &edata;
 
     // Update from inter
-    sf::Vector2f facilityPosition = m_inter.tileLocalPosition(coords) + 0.5f * m_inter.tileSize();
+    sf::Vector2f facilityPosition = m_inter.positionFromRoomCoords(coords) + 0.5f * m_inter.tileSize();
     setLocalPosition(facilityPosition);
 
     // Display reload

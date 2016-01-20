@@ -95,10 +95,10 @@ namespace dungeon
         void setLocked(const Hero* hero, bool locked);
 
         //! Set the list to the room heroes.
-        void listRoomHeroes(const sf::Vector2u& coords, std::vector<Hero*>& heroesList) const;
+        void listRoomHeroes(const RoomCoords& coords, std::vector<Hero*>& heroesList) const;
 
         //! Mark all heroes in that room to be removed.
-        void removeRoomHeroes(const sf::Vector2u& coords);
+        void removeRoomHeroes(const RoomCoords& coords);
 
         //! @}
 
@@ -110,7 +110,7 @@ namespace dungeon
         void heroGetsOut(Hero* hero);
 
         //! Feedback from Hero when he tries to steal a treasure.
-        uint heroStealsTreasure(Hero* hero, const sf::Vector2u& coords, const uint stolenDosh);
+        uint heroStealsTreasure(Hero* hero, const RoomCoords& coords, const uint stolenDosh);
 
         //! @}
 

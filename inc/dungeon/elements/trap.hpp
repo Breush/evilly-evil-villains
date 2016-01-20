@@ -1,6 +1,7 @@
 #pragma once
 
 #include "dungeon/elements/element.hpp"
+#include "dungeon/structs/room.hpp"
 
 namespace dungeon
 {
@@ -13,7 +14,7 @@ namespace dungeon
     public:
 
         //! Constructor.
-        Trap(const sf::Vector2u& coords, ElementData& edata, dungeon::Inter& inter);
+        Trap(const RoomCoords& coords, ElementData& edata, dungeon::Inter& inter);
 
         //! Default destructor.
         ~Trap() = default;
@@ -46,6 +47,6 @@ namespace dungeon
 
     protected:
 
-        sf::Vector2u m_coords;  //!< The room in which the trap is set.
+        RoomCoords m_coords;    //!< The room in which the trap is set.
     };
 }
