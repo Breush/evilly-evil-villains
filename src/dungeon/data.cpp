@@ -407,7 +407,7 @@ void Data::correctFloorsRooms()
         }
     }
 
-    EventEmitter::addEvent("dungeon_changed");
+    EventEmitter::addEvent("dungeon_structure_changed", true);
 }
 
 //-------------------//

@@ -224,6 +224,9 @@ void Inter::receive(const context::Event& event)
     else if (event.type == "harvestable_dosh_changed") {
         refreshTileDoshLabel(coords);
     }
+    else if (event.type == "dungeon_structure_changed") {
+        refreshFromData();
+    }
 }
 
 //------------------------//
@@ -638,13 +641,11 @@ void Inter::adaptRoomsByFloor(int relativeValue)
 void Inter::setFloorsCount(uint value)
 {
     m_data->setFloorsCount(value);
-    refreshFromData();
 }
 
 void Inter::setRoomsByFloor(uint value)
 {
     m_data->setRoomsByFloor(value);
-    refreshFromData();
 }
 
 //----------------------//

@@ -37,6 +37,8 @@ void Graph::receive(const context::Event& event)
         refreshTreasure(m_nodes.at(devent.room.x).at(devent.room.y));
     else if (event.type == "dungeon_changed")
         updateFromData();
+    else if (event.type == "dungeon_structure_changed")
+        reconstructFromData();
 }
 
 //------------------------//

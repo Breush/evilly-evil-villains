@@ -49,6 +49,9 @@ namespace dungeon
         //! Rebinds the element data, called before lua reinit.
         virtual void rebindElementData() = 0;
 
+        //! Refresh the element local position within Inter, knowing the element data.
+        void refreshPosition();
+
         //! @}
 
         //------------------------//

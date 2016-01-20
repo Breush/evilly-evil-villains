@@ -40,11 +40,13 @@ namespace context
 
         //! Emits an event through all receivers.
         //! Note: similar events won't be launched twice.
-        void addEvent(std::unique_ptr<Event> event);
+        //! Set direct to true to send the event without adding it to the broadcast list.
+        void addEvent(std::unique_ptr<Event> event, bool direct = false);
 
         //! Emits a default event type through all receivers.
         //! Note: similar events won't be launched twice.
-        void addEvent(std::string eventType);
+        //! Set direct to true to send the event without adding it to the broadcast list.
+        void addEvent(std::string eventType, bool direct = false);
 
         //! @}
 

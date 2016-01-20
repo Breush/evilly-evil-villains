@@ -244,10 +244,7 @@ void MovingElement::bindElementData(ElementData& edata)
     }
 
     // Initial position
-    sf::Vector2f position = m_inter.relTileLocalPosition({m_edata->operator[](L"rx").as_float(), m_edata->operator[](L"ry").as_float()});
-    sf::Vector2f targetPosition  = m_inter.relTileLocalPosition({m_edata->operator[](L"tx").as_float(), m_edata->operator[](L"ty").as_float()});
-    lerpable()->setTargetPosition(targetPosition);
-    setLocalPosition(position);
+    refreshPosition();
     refreshAnimation();
 
     // Reparameter from inter
@@ -276,6 +273,16 @@ void MovingElement::bindElementData(ElementData& edata)
     // Finish update
     updateFromGraph();
     m_lua["_reinit"]();
+}
+
+void MovingElement::refreshPosition()
+{
+    returnif (m_edata == nullptr);
+
+    sf::Vector2f position = m_inter.relTileLocalPosition({m_edata->operator[](L"rx").as_float(), m_edata->operator[](L"ry").as_float()});
+    sf::Vector2f targetPosition  = m_inter.relTileLocalPosition({m_edata->operator[](L"tx").as_float(), m_edata->operator[](L"ty").as_float()});
+    lerpable()->setTargetPosition(targetPosition);
+    setLocalPosition(position);
 }
 
 //----------------------------------//

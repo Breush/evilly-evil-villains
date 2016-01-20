@@ -65,16 +65,36 @@ void EventEmitter::broadcast(uint count)
 #endif
 }
 
-void EventEmitter::addEvent(std::unique_ptr<Event> event)
+void EventEmitter::addEvent(std::unique_ptr<Event> event, bool direct)
 {
-    m_events.emplace_back(std::move(event));
+    // Send it
+    if (direct) {
+#if DEBUG_GLOBAL > 0
+        for (auto& receiver : m_receivers)
+            receiver->m_lock = true;
+#endif
+
+        for (auto& receiver : m_receivers)
+            receiver->receive(*event);
+
+#if DEBUG_GLOBAL > 0
+        for (auto& receiver : m_receivers)
+            receiver->m_lock = false;
+#endif
+    }
+
+    // Add it to the broadcast list
+    else {
+        // TODO Do not add it twice if event exists
+        m_events.emplace_back(std::move(event));
+    }
 }
 
-void EventEmitter::addEvent(std::string eventType)
+void EventEmitter::addEvent(std::string eventType, bool direct)
 {
     auto event = std::make_unique<Event>();
     event->type = std::move(eventType);
-    addEvent(std::move(event));
+    addEvent(std::move(event), direct);
 }
 
 //-------------------------------//

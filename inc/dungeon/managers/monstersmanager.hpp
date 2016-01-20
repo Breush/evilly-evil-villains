@@ -92,7 +92,7 @@ namespace dungeon
         //! @name ICU
         //! @{
 
-        //! Refresh all element data reference for heroes.
+        //! Refresh all element data references.
         void refreshMonstersData();
 
         //! @}
