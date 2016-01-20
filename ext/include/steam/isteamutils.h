@@ -43,7 +43,7 @@ enum EGamepadTextInputLineMode
 
 
 // function prototype for warning message hook
-#if defined( POSIX ) && not defined( __cdecl )
+#if defined( POSIX )
 #define __cdecl
 #endif
 extern "C" typedef void (__cdecl *SteamAPIWarningMessageHook_t)(int, const char *);

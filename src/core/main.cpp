@@ -11,6 +11,8 @@
 #include <fstream>
 #include <sstream>
 
+#include <unistd.h> // STDERR_FILENO
+
 //! The call stack.
 tools::CallStack callStack;
 
@@ -46,6 +48,8 @@ int main(int argc, char *argv[])
 {
     int returnStatus = EXIT_SUCCESS;
 
+    //----- Bugs catching -----//
+
     // Catch GCC signals
     #if defined(__GNUC__)
     #if not defined(__MINGW32__)
@@ -53,24 +57,40 @@ int main(int argc, char *argv[])
     #endif
     #endif
 
+    //----- Initialization -----//
+
+    // Initialize randomness
+    alea::s_generator.seed(time(nullptr));
+
     // As we do not control all libraries,
     // keeping in sync is important to avoid interleaved characters.
     std::ios_base::sync_with_stdio(true);
     std::wcout << L"";
     std::cerr << "";
 
-    // Initialize randomness
-    alea::s_generator.seed(time(nullptr));
+    //----- Steam API -----//
+
+    // Redirecting stdcerr (C interface) to file while Steam is loading
+    auto steamErrorFile = fopen("steam.log", "w+");
+    auto stdcerrOriginal = dup(STDERR_FILENO);
+    dup2(fileno(steamErrorFile), STDERR_FILENO);
 
     // Start Steam
     // Note: That's important to do that before the call to Application,
     // otherwise the hook to OpenGL (Shift+Tab) won't work.
-    // FIXME bool steamActivated = steam::SteamAPI_Init();
-    // Currently disabled because of Linux incompatibilities.
-    bool steamActivated = false;
+    bool steamActivated = steam::SteamAPI_Init();
+
+    // Setting cerr back
+    fflush(stderr);
+    dup2(stdcerrOriginal, STDERR_FILENO);
+    fclose(steamErrorFile);
+    close(stdcerrOriginal);
+
+    // Steam state
     mdebug_core_1("Steam interfacing: " << (steamActivated? "Enabled" : "Disabled"));
 
-    // Running application
+    //----- Application -----//
+
     try {
         Application app;
         app.run();
@@ -90,6 +110,8 @@ int main(int argc, char *argv[])
 
         returnStatus = EXIT_FAILURE;
     }
+
+    //----- Closing procedures -----//
 
     // Closing Steam
     if (steamActivated)
