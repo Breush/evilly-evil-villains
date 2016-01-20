@@ -41,12 +41,12 @@ bool ReactImage::handleMouseButtonPressed(const sf::Mouse::Button button, const 
 
     // Maybe callback is not set
     if (callback == nullptr) {
-        Application::context().sounds.play("refuse");
+        Application::context().sounds.play("core/nui/refuse/refuse");
         return true;
     }
 
     // Accept callback
-    Application::context().sounds.play("accept");
+    Application::context().sounds.play("core/nui/accept/accept");
     callback();
     return true;
 }
@@ -164,7 +164,7 @@ void ReactImage::setActiveReact(const std::wstring& key, bool sensitive)
     // Indicate the selected react changed
     if (sensitive) {
         m_activeReactChanged = true;
-        Application::context().sounds.play("select");
+        Application::context().sounds.play("core/nui/select/select");
     }
 }
 

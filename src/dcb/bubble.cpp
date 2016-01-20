@@ -16,7 +16,7 @@ Bubble::Bubble()
 
     // Text
     addPart(&m_wrapText);
-    m_wrapText.setFont(Application::context().fonts.get("nui"));
+    m_wrapText.setFont(Application::context().fonts.get("core/global/fonts/nui"));
     m_wrapText.setFillColor(sf::Color::White);
 }
 

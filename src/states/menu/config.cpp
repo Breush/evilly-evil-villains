@@ -265,5 +265,5 @@ void MenuConfig::onVolumeSliderChanged(uint sliderIndex)
 
     // Play testing sound so that the user can hear the level of sounds
     if (sliderIndex == 2u)
-        Application::context().sounds.play("select");
+        Application::context().sounds.play("core/nui/select/select");
 }

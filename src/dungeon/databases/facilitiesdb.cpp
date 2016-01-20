@@ -23,7 +23,7 @@ void FacilitiesDB::reload()
     m_facilitiesData.clear();
 
     // Loading from XML files
-    for (const auto& fileInfo : listFiles("res/data/facilities", true)) {
+    for (const auto& fileInfo : listFiles("res/vanilla/facilities", true)) {
         // Check the file extension
         if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "xml")
             continue;

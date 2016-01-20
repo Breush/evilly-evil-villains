@@ -113,15 +113,15 @@ void VillainDisplay::refreshFromSource()
 
     if (m_source->man) {
         m_background.setFillColor(m_selected? sf::Color{170u, 151u, 184u, 240u} : sf::Color{170u, 151u, 184u, 200u});
-        m_image.setTexture("villain/man");
+        m_image.setTexture("core/villains/man");
     }
     else {
         m_background.setFillColor(m_selected? sf::Color{184u, 171u, 151u, 240u} : sf::Color{184u, 171u, 151u, 200u});
-        m_image.setTexture("villain/woman");
+        m_image.setTexture("core/villains/woman");
     }
 
     m_background.setOutlineThickness(m_selected? 3.f : 1.f);
-    m_villainName.setShader(m_selected? "nui/select" : "");
+    m_villainName.setShader(m_selected? "core/nui/select/select" : "");
 
     refreshImageSize();
 }

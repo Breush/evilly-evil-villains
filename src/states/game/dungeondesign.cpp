@@ -69,11 +69,11 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 GameDungeonDesign::~GameDungeonDesign()
 {
     // Musics
-    Application::context().musics.stop("angevin_70");
+    Application::context().musics.stop("core/global/musics/angevin_70");
 
     // Freeing resources
-    Application::freeTextures({"dungeon", "resources", "effects"});
-    Application::freeAnimations({"dungeon"});
+    Application::freeTextures({"vanilla"});
+    Application::freeAnimations({"vanilla"});
 }
 
 //-------------------//
@@ -155,32 +155,30 @@ void GameDungeonDesign::updateLoading(const sf::Time& dt)
     }
 
     // Pre-init
-    LOAD( 0u, m_loadingBackground.setTexture("menu/loading/background"))
+    LOAD( 0u, m_loadingBackground.setTexture("core/menu/loading/background"))
 
     // Loading resources
-    LOAD( 1u, Application::loadTextures({"dungeon/dynamics"}))
-    LOAD( 2u, Application::loadTextures({"dungeon/facilities"}))
-    LOAD( 3u, Application::loadTextures({"dungeon/inter"}))
-    LOAD( 4u, Application::loadTextures({"dungeon/monsters"}))
-    LOAD( 5u, Application::loadTextures({"dungeon/panel"}))
-    LOAD( 6u, Application::loadTextures({"dungeon/scene"}))
-    LOAD( 7u, Application::loadTextures({"dungeon/sidebar"}))
-    LOAD( 8u, Application::loadTextures({"dungeon/tools"}))
-    LOAD( 9u, Application::loadTextures({"dungeon/traps"}))
-    LOAD(10u, Application::loadTextures({"dungeon/heroes"}))
-    LOAD(11u, Application::loadTextures({"resources"}))
-    LOAD(12u, Application::loadTextures({"effects"}))
+    LOAD( 1u, Application::loadTextures({"core/tools"}))
+    LOAD( 2u, Application::loadTextures({"core/resources"}))
+    LOAD( 3u, Application::loadTextures({"core/dungeon/inter"}))
+    LOAD( 4u, Application::loadTextures({"core/dungeon/scene"}))
+    LOAD( 5u, Application::loadTextures({"core/dungeon/sidebar"}))
+    LOAD( 6u, Application::loadTextures({"vanilla/dynamics"}))
+    LOAD( 7u, Application::loadTextures({"vanilla/facilities"}))
+    LOAD( 8u, Application::loadTextures({"vanilla/monsters"}))
+    LOAD( 9u, Application::loadTextures({"vanilla/traps"}))
+    LOAD(10u, Application::loadTextures({"vanilla/heroes"}))
 
-    LOAD(20u, Application::loadAnimations({"dungeon/dynamics"}))
-    LOAD(21u, Application::loadAnimations({"dungeon/facilities"}))
-    LOAD(22u, Application::loadAnimations({"dungeon/monsters"}))
-    LOAD(23u, Application::loadAnimations({"dungeon/traps"}))
-    LOAD(24u, Application::loadAnimations({"dungeon/heroes"}))
+    LOAD(20u, Application::loadAnimations({"vanilla/dynamics"}))
+    LOAD(21u, Application::loadAnimations({"vanilla/facilities"}))
+    LOAD(22u, Application::loadAnimations({"vanilla/monsters"}))
+    LOAD(23u, Application::loadAnimations({"vanilla/traps"}))
+    LOAD(24u, Application::loadAnimations({"vanilla/heroes"}))
 
-    LOAD(30u, Application::context().textures.get("dungeon/sidebar/tab/monsters/cage").setRepeated(true))
-    LOAD(31u, Application::context().textures.get("dungeon/inter/outer_wall_west").setRepeated(true))
-    LOAD(32u, Application::context().textures.get("dungeon/inter/outer_wall_east").setRepeated(true))
-    LOAD(33u, Application::context().textures.get("dungeon/inter/void_room").setRepeated(true))
+    LOAD(30u, Application::context().textures.get("core/dungeon/sidebar/tabs/monsters/cage").setRepeated(true))
+    LOAD(31u, Application::context().textures.get("core/dungeon/inter/outer_wall_west").setRepeated(true))
+    LOAD(32u, Application::context().textures.get("core/dungeon/inter/outer_wall_east").setRepeated(true))
+    LOAD(33u, Application::context().textures.get("core/dungeon/inter/void_room").setRepeated(true))
 
     // Inits
     LOAD(40u, m_dungeonInter.init())
@@ -195,12 +193,12 @@ void GameDungeonDesign::updateLoading(const sf::Time& dt)
     LOAD(53u, m_dungeonSidebar.setMinimapLayer(scene().layer("DUNGEON")))
 
     // Decorum
-    LOAD(60u, m_sceneFront.setTexture("dungeon/scene/front"))
-    LOAD(61u, m_sceneClose.setTexture("dungeon/scene/close"))
-    LOAD(62u, m_sceneMiddle.setTexture("dungeon/scene/middle"))
-    LOAD(63u, m_sceneFar.setTexture("dungeon/scene/far"))
-    LOAD(64u, m_sceneHorizon.setTexture("dungeon/scene/horizon"))
-    LOAD(65u, m_sceneSky.setTexture("dungeon/scene/sky"))
+    LOAD(60u, m_sceneFront.setTexture("core/dungeon/scene/front"))
+    LOAD(61u, m_sceneClose.setTexture("core/dungeon/scene/close"))
+    LOAD(62u, m_sceneMiddle.setTexture("core/dungeon/scene/middle"))
+    LOAD(63u, m_sceneFar.setTexture("core/dungeon/scene/far"))
+    LOAD(64u, m_sceneHorizon.setTexture("core/dungeon/scene/horizon"))
+    LOAD(65u, m_sceneSky.setTexture("core/dungeon/scene/sky"))
 
     // Adjust images to new maxZoom
     // TODO Sky is streched, use a setScale instead of setSize inside that function?
@@ -213,7 +211,7 @@ void GameDungeonDesign::updateLoading(const sf::Time& dt)
 
     // Music
     // Keep last, as it is a indicator for the player that everything is ready
-    LOAD(100u, Application::context().musics.play("angevin_70"))
+    LOAD(100u, Application::context().musics.play("core/global/musics/angevin_70"))
 
     ++m_loadingStep;
 }

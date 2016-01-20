@@ -62,7 +62,7 @@ namespace SpriterEngine
                 std::string fileName;
                 if (att->isValid())
                 {
-                    fileName = att->getStringValue();
+                    fileName = filePath + att->getStringValue();
                     att->advanceToNextAttribute();
                 }
                 else

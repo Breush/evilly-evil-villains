@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r4.1">
+    <folder id="0" name="smallChest">
+        <file id="0" name="base.png" width="123" height="92" pivot_x="0" pivot_y="1"/>
+        <file id="1" name="close.png" width="121" height="67" pivot_x="0" pivot_y="1"/>
+        <file id="2" name="half.png" width="60" height="21" pivot_x="0" pivot_y="1"/>
+        <file id="3" name="full.png" width="76" height="41" pivot_x="0" pivot_y="1"/>
+        <file id="4" name="open.png" width="121" height="83" pivot_x="0" pivot_y="1"/>
+    </folder>
+    <entity id="0" name="smallChest">
+        <obj_info name="smallChest_base" realname="base" type="sprite">
+            <frames>
+                <i folder="0" file="0"/>
+            </frames>
+        </obj_info>
+        <obj_info name="smallChest_close" realname="close" type="sprite">
+            <frames>
+                <i folder="0" file="1"/>
+            </frames>
+        </obj_info>
+        <animation id="0" name="idle_empty" length="1000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" name="base" folder="0" file="0" abs_x="-9" abs_y="-12" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" name="close" folder="0" file="1" abs_x="-11" abs_y="20" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="1" key="0" z_index="1"/>
+                </key>
+            </mainline>
+            <timeline id="0" obj="0" name="base">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="-9" y="-12" angle="0"/>
+                </key>
+            </timeline>
+            <timeline id="1" obj="1" name="close">
+                <key id="0" spin="0">
+                    <object folder="0" file="1" x="-11" y="20" angle="0"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

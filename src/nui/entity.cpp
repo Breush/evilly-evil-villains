@@ -14,8 +14,8 @@ Entity::Entity(bool isLerpable)
 {
     // Focusing
     if (sf::Shader::isAvailable())
-        m_focusShader = &Application::context().shaders.get("nui/focus");
-    m_focusSprite.setTexture(&Application::context().textures.get("nui/focus"));
+        m_focusShader = &Application::context().shaders.get("core/nui/focus/background");
+    m_focusSprite.setTexture(&Application::context().textures.get("core/nui/focus/background"));
     m_focusSprite.setFillColor({255, 255, 255, 100});
 
     // Tooltip

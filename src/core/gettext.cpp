@@ -64,7 +64,7 @@ void i18n::init(const std::string& language)
     setlocale(LC_NUMERIC, "C");
 
     // Set text domain
-    bindtextdomain("eev", "res/po/");
+    bindtextdomain("eev", "res/core/langs/");
     textdomain("eev");
 }
 
@@ -85,7 +85,7 @@ void i18n::initLanguagesList()
 {
     s_languagesList.clear();
 
-    for (auto& fileInfo : listFiles("res/po")) {
+    for (auto& fileInfo : listFiles("res/core/langs")) {
         if (!fileInfo.isDirectory) continue;
 
         pugi::xml_document doc;

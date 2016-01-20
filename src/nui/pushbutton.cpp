@@ -18,7 +18,7 @@ PushButton::PushButton()
 
     // Text
     addPart(&m_text);
-    m_text.setFont(Application::context().fonts.get("nui"));
+    m_text.setFont(Application::context().fonts.get("core/global/fonts/nui"));
 }
 
 //-------------------//
@@ -132,11 +132,11 @@ bool PushButton::handleMouseButtonPressed(const sf::Mouse::Button button, const 
     returnif (button != sf::Mouse::Left) false;
 
     if (m_validateCallback == nullptr) {
-        Application::context().sounds.play("refuse");
+        Application::context().sounds.play("core/nui/refuse/refuse");
         return true;
     }
 
-    Application::context().sounds.play("accept");
+    Application::context().sounds.play("core/nui/accept/accept");
     m_pressed = true;
     refresh();
 
@@ -157,14 +157,14 @@ bool PushButton::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector
     returnif (m_hovered) true;
     returnif (m_validateCallback == nullptr) true;
 
-    Application::context().sounds.play("select");
+    Application::context().sounds.play("core/nui/select/select");
     m_hovered = true;
 
-    setPartShader(&m_text, "nui/hover");
-    setPartShader(&m_left, "nui/hover");
-    setPartShader(&m_middle, "nui/hover");
-    setPartShader(&m_right, "nui/hover");
-    if (m_imageActive) setPartShader(&m_image, "nui/hover");
+    setPartShader(&m_text, "core/nui/hover/hover");
+    setPartShader(&m_left, "core/nui/hover/hover");
+    setPartShader(&m_middle, "core/nui/hover/hover");
+    setPartShader(&m_right, "core/nui/hover/hover");
+    if (m_imageActive) setPartShader(&m_image, "core/nui/hover/hover");
     return true;
 }
 
@@ -202,9 +202,9 @@ void PushButton::refresh()
     }
 
     // Button
-    const auto& leftTexture = Application::context().textures.get(m_pressed? "nui/pushbutton/push_left" : "nui/pushbutton/pop_left");
-    const auto& middleTexture = Application::context().textures.get(m_pressed? "nui/pushbutton/push_middle" : "nui/pushbutton/pop_middle");
-    const auto& rightTexture = Application::context().textures.get(m_pressed? "nui/pushbutton/push_right" : "nui/pushbutton/pop_right");
+    const auto& leftTexture =   Application::context().textures.get(m_pressed? "core/nui/pushbutton/push_left"   : "core/nui/pushbutton/pop_left");
+    const auto& middleTexture = Application::context().textures.get(m_pressed? "core/nui/pushbutton/push_middle" : "core/nui/pushbutton/pop_middle");
+    const auto& rightTexture =  Application::context().textures.get(m_pressed? "core/nui/pushbutton/push_right"  : "core/nui/pushbutton/pop_right");
 
     float leftTextureWidth = leftTexture.getSize().x;
     float rightTextureWidth = rightTexture.getSize().x;

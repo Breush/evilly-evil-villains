@@ -19,9 +19,9 @@ DropDownList::DropDownList()
     addPart(&m_headerMiddle);
     addPart(&m_headerRight);
 
-    const auto& headerLeftTexture = Application::context().textures.get("nui/dropdownlist/header_left");
-    const auto& headerMiddleTexture = Application::context().textures.get("nui/dropdownlist/header_middle");
-    const auto& headerRightTexture = Application::context().textures.get("nui/dropdownlist/header_right");
+    const auto& headerLeftTexture = Application::context().textures.get("core/nui/dropdownlist/header_left");
+    const auto& headerMiddleTexture = Application::context().textures.get("core/nui/dropdownlist/header_middle");
+    const auto& headerRightTexture = Application::context().textures.get("core/nui/dropdownlist/header_right");
 
     m_headerLeft.setTexture(&headerLeftTexture);
     m_headerMiddle.setTexture(&headerMiddleTexture);
@@ -34,7 +34,7 @@ DropDownList::DropDownList()
 
     // Text
     addPart(&m_text);
-    m_text.setFont(Application::context().fonts.get("nui"));
+    m_text.setFont(Application::context().fonts.get("core/global/fonts/nui"));
     m_text.setFillColor(sf::Color::White);
 }
 
@@ -130,10 +130,10 @@ bool DropDownList::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vect
 {
     resetPartsShader();
 
-    setPartShader(&m_text, "nui/hover");
-    setPartShader(&m_headerLeft, "nui/hover");
-    setPartShader(&m_headerMiddle, "nui/hover");
-    setPartShader(&m_headerRight, "nui/hover");
+    setPartShader(&m_text, "core/nui/hover/hover");
+    setPartShader(&m_headerLeft, "core/nui/hover/hover");
+    setPartShader(&m_headerMiddle, "core/nui/hover/hover");
+    setPartShader(&m_headerRight, "core/nui/hover/hover");
 
     return true;
 }
@@ -178,7 +178,7 @@ void DropDownList::selectPrevious()
     auto choicesCount = m_selector.choicesCount();
     returnif (choicesCount <= 1u);
 
-    Application::context().sounds.play("select");
+    Application::context().sounds.play("core/nui/select/select");
 
     if (m_selectedChoiceID == 0u) select(choicesCount - 1u);
     else select(m_selectedChoiceID - 1u);
@@ -189,7 +189,7 @@ void DropDownList::selectNext()
     auto choicesCount = m_selector.choicesCount();
     returnif (choicesCount <= 1u);
 
-    Application::context().sounds.play("select");
+    Application::context().sounds.play("core/nui/select/select");
 
     if (m_selectedChoiceID == choicesCount - 1u) select(0u);
     else select(m_selectedChoiceID + 1u);

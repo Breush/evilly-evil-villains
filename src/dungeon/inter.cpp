@@ -48,12 +48,12 @@ Inter::Inter(nui::ContextMenu& contextMenu)
 void Inter::init()
 {
     // Outer walls
-    m_voidBackground.setTexture(&Application::context().textures.get("dungeon/inter/void_room"));
-    m_outerWalls[0].setTexture(&Application::context().textures.get("dungeon/inter/outer_wall_west"));
-    m_outerWalls[1].setTexture(&Application::context().textures.get("dungeon/inter/outer_wall_east"));
+    m_voidBackground.setTexture(&Application::context().textures.get("core/dungeon/inter/void_room"));
+    m_outerWalls[0].setTexture(&Application::context().textures.get("core/dungeon/inter/outer_wall_west"));
+    m_outerWalls[1].setTexture(&Application::context().textures.get("core/dungeon/inter/outer_wall_east"));
 
     // Ref size
-    m_refRoomSize = sf::v2f(Application::context().textures.get("dungeon/inter/inner_wall").getSize());
+    m_refRoomSize = sf::v2f(Application::context().textures.get("core/dungeon/inter/inner_wall").getSize());
 }
 
 //-------------------//
@@ -360,7 +360,7 @@ void Inter::selectTile(const RoomCoords& coords)
     m_selectedTile = &m_tiles.at(coords);
 
     for (auto& layer : m_selectedTile->layers)
-        layer->setShader("nui/select");
+        layer->setShader("core/nui/select/select");
 
     // Animated sprites do not handle shaders right now...
     // so, nothing else to select
@@ -393,7 +393,7 @@ void Inter::setHoveredTile(const RoomCoords& coords)
     returnif (m_hoveredTile == m_selectedTile);
 
     for (auto& layer : m_hoveredTile->layers)
-        layer->setShader("nui/hover");
+        layer->setShader("core/nui/hover/hover");
 }
 
 void Inter::resetHoveredTile()
@@ -485,11 +485,13 @@ void Inter::resetPrediction()
     m_predictionSprite.setVisible(false);
 }
 
+// TODO These two functions setPredictionXXX can definitely be factorized
+
 void Inter::setPredictionMonster(const sf::Vector2f& relPos, const std::wstring& monsterID)
 {
     if (m_predictionID != monsterID) {
         m_predictionID = monsterID;
-        m_predictionSprite.load(toString(L"dungeon/monsters/" + monsterID));
+        m_predictionSprite.load(toString(L"vanilla/monsters/" + monsterID + L"/anim"));
         m_predictionSprite.setVisible(true);
     }
 
@@ -508,7 +510,7 @@ void Inter::setPredictionFacility(const sf::Vector2f& relPos, const std::wstring
 {
     if (m_predictionID != facilityID) {
         m_predictionID = facilityID;
-        m_predictionSprite.load(toString(L"dungeon/facilities/" + facilityID));
+        m_predictionSprite.load(toString(L"vanilla/facilities/" + facilityID + L"/anim"));
         m_predictionSprite.setVisible(true);
     }
 
@@ -958,11 +960,11 @@ void Inter::refreshTileLayers(const RoomCoords& coords)
     if (state == RoomState::EMPTY)
     {
         if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, WEST)))
-            addLayer(coords, "dungeon/inter/void_west_transition", 150.f);
+            addLayer(coords, "core/dungeon/inter/void_west_transition", 150.f);
         if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, SOUTH)))
-            addLayer(coords, "dungeon/inter/void_south_transition", 150.f);
+            addLayer(coords, "core/dungeon/inter/void_south_transition", 150.f);
         if (m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, EAST)))
-            addLayer(coords, "dungeon/inter/void_east_transition", 150.f);
+            addLayer(coords, "core/dungeon/inter/void_east_transition", 150.f);
 
         return;
     }
@@ -976,11 +978,11 @@ void Inter::refreshTileLayers(const RoomCoords& coords)
     }
 
     // Add room textures if not hidden
-    if (!(room.hide & RoomFlag::WALL))  addLayer(coords, "dungeon/inter/inner_wall", 100.f);
-    if (!(room.hide & RoomFlag::FLOOR)) addLayer(coords, "dungeon/inter/floor", 75.f);
+    if (!(room.hide & RoomFlag::WALL))  addLayer(coords, "core/dungeon/inter/inner_wall", 100.f);
+    if (!(room.hide & RoomFlag::FLOOR)) addLayer(coords, "core/dungeon/inter/floor", 75.f);
 
     if (!m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, EAST)))
-        addLayer(coords, "dungeon/inter/right_wall", 75.f);
+        addLayer(coords, "core/dungeon/inter/right_wall", 75.f);
 }
 
 void Inter::refreshTileFacilities(const RoomCoords& coords)
@@ -1030,16 +1032,16 @@ void Inter::refreshTileTraps(const RoomCoords& coords)
 
 void Inter::refreshOuterWalls()
 {
-    const auto& roomSize = Application::context().textures.get("dungeon/inter/inner_wall").getSize();
+    const auto& roomSize = Application::context().textures.get("core/dungeon/inter/inner_wall").getSize();
 
     // Void rooms behind
-    const auto& voidTextureSize = Application::context().textures.get("dungeon/inter/void_room").getSize();
+    const auto& voidTextureSize = Application::context().textures.get("core/dungeon/inter/void_room").getSize();
     sf::IntRect voidRect(0, 0, voidTextureSize.x * m_grid.columns(), voidTextureSize.y * m_grid.rows());
     m_voidBackground.setSize(size());
     m_voidBackground.setTextureRect(voidRect);
 
     // West wall
-    const auto& westTextureSize = Application::context().textures.get("dungeon/inter/outer_wall_west").getSize();
+    const auto& westTextureSize = Application::context().textures.get("core/dungeon/inter/outer_wall_west").getSize();
     sf::Vector2f westRealSize(westTextureSize.x * m_grid.cellSize().x / roomSize.x, size().y);
     sf::IntRect westWallsRect(0, 0, westTextureSize.x, westTextureSize.y * m_grid.rows());
     m_outerWalls[0].setSize(westRealSize);
@@ -1047,7 +1049,7 @@ void Inter::refreshOuterWalls()
     m_outerWalls[0].setTextureRect(westWallsRect);
 
     // East wall
-    const auto& eastTextureSize = Application::context().textures.get("dungeon/inter/outer_wall_east").getSize();
+    const auto& eastTextureSize = Application::context().textures.get("core/dungeon/inter/outer_wall_east").getSize();
     sf::Vector2f eastRealSize(eastTextureSize.x * m_grid.cellSize().x / roomSize.x, size().y);
     sf::IntRect eastWallsRect(0, 0, eastTextureSize.x, eastTextureSize.y * m_grid.rows());
     m_outerWalls[1].setSize(eastRealSize);

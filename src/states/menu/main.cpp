@@ -15,7 +15,7 @@ MenuMain::MenuMain(StateStack& stack)
 {
     // During menus, enable key repeat
     Application::context().window.setKeyRepeatEnabled(true);
-    Application::context().musics.play("pippin_the_hunchback");
+    Application::context().musics.play("core/global/musics/pippin_the_hunchback");
 
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
@@ -23,7 +23,7 @@ MenuMain::MenuMain(StateStack& stack)
     // Background
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
-    m_background.setTexture("menu/main/background");
+    m_background.setTexture("core/menu/main/background");
 
     // Copyright label
     nuiRoot.attachChild(m_copyrightLabel);
@@ -74,7 +74,7 @@ MenuMain::MenuMain(StateStack& stack)
     nuiRoot.attachChild(m_reactImage);
     m_reactImage.centerOrigin();
     m_reactImage.setRelativePosition({0.5f, 0.2f});
-    m_reactImage.setShader("menu/name");
+    m_reactImage.setShader("core/menu/main/logo");
     m_reactImage.setMouseLeftDeselect(false);
 
     // Fading sprite
@@ -83,7 +83,7 @@ MenuMain::MenuMain(StateStack& stack)
     m_fadingRectangle.setDepth(-100.f);
 
     // Setting callbacks
-    m_reactImage.loadFromFile("res/tex/menu/main/logo.xml");
+    m_reactImage.loadFromFile("res/core/menu/main/logo.xml");
     m_reactImage.setReactCallback(m_choices[0].key, singlePlayer);
     m_reactImage.setReactCallback(m_choices[1].key, multiPlayer);
     m_reactImage.setReactCallback(m_choices[2].key, villains);
@@ -95,7 +95,7 @@ MenuMain::MenuMain(StateStack& stack)
 MenuMain::~MenuMain()
 {
     // Musics
-    Application::context().musics.stop("pippin_the_hunchback");
+    Application::context().musics.stop("core/global/musics/pippin_the_hunchback");
 }
 
 //-------------------//
@@ -141,7 +141,7 @@ void MenuMain::refreshWindow(const config::WindowInfo& cWindow)
     m_fadingRectangle.setSize(resolution);
 
     // Background
-    auto textureSize = sf::v2f(Application::context().textures.get("menu/main/background").getSize());
+    auto textureSize = sf::v2f(Application::context().textures.get("core/menu/main/background").getSize());
     auto scaleFactor = maxSide / textureSize.x;
     m_background.setLocalScale({scaleFactor, scaleFactor});
 

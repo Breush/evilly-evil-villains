@@ -8,7 +8,7 @@ void Application::loadFonts()
     uint fontsCount = 0u;
 
     // Recursively load all files in resource directory
-    for (const auto& fileInfo : listFiles("res/font", true)) {
+    for (const auto& fileInfo : listFiles("res/core/global/fonts", true)) {
         // Load only font files
         if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "ttf")
             continue;

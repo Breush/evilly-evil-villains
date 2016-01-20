@@ -16,7 +16,7 @@ using namespace dungeon;
 TrapGrabButton::TrapGrabButton(const std::wstring& text, std::wstring trapID)
     : m_trapID(std::move(trapID))
 {
-    set(text, toString(L"dungeon/traps/" + m_trapID + L"/icon"));
+    set(text, toString(L"vanilla/traps/" + m_trapID + L"/icon"));
 }
 
 void TrapGrabButton::grabbableButtonReleased(scene::Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)

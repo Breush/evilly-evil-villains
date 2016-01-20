@@ -151,7 +151,7 @@ void Terminal::addMessage(std::wstring text, sf::Color color)
 
     message.label = std::make_unique<scene::WrapLabel<sf::Text>>();
     message.label->setText(std::move(text));
-    message.label->setFont("mono");
+    message.label->setFont("core/global/fonts/mono");
     message.label->setCharacterSize(m_characterSize);
     message.label->setFillColor(std::move(color));
     message.label->fitWidth(m_width);

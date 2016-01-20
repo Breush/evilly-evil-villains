@@ -14,11 +14,11 @@ GameDCB::GameDCB(StateStack& stack)
     , m_controller(m_gaugesManager, m_bubble, m_answerBox)
 {
     // Loading resources
-    Application::loadTextures({"dcb"});
-    Application::loadAnimations({"dcb"});
+    Application::loadTextures({"core/menu/dcb"});
+    Application::loadAnimations({"core/menu/dcb"});
 
     // Music
-    Application::context().musics.play("moorland");
+    Application::context().musics.play("core/global/musics/moorland");
 
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
@@ -26,7 +26,7 @@ GameDCB::GameDCB(StateStack& stack)
     const auto nuiRatio = nuiSize.x / nuiSize.y;
 
     // Background
-    const auto backgroundSize = sf::v2f(Application::context().textures.get("dcb/scene/stage").getSize());
+    const auto backgroundSize = sf::v2f(Application::context().textures.get("core/menu/dcb/stage/stage").getSize());
     const auto backgroundRatio = backgroundSize.x / backgroundSize.y;
     float backgroundScaleValue = 1.f;
     if (nuiRatio > backgroundRatio) backgroundScaleValue *= nuiSize.x / backgroundSize.x;
@@ -34,17 +34,17 @@ GameDCB::GameDCB(StateStack& stack)
     const sf::Vector2f backgroundScale(backgroundScaleValue, backgroundScaleValue);
 
     nuiRoot.attachChild(m_trees);
-    m_trees.load("dcb/scene/trees");
+    m_trees.load("core/menu/dcb/trees");
     m_trees.setRelativePosition({0.5f, 0.5f});
     m_trees.setLocalScale(backgroundScale);
 
     nuiRoot.attachChild(m_stage);
-    m_stage.load("dcb/scene/stage");
+    m_stage.load("core/menu/dcb/stage");
     m_stage.setRelativePosition({0.5f, 0.5f});
     m_stage.setLocalScale(backgroundScale);
 
     nuiRoot.attachChild(m_candle);
-    m_candle.load("dcb/scene/candle");
+    m_candle.load("core/menu/dcb/candle");
     m_candle.setRelativePosition({0.5f, 0.5f});
     m_candle.setLocalScale(backgroundScale);
 
@@ -86,19 +86,19 @@ GameDCB::GameDCB(StateStack& stack)
     m_controller.setOnSequenceFinishedCallback([this] { confirmDungeonCreation(); });
 
     // Try to load specific language file. If none, just go back to English.
-    std::string controllerFile = "res/po/" + toString(languageCode) + "/dcb.xml";
+    std::string controllerFile = "res/core/langs/" + toString(languageCode) + "/dcb.xml";
     if (fileExists(controllerFile)) m_controller.load(controllerFile);
-    else m_controller.load("res/po/en_EN/dcb.xml");
+    else m_controller.load("res/core/langs/en_EN/dcb.xml");
 }
 
 GameDCB::~GameDCB()
 {
     // Musics
-    Application::context().musics.stop("moorland");
+    Application::context().musics.stop("core/global/musics/moorland");
 
     // Freeing resources
-    Application::freeTextures({"dcb"});
-    Application::freeAnimations({"dcb"});
+    Application::freeTextures({"core/menu/dcb"});
+    Application::freeAnimations({"core/menu/dcb"});
 }
 
 //-----------------------//

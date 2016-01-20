@@ -21,7 +21,9 @@ Facility::Facility(const RoomCoords& coords, ElementData& edata, dungeon::Inter&
     // Display reload
     m_elementID = m_edata->type();
     auto sElementID = toString(m_elementID);
-    m_sprite.load("dungeon/facilities/" + sElementID);
+
+    // FIXME We're all vanilla for now, but sElementID should probably hold the modID too
+    m_sprite.load("vanilla/facilities/" + sElementID + "/anim");
 
     // Lua API
     m_lua["eev_hasSiblingFacility"] = [this] (const std::string& facilityID) { return lua_hasSiblingFacility(facilityID); };
@@ -41,7 +43,7 @@ Facility::Facility(const RoomCoords& coords, ElementData& edata, dungeon::Inter&
     m_lua["eev_removeTunnels"] = [this] { lua_removeTunnels(); };
 
     // Load lua file
-    std::string luaFilename = "res/ai/dungeon/facilities/" + sElementID + ".lua";
+    std::string luaFilename = "res/vanilla/facilities/" + sElementID + "/ai.lua";
     if (!m_lua.load(luaFilename))
         throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
     m_lua["_register"]();

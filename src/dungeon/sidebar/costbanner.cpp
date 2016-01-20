@@ -9,12 +9,12 @@ using namespace dungeon;
 CostBanner::CostBanner()
 {
     // Text
-    m_text.setFont(Application::context().fonts.get("mono"));
+    m_text.setFont(Application::context().fonts.get("core/global/fonts/mono"));
 
     // Icons
-    m_icons[IconID::DOSH].setTexture(&Application::context().textures.get("resources/dosh"));
-    m_icons[IconID::SOUL].setTexture(&Application::context().textures.get("resources/soul"));
-    m_icons[IconID::FAME].setTexture(&Application::context().textures.get("resources/fame"));
+    m_icons[IconID::DOSH].setTexture(&Application::context().textures.get("core/resources/dosh/icon"));
+    m_icons[IconID::SOUL].setTexture(&Application::context().textures.get("core/resources/soul/icon"));
+    m_icons[IconID::FAME].setTexture(&Application::context().textures.get("core/resources/fame/icon"));
 }
 
 //-------------------//

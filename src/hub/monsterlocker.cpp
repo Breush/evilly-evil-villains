@@ -37,7 +37,7 @@ MonsterLocker::MonsterLocker(dungeon::Data& data)
     m_lockedText.attachChild(m_lockedIcon);
     m_lockedIcon.setRelativePosition({-0.1f, 0.5f});
     m_lockedIcon.setRelativeOrigin({1.f, 0.5f});
-    m_lockedIcon.setTexture("hub/general/lock_closed");
+    m_lockedIcon.setTexture("core/menu/hub/general/lock_closed");
     m_lockedIcon.setSize({50.f, 50.f});
 
     m_lockedText.attachChild(m_lockedCostText);
@@ -48,7 +48,7 @@ MonsterLocker::MonsterLocker(dungeon::Data& data)
     m_lockedCostText.attachChild(m_lockedDoshIcon);
     m_lockedDoshIcon.setRelativePosition({1.f, 0.5f});
     m_lockedDoshIcon.setRelativeOrigin({0.f, 0.5f});
-    m_lockedDoshIcon.setTexture("resources/dosh");
+    m_lockedDoshIcon.setTexture("core/resources/dosh/icon");
     m_lockedDoshIcon.setSize({32.f, 32.f});
 
     // Image
@@ -56,7 +56,7 @@ MonsterLocker::MonsterLocker(dungeon::Data& data)
 
     // The room
     addPart(&m_room);
-    const auto& texture = Application::context().textures.get("hub/market/trap_room");
+    const auto& texture = Application::context().textures.get("core/menu/hub/market/trap_room");
     m_roomTextureSize = sf::v2f(texture.getSize());
     m_room.setSize(m_roomTextureSize);
     m_room.setTexture(&texture);
@@ -98,7 +98,7 @@ bool MonsterLocker::handleMouseButtonPressed(const sf::Mouse::Button, const sf::
     returnif (!m_data.doshWallet().sub(m_monsterGeneric->common->unlockCost.dosh)) true;
 
     // TODO See trap locker
-    Application::context().sounds.play("resources/dosh_gain");
+    Application::context().sounds.play("core/resources/dosh/gain");
 
     // We know the player has enough money and already paid, unlock it
     m_data.setMonsterGenericUnlocked(m_monsterID, true);
@@ -110,7 +110,7 @@ bool MonsterLocker::handleMouseButtonPressed(const sf::Mouse::Button, const sf::
 bool MonsterLocker::handleMouseMoved(const sf::Vector2f&, const sf::Vector2f&)
 {
     returnif (!m_locked) true;
-    m_lockedIcon.setShader("nui/hover");
+    m_lockedIcon.setShader("core/nui/hover/hover");
     return true;
 }
 
@@ -128,7 +128,7 @@ void MonsterLocker::setSource(const std::wstring& monsterID, const dungeon::Mons
     m_monsterID = monsterID;
     m_monsterGeneric = &monsterGeneric;
 
-    m_sprite.load("dungeon/monsters/" + toString(monsterID));
+    m_sprite.load("vanilla/monsters/" + toString(monsterID) + "/anim");
     m_sprite.select("presentation");
     m_name.setText(monsterGeneric.common->name);
     m_lockedCostText.setText(L"*" + toWString(monsterGeneric.common->unlockCost.dosh) + L"*");

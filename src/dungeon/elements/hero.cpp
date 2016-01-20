@@ -12,7 +12,7 @@
 using namespace dungeon;
 
 Hero::Hero(HeroesManager& manager, Inter& inter, Graph& graph)
-    : baseClass("dungeon/heroes/", inter, graph)
+    : baseClass("vanilla/heroes/", inter, graph)
     , m_manager(manager)
 {
     // Lua API

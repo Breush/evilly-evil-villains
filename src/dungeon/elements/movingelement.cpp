@@ -254,10 +254,10 @@ void MovingElement::bindElementData(ElementData& edata)
     // First time or new elementID
     if (firstTime) {
         // Animated sprite
-        m_sprite.load(m_folder + sElementID);
+        m_sprite.load(m_folder + sElementID + "/anim");
 
         // Lua
-        std::string luaFilename = "res/ai/" + m_folder + sElementID + ".lua";
+        std::string luaFilename = "res/" + m_folder + sElementID + "/ai.lua";
         if (!m_lua.load(luaFilename))
             throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
 

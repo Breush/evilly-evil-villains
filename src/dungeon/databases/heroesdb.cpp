@@ -21,7 +21,7 @@ void HeroesDB::reload()
     m_heroesData.clear();
 
     // Loading from XML files
-    for (const auto& fileInfo : listFiles("res/data/heroes", true)) {
+    for (const auto& fileInfo : listFiles("res/vanilla/heroes", true)) {
         // Check the file extension
         if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "xml")
             continue;

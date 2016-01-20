@@ -18,7 +18,7 @@ FacilityGrabButton::FacilityGrabButton(const FacilityData& facilityData, std::ws
     , m_facilityID(std::move(facilityID))
 {
     m_grabbableFacilityID = m_facilityID;
-    m_imageTextureID = "dungeon/facilities/" + toString(m_facilityID) + "/icon";
+    m_imageTextureID = "vanilla/facilities/" + toString(m_facilityID) + "/icon";
     set(m_facilityData.name, m_imageTextureID);
 
     // Explicit links (m_explicitLinksCount is constructed to 0u)

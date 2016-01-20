@@ -31,10 +31,10 @@ void Summary::init()
     for (auto& bar : m_bars)
         bar->init();
 
-    m_bars[BAR_TIME]->setLogo("resources/time");
-    m_bars[BAR_DOSH]->setLogo("resources/dosh");
-    m_bars[BAR_SOUL]->setLogo("resources/soul");
-    m_bars[BAR_FAME]->setLogo("resources/fame");
+    m_bars[BAR_TIME]->setLogo("core/resources/time/icon");
+    m_bars[BAR_DOSH]->setLogo("core/resources/dosh/icon");
+    m_bars[BAR_SOUL]->setLogo("core/resources/soul/icon");
+    m_bars[BAR_FAME]->setLogo("core/resources/fame/icon");
 
     m_bars[BAR_TIME]->setTextColor(sf::Color::White);
     m_bars[BAR_DOSH]->setTextColor({190u, 171u, 21u});

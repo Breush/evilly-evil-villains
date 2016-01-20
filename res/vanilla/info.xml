@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<modinfo id="vanilla" name="Vanilla" version="2016w01a">
+    <author name="A. Breust" />
+    <description>Main game. Cannot be disabled.</description>
+    <changelog timestamp="1451606400">First version.</changelog>
+</modinfo>

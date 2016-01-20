@@ -9,7 +9,7 @@ void Application::loadTextures(const std::initializer_list<std::string>& folders
     for (const auto& folder : folders) {
         uint texturesCount = 0u;
 
-        for (const auto& fileInfo : listFiles("res/tex/" + folder, true)) {
+        for (const auto& fileInfo : listFiles("res/" + folder, true)) {
             // Load only png files
             if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "png")
                 continue;
@@ -33,13 +33,12 @@ void Application::freeTextures(const std::initializer_list<std::string>& folders
 
 void Application::preloadTextures()
 {
-    loadTextures({"global", "menu", "nui"});
+    loadTextures({"core/default", "core/cursor", "core/global", "core/menu/main", "core/menu/loading", "core/nui"});
 
     // Force default
-    s_context.textures.load("res/tex/default.png");
-    s_context.textures.get("default").setRepeated(true);
-    s_context.textures.setDefault("default");
+    s_context.textures.get("core/default/default").setRepeated(true);
+    s_context.textures.setDefault("core/default/default");
 
     // And NUI
-    s_context.textures.get("nui/focus").setRepeated(true);
+    s_context.textures.get("core/nui/focus/background").setRepeated(true);
 }

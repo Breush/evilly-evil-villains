@@ -86,7 +86,7 @@ void AnswerBox::showAnswer(uint answerID)
         auto text = std::make_unique<scene::WrapLabel<sfe::RichText>>();
         text->setFillColor(sf::Color::White);
         text->setText(answer);
-        text->setFont("nui");
+        text->setFont("core/global/fonts/nui");
         m_texts.emplace_back(std::move(text));
         m_stacker.stackBack(*m_texts.back());
     }

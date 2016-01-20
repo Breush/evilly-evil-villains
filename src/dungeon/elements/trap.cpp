@@ -21,13 +21,13 @@ Trap::Trap(const RoomCoords& coords, ElementData& edata, Inter& inter)
     setLocalPosition(trapPosition);
 
     // Decorum
-    m_sprite.load("dungeon/traps/" + sTrapID);
+    m_sprite.load("vanilla/traps/" + sTrapID + "/anim");
 
     // Lua API
     m_lua["eev_warnHarvestableDosh"] = [this] { lua_warnHarvestableDosh(); };
 
     // Lua
-    std::string luaFilename = "res/ai/dungeon/traps/" + sTrapID + ".lua";
+    std::string luaFilename = "res/vanilla/traps/" + sTrapID + "/ai.lua";
     if (!m_lua.load(luaFilename))
         throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
     m_lua["_register"]();

@@ -81,6 +81,9 @@ inline std::vector<FileInfo> listFiles(const std::string& directory, bool recurs
     class stat st;
     DIR* dir = opendir(directory.c_str());
 
+    if (dir == nullptr)
+        throw std::runtime_error("Directory " + directory + " does not exist or is unaccessible.");
+
     while ((ent = readdir(dir)) != nullptr) {
         const std::string fileName = ent->d_name;
         const std::string fullFileName = directory + "/" + fileName;

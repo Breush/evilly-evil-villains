@@ -9,7 +9,7 @@ void Application::loadAnimations(const std::initializer_list<std::string>& folde
     for (const auto& folder : folders) {
         uint animationsCount = 0u;
 
-        for (const auto& fileInfo : listFiles("res/scml/" + folder, true)) {
+        for (const auto& fileInfo : listFiles("res/" + folder, true)) {
             // Load only animations files
             if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "scml")
                 continue;
@@ -35,6 +35,6 @@ void Application::freeAnimations(const std::initializer_list<std::string>& folde
 void Application::preloadAnimations()
 {
     // Force default
-    s_context.animations.load("res/scml/default.scml");
-    s_context.animations.setDefault("default");
+    s_context.animations.load("core/default/default.scml");
+    s_context.animations.setDefault("default/default");
 }

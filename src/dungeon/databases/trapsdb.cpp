@@ -21,7 +21,7 @@ void TrapsDB::reload()
     m_trapsData.clear();
 
     // Loading from XML files
-    for (const auto& fileInfo : listFiles("res/data/traps", true)) {
+    for (const auto& fileInfo : listFiles("res/vanilla/traps", true)) {
         // Check the file extension
         if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "xml")
             continue;

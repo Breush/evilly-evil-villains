@@ -18,7 +18,6 @@ AnimationHolder::AnimationHolder()
 std::string AnimationHolder::getID(const std::string& filename)
 {
     std::string id = filename.substr(0u, filename.find_last_of("."));
-    id = id.substr(id.find_first_of("/") + 1u);
     return id.substr(id.find_first_of("/") + 1u);
 }
 

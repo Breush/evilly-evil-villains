@@ -11,7 +11,7 @@ void Application::loadShaders()
     uint shadersCount = 0u;
 
     // Recursively load all files in resource directory
-    for (const auto& fileInfo : listFiles("res/shd", true)) {
+    for (const auto& fileInfo : listFiles("res", true)) {
         // Load only shader files
         const auto& file = fileInfo.fullName;
         auto extension = fileExtension(file);
@@ -43,7 +43,7 @@ void Application::loadShaders()
     mdebug_core_2("Loaded " << shadersCount << " shaders.");
 
     // Backup
-    s_context.shaders.setDefault("default");
+    s_context.shaders.setDefault("core/default/default");
 
     refreshShaders();
 }
@@ -57,20 +57,23 @@ void Application::refreshShaders()
     const auto& effectiveDisplay = s_context.windowInfo.effectiveDisplay;
 
     // NUI
-    s_context.shaders.get("nui/hover").setParameter("texture", sf::Shader::CurrentTexture);
+    s_context.shaders.get("core/nui/hover/hover").setParameter("texture", sf::Shader::CurrentTexture);
 
     // Splashcreen
-    s_context.shaders.get("menu/splashscreen").setParameter("texture", sf::Shader::CurrentTexture);
-    s_context.shaders.get("menu/splashscreen").setParameter("screenSize", screenSize);
-    s_context.shaders.get("menu/splashscreen").setParameter("resolution", resolution);
-    s_context.shaders.get("menu/splashscreen").setParameter("effectiveDisplay", effectiveDisplay);
+    s_context.shaders.get("core/menu/splashscreen/background").setParameter("texture", sf::Shader::CurrentTexture);
+    s_context.shaders.get("core/menu/splashscreen/background").setParameter("screenSize", screenSize);
+    s_context.shaders.get("core/menu/splashscreen/background").setParameter("resolution", resolution);
+    s_context.shaders.get("core/menu/splashscreen/background").setParameter("effectiveDisplay", effectiveDisplay);
 }
+
+// TODO Have the shaders working the same way as textures and animations,
+// Because these updates do not feel really useful when it's not a menu screen.
 
 void Application::updateShaders(const sf::Time& dt)
 {
     returnif (!sf::Shader::isAvailable());
 
-    s_context.shaders.get("menu/splashscreen").setParameter("time", m_gameTime / 5.f);
-    s_context.shaders.get("menu/name").setParameter("time", m_gameTime / 5.f);
+    s_context.shaders.get("core/menu/splashscreen/background").setParameter("time", m_gameTime / 5.f);
+    s_context.shaders.get("core/menu/main/logo").setParameter("time", m_gameTime / 5.f);
 }
 

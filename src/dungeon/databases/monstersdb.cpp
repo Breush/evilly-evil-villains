@@ -21,9 +21,10 @@ void MonstersDB::reload()
     m_monstersData.clear();
 
     // Loading from XML files
-    for (const auto& fileInfo : listFiles("res/data/monsters", true)) {
+    // TODO Do other mods than vanilla too
+    for (const auto& fileInfo : listFiles("res/vanilla/monsters", true)) {
         // Check the file extension
-        if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "xml")
+        if (fileInfo.isDirectory || fileInfo.name != "data.xml")
             continue;
 
         // Add its content to the map

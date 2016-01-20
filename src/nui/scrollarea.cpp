@@ -10,18 +10,18 @@ using namespace nui;
 ScrollArea::ScrollArea()
 {
     // Bars
-    const auto& vBarStartTexture = Application::context().textures.get("nui/scrollarea/vbar_start");
-    const auto& vBarMiddleTexture = Application::context().textures.get("nui/scrollarea/vbar_middle");
-    const auto& vBarEndTexture = Application::context().textures.get("nui/scrollarea/vbar_end");
+    const auto& vBarStartTexture = Application::context().textures.get("core/nui/scrollarea/vbar_start");
+    const auto& vBarMiddleTexture = Application::context().textures.get("core/nui/scrollarea/vbar_middle");
+    const auto& vBarEndTexture = Application::context().textures.get("core/nui/scrollarea/vbar_end");
     m_vBarStart.setTexture(vBarStartTexture);
     m_vBarMiddle.setTexture(&vBarMiddleTexture);
     m_vBarEnd.setTexture(vBarEndTexture);
     m_vBarMiddle.setOrigin(0.f, -static_cast<float>(vBarStartTexture.getSize().y));
     m_vBarEnd.setOrigin(0.f, static_cast<float>(vBarEndTexture.getSize().y));
 
-    const auto& hBarStartTexture = Application::context().textures.get("nui/scrollarea/hbar_start");
-    const auto& hBarMiddleTexture = Application::context().textures.get("nui/scrollarea/hbar_middle");
-    const auto& hBarEndTexture = Application::context().textures.get("nui/scrollarea/hbar_end");
+    const auto& hBarStartTexture = Application::context().textures.get("core/nui/scrollarea/hbar_start");
+    const auto& hBarMiddleTexture = Application::context().textures.get("core/nui/scrollarea/hbar_middle");
+    const auto& hBarEndTexture = Application::context().textures.get("core/nui/scrollarea/hbar_end");
     m_hBarStart.setTexture(hBarStartTexture);
     m_hBarMiddle.setTexture(&hBarMiddleTexture);
     m_hBarEnd.setTexture(hBarEndTexture);
@@ -32,7 +32,7 @@ ScrollArea::ScrollArea()
     m_barMiddleStep = vBarStartTexture.getSize().y + vBarEndTexture.getSize().y;
 
     // Grabbers
-    const auto vGrabberTextureString = "nui/scrollarea/vgrabber";
+    const auto vGrabberTextureString = "core/nui/scrollarea/vgrabber";
     const auto& vGrabberTexture = Application::context().textures.get(vGrabberTextureString);
     m_vGrabberSize = sf::v2f(vGrabberTexture.getSize());
     m_vGrabber.setTexture(vGrabberTextureString);

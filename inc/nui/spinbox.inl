@@ -17,8 +17,8 @@ namespace nui
         // Plus/minus
         addPart(&m_plus);
         addPart(&m_minus);
-        m_plus.setTexture(&Application::context().textures.get("nui/plus"));
-        m_minus.setTexture(&Application::context().textures.get("nui/minus"));
+        m_plus.setTexture(&Application::context().textures.get("core/nui/plus"));
+        m_minus.setTexture(&Application::context().textures.get("core/nui/minus"));
     }
 
     //-------------------//

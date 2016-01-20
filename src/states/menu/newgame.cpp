@@ -15,7 +15,7 @@ MenuNewGame::MenuNewGame(StateStack& stack)
     : baseClass(stack)
 {
     // Loading resources
-    Application::loadTextures({"villain"});
+    Application::loadTextures({"core/villains"});
 
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
@@ -67,7 +67,7 @@ MenuNewGame::MenuNewGame(StateStack& stack)
 MenuNewGame::~MenuNewGame()
 {
     // Freeing resources
-    Application::freeTextures({"villain"});
+    Application::freeTextures({"core/villains"});
 }
 
 //-------------------//

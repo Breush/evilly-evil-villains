@@ -45,7 +45,7 @@ void Application::Context::recreateWindow()
 
     // Window parameters
     sf::Image icon;
-    if (icon.loadFromFile("res/tex/global/icon.png"))
+    if (icon.loadFromFile("res/core/global/icon/icon.png"))
         window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
     window.setVerticalSyncEnabled(vsync);
     window.setMouseCursorVisible(false);

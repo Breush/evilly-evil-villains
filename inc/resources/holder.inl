@@ -68,9 +68,8 @@ namespace resources
     template <typename Resource>
     inline std::string Holder<Resource>::getID(const std::string& filename) const
     {
-        // Remove res/xxx/ and file extension
+        // Remove res/ and file extension
         std::string id = filename.substr(0u, filename.find_last_of("."));
-        id = id.substr(id.find_first_of("/") + 1u);
         return id.substr(id.find_first_of("/") + 1u);
     }
 

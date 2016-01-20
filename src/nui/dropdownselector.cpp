@@ -21,9 +21,9 @@ DropDownSelector::DropDownSelector(DropDownList& dropDownList)
     addPart(&m_fillMiddle);
     addPart(&m_fillRight);
 
-    const auto& fillLeftTexture = Application::context().textures.get("nui/dropdownlist/fill_left");
-    const auto& fillMiddleTexture = Application::context().textures.get("nui/dropdownlist/fill_middle");
-    const auto& fillRightTexture = Application::context().textures.get("nui/dropdownlist/fill_right");
+    const auto& fillLeftTexture = Application::context().textures.get("core/nui/dropdownlist/fill_left");
+    const auto& fillMiddleTexture = Application::context().textures.get("core/nui/dropdownlist/fill_middle");
+    const auto& fillRightTexture = Application::context().textures.get("core/nui/dropdownlist/fill_right");
 
     m_fillLeft.setTexture(&fillLeftTexture);
     m_fillMiddle.setTexture(&fillMiddleTexture);
@@ -39,9 +39,9 @@ DropDownSelector::DropDownSelector(DropDownList& dropDownList)
     addPart(&m_bottomMiddle);
     addPart(&m_bottomRight);
 
-    const auto& bottomLeftTexture = Application::context().textures.get("nui/dropdownlist/bottom_left");
-    const auto& bottomMiddleTexture = Application::context().textures.get("nui/dropdownlist/bottom_middle");
-    const auto& bottomRightTexture = Application::context().textures.get("nui/dropdownlist/bottom_right");
+    const auto& bottomLeftTexture = Application::context().textures.get("core/nui/dropdownlist/bottom_left");
+    const auto& bottomMiddleTexture = Application::context().textures.get("core/nui/dropdownlist/bottom_middle");
+    const auto& bottomRightTexture = Application::context().textures.get("core/nui/dropdownlist/bottom_right");
 
     m_bottomLeft.setTexture(&bottomLeftTexture);
     m_bottomMiddle.setTexture(&bottomMiddleTexture);
@@ -201,8 +201,8 @@ void DropDownSelector::hoverChoice(uint choiceID)
             m_choices[m_hoveredChoiceID].label->setShader("");
 
         m_hoveredChoiceID = choiceID;
-        m_choices[choiceID].label->setShader("nui/hover");
-        Application::context().sounds.play("select");
+        m_choices[choiceID].label->setShader("core/nui/hover/hover");
+        Application::context().sounds.play("core/nui/select/select");
     }
 
     // Set highlight

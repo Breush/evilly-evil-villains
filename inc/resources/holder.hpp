@@ -52,7 +52,7 @@ namespace resources
         bool stored(const std::string& id) const;
 
         //! Returns true if resource exists.
-        inline bool fileStored(const std::string& filename) const { return stored(getID(filename)); };
+        inline bool fileStored(const std::string& filename) const { return stored(getID(filename)); }
 
         //! Get resource from its ID.
         Resource& get(const std::string& id);

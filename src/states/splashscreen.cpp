@@ -12,9 +12,8 @@ SplashScreen::SplashScreen(StateStack& stack)
     : State(stack)
 {
     // Loading resources
-    Application::loadTextures({"jumping-toasts"});
-    Application::loadAnimations({"jumping-toasts"});
-    Application::context().textures.get("jumping-toasts/background").setRepeated(true);
+    Application::loadTextures({"core/menu/splashscreen"});
+    Application::loadAnimations({"core/menu/splashscreen"});
 
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
@@ -22,11 +21,11 @@ SplashScreen::SplashScreen(StateStack& stack)
     float maxSide = std::max(nuiSize.x, nuiSize.y);
 
     // Background
-    const auto& textureSize = Application::context().textures.get("jumping-toasts/background").getSize();
+    const auto& textureSize = Application::context().textures.get("core/menu/splashscreen/background").getSize();
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
-    m_background.setTexture("jumping-toasts/background");
-    m_background.setShader("menu/splashscreen");
+    m_background.setTexture("core/menu/splashscreen/background");
+    m_background.setShader("core/menu/splashscreen/background");
     m_background.setLocalScale(maxSide / sf::v2f(textureSize));
     m_background.setLocalPosition((nuiSize - maxSide) / 2.f);
 
@@ -38,7 +37,7 @@ SplashScreen::SplashScreen(StateStack& stack)
 
     // Animation
     nuiRoot.attachChild(m_logo);
-    m_logo.load("jumping-toasts/logo");
+    m_logo.load("core/menu/splashscreen/logo");
     m_logo.setRelativePosition({0.5f, 0.5f});
     m_logo.restart();
 }
@@ -46,8 +45,8 @@ SplashScreen::SplashScreen(StateStack& stack)
 SplashScreen::~SplashScreen()
 {
     // Freeing resources
-    Application::freeTextures({"jumping-toasts"});
-    Application::freeAnimations({"jumping-toasts"});
+    Application::freeTextures({"core/menu/splashscreen"});
+    Application::freeAnimations({"core/menu/splashscreen"});
 }
 
 //-------------------//

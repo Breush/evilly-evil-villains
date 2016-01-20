@@ -11,7 +11,7 @@ void Application::loadSounds()
     uint soundsCount = 0u;
 
     // Recursively load all files in resource directory
-    for (const auto& fileInfo : listFiles("res/snd", true)) {
+    for (const auto& fileInfo : listFiles("res", true)) {
         // Load only sounds files
         if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "wav")
             continue;

@@ -55,7 +55,7 @@ bool CheckBox::handleMouseButtonPressed(const sf::Mouse::Button button, const sf
 
 bool CheckBox::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vector2f& nuiPos)
 {
-    setPartShader(&m_sprite, "nui/hover");
+    setPartShader(&m_sprite, "core/nui/hover/hover");
     return true;
 }
 
@@ -83,7 +83,7 @@ bool CheckBox::handleKeyboardEvent(const sf::Event& event)
 
 void CheckBox::updateSprite()
 {
-    const auto& texture = Application::context().textures.get(m_status? "nui/checkbox/on" : "nui/checkbox/off");
+    const auto& texture = Application::context().textures.get(m_status? "core/nui/checkbox/on" : "core/nui/checkbox/off");
     m_sprite.setTexture(&texture);
     setSize(sf::v2f(texture.getSize()));
 }

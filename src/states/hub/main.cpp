@@ -11,8 +11,8 @@ HubMain::HubMain(StateStack& stack, dungeon::Data& data)
     , m_selector(*this, data)
 {
     // Loading resources
-    Application::loadTextures({"hub"});
-    Application::loadAnimations({"hub"});
+    Application::loadTextures({"core/menu/hub"});
+    Application::loadAnimations({"core/menu/hub"});
 
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
@@ -20,7 +20,7 @@ HubMain::HubMain(StateStack& stack, dungeon::Data& data)
     const auto nuiRatio = nuiSize.x / nuiSize.y;
 
     // Background
-    const auto backgroundSize = sf::v2f(Application::context().textures.get("hub/day/back").getSize());
+    const auto backgroundSize = sf::v2f(Application::context().textures.get("core/menu/hub/day/back").getSize());
     const auto backgroundRatio = backgroundSize.x / backgroundSize.y;
     float backgroundScaleValue = 1.f;
     if (nuiRatio > backgroundRatio) backgroundScaleValue *= nuiSize.x / backgroundSize.x;
@@ -38,9 +38,8 @@ HubMain::HubMain(StateStack& stack, dungeon::Data& data)
 
 HubMain::~HubMain()
 {
-    // Freeing resources
-    Application::freeAnimations({"hub"});
-    Application::freeTextures({"hub"});
+    Application::freeAnimations({"core/menu/hub"});
+    Application::freeTextures({"core/menu/hub"});
 }
 
 //-------------------//

@@ -17,9 +17,9 @@ List::List()
     m_table.overridePadding(-1.f, 0.f);
 
     // Header
-    const auto& headerLeftTexture = Application::context().textures.get("nui/list/header_left");
-    const auto& headerRightTexture = Application::context().textures.get("nui/list/header_right");
-    const auto& headerMiddleTexture = Application::context().textures.get("nui/list/header_middle");
+    const auto& headerLeftTexture = Application::context().textures.get("core/nui/list/header_left");
+    const auto& headerRightTexture = Application::context().textures.get("core/nui/list/header_right");
+    const auto& headerMiddleTexture = Application::context().textures.get("core/nui/list/header_middle");
 
     m_headerLeft.setTexture(headerLeftTexture);
     m_headerRight.setTexture(headerRightTexture);
@@ -31,9 +31,9 @@ List::List()
     m_headerLeftSize = sf::v2f(headerLeftTexture.getSize());
 
     // Fill
-    const auto& fillLeftTexture = Application::context().textures.get("nui/list/fill_left");
-    const auto& fillRightTexture = Application::context().textures.get("nui/list/fill_right");
-    const auto& fillMiddleTexture = Application::context().textures.get("nui/list/fill_middle");
+    const auto& fillLeftTexture = Application::context().textures.get("core/nui/list/fill_left");
+    const auto& fillRightTexture = Application::context().textures.get("core/nui/list/fill_right");
+    const auto& fillMiddleTexture = Application::context().textures.get("core/nui/list/fill_middle");
 
     m_fillLeft.setTexture(&fillLeftTexture);
     m_fillRight.setTexture(&fillRightTexture);
@@ -44,9 +44,9 @@ List::List()
     m_fillMiddleSize = sf::v2f(fillMiddleTexture.getSize());
 
     // Bottom
-    const auto& bottomLeftTexture = Application::context().textures.get("nui/list/bottom_left");
-    const auto& bottomRightTexture = Application::context().textures.get("nui/list/bottom_right");
-    const auto& bottomMiddleTexture = Application::context().textures.get("nui/list/bottom_middle");
+    const auto& bottomLeftTexture = Application::context().textures.get("core/nui/list/bottom_left");
+    const auto& bottomRightTexture = Application::context().textures.get("core/nui/list/bottom_right");
+    const auto& bottomMiddleTexture = Application::context().textures.get("core/nui/list/bottom_middle");
 
     m_footerLeft.setTexture(&bottomLeftTexture);
     m_footerRight.setTexture(&bottomRightTexture);
@@ -110,12 +110,12 @@ bool List::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Ve
     // Double-click?
     if (m_doubleClickDelay >= 0.f) {
         returnif (m_callback == nullptr) true;
-        Application::context().sounds.play("select");
+        Application::context().sounds.play("core/nui/select/select");
         m_callback();
     }
     else {
         m_doubleClickDelay = 0.f;
-        Application::context().sounds.play("select");
+        Application::context().sounds.play("core/nui/select/select");
         selectLine(line);
     }
 
@@ -141,16 +141,16 @@ bool List::handleKeyboardEvent(const sf::Event& event)
     // Confirm
     if (event.key.code == sf::Keyboard::Return) {
         returnif (m_lines.empty() || m_callback == nullptr) false;
-        Application::context().sounds.play("select");
+        Application::context().sounds.play("core/nui/select/select");
         m_callback();
     }
     // Up
     else if (event.key.code == sf::Keyboard::Up) {
         if (m_selectedLine == 0u) {
-            Application::context().sounds.play("refuse");
+            Application::context().sounds.play("core/nui/refuse/refuse");
         }
         else {
-            Application::context().sounds.play("select");
+            Application::context().sounds.play("core/nui/select/select");
             selectLine(m_selectedLine - 1u);
         }
         return true;
@@ -158,10 +158,10 @@ bool List::handleKeyboardEvent(const sf::Event& event)
     // Down
     else if (event.key.code == sf::Keyboard::Down) {
         if (m_selectedLine == m_lines.size() - 1u) {
-            Application::context().sounds.play("refuse");
+            Application::context().sounds.play("core/nui/refuse/refuse");
         }
         else {
-            Application::context().sounds.play("select");
+            Application::context().sounds.play("core/nui/select/select");
             selectLine(m_selectedLine + 1u);
         }
         return true;
@@ -262,7 +262,7 @@ void List::hoverLine(uint line)
 
     // Set shader effect
     for (auto& cell : m_lines[line].cells)
-        cell.label->setShader("nui/hover");
+        cell.label->setShader("core/nui/hover/hover");
 
     // Set highlight
     float yOffset = (line + 1u) * m_lineHeight;

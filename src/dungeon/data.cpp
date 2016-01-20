@@ -44,7 +44,7 @@ void Data::update(const sf::Time& dt)
             if (weekSecond != 0u) continue;
 
             m_debtWeeksLeft -= 1u;
-            Application::context().sounds.play("resources/interests");
+            Application::context().sounds.play("core/resources/bank/interests");
             if (!doshWallet().sub(m_debtPerWeek)) {
                 // TODO Game over if no more dosh
             }

@@ -58,13 +58,13 @@ void Sidebar::init()
     m_summary.init();
 
     // Background
-    m_background.setTexture("dungeon/sidebar/background");
+    m_background.setTexture("core/dungeon/sidebar/background");
 
     // Tabs
-    m_tabHolder.stackBack(_("Monsters"),    "dungeon/sidebar/tab/monsters",    m_tabContents[TabsID::MONSTERS].scrollArea);
-    m_tabHolder.stackBack(_("Traps"),       "dungeon/sidebar/tab/traps",       m_tabContents[TabsID::TRAPS].scrollArea);
-    m_tabHolder.stackBack(_("Facilities"),  "dungeon/sidebar/tab/facilities",  m_tabContents[TabsID::FACILITIES].scrollArea);
-    m_tabHolder.stackBack(_("Tools"),       "dungeon/sidebar/tab/tools",       m_tabContents[TabsID::TOOLS].scrollArea);
+    m_tabHolder.stackBack(_("Monsters"),    "core/dungeon/sidebar/tabs/monsters/icon",    m_tabContents[TabsID::MONSTERS].scrollArea);
+    m_tabHolder.stackBack(_("Traps"),       "core/dungeon/sidebar/tabs/traps/icon",       m_tabContents[TabsID::TRAPS].scrollArea);
+    m_tabHolder.stackBack(_("Facilities"),  "core/dungeon/sidebar/tabs/facilities/icon",  m_tabContents[TabsID::FACILITIES].scrollArea);
+    m_tabHolder.stackBack(_("Tools"),       "core/dungeon/sidebar/tabs/tools/icon",       m_tabContents[TabsID::TOOLS].scrollArea);
 
     // Monsters
     auto& monstersCages = m_tabContents[TabsID::MONSTERS].monsterCages;

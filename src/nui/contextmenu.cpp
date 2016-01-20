@@ -45,11 +45,11 @@ bool ContextMenu::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Ve
     returnif (selectedChoiceID >= m_choices.size()) false;
 
     if (m_choices[selectedChoiceID].callback != nullptr) {
-        Application::context().sounds.play("accept");
+        Application::context().sounds.play("core/nui/accept/accept");
         m_choices[selectedChoiceID].callback();
     }
     else {
-        Application::context().sounds.play("refuse");
+        Application::context().sounds.play("core/nui/refuse/refuse");
         markForVisible(true);
     }
 
@@ -67,7 +67,7 @@ bool ContextMenu::handleMouseMoved(const sf::Vector2f& mousePos, const sf::Vecto
     returnif (hoveredChoiceID >= m_choices.size()) false;
     returnif (m_choices[hoveredChoiceID].callback == nullptr) true;
 
-    m_choices[hoveredChoiceID].label->setShader("nui/hover");
+    m_choices[hoveredChoiceID].label->setShader("core/nui/hover/hover");
 
     return true;
 }

@@ -161,7 +161,7 @@ void Element::showMouseOverlay(const sf::Vector2f& relPos)
     m_mouseOverlay.setLocalPosition(relPos + sf::Vector2f{0.f, -15.f});
 
     returnif (m_mouseOverlay.visible());
-    m_sprite.setShader("nui/hover");
+    m_sprite.setShader("core/nui/hover/hover");
 
     if (m_leftClickAction.callback != nullptr || m_rightClickAction.callback != nullptr)
         m_mouseOverlay.setVisible(true);

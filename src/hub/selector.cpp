@@ -27,7 +27,7 @@ void Selector::init()
 {
     // Sprite
     attachChild(m_sprite);
-    m_sprite.load("hub/hub");
+    m_sprite.load("core/menu/hub/hub");
     m_sprite.setRelativePosition({0.5f, 0.5f});
 }
 

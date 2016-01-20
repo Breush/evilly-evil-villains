@@ -3,7 +3,7 @@
 void Application::loadMusics()
 {
     // Musics are too heavy too be preloaded
-    // so there streamed live on call.
+    // so they're streamed live on call.
 
     refreshMusics();
 }

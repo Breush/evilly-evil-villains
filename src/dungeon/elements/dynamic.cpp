@@ -43,10 +43,10 @@ void Dynamic::bindElementData(ElementData& edata)
     // First time or new monsterID
     if (firstTime) {
         // Animated sprite
-        m_sprite.load("dungeon/dynamics/" + sElementID);
+        m_sprite.load("vanilla/dynamics/" + sElementID + "/anim");
 
         // Lua
-        std::string luaFilename = "res/ai/dungeon/dynamics/" + sElementID + ".lua";
+        std::string luaFilename = "res/vanilla/dynamics/" + sElementID + "/ai.lua";
         if (!m_lua.load(luaFilename))
             throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
 

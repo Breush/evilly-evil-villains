@@ -26,7 +26,7 @@ MonsterCage::MonsterCage(std::wstring monsterID, Inter& inter, Data& data)
 
     // Background
     addPart(&m_reserveBackground);
-    m_reserveBackground.setTexture(&Application::context().textures.get("dungeon/sidebar/tab/monsters/cage"));
+    m_reserveBackground.setTexture(&Application::context().textures.get("core/dungeon/sidebar/tabs/monsters/cage"));
 
     // Box name
     attachChild(m_nameLabel);
@@ -45,7 +45,7 @@ MonsterCage::MonsterCage(std::wstring monsterID, Inter& inter, Data& data)
     m_hireBoxBackground.setRelativeOrigin({1.f, 1.f});
 
     m_hireBoxBackground.attachChild(m_hireBoxLabel);
-    m_hireBoxLabel.setFont("mono");
+    m_hireBoxLabel.setFont("core/global/fonts/mono");
     m_hireBoxLabel.setCustomPrestyle(0.8f);
     m_hireBoxLabel.setRelativeOrigin({0.5f, 1.f});
     m_hireBoxLabel.setRelativePosition({0.5f, 0.95f});
@@ -229,7 +229,7 @@ void MonsterCage::refreshReservePuppetsCount()
     for (uint i = monstersCountBefore; i < monstersCount; ++i) {
         auto& puppet = m_puppets.at(i);
         puppet = std::make_unique<ai::DumbPuppet>();
-        puppet->setSource(toString(L"dungeon/monsters/" + m_monsterID));
+        puppet->setSource(toString(L"vanilla/monsters/" + m_monsterID + L"/anim"));
         attachChild(*puppet);
     }
 
@@ -279,7 +279,7 @@ MonsterGrabbable::MonsterGrabbable(scene::GrabbableSpawner& spawner, const std::
     : baseClass(spawner)
 {
     attachChild(m_sprite);
-    m_sprite.load(toString(L"dungeon/monsters/" + monsterID));
+    m_sprite.load(toString(L"vanilla/monsters/" + monsterID + L"/anim"));
     m_sprite.setLocalScale(scale);
     m_sprite.select("grabbed");
 

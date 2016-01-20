@@ -50,7 +50,7 @@ void Cursor::handleEvent(const sf::Event& event)
 
 void Cursor::setMode(const std::string& mode)
 {
-    const auto& texture = Application::context().textures.get("nui/cursor/" + mode);
+    const auto& texture = Application::context().textures.get("core/cursor/" + mode);
     m_shape.setSize(sf::v2f(texture.getSize()));
     m_shape.setTexture(&texture);
 }

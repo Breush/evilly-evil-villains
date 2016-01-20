@@ -15,14 +15,14 @@ SummaryBar::SummaryBar()
     addPart(&m_text);
     addPart(&m_logo);
 
-    m_text.setFont(Application::context().fonts.get("nui"));
+    m_text.setFont(Application::context().fonts.get("core/global/fonts/nui"));
 }
 
 void SummaryBar::init()
 {
-    const auto& backgroundLeftTexture = Application::context().textures.get("dungeon/sidebar/summary/bar/background_left");
-    const auto& backgroundMiddleTexture = Application::context().textures.get("dungeon/sidebar/summary/bar/background_middle");
-    const auto& backgroundRightTexture = Application::context().textures.get("dungeon/sidebar/summary/bar/background_right");
+    const auto& backgroundLeftTexture = Application::context().textures.get("core/dungeon/sidebar/summary/bar/background_left");
+    const auto& backgroundMiddleTexture = Application::context().textures.get("core/dungeon/sidebar/summary/bar/background_middle");
+    const auto& backgroundRightTexture = Application::context().textures.get("core/dungeon/sidebar/summary/bar/background_right");
 
     m_backgroundLeft.setTexture(&backgroundLeftTexture);
     m_backgroundMiddle.setTexture(&backgroundMiddleTexture);
