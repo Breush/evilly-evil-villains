@@ -10,10 +10,6 @@ HubMain::HubMain(StateStack& stack, dungeon::Data& data)
     : baseClass(stack)
     , m_selector(*this, data)
 {
-    // Loading resources
-    Application::loadTextures({"core/menu/hub"});
-    Application::loadAnimations({"core/menu/hub"});
-
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
     const auto& nuiSize = nuiLayer().size();
@@ -38,8 +34,6 @@ HubMain::HubMain(StateStack& stack, dungeon::Data& data)
 
 HubMain::~HubMain()
 {
-    Application::freeAnimations({"core/menu/hub"});
-    Application::freeTextures({"core/menu/hub"});
 }
 
 //-------------------//

@@ -72,8 +72,8 @@ GameDungeonDesign::~GameDungeonDesign()
     Application::context().musics.stop("core/global/musics/angevin_70");
 
     // Freeing resources
-    Application::freeTextures({"vanilla", "core/dungeon", "core/resources", "core/tools"});
-    Application::freeAnimations({"vanilla"});
+    Application::freeTextures({"vanilla", "core/dungeon", "core/resources", "core/tools", "core/menu/hub"});
+    Application::freeAnimations({"vanilla", "core/menu/hub"});
 }
 
 //-------------------//
@@ -208,6 +208,10 @@ void GameDungeonDesign::updateLoading(const sf::Time& dt)
     LOAD(73u, scene().layer("FAR").fitToVisibleRect(m_sceneFar))
     LOAD(74u, scene().layer("HORIZON").fitToVisibleRect(m_sceneHorizon))
     LOAD(75u, scene().layer("SKY").fitToVisibleRect(m_sceneSky))
+
+    // Hub
+    LOAD(80u, Application::loadTextures({"core/menu/hub"}))
+    LOAD(81u, Application::loadAnimations({"core/menu/hub"}))
 
     // Music
     // Keep last, as it is a indicator for the player that everything is ready
