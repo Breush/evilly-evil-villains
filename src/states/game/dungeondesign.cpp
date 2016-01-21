@@ -72,7 +72,7 @@ GameDungeonDesign::~GameDungeonDesign()
     Application::context().musics.stop("core/global/musics/angevin_70");
 
     // Freeing resources
-    Application::freeTextures({"vanilla"});
+    Application::freeTextures({"vanilla", "core/dungeon", "core/resources", "core/tools"});
     Application::freeAnimations({"vanilla"});
 }
 
