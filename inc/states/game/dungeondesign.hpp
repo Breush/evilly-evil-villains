@@ -10,8 +10,6 @@
 
 #include <SFML/Graphics/RenderTexture.hpp>
 
-#include <ltbl/lighting/LightSystem.h>
-
 namespace states
 {
     class GameDungeonDesign final : public State
@@ -40,8 +38,6 @@ namespace states
         //----------------//
         //! @name Routine
         //! @{
-
-        void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
 
         bool update(const sf::Time& dt) final;
         void handleEvent(const sf::Event& event) final;
@@ -72,9 +68,6 @@ namespace states
         bool m_loading = true;
         uint m_loadingStep = 0u;
         uint m_loadingPercent = 0u;
-
-        // Lighting
-        mutable ltbl::LightSystem m_lightSystem;
 
         // NUI
         nui::ContextMenu m_contextMenu;

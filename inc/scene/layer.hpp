@@ -3,6 +3,7 @@
 #include "scene/entity.hpp"
 
 #include <SFML/Graphics/View.hpp>
+#include <ltbl/lighting/LightSystem.h>
 
 #include <functional>
 
@@ -42,8 +43,11 @@ namespace scene
 
     public:
 
-        //! Default constructor.
-        Layer() = default;
+        //! Constructor.
+        Layer();
+
+        //! Default destructor.
+        ~Layer() = default;
 
         //! Initialization.
         void init(Graph* graph);
@@ -66,6 +70,16 @@ namespace scene
 
         //! Refresh from size change.
         void refreshSize();
+
+        //! @}
+
+        //-----------------//
+        //! @name Lighting
+        //! @{
+
+        //! Enable the lighting rendering over the layer.
+        //! All entities with the corresponding components will influence this.
+        void turnLights(bool on);
 
         //! @}
 
@@ -148,6 +162,20 @@ namespace scene
 
         //! @}
 
+    protected:
+
+        //------------//
+        //! @name ICU
+        //! @{
+
+        //! Refresh the basic view parameters.
+        void refreshBasicView();
+
+        //! Recreate the light system if needed.
+        void refreshLightSystem();
+
+        //! @}
+
     private:
 
         //! The entity, as a layer holds the first node.
@@ -164,5 +192,21 @@ namespace scene
 
         //! Called whenever the view changes.
         Callback m_onViewChangesCallback = nullptr;
+
+        // Drawing
+        mutable sf::RenderTexture m_tmpTarget;  //!< Temporary target to draw.
+        sf::View m_basicView;                   //!< The view used to render.
+        sf::View m_internView;                  //!< The view, but with a viewport relative to the layer size, not the screen.
+
+        // Lighting
+        bool m_lightsOn = false;                        //!< Whether or not the light system is active for this layer.
+        mutable ltbl::LightSystem m_lightSystem;        //!< The light system.
+        sf::RenderStates m_lightRenderStates;           //!< The render states with correct blending for the lighting.
+        const sf::Texture* m_penumbraTexture = nullptr; //!< The penumbra texture.
+        sf::Shader* m_lightOverShapeShader = nullptr;   //!< The light over shape shader.
+        sf::Shader* m_unshadowShader = nullptr;         //!< The unshadow shader.
+
+        bool m_lightDebugFirstTime = true;  // FIXME Debug thing.
+
     };
 }

@@ -15,6 +15,16 @@ LayerRoot::LayerRoot()
     setTransparent(true);
 }
 
+Layer::Layer()
+{
+    // Lighting
+    m_lightRenderStates.blendMode = sf::BlendMultiply;
+
+    m_penumbraTexture = &Application::context().textures.get("core/ltbl/penumbra");
+    m_lightOverShapeShader = &Application::context().shaders.get("core/ltbl/lightOverShape");
+    m_unshadowShader = &Application::context().shaders.get("core/ltbl/unshadow");
+}
+
 void Layer::init(Graph* graph)
 {
     m_root.setGraph(graph);
@@ -30,8 +40,31 @@ void Layer::update(const sf::Time& dt, const float factor)
 
 void Layer::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    target.setView(m_view);
-    target.draw(m_root, states);
+    // No lights? Easy drawing.
+    if (!m_lightsOn) {
+        target.setView(m_view);
+        target.draw(m_root, states);
+        return;
+    }
+
+    // We keep an intermediate RenderTarget so that the lighting can affect only this layer
+    m_tmpTarget.clear(sf::Color::Transparent);
+    m_tmpTarget.setView(m_internView);
+    m_tmpTarget.draw(m_root, states);
+
+    // We are rendering within the effective view
+    m_lightSystem.render(m_internView, *m_unshadowShader, *m_lightOverShapeShader);
+
+    // But we show the lighting sprite in {0.f, 0.f}
+    sf::Sprite lightSprite(m_lightSystem.getLightingTexture());
+    m_tmpTarget.setView(m_tmpTarget.getDefaultView());
+    m_tmpTarget.draw(lightSprite, m_lightRenderStates);
+    m_tmpTarget.display();
+
+    // Draw to the final target
+    sf::Sprite screenSprite(m_tmpTarget.getTexture());
+    target.setView(m_basicView);
+    target.draw(screenSprite);
 }
 
 void Layer::refreshSize()
@@ -40,6 +73,7 @@ void Layer::refreshSize()
     // This is used for relative positionning of entities.
     m_root.setSize(m_size);
     refreshManipulability();
+    refreshLightSystem();
 
     if (m_onSizeChangesCallback != nullptr)
         m_onSizeChangesCallback();
@@ -50,6 +84,9 @@ void Layer::refreshWindow(const config::WindowInfo& cWindow)
     if (!m_ownViewport)
         m_view.setViewport(cWindow.viewport);
 
+    // Refresh the basic view, using the screenSize
+    refreshBasicView();
+
     // Recursively update the whole layer.
     m_root.refreshWindow(cWindow);
 }
@@ -58,6 +95,15 @@ void Layer::refreshNUI(const config::NUIGuides& cNUI)
 {
     // Recursively update the whole layer.
     m_root.refreshNUI(cNUI);
+}
+
+//--------------------//
+//----- Lighting -----//
+
+void Layer::turnLights(bool on)
+{
+    m_lightsOn = on;
+    refreshLightSystem();
 }
 
 //-------------------//
@@ -95,11 +141,13 @@ void Layer::setViewport(const sf::FloatRect& viewport)
 {
     m_ownViewport = true;
     m_view.setViewport(viewport);
+    refreshBasicView();
 }
 
 void Layer::setRelativeCenter(const sf::Vector2f& relativeCenter)
 {
     m_view.setCenter(m_view.getSize() / 2.f + relativeCenter * (m_size - m_view.getSize()));
+    m_internView.setCenter(m_view.getCenter());
 
     if (m_onViewChangesCallback != nullptr)
         m_onViewChangesCallback();
@@ -108,6 +156,7 @@ void Layer::setRelativeCenter(const sf::Vector2f& relativeCenter)
 void Layer::setViewSize(const sf::Vector2f& viewSize)
 {
     m_view.setSize(viewSize);
+    m_internView.setSize(m_view.getSize());
 
     if (m_onViewChangesCallback != nullptr)
         m_onViewChangesCallback();
@@ -125,5 +174,48 @@ void Layer::refreshManipulability()
     if (!m_manipulable) {
         m_view.setSize(m_size);
         m_view.setCenter(m_size / 2.f);
+
+        m_internView.setSize(m_view.getSize());
+        m_internView.setCenter(m_view.getCenter());
+    }
+}
+
+//---------------//
+//----- ICU -----//
+
+#include <iostream>
+
+void Layer::refreshBasicView()
+{
+    const auto& viewport = m_view.getViewport();
+    const auto& resolution = Application::context().display.window.resolution;
+
+    m_basicView.setViewport(viewport);
+    m_basicView.setSize({viewport.width * resolution.x, viewport.height * resolution.y});
+    m_basicView.setCenter(0.5f * m_basicView.getSize());
+
+    // Some light system's parts are based on basic view informations
+    refreshLightSystem();
+}
+
+void Layer::refreshLightSystem()
+{
+    returnif (!m_lightsOn);
+
+    m_tmpTarget.create(m_basicView.getSize().x, m_basicView.getSize().y);
+    m_lightSystem.create({0.f, 0.f, m_size.x, m_size.y}, sf::v2u(m_basicView.getSize()), *m_penumbraTexture, *m_unshadowShader, *m_lightOverShapeShader);
+
+    // FIXME The following is a debug thingy
+    if (m_lightDebugFirstTime) {
+        m_lightDebugFirstTime = false;
+
+        const auto& lightPointTexture = Application::context().textures.get("core/ltbl/lightPoint");
+        auto light = std::make_shared<ltbl::LightPointEmission>();
+        light->_emissionSprite.setOrigin({lightPointTexture.getSize().x * 0.5f, lightPointTexture.getSize().y * 0.5f});
+        light->_emissionSprite.setTexture(lightPointTexture);
+        light->_emissionSprite.setScale({40.0f, 40.0f});
+        light->_emissionSprite.setColor({255u, 230u, 200u});
+        light->_emissionSprite.setPosition(0.5f * m_size.x, 0.75f * m_size.y);
+        m_lightSystem.addLight(light);
     }
 }
