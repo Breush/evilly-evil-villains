@@ -22,7 +22,7 @@ int main(void)
     const auto& nodeData = *toNodeData(&node);
 
     // Starting node
-    sf::Vector2u expectedEntranceCoords(0u, 2u);
+    dungeon::RoomCoords expectedEntranceCoords(0_u8, 2_u8);
     if (nodeData.coords != expectedEntranceCoords) {
         std::cerr << "Starting room is not set correctly." << std::endl;
         std::cerr << "Found: " << nodeData.coords << " | Expected: " << expectedEntranceCoords << std::endl;

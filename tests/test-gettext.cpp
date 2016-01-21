@@ -4,6 +4,7 @@
 
 int main(void)
 {
+    i18n::initLanguagesList();
     i18n::init("fr_FR");
 
     if (_("Monsters") != L"Monstres") {

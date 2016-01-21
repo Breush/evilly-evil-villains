@@ -88,7 +88,6 @@ std::wstring Data::load(const std::wstring& folder)
 
     context::villains.load();
     m_villain = context::villains.getFromWorldFolder(folder);
-    uint walletsFactor = (context::worlds.selected().gamemode == context::Gamemode::RICHMAN)? 0u : 1u;
 
     // We keep that case possible for tests.
     if (m_villain == nullptr) {
@@ -97,12 +96,12 @@ std::wstring Data::load(const std::wstring& folder)
         std::wcout << L" |  If you are running a test file, no problem here." << std::endl;
     }
     else {
+        uint walletsFactor = (context::worlds.selected().gamemode == context::Gamemode::RICHMAN)? 0u : 1u;
         m_villain->doshWallet.setEvents(this, "dosh_changed");
         m_villain->doshWallet.setFactor(walletsFactor);
+        m_fameWallet.setFactor(walletsFactor);
+        m_soulWallet.setFactor(walletsFactor);
     }
-
-    m_fameWallet.setFactor(walletsFactor);
-    m_soulWallet.setFactor(walletsFactor);
 
     #if DEBUG_GLOBAL > 0
         std::wstring mainDungeonFilename = L"saves/" + folder + L"dungeon_saved.xml";
@@ -365,8 +364,8 @@ void Data::saveDungeon(const std::wstring& file)
                 if (facility.isLink) facilityNode.append_attribute(L"isLink") = true;
                 if (facility.barrier) facilityNode.append_attribute(L"barrier") = true;
                 if (facility.treasure != -1u) facilityNode.append_attribute(L"treasure") = facility.treasure;
-                if (facility.link.x != -1u) facilityNode.append_attribute(L"linkX") = facility.link.x;
-                if (facility.link.y != -1u) facilityNode.append_attribute(L"linkY") = facility.link.y;
+                if (facility.link.x != 0xff_u8) facilityNode.append_attribute(L"linkX") = facility.link.x;
+                if (facility.link.y != 0xff_u8) facilityNode.append_attribute(L"linkY") = facility.link.y;
                 facility.data.saveXML(facilityNode);
 
                 // Tunnels

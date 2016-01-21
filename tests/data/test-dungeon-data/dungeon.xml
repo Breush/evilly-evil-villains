@@ -8,8 +8,8 @@
 	<dynamics />
 	<heroes nextWaveDelay="0" />
 	<monstersGenerics>
-		<sand_spirit unlocked="false" reserve="0" countdown="0" />
 		<creepim unlocked="true" reserve="3" countdown="5" />
+		<sand_spirit unlocked="false" reserve="0" countdown="0" />
 	</monstersGenerics>
 	<monsters>
 		<monster type="creepim" hp="23" status="spawning">
@@ -18,9 +18,9 @@
 		<monster type="creepim" hp="15" status="spawning" />
 	</monsters>
 	<trapsGenerics>
-		<pickpock unlocked="true" />
 		<trompe_loeil unlocked="false" />
 		<razor unlocked="true" />
+		<pickpock unlocked="true" />
 	</trapsGenerics>
 	<floor pos="0">
 		<room pos="0" state="constructed" />
