@@ -33,7 +33,7 @@ void Application::freeTextures(const std::initializer_list<std::string>& folders
 
 void Application::preloadTextures()
 {
-    loadTextures({"core/default", "core/cursor", "core/global", "core/menu/main", "core/menu/loading", "core/nui"});
+    loadTextures({"core/default", "core/cursor", "core/global", "core/ltbl", "core/menu/main", "core/menu/loading", "core/nui"});
 
     // Force default
     s_context.textures.get("core/default/default").setRepeated(true);

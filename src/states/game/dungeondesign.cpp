@@ -57,6 +57,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 
     // Loading
     nuiRoot.attachChild(m_loadingBackground);
+    m_loadingBackground.setTexture("core/menu/loading/background");
     m_loadingBackground.setDepth(-500.f);
 
     nuiRoot.attachChild(m_loadingText);
@@ -79,6 +80,31 @@ GameDungeonDesign::~GameDungeonDesign()
 //-------------------//
 //----- Routine -----//
 
+void GameDungeonDesign::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    baseClass::draw(target, states);
+
+    // FIXME We probably want to let scene::Graph manage the lighting,
+    // so that each layer will have specific lighting (i.e. none on NUI!)
+    // But, hm, that's a test.
+
+    /*
+    auto& unshadowShader = Application::context().shaders.get("core/ltbl/unshadow");
+    auto& lightOverShapeShader = Application::context().shaders.get("core/ltbl/lightOverShape");
+
+    auto view = target.getView();
+    m_lightSystem.render(view, unshadowShader, lightOverShapeShader);
+
+    sf::Sprite sprite;
+    sprite.setTexture(m_lightSystem.getLightingTexture());
+
+    sf::RenderStates lightRenderStates;
+    lightRenderStates.blendMode = sf::BlendMultiply;
+
+    target.draw(sprite, lightRenderStates);
+    */
+}
+
 bool GameDungeonDesign::update(const sf::Time& dt)
 {
     // Continue loading the state if still in this phase
@@ -100,6 +126,35 @@ void GameDungeonDesign::refreshWindow(const config::WindowInfo& cWindow)
     const auto& window = Application::context().window;
     const auto& screenSize = cWindow.screenSize;
     const auto& resolution = cWindow.resolution;
+
+    // Lighting
+    /*
+    static sf::Vector2f lastKnownScreenSize;
+    if (lastKnownScreenSize != screenSize) {
+        lastKnownScreenSize = screenSize;
+
+        const auto& lightPointTexture = Application::context().textures.get("core/ltbl/lightPoint");
+        const auto& penumbraTexture = Application::context().textures.get("core/ltbl/penumbra");
+        auto& unshadowShader = Application::context().shaders.get("core/ltbl/unshadow");
+        auto& lightOverShapeShader = Application::context().shaders.get("core/ltbl/lightOverShape");
+
+        m_lightSystem.create({0.f, 0.f, 1000.f, 1000.f}, window.getSize(), penumbraTexture, unshadowShader, lightOverShapeShader);
+
+        static bool firstTime = true;
+        if (firstTime) {
+            firstTime = false;
+
+            auto light = std::make_shared<ltbl::LightDirectionEmission>();
+            light->_emissionSprite.setOrigin({lightPointTexture.getSize().x * 0.5f, lightPointTexture.getSize().y * 0.5f});
+            light->_emissionSprite.setTexture(lightPointTexture);
+            light->_emissionSprite.setScale({4.0f, 4.0f});
+            light->_emissionSprite.setColor({255u, 230u, 200u});
+            light->_emissionSprite.setPosition({200.0f, 200.0f});
+            light->_castDirection = ltbl::vectorNormalize({-0.1f, 0.6f});
+            m_lightSystem.addLight(light);
+        }
+    }
+    */
 
     // Loading
     m_loadingBackground.setSize(resolution);
@@ -153,9 +208,6 @@ void GameDungeonDesign::updateLoading(const sf::Time& dt)
         m_loadingPercent = 100u;
         m_loadingText.setText(_("Loading is done.\nClick to start the game."));
     }
-
-    // Pre-init
-    LOAD( 0u, m_loadingBackground.setTexture("core/menu/loading/background"))
 
     // Loading resources
     LOAD( 1u, Application::loadTextures({"core/tools"}))

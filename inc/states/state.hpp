@@ -33,7 +33,7 @@ namespace states
         //! @{
 
         //! Draw the state.
-        void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
         //! Update the state.
         //! Return false to prevent update of below states in the pile.
@@ -74,6 +74,9 @@ namespace states
 
         //! Get the scene graph.
         inline scene::Graph& sceneGraph() { return m_sceneGraph; }
+
+        //! Get the scene graph (const).
+        inline const scene::Graph& sceneGraph() const { return m_sceneGraph; }
 
         //! Get the scene from the graph.
         inline scene::Scene& scene() { return m_sceneGraph.scene(); }

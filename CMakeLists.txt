@@ -108,6 +108,16 @@ add_subdirectory(${SPRITER_ROOT_DIR})
 get_directory_property(SPRITER_LIBRARIES DIRECTORY ${SPRITER_ROOT_DIR} DEFINITION SPRITER_LIBRARIES)
 
 #=====
+# Create LTBL libraries
+
+set(LTBL_ROOT_DIR ${CMAKE_SOURCE_DIR}/ext/ltbl)
+set(LTBL_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/ext/include/ltbl)
+
+add_subdirectory(${LTBL_ROOT_DIR})
+
+get_directory_property(LTBL_LIBRARIES DIRECTORY ${LTBL_ROOT_DIR} DEFINITION LTBL_LIBRARIES)
+
+#=====
 # Create SFML libraries
 
 set(SFML_ROOT_DIR ${CMAKE_SOURCE_DIR}/ext/sfml)
@@ -130,6 +140,7 @@ target_link_libraries(${EEV_LIBRARIES} ${SFML_LIBRARIES})
 target_link_libraries(${EEV_LIBRARIES} ${STEAM_LIBRARIES})
 target_link_libraries(${EEV_LIBRARIES} ${BOX2D_LIBRARIES})
 target_link_libraries(${EEV_LIBRARIES} ${SPRITER_LIBRARIES})
+target_link_libraries(${EEV_LIBRARIES} ${LTBL_LIBRARIES})
 
 #=====
 # Create game executable
