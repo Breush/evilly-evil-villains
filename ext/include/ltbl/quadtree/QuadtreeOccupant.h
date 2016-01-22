@@ -15,7 +15,7 @@ namespace ltbl {
 		friend class QuadtreeNode;
 		friend class DynamicQuadtree;
 		friend class StaticQuadtree;
-	
+		
 	private:
 		class QuadtreeNode* _pQuadtreeNode;
 		class Quadtree* _pQuadtree;

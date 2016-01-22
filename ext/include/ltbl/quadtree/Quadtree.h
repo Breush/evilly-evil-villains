@@ -15,6 +15,10 @@ namespace ltbl {
 
 	// Base class for dynamic and static Quadtree types
 	class Quadtree {
+		friend class QuadtreeOccupant;
+		friend class QuadtreeNode;
+		friend class SceneObject;
+		
 	protected:
 		std::unordered_set<QuadtreeOccupant*> _outsideRoot;
 
@@ -51,9 +55,5 @@ namespace ltbl {
 		void queryRegion(std::vector<QuadtreeOccupant*> &result, const sf::FloatRect &region);
 		void queryPoint(std::vector<QuadtreeOccupant*> &result, const sf::Vector2f &p);
 		void queryShape(std::vector<QuadtreeOccupant*> &result, const sf::ConvexShape &shape);
-
-		friend class QuadtreeNode;
-		friend class QuadtreeOccupant;
-		friend class SceneObject;
 	};
 }
