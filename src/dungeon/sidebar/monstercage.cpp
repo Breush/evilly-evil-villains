@@ -255,7 +255,7 @@ void MonsterCage::refreshReservePuppetsParameters(const uint monstersUpdateStart
     // Puppets
     for (uint i = monstersUpdateStart; i < m_puppets.size(); ++i) {
         auto& puppet = m_puppets.at(i);
-        puppet->lerpable()->setPositionSpeed(monsterData.speed * m_inter.tileSize());
+        puppet->setSpeed(monsterData.speed * m_inter.tileSize());
         puppet->setLocalScale({m_scaleFactor, m_scaleFactor});
 
         // TODO Why 25.f? Use collision box, position 0.f means 0.f + colBox

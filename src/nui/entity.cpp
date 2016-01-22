@@ -9,8 +9,7 @@
 
 using namespace nui;
 
-Entity::Entity(bool isLerpable)
-    : baseClass(isLerpable)
+Entity::Entity()
 {
     // Focusing
     if (sf::Shader::isAvailable())

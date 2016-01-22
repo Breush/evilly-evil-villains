@@ -24,7 +24,7 @@ namespace dungeon
     public:
 
         //! Constructor.
-        DetectEntity(bool isLerpable = false);
+        DetectEntity();
 
         //! Default destructor.
         virtual ~DetectEntity();

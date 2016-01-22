@@ -11,9 +11,8 @@
 using namespace dungeon;
 using namespace std::placeholders;
 
-Element::Element(dungeon::Inter& inter, bool isLerpable)
-    : baseClass(isLerpable)
-    , m_inter(inter)
+Element::Element(dungeon::Inter& inter)
+    : m_inter(inter)
     , m_lua(true)
 {
     // Note: an Element has a size fitting a whole room,

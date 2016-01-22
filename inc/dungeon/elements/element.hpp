@@ -30,7 +30,7 @@ namespace dungeon
     public:
 
         //! Constructor.
-        Element(dungeon::Inter& inter, bool isLerpable = false);
+        Element(dungeon::Inter& inter);
 
         //! Default destructor.
         virtual ~Element() = default;

@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <SFML/System/Time.hpp>
+
 namespace scene
 {
     // Forward declarations
@@ -9,7 +11,7 @@ namespace scene
     class Entity;
     class Layer;
 
-    //! Abstract class inherited by all components.
+    //! Abstract class designed to be the interface of all components.
 
     class Component
     {
@@ -20,6 +22,15 @@ namespace scene
 
         //! Default destructor.
         virtual ~Component() = default;
+
+        //--------------------------//
+        //! @name Routine callbacks
+        //! @{
+
+        //! Regular update routine.
+        virtual void update(const sf::Time& dt) {}
+
+        //! @}
 
         //----------------------------//
         //! @name Structure callbacks

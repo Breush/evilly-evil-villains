@@ -9,8 +9,7 @@
 
 using namespace scene;
 
-AnimatedSprite::AnimatedSprite(bool isLerpable)
-    : baseClass(isLerpable)
+AnimatedSprite::AnimatedSprite()
 {
     setDetectable(false);
 }

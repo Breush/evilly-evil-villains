@@ -16,7 +16,7 @@ namespace nui
     public:
 
         //! Constructor.
-        Entity(bool isLerpable = false);
+        Entity();
 
         //! Destructor.
         virtual ~Entity() = default;

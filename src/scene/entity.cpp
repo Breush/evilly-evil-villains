@@ -1,7 +1,6 @@
 #include "scene/entity.hpp"
 
 #include "core/application.hpp"
-#include "scene/components/lerpable.hpp"
 #include "scene/graph.hpp"
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
@@ -14,7 +13,7 @@
 
 using namespace scene;
 
-Entity::Entity(bool isLerpable)
+Entity::Entity()
     : m_depth(50.f)
     , m_relativePosition(0.f, 0.f)
     , m_relativeOrigin(0.f, 0.f)
@@ -31,9 +30,6 @@ Entity::Entity(bool isLerpable)
     , m_focusable(false)
     , m_focusOwned(false)
 {
-    // Lerpable component
-    if (isLerpable)
-        m_lerpable = std::make_unique<scene::Lerpable>(this);
 }
 
 Entity::~Entity()
@@ -181,7 +177,7 @@ void Entity::update(const sf::Time& dt, const float factor)
     auto dtGame = dt * factor;
 
     updateRoutine(dtGame);
-    updateLerpable(dtGame);
+    updateComponents(dtGame);
     updateAI(dtGame);
     updateChanges();
 
@@ -190,10 +186,10 @@ void Entity::update(const sf::Time& dt, const float factor)
         child->update(dt, factor);
 }
 
-void Entity::updateLerpable(const sf::Time& dt)
+void Entity::updateComponents(const sf::Time& dt)
 {
-    if (m_lerpable != nullptr)
-        m_lerpable->update(dt);
+    for (auto& component : m_components)
+        component->update(dt);
 }
 
 void Entity::updateChanges()

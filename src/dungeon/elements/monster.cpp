@@ -1,5 +1,6 @@
 #include "dungeon/elements/monster.hpp"
 
+#include "scene/components/lerpable.hpp"
 #include "dungeon/inter.hpp"
 
 using namespace dungeon;
@@ -29,6 +30,6 @@ void Monster::rebindElementData()
 
     // Update from data
     const auto& monsterData = m_inter.monstersDB().get(m_elementID);
-    lerpable()->setPositionSpeed(m_inter.tileSize() * monsterData.speed);
+    getComponent<scene::Lerpable>()->setPositionSpeed(m_inter.tileSize() * monsterData.speed);
     m_pauseDelay = monsterData.pauseDelay;
 }

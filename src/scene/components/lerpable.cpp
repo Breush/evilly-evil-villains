@@ -1,17 +1,15 @@
 #include "scene/components/lerpable.hpp"
 
 #include "scene/entity.hpp"
-#include "tools/debug.hpp"
 #include "tools/tools.hpp"
 
 using namespace scene;
 
-Lerpable::Lerpable(Entity* entity)
-    : m_positionLerping(false)
+Lerpable::Lerpable(Entity& entity)
+    : baseClass(entity)
+    , m_positionLerping(false)
     , m_positionSpeed(250.f, 250.f)
-    , m_entity(entity)
 {
-    massert(m_entity != nullptr, "Init lerpable with empty entity.");
 }
 
 //-------------------//
@@ -21,9 +19,9 @@ void Lerpable::update(const sf::Time& dt)
 {
     // Updating position
     if (m_positionLerping) {
-        const auto& localPosition(m_entity->localPosition());
-        m_entity->setLocalPosition(nextPosition(localPosition, dt));
-        if (m_entity->localPosition() == m_targetPosition)
+        const auto& localPosition(m_entity.localPosition());
+        m_entity.setLocalPosition(nextPosition(localPosition, dt));
+        if (m_entity.localPosition() == m_targetPosition)
             m_positionLerping = false;
     }
 
@@ -35,7 +33,7 @@ void Lerpable::update(const sf::Time& dt)
 
 void Lerpable::saveDefaults()
 {
-    m_defaultPosition = m_entity->localPosition();
+    m_defaultPosition = m_entity.localPosition();
 }
 
 //----------------------------------//
@@ -44,7 +42,7 @@ void Lerpable::saveDefaults()
 void Lerpable::setTargetPosition(const sf::Vector2f& targetPosition)
 {
     m_targetPosition = targetPosition;
-    setPositionLerping(true);
+    m_positionLerping = true;
 }
 
 void Lerpable::setTargetPositionOffset(const sf::Vector2f& positionOffset)

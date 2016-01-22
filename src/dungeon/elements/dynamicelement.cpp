@@ -3,7 +3,7 @@
 using namespace dungeon;
 
 DynamicElement::DynamicElement(Inter& inter)
-    : baseClass(inter, true)
+    : baseClass(inter)
 {
 }
 

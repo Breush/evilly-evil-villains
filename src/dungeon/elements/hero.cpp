@@ -1,5 +1,6 @@
 #include "dungeon/elements/hero.hpp"
 
+#include "scene/components/lerpable.hpp"
 #include "dungeon/managers/heroesmanager.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/data.hpp"
@@ -43,7 +44,7 @@ void Hero::setDamaged(bool damaged)
 void Hero::rebindElementData()
 {
     const auto& heroData = m_inter.heroesDB().get(m_elementID);
-    lerpable()->setPositionSpeed(m_inter.tileSize() * heroData.speed);
+    getComponent<scene::Lerpable>()->setPositionSpeed(m_inter.tileSize() * heroData.speed);
     m_pauseDelay = heroData.pauseDelay;
 }
 

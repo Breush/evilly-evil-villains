@@ -29,7 +29,7 @@ namespace scene
     public:
 
         //! Constructor, will register this animated sprite to the context.
-        AnimatedSprite(bool isLerpable = false);
+        AnimatedSprite();
 
         //! Destructor, will unregister this animated sprite from the context.
         virtual ~AnimatedSprite();

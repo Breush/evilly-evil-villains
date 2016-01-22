@@ -31,6 +31,9 @@ namespace ai
         //! Set the visual part.
         void setSource(const std::string& source);
 
+        //! Set the speed.
+        void setSpeed(const sf::Vector2f& speed);
+
         //! Set the initial local position.
         void setInitialLocalPosition(const sf::Vector2f& position);
 

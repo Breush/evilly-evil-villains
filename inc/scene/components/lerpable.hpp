@@ -1,5 +1,6 @@
 #pragma once
 
+#include "scene/components/component.hpp"
 #include "tools/param.hpp"
 
 #include <SFML/System/Time.hpp>
@@ -14,26 +15,26 @@ namespace scene
 
 namespace scene
 {
-    // TODO Should inherits from some scene::Component
-    /*! This component of an Entity allows to interpolate various parameters over time.
-     *  For example, set a targetPosition and a speed, the entity will move at that speed
+    //! Allows to interpolate various parameters over time.
+    /*!
+     *  For instance, set a targetPosition and a speed, the entity will move at that speed
      *  to the provided targetPosition.
      */
 
-    class Lerpable
+    class Lerpable final : public Component
     {
-        friend class Entity;
+        using baseClass = Component;
 
     public:
 
         //! Constructor.
-        Lerpable(Entity* entity);
+        Lerpable(Entity& entity);
 
         //! Default destructor.
-        virtual ~Lerpable() = default;
+        ~Lerpable() = default;
 
-        //-----------------------//
-        //! @name User interface
+        //----------------------//
+        //! @name Basic control
         //! @{
 
         //! Need to be called to set current variables as default reference for offset functions.
@@ -44,6 +45,15 @@ namespace scene
         //-------------------------------//
         //! @name Position interpolation
         //! @{
+
+        //! Stop or un-pause the position lerping.
+        inline void setPositionLerping(bool positionLerping) { m_positionLerping = positionLerping; }
+
+        //! True while the position is being lerped.
+        inline bool positionLerping() const { return m_positionLerping; }
+
+        //! The speed for position lerping.
+        inline void setPositionSpeed(const sf::Vector2f& positionSpeed) { m_positionSpeed = positionSpeed; }
 
         //! The target position.
         inline const sf::Vector2f& targetPosition() const { return m_targetPosition; }
@@ -59,25 +69,12 @@ namespace scene
 
         //! @}
 
-        //--------------------------//
-        //! @name Public properties
-        //! @{
-
-        //! Whether position interpolation is activated or not.
-        PARAMGS(bool, m_positionLerping, positionLerping, setPositionLerping)
-
-        //! The speed for position interpolation.
-        PARAMGS(sf::Vector2f, m_positionSpeed, positionSpeed, setPositionSpeed)
-
-        //! @}
-
     protected:
 
-        //----------------//
-        //! @name Routine
+        //------------------//
+        //! @name Callbacks
         //! @{
 
-        //! Update the various parameters of the entity.
         void update(const sf::Time& dt);
 
         //! @}
@@ -96,8 +93,9 @@ namespace scene
 
     private:
 
-        scene::Entity* m_entity = nullptr;  //!< The binded entity.
-
+        // Position
+        bool m_positionLerping = false;     //!< Should we lerp the position?
+        sf::Vector2f m_positionSpeed;       //!< The speed to move position when lerping.
         sf::Vector2f m_targetPosition;      //!< The target position.
         sf::Vector2f m_defaultPosition;     //!< The default position, for offset relative.
     };

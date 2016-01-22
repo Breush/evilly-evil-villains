@@ -2,6 +2,7 @@
 
 #include "ai/node.hpp"
 #include "dungeon/inter.hpp"
+#include "scene/components/lerpable.hpp"
 #include "tools/random.hpp"
 
 using namespace dungeon;
@@ -11,6 +12,8 @@ MovingElement::MovingElement(std::string folder, Inter& inter, Graph& graph)
     , m_graph(graph)
     , m_folder(std::move(folder))
 {
+    addComponent<scene::Lerpable>();
+
     // Lua API
     m_lua["eev_setMoving"] = [this] (bool moving) { lua_setMoving(moving); };
     m_lua["eev_isLookingDirection"] = [this] (const std::string& direction) { return lua_isLookingDirection(direction); };
@@ -26,7 +29,7 @@ void MovingElement::updateAI(const sf::Time& dt)
     returnif (!m_moving);
 
     // Quit if still moving
-    returnif (lerpable()->positionLerping());
+    returnif (getComponent<scene::Lerpable>()->positionLerping());
 
     // Quit if pause intended
     if (m_pauseTime >= 0.f) {
@@ -124,7 +127,7 @@ void MovingElement::setMoving(bool moving)
 {
     m_moving = moving;
     setNewTargetPosition(localPosition());
-    lerpable()->setPositionLerping(moving);
+    getComponent<scene::Lerpable>()->setPositionLerping(moving);
     if (moving) updateFromGraph();
 }
 
@@ -282,7 +285,7 @@ void MovingElement::refreshPosition()
 
     sf::Vector2f position = m_inter.positionFromRelCoords({m_edata->operator[](L"rx").as_float(), m_edata->operator[](L"ry").as_float()});
     sf::Vector2f targetPosition  = m_inter.positionFromRelCoords({m_edata->operator[](L"tx").as_float(), m_edata->operator[](L"ty").as_float()});
-    lerpable()->setTargetPosition(targetPosition);
+    getComponent<scene::Lerpable>()->setTargetPosition(targetPosition);
     setLocalPosition(position);
 }
 
@@ -291,7 +294,7 @@ void MovingElement::refreshPosition()
 
 void MovingElement::setNewTargetPosition(const sf::Vector2f& targetPosition)
 {
-    lerpable()->setTargetPosition(targetPosition);
+    getComponent<scene::Lerpable>()->setTargetPosition(targetPosition);
 
     auto relTargetPosition = m_inter.relCoordsFromPosition(targetPosition);
     m_edata->operator[](L"tx").as_float() = relTargetPosition.x;
@@ -314,14 +317,16 @@ void MovingElement::refreshAnimation()
 {
     returnif (m_inTunnel);
 
+    auto lerpable = getComponent<scene::Lerpable>();
+
     // Select correct animation (right/left)
     // TODO Have a state machine and interface with physics module
     // Maybe the state machine animated sprite makes its own class
-    if (lerpable()->targetPosition().x > localPosition().x) {
+    if (lerpable->targetPosition().x > localPosition().x) {
         m_sprite.select("rwalk");
         m_left = false;
     }
-    else if (lerpable()->targetPosition().x < localPosition().x) {
+    else if (lerpable->targetPosition().x < localPosition().x) {
         m_sprite.select("lwalk");
         m_left = true;
     }

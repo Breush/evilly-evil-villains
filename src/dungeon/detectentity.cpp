@@ -7,8 +7,7 @@
 
 using namespace dungeon;
 
-DetectEntity::DetectEntity(bool isLerpable)
-    : baseClass(isLerpable)
+DetectEntity::DetectEntity()
 {
     s_detector.addEntity(*this);
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "scene/components/component.hpp"
-#include "scene/components/lerpable.hpp"
 #include "tools/param.hpp"
 #include "tools/int.hpp"
 
@@ -58,11 +57,7 @@ namespace scene
     public:
 
         //! Constructor.
-        /*!
-         *  @param isLerpable When true, the entity parameters (position, ...)
-         *  will be interpolated during update(dt).
-         */
-        Entity(bool isLerpable = false);
+        Entity();
 
         //! Destructor.
         //! The entity will detach itself if still attached to a parent.
@@ -86,14 +81,6 @@ namespace scene
         //! Add the specified component.
         template <class Component_t>
         Component_t& addComponent();
-
-        // FIXME The lerpable as such should become a real component.
-        //! Get the lerpable component of the entity.
-        /*!
-         *  Different from nullptr if entity constructor was created
-         *  with lerpable option on.
-         */
-        scene::Lerpable* lerpable() noexcept { return m_lerpable.get(); }
 
         //! @}
 
@@ -292,8 +279,8 @@ namespace scene
 
         //! Update the entity given time-step and recursively update its children.
         /*!
-         *  Calls the updateRoutine() first and update lerpable before
-         *  updating its children.
+         *  Calls the updateRoutine() first and update the components
+         *  before updating its children.
          *  Direct override is not encouraged, one should use updateRoutine().
          *  This is made virtual for nui::Entity to add specific extra steps.
          */
@@ -306,11 +293,11 @@ namespace scene
          */
         virtual void updateRoutine(const sf::Time& dt) {}
 
+        //! Updates all components.
+        void updateComponents(const sf::Time& dt);
+
         //! Updates the state of the artificial intelligence.
         virtual void updateAI(const sf::Time& dt) {}
-
-        //! If lerpable component enabled, update it.
-        void updateLerpable(const sf::Time& dt);
 
         //! Check and call parent on changes if options enabled.
         void updateChanges();
@@ -593,7 +580,6 @@ namespace scene
 
         // Components
         std::vector<ComponentPtr> m_components;                 //!< All the components.
-        std::unique_ptr<scene::Lerpable> m_lerpable = nullptr;  //!< The lerpable component.
 
         // Structure
         Layer* m_layer = nullptr;   //!< The layer storing this entity.
