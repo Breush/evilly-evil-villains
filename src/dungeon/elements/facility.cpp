@@ -4,6 +4,7 @@
 #include "dungeon/detector.hpp"
 #include "dungeon/data.hpp"
 #include "dungeon/inter.hpp"
+#include "scene/components/lightemitter.hpp"
 #include "tools/string.hpp"
 
 using namespace dungeon;
@@ -41,6 +42,10 @@ Facility::Facility(const RoomCoords& coords, ElementData& edata, dungeon::Inter&
     m_lua["eev_hasBarrier"] = [this] { return lua_hasBarrier(); };
     m_lua["eev_setBarrier"] = [this] (bool activated) { lua_setBarrier(activated); };
     m_lua["eev_removeTunnels"] = [this] { lua_removeTunnels(); };
+
+    // Lighting
+    m_lua["eev_lightAddPoint"] = [this] (lua_Number x, lua_Number y, lua_Number s) { return lua_lightAddPoint(x, y, s); };
+    m_lua["eev_lightSetColor"] = [this] (uint32 lightID, uint r, uint g, uint b) { return lua_lightSetColor(lightID, r, g, b); };
 
     // Load lua file
     std::string luaFilename = "res/vanilla/facilities/" + sElementID + "/ai.lua";
@@ -151,4 +156,26 @@ void Facility::lua_setBarrier(bool activated)
 void Facility::lua_removeTunnels()
 {
     m_facilityInfo->tunnels.clear();
+}
+
+//----- Lighting
+
+uint32 Facility::lua_lightAddPoint(lua_Number x, lua_Number y, lua_Number s)
+{
+    sf::Vector2f relPos{static_cast<float>(x), static_cast<float>(y)};
+    float lightSize = static_cast<float>(s) * detectRangeFactor();
+
+    // Become a light emitter if not yet
+    if (!hasComponent<scene::LightEmitter>())
+        addComponent<scene::LightEmitter>();
+
+    auto& lightEmitter = *getComponent<scene::LightEmitter>();
+    return lightEmitter.addPoint(relPos, lightSize);
+}
+
+void Facility::lua_lightSetColor(uint32 lightID, uint r, uint g, uint b)
+{
+    auto& lightEmitter = *getComponent<scene::LightEmitter>();
+    sf::Color color(static_cast<uint8>(r), static_cast<uint8>(g), static_cast<uint8>(b));
+    lightEmitter.setColor(lightID, std::move(color));
 }

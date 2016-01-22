@@ -183,8 +183,6 @@ void Layer::refreshManipulability()
 //---------------//
 //----- ICU -----//
 
-#include <iostream>
-
 void Layer::refreshBasicView()
 {
     const auto& viewport = m_view.getViewport();
@@ -203,6 +201,7 @@ void Layer::refreshLightSystem()
     returnif (!m_lightsOn);
 
     m_tmpTarget.create(m_basicView.getSize().x, m_basicView.getSize().y);
+    m_tmpTarget.setSmooth(true);
     m_lightSystem.create({0.f, 0.f, m_size.x, m_size.y}, sf::v2u(m_basicView.getSize()), *m_penumbraTexture, *m_unshadowShader, *m_lightOverShapeShader);
 
     // FIXME The following is a debug thingy

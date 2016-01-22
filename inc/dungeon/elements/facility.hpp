@@ -108,6 +108,14 @@ namespace dungeon
         //! Set the barrier state.
         void lua_setBarrier(bool activated);
 
+        //----- Lighting
+
+        //! Add a lightPoint in position (x, y) and scale s.
+        uint32 lua_lightAddPoint(lua_Number x, lua_Number y, lua_Number s);
+
+        //! Sets the color of a previously added light.
+        void lua_lightSetColor(uint32 lightID, uint r, uint g, uint b);
+
         //! @}
 
     private:

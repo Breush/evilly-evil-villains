@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<facility id="torch" trName="Torch" lock="wall">
+    <data name="baseCost" dosh="5" />
+</facility>

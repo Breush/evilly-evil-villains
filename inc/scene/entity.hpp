@@ -1,5 +1,6 @@
 #pragma once
 
+#include "scene/components/component.hpp"
 #include "scene/components/lerpable.hpp"
 #include "tools/param.hpp"
 #include "tools/int.hpp"
@@ -74,6 +75,19 @@ namespace scene
         //! @name Components
         //! @{
 
+        //! Do the entity has the specified component?
+        template <class Component_t>
+        bool hasComponent() const;
+
+        //! Get the specified component.
+        template <class Component_t>
+        Component_t* getComponent();
+
+        //! Add the specified component.
+        template <class Component_t>
+        Component_t& addComponent();
+
+        // FIXME The lerpable as such should become a real component.
         //! Get the lerpable component of the entity.
         /*!
          *  Different from nullptr if entity constructor was created
@@ -570,6 +584,9 @@ namespace scene
 
     private:
 
+        // Components
+        std::vector<ComponentPtr> m_components; //!< All the components.
+
         //! The children, as an entity is also a node in a graph.
         std::list<Entity*> m_children;
 
@@ -606,3 +623,5 @@ namespace scene
         bool m_localChanges = true; //!< Whether the local transformations has changed since last update.
     };
 }
+
+#include "scene/entity.inl"
