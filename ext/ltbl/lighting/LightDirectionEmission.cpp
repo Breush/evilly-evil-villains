@@ -4,7 +4,8 @@
 
 #include <ltbl/lighting/LightSystem.h>
 
-#include <assert.h>
+#include <cassert>
+#include <cmath>
 
 using namespace ltbl;
 

@@ -11,8 +11,8 @@
 		<param name="fontFactor" value="1" />
 	</group>
 	<group type="global">
-		<param name="language" code="en_EN" />
+		<param name="language" code="en_GB" />
 		<param name="scrollingFactor" value="20" />
-		<param name="zoomSpeed" value="0.05f" />
+		<param name="zoomSpeed" value="0.05" />
 	</group>
 </config>

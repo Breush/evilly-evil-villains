@@ -38,7 +38,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE}"
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 # Compiler options
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
     set(EEV_DEBUG_MODE ON)
 
@@ -136,11 +136,11 @@ set(EEV_LIBRARIES eev-common)
 
 add_library(${EEV_LIBRARIES} ${CODE_FILES})
 
+target_link_libraries(${EEV_LIBRARIES} ${LTBL_LIBRARIES})
 target_link_libraries(${EEV_LIBRARIES} ${SFML_LIBRARIES})
 target_link_libraries(${EEV_LIBRARIES} ${STEAM_LIBRARIES})
 target_link_libraries(${EEV_LIBRARIES} ${BOX2D_LIBRARIES})
 target_link_libraries(${EEV_LIBRARIES} ${SPRITER_LIBRARIES})
-target_link_libraries(${EEV_LIBRARIES} ${LTBL_LIBRARIES})
 
 #=====
 # Create game executable

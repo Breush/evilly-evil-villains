@@ -41,8 +41,8 @@
 
 #include <windows.h>
 
-extern int __argc;
-extern char* __argv[];
+//extern int __argc;
+//extern char* __argv[];
 extern int main(int argc, char* argv[]);
 
 ////////////////////////////////////////////////////////////

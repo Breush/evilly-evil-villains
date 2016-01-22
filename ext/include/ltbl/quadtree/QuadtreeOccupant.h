@@ -3,7 +3,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
-#include <ltbl/Math.h>
+#include <ltbl/tools/Math.h>
 
 #include <memory>
 #include <array>
