@@ -28,6 +28,7 @@ Layer::Layer()
 void Layer::init(Graph* graph)
 {
     m_root.setGraph(graph);
+    m_root.setLayer(this);
 }
 
 //-------------------//

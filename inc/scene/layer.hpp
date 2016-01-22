@@ -17,6 +17,8 @@ namespace config
 
 namespace scene
 {
+    class LightEmitter;
+
     //! A layer root entity.
 
     class LayerRoot final : public Entity
@@ -40,6 +42,8 @@ namespace scene
     {
         //! General callback function.
         using Callback = std::function<void()>;
+
+        friend class LightEmitter;
 
     public:
 
@@ -163,6 +167,15 @@ namespace scene
         //! @}
 
     protected:
+
+        //-----------------//
+        //! @name Lighting
+        //! @{
+
+        //! Access the light system.
+        ltbl::LightSystem& lightSystem() { return m_lightSystem; }
+
+        //! @}
 
         //------------//
         //! @name ICU

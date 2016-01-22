@@ -415,6 +415,9 @@ namespace scene
         //! @name Graph
         //! @{
 
+        //! Set the current layer which stores this entity.
+        void setLayer(Layer* inLayer);
+
         //! Set the current graph which stores this entity.
         void setGraph(Graph* graph);
 
@@ -584,43 +587,31 @@ namespace scene
 
     private:
 
+        std::list<Entity*> m_children;  //!< The children, as an entity is also a node in a graph.
+        std::vector<Part> m_parts;      //!< The parts, as an entity is something drawn.
+        sf::Shader* m_shader = nullptr; //!< The shader used to draw the entity's parts and children.
+
         // Components
-        std::vector<ComponentPtr> m_components; //!< All the components.
+        std::vector<ComponentPtr> m_components;                 //!< All the components.
+        std::unique_ptr<scene::Lerpable> m_lerpable = nullptr;  //!< The lerpable component.
 
-        //! The children, as an entity is also a node in a graph.
-        std::list<Entity*> m_children;
+        // Structure
+        Layer* m_layer = nullptr;   //!< The layer storing this entity.
 
-        //! The parts, as an entity is something drawn.
-        std::vector<Part> m_parts;
+        // Flags
+        bool m_sizeChanges = true;          //!< Whether the size has changed since last update.
+        bool m_localChanges = true;         //!< Whether the local transformations has changed since last update.
+        bool m_focused = false;             //!< Whether the entity is currently focused.
+        bool m_relativePositioning = false; //!< Whether the position of the entity should be computed relatively.
+        bool m_markedForVisible = false;    //!< Whether the entity is marked for a delayed setVisible() call.
+        bool m_visibleMark;                 //!< The target status to visible, if mark is on.
 
-        //! The lerpable component.
-        std::unique_ptr<scene::Lerpable> m_lerpable = nullptr;
-
-        //! The shader used to draw the entity.
-        sf::Shader* m_shader = nullptr;
-
-        //! Whether the entity is currently focused.
-        bool m_focused = false;
-
-        //! Whether the position of the entity should be computed relatively.
-        bool m_relativePositioning = false;
-
-        //! Whether the entity is marked for a delayed setVisible() call.
-        bool m_markedForVisible = false;
-
-        //! The target status to visible, if mark is on.
-        bool m_visibleMark;
-
-        //! The entity will be kept between this limits if width/height is not negative.
-        sf::FloatRect m_insideLocalRect = {0.f, 0.f, -1.f, -1.f};
+        // Constraints
+        sf::FloatRect m_insideLocalRect = {0.f, 0.f, -1.f, -1.f};   //!< The entity will be kept between this limits if width/height is not negative.
 
         // Clipping
         std::vector<ClipArea> m_clipAreas;              //!< Specifies what is drawn for the entity (also affects children).
         std::vector<sf::FloatRect> m_globalClipAreas;   //!< The visual part of the entity, taking parent clip area in account.
-
-        // Dirty flags
-        bool m_sizeChanges = true;  //!< Whether the size has changed since last update.
-        bool m_localChanges = true; //!< Whether the local transformations has changed since last update.
     };
 }
 

@@ -19,9 +19,11 @@ end
 -- Called once on object creation
 function _register()
     eev_setDepth(90)
-    
-    local lightID = eev_lightAddPoint(-36, 160, 1, 1)
-    eev_lightSetColor(lightID, 255, 0, 0)
+
+    -- TODO Better use a point name giving the position in the Spriter file,
+    -- otherwise, it might be hard to really get the coordinates working
+    local lightID = eev_lightAddPoint(0, -40, 3)
+    eev_lightSetColor(lightID, 255, 230, 200)
 end
 
 -------------

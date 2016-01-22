@@ -209,6 +209,11 @@ void Entity::updateChanges()
         refreshClipAreas();
 
         onTransformChanges();
+
+        // Warn components
+        for (auto& component : m_components)
+            component->onTransformChanged();
+
         m_localChanges = false;
     }
 
@@ -259,6 +264,7 @@ void Entity::attachChild(Entity& child)
 {
     massert(!hasChild(child), "Trying to attach an already attached entity.");
 
+    child.setLayer(m_layer);
     child.setGraph(m_graph);
     child.setParent(this);
     m_children.emplace_back(&child);
@@ -273,6 +279,7 @@ void Entity::detachChild(Entity& child)
     onChildDetached(child);
     child.setParent(nullptr);
     child.setGraph(nullptr);
+    child.setLayer(nullptr);
     m_children.erase(found);
 }
 
@@ -773,6 +780,19 @@ void Entity::setParent(Entity* inParent)
 //-----------------//
 //----- Graph -----//
 
+void Entity::setLayer(Layer* inLayer)
+{
+    returnif (m_layer == inLayer);
+
+    m_layer = inLayer;
+    for (auto& child : m_children)
+        child->setLayer(m_layer);
+
+    // Warn components
+    for (auto& component : m_components)
+        component->onLayerChanged(m_layer);
+}
+
 void Entity::setGraph(Graph* inGraph)
 {
     if (m_graph != nullptr)
@@ -780,7 +800,7 @@ void Entity::setGraph(Graph* inGraph)
 
     m_graph = inGraph;
     for (auto& child : m_children)
-        child->setGraph(inGraph);
+        child->setGraph(m_graph);
 
     if (m_graph != nullptr)
         m_graph->attachedEntity(this);

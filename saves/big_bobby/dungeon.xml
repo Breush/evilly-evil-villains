@@ -1,25 +1,28 @@
 <?xml version="1.0"?>
-<dungeon name="No woman, no pancakes" floorsCount="17" roomsByFloor="12">
-    <resources>
-        <soul value="410" />
-        <fame value="559" />
-        <debt perWeekDosh="0" weeksLeft="0" />
-    </resources>
+<dungeon name="No woman, no pancakes" time="25" floorsCount="17" roomsByFloor="12">
+	<resources>
+		<soul value="410" />
+		<fame value="559" />
+		<debt perWeekDosh="0" weeksLeft="0" />
+	</resources>
+	<dynamics />
 	<heroes />
 	<monstersGenerics>
-		<sand_spirit unlocked="true" number="0" countdown="0" />
-		<creepim unlocked="true" number="1" countdown="10" />
+		<creepim unlocked="true" reserve="0" countdown="0" />
+		<sand_spirit unlocked="true" reserve="0" countdown="10" />
 	</monstersGenerics>
 	<monsters />
 	<trapsGenerics>
-		<pickpock unlocked="true" />
 		<trompe_loeil unlocked="true" />
+		<razor unlocked="false" />
+		<pickpock unlocked="true" />
 	</trapsGenerics>
 	<floor pos="0">
 		<room pos="0" state="constructed" />
 		<room pos="1" state="constructed" />
 		<room pos="2" state="constructed">
-			<facility type="piston" barrier="true">
+			<facility barrier="true" type="piston">
+				<direction type="uint32" value="0" />
 				<on type="bool" value="true" />
 			</facility>
 		</room>
@@ -40,7 +43,9 @@
 		<room pos="3" state="constructed" />
 		<room pos="4" state="constructed" />
 		<room pos="5" state="constructed" />
-		<room pos="6" state="constructed" />
+		<room pos="6" state="constructed">
+			<facility type="torch" />
+		</room>
 		<room pos="7" state="constructed" />
 		<room pos="8" state="constructed" />
 		<room pos="9" state="constructed" />
@@ -136,7 +141,9 @@
 		<room pos="1" state="void" />
 		<room pos="2" state="constructed" />
 		<room pos="3" state="constructed" />
-		<room pos="4" state="constructed" />
+		<room pos="4" state="constructed">
+			<facility type="torch" />
+		</room>
 		<room pos="5" state="void" />
 		<room pos="6" state="void" />
 		<room pos="7" state="constructed" />
@@ -189,7 +196,9 @@
 	</floor>
 	<floor pos="12">
 		<room pos="0" state="void" />
-		<room pos="1" state="constructed" />
+		<room pos="1" state="constructed">
+			<facility type="torch" />
+		</room>
 		<room pos="2" state="constructed" />
 		<room pos="3" state="void" />
 		<room pos="4" state="void" />

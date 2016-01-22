@@ -7,6 +7,7 @@ namespace scene
     // Forward declarations
 
     class Entity;
+    class Layer;
 
     //! Abstract class inherited by all components.
 
@@ -24,8 +25,11 @@ namespace scene
         //! @name Structure callbacks
         //! @{
 
+        //! Called whenever the entity's transform changed.
+        virtual void onTransformChanged() {}
+
         //! Called whenever the entity changed its layer.
-        virtual void onLayerChanged() {}
+        virtual void onLayerChanged(Layer* layer) {}
 
         //! @}
 
