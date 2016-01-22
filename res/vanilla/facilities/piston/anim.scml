@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r4.1">
-    <folder id="0" name="piston/up">
-        <file id="0" name="piston/up/stick.png" width="72" height="500" pivot_x="0.5" pivot_y="0.5"/>
-        <file id="1" name="piston/up/front.png" width="264" height="314" pivot_x="0.5" pivot_y="0"/>
-        <file id="2" name="piston/up/head.png" width="264" height="68" pivot_x="0" pivot_y="1"/>
+    <folder id="0" name="up">
+        <file id="0" name="up/stick.png" width="72" height="500" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="1" name="up/front.png" width="264" height="314" pivot_x="0.5" pivot_y="0"/>
+        <file id="2" name="up/head.png" width="264" height="68" pivot_x="0" pivot_y="1"/>
     </folder>
-    <folder id="1" name="piston/right">
-        <file id="0" name="piston/right/front.png" width="256" height="384" pivot_x="0" pivot_y="1"/>
-        <file id="1" name="piston/right/head.png" width="105" height="384" pivot_x="0" pivot_y="1"/>
-        <file id="2" name="piston/right/stick.png" width="309" height="84" pivot_x="0" pivot_y="1"/>
+    <folder id="1" name="right">
+        <file id="0" name="right/front.png" width="256" height="384" pivot_x="0" pivot_y="1"/>
+        <file id="1" name="right/head.png" width="105" height="384" pivot_x="0" pivot_y="1"/>
+        <file id="2" name="right/stick.png" width="309" height="84" pivot_x="0" pivot_y="1"/>
     </folder>
-    <folder id="2" name="piston/left">
-        <file id="0" name="piston/left/stick.png" width="309" height="83" pivot_x="0" pivot_y="1"/>
-        <file id="1" name="piston/left/front.png" width="256" height="384" pivot_x="0" pivot_y="1"/>
-        <file id="2" name="piston/left/head.png" width="105" height="384" pivot_x="0" pivot_y="1"/>
+    <folder id="2" name="left">
+        <file id="0" name="left/stick.png" width="309" height="83" pivot_x="0" pivot_y="1"/>
+        <file id="1" name="left/front.png" width="256" height="384" pivot_x="0" pivot_y="1"/>
+        <file id="2" name="left/head.png" width="105" height="384" pivot_x="0" pivot_y="1"/>
     </folder>
-    <folder id="3" name="piston/down">
-        <file id="0" name="piston/down/front.png" width="264" height="234" pivot_x="0" pivot_y="1"/>
-        <file id="1" name="piston/down/stick.png" width="73" height="358" pivot_x="0.5" pivot_y="1"/>
-        <file id="2" name="piston/down/head.png" width="264" height="151" pivot_x="0.5" pivot_y="0"/>
+    <folder id="3" name="down">
+        <file id="0" name="down/front.png" width="264" height="234" pivot_x="0" pivot_y="1"/>
+        <file id="1" name="down/stick.png" width="73" height="358" pivot_x="0.5" pivot_y="1"/>
+        <file id="2" name="down/head.png" width="264" height="151" pivot_x="0.5" pivot_y="0"/>
     </folder>
     <entity id="0" name="piston">
         <obj_info name="piston_head" realname="head" type="sprite">
