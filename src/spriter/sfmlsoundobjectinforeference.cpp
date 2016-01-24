@@ -1,6 +1,6 @@
 #include "spriter/sfmlsoundobjectinforeference.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 
 using namespace SpriterEngine;
 
@@ -12,6 +12,6 @@ SfmlSoundObjectInfoReference::SfmlSoundObjectInfoReference(std::string soundID)
 void SfmlSoundObjectInfoReference::playTrigger()
 {
     if (getTriggerCount() > 0) {
-        Application::context().sounds.play(m_soundID);
+        context::context.sounds.play(m_soundID);
     }
 }

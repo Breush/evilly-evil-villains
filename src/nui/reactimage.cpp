@@ -1,6 +1,6 @@
 #include "nui/reactimage.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "tools/math.hpp"
 #include "tools/tools.hpp"
 #include "tools/string.hpp"
@@ -41,12 +41,12 @@ bool ReactImage::handleMouseButtonPressed(const sf::Mouse::Button button, const 
 
     // Maybe callback is not set
     if (callback == nullptr) {
-        Application::context().sounds.play("core/nui/refuse/refuse");
+        context::context.sounds.play("core/nui/refuse/refuse");
         return true;
     }
 
     // Accept callback
-    Application::context().sounds.play("core/nui/accept/accept");
+    context::context.sounds.play("core/nui/accept/accept");
     callback();
     return true;
 }
@@ -103,7 +103,7 @@ void ReactImage::loadFromFile(const std::string& file)
 
 void ReactImage::setTexture(const std::string& id)
 {
-    sf::Texture& texture = Application::context().textures.get(id);
+    sf::Texture& texture = context::context.textures.get(id);
     m_image.setTexture(texture);
 
     // Getting size and reconfiguring visual
@@ -164,7 +164,7 @@ void ReactImage::setActiveReact(const std::wstring& key, bool sensitive)
     // Indicate the selected react changed
     if (sensitive) {
         m_activeReactChanged = true;
-        Application::context().sounds.play("core/nui/select/select");
+        context::context.sounds.play("core/nui/select/select");
     }
 }
 

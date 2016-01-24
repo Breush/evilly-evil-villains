@@ -56,7 +56,7 @@ MonsterLocker::MonsterLocker(dungeon::Data& data)
 
     // The room
     addPart(&m_room);
-    const auto& texture = Application::context().textures.get("core/menu/hub/market/trap_room");
+    const auto& texture = context::context.textures.get("core/menu/hub/market/trap_room");
     m_roomTextureSize = sf::v2f(texture.getSize());
     m_room.setSize(m_roomTextureSize);
     m_room.setTexture(&texture);
@@ -98,7 +98,7 @@ bool MonsterLocker::handleMouseButtonPressed(const sf::Mouse::Button, const sf::
     returnif (!m_data.doshWallet().sub(m_monsterGeneric->common->unlockCost.dosh)) true;
 
     // TODO See trap locker
-    Application::context().sounds.play("core/resources/dosh/gain");
+    context::context.sounds.play("core/resources/dosh/gain");
 
     // We know the player has enough money and already paid, unlock it
     m_data.setMonsterGenericUnlocked(m_monsterID, true);

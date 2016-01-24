@@ -1,6 +1,6 @@
 #include "nui/contextmenu.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "tools/tools.hpp"
 
 using namespace nui;
@@ -45,11 +45,11 @@ bool ContextMenu::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Ve
     returnif (selectedChoiceID >= m_choices.size()) false;
 
     if (m_choices[selectedChoiceID].callback != nullptr) {
-        Application::context().sounds.play("core/nui/accept/accept");
+        context::context.sounds.play("core/nui/accept/accept");
         m_choices[selectedChoiceID].callback();
     }
     else {
-        Application::context().sounds.play("core/nui/refuse/refuse");
+        context::context.sounds.play("core/nui/refuse/refuse");
         markForVisible(true);
     }
 

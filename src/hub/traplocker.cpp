@@ -51,7 +51,7 @@ TrapLocker::TrapLocker(dungeon::Data& data)
 
     // The room
     addPart(&m_room);
-    const auto& texture = Application::context().textures.get("core/menu/hub/market/trap_room");
+    const auto& texture = context::context.textures.get("core/menu/hub/market/trap_room");
     m_roomTextureSize = sf::v2f(texture.getSize());
     m_room.setSize(m_roomTextureSize);
     m_room.setTexture(&texture);
@@ -85,7 +85,7 @@ bool TrapLocker::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vec
     returnif (!m_data.villain().doshWallet.sub(m_trapGeneric->common->unlockCost.dosh)) true;
 
     // TODO Yeah... well, have something more rewarding I guess
-    Application::context().sounds.play("core/resources/dosh/gain");
+    context::context.sounds.play("core/resources/dosh/gain");
 
     // We know the player has enough money and already paid, unlock it
     m_data.setTrapGenericUnlocked(m_trapID, true);

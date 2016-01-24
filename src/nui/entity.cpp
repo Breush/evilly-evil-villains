@@ -1,6 +1,6 @@
 #include "nui/entity.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
 
@@ -13,8 +13,8 @@ Entity::Entity()
 {
     // Focusing
     if (sf::Shader::isAvailable())
-        m_focusShader = &Application::context().shaders.get("core/nui/focus/background");
-    m_focusSprite.setTexture(&Application::context().textures.get("core/nui/focus/background"));
+        m_focusShader = &context::context.shaders.get("core/nui/focus/background");
+    m_focusSprite.setTexture(&context::context.textures.get("core/nui/focus/background"));
     m_focusSprite.setFillColor({255, 255, 255, 100});
 
     // Tooltip
@@ -39,7 +39,7 @@ void Entity::drawInternal(sf::RenderTarget& target, sf::RenderStates states) con
 
     // Update focus shader
     if (sf::Shader::isAvailable()) {
-        const auto& screenSize = Application::context().windowInfo.screenSize;
+        const auto& screenSize = context::context.windowInfo.screenSize;
         auto focusWindowRect = states.transform.transformRect(focusRect());
         focusWindowRect = tools::mapRectCoordsToPixel(target, focusWindowRect);
         focusWindowRect.top = screenSize.y - (focusWindowRect.height + focusWindowRect.top); // SFML - GL compatibility

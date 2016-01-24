@@ -1,6 +1,6 @@
 #include "states/menu/main.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "core/gettext.hpp"
 #include "core/define.hpp"
 #include "tools/vector.hpp"
@@ -14,8 +14,8 @@ MenuMain::MenuMain(StateStack& stack)
     : baseClass(stack)
 {
     // During menus, enable key repeat
-    Application::context().window.setKeyRepeatEnabled(true);
-    Application::context().musics.play("core/global/musics/pippin_the_hunchback");
+    context::context.window.setKeyRepeatEnabled(true);
+    context::context.musics.play("core/global/musics/pippin_the_hunchback");
 
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
@@ -95,7 +95,7 @@ MenuMain::MenuMain(StateStack& stack)
 MenuMain::~MenuMain()
 {
     // Musics
-    Application::context().musics.stop("core/global/musics/pippin_the_hunchback");
+    context::context.musics.stop("core/global/musics/pippin_the_hunchback");
 }
 
 //-------------------//
@@ -141,7 +141,7 @@ void MenuMain::refreshWindow(const config::WindowInfo& cWindow)
     m_fadingRectangle.setSize(resolution);
 
     // Background
-    auto textureSize = sf::v2f(Application::context().textures.get("core/menu/main/background").getSize());
+    auto textureSize = sf::v2f(context::context.textures.get("core/menu/main/background").getSize());
     auto scaleFactor = maxSide / textureSize.x;
     m_background.setLocalScale({scaleFactor, scaleFactor});
 

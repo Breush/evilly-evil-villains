@@ -1,6 +1,6 @@
 #include "dungeon/sidebar/costbanner.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
 
@@ -9,12 +9,12 @@ using namespace dungeon;
 CostBanner::CostBanner()
 {
     // Text
-    m_text.setFont(Application::context().fonts.get("core/global/fonts/mono"));
+    m_text.setFont(context::context.fonts.get("core/global/fonts/mono"));
 
     // Icons
-    m_icons[IconID::DOSH].setTexture(&Application::context().textures.get("core/resources/dosh/icon"));
-    m_icons[IconID::SOUL].setTexture(&Application::context().textures.get("core/resources/soul/icon"));
-    m_icons[IconID::FAME].setTexture(&Application::context().textures.get("core/resources/fame/icon"));
+    m_icons[IconID::DOSH].setTexture(&context::context.textures.get("core/resources/dosh/icon"));
+    m_icons[IconID::SOUL].setTexture(&context::context.textures.get("core/resources/soul/icon"));
+    m_icons[IconID::FAME].setTexture(&context::context.textures.get("core/resources/fame/icon"));
 }
 
 //-------------------//

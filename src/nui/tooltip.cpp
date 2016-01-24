@@ -1,6 +1,6 @@
 #include "nui/tooltip.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "tools/vector.hpp"
 #include "tools/string.hpp"
 
@@ -16,7 +16,7 @@ Tooltip::Tooltip()
     addPart(&m_bottomLeft);
     addPart(&m_bottomRight);
 
-    const auto& topLeftTexture = Application::context().textures.get("core/nui/tooltip/top_left");
+    const auto& topLeftTexture = context::context.textures.get("core/nui/tooltip/top_left");
 
     m_topLeft.setTexture(topLeftTexture);
     m_topRight.setTexture(topLeftTexture);
@@ -35,8 +35,8 @@ Tooltip::Tooltip()
     addPart(&m_right);
     addPart(&m_bottom);
 
-    const auto& topTexture = Application::context().textures.get("core/nui/tooltip/top");
-    const auto& leftTexture = Application::context().textures.get("core/nui/tooltip/left");
+    const auto& topTexture = context::context.textures.get("core/nui/tooltip/top");
+    const auto& leftTexture = context::context.textures.get("core/nui/tooltip/left");
 
     m_top.setTexture(&topTexture);
     m_left.setTexture(&leftTexture);
@@ -49,13 +49,13 @@ Tooltip::Tooltip()
     // Fill
     addPart(&m_fill);
 
-    const auto& fillTexture = Application::context().textures.get("core/nui/tooltip/fill");
+    const auto& fillTexture = context::context.textures.get("core/nui/tooltip/fill");
 
     m_fill.setTexture(&fillTexture);
 
     // Text
     addPart(&m_text);
-    m_text.setFont(Application::context().fonts.get("core/global/fonts/nui"));
+    m_text.setFont(context::context.fonts.get("core/global/fonts/nui"));
     m_text.setFillColor({210, 210, 210}); // Light grey
 }
 

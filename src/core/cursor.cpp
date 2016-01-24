@@ -1,6 +1,6 @@
 #include "core/cursor.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "tools/vector.hpp"
 
 void Cursor::init()
@@ -23,7 +23,7 @@ void Cursor::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Cursor::update(const sf::Time&)
 {
-    m_shape.setPosition(sf::v2f(sf::Mouse::getPosition(Application::context().window)));
+    m_shape.setPosition(sf::v2f(sf::Mouse::getPosition(context::context.window)));
 }
 
 void Cursor::refreshWindow(const config::WindowInfo& cWindow)
@@ -50,7 +50,7 @@ void Cursor::handleEvent(const sf::Event& event)
 
 void Cursor::setMode(const std::string& mode)
 {
-    const auto& texture = Application::context().textures.get("core/cursor/" + mode);
+    const auto& texture = context::context.textures.get("core/cursor/" + mode);
     m_shape.setSize(sf::v2f(texture.getSize()));
     m_shape.setTexture(&texture);
 }

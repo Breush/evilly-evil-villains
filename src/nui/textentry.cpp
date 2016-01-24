@@ -1,9 +1,11 @@
 #include "nui/textentry.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "tools/vector.hpp"
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
+
+#include <SFML/Window/Event.hpp>
 
 using namespace nui;
 
@@ -19,15 +21,15 @@ TextEntry::TextEntry()
     addPart(&m_backgroundRight);
     addPart(&m_backgroundMiddle);
 
-    m_backgroundLeft.setTexture(&Application::context().textures.get("core/nui/textentry/background_left"));
-    m_backgroundRight.setTexture(&Application::context().textures.get("core/nui/textentry/background_right"));
-    m_backgroundMiddle.setTexture(&Application::context().textures.get("core/nui/textentry/background_middle"));
+    m_backgroundLeft.setTexture(&context::context.textures.get("core/nui/textentry/background_left"));
+    m_backgroundRight.setTexture(&context::context.textures.get("core/nui/textentry/background_right"));
+    m_backgroundMiddle.setTexture(&context::context.textures.get("core/nui/textentry/background_middle"));
 
     addPart(&m_selectRect);
     m_selectRect.setFillColor({220u, 180u, 160u, 160u});
 
     addPart(&m_text);
-    m_text.setFont(Application::context().fonts.get("core/global/fonts/nui"));
+    m_text.setFont(context::context.fonts.get("core/global/fonts/nui"));
     m_text.setFillColor(sf::Color::White);
 
     addPart(&m_cursor);

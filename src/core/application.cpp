@@ -2,6 +2,7 @@
 
 #include "core/debug.hpp"
 #include "core/gettext.hpp"
+#include "context/context.hpp"
 #include "states/identifiers.hpp"
 #include "tools/vector.hpp"
 #include "tools/string.hpp"
@@ -14,53 +15,9 @@
 //----------------------------//
 //----- Static variables -----//
 
-Application::Context Application::s_context;
 VisualDebug Application::s_visualDebug;
 bool Application::s_needRefresh = false;
 bool Application::s_paused = false;
-
-//-------------------//
-//----- Context -----//
-
-void Application::Context::recreateWindow()
-{
-    const auto& title = windowInfo.title;
-    const auto& style = windowInfo.style;
-    const auto& vsync = display.window.vsync;
-    const auto& resolution = display.window.resolution;
-    const auto& antialiasingLevel = display.window.antialiasingLevel;
-
-    mdebug_core_1("Recreating window with resolution " << resolution);
-
-    if (window.isOpen())
-        window.close();
-
-    sf::ContextSettings contextSettings;
-    contextSettings.antialiasingLevel = antialiasingLevel;
-    sf::VideoMode videoMode{static_cast<uint>(resolution.x), static_cast<uint>(resolution.y), sf::VideoMode::getDesktopMode().bitsPerPixel};
-    window.create(videoMode, title, style, contextSettings);
-
-    if (!window.isOpen())
-        throw std::runtime_error("Cannot initialize window.");
-
-    // Window parameters
-    sf::Image icon;
-    if (icon.loadFromFile("res/core/global/icon/icon.png"))
-        window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-    window.setVerticalSyncEnabled(vsync);
-    window.setMouseCursorVisible(false);
-    window.setFramerateLimit(120); // TODO Put that value in the config
-
-    // Window info
-    windowInfo.screenSize = sf::v2f(window.getSize());
-    windowInfo.recompute();
-
-    // Global log
-    debug_core_2(const auto& settings = window.getSettings());
-    mdebug_core_2("OpenGL version used: " << settings.majorVersion << "." << settings.minorVersion);
-    mdebug_core_2("Depth bits: " << settings.depthBits << " | Stencil bits: " << settings.stencilBits);
-    mdebug_core_2("Antialiasing level: " << settings.antialiasingLevel);
-}
 
 //-----------------//
 //----- Extra -----//
@@ -82,8 +39,8 @@ void cleanExtraFiles()
 Application::Application()
     : m_initialState(StateID::SPLASHSCREEN)
 {
-    // Context
-    s_context.windowInfo.title = "Evilly Evil Villains";
+    // Context and config
+    context::context.windowInfo.title = "Evilly Evil Villains";
     i18n::initLanguagesList();
     refreshFromConfig();
 
@@ -148,8 +105,8 @@ void Application::run()
     }
 
     // Finish closing
-    if (s_context.window.isOpen())
-        s_context.window.close();
+    if (context::context.window.isOpen())
+        context::context.window.close();
 }
 
 void Application::setPaused(bool paused)
@@ -157,8 +114,8 @@ void Application::setPaused(bool paused)
     returnif (s_paused == paused);
 
     s_paused = paused;
-    s_context.sounds.setPaused(s_paused);
-    s_context.musics.setPaused(s_paused);
+    context::context.sounds.setPaused(s_paused);
+    context::context.musics.setPaused(s_paused);
 }
 
 //-------------------------------//
@@ -168,7 +125,7 @@ void Application::processInput()
 {
     sf::Event event;
 
-    while (s_context.window.pollEvent(event)) {
+    while (context::context.window.pollEvent(event)) {
         // Discard mouse moved events as we create them each frame anyway
         if (event.type == sf::Event::MouseMoved)
             continue;
@@ -229,11 +186,11 @@ void Application::processInput()
             if (newSize.x < 10u || newSize.y < 10u) {
                     if (newSize.x < 10u) newSize.x = 10u;
                     if (newSize.y < 10u) newSize.y = 10u;
-                    s_context.window.setSize(newSize);
+                    context::context.window.setSize(newSize);
                     continue;
             }
 
-            s_context.windowInfo.screenSize = sf::v2f(newSize);
+            context::context.windowInfo.screenSize = sf::v2f(newSize);
             refreshWindow();
             continue;
         }
@@ -246,7 +203,7 @@ void Application::processInput()
 
 void Application::synchronizeMouse()
 {
-    const auto& mousePosition = sf::Mouse::getPosition(s_context.window);
+    const auto& mousePosition = sf::Mouse::getPosition(context::context.window);
 
     sf::Event mouseMovedEvent;
     mouseMovedEvent.type = sf::Event::MouseMoved;
@@ -273,8 +230,11 @@ void Application::update(const sf::Time& dt)
     m_cursor.update(dt);
 
     // Game logic
-    s_context.commander.update(dt);
+    context::context.commander.update(dt);
     m_stateStack.update(dt);
+
+    // TODO Make that
+    // Just update all registered AI components
 
     // Update the visual effects
     // FIXME Sounds and shaders are not affected by States's timefactor
@@ -286,11 +246,11 @@ void Application::update(const sf::Time& dt)
 
 void Application::render()
 {
-    s_context.window.clear();
-    s_context.window.draw(m_stateStack);
-    s_context.window.draw(s_visualDebug);
-    s_context.window.draw(m_cursor);
-    s_context.window.display();
+    context::context.window.clear();
+    context::context.window.draw(m_stateStack);
+    context::context.window.draw(s_visualDebug);
+    context::context.window.draw(m_cursor);
+    context::context.window.display();
 }
 
 //-----------------------------//
@@ -299,12 +259,12 @@ void Application::render()
 void Application::refreshFromConfig(bool refreshWindow, bool refreshAudio)
 {
     // Language
-    i18n::init(toString(s_context.display.global.language));
+    i18n::init(toString(context::context.display.global.language));
 
     // Window
     if (refreshWindow) {
-        s_context.windowInfo.style = (s_context.display.window.fullscreen)? sf::Style::Fullscreen : sf::Style::Default;
-        s_context.recreateWindow();
+        context::context.windowInfo.style = (context::context.display.window.fullscreen)? sf::Style::Fullscreen : sf::Style::Default;
+        context::context.recreateWindow();
     }
 
     // Audio
@@ -314,25 +274,26 @@ void Application::refreshFromConfig(bool refreshWindow, bool refreshAudio)
     }
 
     // Marking the need for future refresh of NUI/Window
-    s_needRefresh = true;
+    if (!refreshAudio || refreshWindow)
+        s_needRefresh = true;
 }
 
 void Application::refreshNUI()
 {
-    s_context.nuiGuides.recompute(s_context.display.nui);
+    context::context.nuiGuides.recompute(context::context.display.nui);
 
-    m_stateStack.refreshNUI(s_context.nuiGuides);
-    s_visualDebug.refreshNUI(s_context.nuiGuides);
+    m_stateStack.refreshNUI(context::context.nuiGuides);
+    s_visualDebug.refreshNUI(context::context.nuiGuides);
 }
 
 void Application::refreshWindow()
 {
-    s_context.windowInfo.recompute();
+    context::context.windowInfo.recompute();
 
     // Refresh all views
-    m_stateStack.refreshWindow(s_context.windowInfo);
-    s_visualDebug.refreshWindow(s_context.windowInfo);
-    m_cursor.refreshWindow(s_context.windowInfo);
+    m_stateStack.refreshWindow(context::context.windowInfo);
+    s_visualDebug.refreshWindow(context::context.windowInfo);
+    m_cursor.refreshWindow(context::context.windowInfo);
 
     // Refresh shaders
     refreshShaders();
@@ -341,13 +302,13 @@ void Application::refreshWindow()
 void Application::clearWindowEvents()
 {
     sf::Event polledEvent;
-    while (s_context.window.pollEvent(polledEvent));
+    while (context::context.window.pollEvent(polledEvent));
 }
 
 void Application::clearWindowEvents(sf::Event& event, sf::Event::EventType type)
 {
     sf::Event polledEvent;
-    while (s_context.window.pollEvent(polledEvent))
+    while (context::context.window.pollEvent(polledEvent))
         if (polledEvent.type == type)
             event = polledEvent;
 }
@@ -355,7 +316,7 @@ void Application::clearWindowEvents(sf::Event& event, sf::Event::EventType type)
 void Application::switchFullscreenMode()
 {
     // Switching fullscreen flag
-    s_context.display.window.fullscreen = !s_context.display.window.fullscreen;
+    context::context.display.window.fullscreen = !context::context.display.window.fullscreen;
     refreshFromConfig();
     refreshWindow();
 }

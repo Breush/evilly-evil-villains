@@ -1,6 +1,7 @@
 #include "states/menu/newgame.hpp"
 
 #include "core/gettext.hpp"
+#include "core/application.hpp"
 #include "context/villains.hpp"
 #include "context/worlds.hpp"
 #include "dungeon/data.hpp"

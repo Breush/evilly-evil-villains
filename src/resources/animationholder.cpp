@@ -1,6 +1,6 @@
 #include "resources/animationholder.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "scene/wrappers/animatedsprite.hpp"
 #include "tools/platform-fixes.hpp"
 

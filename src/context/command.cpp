@@ -1,6 +1,6 @@
 #include "context/command.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 
 using namespace context;
 
@@ -9,12 +9,12 @@ using namespace context;
 
 Commandable::Commandable()
 {
-    Application::context().commander.add(this);
+    context::context.commander.add(this);
 }
 
 Commandable::~Commandable()
 {
-    Application::context().commander.remove(this);
+    context::context.commander.remove(this);
 }
 
 //-----------------------//
@@ -22,10 +22,10 @@ Commandable::~Commandable()
 
 Interpreter::Interpreter()
 {
-    Application::context().commander.add(this);
+    context::context.commander.add(this);
 }
 
 Interpreter::~Interpreter()
 {
-    Application::context().commander.remove(this);
+    context::context.commander.remove(this);
 }

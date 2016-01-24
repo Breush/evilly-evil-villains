@@ -1,6 +1,6 @@
 #include "scene/scene.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "scene/layer.hpp"
 #include "tools/tools.hpp"
 #include "tools/vector.hpp"
@@ -123,7 +123,7 @@ void Scene::centerRelative(const sf::Vector2f& relCoords)
 
 void Scene::zoom(const sf::Vector2i& mousePos, float zoomFactor)
 {
-    const auto& window = Application::context().window;
+    const auto& window = context::context.window;
     m_relZoom *= zoomFactor;
 
     // Apply new zoom
@@ -139,7 +139,7 @@ void Scene::zoom(const sf::Vector2i& mousePos, float zoomFactor)
 
 void Scene::startGrabbing(const sf::Vector2i& mousePos)
 {
-    const auto& window = Application::context().window;
+    const auto& window = context::context.window;
     auto position = window.mapPixelToCoords(mousePos, m_refView);
     m_grabbingMousePosition = mousePos;
     m_grabbingPosition = position;
@@ -147,7 +147,7 @@ void Scene::startGrabbing(const sf::Vector2i& mousePos)
 
 void Scene::moveGrabbing(const sf::Vector2i& mousePos)
 {
-    const auto& window = Application::context().window;
+    const auto& window = context::context.window;
     auto position = window.mapPixelToCoords(mousePos, m_refView);
     m_refView.move(m_grabbingPosition - position);
     adaptViewPosition();
@@ -224,8 +224,8 @@ void Scene::adaptViewZoom()
 
 void Scene::updateReferenceMinMax()
 {
-    const auto& viewport = (m_ownViewport)? m_viewport : Application::context().windowInfo.viewport;
-    const auto& screenSize = Application::context().windowInfo.screenSize;
+    const auto& viewport = (m_ownViewport)? m_viewport : context::context.windowInfo.viewport;
+    const auto& screenSize = context::context.windowInfo.screenSize;
     sf::Vector2f viewportSize{viewport.width * screenSize.x, viewport.height * screenSize.y};
 
     auto viewRatio = viewportSize.x / viewportSize.y;

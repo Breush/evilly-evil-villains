@@ -1,6 +1,6 @@
 #include "scene/entity.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "scene/graph.hpp"
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
@@ -243,8 +243,8 @@ void Entity::refreshNUI(const config::NUIGuides& cNUI)
 
 void Entity::refresh()
 {
-    refreshWindow(Application::context().windowInfo);
-    refreshNUI(Application::context().nuiGuides);
+    refreshWindow(context::context.windowInfo);
+    refreshNUI(context::context.nuiGuides);
 }
 
 //-------------------------------//
@@ -441,7 +441,7 @@ void Entity::setPartShader(sf::Drawable* drawable, const std::string& shaderID)
 
     for (auto& part : m_parts) {
         if (part.drawable == drawable) {
-            part.shader = shaderID.empty()? nullptr : &Application::context().shaders.get(shaderID);
+            part.shader = shaderID.empty()? nullptr : &context::context.shaders.get(shaderID);
             return;
         }
     }
@@ -527,7 +527,7 @@ void Entity::setShader(const std::string& shaderID)
     returnif (!sf::Shader::isAvailable());
 
     if (shaderID.empty()) m_shader = nullptr;
-    else m_shader = &Application::context().shaders.get(shaderID);
+    else m_shader = &context::context.shaders.get(shaderID);
 }
 
 //--------------------//

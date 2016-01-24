@@ -1,6 +1,7 @@
 #include "core/application.hpp"
 
 #include "core/debug.hpp"
+#include "context/context.hpp"
 #include "tools/filesystem.hpp"
 
 void Application::loadAnimations(const std::initializer_list<std::string>& folders)
@@ -14,7 +15,7 @@ void Application::loadAnimations(const std::initializer_list<std::string>& folde
             if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "scml")
                 continue;
 
-            s_context.animations.load(fileInfo.fullName);
+            context::context.animations.load(fileInfo.fullName);
 
             ++animationsCount;
         }
@@ -26,7 +27,7 @@ void Application::loadAnimations(const std::initializer_list<std::string>& folde
 void Application::freeAnimations(const std::initializer_list<std::string>& folders)
 {
     for (const auto& folder : folders) {
-        s_context.animations.freeMatchingPrefix(folder);
+        context::context.animations.freeMatchingPrefix(folder);
 
         mdebug_core_2("Freed animations from " << folder << ".");
     }
@@ -35,6 +36,6 @@ void Application::freeAnimations(const std::initializer_list<std::string>& folde
 void Application::preloadAnimations()
 {
     // Force default
-    s_context.animations.load("core/default/default.scml");
-    s_context.animations.setDefault("default/default");
+    context::context.animations.load("core/default/default.scml");
+    context::context.animations.setDefault("default/default");
 }

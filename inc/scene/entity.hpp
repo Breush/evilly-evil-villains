@@ -4,19 +4,16 @@
 #include "tools/param.hpp"
 #include "tools/int.hpp"
 
-#include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
+#include <SFML/Graphics/Drawable.hpp>
+#include <SFML/Graphics/Shader.hpp>
 #include <SFML/Window/Mouse.hpp>
+#include <SFML/Window/Event.hpp>
+
 #include <memory>
 #include <list>
 
 // Forward declarations
-
-namespace sf
-{
-    class Shader;
-    class Event;
-}
 
 namespace config
 {
@@ -26,8 +23,6 @@ namespace config
 
 namespace scene
 {
-    // Forward declarations
-
     class Graph;
 
     //! Base for every scene object.

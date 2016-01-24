@@ -1,6 +1,6 @@
 #include "scene/layer.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "tools/tools.hpp"
 #include "tools/vector.hpp"
 
@@ -20,9 +20,9 @@ Layer::Layer()
     // Lighting
     m_lightRenderStates.blendMode = sf::BlendMultiply;
 
-    m_penumbraTexture = &Application::context().textures.get("core/ltbl/penumbra");
-    m_lightOverShapeShader = &Application::context().shaders.get("core/ltbl/lightOverShape");
-    m_unshadowShader = &Application::context().shaders.get("core/ltbl/unshadow");
+    m_penumbraTexture = &context::context.textures.get("core/ltbl/penumbra");
+    m_lightOverShapeShader = &context::context.shaders.get("core/ltbl/lightOverShape");
+    m_unshadowShader = &context::context.shaders.get("core/ltbl/unshadow");
 }
 
 void Layer::init(Graph* graph)
@@ -165,7 +165,7 @@ void Layer::setViewSize(const sf::Vector2f& viewSize)
 
 Entity* Layer::entityFromPosition(const sf::Vector2i& mousePos, sf::Vector2f& viewPos)
 {
-    const auto& window = Application::context().window;
+    const auto& window = context::context.window;
     viewPos = window.mapPixelToCoords(mousePos, m_view);
     return m_root.firstOver(viewPos);
 }
@@ -187,7 +187,7 @@ void Layer::refreshManipulability()
 void Layer::refreshBasicView()
 {
     const auto& viewport = m_view.getViewport();
-    const auto& resolution = Application::context().display.window.resolution;
+    const auto& resolution = context::context.display.window.resolution;
 
     m_basicView.setViewport(viewport);
     m_basicView.setSize({viewport.width * resolution.x, viewport.height * resolution.y});
@@ -209,7 +209,7 @@ void Layer::refreshLightSystem()
     if (m_lightDebugFirstTime) {
         m_lightDebugFirstTime = false;
 
-        const auto& lightPointTexture = Application::context().textures.get("core/ltbl/lightPoint");
+        const auto& lightPointTexture = context::context.textures.get("core/ltbl/lightPoint");
         auto light = std::make_shared<ltbl::LightPointEmission>();
         light->_emissionSprite.setOrigin({lightPointTexture.getSize().x * 0.5f, lightPointTexture.getSize().y * 0.5f});
         light->_emissionSprite.setTexture(lightPointTexture);

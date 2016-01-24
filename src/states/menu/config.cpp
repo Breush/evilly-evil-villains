@@ -1,6 +1,7 @@
 #include "states/menu/config.hpp"
 
 #include "core/gettext.hpp"
+#include "core/application.hpp"
 #include "context/villains.hpp"
 #include "tools/math.hpp"
 #include "tools/tools.hpp"
@@ -187,8 +188,8 @@ void MenuConfig::handleEvent(const sf::Event& event)
 
 void MenuConfig::refreshFormsFromConfig()
 {
-    auto& display = Application::context().display;
-    auto& audio = Application::context().audio;
+    auto& display = context::context.display;
+    auto& audio = context::context.audio;
 
     // General
     auto languageIndex = i18n::languageIndexFromCode(display.global.language);
@@ -220,7 +221,7 @@ void MenuConfig::refreshFormsFromConfig()
 
 void MenuConfig::applyChanges()
 {
-    auto& display = Application::context().display;
+    auto& display = context::context.display;
 
     // General
     display.global.language = i18n::languagesList().at(m_languageList.selected()).code;
@@ -254,16 +255,17 @@ void MenuConfig::applyChanges()
 
 void MenuConfig::onVolumeSliderChanged(uint sliderIndex)
 {
-    auto& audio = Application::context().audio;
+    auto& audio = context::context.audio;
 
     if (sliderIndex == 0u)      audio.globalRelVolume = m_volumeSliders[0u].value() / 100.f;
     else if (sliderIndex == 1u) audio.musicVolume = m_volumeSliders[1u].value();
     else if (sliderIndex == 2u) audio.soundVolume = m_volumeSliders[2u].value();
 
     audio.save();
+    // TODO That's not a very well designed function...
     Application::refreshFromConfig(false, true);
 
     // Play testing sound so that the user can hear the level of sounds
     if (sliderIndex == 2u)
-        Application::context().sounds.play("core/nui/select/select");
+        context::context.sounds.play("core/nui/select/select");
 }

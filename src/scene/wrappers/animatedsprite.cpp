@@ -1,6 +1,6 @@
 #include "scene/wrappers/animatedsprite.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
@@ -61,7 +61,7 @@ void AnimatedSprite::updateRoutine(const sf::Time& dt)
 void AnimatedSprite::load(const std::string& id)
 {
     // Note: we're currently using only one entity per model
-    auto& model = Application::context().animations.getModel(id);
+    auto& model = context::context.animations.getModel(id);
     if (m_spriterEntity != nullptr) delete m_spriterEntity;
     m_spriterEntity = model.getNewEntityInstance(0);
 

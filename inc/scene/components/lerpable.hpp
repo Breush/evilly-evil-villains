@@ -1,17 +1,9 @@
 #pragma once
 
 #include "scene/components/component.hpp"
-#include "tools/param.hpp"
 
 #include <SFML/System/Time.hpp>
 #include <SFML/System/Vector2.hpp>
-
-// Forward declarations
-
-namespace scene
-{
-    class Entity;
-}
 
 namespace scene
 {

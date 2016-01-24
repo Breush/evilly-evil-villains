@@ -1,5 +1,7 @@
 #include "core/application.hpp"
 
+#include "context/context.hpp"
+
 void Application::loadMusics()
 {
     // Musics are too heavy too be preloaded
@@ -10,5 +12,5 @@ void Application::loadMusics()
 
 void Application::refreshMusics()
 {
-    s_context.musics.setVolume(s_context.audio.effectiveMusicVolume);
+    context::context.musics.setVolume(context::context.audio.effectiveMusicVolume);
 }

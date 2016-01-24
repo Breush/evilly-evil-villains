@@ -5,6 +5,8 @@
 #include "scene/wrappers/richlabel.hpp"
 #include "context/villains.hpp"
 
+#include <SFML/Graphics/RectangleShape.hpp>
+
 #include <functional>
 
 namespace dungeon

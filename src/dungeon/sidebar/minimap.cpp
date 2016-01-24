@@ -1,6 +1,6 @@
 #include "dungeon/sidebar/minimap.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "scene/graph.hpp"
 #include "scene/layer.hpp"
 #include "tools/vector.hpp"
@@ -99,7 +99,7 @@ void Minimap::doAction(const sf::Vector2f& nuiPos)
     returnif (m_layer == nullptr);
     returnif (m_callbackAction == nullptr);
 
-    const auto& window = Application::context().window;
+    const auto& window = context::context.window;
     auto pixel = window.mapCoordsToPixel(nuiPos, m_nuiView);
     auto viewCoordsClicked = window.mapPixelToCoords(pixel, m_view);
     m_callbackAction(viewCoordsClicked);
@@ -137,9 +137,9 @@ void Minimap::refreshSize()
 
 void Minimap::refreshViewport()
 {
-    const auto& window = Application::context().window;
-    const auto& screenSize = Application::context().windowInfo.screenSize;
-    const auto& referenceView = Application::context().windowInfo.referenceView;
+    const auto& window = context::context.window;
+    const auto& screenSize = context::context.windowInfo.screenSize;
+    const auto& referenceView = context::context.windowInfo.referenceView;
     sf::FloatRect rect{getPosition().x, getPosition().y, size().x, size().y};
     rect = tools::mapRectCoordsToPixel(window, rect, &referenceView);
     m_view.setViewport(rect / screenSize);

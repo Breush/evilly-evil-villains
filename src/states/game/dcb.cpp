@@ -4,6 +4,7 @@
 #include "core/gettext.hpp"
 #include "dungeon/data.hpp"
 #include "context/worlds.hpp"
+#include "context/context.hpp"
 #include "context/villains.hpp"
 #include "tools/filesystem.hpp"
 
@@ -18,7 +19,7 @@ GameDCB::GameDCB(StateStack& stack)
     Application::loadAnimations({"core/menu/dcb"});
 
     // Music
-    Application::context().musics.play("core/global/musics/moorland");
+    context::context.musics.play("core/global/musics/moorland");
 
     // Creating scene
     auto& nuiRoot = nuiLayer().root();
@@ -26,7 +27,7 @@ GameDCB::GameDCB(StateStack& stack)
     const auto nuiRatio = nuiSize.x / nuiSize.y;
 
     // Background
-    const auto backgroundSize = sf::v2f(Application::context().textures.get("core/menu/dcb/stage/stage").getSize());
+    const auto backgroundSize = sf::v2f(context::context.textures.get("core/menu/dcb/stage/stage").getSize());
     const auto backgroundRatio = backgroundSize.x / backgroundSize.y;
     float backgroundScaleValue = 1.f;
     if (nuiRatio > backgroundRatio) backgroundScaleValue *= nuiSize.x / backgroundSize.x;
@@ -82,7 +83,7 @@ GameDCB::GameDCB(StateStack& stack)
     m_okButton.setRelativeOrigin({0.f, 0.5f});
 
     // Controller
-    const auto& languageCode = Application::context().display.global.language;
+    const auto& languageCode = context::context.display.global.language;
     m_controller.setOnSequenceFinishedCallback([this] { confirmDungeonCreation(); });
 
     // Try to load specific language file. If none, just go back to English.
@@ -94,7 +95,7 @@ GameDCB::GameDCB(StateStack& stack)
 GameDCB::~GameDCB()
 {
     // Musics
-    Application::context().musics.stop("core/global/musics/moorland");
+    context::context.musics.stop("core/global/musics/moorland");
 
     // Freeing resources
     Application::freeTextures({"core/menu/dcb"});

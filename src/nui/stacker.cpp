@@ -1,6 +1,6 @@
 #include "nui/stacker.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "tools/debug.hpp"
 #include "tools/platform-fixes.hpp" // erase_if
 
@@ -30,7 +30,7 @@ void Stacker::setPadding(const float inPadding)
     if (m_paddingOverwritten)
         m_padding = inPadding;
     else
-        refreshNUI(Application::context().nuiGuides);
+        refreshNUI(context::context.nuiGuides);
 }
 
 //-------------------------------//

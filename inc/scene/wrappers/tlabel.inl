@@ -1,4 +1,4 @@
-#include "core/application.hpp"
+#include "context/context.hpp"
 
 namespace scene
 {
@@ -37,7 +37,7 @@ namespace scene
     template<class Text_t>
     void TLabel<Text_t>::setFont(const std::string& fontID)
     {
-        m_text.setFont(Application::context().fonts.get(fontID));
+        m_text.setFont(context::context.fonts.get(fontID));
         updateSize();
     }
 
@@ -77,7 +77,7 @@ namespace scene
     void TLabel<Text_t>::setText(const std::wstring& text, const std::string& fontID)
     {
         m_text.setString(text);
-        m_text.setFont(Application::context().fonts.get(fontID));
+        m_text.setFont(context::context.fonts.get(fontID));
         updateSize();
     }
 
@@ -103,65 +103,65 @@ namespace scene
             break;
 
         case Prestyle::NUI:
-            m_text.setFont(Application::context().fonts.get("core/global/fonts/nui"));
+            m_text.setFont(context::context.fonts.get("core/global/fonts/nui"));
             m_text.setFillColor(sf::Color::White);
             m_text.setCharacterSize(m_fontSize);
             break;
 
         case Prestyle::NUI_SOBER:
-            m_text.setFont(Application::context().fonts.get("core/global/fonts/mono"));
+            m_text.setFont(context::context.fonts.get("core/global/fonts/mono"));
             m_text.setFillColor(sf::Color::Black);
             m_text.setCharacterSize(m_fontSize);
             break;
 
         case Prestyle::NUI_TITLE:
-            m_text.setFont(Application::context().fonts.get("core/global/fonts/nui"));
+            m_text.setFont(context::context.fonts.get("core/global/fonts/nui"));
             m_text.setFillColor(sf::Color::White);
             m_text.setStyle(sf::Text::Bold);
             m_text.setCharacterSize(m_fontSize);
             break;
 
         case Prestyle::NUI_SMALL:
-            m_text.setFont(Application::context().fonts.get("core/global/fonts/nui"));
+            m_text.setFont(context::context.fonts.get("core/global/fonts/nui"));
             m_text.setFillColor(sf::Color::White);
             m_text.setCharacterSize(0.7f * m_fontSize);
             break;
 
         case Prestyle::NUI_SMALL_TITLE:
-            m_text.setFont(Application::context().fonts.get("core/global/fonts/nui"));
+            m_text.setFont(context::context.fonts.get("core/global/fonts/nui"));
             m_text.setFillColor(sf::Color::White);
             m_text.setStyle(sf::Text::Bold);
             m_text.setCharacterSize(0.7f * m_fontSize);
             break;
 
         case Prestyle::NUI_SMALL_SOBER:
-            m_text.setFont(Application::context().fonts.get("core/global/fonts/mono"));
+            m_text.setFont(context::context.fonts.get("core/global/fonts/mono"));
             m_text.setFillColor(sf::Color::White);
             m_text.setCharacterSize(0.7f * m_fontSize);
             break;
 
         case Prestyle::MENU_TITLE:
-            m_text.setFont(Application::context().fonts.get("core/global/fonts/horror"));
+            m_text.setFont(context::context.fonts.get("core/global/fonts/horror"));
             m_text.setStyle(sf::Text::Style::Bold);
             m_text.setFillColor(sf::Color::White);
             m_text.setCharacterSize(1.6f * m_fontSize);
             break;
 
         case Prestyle::MENU_POPUP_TITLE:
-            m_text.setFont(Application::context().fonts.get("core/global/fonts/horror"));
+            m_text.setFont(context::context.fonts.get("core/global/fonts/horror"));
             m_text.setStyle(sf::Text::Bold);
             m_text.setFillColor(sf::Color::White);
             m_text.setCharacterSize(3.2f * m_fontSize);
             break;
 
         case Prestyle::MENU_SOBER:
-            m_text.setFont(Application::context().fonts.get("core/global/fonts/mono"));
+            m_text.setFont(context::context.fonts.get("core/global/fonts/mono"));
             m_text.setFillColor(sf::Color::White);
             m_text.setCharacterSize(1.1f * m_fontSize);
             break;
 
         case Prestyle::MENU_SOBER_LIGHT:
-            m_text.setFont(Application::context().fonts.get("core/global/fonts/mono"));
+            m_text.setFont(context::context.fonts.get("core/global/fonts/mono"));
             m_text.setFillColor({255u, 255u, 255u, 128u});
             m_text.setCharacterSize(m_fontSize);
             break;

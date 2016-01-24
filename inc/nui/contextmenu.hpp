@@ -5,6 +5,8 @@
 #include "nui/frame.hpp"
 #include "nui/vstacker.hpp"
 
+#include <SFML/Window/Event.hpp>
+
 #include <sstream>
 #include <functional>
 

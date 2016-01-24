@@ -47,7 +47,7 @@ void HeroesManager::update(const sf::Time& dt)
                 const auto& startingNodes = m_graph->startingNodes();
                 if (startingNodes.empty()) {
                     heroInfo.status = HeroStatus::TO_BE_REMOVED;
-                    Application::context().sounds.play("core/heroes/no_entrance");
+                    context::context.sounds.play("core/heroes/no_entrance");
                     m_data->fameWallet().sub(2u);
                     goto _continue;
                 }

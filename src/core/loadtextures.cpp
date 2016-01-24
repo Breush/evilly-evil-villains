@@ -1,6 +1,7 @@
 #include "core/application.hpp"
 
 #include "core/debug.hpp"
+#include "context/context.hpp"
 #include "tools/filesystem.hpp"
 
 void Application::loadTextures(const std::initializer_list<std::string>& folders)
@@ -14,7 +15,7 @@ void Application::loadTextures(const std::initializer_list<std::string>& folders
             if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "png")
                 continue;
 
-            s_context.textures.load(fileInfo.fullName).setSmooth(true);
+            context::context.textures.load(fileInfo.fullName).setSmooth(true);
 
             ++texturesCount;
         }
@@ -26,7 +27,7 @@ void Application::loadTextures(const std::initializer_list<std::string>& folders
 void Application::freeTextures(const std::initializer_list<std::string>& folders)
 {
     for (const auto& folder : folders) {
-        s_context.textures.freeMatchingPrefix(folder);
+        context::context.textures.freeMatchingPrefix(folder);
         mdebug_core_2("Freed textures from " << folder << ".");
     }
 }
@@ -36,9 +37,9 @@ void Application::preloadTextures()
     loadTextures({"core/default", "core/cursor", "core/global", "core/ltbl", "core/menu/main", "core/menu/loading", "core/nui"});
 
     // Force default
-    s_context.textures.get("core/default/default").setRepeated(true);
-    s_context.textures.setDefault("core/default/default");
+    context::context.textures.get("core/default/default").setRepeated(true);
+    context::context.textures.setDefault("core/default/default");
 
     // And NUI
-    s_context.textures.get("core/nui/focus/background").setRepeated(true);
+    context::context.textures.get("core/nui/focus/background").setRepeated(true);
 }

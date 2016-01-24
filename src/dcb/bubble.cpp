@@ -1,6 +1,6 @@
 #include "dcb/bubble.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "tools/vector.hpp"
 
 using namespace dcb;
@@ -16,7 +16,7 @@ Bubble::Bubble()
 
     // Text
     addPart(&m_wrapText);
-    m_wrapText.setFont(Application::context().fonts.get("core/global/fonts/nui"));
+    m_wrapText.setFont(context::context.fonts.get("core/global/fonts/nui"));
     m_wrapText.setFillColor(sf::Color::White);
 }
 

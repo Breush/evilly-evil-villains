@@ -1,7 +1,7 @@
 #include "dungeon/inter.hpp"
 
 #include "core/gettext.hpp"
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "context/worlds.hpp"
 #include "context/villains.hpp"
 #include "dungeon/managers/heroesmanager.hpp"
@@ -48,12 +48,12 @@ Inter::Inter(nui::ContextMenu& contextMenu)
 void Inter::init()
 {
     // Outer walls
-    m_voidBackground.setTexture(&Application::context().textures.get("core/dungeon/inter/void_room"));
-    m_outerWalls[0].setTexture(&Application::context().textures.get("core/dungeon/inter/outer_wall_west"));
-    m_outerWalls[1].setTexture(&Application::context().textures.get("core/dungeon/inter/outer_wall_east"));
+    m_voidBackground.setTexture(&context::context.textures.get("core/dungeon/inter/void_room"));
+    m_outerWalls[0].setTexture(&context::context.textures.get("core/dungeon/inter/outer_wall_west"));
+    m_outerWalls[1].setTexture(&context::context.textures.get("core/dungeon/inter/outer_wall_east"));
 
     // Ref size
-    m_refRoomSize = sf::v2f(Application::context().textures.get("core/dungeon/inter/inner_wall").getSize());
+    m_refRoomSize = sf::v2f(context::context.textures.get("core/dungeon/inter/inner_wall").getSize());
 }
 
 //-------------------//
@@ -1032,16 +1032,16 @@ void Inter::refreshTileTraps(const RoomCoords& coords)
 
 void Inter::refreshOuterWalls()
 {
-    const auto& roomSize = Application::context().textures.get("core/dungeon/inter/inner_wall").getSize();
+    const auto& roomSize = context::context.textures.get("core/dungeon/inter/inner_wall").getSize();
 
     // Void rooms behind
-    const auto& voidTextureSize = Application::context().textures.get("core/dungeon/inter/void_room").getSize();
+    const auto& voidTextureSize = context::context.textures.get("core/dungeon/inter/void_room").getSize();
     sf::IntRect voidRect(0, 0, voidTextureSize.x * m_grid.columns(), voidTextureSize.y * m_grid.rows());
     m_voidBackground.setSize(size());
     m_voidBackground.setTextureRect(voidRect);
 
     // West wall
-    const auto& westTextureSize = Application::context().textures.get("core/dungeon/inter/outer_wall_west").getSize();
+    const auto& westTextureSize = context::context.textures.get("core/dungeon/inter/outer_wall_west").getSize();
     sf::Vector2f westRealSize(westTextureSize.x * m_grid.cellSize().x / roomSize.x, size().y);
     sf::IntRect westWallsRect(0, 0, westTextureSize.x, westTextureSize.y * m_grid.rows());
     m_outerWalls[0].setSize(westRealSize);
@@ -1049,7 +1049,7 @@ void Inter::refreshOuterWalls()
     m_outerWalls[0].setTextureRect(westWallsRect);
 
     // East wall
-    const auto& eastTextureSize = Application::context().textures.get("core/dungeon/inter/outer_wall_east").getSize();
+    const auto& eastTextureSize = context::context.textures.get("core/dungeon/inter/outer_wall_east").getSize();
     sf::Vector2f eastRealSize(eastTextureSize.x * m_grid.cellSize().x / roomSize.x, size().y);
     sf::IntRect eastWallsRect(0, 0, eastTextureSize.x, eastTextureSize.y * m_grid.rows());
     m_outerWalls[1].setSize(eastRealSize);

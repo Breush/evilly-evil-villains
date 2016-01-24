@@ -2,16 +2,8 @@
 
 #include "core/cursor.hpp"
 #include "core/visualdebug.hpp"
-#include "resources/holder.hpp"
-#include "resources/musicplayer.hpp"
-#include "resources/soundplayer.hpp"
-#include "resources/animationholder.hpp"
-#include "context/commander.hpp"
 #include "states/statestack.hpp"
-#include "config/windowinfo.hpp"
-#include "config/nuiguides.hpp"
-#include "config/display.hpp"
-#include "config/audio.hpp"
+#include "tools/memorypool.hpp"
 #include "tools/int.hpp"
 
 #include <SFML/System/Time.hpp>
@@ -30,39 +22,6 @@
 
 class Application final : sf::NonCopyable
 {
-public:
-
-    //-------------------//
-    //----- Context -----//
-
-    //! This structure holds all resources managers and window/screen information.
-    struct Context
-    {
-        //! Constructor.
-        Context() : windowInfo(display.window) {}
-
-        //! Recreates the window from current config::WindowInfo.
-        void recreateWindow();
-
-        sf::RenderWindow window;        //!< The window, final destination of all draws.
-        context::Commander commander;   //!< The commands manager.
-
-        resources::TextureHolder    textures;   //!< The textures.
-        resources::ShaderHolder     shaders;    //!< The shaders.
-        resources::FontHolder       fonts;      //!< The fonts.
-        resources::MusicPlayer      musics;     //!< The musics.
-        resources::SoundPlayer      sounds;     //!< The sounds.
-        resources::AnimationHolder  animations; //!< The animations, parsed SCML files.
-
-        config::Display     display;    //!< The display configuration.
-        config::Audio       audio;      //!< The audio configuration.
-        config::NUIGuides   nuiGuides;  //!< Guidelines for NUI elements.
-        config::WindowInfo  windowInfo; //!< Extra informations for window parameters.
-    };
-
-    //! Access the static context to get resources and window/screen information.
-    static inline Context& context() { return s_context; }
-
 public:
 
     //--------------------//
@@ -186,9 +145,9 @@ protected:
     void preloadAnimations();   //!< Load all shared animations.
     void loadStates();          //!< Register states.
 
-    void refreshNUI();      //!< Adapt all NUI elements.
-    void refreshWindow();   //!< Adapt all views to current window settings.
-    void refreshShaders();  //!< Adapt all shaders to current window settings.
+    void refreshNUI();              //!< Adapt all NUI elements.
+    void refreshWindow();           //!< Adapt all views to current window settings.
+    void refreshShaders();          //!< Adapt all shaders to current window settings.
     static void refreshMusics();    //!< Adapt all musics volume to current settings.
     static void refreshSounds();    //!< Adapt all sounds position/volume to current settings.
 
@@ -199,7 +158,6 @@ protected:
 
 private:
 
-    static Context s_context;   //!< The main global variable.
     static bool s_needRefresh;  //!< Mark for the need to refresh NUI and window.
     static bool s_paused;       //!< Is the game paused?
 

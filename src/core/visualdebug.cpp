@@ -1,6 +1,6 @@
 #include "core/visualdebug.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "tools/tools.hpp"
 
 #include <sstream>
@@ -10,7 +10,7 @@ void VisualDebug::init()
     // Getting font from holder
     m_text.setPosition(10.f, 10.f);
     m_text.setFillColor(sf::Color::White);
-    m_text.setFont(Application::context().fonts.get("core/global/fonts/mono"));
+    m_text.setFont(context::context.fonts.get("core/global/fonts/mono"));
 
     // Setting background
     m_background.setPosition(0.f, 0.f);

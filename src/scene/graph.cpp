@@ -1,7 +1,7 @@
 #include "scene/graph.hpp"
 
 #include "nui/debug.hpp"
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "scene/layer.hpp"
 #include "tools/math.hpp"
 #include "tools/event.hpp"
@@ -263,11 +263,11 @@ bool Graph::handleMouseMovedEvent(const sf::Event& event)
 void Graph::handleMouseWheelScrolledEvent(const sf::Event& event)
 {
     float delta = event.mouseWheelScroll.delta;
-    const auto& scrollingFactor = Application::context().display.global.scrollingFactor;
+    const auto& scrollingFactor = context::context.display.global.scrollingFactor;
 
     // With Control pressed, zoom
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
-        const auto& zoomSpeed = Application::context().display.global.zoomSpeed;
+        const auto& zoomSpeed = context::context.display.global.zoomSpeed;
         float zoomFactor = 1.f + ((delta < 0.f)? zoomSpeed : -zoomSpeed);
         zoomFactor = std::pow(zoomFactor, std::abs(delta));
         m_scene.zoom(mousePosition(event), zoomFactor);
@@ -335,7 +335,7 @@ void Graph::removeGrabbable()
 
 sf::Vector2f Graph::nuiPosition(sf::Vector2i mousePosition)
 {
-    const auto& window = Application::context().window;
+    const auto& window = context::context.window;
 
     // Get current mouse position, if passed with no argument
     if (mousePosition.x < 0.f)

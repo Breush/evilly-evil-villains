@@ -1,6 +1,6 @@
 #include "nui/frame.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
 
@@ -16,7 +16,7 @@ Frame::Frame()
     addPart(&m_bottomLeft);
     addPart(&m_bottomRight);
 
-    const auto& topLeftTexture = Application::context().textures.get("core/nui/frame/top_left");
+    const auto& topLeftTexture = context::context.textures.get("core/nui/frame/top_left");
 
     m_topLeft.setTexture(topLeftTexture);
     m_topRight.setTexture(topLeftTexture);
@@ -35,8 +35,8 @@ Frame::Frame()
     addPart(&m_right);
     addPart(&m_bottom);
 
-    const auto& topTexture = Application::context().textures.get("core/nui/frame/top");
-    const auto& leftTexture = Application::context().textures.get("core/nui/frame/left");
+    const auto& topTexture = context::context.textures.get("core/nui/frame/top");
+    const auto& leftTexture = context::context.textures.get("core/nui/frame/left");
 
     m_top.setTexture(&topTexture);
     m_left.setTexture(&leftTexture);
@@ -49,18 +49,18 @@ Frame::Frame()
     // Fill
     addPart(&m_fill);
 
-    const auto& fillTexture = Application::context().textures.get("core/nui/frame/fill");
+    const auto& fillTexture = context::context.textures.get("core/nui/frame/fill");
 
     m_fill.setTexture(&fillTexture);
 
     // Title
-    m_titleText.setFont(Application::context().fonts.get("core/global/fonts/nui"));
+    m_titleText.setFont(context::context.fonts.get("core/global/fonts/nui"));
     m_titleText.setFillColor(sf::Color::White);
     m_titleText.setStyle(sf::Text::Bold);
 
-    const auto& titleLeftTexture = Application::context().textures.get("core/nui/frame/title_left");
-    const auto& titleMiddleTexture = Application::context().textures.get("core/nui/frame/title_middle");
-    const auto& titleRightTexture = Application::context().textures.get("core/nui/frame/title_right");
+    const auto& titleLeftTexture = context::context.textures.get("core/nui/frame/title_left");
+    const auto& titleMiddleTexture = context::context.textures.get("core/nui/frame/title_middle");
+    const auto& titleRightTexture = context::context.textures.get("core/nui/frame/title_right");
 
     m_titleLeft.setTexture(&titleLeftTexture);
     m_titleMiddle.setTexture(&titleMiddleTexture);

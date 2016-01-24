@@ -1,6 +1,6 @@
 #include "dungeon/sidebar/trapbutton.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "dungeon/inter.hpp"
 #include "scene/graph.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
@@ -46,7 +46,7 @@ TrapGrabbable::TrapGrabbable(scene::GrabbableSpawner& spawner, const std::wstrin
     auto textureID = "vanilla/traps/" + toString(trapID) + "/icon";
 
     addPart(&m_sprite);
-    m_sprite.setTexture(&Application::context().textures.get(textureID));
+    m_sprite.setTexture(&context::context.textures.get(textureID));
     m_sprite.setSize(sizeHint());
     m_sprite.setOrigin(sizeHint() / 2.f);
 }

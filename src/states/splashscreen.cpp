@@ -1,5 +1,6 @@
 #include "states/splashscreen.hpp"
 
+#include "context/context.hpp"
 #include "core/application.hpp"
 #include "tools/vector.hpp"
 
@@ -21,7 +22,7 @@ SplashScreen::SplashScreen(StateStack& stack)
     float maxSide = std::max(nuiSize.x, nuiSize.y);
 
     // Background
-    const auto& textureSize = Application::context().textures.get("core/menu/splashscreen/background").getSize();
+    const auto& textureSize = context::context.textures.get("core/menu/splashscreen/background").getSize();
     nuiRoot.attachChild(m_background);
     m_background.setDepth(100.f);
     m_background.setTexture("core/menu/splashscreen/background");
@@ -75,7 +76,7 @@ void SplashScreen::handleEvent(const sf::Event& event)
     // Skip splashscreen on Escape
     if (event.type == sf::Event::KeyPressed
         && event.key.code == sf::Keyboard::Escape) {
-        Application::context().sounds.stopAll();
+        context::context.sounds.stopAll();
         stackReplace(StateID::MENU_MAIN);
         return;
     }

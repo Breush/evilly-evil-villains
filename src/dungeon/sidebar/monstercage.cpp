@@ -1,7 +1,7 @@
 #include "dungeon/sidebar/monstercage.hpp"
 
 #include "core/gettext.hpp"
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "context/villains.hpp"
 #include "scene/graph.hpp"
 #include "dungeon/inter.hpp"
@@ -26,7 +26,7 @@ MonsterCage::MonsterCage(std::wstring monsterID, Inter& inter, Data& data)
 
     // Background
     addPart(&m_reserveBackground);
-    m_reserveBackground.setTexture(&Application::context().textures.get("core/dungeon/sidebar/tabs/monsters/cage"));
+    m_reserveBackground.setTexture(&context::context.textures.get("core/dungeon/sidebar/tabs/monsters/cage"));
 
     // Box name
     attachChild(m_nameLabel);

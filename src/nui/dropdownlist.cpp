@@ -3,6 +3,8 @@
 #include "tools/tools.hpp"
 #include "tools/string.hpp"
 
+#include <SFML/Window/Event.hpp>
+
 using namespace nui;
 
 DropDownList::DropDownList()
@@ -19,9 +21,9 @@ DropDownList::DropDownList()
     addPart(&m_headerMiddle);
     addPart(&m_headerRight);
 
-    const auto& headerLeftTexture = Application::context().textures.get("core/nui/dropdownlist/header_left");
-    const auto& headerMiddleTexture = Application::context().textures.get("core/nui/dropdownlist/header_middle");
-    const auto& headerRightTexture = Application::context().textures.get("core/nui/dropdownlist/header_right");
+    const auto& headerLeftTexture = context::context.textures.get("core/nui/dropdownlist/header_left");
+    const auto& headerMiddleTexture = context::context.textures.get("core/nui/dropdownlist/header_middle");
+    const auto& headerRightTexture = context::context.textures.get("core/nui/dropdownlist/header_right");
 
     m_headerLeft.setTexture(&headerLeftTexture);
     m_headerMiddle.setTexture(&headerMiddleTexture);
@@ -34,7 +36,7 @@ DropDownList::DropDownList()
 
     // Text
     addPart(&m_text);
-    m_text.setFont(Application::context().fonts.get("core/global/fonts/nui"));
+    m_text.setFont(context::context.fonts.get("core/global/fonts/nui"));
     m_text.setFillColor(sf::Color::White);
 }
 
@@ -178,7 +180,7 @@ void DropDownList::selectPrevious()
     auto choicesCount = m_selector.choicesCount();
     returnif (choicesCount <= 1u);
 
-    Application::context().sounds.play("core/nui/select/select");
+    context::context.sounds.play("core/nui/select/select");
 
     if (m_selectedChoiceID == 0u) select(choicesCount - 1u);
     else select(m_selectedChoiceID - 1u);
@@ -189,7 +191,7 @@ void DropDownList::selectNext()
     auto choicesCount = m_selector.choicesCount();
     returnif (choicesCount <= 1u);
 
-    Application::context().sounds.play("core/nui/select/select");
+    context::context.sounds.play("core/nui/select/select");
 
     if (m_selectedChoiceID == choicesCount - 1u) select(0u);
     else select(m_selectedChoiceID + 1u);

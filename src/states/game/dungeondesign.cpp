@@ -2,8 +2,9 @@
 
 #include "core/gettext.hpp"
 #include "core/application.hpp"
-#include "dungeon/detector.hpp"
 #include "states/hub/main.hpp"
+#include "dungeon/detector.hpp"
+#include "context/context.hpp"
 #include "context/worlds.hpp"
 #include "tools/tools.hpp"
 #include "tools/vector.hpp"
@@ -73,7 +74,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
 GameDungeonDesign::~GameDungeonDesign()
 {
     // Musics
-    Application::context().musics.stop("core/global/musics/angevin_70");
+    context::context.musics.stop("core/global/musics/angevin_70");
 
     // Freeing resources
     Application::freeTextures({"vanilla", "core/dungeon", "core/resources", "core/tools", "core/menu/hub"});
@@ -101,7 +102,7 @@ void GameDungeonDesign::refreshWindow(const config::WindowInfo& cWindow)
 {
     baseClass::refreshWindow(cWindow);
 
-    const auto& window = Application::context().window;
+    const auto& window = context::context.window;
     const auto& screenSize = cWindow.screenSize;
     const auto& resolution = cWindow.resolution;
 
@@ -176,10 +177,10 @@ void GameDungeonDesign::updateLoading(const sf::Time& dt)
     LOAD(23u, Application::loadAnimations({"vanilla/traps"}))
     LOAD(24u, Application::loadAnimations({"vanilla/heroes"}))
 
-    LOAD(30u, Application::context().textures.get("core/dungeon/sidebar/tabs/monsters/cage").setRepeated(true))
-    LOAD(31u, Application::context().textures.get("core/dungeon/inter/outer_wall_west").setRepeated(true))
-    LOAD(32u, Application::context().textures.get("core/dungeon/inter/outer_wall_east").setRepeated(true))
-    LOAD(33u, Application::context().textures.get("core/dungeon/inter/void_room").setRepeated(true))
+    LOAD(30u, context::context.textures.get("core/dungeon/sidebar/tabs/monsters/cage").setRepeated(true))
+    LOAD(31u, context::context.textures.get("core/dungeon/inter/outer_wall_west").setRepeated(true))
+    LOAD(32u, context::context.textures.get("core/dungeon/inter/outer_wall_east").setRepeated(true))
+    LOAD(33u, context::context.textures.get("core/dungeon/inter/void_room").setRepeated(true))
 
     // Inits
     LOAD(40u, m_dungeonInter.init())
@@ -216,7 +217,7 @@ void GameDungeonDesign::updateLoading(const sf::Time& dt)
 
     // Music
     // Keep last, as it is a indicator for the player that everything is ready
-    LOAD(100u, Application::context().musics.play("core/global/musics/angevin_70"))
+    LOAD(100u, context::context.musics.play("core/global/musics/angevin_70"))
 
     ++m_loadingStep;
 }

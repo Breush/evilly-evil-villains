@@ -1,6 +1,6 @@
 #include "scene/wrappers/rectangleshape.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 
 using namespace scene;
 
@@ -29,5 +29,5 @@ void RectangleShape::onScaleChanges()
 
 void RectangleShape::setTexture(const std::string& textureID)
 {
-    m_rectangleShape.setTexture(&Application::context().textures.get(textureID));
+    m_rectangleShape.setTexture(&context::context.textures.get(textureID));
 }

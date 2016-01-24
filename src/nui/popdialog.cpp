@@ -1,6 +1,6 @@
 #include "nui/popdialog.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "tools/vector.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 #include "tools/tools.hpp"

@@ -1,6 +1,6 @@
 #include "dungeon/sidebar/facilitybutton.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "dungeon/inter.hpp"
 #include "scene/graph.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
@@ -144,7 +144,7 @@ FacilityGrabbable::FacilityGrabbable(scene::GrabbableSpawner& spawner, const std
     : baseClass(spawner)
 {
     addPart(&m_sprite);
-    m_sprite.setTexture(&Application::context().textures.get(textureID));
+    m_sprite.setTexture(&context::context.textures.get(textureID));
     m_sprite.setSize(sizeHint());
     m_sprite.setOrigin(sizeHint() / 2.f);
 }

@@ -1,6 +1,6 @@
 #include "scene/components/lightemitter.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "scene/layer.hpp"
 #include "tools/tools.hpp"
 
@@ -59,7 +59,7 @@ void LightEmitter::clear()
 
 uint32 LightEmitter::addPoint(const sf::Vector2f& position, float lightSize)
 {
-    const auto& lightPointTexture = Application::context().textures.get("core/ltbl/lightPoint");
+    const auto& lightPointTexture = context::context.textures.get("core/ltbl/lightPoint");
     auto lightPointTextureSize = sf::v2f(lightPointTexture.getSize());
     float scale = lightSize / lightPointTextureSize.x;
 

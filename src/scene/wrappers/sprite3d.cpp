@@ -1,6 +1,6 @@
 #include "scene/wrappers/sprite3d.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "tools/vector.hpp"
 
 using namespace scene;
@@ -25,7 +25,7 @@ void Sprite3D::onScaleChanges()
 
 void Sprite3D::setTexture(const std::string& textureID)
 {
-    const auto& texture = Application::context().textures.get(textureID);
+    const auto& texture = context::context.textures.get(textureID);
     m_sprite.setTexture(texture);
 
     auto textureSize = sf::v2f(texture.getSize());

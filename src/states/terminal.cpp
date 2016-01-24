@@ -1,6 +1,7 @@
 #include "states/terminal.hpp"
 
 #include "core/gettext.hpp"
+#include "core/application.hpp"
 #include "tools/platform-fixes.hpp" // make_unique()
 #include "tools/tools.hpp"
 
@@ -116,7 +117,7 @@ void Terminal::handleEvent(const sf::Event& event)
         // Auto-complete
         if (event.key.code == sf::Keyboard::Tab) {
             auto commandLine = m_entry.textBeforeCursor();
-            commandLine = Application::context().commander.autoComplete(std::move(commandLine));
+            commandLine = context::context.commander.autoComplete(std::move(commandLine));
             m_entry.setText(commandLine + m_entry.textAfterCursor(), false);
             m_entry.setCursorPosition(commandLine.size());
             return;
@@ -185,8 +186,8 @@ void Terminal::onEntryValidated()
     addMessage(commandLine, sf::Color::Blue);
 
     // Interpret it via the commander
-    auto commands = Application::context().commander.interpret(commandLine);
-    Application::context().commander.push(commands);
+    auto commands = context::context.commander.interpret(commandLine);
+    context::context.commander.push(commands);
 }
 
 void Terminal::navigateHistoric(const int relPos)

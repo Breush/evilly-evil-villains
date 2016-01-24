@@ -1,6 +1,7 @@
 #include "core/application.hpp"
 
 #include "core/debug.hpp"
+#include "context/context.hpp"
 #include "tools/filesystem.hpp"
 
 // FIXME Should be on the same structure that textures and animations,
@@ -16,7 +17,7 @@ void Application::loadSounds()
         if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "wav")
             continue;
 
-        s_context.sounds.load(fileInfo.fullName);
+        context::context.sounds.load(fileInfo.fullName);
 
         ++soundsCount;
     }
@@ -28,11 +29,11 @@ void Application::loadSounds()
 
 void Application::refreshSounds()
 {
-    const auto& resolution = s_context.windowInfo.resolution;
-    const auto& effectiveSoundVolume = s_context.audio.effectiveSoundVolume;
+    const auto& resolution = context::context.windowInfo.resolution;
+    const auto& effectiveSoundVolume = context::context.audio.effectiveSoundVolume;
 
-    s_context.sounds.setListenerPosition(resolution / 2.f);
-    s_context.sounds.setVolume(effectiveSoundVolume);
+    context::context.sounds.setListenerPosition(resolution / 2.f);
+    context::context.sounds.setVolume(effectiveSoundVolume);
 }
 
 void Application::updateSounds(const sf::Time& dt)
@@ -42,7 +43,7 @@ void Application::updateSounds(const sf::Time& dt)
 
     // Clean all sounds regularly
     if (soundsTime >= m_soundsRefreshTime) {
-        s_context.sounds.removeStoppedSounds();
+        context::context.sounds.removeStoppedSounds();
         soundsTime -= m_soundsRefreshTime;
     }
 }

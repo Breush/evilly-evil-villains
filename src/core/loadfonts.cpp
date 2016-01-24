@@ -1,6 +1,7 @@
 #include "core/application.hpp"
 
 #include "core/debug.hpp"
+#include "context/context.hpp"
 #include "tools/filesystem.hpp"
 
 void Application::loadFonts()
@@ -13,7 +14,7 @@ void Application::loadFonts()
         if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "ttf")
             continue;
 
-        s_context.fonts.load(fileInfo.fullName);
+        context::context.fonts.load(fileInfo.fullName);
 
         ++fontsCount;
     }

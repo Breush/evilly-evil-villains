@@ -1,6 +1,6 @@
 #include "nui/slider.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "config/nuiguides.hpp"
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
@@ -13,9 +13,9 @@ Slider::Slider()
     setFocusable(true);
 
     // Bars
-    const auto& barLeftTexture = Application::context().textures.get("core/nui/slider/bar_left");
-    const auto& barMiddleTexture = Application::context().textures.get("core/nui/slider/bar_middle");
-    const auto& barRightTexture = Application::context().textures.get("core/nui/slider/bar_right");
+    const auto& barLeftTexture = context::context.textures.get("core/nui/slider/bar_left");
+    const auto& barMiddleTexture = context::context.textures.get("core/nui/slider/bar_middle");
+    const auto& barRightTexture = context::context.textures.get("core/nui/slider/bar_right");
 
     m_barLeft.setTexture(&barLeftTexture);
     m_barMiddle.setTexture(&barMiddleTexture);
@@ -27,11 +27,11 @@ Slider::Slider()
     m_barRight.setOrigin(m_barRightWidth, 0.f);
 
     // Traces
-    m_traceTexture = &Application::context().textures.get("core/nui/slider/trace");
+    m_traceTexture = &context::context.textures.get("core/nui/slider/trace");
     m_traceWidth = m_traceTexture->getSize().x;
 
     // Indicator
-    const auto& indicatorTexture = Application::context().textures.get("core/nui/slider/indicator");
+    const auto& indicatorTexture = context::context.textures.get("core/nui/slider/indicator");
     m_indicator.setTexture(&indicatorTexture);
     m_indicatorWidth = indicatorTexture.getSize().x;
     m_indicator.setFillColor(sf::Color::Green);
@@ -240,7 +240,7 @@ void Slider::refreshTraces()
         trace.line.setPosition({offset, m_barOffset});
         trace.line.setOrigin({0.5f * m_traceWidth, 0.f});
 
-        trace.text.setFont(Application::context().fonts.get("core/global/fonts/nui"));
+        trace.text.setFont(context::context.fonts.get("core/global/fonts/nui"));
         trace.text.setCharacterSize(m_fontSize);
         trace.text.setString(toString(traceValue));
 

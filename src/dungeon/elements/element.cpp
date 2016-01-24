@@ -328,7 +328,7 @@ void Element::lua_selectAnimationUID(const uint32 UID, const std::string& animat
 
 void Element::lua_soundPlay(const std::string& soundID)
 {
-    Application::context().sounds.play(soundID);
+    context::context.sounds.play(soundID);
 }
 
 //----- Villain

@@ -1,6 +1,6 @@
 #include "spriter/sfmlimagefile.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 
 #include <Spriter/objectinfo/universalobjectinterface.h>
 
@@ -11,8 +11,8 @@ using namespace SpriterEngine;
 SfmlImageFile::SfmlImageFile(std::string filePath, point defaultPivot)
     : baseClass(filePath, defaultPivot)
 {
-    auto fileID = Application::context().textures.getID(path());
-    auto& texture = Application::context().textures.get(fileID);
+    auto fileID = context::context.textures.getID(path());
+    auto& texture = context::context.textures.get(fileID);
     sprite.setTexture(texture);
     m_textureSize = texture.getSize();
 }

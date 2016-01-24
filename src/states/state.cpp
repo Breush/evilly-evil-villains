@@ -1,6 +1,6 @@
 #include "states/state.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "states/statestack.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -11,8 +11,8 @@ State::State(StateStack& stack)
     : m_stack(stack)
 {
     // Refresh graph (init size, etc.)
-    m_sceneGraph.refreshWindow(Application::context().windowInfo);
-    m_sceneGraph.refreshNUI(Application::context().nuiGuides);
+    m_sceneGraph.refreshWindow(context::context.windowInfo);
+    m_sceneGraph.refreshNUI(context::context.nuiGuides);
 }
 
 //-------------------//

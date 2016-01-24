@@ -1,7 +1,9 @@
 #include "nui/scrollarea.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "tools/tools.hpp"
+
+#include <SFML/Window/Event.hpp>
 
 #include <iostream>
 
@@ -10,18 +12,18 @@ using namespace nui;
 ScrollArea::ScrollArea()
 {
     // Bars
-    const auto& vBarStartTexture = Application::context().textures.get("core/nui/scrollarea/vbar_start");
-    const auto& vBarMiddleTexture = Application::context().textures.get("core/nui/scrollarea/vbar_middle");
-    const auto& vBarEndTexture = Application::context().textures.get("core/nui/scrollarea/vbar_end");
+    const auto& vBarStartTexture = context::context.textures.get("core/nui/scrollarea/vbar_start");
+    const auto& vBarMiddleTexture = context::context.textures.get("core/nui/scrollarea/vbar_middle");
+    const auto& vBarEndTexture = context::context.textures.get("core/nui/scrollarea/vbar_end");
     m_vBarStart.setTexture(vBarStartTexture);
     m_vBarMiddle.setTexture(&vBarMiddleTexture);
     m_vBarEnd.setTexture(vBarEndTexture);
     m_vBarMiddle.setOrigin(0.f, -static_cast<float>(vBarStartTexture.getSize().y));
     m_vBarEnd.setOrigin(0.f, static_cast<float>(vBarEndTexture.getSize().y));
 
-    const auto& hBarStartTexture = Application::context().textures.get("core/nui/scrollarea/hbar_start");
-    const auto& hBarMiddleTexture = Application::context().textures.get("core/nui/scrollarea/hbar_middle");
-    const auto& hBarEndTexture = Application::context().textures.get("core/nui/scrollarea/hbar_end");
+    const auto& hBarStartTexture = context::context.textures.get("core/nui/scrollarea/hbar_start");
+    const auto& hBarMiddleTexture = context::context.textures.get("core/nui/scrollarea/hbar_middle");
+    const auto& hBarEndTexture = context::context.textures.get("core/nui/scrollarea/hbar_end");
     m_hBarStart.setTexture(hBarStartTexture);
     m_hBarMiddle.setTexture(&hBarMiddleTexture);
     m_hBarEnd.setTexture(hBarEndTexture);
@@ -33,7 +35,7 @@ ScrollArea::ScrollArea()
 
     // Grabbers
     const auto vGrabberTextureString = "core/nui/scrollarea/vgrabber";
-    const auto& vGrabberTexture = Application::context().textures.get(vGrabberTextureString);
+    const auto& vGrabberTexture = context::context.textures.get(vGrabberTextureString);
     m_vGrabberSize = sf::v2f(vGrabberTexture.getSize());
     m_vGrabber.setTexture(vGrabberTextureString);
     m_hGrabber.setTexture(vGrabberTextureString);
@@ -112,7 +114,7 @@ bool ScrollArea::handleMouseButtonPressed(const sf::Mouse::Button button, const 
 
 bool ScrollArea::handleMouseWheelScrolled(sf::Mouse::Wheel wheel, float delta, const sf::Vector2f&, const sf::Vector2f&)
 {
-    const auto& scrollingFactor = Application::context().display.global.scrollingFactor;
+    const auto& scrollingFactor = context::context.display.global.scrollingFactor;
     const float offset = delta * scrollingFactor;
 
     // It's an horizontal scrolling if the wheel is the horizontal one,

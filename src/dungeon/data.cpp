@@ -1,6 +1,6 @@
 #include "dungeon/data.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "context/worlds.hpp"
 #include "dungeon/debug.hpp"
 #include "dungeon/graph.hpp"
@@ -44,7 +44,7 @@ void Data::update(const sf::Time& dt)
             if (weekSecond != 0u) continue;
 
             m_debtWeeksLeft -= 1u;
-            Application::context().sounds.play("core/resources/bank/interests");
+            context::context.sounds.play("core/resources/bank/interests");
             if (!doshWallet().sub(m_debtPerWeek)) {
                 // TODO Game over if no more dosh
             }

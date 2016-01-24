@@ -1,6 +1,6 @@
 #include "nui/text.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "tools/string.hpp"
 
 using namespace nui;
@@ -57,7 +57,7 @@ void Text::setFont(const sf::Font& font)
 
 void Text::setFont(const std::string& fontID)
 {
-    m_text.setFont(Application::context().fonts.get(fontID));
+    m_text.setFont(context::context.fonts.get(fontID));
     updateSize();
 }
 

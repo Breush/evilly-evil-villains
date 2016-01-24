@@ -1,6 +1,6 @@
 #include "states/hub/main.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 
 #include <iostream>
 
@@ -16,7 +16,7 @@ HubMain::HubMain(StateStack& stack, dungeon::Data& data)
     const auto nuiRatio = nuiSize.x / nuiSize.y;
 
     // Background
-    const auto backgroundSize = sf::v2f(Application::context().textures.get("core/menu/hub/day/back").getSize());
+    const auto backgroundSize = sf::v2f(context::context.textures.get("core/menu/hub/day/back").getSize());
     const auto backgroundRatio = backgroundSize.x / backgroundSize.y;
     float backgroundScaleValue = 1.f;
     if (nuiRatio > backgroundRatio) backgroundScaleValue *= nuiSize.x / backgroundSize.x;

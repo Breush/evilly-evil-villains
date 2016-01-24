@@ -1,6 +1,6 @@
 #include "dungeon/sidebar/sidebar.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "core/gettext.hpp"
 #include "dungeon/event.hpp"
 #include "dungeon/sidebar/monstercage.hpp"

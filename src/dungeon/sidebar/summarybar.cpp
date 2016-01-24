@@ -1,6 +1,6 @@
 #include "dungeon/sidebar/summarybar.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 
 using namespace dungeon;
 
@@ -15,14 +15,14 @@ SummaryBar::SummaryBar()
     addPart(&m_text);
     addPart(&m_logo);
 
-    m_text.setFont(Application::context().fonts.get("core/global/fonts/nui"));
+    m_text.setFont(context::context.fonts.get("core/global/fonts/nui"));
 }
 
 void SummaryBar::init()
 {
-    const auto& backgroundLeftTexture = Application::context().textures.get("core/dungeon/sidebar/summary/bar/background_left");
-    const auto& backgroundMiddleTexture = Application::context().textures.get("core/dungeon/sidebar/summary/bar/background_middle");
-    const auto& backgroundRightTexture = Application::context().textures.get("core/dungeon/sidebar/summary/bar/background_right");
+    const auto& backgroundLeftTexture = context::context.textures.get("core/dungeon/sidebar/summary/bar/background_left");
+    const auto& backgroundMiddleTexture = context::context.textures.get("core/dungeon/sidebar/summary/bar/background_middle");
+    const auto& backgroundRightTexture = context::context.textures.get("core/dungeon/sidebar/summary/bar/background_right");
 
     m_backgroundLeft.setTexture(&backgroundLeftTexture);
     m_backgroundMiddle.setTexture(&backgroundMiddleTexture);
@@ -74,7 +74,7 @@ void SummaryBar::setText(const std::wstring& text)
 
 void SummaryBar::setLogo(const std::string& textureID)
 {
-    m_logo.setTexture(textureID.empty()? nullptr : &Application::context().textures.get(textureID));
+    m_logo.setTexture(textureID.empty()? nullptr : &context::context.textures.get(textureID));
 }
 
 void SummaryBar::setTextColor(const sf::Color& color)

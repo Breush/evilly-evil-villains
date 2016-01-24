@@ -1,6 +1,6 @@
 #include "nui/mouseoverlay.hpp"
 
-#include "core/application.hpp"
+#include "context/context.hpp"
 #include "tools/string.hpp"
 
 using namespace nui;
@@ -16,11 +16,11 @@ MouseOverlay::MouseOverlay()
     // TODO Have it done in refreshNUI()
     m_leftText.setCharacterSize(16);
     m_leftText.setPosition({-20.f, -15.f});
-    m_leftText.setFont(Application::context().fonts.get("core/global/fonts/nui"));
+    m_leftText.setFont(context::context.fonts.get("core/global/fonts/nui"));
 
     m_rightText.setCharacterSize(16);
     m_rightText.setPosition({20.f, -15.f});
-    m_rightText.setFont(Application::context().fonts.get("core/global/fonts/nui"));
+    m_rightText.setFont(context::context.fonts.get("core/global/fonts/nui"));
 
     refreshMouseTexture();
 }
@@ -55,10 +55,10 @@ void MouseOverlay::refreshMouseTexture()
     bool right = !m_rightText.getString().isEmpty();
 
     const sf::Texture* texture;
-    if      (!left && !right)   texture = &Application::context().textures.get("core/cursor/mouse_off");
-    else if (!left && right)    texture = &Application::context().textures.get("core/cursor/mouse_r");
-    else if (left && !right)    texture = &Application::context().textures.get("core/cursor/mouse_l");
-    else if (left && right)     texture = &Application::context().textures.get("core/cursor/mouse_rl");
+    if      (!left && !right)   texture = &context::context.textures.get("core/cursor/mouse_off");
+    else if (!left && right)    texture = &context::context.textures.get("core/cursor/mouse_r");
+    else if (left && !right)    texture = &context::context.textures.get("core/cursor/mouse_l");
+    else if (left && right)     texture = &context::context.textures.get("core/cursor/mouse_rl");
 
     const auto textureSize = sf::v2f(texture->getSize());
     m_mouse.setOrigin(textureSize / 2.f);
