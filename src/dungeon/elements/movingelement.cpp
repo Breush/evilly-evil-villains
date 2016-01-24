@@ -12,13 +12,18 @@ MovingElement::MovingElement(std::string folder, Inter& inter, Graph& graph)
     , m_graph(graph)
     , m_folder(std::move(folder))
 {
-    addComponent<scene::Lerpable>();
+    addComponent<scene::Lerpable>(*this);
 
     // Lua API
     m_lua["eev_setMoving"] = [this] (bool moving) { lua_setMoving(moving); };
     m_lua["eev_isLookingDirection"] = [this] (const std::string& direction) { return lua_isLookingDirection(direction); };
     m_lua["eev_getCurrentRoomX"] = [this] { return lua_getCurrentRoomX(); };
     m_lua["eev_getCurrentRoomY"] = [this] { return lua_getCurrentRoomY(); };
+}
+
+MovingElement::~MovingElement()
+{
+    removeComponent<scene::Lerpable>();
 }
 
 //------------------//

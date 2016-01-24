@@ -1,6 +1,6 @@
 #pragma once
 
-#include "scene/components/component.hpp"
+#include "context/componententity.hpp"
 #include "tools/param.hpp"
 #include "tools/int.hpp"
 
@@ -23,6 +23,7 @@ namespace config
 
 namespace scene
 {
+    class Layer;
     class Graph;
 
     //! Base for every scene object.
@@ -32,8 +33,10 @@ namespace scene
      *  as only currently focused entity gets keyboard/joystick events.
      */
 
-    class Entity : public sf::Drawable, public sf::Transformable
+    class Entity : public sf::Drawable, public sf::Transformable, public context::ComponentEntity
     {
+        using baseClass = context::ComponentEntity;
+
         friend class Layer;
         friend class Graph;
 
@@ -60,24 +63,6 @@ namespace scene
 
         //! Entity unique qualifier, mostly for debugging.
         virtual std::string _name() const = 0;
-
-        //-------------------//
-        //! @name Components
-        //! @{
-
-        //! Do the entity has the specified component?
-        template <class Component_t>
-        bool hasComponent() const;
-
-        //! Get the specified component.
-        template <class Component_t>
-        Component_t* getComponent();
-
-        //! Add the specified component.
-        template <class Component_t>
-        Component_t& addComponent();
-
-        //! @}
 
         //----------------------------//
         //! @name Children management
@@ -287,9 +272,6 @@ namespace scene
          *  real-time animations.
          */
         virtual void updateRoutine(const sf::Time& dt) {}
-
-        //! Updates all components.
-        void updateComponents(const sf::Time& dt);
 
         //! Updates the state of the artificial intelligence.
         virtual void updateAI(const sf::Time& dt) {}
@@ -573,9 +555,6 @@ namespace scene
         std::vector<Part> m_parts;      //!< The parts, as an entity is something drawn.
         sf::Shader* m_shader = nullptr; //!< The shader used to draw the entity's parts and children.
 
-        // Components
-        std::vector<ComponentPtr> m_components;                 //!< All the components.
-
         // Structure
         Layer* m_layer = nullptr;   //!< The layer storing this entity.
 
@@ -595,5 +574,3 @@ namespace scene
         std::vector<sf::FloatRect> m_globalClipAreas;   //!< The visual part of the entity, taking parent clip area in account.
     };
 }
-
-#include "scene/entity.inl"

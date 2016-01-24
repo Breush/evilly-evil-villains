@@ -3,6 +3,7 @@
 #include "core/debug.hpp"
 #include "core/gettext.hpp"
 #include "context/context.hpp"
+#include "context/componenter.hpp"
 #include "states/identifiers.hpp"
 #include "tools/vector.hpp"
 #include "tools/string.hpp"
@@ -52,6 +53,7 @@ Application::Application()
     loadSounds();
     preloadAnimations();
     loadStates();
+    loadComponents();
 
     // All is ready, go for it
     m_stateStack.pushState(m_initialState);
@@ -64,6 +66,11 @@ Application::Application()
         cleanExtraFiles();
     }
 #endif
+}
+
+Application::~Application()
+{
+    freeComponents();
 }
 
 void Application::run()
@@ -241,6 +248,7 @@ void Application::update(const sf::Time& dt)
     if (!s_paused) {
         updateSounds(dt);
         updateShaders(dt);
+        updateComponents(dt);
     }
 }
 

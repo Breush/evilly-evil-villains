@@ -1,8 +1,8 @@
 #pragma once
 
-#include <memory>
+#include "context/component.hpp"
 
-#include <SFML/System/Time.hpp>
+#include <memory>
 
 namespace scene
 {
@@ -11,9 +11,9 @@ namespace scene
     class Entity;
     class Layer;
 
-    //! Abstract class designed to be the interface of all components.
+    //! Abstract class designed to be the interface of all scene components.
 
-    class Component
+    class Component : public context::Component
     {
     public:
 
@@ -22,15 +22,6 @@ namespace scene
 
         //! Default destructor.
         virtual ~Component() = default;
-
-        //--------------------------//
-        //! @name Routine callbacks
-        //! @{
-
-        //! Regular update routine.
-        virtual void update(const sf::Time& dt) {}
-
-        //! @}
 
         //----------------------------//
         //! @name Structure callbacks

@@ -3,7 +3,6 @@
 #include "core/cursor.hpp"
 #include "core/visualdebug.hpp"
 #include "states/statestack.hpp"
-#include "tools/memorypool.hpp"
 #include "tools/int.hpp"
 
 #include <SFML/System/Time.hpp>
@@ -28,8 +27,11 @@ public:
     //! @name Application
     //! @{
 
-    //! Application constructor.
+    //! Constructor.
     Application();
+
+    //! Destructor.
+    ~Application();
 
     //! The game loop.
     /*!
@@ -144,6 +146,7 @@ protected:
     void loadSounds();          //!< Load sounds file information.
     void preloadAnimations();   //!< Load all shared animations.
     void loadStates();          //!< Register states.
+    void loadComponents();      //!< Register components.
 
     void refreshNUI();              //!< Adapt all NUI elements.
     void refreshWindow();           //!< Adapt all views to current window settings.
@@ -153,6 +156,9 @@ protected:
 
     void updateSounds(const sf::Time& dt);      //!< Manage the sounds.
     void updateShaders(const sf::Time& dt);     //!< Animate the shaders.
+    void updateComponents(const sf::Time& dt);  //!< Update the components, in a cache-friendly way.
+
+    void freeComponents();  //!< Un-register components.
 
     //! @}
 

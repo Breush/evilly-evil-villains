@@ -1,5 +1,8 @@
 #pragma once
 
+#include <utility>
+#include <cstdint>
+
 template <typename T, size_t BlockSize>
 MemoryPool<T, BlockSize>::MemoryPool() noexcept
 {

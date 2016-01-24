@@ -36,8 +36,8 @@ namespace dungeon
         //! Constructor.
         MovingElement(std::string folder, Inter& inter, Graph& graph);
 
-        //! Default destructor.
-        virtual ~MovingElement() = default;
+        //! Destructor.
+        virtual ~MovingElement();
 
         //---------------------//
         //! @name Element data

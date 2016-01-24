@@ -1,6 +1,7 @@
 #include "scene/entity.hpp"
 
 #include "context/context.hpp"
+#include "scene/components/component.hpp"
 #include "scene/graph.hpp"
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
@@ -177,19 +178,12 @@ void Entity::update(const sf::Time& dt, const float factor)
     auto dtGame = dt * factor;
 
     updateRoutine(dtGame);
-    updateComponents(dtGame);
     updateAI(dtGame);
     updateChanges();
 
     // Update children - DFS
     for (auto& child : m_children)
         child->update(dt, factor);
-}
-
-void Entity::updateComponents(const sf::Time& dt)
-{
-    for (auto& component : m_components)
-        component->update(dt);
 }
 
 void Entity::updateChanges()
@@ -207,8 +201,9 @@ void Entity::updateChanges()
         onTransformChanges();
 
         // Warn components
+        // TODO Might do a dynamic_cast<>, would be a lot safer when extending
         for (auto& component : m_components)
-            component->onTransformChanged();
+            reinterpret_cast<scene::Component*>(component)->onTransformChanged();
 
         m_localChanges = false;
     }
@@ -786,7 +781,7 @@ void Entity::setLayer(Layer* inLayer)
 
     // Warn components
     for (auto& component : m_components)
-        component->onLayerChanged(m_layer);
+        reinterpret_cast<scene::Component*>(component)->onLayerChanged(m_layer);
 }
 
 void Entity::setGraph(Graph* inGraph)

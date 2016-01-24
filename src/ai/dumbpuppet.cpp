@@ -8,9 +8,14 @@ using namespace ai;
 
 DumbPuppet::DumbPuppet()
 {
-    addComponent<scene::Lerpable>();
+    addComponent<scene::Lerpable>(*this);
 
     attachChild(m_sprite);
+}
+
+DumbPuppet::~DumbPuppet()
+{
+    removeComponent<scene::Lerpable>();
 }
 
 //-------------------//

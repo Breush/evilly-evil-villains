@@ -21,8 +21,8 @@ namespace dungeon
         //! Constructor.
         Facility(const RoomCoords& coords, ElementData& edata, Inter& inter);
 
-        //! Default destructor.
-        ~Facility() = default;
+        //! Destructor.
+        ~Facility();
 
         std::string detectKey() const final { return "facility"; }
         std::string _name() const final { return "dungeon::Facility"; }

@@ -25,6 +25,14 @@ namespace scene
         //! Default destructor.
         ~Lerpable() = default;
 
+        //----------------//
+        //! @name Routine
+        //! @{
+
+        void update(const sf::Time& dt);
+
+        //! @}
+
         //----------------------//
         //! @name Basic control
         //! @{
@@ -62,14 +70,6 @@ namespace scene
         //! @}
 
     protected:
-
-        //------------------//
-        //! @name Callbacks
-        //! @{
-
-        void update(const sf::Time& dt);
-
-        //! @}
 
         //----------------------//
         //! @name Interpolation

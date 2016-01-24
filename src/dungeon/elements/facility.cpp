@@ -54,6 +54,12 @@ Facility::Facility(const RoomCoords& coords, ElementData& edata, dungeon::Inter&
     m_lua["_register"]();
 }
 
+Facility::~Facility()
+{
+    // Might not exist
+    removeComponent<scene::LightEmitter>();
+}
+
 //------------------------//
 //----- Element data -----//
 
@@ -168,11 +174,10 @@ uint32 Facility::lua_lightAddPoint(lua_Number x, lua_Number y, lua_Number s)
     position += getOrigin();
 
     // Become a light emitter if not yet
-    if (!hasComponent<scene::LightEmitter>())
-        addComponent<scene::LightEmitter>();
-
-    auto& lightEmitter = *getComponent<scene::LightEmitter>();
-    return lightEmitter.addPoint(position, lightSize);
+    auto pLightEmitter = getComponent<scene::LightEmitter>();
+    if (pLightEmitter == nullptr)
+        pLightEmitter = addComponent<scene::LightEmitter>(*this);
+    return pLightEmitter->addPoint(position, lightSize);
 }
 
 void Facility::lua_lightSetColor(uint32 lightID, uint r, uint g, uint b)
