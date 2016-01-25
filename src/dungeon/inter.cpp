@@ -47,6 +47,8 @@ Inter::Inter(nui::ContextMenu& contextMenu)
 
 void Inter::init()
 {
+    m_effecter.init();
+
     // Outer walls
     m_voidBackground.setTexture(&context::context.textures.get("core/dungeon/inter/void_room"));
     m_outerWalls[0].setTexture(&context::context.textures.get("core/dungeon/inter/outer_wall_west"));
@@ -61,6 +63,10 @@ void Inter::init()
 
 void Inter::updateRoutine(const sf::Time& dt)
 {
+    // Effecter update
+    m_effecter.update(dt);
+
+    // Moving rooms
     returnif (m_movingRooms.empty());
 
     auto timeElapsed = dt.asSeconds();
@@ -238,6 +244,8 @@ void Inter::useData(Data& data)
     m_data->heroesManager().useInter(*this);
     m_data->monstersManager().useInter(*this);
     m_data->dynamicsManager().useInter(*this);
+
+    m_effecter.useInter(*this);
 
     setEmitter(m_data);
     refreshFromData();
@@ -559,7 +567,9 @@ void Inter::constructRoom(const RoomCoords& coords, bool free)
     returnif (m_tiles[coords].movingLocked);
 
     if (!free) returnif (!villain().doshWallet.sub(m_data->onConstructRoomCost));
+
     m_data->constructRoom(coords);
+    m_effecter.add("construct_room", coords);
 }
 
 void Inter::destroyRoom(const RoomCoords& coords, bool loss)

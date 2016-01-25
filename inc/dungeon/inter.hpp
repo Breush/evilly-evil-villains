@@ -6,6 +6,7 @@
 #include "dungeon/commandable.hpp"
 #include "dungeon/elements/trap.hpp"
 #include "dungeon/elements/facility.hpp"
+#include "dungeon/effecter.hpp"
 #include "nui/contextmenu.hpp"
 #include "nui/spinbox.hpp"
 #include "sfe/grid.hpp"
@@ -434,7 +435,8 @@ namespace dungeon
         sf::RectangleShape m_voidBackground;                //!< The void background of each room.
 
         // Animation
-        std::vector<MovingRoom> m_movingRooms;      //!< The rooms to animate.
+        std::vector<MovingRoom> m_movingRooms;  //!< The rooms to animate.
+        Effecter m_effecter;                    //!< Play some routine animations.
 
         // Prediction
         std::wstring m_predictionID;                //!< The current ID of the element overlay.
