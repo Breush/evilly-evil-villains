@@ -3,6 +3,7 @@
 #include "dungeon/data.hpp"
 #include "dungeon/inter.hpp"
 #include "dungeon/detector.hpp"
+#include "scene/components/ai.hpp"
 #include "context/villains.hpp"
 #include "core/gettext.hpp"
 #include "tools/tools.hpp"
@@ -13,8 +14,11 @@ using namespace std::placeholders;
 
 Element::Element(dungeon::Inter& inter)
     : m_inter(inter)
-    , m_lua(true)
 {
+    // Components
+    auto aiComponent = addComponent<scene::AI>(*this);
+    m_lua = &aiComponent->luaState();
+
     // Note: an Element has a size fitting a whole room,
     // so the hitbox cannot be bigger than that.
 
@@ -39,56 +43,56 @@ Element::Element(dungeon::Inter& inter)
     std::function<void(const std::string&, const std::string&)> eev_setLeftClickAction = std::bind(&Element::lua_setLeftClickAction, this, _1, _2);
     std::function<void(const std::string&, const std::string&)> eev_setRightClickAction = std::bind(&Element::lua_setRightClickAction, this, _1, _2);
 
-    m_lua["eev_addCallback"] = eev_addCallback;
-    m_lua["eev_setLeftClickAction"] = eev_setLeftClickAction;
-    m_lua["eev_setRightClickAction"] = eev_setRightClickAction;
+    lua()["eev_addCallback"] = eev_addCallback;
+    lua()["eev_setLeftClickAction"] = eev_setLeftClickAction;
+    lua()["eev_setRightClickAction"] = eev_setRightClickAction;
 
-    m_lua["eev_setDataBool"] = [this] (const std::string& s, const bool value) { return lua_setDataBool(s, value); };
-    m_lua["eev_getDataBool"] = [this] (const std::string& s) { return lua_getDataBool(s); };
-    m_lua["eev_initEmptyDataBool"] = [this] (const std::string& s, const bool value) { return lua_initEmptyDataBool(s, value); };
-    m_lua["eev_setDataU32"] = [this] (const std::string& s, const uint32 value) { return lua_setDataU32(s, value); };
-    m_lua["eev_getDataU32"] = [this] (const std::string& s) { return lua_getDataU32(s); };
-    m_lua["eev_addDataU32"] = [this] (const std::string& s, const uint32 value) { return lua_addDataU32(s, value); };
-    m_lua["eev_initEmptyDataU32"] = [this] (const std::string& s, const uint32 value) { return lua_initEmptyDataU32(s, value); };
-    m_lua["eev_setDataFloat"] = [this] (const std::string& s, const lua_Number value) { return lua_setDataFloat(s, value); };
-    m_lua["eev_getDataFloat"] = [this] (const std::string& s) { return lua_getDataFloat(s); };
-    m_lua["eev_addDataFloat"] = [this] (const std::string& s, const lua_Number value) { return lua_addDataFloat(s, value); };
-    m_lua["eev_initEmptyDataFloat"] = [this] (const std::string& s, const lua_Number value) { return lua_initEmptyDataFloat(s, value); };
+    lua()["eev_setDataBool"] = [this] (const std::string& s, const bool value) { return lua_setDataBool(s, value); };
+    lua()["eev_getDataBool"] = [this] (const std::string& s) { return lua_getDataBool(s); };
+    lua()["eev_initEmptyDataBool"] = [this] (const std::string& s, const bool value) { return lua_initEmptyDataBool(s, value); };
+    lua()["eev_setDataU32"] = [this] (const std::string& s, const uint32 value) { return lua_setDataU32(s, value); };
+    lua()["eev_getDataU32"] = [this] (const std::string& s) { return lua_getDataU32(s); };
+    lua()["eev_addDataU32"] = [this] (const std::string& s, const uint32 value) { return lua_addDataU32(s, value); };
+    lua()["eev_initEmptyDataU32"] = [this] (const std::string& s, const uint32 value) { return lua_initEmptyDataU32(s, value); };
+    lua()["eev_setDataFloat"] = [this] (const std::string& s, const lua_Number value) { return lua_setDataFloat(s, value); };
+    lua()["eev_getDataFloat"] = [this] (const std::string& s) { return lua_getDataFloat(s); };
+    lua()["eev_addDataFloat"] = [this] (const std::string& s, const lua_Number value) { return lua_addDataFloat(s, value); };
+    lua()["eev_initEmptyDataFloat"] = [this] (const std::string& s, const lua_Number value) { return lua_initEmptyDataFloat(s, value); };
 
-    m_lua["eev_setUIDDataU32"] = [this] (const uint32 UID, const std::string& s, const uint32 value) { lua_setUIDDataU32(UID, s, value); };
-    m_lua["eev_getUIDDataU32"] = [this] (const uint32 UID, const std::string& s) { return lua_getUIDDataU32(UID, s); };
+    lua()["eev_setUIDDataU32"] = [this] (const uint32 UID, const std::string& s, const uint32 value) { lua_setUIDDataU32(UID, s, value); };
+    lua()["eev_getUIDDataU32"] = [this] (const uint32 UID, const std::string& s) { return lua_getUIDDataU32(UID, s); };
 
-    m_lua["eev_selectAnimation"] = [this] (const std::string& animationKey) { lua_selectAnimation(animationKey); };
-    m_lua["eev_isAnimationStopped"] = [this] { return lua_isAnimationStopped(); };
-    m_lua["eev_restartAnimation"] = [this] { lua_restartAnimation(); };
-    m_lua["eev_forwardAnimation"] = [this] (const lua_Number offset) { lua_forwardAnimation(offset); };
+    lua()["eev_selectAnimation"] = [this] (const std::string& animationKey) { lua_selectAnimation(animationKey); };
+    lua()["eev_isAnimationStopped"] = [this] { return lua_isAnimationStopped(); };
+    lua()["eev_restartAnimation"] = [this] { lua_restartAnimation(); };
+    lua()["eev_forwardAnimation"] = [this] (const lua_Number offset) { lua_forwardAnimation(offset); };
 
-    m_lua["eev_soundPlay"] = [this] (const std::string& soundID) { lua_soundPlay(soundID); };
+    lua()["eev_soundPlay"] = [this] (const std::string& soundID) { lua_soundPlay(soundID); };
 
-    m_lua["eev_selectAnimationUID"] = [this] (const uint32 UID, const std::string& animationKey) { lua_selectAnimationUID(UID, animationKey); };
+    lua()["eev_selectAnimationUID"] = [this] (const uint32 UID, const std::string& animationKey) { lua_selectAnimationUID(UID, animationKey); };
 
-    m_lua["eev_damageRange"] = [this] (const lua_Number rx, const lua_Number ry, const lua_Number relRange, const lua_Number basePower) { lua_damageRange(rx, ry, relRange, basePower); };
-    m_lua["eev_spawnDynamic"] = [this] (const std::string& shortDynamicID, const lua_Number rx, const lua_Number ry) { return lua_spawnDynamic(shortDynamicID, rx, ry); };
-    m_lua["eev_setDepth"] = [this] (const lua_Number inDepth) { lua_setDepth(inDepth); };
-    m_lua["eev_setVisible"] = [this] (bool isVisible) { lua_setVisible(isVisible); };
+    lua()["eev_damageRange"] = [this] (const lua_Number rx, const lua_Number ry, const lua_Number relRange, const lua_Number basePower) { lua_damageRange(rx, ry, relRange, basePower); };
+    lua()["eev_spawnDynamic"] = [this] (const std::string& shortDynamicID, const lua_Number rx, const lua_Number ry) { return lua_spawnDynamic(shortDynamicID, rx, ry); };
+    lua()["eev_setDepth"] = [this] (const lua_Number inDepth) { lua_setDepth(inDepth); };
+    lua()["eev_setVisible"] = [this] (bool isVisible) { lua_setVisible(isVisible); };
 
-    m_lua["eev_damageUID"] = [this] (const uint32 UID, const lua_Number amount) { lua_damageUID(UID, amount); };
-    m_lua["eev_setDepthUID"] = [this] (const uint32 UID, const lua_Number inDepth) { lua_setDepthUID(UID, inDepth); };
-    m_lua["eev_setVisibleUID"] = [this] (const uint32 UID, bool isVisible) { lua_setVisibleUID(UID, isVisible); };
-    m_lua["eev_setDetectVisibleUID"] = [this] (const uint32 UID, bool detectVisible) { lua_setDetectVisibleUID(UID, detectVisible); };
-    m_lua["eev_setDetectActiveUID"] = [this] (const uint32 UID, bool detectActive) { lua_setDetectActiveUID(UID, detectActive); };
-    m_lua["eev_resetClipAreasUID"] = [this] (const uint32 UID) { lua_resetClipAreasUID(UID); };
-    m_lua["eev_addClipAreaUID"] = [this] (const uint32 UID, const lua_Number rx, const lua_Number ry, const lua_Number rw, const lua_Number rh) { lua_addClipAreaUID(UID, rx, ry, rw, rh); };
+    lua()["eev_damageUID"] = [this] (const uint32 UID, const lua_Number amount) { lua_damageUID(UID, amount); };
+    lua()["eev_setDepthUID"] = [this] (const uint32 UID, const lua_Number inDepth) { lua_setDepthUID(UID, inDepth); };
+    lua()["eev_setVisibleUID"] = [this] (const uint32 UID, bool isVisible) { lua_setVisibleUID(UID, isVisible); };
+    lua()["eev_setDetectVisibleUID"] = [this] (const uint32 UID, bool detectVisible) { lua_setDetectVisibleUID(UID, detectVisible); };
+    lua()["eev_setDetectActiveUID"] = [this] (const uint32 UID, bool detectActive) { lua_setDetectActiveUID(UID, detectActive); };
+    lua()["eev_resetClipAreasUID"] = [this] (const uint32 UID) { lua_resetClipAreasUID(UID); };
+    lua()["eev_addClipAreaUID"] = [this] (const uint32 UID, const lua_Number rx, const lua_Number ry, const lua_Number rw, const lua_Number rh) { lua_addClipAreaUID(UID, rx, ry, rw, rh); };
 
-    m_lua["eev_borrowVillainDosh"] = [this] (const uint32 amount) { return lua_borrowVillainDosh(amount); };
-    m_lua["eev_giveDosh"] = [this] (const uint32 amount) { lua_giveDosh(amount); };
-    m_lua["eev_giveSoul"] = [this] (const uint32 amount) { lua_giveSoul(amount); };
-    m_lua["eev_giveFame"] = [this] (const uint32 amount) { lua_giveFame(amount); };
+    lua()["eev_borrowVillainDosh"] = [this] (const uint32 amount) { return lua_borrowVillainDosh(amount); };
+    lua()["eev_giveDosh"] = [this] (const uint32 amount) { lua_giveDosh(amount); };
+    lua()["eev_giveSoul"] = [this] (const uint32 amount) { lua_giveSoul(amount); };
+    lua()["eev_giveFame"] = [this] (const uint32 amount) { lua_giveFame(amount); };
 
-    m_lua["eev_dungeonExplodeRoom"] = [this] (const uint x, const uint y) { lua_dungeonExplodeRoom(x, y); };
-    m_lua["eev_dungeonPushRoom"] = [this] (const uint x, const uint y, const std::string& direction, const uint animationDelay) { return lua_dungeonPushRoom(x, y, direction, animationDelay); };
+    lua()["eev_dungeonExplodeRoom"] = [this] (const uint x, const uint y) { lua_dungeonExplodeRoom(x, y); };
+    lua()["eev_dungeonPushRoom"] = [this] (const uint x, const uint y, const std::string& direction, const uint animationDelay) { return lua_dungeonPushRoom(x, y, direction, animationDelay); };
 
-    m_lua["eev_log"] = [this] (const std::string& str) { lua_log(str); };
+    lua()["eev_log"] = [this] (const std::string& str) { lua_log(str); };
 }
 
 //-------------------//
@@ -97,7 +101,7 @@ Element::Element(dungeon::Inter& inter)
 void Element::updateRoutine(const sf::Time& dt)
 {
     // Forward to lua
-    m_lua["_update"](dt.asSeconds());
+    lua()["_update"](dt.asSeconds());
 }
 
 bool Element::isPointOverable(const sf::Vector2f& relPos) const noexcept
@@ -178,20 +182,20 @@ void Element::hideMouseOverlay()
 
 void Element::lua_addCallback(const std::string& luaKey, const std::string& entityType, const std::string& condition)
 {
-    addDetectSignal(entityType, condition, [this, luaKey] (const uint32 UID) { m_lua[luaKey.c_str()](UID); });
+    addDetectSignal(entityType, condition, [this, luaKey] (const uint32 UID) { lua()[luaKey.c_str()](UID); });
 }
 
 void Element::lua_setLeftClickAction(const std::string& luaKey, const std::string& actionName)
 {
     m_leftClickAction.name = actionName;
-    m_leftClickAction.callback = [this, luaKey] { m_lua[luaKey.c_str()](); };
+    m_leftClickAction.callback = [this, luaKey] { lua()[luaKey.c_str()](); };
     m_mouseOverlay.setLeft(_(m_leftClickAction.name.c_str()));
 }
 
 void Element::lua_setRightClickAction(const std::string& luaKey, const std::string& actionName)
 {
     m_rightClickAction.name = actionName;
-    m_rightClickAction.callback = [this, luaKey] { m_lua[luaKey.c_str()](); };
+    m_rightClickAction.callback = [this, luaKey] { lua()[luaKey.c_str()](); };
     m_mouseOverlay.setRight(_(m_rightClickAction.name.c_str()));
 }
 

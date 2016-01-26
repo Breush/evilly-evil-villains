@@ -185,7 +185,6 @@ void Entity::update(const sf::Time& dt, const float factor)
     auto dtGame = dt * factor;
 
     updateRoutine(dtGame);
-    updateAI(dtGame);
     updateChanges();
 
     // Update children - DFS

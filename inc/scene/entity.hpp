@@ -273,9 +273,6 @@ namespace scene
          */
         virtual void updateRoutine(const sf::Time& dt) {}
 
-        //! Updates the state of the artificial intelligence.
-        virtual void updateAI(const sf::Time& dt) {}
-
         //! Check and call parent on changes if options enabled.
         void updateChanges();
 

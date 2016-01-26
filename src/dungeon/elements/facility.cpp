@@ -27,31 +27,31 @@ Facility::Facility(const RoomCoords& coords, ElementData& edata, dungeon::Inter&
     m_sprite.load("vanilla/facilities/" + sElementID + "/anim");
 
     // Lua API
-    m_lua["eev_hasSiblingFacility"] = [this] (const std::string& facilityID) { return lua_hasSiblingFacility(facilityID); };
-    m_lua["eev_getSiblingFacility"] = [this] (const std::string& facilityID) { return lua_getSiblingFacility(facilityID); };
-    m_lua["eev_getCurrentRoomX"] = [this] { return lua_getCurrentRoomX(); };
-    m_lua["eev_getCurrentRoomY"] = [this] { return lua_getCurrentRoomY(); };
-    m_lua["eev_hasTreasure"] = [this] { return lua_hasTreasure(); };
-    m_lua["eev_setTreasure"] = [this] (const uint32 value) { lua_setTreasure(value); };
-    m_lua["eev_isLink"] = [this] { return lua_isLink(); };
-    m_lua["eev_hasLink"] = [this] { return lua_hasLink(); };
-    m_lua["eev_getLinkRoomX"] = [this] { return lua_getLinkRoomX(); };
-    m_lua["eev_getLinkRoomY"] = [this] { return lua_getLinkRoomY(); };
-    m_lua["eev_hasTunnel"] = [this] { return lua_hasTunnel(); };
-    m_lua["eev_addTunnel"] = [this] (const int32 x, const int32 y, bool relative) { lua_addTunnel(x, y, relative); };
-    m_lua["eev_hasBarrier"] = [this] { return lua_hasBarrier(); };
-    m_lua["eev_setBarrier"] = [this] (bool activated) { lua_setBarrier(activated); };
-    m_lua["eev_removeTunnels"] = [this] { lua_removeTunnels(); };
+    lua()["eev_hasSiblingFacility"] = [this] (const std::string& facilityID) { return lua_hasSiblingFacility(facilityID); };
+    lua()["eev_getSiblingFacility"] = [this] (const std::string& facilityID) { return lua_getSiblingFacility(facilityID); };
+    lua()["eev_getCurrentRoomX"] = [this] { return lua_getCurrentRoomX(); };
+    lua()["eev_getCurrentRoomY"] = [this] { return lua_getCurrentRoomY(); };
+    lua()["eev_hasTreasure"] = [this] { return lua_hasTreasure(); };
+    lua()["eev_setTreasure"] = [this] (const uint32 value) { lua_setTreasure(value); };
+    lua()["eev_isLink"] = [this] { return lua_isLink(); };
+    lua()["eev_hasLink"] = [this] { return lua_hasLink(); };
+    lua()["eev_getLinkRoomX"] = [this] { return lua_getLinkRoomX(); };
+    lua()["eev_getLinkRoomY"] = [this] { return lua_getLinkRoomY(); };
+    lua()["eev_hasTunnel"] = [this] { return lua_hasTunnel(); };
+    lua()["eev_addTunnel"] = [this] (const int32 x, const int32 y, bool relative) { lua_addTunnel(x, y, relative); };
+    lua()["eev_hasBarrier"] = [this] { return lua_hasBarrier(); };
+    lua()["eev_setBarrier"] = [this] (bool activated) { lua_setBarrier(activated); };
+    lua()["eev_removeTunnels"] = [this] { lua_removeTunnels(); };
 
     // Lighting
-    m_lua["eev_lightAddPoint"] = [this] (lua_Number x, lua_Number y, lua_Number s) { return lua_lightAddPoint(x, y, s); };
-    m_lua["eev_lightSetColor"] = [this] (uint32 lightID, uint r, uint g, uint b) { return lua_lightSetColor(lightID, r, g, b); };
+    lua()["eev_lightAddPoint"] = [this] (lua_Number x, lua_Number y, lua_Number s) { return lua_lightAddPoint(x, y, s); };
+    lua()["eev_lightSetColor"] = [this] (uint32 lightID, uint r, uint g, uint b) { return lua_lightSetColor(lightID, r, g, b); };
 
     // Load lua file
     std::string luaFilename = "res/vanilla/facilities/" + sElementID + "/ai.lua";
-    if (!m_lua.load(luaFilename))
+    if (!lua().load(luaFilename))
         throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
-    m_lua["_register"]();
+    lua()["_register"]();
 }
 
 Facility::~Facility()
@@ -68,7 +68,7 @@ void Facility::bindFacilityInfo(FacilityInfo& facilityInfo)
     m_facilityInfo = &facilityInfo;
 
     // Lua update
-    m_lua["_reinit"]();
+    lua()["_reinit"]();
 }
 
 //-----------------------------//
@@ -76,12 +76,12 @@ void Facility::bindFacilityInfo(FacilityInfo& facilityInfo)
 
 void Facility::movingElementEnterTunnel(MovingElement& movingElement)
 {
-    m_lua["_onEntityEnterTunnel"](movingElement.UID());
+    lua()["_onEntityEnterTunnel"](movingElement.UID());
 }
 
 void Facility::movingElementLeaveTunnel(MovingElement& movingElement)
 {
-    m_lua["_onEntityLeaveTunnel"](movingElement.UID());
+    lua()["_onEntityLeaveTunnel"](movingElement.UID());
 }
 
 //---------------------------//

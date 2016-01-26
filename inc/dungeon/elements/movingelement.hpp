@@ -69,7 +69,7 @@ namespace dungeon
         //! @name Routine
         //! @{
 
-        void updateAI(const sf::Time& dt) final;
+        void updateAI(const sf::Time& dt);
         void updateRoutine(const sf::Time& dt) final;
 
         //! @}

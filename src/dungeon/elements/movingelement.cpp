@@ -15,10 +15,10 @@ MovingElement::MovingElement(std::string folder, Inter& inter, Graph& graph)
     addComponent<scene::Lerpable>(*this);
 
     // Lua API
-    m_lua["eev_setMoving"] = [this] (bool moving) { lua_setMoving(moving); };
-    m_lua["eev_isLookingDirection"] = [this] (const std::string& direction) { return lua_isLookingDirection(direction); };
-    m_lua["eev_getCurrentRoomX"] = [this] { return lua_getCurrentRoomX(); };
-    m_lua["eev_getCurrentRoomY"] = [this] { return lua_getCurrentRoomY(); };
+    lua()["eev_setMoving"] = [this] (bool moving) { lua_setMoving(moving); };
+    lua()["eev_isLookingDirection"] = [this] (const std::string& direction) { return lua_isLookingDirection(direction); };
+    lua()["eev_getCurrentRoomX"] = [this] { return lua_getCurrentRoomX(); };
+    lua()["eev_getCurrentRoomY"] = [this] { return lua_getCurrentRoomY(); };
 }
 
 MovingElement::~MovingElement()
@@ -46,6 +46,9 @@ void MovingElement::updateAI(const sf::Time& dt)
     // Get next room
     if (m_currentNode != nullptr)
         setCurrentNode(findNextNode(m_currentNode));
+
+    // Forward to lua
+    lua()["_update"](dt.asSeconds());
 }
 
 void MovingElement::updateRoutine(const sf::Time& dt)
@@ -56,8 +59,7 @@ void MovingElement::updateRoutine(const sf::Time& dt)
     m_edata->operator[](L"ry").as_float() = relPosition.y;
 
     baseClass::updateRoutine(dt);
-    // Forward to lua
-    m_lua["_update"](dt.asSeconds());
+    updateAI(dt);
 }
 
 //-------------------------------//
@@ -72,7 +74,7 @@ MovingElement::NodeWay MovingElement::findNextNode(const Graph::NodeData* curren
 
     // First visit to this node
     if (m_nodeInfos[currentNode->coords].visits == 0u)
-        m_lua["nonVisitedNodes"] = static_cast<uint>(m_lua["nonVisitedNodes"]) - 1u;
+        lua()["nonVisitedNodes"] = static_cast<uint>(lua()["nonVisitedNodes"]) - 1u;
 
     m_nodeInfos[currentNode->coords].visits += 1u;
     m_nodeInfos[currentNode->coords].lastVisit = m_tick++;
@@ -202,8 +204,8 @@ void MovingElement::updateFromGraph()
 void MovingElement::reinit()
 {
     m_tick = 0u;
-    m_lua["_init"]();
-    m_lua["eev_nonVisitedNodes"] = m_graph.uniqueNodesCount();
+    lua()["_init"]();
+    lua()["eev_nonVisitedNodes"] = m_graph.uniqueNodesCount();
     m_nodeInfos.clear();
 }
 
@@ -222,14 +224,14 @@ uint MovingElement::call(const char* function, const Graph::NodeData* node)
 {
     Weight weight = getWeight(node);
 
-    m_lua["eev_weight"].SetObj(weight,
+    lua()["eev_weight"].SetObj(weight,
                                "visited",   &Weight::visited,
                                "lastVisit", &Weight::lastVisit,
                                "altitude",  &Weight::altitude,
                                "treasure",  &Weight::treasure,
                                "exit",      &Weight::exit);
 
-    return m_lua[function]();
+    return lua()[function]();
 }
 
 //-----------------------//
@@ -266,7 +268,7 @@ void MovingElement::bindElementData(ElementData& edata)
 
         // Lua
         std::string luaFilename = "res/" + m_folder + sElementID + "/ai.lua";
-        if (!m_lua.load(luaFilename))
+        if (!lua().load(luaFilename))
             throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
 
         // Clear all previous callbacks
@@ -276,12 +278,12 @@ void MovingElement::bindElementData(ElementData& edata)
         m_leftClickAction.callback = nullptr;
         m_rightClickAction.callback = nullptr;
 
-        m_lua["_register"]();
+        lua()["_register"]();
     }
 
     // Finish update
     updateFromGraph();
-    m_lua["_reinit"]();
+    lua()["_reinit"]();
 }
 
 void MovingElement::refreshPosition()

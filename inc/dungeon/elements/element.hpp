@@ -94,6 +94,9 @@ namespace dungeon
         //! @name Lua API
         //! @{
 
+        //! Access the lua state.
+        sel::State& lua() { return *m_lua; }
+
         //! Calling detector.
         void lua_addCallback(const std::string& luaKey, const std::string& entityType, const std::string& condition);
 
@@ -243,7 +246,7 @@ namespace dungeon
         Inter& m_inter;                 //!< To be able to interact with nearby elements.
         ElementData* m_edata = nullptr; //!< The data of the element.
         scene::AnimatedSprite m_sprite; //!< The sprite.
-        sel::State m_lua;               //!< The lua state.
+        sel::State* m_lua = nullptr;    //!< The lua state.
 
         // Click actions
         ClickAction m_leftClickAction;      //!< When left click is pressed.

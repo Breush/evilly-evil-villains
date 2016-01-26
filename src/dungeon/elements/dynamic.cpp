@@ -9,7 +9,7 @@ Dynamic::Dynamic(Inter& inter)
     : baseClass(inter)
 {
     // Lua API
-    m_lua["eev_dynamicRemoveSelf"] = [this] { lua_dynamicRemoveSelf(); };
+    lua()["eev_dynamicRemoveSelf"] = [this] { lua_dynamicRemoveSelf(); };
 }
 
 //------------------------//
@@ -47,7 +47,7 @@ void Dynamic::bindElementData(ElementData& edata)
 
         // Lua
         std::string luaFilename = "res/vanilla/dynamics/" + sElementID + "/ai.lua";
-        if (!m_lua.load(luaFilename))
+        if (!lua().load(luaFilename))
             throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
 
         // Clear all previous callbacks
@@ -57,9 +57,9 @@ void Dynamic::bindElementData(ElementData& edata)
         m_leftClickAction.callback = nullptr;
         m_rightClickAction.callback = nullptr;
 
-        m_lua["_register"]();
+        lua()["_register"]();
     }
 
     // Finish update
-    m_lua["_reinit"]();
+    lua()["_reinit"]();
 }

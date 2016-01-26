@@ -17,8 +17,8 @@ Hero::Hero(HeroesManager& manager, Inter& inter, Graph& graph)
     , m_manager(manager)
 {
     // Lua API
-    m_lua["eev_getOut"] = [this] { lua_getOut(); };
-    m_lua["eev_stealTreasure"] = [this] { return lua_stealTreasure(); };
+    lua()["eev_getOut"] = [this] { lua_getOut(); };
+    lua()["eev_stealTreasure"] = [this] { return lua_stealTreasure(); };
 }
 
 //----------------------//
@@ -26,7 +26,7 @@ Hero::Hero(HeroesManager& manager, Inter& inter, Graph& graph)
 
 void Hero::onDeath()
 {
-    m_lua["_onDeath"]();
+    lua()["_onDeath"]();
 }
 
 //-------------------//
