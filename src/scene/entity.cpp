@@ -48,6 +48,13 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     returnif (!m_visible);
 
+    // Check if this entity is not visible because completely out
+    // of the view rect. If so, no need for drawing itself and its children.
+    // OPTIM: do not recompute that each time
+    /*sf::FloatRect viewRect{target.getView().getCenter() - target.getView().getSize() / 2.f, target.getView().getSize()};
+    viewRect = tools::intersect(viewRect, localBounds() + getPosition() - getOrigin());
+    returnif (viewRect.width < 0.f || viewRect.height < 0.f);*/
+
     states.transform = getTransform();
     states.shader = m_shader;
 
@@ -484,7 +491,7 @@ void Entity::centerOrigin()
     setRelativeOrigin({0.5f, 0.5f});
 }
 
-sf::FloatRect Entity::localBounds()
+sf::FloatRect Entity::localBounds() const
 {
     return {0.f, 0.f, m_size.x, m_size.y};
 }

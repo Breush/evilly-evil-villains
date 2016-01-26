@@ -205,6 +205,16 @@ namespace tools
 
         return r;
     }
+
+    template<typename T> inline
+    bool areIntersecting(const sf::Rect<T>& r1, const sf::Rect<T>& r2)
+    {
+        if (r1.width < 0.f || r1.height < 0.f) return false;
+        if (r2.width < 0.f || r2.height < 0.f) return false;
+
+        return (r1.left < r2.left + r2.width && r1.left + r1.width > r2.left
+                && r1.top > r2.top + r2.height && r1.top + r1.height < r2.top);
+    }
 }
 
 namespace std

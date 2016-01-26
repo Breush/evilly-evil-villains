@@ -123,7 +123,7 @@ namespace scene
         void setKeepInsideLocalRect(const sf::FloatRect& localRect);
 
         //! Returns the entity size with a rect.
-        sf::FloatRect localBounds();
+        sf::FloatRect localBounds() const;
 
         //! Returns the localBounds transformed to global coordinates.
         sf::FloatRect globalBounds();
