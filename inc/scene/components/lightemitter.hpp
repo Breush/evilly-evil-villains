@@ -33,6 +33,8 @@ namespace scene
         //! Destructor.
         ~LightEmitter();
 
+        static std::string id() noexcept { return "LightEmitter"; }
+
         //-------------------------//
         //! @name Lighting control
         //! @{

@@ -2,7 +2,8 @@
 
 #include "context/component.hpp"
 
-#include <vector>
+#include <unordered_map>
+#include <string>
 
 namespace context
 {
@@ -44,7 +45,7 @@ namespace context
     protected:
 
         // Components
-        std::vector<Component*> m_components;   //!< All the components.
+        std::unordered_map<std::string, Component*> m_components;   //!< All the components.
     };
 }
 

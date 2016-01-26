@@ -25,6 +25,8 @@ namespace scene
         //! Default destructor.
         ~Lerpable() = default;
 
+        static std::string id() noexcept { return "Lerpable"; }
+
         //----------------//
         //! @name Routine
         //! @{

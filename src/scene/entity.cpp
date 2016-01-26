@@ -208,9 +208,8 @@ void Entity::updateChanges()
         onTransformChanges();
 
         // Warn components
-        // TODO Might do a dynamic_cast<>, would be a lot safer when extending
         for (auto& component : m_components)
-            reinterpret_cast<scene::Component*>(component)->onTransformChanged();
+            reinterpret_cast<scene::Component*>(component.second)->onTransformChanged();
 
         m_localChanges = false;
     }
@@ -788,7 +787,7 @@ void Entity::setLayer(Layer* inLayer)
 
     // Warn components
     for (auto& component : m_components)
-        reinterpret_cast<scene::Component*>(component)->onLayerChanged(m_layer);
+        reinterpret_cast<scene::Component*>(component.second)->onLayerChanged(m_layer);
 }
 
 void Entity::setGraph(Graph* inGraph)

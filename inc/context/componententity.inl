@@ -12,39 +12,32 @@ namespace context
     template <class Component_t>
     inline bool ComponentEntity::hasComponent() const
     {
-        for (auto& component : m_components) {
-            auto pComponent = dynamic_cast<Component_t*>(component);
-            if (pComponent != nullptr)
-                return true;
-        }
-        return false;
+        auto found = m_components.find(Component_t::id());
+        return (found != std::end(m_components));
     }
 
     template <class Component_t>
     inline Component_t* ComponentEntity::getComponent()
     {
-        for (auto& component : m_components) {
-            auto pComponent = dynamic_cast<Component_t*>(component);
-            if (pComponent != nullptr)
-                return pComponent;
-        }
-        return nullptr;
+        auto found = m_components.find(Component_t::id());
+        return (found != std::end(m_components))? reinterpret_cast<Component_t*>(found->second) : nullptr;
     }
 
     template <class Component_t, class... Args>
     inline Component_t* ComponentEntity::addComponent(Args&&... args)
     {
         auto& component = componenter.newComponent<Component_t>(std::forward<Args>(args)...);
-        m_components.emplace_back(&component);
+        m_components[Component_t::id()] = &component;
         return &component;
     }
 
     template <class Component_t>
     inline void ComponentEntity::removeComponent()
     {
-        auto pComponent = getComponent<Component_t>();
-        if (pComponent == nullptr) return;
+        auto found = m_components.find(Component_t::id());
+        if (found == std::end(m_components)) return;
+        auto pComponent = reinterpret_cast<Component_t*>(found->second);
         componenter.deleteComponent<Component_t>(pComponent);
-        std::erase_if(m_components, [pComponent] (Component* component) { return component == pComponent; });
+        m_components.erase(found);
     }
 }
