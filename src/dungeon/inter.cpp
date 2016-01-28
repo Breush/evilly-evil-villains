@@ -86,7 +86,6 @@ void Inter::updateRoutine(const sf::Time& dt)
         for (auto& layer : tile.layers)             layer->localMove(offset);
         for (auto& facility : tile.facilities)      facility->localMove(offset);
         if (tile.trap != nullptr)                   tile.trap->localMove(offset);
-        if (tile.totalDoshLabel != nullptr)         tile.totalDoshLabel->localMove(offset);
         if (tile.harvestableDoshLabel != nullptr)   tile.harvestableDoshLabel->localMove(offset);
 
         // Move moving elements (monsters/heroes)
@@ -328,7 +327,7 @@ void Inter::addLayer(const RoomCoords& coords, const std::string& textureID, flo
 {
     auto& tile = m_tiles[coords];
 
-    auto layer = std::make_unique<scene::RectangleShape>();
+    auto layer = std::make_unique<TileLayer>();
     layer->setTexture(textureID);
     layer->setLocalPosition(positionFromRoomCoords(coords));
     layer->setSize(tileSize());
@@ -926,7 +925,6 @@ void Inter::refreshTileDoshLabel(const RoomCoords& coords)
 
     // Remove label if no room
     if (room.state == RoomState::EMPTY) {
-        tile.totalDoshLabel = nullptr;
         tile.harvestableDoshLabel = nullptr;
         return;
     }
@@ -937,19 +935,9 @@ void Inter::refreshTileDoshLabel(const RoomCoords& coords)
         harvestableDosh += tile.trap->harvestableDosh();
     configureDoshLabel(tile.harvestableDoshLabel, harvestableDosh, sf::Color::Red);
 
-    // Total dosh
-    uint totalDosh = 0u;
-    totalDosh += harvestableDosh;
-    totalDosh += m_data->roomTreasureDosh(coords);
-    configureDoshLabel(tile.totalDoshLabel, totalDosh, sf::Color::White);
-
-    // Re-position
-    if (tile.totalDoshLabel != nullptr)
-        tile.totalDoshLabel->setLocalPosition(localPosition);
-
     if (tile.harvestableDoshLabel != nullptr) {
-        tile.harvestableDoshLabel->setLocalPosition(localPosition + tileSize());
-        tile.harvestableDoshLabel->setRelativeOrigin({1.f, 1.f});
+        tile.harvestableDoshLabel->setLocalPosition(localPosition + sf::Vector2f{0.5f, 0.05f} * tileSize());
+        tile.harvestableDoshLabel->setRelativeOrigin({0.5f, 0.f});
     }
 }
 

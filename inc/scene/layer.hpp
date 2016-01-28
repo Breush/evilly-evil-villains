@@ -18,6 +18,7 @@ namespace config
 namespace scene
 {
     class LightEmitter;
+    class LightNormals;
 
     //! A layer root entity.
 
@@ -44,6 +45,7 @@ namespace scene
         using Callback = std::function<void()>;
 
         friend class LightEmitter;
+        friend class LightNormals;
 
     public:
 
@@ -218,6 +220,7 @@ namespace scene
         const sf::Texture* m_penumbraTexture = nullptr; //!< The penumbra texture.
         sf::Shader* m_lightOverShapeShader = nullptr;   //!< The light over shape shader.
         sf::Shader* m_unshadowShader = nullptr;         //!< The unshadow shader.
+        sf::Shader* m_normalsShader = nullptr;          //!< The normals shader.
 
         bool m_lightDebugFirstTime = true;  // FIXME Debug thing.
 

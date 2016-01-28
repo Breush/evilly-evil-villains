@@ -66,6 +66,9 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
         if (!m_transparent) {
             drawParts(target, states);
             drawInternal(target, states);
+
+            for (const auto& component : m_components)
+                reinterpret_cast<scene::Component*>(component.second)->draw(target, states);
         }
 
         // Draw children - DFS
@@ -98,6 +101,9 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
         if (!m_transparent) {
             drawParts(target, states, clipArea);
             drawInternal(target, states);
+
+            for (const auto& component : m_components)
+                reinterpret_cast<scene::Component*>(component.second)->draw(target, states, clipArea);
         }
 
         // Draw children - DFS
@@ -511,7 +517,10 @@ void Entity::setSize(const sf::Vector2f& inSize)
 
     refreshChildrenRelativePosition();
     refreshOrigin();
+
     onSizeChanges();
+    for (auto& component : m_components)
+        reinterpret_cast<scene::Component*>(component.second)->onSizeChanged();
 }
 
 void Entity::setLocalPosition(const sf::Vector2f& inLocalPosition)

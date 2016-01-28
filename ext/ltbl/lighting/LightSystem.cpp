@@ -595,7 +595,10 @@ void LightSystem::clear(sf::RenderTarget &rt, const sf::Color &color) {
     rt.setView(v);
 }
 
-void LightSystem::create(const sf::FloatRect &rootRegion, const sf::Vector2u &imageSize, const sf::Texture &penumbraTexture, sf::Shader &unshadowShader, sf::Shader &lightOverShapeShader) {
+void LightSystem::create(const sf::FloatRect& rootRegion, const sf::Vector2u& imageSize,
+                         const sf::Texture& penumbraTexture,
+                         sf::Shader& unshadowShader, sf::Shader& lightOverShapeShader, sf::Shader& normalsShader)
+{
     _shapeQuadtree.create(rootRegion);
     _lightPointEmissionQuadtree.create(rootRegion);
 
@@ -603,6 +606,9 @@ void LightSystem::create(const sf::FloatRect &rootRegion, const sf::Vector2u &im
     _emissionTempTexture.create(imageSize.x, imageSize.y);
     _antumbraTempTexture.create(imageSize.x, imageSize.y);
     _compositionTexture.create(imageSize.x, imageSize.y);
+    _normalsTexture.create(imageSize.x, imageSize.y);
+
+    normalsTargetClear();
 
     sf::Vector2f targetSizeInv = sf::Vector2f(1.0f / imageSize.x, 1.0f / imageSize.y);
 
@@ -610,9 +616,14 @@ void LightSystem::create(const sf::FloatRect &rootRegion, const sf::Vector2u &im
 
     lightOverShapeShader.setParameter("emissionTexture", _emissionTempTexture.getTexture());
     lightOverShapeShader.setParameter("targetSizeInv", targetSizeInv);
+
+    normalsShader.setParameter("normalsTexture", _normalsTexture.getTexture());
+    normalsShader.setParameter("targetSize", imageSize.x, imageSize.y);
+    normalsShader.setParameter("lightTexture", sf::Shader::CurrentTexture);
 }
 
-void LightSystem::render(const sf::View &view, sf::Shader &unshadowShader, sf::Shader &lightOverShapeShader) {
+void LightSystem::render(const sf::View &view, sf::Shader &unshadowShader, sf::Shader &lightOverShapeShader, sf::Shader& normalsShader)
+{
     clear(_compositionTexture, _ambientColor);
     _compositionTexture.setView(_compositionTexture.getDefaultView());
 
@@ -646,7 +657,7 @@ void LightSystem::render(const sf::View &view, sf::Shader &unshadowShader, sf::S
         lightShapes.clear();
         _shapeQuadtree.queryRegion(lightShapes, pPointEmissionLight->getAABB());
 
-        pPointEmissionLight->render(view, _lightTempTexture, _emissionTempTexture, _antumbraTempTexture, lightShapes, unshadowShader, lightOverShapeShader);
+        pPointEmissionLight->render(view, _lightTempTexture, _emissionTempTexture, _antumbraTempTexture, lightShapes, unshadowShader, lightOverShapeShader, _normalsEnabled, normalsShader);
         _compositionTexture.draw(lightTempSprite, compoRenderStates);
     }
 
@@ -656,55 +667,53 @@ void LightSystem::render(const sf::View &view, sf::Shader &unshadowShader, sf::S
         LightDirectionEmission* pDirectionEmissionLight = directionEmissionLight.get();
 
         float maxDim = std::max(centeredViewBounds.width, centeredViewBounds.height);
-
         sf::FloatRect extendedViewBounds = rectFromBounds(sf::Vector2f(-maxDim, -maxDim) * _directionEmissionRadiusMultiplier,
                                                           sf::Vector2f(maxDim, maxDim) * _directionEmissionRadiusMultiplier + sf::Vector2f(_directionEmissionRange, 0.0f));
-
         float shadowExtension = vectorMagnitude(rectLowerBound(centeredViewBounds)) * _directionEmissionRadiusMultiplier * 2.0f;
 
         sf::ConvexShape directionShape = shapeFromRect(extendedViewBounds);
-
         directionShape.setPosition(view.getCenter());
 
         sf::Vector2f normalizedCastDirection = vectorNormalize(pDirectionEmissionLight->_castDirection);
-
         directionShape.setRotation(_radToDeg * std::atan2(normalizedCastDirection.y, normalizedCastDirection.x));
 
         std::vector<QuadtreeOccupant*> viewLightShapes;
-
         _shapeQuadtree.queryShape(viewLightShapes, directionShape);
 
         pDirectionEmissionLight->render(view, _lightTempTexture, _antumbraTempTexture, viewLightShapes, unshadowShader, shadowExtension);
 
         sf::Sprite sprite;
-
         sprite.setTexture(_lightTempTexture.getTexture());
-
         _compositionTexture.draw(sprite, compoRenderStates);
+
+        // TODO Normals
     }
 
     _compositionTexture.display();
 }
 
-void LightSystem::addShape(const std::shared_ptr<LightShape> &lightShape) {
-    _shapeQuadtree.add(lightShape.get());
-
-    _lightShapes.insert(lightShape);
+LightShape* LightSystem::allocateShape()
+{
+    return _lightShapesPool.newElement();
 }
 
-void LightSystem::removeShape(const std::shared_ptr<LightShape> &lightShape) {
-    std::unordered_set<std::shared_ptr<LightShape>>::iterator it = _lightShapes.find(lightShape);
+void LightSystem::deallocateShape(LightShape* pLightShape)
+{
+    _lightShapesPool.deleteElement(pLightShape);
+}
 
-    if (it != _lightShapes.end()) {
-        (*it)->quadtreeRemove();
+void LightSystem::addShape(LightShape* pLightShape)
+{
+    _shapeQuadtree.add(pLightShape);
+}
 
-        _lightShapes.erase(it);
-    }
+void LightSystem::removeShape(LightShape* pLightShape)
+{
+    pLightShape->quadtreeRemove();
 }
 
 void LightSystem::addLight(const std::shared_ptr<LightPointEmission> &pointEmissionLight) {
     _lightPointEmissionQuadtree.add(pointEmissionLight.get());
-
     _pointEmissionLights.insert(pointEmissionLight);
 }
 
@@ -724,7 +733,35 @@ void LightSystem::removeLight(const std::shared_ptr<LightPointEmission> &pointEm
 
 void LightSystem::removeLight(const std::shared_ptr<LightDirectionEmission> &directionEmissionLight) {
     std::unordered_set<std::shared_ptr<LightDirectionEmission>>::iterator it = _directionEmissionLights.find(directionEmissionLight);
-
     if (it != _directionEmissionLights.end())
         _directionEmissionLights.erase(it);
+}
+
+//----- Normals -----//
+
+void LightSystem::normalsEnabled(bool enabled)
+{
+    _normalsEnabled = enabled;
+}
+
+void LightSystem::normalsTargetSetView(sf::View view)
+{
+    _normalsTexture.setView(view);
+}
+
+void LightSystem::normalsTargetClear()
+{
+    _normalsTexture.clear(sf::Color{127u, 127u, 255u});
+}
+
+void LightSystem::normalsTargetDisplay()
+{
+    if (!_normalsEnabled) return;
+    _normalsTexture.display();
+}
+
+void LightSystem::normalsTargetDraw(const sf::Drawable& drawable, sf::RenderStates states)
+{
+    if (!_normalsEnabled) return;
+    _normalsTexture.draw(drawable, states);
 }

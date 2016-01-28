@@ -12,6 +12,7 @@
 #include "sfe/grid.hpp"
 #include "scene/wrappers/label.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
+#include "scene/wrappers/lightsprite.hpp"
 #include "scene/wrappers/customline.hpp"
 #include "tools/vector.hpp"
 
@@ -29,14 +30,16 @@ namespace dungeon
         //! A basic void callback.
         using Callback = std::function<void()>;
 
+        //! A tile is just a bunch a layers and some fixed entities (facilities/traps).
+        using TileLayer = scene::LightSprite;
+
         //! A tile of the dungeon.
         struct Tile
         {
             RoomCoords coords;                                          //!< The coordinates of the tile (floor/room).
-            std::vector<std::unique_ptr<scene::RectangleShape>> layers; //!< All sprites to draw, from furthest to nearest.
+            std::vector<std::unique_ptr<TileLayer>> layers;             //!< All sprites to draw, from furthest to nearest.
             std::vector<std::unique_ptr<Facility>> facilities;          //!< The facilities in the tile.
             std::unique_ptr<Trap> trap = nullptr;                       //!< The trap, protecting the tile.
-            std::unique_ptr<scene::Label> totalDoshLabel;               //!< The total dosh inside the room.
             std::unique_ptr<scene::Label> harvestableDoshLabel;         //!< The harvestable dosh.
             bool movingLocked = false;                                  //!< Is the tile locked because it is moving?
         };

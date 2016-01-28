@@ -48,7 +48,7 @@ namespace ai
         //! @name Routine
         //! @{
 
-        void updateAI(const sf::Time& dt);
+        void updateRoutine(const sf::Time& dt) final;
 
         //! @}
 

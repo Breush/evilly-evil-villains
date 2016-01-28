@@ -23,6 +23,7 @@ Layer::Layer()
     m_penumbraTexture = &context::context.textures.get("core/ltbl/penumbra");
     m_lightOverShapeShader = &context::context.shaders.get("core/ltbl/lightOverShape");
     m_unshadowShader = &context::context.shaders.get("core/ltbl/unshadow");
+    m_normalsShader = &context::context.shaders.get("core/ltbl/normals");
 }
 
 void Layer::init(Graph* graph)
@@ -48,13 +49,20 @@ void Layer::draw(sf::RenderTarget& target, sf::RenderStates states) const
         return;
     }
 
+    // Normals prologue
+    m_lightSystem.normalsTargetClear();
+    m_lightSystem.normalsTargetSetView(m_internView);
+
     // We keep an intermediate RenderTarget so that the lighting can affect only this layer
     m_tmpTarget.clear(sf::Color::Transparent);
     m_tmpTarget.setView(m_internView);
     m_tmpTarget.draw(m_root, states);
 
+    // Normals epilogue
+    m_lightSystem.normalsTargetDisplay();
+
     // We are rendering within the effective view
-    m_lightSystem.render(m_internView, *m_unshadowShader, *m_lightOverShapeShader);
+    m_lightSystem.render(m_internView, *m_unshadowShader, *m_lightOverShapeShader, *m_normalsShader);
 
     // But we show the lighting sprite in {0.f, 0.f}
     sf::Sprite lightSprite(m_lightSystem.getLightingTexture());
@@ -203,7 +211,8 @@ void Layer::refreshLightSystem()
 
     m_tmpTarget.create(m_basicView.getSize().x, m_basicView.getSize().y);
     m_tmpTarget.setSmooth(true);
-    m_lightSystem.create({0.f, 0.f, m_size.x, m_size.y}, sf::v2u(m_basicView.getSize()), *m_penumbraTexture, *m_unshadowShader, *m_lightOverShapeShader);
+    m_lightSystem.create({0.f, 0.f, m_size.x, m_size.y}, sf::v2u(m_basicView.getSize()), *m_penumbraTexture, *m_unshadowShader, *m_lightOverShapeShader, *m_normalsShader);
+    // m_lightSystem.normalsEnabled(true);
 
     // FIXME The following is a debug thingy
     if (m_lightDebugFirstTime) {

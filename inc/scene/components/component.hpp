@@ -4,6 +4,8 @@
 
 #include <memory>
 
+#include <SFML/Graphics/RenderTarget.hpp>
+
 namespace scene
 {
     // Forward declarations
@@ -26,6 +28,15 @@ namespace scene
         //----------------------------//
         //! @name Structure callbacks
         //! @{
+
+        //! Called whenever the entity is drawn.
+        virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {}
+
+        //! Called whenever the entity is drawn, with a clip area.
+        virtual void draw(sf::RenderTarget& target, sf::RenderStates states, const sf::FloatRect& clipArea) const {}
+
+        //! Called whenever the entity's size changed.
+        virtual void onSizeChanged() {}
 
         //! Called whenever the entity's transform changed.
         virtual void onTransformChanged() {}
