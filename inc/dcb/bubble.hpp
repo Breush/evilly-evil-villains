@@ -4,8 +4,7 @@
 #include "sfe/twraptext.hpp"
 #include "sfe/richtext.hpp"
 #include "nui/progressivetext.hpp"
-
-#include <SFML/Graphics/RectangleShape.hpp>
+#include "nui/frame.hpp"
 
 #include <vector>
 #include <string>
@@ -67,20 +66,17 @@ namespace dcb
         //! @{
 
         //! Refresh parts position and size.
-        void refreshParts();
+        void refreshText();
 
         //! @}
 
     private:
 
-        using Text = sfe::WrapText<sfe::RichText>;
-        nui::ProgressiveText<Text> m_text;      //!< The text shown.
         std::vector<std::wstring> m_messages;   //!< The list of texts.
 
-        // Decorum
-        sf::RectangleShape m_background;    //!< The background.
-        float m_hPadding;   //!< Horizontal padding value got from config.
-        float m_vPadding;   //!< Vertical padding value got from config.
-        float m_outlineThickness = 1.f; //!< Size of outline.
+        // Content
+        using Text = sfe::WrapText<sfe::RichText>;
+        nui::Frame m_frame;                     //!< Box around the text.
+        nui::ProgressiveText<Text> m_text;      //!< The text shown.
     };
 }

@@ -10,12 +10,10 @@ Bubble::Bubble()
     setDetectable(false);
 
     // Background
-    addPart(&m_background);
-    m_background.setOutlineColor(sf::Color::White);
-    m_background.setFillColor({0u, 0u, 0u, 150u});
+    attachChild(m_frame);
 
     // Text
-    attachChild(m_text);
+    m_frame.setContent(m_text);
     m_text.text().setFont(context::context.fonts.get("core/global/fonts/nui"));
     m_text.text().setFillColor(sf::Color::White);
 }
@@ -25,7 +23,7 @@ Bubble::Bubble()
 
 void Bubble::onSizeChanges()
 {
-    refreshParts();
+    refreshText();
 }
 
 void Bubble::refreshNUI(const config::NUIGuides& cNUI)
@@ -33,10 +31,8 @@ void Bubble::refreshNUI(const config::NUIGuides& cNUI)
     baseClass::refreshNUI(cNUI);
 
     m_text.text().setCharacterSize(cNUI.fontSize);
-    m_hPadding = cNUI.hPadding;
-    m_vPadding = cNUI.vPadding;
 
-    refreshParts();
+    refreshText();
 }
 
 //-----------------------------//
@@ -67,12 +63,8 @@ void Bubble::clearMessages()
 //-----------------------------------//
 //----- Internal change updates -----//
 
-void Bubble::refreshParts()
+void Bubble::refreshText()
 {
-    m_background.setOutlineThickness(m_outlineThickness);
-    m_background.setPosition({m_outlineThickness, m_outlineThickness});
-    m_background.setSize(size() - 2.f * m_outlineThickness);
-
-    m_text.setLocalPosition({m_hPadding, m_vPadding});
-    m_text.text().fitWidth(size().x - 2.f * m_hPadding);
+    m_text.setSize(size() - 2.f * m_frame.paddings());
+    m_text.text().fitWidth(m_text.size().x);
 }
