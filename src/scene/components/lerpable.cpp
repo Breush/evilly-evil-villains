@@ -7,7 +7,6 @@ using namespace scene;
 
 Lerpable::Lerpable(Entity& entity)
     : baseClass(entity)
-    , m_positionLerping(false)
     , m_positionSpeed(250.f, 250.f)
 {
 }

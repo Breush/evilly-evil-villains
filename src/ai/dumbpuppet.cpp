@@ -21,7 +21,7 @@ DumbPuppet::~DumbPuppet()
 //-------------------//
 //----- Routine -----//
 
-void DumbPuppet::updateAI(const sf::Time&)
+void DumbPuppet::updateRoutine(const sf::Time&)
 {
     auto lerpable = getComponent<scene::Lerpable>();
 
