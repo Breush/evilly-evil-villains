@@ -15,9 +15,9 @@ Bubble::Bubble()
     m_background.setFillColor({0u, 0u, 0u, 150u});
 
     // Text
-    addPart(&m_wrapText);
-    m_wrapText.setFont(context::context.fonts.get("core/global/fonts/nui"));
-    m_wrapText.setFillColor(sf::Color::White);
+    attachChild(m_text);
+    m_text.text().setFont(context::context.fonts.get("core/global/fonts/nui"));
+    m_text.text().setFillColor(sf::Color::White);
 }
 
 //-------------------//
@@ -32,7 +32,7 @@ void Bubble::refreshNUI(const config::NUIGuides& cNUI)
 {
     baseClass::refreshNUI(cNUI);
 
-    m_wrapText.setCharacterSize(cNUI.fontSize);
+    m_text.text().setCharacterSize(cNUI.fontSize);
     m_hPadding = cNUI.hPadding;
     m_vPadding = cNUI.vPadding;
 
@@ -44,7 +44,7 @@ void Bubble::refreshNUI(const config::NUIGuides& cNUI)
 
 void Bubble::forceMessage(const std::wstring& message)
 {
-    m_wrapText.setString(message);
+    m_text.setString(message);
 }
 
 uint Bubble::addMessage(std::wstring message)
@@ -56,7 +56,7 @@ uint Bubble::addMessage(std::wstring message)
 void Bubble::showMessage(uint messageID)
 {
     massert(messageID < m_messages.size(), "Message ID " << messageID << " does not exists.");
-    m_wrapText.setString(m_messages[messageID]);
+    m_text.setString(m_messages[messageID]);
 }
 
 void Bubble::clearMessages()
@@ -73,7 +73,6 @@ void Bubble::refreshParts()
     m_background.setPosition({m_outlineThickness, m_outlineThickness});
     m_background.setSize(size() - 2.f * m_outlineThickness);
 
-    m_wrapText.setPosition({m_hPadding, m_vPadding});
-    m_wrapText.fitWidth(size().x - 2.f * m_hPadding);
-    setPartClippingRect(&m_wrapText, {0.f, 0.f, size().x - 2.f * m_hPadding, size().y - 2.f * m_vPadding});
+    m_text.setLocalPosition({m_hPadding, m_vPadding});
+    m_text.text().fitWidth(size().x - 2.f * m_hPadding);
 }

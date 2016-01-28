@@ -36,10 +36,10 @@ namespace sfe
         //! @{
 
         //! Set the string to wrap.
-        void setString(const std::wstring& string);
+        void setString(const sf::String& string);
 
         //! Get the source string.
-        inline const sf::String& getString() const { return m_wrapString; }
+        inline sf::String getString() const { return m_wrapString; }
 
         //! Set the default color.
         void setFillColor(const sf::Color& color);

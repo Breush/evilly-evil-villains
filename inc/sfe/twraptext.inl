@@ -19,9 +19,9 @@ namespace sfe
     //----- Wrappers -----//
 
     template<class Text_t>
-    void WrapText<Text_t>::setString(const std::wstring& string)
+    void WrapText<Text_t>::setString(const sf::String& string)
     {
-        m_wrapString = string;
+        m_wrapString = string.toWideString();
         rewrap();
     }
 
