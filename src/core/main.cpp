@@ -54,6 +54,10 @@ int main(int argc, char *argv[])
     #if defined(__GNUC__)
     #if not defined(__MINGW32__)
     signal(SIGSEGV, handler);
+    signal(SIGBUS, handler);
+    signal(SIGILL, handler);
+    signal(SIGSYS, handler);
+    signal(SIGFPE, handler);
     #endif
     #endif
 
@@ -107,6 +111,7 @@ int main(int argc, char *argv[])
         std::cerr << "This message has also been saved to error.log." << std::endl;
         std::ofstream ofs;
         ofs.open("error.log");
+        ofs << time(nullptr) << std::endl;
         ofs << str.str();
 
         returnStatus = EXIT_FAILURE;

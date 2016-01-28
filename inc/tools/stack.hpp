@@ -84,7 +84,7 @@ namespace tools
                     entry.file = dlinfo.dli_fname;
                 entry.line = atoi(strstr(fileBuffer, ":") + 1);
                 entry.function = (symname)? symname : "??";
-                m_entryStack.emplace_back(entry);
+                m_entryStack.emplace_back(std::move(entry));
 
                 // Freeing
                 if (demangled)
@@ -94,6 +94,13 @@ namespace tools
                 if (entry.function == "main")
                     break;
             }
+
+            #else
+
+            Entry entry;
+            entry.file = "Unable to generate the callStack on your system.";
+            m_entryStack.emplace_back(std::move(entry));
+
             #endif
             #endif
         }
