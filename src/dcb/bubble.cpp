@@ -21,9 +21,10 @@ Bubble::Bubble()
 //-------------------//
 //----- Routine -----//
 
-void Bubble::onSizeChanges()
+void Bubble::onChildSizeChanges(scene::Entity& child)
 {
-    refreshText();
+    returnif (&child != &m_frame);
+    setSize(m_frame.size());
 }
 
 void Bubble::refreshNUI(const config::NUIGuides& cNUI)
@@ -31,8 +32,14 @@ void Bubble::refreshNUI(const config::NUIGuides& cNUI)
     baseClass::refreshNUI(cNUI);
 
     m_text.text().setCharacterSize(cNUI.fontSize);
+}
 
-    refreshText();
+//-------------------//
+//----- Display -----//
+
+void Bubble::fitWidth(float width)
+{
+    m_text.text().fitWidth(width);
 }
 
 //-----------------------------//
@@ -58,13 +65,4 @@ void Bubble::showMessage(uint messageID)
 void Bubble::clearMessages()
 {
     m_messages.clear();
-}
-
-//-----------------------------------//
-//----- Internal change updates -----//
-
-void Bubble::refreshText()
-{
-    m_text.setSize(size() - 2.f * m_frame.paddings());
-    m_text.text().fitWidth(m_text.size().x);
 }

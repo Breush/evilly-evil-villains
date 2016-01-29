@@ -55,9 +55,9 @@ GameDCB::GameDCB(StateStack& stack)
 
     // Message
     nuiRoot.attachChild(m_bubble);
-    m_bubble.setRelativePosition({1.f, 0.f});
+    m_bubble.setRelativePosition({0.99f, 0.01f});
     m_bubble.setRelativeOrigin({1.f, 0.f});
-    m_bubble.setSize(nuiSize / 3.f);
+    m_bubble.fitWidth(0.3f * nuiSize.x);
     m_bubble.forceMessage(_("Welcome to the Dungeon Community Bank (DCB). "
                             "I heard that you wanted to open your own dungeon, "
                             "this is the kind of operation we like to support here.\n\n"
@@ -65,26 +65,24 @@ GameDCB::GameDCB(StateStack& stack)
 
     // Answer box
     nuiRoot.attachChild(m_answerBox);
-    m_answerBox.setSize({0.50f * nuiSize.x, 0.30f * nuiSize.y});
+    m_answerBox.setSize({0.40f * nuiSize.x, 0.30f * nuiSize.y});
     m_answerBox.setRelativePosition({0.5f, 1.0f});
-    m_answerBox.setRelativeOrigin({0.4f, 1.0f});
+    m_answerBox.setRelativeOrigin({0.5f, 1.0f});
 
-    // Entry
-    m_answerBox.attachChild(m_nameEntry);
+    // Name
+    m_answerBox.attachChild(m_nameStacker);
+    m_nameStacker.stackBack(m_nameEntry);
+    m_nameStacker.stackBack(m_okButton);
+    m_nameStacker.setRelativePosition({0.5f, 0.5f});
+    m_nameStacker.centerOrigin();
+
     m_nameEntry.setLength(20u);
-    m_nameEntry.setRelativePosition({0.5f, 0.5f});
-    m_nameEntry.centerOrigin();
     m_nameEntry.setOnValidateCallback([this] { onNameValidate(); });
-
-    // Button
-    m_answerBox.attachChild(m_okButton);
     m_okButton.set(_("OK"), [this] { onNameValidate(); });
-    m_okButton.setLocalPosition(m_nameEntry.localPosition() + sf::Vector2f{m_nameEntry.size().x / 2.f + 10.f, 0.f});
-    m_okButton.setRelativeOrigin({0.f, 0.5f});
 
     // Controller
     const auto& languageCode = context::context.display.global.language;
-    m_controller.setOnSequenceFinishedCallback([this] { confirmDungeonCreation(); });
+    m_controller.setOnSequenceFinishedCallback([this] { beforeConfirmDungeonCreation(); });
 
     // Try to load specific language file. If none, just go back to English.
     std::string controllerFile = "res/core/langs/" + toString(languageCode) + "/dcb.xml";
@@ -102,6 +100,36 @@ GameDCB::~GameDCB()
     Application::freeAnimations({"core/menu/dcb"});
 }
 
+//------------------//
+//----- Events -----//
+
+void GameDCB::handleEvent(const sf::Event& event)
+{
+    // TODO Have a GameQuitDCB state as the Pause's text is not what we want,
+    // and we need to clean context::worlds (as done for the game over)
+    if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::Escape)
+            stackPush(StateID::GAME_PAUSE);
+    }
+    else if (event.type == sf::Event::MouseButtonPressed) {
+        if (m_confirmGoing) {
+            if (m_confirmStatus) {
+                confirmDungeonCreation();
+            }
+            else {
+                // Game over if conviction gauge has not enough
+                auto& worldInfo = context::worlds.selected();
+                context::worlds.remove(worldInfo);
+                context::worlds.save();
+                stackClear(StateID::GAME_OVER);
+            }
+        }
+    }
+
+
+    baseClass::handleEvent(event);
+}
+
 //-----------------------//
 //----- Interaction -----//
 
@@ -109,25 +137,35 @@ void GameDCB::onNameValidate()
 {
     returnif (m_nameEntry.text().empty());
 
-    m_answerBox.detachChild(m_nameEntry);
-    m_answerBox.detachChild(m_okButton);
+    m_answerBox.detachChild(m_nameStacker);
     nuiLayer().root().attachChild(m_gaugesManager);
 
     m_controller.randomGaugesFromString(m_nameEntry.text());
     m_controller.startSequence();
 }
 
+void GameDCB::beforeConfirmDungeonCreation()
+{
+    m_confirmGoing = true;
+    m_confirmStatus = m_gaugesManager.enoughConviction();
+
+    nuiLayer().root().detachChild(m_gaugesManager);
+    nuiLayer().root().detachChild(m_answerBox);
+
+    if (m_confirmStatus)
+        m_bubble.forceMessage(_("I think you have successfully convinced me. "
+                                "I do believe in your project. "
+                                "Let me check a few details, and see you soon in your new home!\n\n"
+                                "*Click this message to get to your dungeon.*"));
+    else
+        m_bubble.forceMessage(_("I am really sorry, but... I don't feel like you're worth it. "
+                                "I don't think you would be so great as a dungeon master...\n\n"
+                                "*Click this message to end the conversation.*"));
+}
+
 void GameDCB::confirmDungeonCreation()
 {
     auto& worldInfo = context::worlds.selected();
-
-    // State GAMEOVER if conviction gauge has not enough
-    if (!m_gaugesManager.enoughConviction()) {
-        context::worlds.remove(worldInfo);
-        context::worlds.save();
-        stackClear(StateID::GAME_OVER);
-        return;
-    }
 
     // Affects different creation
     auto appreciation = m_gaugesManager.gaugeValue(dcb::GaugesManager::GaugeID::APPRECIATION);

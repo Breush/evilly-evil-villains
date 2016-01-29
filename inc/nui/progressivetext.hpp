@@ -47,6 +47,9 @@ namespace nui
 
         void updateRoutine(const sf::Time& dt) final;
 
+        //! Update the absolute size.
+        void updateSize();
+
         //! @}
 
     private:

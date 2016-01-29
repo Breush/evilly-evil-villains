@@ -26,16 +26,24 @@ namespace states
         //! Destructor.
         ~GameDCB();
 
-        //----------------------//
-        //! @name State control
+        StateID id() const noexcept final { return StateID::GAME_DCB; }
+
+    protected:
+
+        //---------------//
+        //! @name Events
         //! @{
 
-        //! ID of the state.
-        StateID id() const noexcept final { return StateID::GAME_DCB; }
+        void handleEvent(const sf::Event& event) final;
 
         //! @}
 
-    protected:
+        //--------------------//
+        //! @name Interaction
+        //! @{
+
+        //! Check dungeon creation validity and shows a conclusion message.
+        void beforeConfirmDungeonCreation();
 
         //! Creates the dungeon given the current data.
         void confirmDungeonCreation();
@@ -43,15 +51,22 @@ namespace states
         //! Called when name is validated.
         void onNameValidate();
 
+        //! @}
+
     private:
 
-        nui::TextEntry m_nameEntry;         //!< The entry for the dungeon name.
-        nui::PushButton m_okButton;             //!< The only one button in the world.
+        nui::HStacker m_nameStacker;    //!< Stacks name asking entities.
+        nui::TextEntry m_nameEntry;     //!< The entry for the dungeon name.
+        nui::PushButton m_okButton;     //!< The only one button in the world.
 
         dcb::Bubble m_bubble;               //!< The message.
         dcb::AnswerBox m_answerBox;         //!< The box with all possible answers.
         dcb::GaugesManager m_gaugesManager; //!< The gauges.
         dcb::Controller m_controller;       //!< Controls the content of the other DCB elements.
+
+        // Confirm
+        bool m_confirmGoing = false;    //!< True if the negociation phase has ended.
+        bool m_confirmStatus = false;   //!< If going, is there enough conviction to accept dungeon?
 
         // Decorum
         scene::AnimatedSprite m_trees;        //!< The animated trees.

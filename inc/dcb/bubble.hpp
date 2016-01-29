@@ -50,23 +50,23 @@ namespace dcb
 
         //! @}
 
+        //----------------//
+        //! @name Display
+        //! @{
+
+        //! Set the visible width of the entity (except the frame padding).
+        void fitWidth(float width);
+
+        //! @}
+
     protected:
 
         //----------------//
         //! @name Routine
         //! @{
 
-        void onSizeChanges();
+        void onChildSizeChanges(scene::Entity& child) final;
         void refreshNUI(const config::NUIGuides& cNUI) final;
-
-        //! @}
-
-        //--------------------------------//
-        //! @name Internal change updates
-        //! @{
-
-        //! Refresh parts position and size.
-        void refreshText();
 
         //! @}
 

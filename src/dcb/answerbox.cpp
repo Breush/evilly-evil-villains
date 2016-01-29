@@ -82,5 +82,5 @@ void AnswerBox::refreshContainers()
 void AnswerBox::refreshTexts()
 {
     for (auto& pAnswerLine : m_answerLines)
-        pAnswerLine->fitWidth(m_scrollArea.size().x);
+        pAnswerLine->fitWidth(m_scrollArea.size().x - m_scrollArea.barThick());
 }

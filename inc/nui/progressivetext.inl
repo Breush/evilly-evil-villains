@@ -26,10 +26,17 @@ namespace nui
             auto currentString = m_text.getString();
             currentString += m_string[currentString.getSize()];
             m_text.setString(currentString);
+            updateSize();
 
             if (currentString.getSize() == m_string.size())
                 m_running = false;
         }
+    }
+
+    template<class Text_t> inline
+    void ProgressiveText<Text_t>::updateSize()
+    {
+        setSize(boundsSize(m_text));
     }
 
     //------------------------//
@@ -46,7 +53,8 @@ namespace nui
     void ProgressiveText<Text_t>::restart()
     {
         m_currentTime = sf::Time::Zero;
-        m_text.setString(L"");
         m_running = m_string.size() > 0u;
+        m_text.setString(L"");
+        updateSize();
     }
 }
