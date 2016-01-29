@@ -10,14 +10,10 @@ using namespace dcb;
 AnswerBox::AnswerBox()
     : m_answerSelectedCallback(nullptr)
 {
-    // Scroll area
-    attachChild(m_scrollArea);
+    // Content
+    attachChild(m_frame);
+    m_frame.setContent(m_scrollArea);
     m_scrollArea.setContent(m_stacker);
-
-    // Background
-    addPart(&m_background);
-    m_background.setOutlineColor(sf::Color::White);
-    m_background.setFillColor({0u, 0u, 0u, 150u});
 }
 
 //-------------------//
@@ -25,43 +21,14 @@ AnswerBox::AnswerBox()
 
 void AnswerBox::onSizeChanges()
 {
-    m_scrollArea.setSize(size());
+    refreshContainers();
     refreshTexts();
-    refreshParts();
 }
 
 void AnswerBox::refreshNUI(const config::NUIGuides& cNUI)
 {
     baseClass::refreshNUI(cNUI);
-
-    m_vPadding = cNUI.vPadding;
-
-    refreshParts();
-}
-
-//------------------//
-//----- Events -----//
-
-bool AnswerBox::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::Vector2f& mousePos, const sf::Vector2f&)
-{
-    returnif (button != sf::Mouse::Left) false;
-
-    float vOffset = 0.f;
-
-    for (uint i = 0u; i < m_texts.size(); ++i) {
-        // Max y for the answer
-        vOffset += m_texts[i]->size().y;
-
-        // Feedback on controller if clicked
-        if (mousePos.y < vOffset && m_answerSelectedCallback != nullptr) {
-            m_answerSelectedCallback(i);
-            return true;
-        }
-
-        vOffset += m_vPadding;
-    }
-
-    return true;
+    refreshContainers();
 }
 
 //---------------------------//
@@ -78,17 +45,22 @@ void AnswerBox::showAnswer(uint answerID)
     massert(answerID < m_answers.size(), "Answer ID " << answerID << " does not exists.");
 
     // Remove all previous texts
-    m_stacker.unstackAll();
-    m_texts.clear();
+    m_answerLines.clear();
 
     // Affects new answer
-    for (const auto& answer : m_answers[answerID]) {
-        auto text = std::make_unique<scene::WrapLabel<sfe::RichText>>();
-        text->setFillColor(sf::Color::White);
-        text->setText(answer);
-        text->setFont("core/global/fonts/nui");
-        m_texts.emplace_back(std::move(text));
-        m_stacker.stackBack(*m_texts.back());
+    const auto& answers = m_answers[answerID];
+    for (uint i = 0u; i < answers.size(); ++i) {
+        const auto& answer = answers[i];
+
+        auto pAnswerLine = std::make_unique<AnswerLine>();
+        pAnswerLine->setString(answer);
+        pAnswerLine->setClickedCallback([this, i] () {
+            returnif (m_answerSelectedCallback == nullptr);
+            m_answerSelectedCallback(i);
+        });
+
+        m_answerLines.emplace_back(std::move(pAnswerLine));
+        m_stacker.stackBack(*m_answerLines.back());
     }
 
     refreshTexts();
@@ -99,18 +71,16 @@ void AnswerBox::clearAnswers()
     m_answers.clear();
 }
 
-//-----------------------------------//
-//----- Internal change updates -----//
+//---------------//
+//----- ICU -----//
+
+void AnswerBox::refreshContainers()
+{
+    m_scrollArea.setSize(size() - 2.f * m_frame.paddings());
+}
 
 void AnswerBox::refreshTexts()
 {
-    for (auto& text : m_texts)
-        text->fitWidth(size().x);
-}
-
-void AnswerBox::refreshParts()
-{
-    m_background.setOutlineThickness(m_outlineThickness);
-    m_background.setPosition({m_outlineThickness, m_outlineThickness});
-    m_background.setSize(size() - 2.f * m_outlineThickness);
+    for (auto& pAnswerLine : m_answerLines)
+        pAnswerLine->fitWidth(m_scrollArea.size().x);
 }
