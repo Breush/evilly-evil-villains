@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r4.1">
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r5">
     <folder id="0" name="stage">
         <file id="0" name="stage/stage.png" width="3840" height="2160" pivot_x="0" pivot_y="1"/>
         <file id="1" name="stage/filoam.png" width="923" height="1014" pivot_x="0" pivot_y="1"/>
     </folder>
-    <folder id="1" name="candle">
-    </folder>
-    <folder id="2" name="trees">
-    </folder>
+    <folder id="1" name="candle"/>
+    <folder id="2" name="trees"/>
     <entity id="0" name="scene">
         <obj_info name="scene_stage" realname="stage" type="sprite">
             <frames>
@@ -25,18 +23,18 @@
         <animation id="0" name="idle" length="60000" interval="100">
             <mainline>
                 <key id="0">
-                    <object_ref id="0" name="stage" folder="0" file="0" abs_x="-1920" abs_y="1080" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
-                    <object_ref id="1" name="filoam" folder="0" file="1" abs_x="-515.625" abs_y="784.375" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="1" key="0" z_index="1"/>
+                    <object_ref id="0" name="stage" folder="0" file="0" abs_x="-960" abs_y="540" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" name="filoam" folder="0" file="1" abs_x="-257.8125" abs_y="392.1875" abs_angle="0" abs_scale_x="1" abs_scale_y="1" abs_a="1" timeline="1" key="0" z_index="1"/>
                 </key>
             </mainline>
             <timeline id="0" obj="0" name="stage">
                 <key id="0" spin="0">
-                    <object folder="0" file="0" x="-1920" y="1080" angle="0"/>
+                    <object folder="0" file="0" x="-960" y="540" angle="0"/>
                 </key>
             </timeline>
             <timeline id="1" obj="2" name="filoam">
                 <key id="0" spin="0">
-                    <object folder="0" file="1" x="-515.625" y="784.375" angle="0"/>
+                    <object folder="0" file="1" x="-257.8125" y="392.1875" angle="0"/>
                 </key>
             </timeline>
         </animation>
