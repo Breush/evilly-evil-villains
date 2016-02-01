@@ -53,7 +53,6 @@ namespace states
 
         //! @}
 
-
         //----------------//
         //! @name Actions
         //! @{

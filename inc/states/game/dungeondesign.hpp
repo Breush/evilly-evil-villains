@@ -12,7 +12,7 @@
 
 namespace states
 {
-    class GameDungeonDesign final : public State
+    class GameDungeonDesign final : public State, public context::Interpreter
     {
         using baseClass = State;
 
@@ -45,12 +45,25 @@ namespace states
 
         //! @}
 
+        //--------------------//
+        //! @name Interpreter
+        //! @{
+
+        inline std::wstring interpreterKey() const { return L"gameDungeonDesign"; }
+        context::CommandPtr interpret(const std::vector<std::wstring>& tokens) final;
+        void autoComplete(std::vector<std::wstring>& possibilities, const std::vector<std::wstring>& tokens, const std::wstring& lastToken) final;
+
+        //! @}
+
         //----------------//
         //! @name Loading
         //! @{
 
         //! Progressively load resources in memory.
         void updateLoading(const sf::Time& dt);
+
+        //! Close the loading screen if ended.
+        void closeLoadingScreen();
 
         //! @}
 

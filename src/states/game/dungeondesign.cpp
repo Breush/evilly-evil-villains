@@ -4,6 +4,7 @@
 #include "core/application.hpp"
 #include "states/hub/main.hpp"
 #include "dungeon/detector.hpp"
+#include "context/logger.hpp"
 #include "context/context.hpp"
 #include "context/worlds.hpp"
 #include "tools/tools.hpp"
@@ -134,6 +135,100 @@ void GameDungeonDesign::onQuit() noexcept
     Application::visualDebug().setDisplayedTimeFactor(1.f);
 }
 
+//------------------//
+//----- Events -----//
+
+void GameDungeonDesign::handleEvent(const sf::Event& event)
+{
+    // If loading finished, wait for basic event
+    if (m_loading) {
+        returnif (m_loadingPercent < 100u);
+        returnif (event.type != sf::Event::KeyPressed && event.type != sf::Event::MouseButtonPressed);
+        closeLoadingScreen();
+    }
+
+    // Global events
+    m_dungeonInter.handleGlobalEvent(event);
+    m_contextMenu.handleGlobalEvent(event);
+
+    if (event.type == sf::Event::KeyPressed) {
+        // Pause on escape
+        if (event.key.code == sf::Keyboard::Escape) {
+            if (!isStateVisible(StateID::GAME_PAUSE))
+                stackPush(StateID::GAME_PAUSE);
+            return;
+        }
+
+        // Go to hub
+        // TODO Also have a UI element to access that
+        // TODO Have that key in shortcuts config
+        if (event.key.code == sf::Keyboard::H) {
+            stackDynamicPush<states::HubMain>(m_dungeonData);
+            return;
+        }
+
+        // Decelerate time
+        if (event.key.code == sf::Keyboard::F8) {
+            setTimeFactor(timeFactor() / 2.f);
+            Application::visualDebug().setDisplayedTimeFactor(timeFactor());
+            return;
+        }
+
+        // Accelerate time
+        if (event.key.code == sf::Keyboard::F9) {
+            setTimeFactor(timeFactor() * 2.f);
+            Application::visualDebug().setDisplayedTimeFactor(timeFactor());
+            return;
+        }
+    }
+
+    // TODO Make it a config option?
+    #if DEBUG_GLOBAL == 0
+    if (event.type == sf::Event::LostFocus) {
+        if (!isStateVisible(StateID::GAME_PAUSE))
+            stackPush(StateID::GAME_PAUSE);
+        return;
+    }
+    #endif
+
+    State::handleEvent(event);
+}
+
+//-----------------------//
+//----- Interpreter -----//
+
+context::CommandPtr GameDungeonDesign::interpret(const std::vector<std::wstring>& tokens)
+{
+    returnif (!m_loading || m_loadingPercent < 100u) nullptr;
+
+    std::wstring logMessage;
+    auto nTokens = tokens.size();
+
+    if (nTokens == 1u) {
+        if (tokens[0u] == L"closeLoadingScreen") {
+            logMessage = L"> [gameDungeonDesign] Closing the loading screen";
+            closeLoadingScreen();
+        }
+    }
+
+    if (logMessage.empty()) return nullptr;
+
+    auto pCommand = std::make_unique<context::Command>();
+    context::setCommandLog(*pCommand, logMessage);
+    return std::move(pCommand);
+}
+
+void GameDungeonDesign::autoComplete(std::vector<std::wstring>& possibilities, const std::vector<std::wstring>& tokens, const std::wstring& lastToken)
+{
+    returnif (!m_loading || m_loadingPercent < 100u);
+
+    auto nTokens = tokens.size();
+
+    if (nTokens == 0u) {
+        if (std::wstring(L"closeLoadingScreen").find(lastToken) == 0u)  possibilities.emplace_back(L"closeLoadingScreen");
+    }
+}
+
 //-------------------//
 //----- Loading -----//
 
@@ -224,64 +319,10 @@ void GameDungeonDesign::updateLoading(const sf::Time& dt)
     ++m_loadingStep;
 }
 
-//------------------//
-//----- Events -----//
-
-void GameDungeonDesign::handleEvent(const sf::Event& event)
+void GameDungeonDesign::closeLoadingScreen()
 {
-    // If loading finished, wait for basic event
-    if (m_loading) {
-        returnif (m_loadingPercent < 100u);
-        returnif (event.type != sf::Event::KeyPressed && event.type != sf::Event::MouseButtonPressed);
-        nuiLayer().root().detachChild(m_loadingBackground);
-        nuiLayer().root().detachChild(m_loadingText);
-        m_loading = false;
-    }
-
-    // Global events
-    m_dungeonInter.handleGlobalEvent(event);
-    m_contextMenu.handleGlobalEvent(event);
-
-    if (event.type == sf::Event::KeyPressed) {
-        // Pause on escape
-        if (event.key.code == sf::Keyboard::Escape) {
-            if (!isStateVisible(StateID::GAME_PAUSE))
-                stackPush(StateID::GAME_PAUSE);
-            return;
-        }
-
-        // Go to hub
-        // TODO Also have a UI element to access that
-        // TODO Have that key in shortcuts config
-        if (event.key.code == sf::Keyboard::H) {
-            stackDynamicPush<states::HubMain>(m_dungeonData);
-            return;
-        }
-
-        // Decelerate time
-        if (event.key.code == sf::Keyboard::F8) {
-            setTimeFactor(timeFactor() / 2.f);
-            Application::visualDebug().setDisplayedTimeFactor(timeFactor());
-            return;
-        }
-
-        // Accelerate time
-        if (event.key.code == sf::Keyboard::F9) {
-            setTimeFactor(timeFactor() * 2.f);
-            Application::visualDebug().setDisplayedTimeFactor(timeFactor());
-            return;
-        }
-    }
-
-    // TODO Make it a config option?
-    #if DEBUG_GLOBAL == 0
-    if (event.type == sf::Event::LostFocus) {
-        if (!isStateVisible(StateID::GAME_PAUSE))
-            stackPush(StateID::GAME_PAUSE);
-        return;
-    }
-    #endif
-
-    State::handleEvent(event);
+    nuiLayer().root().detachChild(m_loadingBackground);
+    nuiLayer().root().detachChild(m_loadingText);
+    m_loading = false;
 }
 

@@ -46,6 +46,8 @@ SplashScreen::SplashScreen(StateStack& stack)
 
 SplashScreen::~SplashScreen()
 {
+    context::context.sounds.stopAll();
+
     // Freeing resources
     Application::freeTextures({"core/menu/splashscreen"});
     Application::freeAnimations({"core/menu/splashscreen"});
@@ -120,6 +122,5 @@ void SplashScreen::autoComplete(std::vector<std::wstring>& possibilities, const 
 
 void SplashScreen::skip()
 {
-    context::context.sounds.stopAll();
     stackReplace(StateID::MENU_MAIN);
 }
