@@ -13,9 +13,9 @@ Commandable::Commandable(Inter* inter)
 //-----------------------//
 //----- Interpreter -----//
 
-context::Command Commandable::interpret(const std::vector<std::wstring>& tokens)
+context::CommandPtr Commandable::interpret(const std::vector<std::wstring>& tokens)
 {
-    std::wstring logMessage = L"> [dungeon] Unable to interpret command";
+    std::wstring logMessage;
     auto nTokens = tokens.size();
 
     if (nTokens >= 4u) {
@@ -80,9 +80,12 @@ context::Command Commandable::interpret(const std::vector<std::wstring>& tokens)
         }
     }
 
+    returnif (logMessage.empty()) nullptr;
+
     // Generate log
-    context::Command command;
-    return context::setCommandLog(command, logMessage);
+    auto pCommand = std::make_unique<context::Command>();
+    context::setCommandLog(*pCommand, logMessage);
+    return std::move(pCommand);
 }
 
 void Commandable::autoComplete(std::vector<std::wstring>& possibilities,

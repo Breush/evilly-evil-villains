@@ -16,7 +16,7 @@ namespace states
 {
     //! Main menu state.
 
-    class MenuMain final : public State
+    class MenuMain final : public State, public context::Interpreter
     {
         using baseClass = State;
 
@@ -45,6 +45,16 @@ namespace states
         bool update(const sf::Time& dt) final;
         void handleEvent(const sf::Event& event) final;
         void refreshWindow(const config::WindowInfo& cWindow) final;
+
+        //! @}
+
+        //--------------------//
+        //! @name Interpreter
+        //! @{
+
+        inline std::wstring interpreterKey() const { return L"menuMain"; }
+        context::CommandPtr interpret(const std::vector<std::wstring>& tokens) final;
+        void autoComplete(std::vector<std::wstring>& possibilities, const std::vector<std::wstring>& tokens, const std::wstring& lastToken) final;
 
         //! @}
 

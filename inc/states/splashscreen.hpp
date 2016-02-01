@@ -5,6 +5,7 @@
 #include "scene/wrappers/animatedsprite.hpp"
 #include "scene/wrappers/rectangleshape.hpp"
 #include "scene/wrappers/sprite.hpp"
+#include "context/command.hpp"
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <list>
@@ -13,7 +14,7 @@ namespace states
 {
     //! State shown at the start of the game.
 
-    class SplashScreen final : public State
+    class SplashScreen final : public State, public context::Interpreter
     {
     public:
 
@@ -39,6 +40,26 @@ namespace states
 
         bool update(const sf::Time& dt) final;
         void handleEvent(const sf::Event& event) final;
+
+        //! @}
+
+        //--------------------//
+        //! @name Interpreter
+        //! @{
+
+        inline std::wstring interpreterKey() const { return L"splashScreen"; }
+        context::CommandPtr interpret(const std::vector<std::wstring>& tokens) final;
+        void autoComplete(std::vector<std::wstring>& possibilities, const std::vector<std::wstring>& tokens, const std::wstring& lastToken) final;
+
+        //! @}
+
+
+        //----------------//
+        //! @name Actions
+        //! @{
+
+        //! Skip the splashscreen.
+        void skip();
 
         //! @}
 

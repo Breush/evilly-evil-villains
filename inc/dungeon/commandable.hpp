@@ -30,7 +30,7 @@ namespace dungeon
         //! @name Interpreter
         //! @{
 
-        context::Command interpret(const std::vector<std::wstring>& tokens) final;
+        context::CommandPtr interpret(const std::vector<std::wstring>& tokens) final;
         void autoComplete(std::vector<std::wstring>& possibilities,
                           const std::vector<std::wstring>& tokens, const std::wstring& lastToken) final;
 

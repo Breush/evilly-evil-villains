@@ -1,6 +1,7 @@
 #include "states/menu/main.hpp"
 
 #include "context/context.hpp"
+#include "context/logger.hpp"
 #include "core/gettext.hpp"
 #include "core/define.hpp"
 #include "tools/vector.hpp"
@@ -146,4 +147,40 @@ void MenuMain::refreshWindow(const config::WindowInfo& cWindow)
     m_background.setLocalScale({scaleFactor, scaleFactor});
 
     baseClass::refreshWindow(cWindow);
+}
+
+//-----------------------//
+//----- Interpreter -----//
+
+context::CommandPtr MenuMain::interpret(const std::vector<std::wstring>& tokens)
+{
+    std::wstring logMessage;
+    auto nTokens = tokens.size();
+
+    if (nTokens == 1u) {
+        if (tokens[0u] == L"exit") {
+            logMessage = L"> [menuMain] Exit";
+            stackPop();
+        }
+        else if (tokens[0u] == L"playSolo") {
+            logMessage = L"> [menuMain] Single player";
+            stackPush(StateID::MENU_SELECTWORLD);
+        }
+    }
+
+    if (logMessage.empty()) return nullptr;
+
+    auto pCommand = std::make_unique<context::Command>();
+    context::setCommandLog(*pCommand, logMessage);
+    return std::move(pCommand);
+}
+
+void MenuMain::autoComplete(std::vector<std::wstring>& possibilities, const std::vector<std::wstring>& tokens, const std::wstring& lastToken)
+{
+    auto nTokens = tokens.size();
+
+    if (nTokens == 0u) {
+        if (std::wstring(L"exit").find(lastToken) == 0u)        possibilities.emplace_back(L"exit");
+        if (std::wstring(L"playSolo").find(lastToken) == 0u)    possibilities.emplace_back(L"playSolo");
+    }
 }

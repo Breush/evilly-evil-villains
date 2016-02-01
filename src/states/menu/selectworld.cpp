@@ -1,6 +1,7 @@
 #include "states/menu/selectworld.hpp"
 
 #include "context/context.hpp"
+#include "context/logger.hpp"
 #include "core/gettext.hpp"
 #include "tools/time.hpp"
 #include "tools/tools.hpp"
@@ -73,6 +74,39 @@ void MenuSelectWorld::handleEvent(const sf::Event& event)
     }
 
     State::handleEvent(event);
+}
+
+//-----------------------//
+//----- Interpreter -----//
+
+context::CommandPtr MenuSelectWorld::interpret(const std::vector<std::wstring>& tokens)
+{
+    std::wstring logMessage;
+    auto nTokens = tokens.size();
+
+    if (nTokens == 2u) {
+        if (tokens[0u] == L"start") {
+            logMessage = L"> [menuSelectWorld] Playing on world" + tokens[1u];
+            auto line = to<uint>(tokens[1u]);
+            m_list.selectLine(line);
+            playOnSelectedWorld();
+        }
+    }
+
+    if (logMessage.empty()) return nullptr;
+
+    auto pCommand = std::make_unique<context::Command>();
+    context::setCommandLog(*pCommand, logMessage);
+    return std::move(pCommand);
+}
+
+void MenuSelectWorld::autoComplete(std::vector<std::wstring>& possibilities, const std::vector<std::wstring>& tokens, const std::wstring& lastToken)
+{
+    auto nTokens = tokens.size();
+
+    if (nTokens == 0u) {
+        if (std::wstring(L"start").find(lastToken) == 0u)    possibilities.emplace_back(L"start");
+    }
 }
 
 //-----------------------------//

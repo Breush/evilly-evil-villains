@@ -63,6 +63,11 @@ int main(int argc, char *argv[])
 
     //----- Initialization -----//
 
+    // Arguments
+    std::vector<std::string> args(argc - 1);
+    for (uint i = 0u; i < args.size(); ++i)
+        args[i] = argv[i + 1u];
+
     // Initialize randomness
     alea::s_generator.seed(time(nullptr));
 
@@ -97,7 +102,7 @@ int main(int argc, char *argv[])
     //----- Application -----//
 
     try {
-        Application app;
+        Application app(args);
         app.run();
     }
     catch(std::exception& e) {

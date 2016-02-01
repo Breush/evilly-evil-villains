@@ -1,6 +1,7 @@
 #include "states/splashscreen.hpp"
 
 #include "context/context.hpp"
+#include "context/logger.hpp"
 #include "core/application.hpp"
 #include "tools/vector.hpp"
 
@@ -76,10 +77,49 @@ void SplashScreen::handleEvent(const sf::Event& event)
     // Skip splashscreen on Escape
     if (event.type == sf::Event::KeyPressed
         && event.key.code == sf::Keyboard::Escape) {
-        context::context.sounds.stopAll();
-        stackReplace(StateID::MENU_MAIN);
+        skip();
         return;
     }
 
     State::handleEvent(event);
+}
+
+//-----------------------//
+//----- Interpreter -----//
+
+context::CommandPtr SplashScreen::interpret(const std::vector<std::wstring>& tokens)
+{
+    std::wstring logMessage;
+    auto nTokens = tokens.size();
+
+    if (nTokens == 1u) {
+        if (tokens[0u] == L"skip") {
+            logMessage = L"> [splashScreen] Skipping";
+            skip();
+        }
+    }
+
+    if (logMessage.empty()) return nullptr;
+
+    auto pCommand = std::make_unique<context::Command>();
+    context::setCommandLog(*pCommand, logMessage);
+    return std::move(pCommand);
+}
+
+void SplashScreen::autoComplete(std::vector<std::wstring>& possibilities, const std::vector<std::wstring>& tokens, const std::wstring& lastToken)
+{
+    auto nTokens = tokens.size();
+
+    if (nTokens == 0u) {
+        if (std::wstring(L"skip").find(lastToken) == 0u)    possibilities.emplace_back(L"skip");
+    }
+}
+
+//-------------------//
+//----- Actions -----//
+
+void SplashScreen::skip()
+{
+    context::context.sounds.stopAll();
+    stackReplace(StateID::MENU_MAIN);
 }

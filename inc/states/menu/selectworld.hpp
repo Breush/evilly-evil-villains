@@ -12,7 +12,7 @@
 
 namespace states
 {
-    class MenuSelectWorld final : public State
+    class MenuSelectWorld final : public State, public context::Interpreter
     {
         using baseClass = State;
 
@@ -39,6 +39,16 @@ namespace states
         //! @{
 
         void handleEvent(const sf::Event& event) final;
+
+        //! @}
+
+        //--------------------//
+        //! @name Interpreter
+        //! @{
+
+        inline std::wstring interpreterKey() const { return L"menuSelectWorld"; }
+        context::CommandPtr interpret(const std::vector<std::wstring>& tokens) final;
+        void autoComplete(std::vector<std::wstring>& possibilities, const std::vector<std::wstring>& tokens, const std::wstring& lastToken) final;
 
         //! @}
 

@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <functional>
+#include <memory>
 
 namespace context
 {
@@ -61,6 +62,8 @@ namespace context
         //! @}
     };
 
+    using CommandPtr = std::unique_ptr<Command>;
+
     //! An object able to interpret a command line.
 
     class Interpreter
@@ -81,7 +84,7 @@ namespace context
         virtual std::wstring interpreterKey() const = 0;
 
         //! Interpret a specific command line.
-        virtual Command interpret(const std::vector<std::wstring>& tokens) = 0;
+        virtual CommandPtr interpret(const std::vector<std::wstring>& tokens) = 0;
 
         //! Attempt to autocomplete the command line.
         //! The possibilities to complete the last token will be added at the back of the vector.

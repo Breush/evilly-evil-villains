@@ -10,6 +10,8 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Shader.hpp>
 
+#include <fstream>
+
 //! The heart of the application.
 /*!
  *  Here is how things go:
@@ -28,7 +30,7 @@ public:
     //! @{
 
     //! Constructor.
-    Application();
+    Application(const std::vector<std::string>& args);
 
     //! Destructor.
     ~Application();
@@ -176,6 +178,10 @@ private:
     float m_gameTime = 0.f;         //!< The game time since game loop is running.
     bool m_running = false;         //!< Controls whether to continue game loop.
     StateID m_initialState;         //!< The initial state push into the stack (not fixed for easy debugging).
+
+    // Scripting
+    std::wifstream m_scriptStream;      //!< A script stream to execute.
+    std::wstring m_scriptCommandLine;   //!< The current command line to execute.
 
     // Visual part
     static VisualDebug s_visualDebug;   //!< The debug information.

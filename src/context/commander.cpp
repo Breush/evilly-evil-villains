@@ -1,7 +1,7 @@
 #include "context/commander.hpp"
 
 #include "context/logger.hpp"
-#include "tools/platform-fixes.hpp" // erase_if
+#include "tools/platform-fixes.hpp"
 #include "tools/string.hpp"
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
@@ -42,9 +42,9 @@ Command Commander::pop()
 //----- Interpreter -----//
 
 // TODO We should return a vector of commands, right?
-Command Commander::interpret(const std::wstring& commandLine)
+CommandPtr Commander::interpret(const std::wstring& commandLine)
 {
-    returnif (commandLine.empty()) Command();
+    returnif (commandLine.empty()) nullptr;
 
     // Get tokens
     auto tokens = split(commandLine);
@@ -57,19 +57,21 @@ Command Commander::interpret(const std::wstring& commandLine)
         for (const auto& interpreter : m_interpreters)
             keys.emplace_back(interpreter->interpreterKey());
 
-        Command command;
-        setCommandLog(command, L"> Available command keys: " + join(keys, std::wstring(L", ")));
-        return command;
+        auto pCommand = std::make_unique<Command>();
+        setCommandLog(*pCommand, L"> Available command keys: " + join(keys, std::wstring(L", ")));
+        return std::move(pCommand);
     }
 
     // Forward to interpreters
-    for (auto pInterpreter : m_interpreters)
-        if (pInterpreter->interpreterKey() == key)
-            return pInterpreter->interpret(tokens);
+    for (auto pInterpreter : m_interpreters) {
+        if (pInterpreter->interpreterKey() == key) {
+            auto pCommand = pInterpreter->interpret(tokens);
+            return std::move(pCommand);
+        }
+    }
 
     // Unknown command
-    Command command;
-    return setCommandLog(command, L"> Unknown command key: " + commandLine);
+    return nullptr;
 }
 
 std::wstring Commander::autoComplete(std::wstring commandLine)

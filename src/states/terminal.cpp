@@ -186,8 +186,12 @@ void Terminal::onEntryValidated()
     addMessage(commandLine, sf::Color::Blue);
 
     // Interpret it via the commander
-    auto commands = context::context.commander.interpret(commandLine);
-    context::context.commander.push(commands);
+    auto pCommand = context::context.commander.interpret(commandLine);
+    if (pCommand == nullptr) {
+        pCommand = std::make_unique<context::Command>();
+        context::setCommandLog(*pCommand, L"> Unknown command '" + commandLine + L"'.");
+    }
+    context::context.commander.push(*pCommand);
 }
 
 void Terminal::navigateHistoric(const int relPos)

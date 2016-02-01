@@ -37,9 +37,16 @@ void cleanExtraFiles()
 //-----------------------//
 //----- Application -----//
 
-Application::Application()
+Application::Application(const std::vector<std::string>& args)
     : m_initialState(StateID::SPLASHSCREEN)
 {
+    // Arguments
+    if (args.size() != 0u) {
+        m_scriptStream.open(args[0u]);
+        std::getline(m_scriptStream, m_scriptCommandLine);
+        mdebug_core_1("Reading file " + args[0u] + " as script.");
+    }
+
     // Context and config
     context::context.windowInfo.title = "Evilly Evil Villains";
     i18n::initLanguagesList();
@@ -71,6 +78,9 @@ Application::Application()
 Application::~Application()
 {
     freeComponents();
+
+    if (m_scriptStream.is_open())
+        m_scriptStream.close();
 }
 
 void Application::run()
@@ -140,7 +150,7 @@ void Application::processInput()
         // Keyboard
         if (event.type == sf::Event::KeyPressed) {
             // Force refresh
-            if (event.key.code == sf::Keyboard::F2) {
+            if (event.key.code == sf::Keyboard::F5) {
                 s_needRefresh = true;
                 continue;
             }
@@ -236,12 +246,20 @@ void Application::update(const sf::Time& dt)
     s_visualDebug.update(dt);
     m_cursor.update(dt);
 
+    // Command from script file?
+    if (!m_scriptCommandLine.empty()) {
+        auto command = context::context.commander.interpret(m_scriptCommandLine);
+        if (command != nullptr) {
+            context::context.commander.push(*command);
+            wdebug_core_1(L"Script command: " << m_scriptCommandLine);
+            if (!std::getline(m_scriptStream, m_scriptCommandLine))
+                m_scriptCommandLine.clear();
+        }
+    }
+
     // Game logic
     context::context.commander.update(dt);
     m_stateStack.update(dt);
-
-    // TODO Make that
-    // Just update all registered AI components
 
     // Update the visual effects
     // FIXME Sounds and shaders are not affected by States's timefactor

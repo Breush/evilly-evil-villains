@@ -4,6 +4,7 @@
 
 #include <SFML/System/NonCopyable.hpp>
 
+#include <memory>
 #include <queue>
 
 namespace context
@@ -43,7 +44,7 @@ namespace context
         //! @{
 
         //! Interpret the command line into commands.
-        Command interpret(const std::wstring& commandLine);
+        CommandPtr interpret(const std::wstring& commandLine);
 
         //! Attempt to auto-complete the command line.
         //! @return The command line completed or the original one.
