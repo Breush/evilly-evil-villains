@@ -137,6 +137,15 @@ protected:
 
     //! @}
 
+    //------------------//
+    //! @name Scripting
+    //! @{
+
+    //! Update the command line.
+    void scriptNextLine();
+
+    //! @}
+
     //--------------------------------//
     //! @name Pre-loading and refresh
     //! @{
@@ -182,6 +191,7 @@ private:
     // Scripting
     std::wifstream m_scriptStream;      //!< A script stream to execute.
     std::wstring m_scriptCommandLine;   //!< The current command line to execute.
+    int m_scriptWaitTime = 0;           //!< Milliseconds to wait before sending next command.
 
     // Visual part
     static VisualDebug s_visualDebug;   //!< The debug information.

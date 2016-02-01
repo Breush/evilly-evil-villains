@@ -18,6 +18,20 @@ context::CommandPtr Commandable::interpret(const std::vector<std::wstring>& toke
     std::wstring logMessage;
     auto nTokens = tokens.size();
 
+    if (nTokens == 2u) {
+        // Floors setting
+        if (tokens[0u] == L"setFloorsCount") {
+            logMessage = L"> [dungeon] Setting floors count to " + tokens[1u];
+            m_inter.setFloorsCount(to<uint>(tokens[1u]));
+        }
+
+        // Floors adapting
+        else if (tokens[0u] == L"adaptFloorsCount") {
+            logMessage = L"> [dungeon] Adapting floors count " + tokens[1u];
+            m_inter.adaptFloorsCount(to<int>(tokens[1u]));
+        }
+    }
+
     if (nTokens >= 4u) {
         // Construct room
         if (tokens[0u] == L"construct" && tokens[1u] == L"room") {

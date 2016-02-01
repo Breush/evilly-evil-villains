@@ -58,7 +58,7 @@ Application::Application(const std::vector<std::string>& args)
     // Arguments
     if (args.size() != 0u) {
         m_scriptStream.open(args[0u]);
-        std::getline(m_scriptStream, m_scriptCommandLine);
+        scriptNextLine();
         mdebug_core_1("Reading file " + args[0u] + " as script.");
     }
 
@@ -261,12 +261,16 @@ void Application::update(const sf::Time& dt)
 
     // Command from script file?
     if (!m_scriptCommandLine.empty()) {
-        auto command = context::context.commander.interpret(m_scriptCommandLine);
-        if (command != nullptr) {
-            context::context.commander.push(*command);
-            wdebug_core_1(L"Script command: " << m_scriptCommandLine);
-            if (!std::getline(m_scriptStream, m_scriptCommandLine))
-                m_scriptCommandLine.clear();
+        if (m_scriptWaitTime > 0) {
+            m_scriptWaitTime -= dt.asMilliseconds();
+        }
+        else {
+            auto command = context::context.commander.interpret(m_scriptCommandLine);
+            if (command != nullptr) {
+                context::context.commander.push(*command);
+                wdebug_core_1(L"Script command: " << m_scriptCommandLine);
+                scriptNextLine();
+            }
         }
     }
 
@@ -358,4 +362,24 @@ void Application::switchFullscreenMode()
     context::context.display.window.fullscreen = !context::context.display.window.fullscreen;
     refreshFromConfig();
     refreshWindow();
+}
+
+//---------------------//
+//----- Scripting -----//
+
+void Application::scriptNextLine()
+{
+    if (!std::getline(m_scriptStream, m_scriptCommandLine)) {
+        m_scriptCommandLine.clear();
+        return;
+    }
+
+    // Wait command is managed here
+    returnif (m_scriptCommandLine.find(L"wait") != 0u);
+
+    std::wstringstream ss(m_scriptCommandLine);
+    ss >> m_scriptCommandLine;
+    ss >> m_scriptWaitTime;
+
+    scriptNextLine();
 }
