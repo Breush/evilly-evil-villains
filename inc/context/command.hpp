@@ -24,6 +24,7 @@ namespace context
             LOG,    //!< Used for command result.
         };
 
+        std::wstring line;                                          //!< The command line that create the command.
         Category category = Category::NONE;                         //!< The category of the command.
         std::function<void(Commandable&, const sf::Time&)> action;  //!< Function to execute.
     };

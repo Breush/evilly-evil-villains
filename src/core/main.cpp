@@ -1,8 +1,10 @@
 #include "core/application.hpp"
 #include "core/gettext.hpp"
 #include "core/debug.hpp"
+#include "tools/time.hpp"
 #include "tools/stack.hpp"
 #include "tools/random.hpp"
+#include "tools/filesystem.hpp"
 
 #include <steam/steam.hpp>
 
@@ -63,6 +65,9 @@ int main(int argc, char *argv[])
 
     //----- Initialization -----//
 
+    // Logs
+    createDirectory(L"log");
+
     // Arguments
     std::vector<std::string> args(argc - 1);
     for (uint i = 0u; i < args.size(); ++i)
@@ -80,7 +85,8 @@ int main(int argc, char *argv[])
     //----- Steam API -----//
 
     // Redirecting stdcerr (C interface) to file while Steam is loading
-    auto steamErrorFile = fopen("steam.log", "w+");
+    auto steamErrorFileName = "log/steam_" + time2string("%Y%m%d-%H%M%S") + ".log";
+    auto steamErrorFile = fopen(steamErrorFileName.c_str(), "w+");
     auto stdcerrOriginal = dup(STDERR_FILENO);
     dup2(fileno(steamErrorFile), STDERR_FILENO);
 
@@ -114,10 +120,11 @@ int main(int argc, char *argv[])
         // Show message in the console and in a file
         std::cerr << str.str() << std::endl;
         std::cerr << "This message has also been saved to error.log." << std::endl;
-        std::ofstream ofs;
-        ofs.open("error.log");
-        ofs << time(nullptr) << std::endl;
-        ofs << str.str();
+
+        auto errorErrorFileName = "log/error_" + time2string("%Y%m%d-%H%M%S") + ".log";
+        std::ofstream errorFile;
+        errorFile.open(errorErrorFileName);
+        errorFile << str.str();
 
         returnStatus = EXIT_FAILURE;
     }

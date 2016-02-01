@@ -5,20 +5,39 @@
 #include "tools/string.hpp"
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
+#include "tools/time.hpp"
 
 using namespace context;
+
+Commander::Commander()
+{
+    auto logFileName = "log/commands_" + time2string("%Y%m%d-%H%M%S") + ".eev";
+    m_logStream.open(logFileName);
+}
+
+Commander::~Commander()
+{
+    if (m_logStream.is_open())
+        m_logStream.close();
+}
 
 //-------------------//
 //----- Routine -----//
 
 void Commander::update(const sf::Time& dt)
 {
-    // For each command, test each commandable
     while (!m_commandQueue.empty()) {
         const auto& command = m_commandQueue.front();
+
+        // Log the line if it is written
+        if (!command.line.empty())
+            m_logStream << command.line << std::endl;
+
+        // Test each commandable
         for (auto pCommandable : m_commandables)
             if (pCommandable->category() == command.category)
                 command.action(*pCommandable, dt);
+
         m_commandQueue.pop();
     }
 }
@@ -66,6 +85,8 @@ CommandPtr Commander::interpret(const std::wstring& commandLine)
     for (auto pInterpreter : m_interpreters) {
         if (pInterpreter->interpreterKey() == key) {
             auto pCommand = pInterpreter->interpret(tokens);
+            if (pCommand != nullptr)
+                pCommand->line = key + L" " + join(tokens, std::wstring(L" "));
             return std::move(pCommand);
         }
     }

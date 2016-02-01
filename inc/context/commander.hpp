@@ -4,6 +4,7 @@
 
 #include <SFML/System/NonCopyable.hpp>
 
+#include <fstream>
 #include <memory>
 #include <queue>
 
@@ -17,6 +18,12 @@ namespace context
         friend class Interpreter;
 
     public:
+
+        //! Constructor.
+        Commander();
+
+        //! Destructor.
+        ~Commander();
 
         //----------------//
         //! @name Routine
@@ -76,5 +83,8 @@ namespace context
         std::queue<Command> m_commandQueue;         //!< The command queue.
         std::vector<Commandable*> m_commandables;   //!< The commandables to call on update.
         std::vector<Interpreter*> m_interpreters;   //!< The interpreter to call when a command line comes.
+
+        // Log
+        std::wofstream m_logStream; //!< The stream to log to.
     };
 }

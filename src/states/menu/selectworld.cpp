@@ -86,7 +86,7 @@ context::CommandPtr MenuSelectWorld::interpret(const std::vector<std::wstring>& 
 
     if (nTokens == 2u) {
         if (tokens[0u] == L"start") {
-            logMessage = L"> [menuSelectWorld] Playing on world" + tokens[1u];
+            logMessage = L"> [menuSelectWorld] Playing on world " + tokens[1u];
             auto line = to<uint>(tokens[1u]);
             m_list.selectLine(line);
             playOnSelectedWorld();

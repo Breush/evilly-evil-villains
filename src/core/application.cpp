@@ -26,12 +26,27 @@ bool Application::s_paused = false;
 //! Cleans files that are created and can interfere in debug mode.
 void cleanExtraFiles()
 {
+    // Cleaning log files
+    auto logFiles = listFiles("log/");
+    std::sort(std::begin(logFiles), std::end(logFiles), [] (const FileInfo& f1, const FileInfo& f2) { return f1.name.compare(f2.name) >= 0; });
+    uint commandsCount = 0u, steamCount = 0u, errorCount = 0u;
+    for (const auto& fileInfo : logFiles) {
+        bool toBeRemoved = false;
+        if (fileInfo.name.find("commands_") == 0u)      toBeRemoved = ++commandsCount > 5u;
+        else if (fileInfo.name.find("steam_") == 0u)    toBeRemoved = ++steamCount > 5u;
+        else if (fileInfo.name.find("error_") == 0u)    toBeRemoved = ++errorCount > 5u;
+        if (toBeRemoved)
+            std::remove(fileInfo.fullName.c_str());
+    }
+
+#if DEBUG_GLOBAL > 0
     std::remove("saves/villains_saved.xml");
     std::remove("saves/worlds_saved.xml");
 
     for (const auto& fileInfo : listFiles("saves/", true))
         if (fileInfo.name == "dungeon_saved.xml")
             std::remove(fileInfo.fullName.c_str());
+#endif
 }
 
 //-----------------------//
@@ -67,12 +82,10 @@ Application::Application(const std::vector<std::string>& args)
     s_visualDebug.init();
     m_cursor.init();
 
-#if DEBUG_GLOBAL > 0
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
         mdebug_core_1("Cleaning saved files from last session. Disable this by pressing LControl during application start.");
         cleanExtraFiles();
     }
-#endif
 }
 
 Application::~Application()
