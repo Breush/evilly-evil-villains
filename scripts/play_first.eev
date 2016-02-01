@@ -2,4 +2,3 @@ splashScreen skip
 menuMain playSolo
 menuSelectWorld start 0
 gameDungeonDesign closeLoadingScreen
-dungeon pushRoom north 0 2
