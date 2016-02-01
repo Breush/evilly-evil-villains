@@ -238,15 +238,23 @@ void GameDungeonDesign::updateLoading(const sf::Time& dt)
 
     // Think to update this...
     const uint stepsCount = 101u;
+    sf::Clock clock;
 
     // Recurrent thingy
     #define LOAD(STEP, ...)                                                                 \
     else if (m_loadingStep == STEP) {                                                       \
         m_loadingPercent = (100u * m_loadingStep) / stepsCount;                             \
         m_loadingText.setText(_("Loading") + L"... " + toWString(m_loadingPercent) + L"%"); \
+        clock.restart();                                                                    \
         __VA_ARGS__;                                                                        \
+        m_loadingTime += clock.getElapsedTime().asSeconds();                                \
     }
 
+    // Drop some update as we might have locked the application for a while
+    if (m_loadingTime > 0.f) {
+        m_loadingTime -= dt.asSeconds();
+        return;
+    }
 
     // Click to start screen (final step)
     if (m_loadingStep == stepsCount) {

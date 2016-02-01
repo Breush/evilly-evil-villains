@@ -81,6 +81,7 @@ namespace states
         bool m_loading = true;
         uint m_loadingStep = 0u;
         uint m_loadingPercent = 0u;
+        float m_loadingTime = 0.f;
 
         // NUI
         nui::ContextMenu m_contextMenu;
