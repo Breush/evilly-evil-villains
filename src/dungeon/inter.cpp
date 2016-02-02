@@ -133,15 +133,15 @@ void Inter::handleGlobalEvent(const sf::Event& event)
     if (event.type == sf::Event::KeyPressed) {
         // Control rows
         if (event.key.code == sf::Keyboard::Add)
-            adaptFloorsCount(1);
+            addFloorsCount(1);
         else if (event.key.code == sf::Keyboard::Subtract)
-            adaptFloorsCount(-1);
+            addFloorsCount(-1);
 
         // Control columns
         else if (event.key.code == sf::Keyboard::Multiply)
-            adaptRoomsByFloor(1);
+            addFloorRoomsCount(1);
         else if (event.key.code == sf::Keyboard::Divide)
-            adaptRoomsByFloor(-1);
+            addFloorRoomsCount(-1);
 
         // Dosh control
         else if (event.key.code == sf::Keyboard::Numpad9)
@@ -642,14 +642,14 @@ bool Inter::pushRoom(const RoomCoords& coords, Direction direction, uint animati
     return true;
 }
 
-void Inter::adaptFloorsCount(int relativeValue)
+void Inter::addFloorsCount(int relativeValue)
 {
     setFloorsCount(m_data->floorsCount() + relativeValue);
 }
 
-void Inter::adaptRoomsByFloor(int relativeValue)
+void Inter::addFloorRoomsCount(int relativeValue)
 {
-    setRoomsByFloor(m_data->roomsByFloor() + relativeValue);
+    setFloorRoomsCount(m_data->roomsByFloor() + relativeValue);
 }
 
 void Inter::setFloorsCount(uint value)
@@ -657,7 +657,7 @@ void Inter::setFloorsCount(uint value)
     m_data->setFloorsCount(value);
 }
 
-void Inter::setRoomsByFloor(uint value)
+void Inter::setFloorRoomsCount(uint value)
 {
     m_data->setRoomsByFloor(value);
 }

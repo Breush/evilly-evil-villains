@@ -1,0 +1,123 @@
+\documentclass[10pt,a4paper]{scrartcl}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage[dvipsnames]{xcolor}
+
+\newsavebox{\mybox}
+\newenvironment{apiCode}[1]
+{ \begin{lrbox}{\mybox} \begin{minipage}{0.9\textwidth} {\color{Mahogany} \small\texttt{#1}} \vspace{8pt} \newline }
+{ \end{minipage} \end{lrbox}\fbox{\usebox{\mybox}} \newline\vspace{4pt}\newline }
+
+\title{Scripting API}
+\subtitle{for Evilly Evil Villains 1.0}
+\author{Alexis Breust}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Tools}
+\subsection{Structure control}
+\begin{apiCode}{wait $N$}
+Pause the script reading for $N$ milliseconds.\newline
+\textit{That function only works for input scripts (specified as application argument).}
+\end{apiCode}
+
+\section{Dungeon design}
+\subsection{Structure control}
+\begin{apiCode}{dungeon floorsCount (add|set) $N$}
+Change the floors count.
+\begin{itemize}
+\itemsep 0em
+\item If \verb#add#, the floors count is added $N$ floors. $N$ can be negative.
+\item If \verb#set#, the floors count is set to $N$ floors.
+\end{itemize}
+\end{apiCode}
+\begin{apiCode}{dungeon floorRoomsCount (add|set) $N$}
+Change the rooms count on each floor.
+\begin{itemize}
+\itemsep 0em
+\item If \verb#add#, the rooms count on each floor is added $N$ rooms. $N$ can be negative.
+\item If \verb#set#, the rooms count on each floor is set to $N$ rooms.
+\end{itemize}
+\end{apiCode}
+
+\subsection{Room control}
+\begin{apiCode}{dungeon room $X_1$ $X_2$ construct [free]}
+Construct the room at position $(X_1, X_2)$.
+\begin{itemize}
+\itemsep 0em
+\item If the specified room is already contructed, nothing happens.
+\item If \verb#free# is indicated, the player won't pay anything,\newline
+	  otherwise if the player cannot afford the room creation tax, nothing happens.
+\end{itemize}
+\end{apiCode}
+\begin{apiCode}{dungeon room $X_1$ $X_2$ destroy [loss]}
+Destroy the room at position $(X_1, X_2)$.
+\begin{itemize}
+\itemsep 0em
+\item If the specified room is not yet contructed, nothing happens.
+\item If \verb#loss# is indicated, the player won't get resources back.
+\end{itemize}
+\end{apiCode}
+\begin{apiCode}{dungeon room $X_1$ $X_2$ push (north|south|west|east) [$T$]}
+Push from the room at position $(X_1, X_2)$ into the specified direction.\newline
+The animation will be $T$ milliseconds long (defaulting to $250ms$ if not specified).
+\begin{itemize}
+\itemsep 0em
+\item If the specified room is not yet contructed, nothing happens.
+\item If there is no constructed room from the specified room\newline
+	  into the direction, nothing happens.
+\end{itemize}
+\end{apiCode}
+
+\subsection{Room trap}
+\begin{apiCode}{dungeon room $X_1$ $X_2$ trap set $TrapID$ [free]}
+Set the trap $TrapID$ in the room at position $(X_1, X_2)$.
+\begin{itemize}
+\itemsep 0em
+\item If the specified room is not yet contructed, nothing happens.
+\item If the specified room already contains a trap $TrapID$, nothing happens.
+\item If \verb#free# is indicated, the player won't pay nor get resources back,\newline
+	  otherwise if the player cannot afford the trap creation tax, nothing happens.
+\item If the specified room contains a trap with a different $TrapID$, it will be removed first,\newline
+	  giving back resources if not \verb#free#.
+\end{itemize}
+\end{apiCode}
+\begin{apiCode}{dungeon room $X_1$ $X_2$ trap remove [loss]}
+Remove the trap in the room at position $(X_1, X_2)$.
+\begin{itemize}
+\itemsep 0em
+\item If the specified room is not yet contructed, nothing happens.
+\item If the specified room contains no trap, nothing happens.
+\item If \verb#loss# is indicated, the player won't get resources back.
+\end{itemize}
+\end{apiCode}
+
+\subsection{Room facilities}
+\begin{apiCode}{dungeon room $X_1$ $X_2$ facility create $FacilityID$ [free]}
+Set a facility $FacilityID$ in the room at position $(X_1, X_2)$.
+\begin{itemize}
+\itemsep 0em
+\item If the specified room is not yet contructed, nothing happens.
+\item If the specified room already contains a facility $FacilityID$, nothing happens.
+\item If \verb#free# is indicated, the player won't pay anything,\newline
+	  otherwise if the player cannot afford the facility creation tax, nothing happens.
+\end{itemize}
+\end{apiCode}
+\begin{apiCode}{dungeon room $X_1$ $X_2$ facility remove $FacilityID$ [loss]}
+Remove a facility $FacilityID$ in the room at position $(X_1, X_2)$.
+\begin{itemize}
+\itemsep 0em
+\item If the specified room is not yet contructed, nothing happens.
+\item If the specified room contains no facility $FacilityID$, nothing happens.
+\item If \verb#loss# is indicated, the player won't get resources back.
+\end{itemize}
+\end{apiCode}
+
+\end{document}

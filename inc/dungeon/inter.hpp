@@ -156,16 +156,16 @@ namespace dungeon
         bool pushRoom(const RoomCoords& coords, Direction direction, uint animationDelay = 0u);
 
         //! Change the number of floors.
-        void adaptFloorsCount(int relativeValue);
+        void addFloorsCount(int relativeValue);
 
         //! Change the number of rooms by floor.
-        void adaptRoomsByFloor(int relativeValue);
+        void addFloorRoomsCount(int relativeValue);
 
         //! Set the number of floors.
         void setFloorsCount(uint value);
 
         //! Set the number of rooms by floor.
-        void setRoomsByFloor(uint value);
+        void setFloorRoomsCount(uint value);
 
         //! @}
 

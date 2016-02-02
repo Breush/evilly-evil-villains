@@ -268,7 +268,7 @@ void Application::update(const sf::Time& dt)
             auto command = context::context.commander.interpret(m_scriptCommandLine);
             if (command != nullptr) {
                 context::context.commander.push(*command);
-                wdebug_core_1(L"Script command: " << m_scriptCommandLine);
+                wdebug_core_2(L"Script command: " << m_scriptCommandLine);
                 scriptNextLine();
             }
         }
