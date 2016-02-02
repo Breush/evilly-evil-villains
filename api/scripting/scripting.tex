@@ -30,7 +30,7 @@ Pause the script reading for $N$ milliseconds.\newline
 
 \section{Dungeon design}
 \subsection{Structure control}
-\begin{apiCode}{dungeon floorsCount (add|set) $N$}
+\begin{apiCode}{dungeon structure floorsCount (add|set) $N$}
 Change the floors count.
 \begin{itemize}
 \itemsep 0em
@@ -38,12 +38,34 @@ Change the floors count.
 \item If \verb#set#, the floors count is set to $N$ floors.
 \end{itemize}
 \end{apiCode}
-\begin{apiCode}{dungeon floorRoomsCount (add|set) $N$}
+\begin{apiCode}{dungeon structure floorRoomsCount (add|set) $N$}
 Change the rooms count on each floor.
 \begin{itemize}
 \itemsep 0em
 \item If \verb#add#, the rooms count on each floor is added $N$ rooms. $N$ can be negative.
 \item If \verb#set#, the rooms count on each floor is set to $N$ rooms.
+\end{itemize}
+\end{apiCode}
+
+\subsection{Generics control}
+\begin{apiCode}{dungeon generic monsters unlock (*|$MonsterID$) [free]}
+Unlock a monster of a generic.
+\begin{itemize}
+\itemsep 0em
+\item If \verb#*#, unlock all monsters.
+\item If the monster is already unlocked, nothing happens.
+\item If \verb#free# is indicated, the player won't pay anything,\newline
+	  otherwise if the player cannot afford the unlock tax, nothing happens.
+\end{itemize}
+\end{apiCode}
+\begin{apiCode}{dungeon generic traps unlock (*|$TrapID$) [free]}
+Unlock a trap of a generic.
+\begin{itemize}
+\itemsep 0em
+\item If \verb#*#, unlock all traps.
+\item If the trap is already unlocked, nothing happens.
+\item If \verb#free# is indicated, the player won't pay anything,\newline
+	  otherwise if the player cannot afford the unlock tax, nothing happens.
 \end{itemize}
 \end{apiCode}
 

@@ -238,6 +238,9 @@ namespace dungeon
         //! Will emit an event if a change occured.
         void removeRoomTrap(const RoomCoords& coords);
 
+        //! Set all traps generic unlocked state.
+        void setTrapsGenericUnlocked(bool unlocked);
+
         //! Set the trap generic unlocked state.
         void setTrapGenericUnlocked(const std::wstring& trapID, bool unlocked);
 
@@ -259,6 +262,9 @@ namespace dungeon
         //! Remove all the monsters from the room specified.
         //! Will emit an event if a change occured.
         void removeRoomMonsters(const RoomCoords& coords);
+
+        //! Set all traps generic unlocked state.
+        void setMonstersGenericUnlocked(bool unlocked);
 
         //! Set the monster generic unlocked state.
         void setMonsterGenericUnlocked(const std::wstring& monsterID, bool unlocked);

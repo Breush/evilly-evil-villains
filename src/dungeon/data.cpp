@@ -908,6 +908,13 @@ void Data::removeRoomTrap(const RoomCoords& coords)
     addEvent("trap_changed", coords);
 }
 
+void Data::setTrapsGenericUnlocked(bool unlocked)
+{
+    for (auto& trapInfoPair : m_trapsGenerics)
+        trapInfoPair.second.unlocked = unlocked;
+    EventEmitter::addEvent("trap_generic_changed");
+}
+
 void Data::setTrapGenericUnlocked(const std::wstring& trapID, bool unlocked)
 {
     m_trapsGenerics[trapID].unlocked = unlocked;
@@ -976,6 +983,13 @@ void Data::moveMonsterFromReserve(const RoomCoords& coords, const std::wstring& 
     event->type = "reserve_countdown_changed";
     event->monster.id = monsterGenericPair->first.c_str();
     EventEmitter::addEvent(std::move(event));
+}
+
+void Data::setMonstersGenericUnlocked(bool unlocked)
+{
+    for (auto& monsterInfoPair : m_monstersGenerics)
+        monsterInfoPair.second.unlocked = unlocked;
+    EventEmitter::addEvent("monster_generic_changed");
 }
 
 void Data::setMonsterGenericUnlocked(const std::wstring& monsterID, bool unlocked)

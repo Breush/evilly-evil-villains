@@ -19,34 +19,27 @@ context::CommandPtr Commandable::interpret(const std::vector<std::wstring>& toke
     const std::wstring logStart(L"> [dungeon] ");
     auto nTokens = tokens.size();
 
-    if (nTokens >= 3u) {
-        // Floors count
-        if (tokens[0u] == L"floorsCount") {
-            if (tokens[1u] == L"add") {
-                logMessage = logStart + L"Adding " + tokens[2u] + L" floors to floors count";
-                m_inter.addFloorsCount(to<int>(tokens[2u]));
-            }
-            else if (tokens[1u] == L"set") {
-                logMessage = logStart + L"Setting floors count to " + tokens[2u] + L" floors";
-                m_inter.setFloorsCount(to<uint>(tokens[2u]));
-            }
-        }
-
-        // Floor rooms count
-        if (tokens[0u] == L"floorRoomsCount") {
-            if (tokens[1u] == L"add") {
-                logMessage = logStart + L"Adding " + tokens[2u] + L" rooms to floor rooms count";
-                m_inter.addFloorRoomsCount(to<int>(tokens[2u]));
-            }
-            else if (tokens[1u] == L"set") {
-                logMessage = logStart + L"Setting floor rooms count to " + tokens[2u] + L" rooms";
-                m_inter.setFloorRoomsCount(to<uint>(tokens[2u]));
-            }
-        }
-    }
-
     if (nTokens >= 4u) {
-        if (tokens[0u] == L"room") {
+        if (tokens[0u] == L"generic") {
+            if (tokens[1u] == L"monsters") {
+                if (tokens[2u] == L"unlock") {
+                // TODO Use "free" parameter -> let m_inter manage the cost, and therefore update the Hub Market/Inn states
+                logMessage = logStart + L"Unlocking generic monster " + tokens[3u];
+                bool all = (tokens[3u] == L"*");
+                if (all)    m_inter.data().setMonstersGenericUnlocked(true);
+                else        m_inter.data().setMonsterGenericUnlocked(tokens[3u], true);
+                }
+            }
+            else if (tokens[1u] == L"traps") {
+                if (tokens[2u] == L"unlock") {
+                    logMessage = logStart + L"Unlocking generic trap " + tokens[3u];
+                    bool all = (tokens[3u] == L"*");
+                    if (all)    m_inter.data().setTrapsGenericUnlocked(true);
+                    else        m_inter.data().setTrapGenericUnlocked(tokens[3u], true);
+                }
+            }
+        }
+        else if (tokens[0u] == L"room") {
             // Room control
             if (tokens[3u] == L"construct") {
                 logMessage = logStart + L"Constructing room " + tokens[1u] + L"/" + tokens[2u];
@@ -59,6 +52,31 @@ context::CommandPtr Commandable::interpret(const std::vector<std::wstring>& toke
                 RoomCoords coords{to<uint8>(tokens[1u]), to<uint8>(tokens[2u])};
                 bool loss = (nTokens >= 5u) && (tokens[4u] == L"loss");
                 m_inter.destroyRoom(coords, loss);
+            }
+        }
+        else if (tokens[0u] == L"structure") {
+            // Floors count
+            if (tokens[1u] == L"floorsCount") {
+                if (tokens[2u] == L"add") {
+                    logMessage = logStart + L"Adding " + tokens[3u] + L" floors to floors count";
+                    m_inter.addFloorsCount(to<int>(tokens[3u]));
+                }
+                else if (tokens[2u] == L"set") {
+                    logMessage = logStart + L"Setting floors count to " + tokens[3u] + L" floors";
+                    m_inter.setFloorsCount(to<uint>(tokens[3u]));
+                }
+            }
+
+            // Floor rooms count
+            else if (tokens[1u] == L"floorRoomsCount") {
+                if (tokens[2u] == L"add") {
+                    logMessage = logStart + L"Adding " + tokens[3u] + L" rooms to floor rooms count";
+                    m_inter.addFloorRoomsCount(to<int>(tokens[3u]));
+                }
+                else if (tokens[2u] == L"set") {
+                    logMessage = logStart + L"Setting floor rooms count to " + tokens[3u] + L" rooms";
+                    m_inter.setFloorRoomsCount(to<uint>(tokens[3u]));
+                }
             }
         }
     }
@@ -91,7 +109,7 @@ context::CommandPtr Commandable::interpret(const std::vector<std::wstring>& toke
         if (tokens[0u] == L"room") {
             // Trap
             if (tokens[3u] == L"trap") {
-                if (tokens[4u] == L"remove") {
+                if (tokens[4u] == L"set") {
                     logMessage = logStart + L"Setting trap " + tokens[5u] + L" in room " + tokens[1u] + L"/" + tokens[2u];
                     RoomCoords coords{to<uint8>(tokens[1u]), to<uint8>(tokens[2u])};
                     bool free = (nTokens >= 7u) && (tokens[6u] == L"free");
@@ -135,27 +153,67 @@ void Commandable::autoComplete(std::vector<std::wstring>& possibilities,
     };
 
     if (nTokens == 0u) {
-        checkAdd(L"floorsCount");
-        checkAdd(L"floorRoomsCount");
+        checkAdd(L"generic");
         checkAdd(L"room");
+        checkAdd(L"structure");
     }
     else if (nTokens == 1u) {
-        if (tokens[0u] == L"floorsCount" || tokens[0u] == L"floorRoomsCount") {
-            checkAdd(L"add");
-            checkAdd(L"set");
+        if (tokens[0u] == L"generic") {
+            checkAdd(L"monsters");
+            checkAdd(L"traps");
+        }
+        else if (tokens[0u] == L"structure") {
+            checkAdd(L"floorsCount");
+            checkAdd(L"floorRoomsCount");
+        }
+    }
+    else if (nTokens == 2u) {
+        if (tokens[0u] == L"generic") {
+            if (tokens[1u] == L"monsters" || tokens[1u] == L"traps") {
+                checkAdd(L"unlock");
+            }
+        }
+        else if (tokens[0u] == L"structure") {
+            if (tokens[1u] == L"floorsCount" || tokens[1u] == L"floorRoomsCount") {
+                checkAdd(L"add");
+                checkAdd(L"set");
+            }
         }
     }
     else if (nTokens == 3u) {
-        if (tokens[0u] == L"room") {
+        if (tokens[0u] == L"generic") {
+            if (tokens[1u] == L"monsters") {
+                if (tokens[2u] == L"unlock") {
+                    checkAdd(L"*");
+                    for (const auto& monsterInfoPair : m_inter.monstersDB().get())
+                        checkAdd(monsterInfoPair.first);
+                }
+            }
+            else if (tokens[1u] == L"traps") {
+                if (tokens[2u] == L"unlock") {
+                    checkAdd(L"*");
+                    for (const auto& trapInfoPair : m_inter.trapsDB().get())
+                        checkAdd(trapInfoPair.first);
+                }
+            }
+        }
+        else if (tokens[0u] == L"room") {
             checkAdd(L"construct");
             checkAdd(L"destroy");
             checkAdd(L"push");
-            checkAdd(L"trap");
             checkAdd(L"facility");
+            checkAdd(L"trap");
         }
     }
     else if (nTokens == 4u) {
-        if (tokens[0u] == L"room") {
+        if (tokens[0u] == L"generic") {
+            if (tokens[1u] == L"unlock") {
+                if (tokens[2u] == L"monsters" || tokens[2u] == L"traps") {
+                    checkAdd(L"free");
+                }
+            }
+        }
+        else if (tokens[0u] == L"room") {
             if (tokens[3u] == L"construct") {
                 checkAdd(L"free");
             }

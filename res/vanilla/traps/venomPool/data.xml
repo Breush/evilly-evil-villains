@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<trap id="venomPool" trName="Venom pool" lock="full">
+    <data name="unlockCost" dosh="9000" />
+    <data name="baseCost"   dosh="3000" />
+    <data name="resistance" durability="540" />
+    <data name="repairCost" dosh="0.2" />
+</trap>
