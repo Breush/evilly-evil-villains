@@ -128,7 +128,7 @@ bool Facility::lua_isLink()
 
 bool Facility::lua_hasLink() const
 {
-    return (m_facilityInfo->link.x != -1u) && (m_facilityInfo->link.y != -1u);
+    return (m_facilityInfo->link.x != 0xff_u8) && (m_facilityInfo->link.y != 0xff_u8);
 }
 
 uint32 Facility::lua_getLinkRoomX() const
