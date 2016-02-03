@@ -263,6 +263,7 @@ void Application::update(const sf::Time& dt)
     if (!m_scriptCommandLine.empty()) {
         if (m_scriptWaitTime > 0) {
             m_scriptWaitTime -= dt.asMilliseconds();
+            m_scriptWaitTime = std::max(0, m_scriptWaitTime);
         }
         else {
             auto command = context::context.commander.interpret(m_scriptCommandLine);
@@ -369,7 +370,14 @@ void Application::switchFullscreenMode()
 
 void Application::scriptNextLine()
 {
-    if (!std::getline(m_scriptStream, m_scriptCommandLine)) {
+    bool theEnd;
+
+    // This loop allows us to skip comments and blank lines
+    do {
+        theEnd = !std::getline(m_scriptStream, m_scriptCommandLine);
+    } while (!theEnd && (m_scriptCommandLine.empty() || m_scriptCommandLine[0u] == L'#'));
+
+    if (theEnd) {
         m_scriptCommandLine.clear();
         return;
     }
@@ -379,7 +387,10 @@ void Application::scriptNextLine()
 
     std::wstringstream ss(m_scriptCommandLine);
     ss >> m_scriptCommandLine;
-    ss >> m_scriptWaitTime;
+
+    int waitTime = 0;
+    ss >> waitTime;
+    m_scriptWaitTime += waitTime;
 
     scriptNextLine();
 }
