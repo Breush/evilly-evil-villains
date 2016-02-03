@@ -133,7 +133,6 @@ context::CommandPtr Commandable::interpret(const std::vector<std::wstring>& toke
                     RoomCoords coords{to<uint8>(tokens[1u]), to<uint8>(tokens[2u])};
                     locatedFacility = m_inter.findRoomFacility(coords, tokens[5u]);
                     locatedFacilityTS = 6u;
-
                     logMessage += logStart + ((locatedFacility != nullptr)? L"Found facility " : L"No facility ");
                     logMessage += tokens[5u] + L" in room " + tokens[1u] + L"/" + tokens[2u];
                 }
@@ -157,6 +156,16 @@ context::CommandPtr Commandable::interpret(const std::vector<std::wstring>& toke
                 logMessage += logStart + L"Calling AI function " + tokens[locatedFacilityTS + 1u];
                 auto luaKey = toString(tokens[locatedFacilityTS + 1u]);
                 locatedFacility->lua()[luaKey.c_str()]();
+            }
+        }
+
+        if (nTokens >= 4u) {
+            if (tokens[locatedFacilityTS + 0u] == L"link") {
+                if (tokens[locatedFacilityTS + 1u] == L"set") {
+                    logMessage += logStart + L"Setting link to room " + tokens[locatedFacilityTS + 2u] + L"/" + tokens[locatedFacilityTS + 3u];
+                    RoomCoords linkCoords{to<uint8>(tokens[locatedFacilityTS + 2u]), to<uint8>(tokens[locatedFacilityTS + 3u])};
+                    m_inter.setRoomFacilityLink(locatedFacility->coords(), locatedFacility->edata().type(), linkCoords);
+                }
             }
         }
     }
@@ -322,6 +331,12 @@ void Commandable::autoComplete(std::vector<std::wstring>& possibilities,
         nTokens -= locatedFacilityTS;
         if (nTokens == 0u) {
             checkAdd(L"ai");
+            checkAdd(L"link");
+        }
+        else if (nTokens == 1u) {
+            if (tokens[locatedFacilityTS + 0u] == L"link") {
+                checkAdd(L"set");
+            }
         }
     }
 }

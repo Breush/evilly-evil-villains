@@ -31,6 +31,9 @@ namespace dungeon
         //! @name Element data
         //! @{
 
+        //! Access the coords the facility is in.
+        inline const RoomCoords& coords() const { return m_coords; }
+
         //! Binds the element data.
         void bindFacilityInfo(FacilityInfo& facilityInfo);
 
