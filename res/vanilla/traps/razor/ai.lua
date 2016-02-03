@@ -25,8 +25,8 @@ end
 
 -- Called once on object creation
 function _register()
-    eev_addCallback("cbEntityClose", "hero", "distance < 0.4")
-    eev_addCallback("cbEntityClose", "monster", "distance < 0.4")
+    eev_callbackRegister("cbEntityClose", "hero", "distance < 0.4")
+    eev_callbackRegister("cbEntityClose", "monster", "distance < 0.4")
 
     eev_setDepth(70)
 end

@@ -39,13 +39,13 @@ Element::Element(dungeon::Inter& inter)
     m_mouseOverlay.setDepth(-50.f);
 
     // Lua API
-    std::function<void(const std::string&, const std::string&, const std::string&)> eev_addCallback = std::bind(&Element::lua_addCallback, this, _1, _2, _3);
-    std::function<void(const std::string&, const std::string&)> eev_setLeftClickAction = std::bind(&Element::lua_setLeftClickAction, this, _1, _2);
-    std::function<void(const std::string&, const std::string&)> eev_setRightClickAction = std::bind(&Element::lua_setRightClickAction, this, _1, _2);
+    std::function<void(const std::string&, const std::string&, const std::string&)> eev_callbackRegister = std::bind(&Element::lua_callbackRegister, this, _1, _2, _3);
+    std::function<void(const std::string&, const std::string&)> eev_callbackClickLeftSet = std::bind(&Element::lua_callbackClickLeftSet, this, _1, _2);
+    std::function<void(const std::string&, const std::string&)> eev_callbackClickRightSet = std::bind(&Element::lua_callbackClickRightSet, this, _1, _2);
 
-    lua()["eev_addCallback"] = eev_addCallback;
-    lua()["eev_setLeftClickAction"] = eev_setLeftClickAction;
-    lua()["eev_setRightClickAction"] = eev_setRightClickAction;
+    lua()["eev_callbackRegister"] = eev_callbackRegister;
+    lua()["eev_callbackClickLeftSet"] = eev_callbackClickLeftSet;
+    lua()["eev_callbackClickRightSet"] = eev_callbackClickRightSet;
 
     lua()["eev_setDataBool"] = [this] (const std::string& s, const bool value) { return lua_setDataBool(s, value); };
     lua()["eev_getDataBool"] = [this] (const std::string& s) { return lua_getDataBool(s); };
@@ -180,19 +180,21 @@ void Element::hideMouseOverlay()
 //---------------------------//
 //----- LUA interaction -----//
 
-void Element::lua_addCallback(const std::string& luaKey, const std::string& entityType, const std::string& condition)
+//----- Callbacks
+
+void Element::lua_callbackRegister(const std::string& luaKey, const std::string& entityType, const std::string& condition)
 {
     addDetectSignal(entityType, condition, [this, luaKey] (const uint32 UID) { lua()[luaKey.c_str()](UID); });
 }
 
-void Element::lua_setLeftClickAction(const std::string& luaKey, const std::string& actionName)
+void Element::lua_callbackClickLeftSet(const std::string& luaKey, const std::string& actionName)
 {
     m_leftClickAction.name = actionName;
     m_leftClickAction.callback = [this, luaKey] { lua()[luaKey.c_str()](); };
     m_mouseOverlay.setLeft(_(m_leftClickAction.name.c_str()));
 }
 
-void Element::lua_setRightClickAction(const std::string& luaKey, const std::string& actionName)
+void Element::lua_callbackClickRightSet(const std::string& luaKey, const std::string& actionName)
 {
     m_rightClickAction.name = actionName;
     m_rightClickAction.callback = [this, luaKey] { lua()[luaKey.c_str()](); };

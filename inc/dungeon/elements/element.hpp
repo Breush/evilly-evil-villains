@@ -98,13 +98,13 @@ namespace dungeon
         sel::State& lua() { return *m_lua; }
 
         //! Calling detector.
-        void lua_addCallback(const std::string& luaKey, const std::string& entityType, const std::string& condition);
+        void lua_callbackRegister(const std::string& luaKey, const std::string& entityType, const std::string& condition);
 
         //! Add action callback whenever a left click happens.
-        void lua_setLeftClickAction(const std::string& luaKey, const std::string& actionName);
+        void lua_callbackClickLeftSet(const std::string& luaKey, const std::string& actionName);
 
         //! Add action callback whenever a right click happens.
-        void lua_setRightClickAction(const std::string& luaKey, const std::string& actionName);
+        void lua_callbackClickRightSet(const std::string& luaKey, const std::string& actionName);
 
         //----- Element data
 

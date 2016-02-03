@@ -40,8 +40,8 @@ end
 -- Called once on object creation
 function _register()
     -- Click actions
-    eev_setLeftClickAction("cbLeftClick", "Activate")
-    eev_setRightClickAction("cbRightClick", "Orient")
+    eev_callbackClickLeftSet("cbLeftClick", "Activate")
+    eev_callbackClickRightSet("cbRightClick", "Orient")
 
     -- In front of almost everything
     eev_setDepth(10)

@@ -1,0 +1,108 @@
+\documentclass[10pt,a4paper]{scrartcl}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{minted}
+
+\newsavebox{\mybox}
+\newenvironment{apiCode}[1]
+{ \begin{lrbox}{\mybox} \begin{minipage}{0.9\textwidth} {\mintinline{c++}{#1}} \vspace{8pt} \newline }
+{ \end{minipage} \end{lrbox}\fbox{\usebox{\mybox}} \newline\vspace{4pt}\newline }
+
+\title{Artificial Intelligence API}
+\subtitle{for Evilly Evil Villains 1.0}
+\author{Alexis Breust}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+In \textit{Evilly Evil Villains}, an \textbf{element} is whatever game content that can be written outside the game application. Therefore, it can be a \textbf{dynamic}, a \textbf{facility}, a \textbf{hero}, a \textbf{monster} or a \textbf{trap}. All these different type of elements interact with the player and the game in different ways, but they all have something in common: their behaviour is described in a file named \texttt{ai.lua} written in \textit{Lua}. This file describes the available functions for game/lua communication.
+
+\section{Basics and concepts}
+\subsection{Minimal example}
+The following show the minimal code you need to write to get going. Functions prefixed with a underscore (\verb#_#) are made to be called by the game application, whereas API functions are prefixed with \verb#eev_# and are made to be used in the Lua file to communicate with the game application.
+\begin{figure}[h!]
+\centering
+\begin{minipage}{0.4\textwidth}
+\begin{minted}[linenos]{lua}
+-- Called on new data
+function _reinit()
+end
+
+-- Called once on object creation
+function _register()
+end
+
+-- Regular call
+function _update(dt)
+end
+\end{minted}
+\end{minipage}
+\caption{Minimal \texttt{ai.lua} file for an \textbf{element}.}
+\end{figure}
+
+TODO Explain dt = seconds, etc.
+
+\subsection{Data saving}
+Local variables in the Lua file will be lost if the player quits the game. In order to fix this issue, it is recommended to use API functions to store the value anytime a variable changes. One should rely on local variables only for temporaries values (i.e. used to avoid recomputing something complex or simulating element memory).
+
+The functions are named \verb#eev_dataInitX#, \verb#eev_dataSetX# and \verb#eev_dataGetX#, where \verb#X# is variable type. You can find more on this feature in the corresponding section.
+
+\subsection{Conditionnal callbacks}
+TODO A common convention is to prefix the function name with \texttt{cb} as callback, but nothing forces you to do so.
+
+\subsection{Other elements}
+TODO UID sysem
+
+\subsection{Metrics}
+TODO relative to room size
+
+\newpage
+\section{Common functions}
+The following functions are shared between all elements.
+\subsection{Callbacks}
+\begin{apiCode}{void eev_callbackRegister(string funcName, string elementType, string cond)}
+Register a function to be called whenever an element of \texttt{elementType} matches the condition specified in \texttt{cond}.
+\begin{itemize}
+\itemsep 0em
+\item \texttt{funcName} A lua function name that will be called each time the condition is validated. The function should be of form \mintinline{lua}{function XXX(UID)}, where \texttt{UID} is the one of the element matching the condition.
+\item \texttt{elementType} A type of element to consider between \texttt{dynamic}, \texttt{facility}, \texttt{hero}, \texttt{monster} and \texttt{trap}. If anything else is specified, the condition will never be met.
+\item \texttt{cond} A explicit condition to check. These are the current possibilities:
+    \begin{itemize}
+    \itemsep 0em
+    \item \texttt{distance < X}, where \texttt{X} is a room-relative metric. This condition is validated if and only if the element is close enough.
+    \end{itemize}
+\end{itemize}
+\end{apiCode}
+\begin{apiCode}{void eev_callbackClickLeftSet(string funcName, string trText)}
+Set the function to be called whenever a left click occurs over the element.
+\begin{itemize}
+\itemsep 0em
+\item \texttt{funcName} The lua function name that will be called each time a left click occurs over the element.
+\item \texttt{trName} A translatable text that will be shown next to the mouse overlay.
+\end{itemize}
+\end{apiCode}
+\begin{apiCode}{void eev_callbackClickRightSet(string funcName, string trText)}
+Set the function to be called whenever a right click occurs over the element.
+\begin{itemize}
+\itemsep 0em
+\item \texttt{funcName} The lua function name that will be called each time a right click occurs over the element.
+\item \texttt{trName} A translatable text that will be shown next to the mouse overlay.
+\end{itemize}
+\end{apiCode}
+
+\newpage
+\section{Facilities specific functions}
+\subsection{Structure control}
+\begin{apiCode}{bool eev_hasBarrier()}
+Check whether the facility controled has an activated barrier.
+\end{apiCode}
+\begin{apiCode}{bool eev_setBarrier(bool activated)}
+\end{apiCode}
+
+\end{document}

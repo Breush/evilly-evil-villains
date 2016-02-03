@@ -27,7 +27,7 @@ end
 -- Called once on object creation
 function _register()
     -- Click actions
-    eev_setLeftClickAction("cbLeftClick", "Harvest")
+    eev_callbackClickLeftSet("cbLeftClick", "Harvest")
 
     -- In front of everything
     eev_setDepth(-50)
