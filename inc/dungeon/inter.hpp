@@ -231,6 +231,9 @@ namespace dungeon
         //! Remove the room trap, without gaining money if loss is enabled.
         void removeRoomTrap(const RoomCoords& coords, bool loss = false);
 
+        //! Set the specified room trap's barrier.
+        void setRoomTrapBarrier(const RoomCoords& coords, bool activated);
+
         //! @}
 
         //-----------------//

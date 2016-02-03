@@ -241,6 +241,7 @@ void Data::loadDungeon(const std::wstring& file)
             const auto& trapNode = roomNode.child(L"trap");
             if (trapNode) {
                 trap.data.loadXML(trapNode);
+                trap.barrier = trapNode.attribute(L"barrier").as_bool();
                 trap.common = &trapsDB().get(trap.data.type());
             }
 
@@ -353,9 +354,11 @@ void Data::saveDungeon(const std::wstring& file)
             roomNode.append_attribute(L"state") = roomStateString.c_str();
 
             // Trap
-            if (room.trap.data.exists()) {
+            const auto& trap = room.trap;
+            if (trap.data.exists()) {
                 auto trapNode = roomNode.append_child(L"trap");
-                room.trap.data.saveXML(trapNode);
+                if (trap.barrier) trapNode.append_attribute(L"barrier") = true;
+                trap.data.saveXML(trapNode);
             }
 
             // Facilities
@@ -440,6 +443,7 @@ bool Data::isRoomWalkable(const RoomCoords& coords) const
     // Check that there is no barrier in this room
     for (const auto& facility : selectedRoom.facilities)
         returnif (facility.barrier) false;
+    returnif (selectedRoom.trap.data.exists() && selectedRoom.trap.barrier) false;
 
     return true;
 }
@@ -886,6 +890,7 @@ void Data::setRoomTrap(const RoomCoords& coords, const std::wstring& trapID)
 
     // Destroy previous trap if any
     roomInfo.trap.data.clear();
+    roomInfo.trap.barrier = false;
 
     // And and set it to the new one
     roomInfo.trap.data.create(trapID);
@@ -906,6 +911,16 @@ void Data::removeRoomTrap(const RoomCoords& coords)
     roomInfo.trap.data.clear();
 
     addEvent("trap_changed", coords);
+}
+
+void Data::setRoomTrapBarrier(const RoomCoords& coords, bool activated)
+{
+    auto& roomInfo = room(coords);
+    returnif (!roomInfo.trap.data.exists());
+
+    roomInfo.trap.barrier = activated;
+    addEvent("trap_changed", coords);
+    EventEmitter::addEvent("dungeon_changed");
 }
 
 void Data::setTrapsGenericUnlocked(bool unlocked)

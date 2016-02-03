@@ -26,12 +26,24 @@ Trap::Trap(const RoomCoords& coords, ElementData& edata, Inter& inter)
     // Lua API
     lua()["eev_warnHarvestableDosh"] = [this] { lua_warnHarvestableDosh(); };
 
+    lua()["eev_hasBarrier"] = [this] { return lua_hasBarrier(); };
+    lua()["eev_setBarrier"] = [this] (bool activated) { lua_setBarrier(activated); };
+
     // Lua
     std::string luaFilename = "res/vanilla/traps/" + sTrapID + "/ai.lua";
     if (!lua().load(luaFilename))
         throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
     lua()["_register"]();
+}
 
+//------------------------//
+//----- Element data -----//
+
+void Trap::bindTrapInfo(TrapInfo& trapInfo)
+{
+    m_trapInfo = &trapInfo;
+
+    // Lua update
     lua()["_reinit"]();
 }
 
@@ -54,4 +66,14 @@ uint32 Trap::harvestableDosh()
 void Trap::lua_warnHarvestableDosh()
 {
     m_inter.data().addEvent("harvestable_dosh_changed", m_coords);
+}
+
+bool Trap::lua_hasBarrier() const
+{
+    return m_trapInfo->barrier;
+}
+
+void Trap::lua_setBarrier(bool activated)
+{
+    m_inter.setRoomTrapBarrier(m_coords, activated);
 }

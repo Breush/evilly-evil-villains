@@ -802,6 +802,11 @@ void Inter::removeRoomTrap(const RoomCoords& coords, bool loss)
     m_data->removeRoomTrap(coords);
 }
 
+void Inter::setRoomTrapBarrier(const RoomCoords& coords, bool activated)
+{
+    m_data->setRoomTrapBarrier(coords, activated);
+}
+
 //--------------------//
 //----- Monsters -----//
 
@@ -1019,13 +1024,16 @@ void Inter::refreshTileTraps(const RoomCoords& coords)
     // Reset
     tile.trap = nullptr;
 
-    // Room is not constructed with a trap
+    // Check that room is constructed and has a trap
     returnif (room.state != RoomState::CONSTRUCTED);
     returnif (!room.trap.data.exists());
 
     // Trap
     tile.trap = std::make_unique<Trap>(coords, room.trap.data, *this);
     attachChild(*tile.trap);
+
+    // Now rebind the data
+    tile.trap->bindTrapInfo(room.trap);
 }
 
 void Inter::refreshOuterWalls()

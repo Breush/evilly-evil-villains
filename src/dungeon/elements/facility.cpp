@@ -37,11 +37,13 @@ Facility::Facility(const RoomCoords& coords, ElementData& edata, dungeon::Inter&
     lua()["eev_hasLink"] = [this] { return lua_hasLink(); };
     lua()["eev_getLinkRoomX"] = [this] { return lua_getLinkRoomX(); };
     lua()["eev_getLinkRoomY"] = [this] { return lua_getLinkRoomY(); };
+
     lua()["eev_hasTunnel"] = [this] { return lua_hasTunnel(); };
     lua()["eev_addTunnel"] = [this] (const int32 x, const int32 y, bool relative) { lua_addTunnel(x, y, relative); };
+    lua()["eev_removeTunnels"] = [this] { lua_removeTunnels(); };
+
     lua()["eev_hasBarrier"] = [this] { return lua_hasBarrier(); };
     lua()["eev_setBarrier"] = [this] (bool activated) { lua_setBarrier(activated); };
-    lua()["eev_removeTunnels"] = [this] { lua_removeTunnels(); };
 
     // Lighting
     lua()["eev_lightAddPoint"] = [this] (lua_Number x, lua_Number y, lua_Number s) { return lua_lightAddPoint(x, y, s); };
@@ -149,6 +151,11 @@ void Facility::lua_addTunnel(const int32 x, const int32 y, bool relative)
     m_inter.data().addFacilityTunnel(*m_facilityInfo, {x, y}, relative);
 }
 
+void Facility::lua_removeTunnels()
+{
+    m_facilityInfo->tunnels.clear();
+}
+
 bool Facility::lua_hasBarrier() const
 {
     return m_facilityInfo->barrier;
@@ -157,11 +164,6 @@ bool Facility::lua_hasBarrier() const
 void Facility::lua_setBarrier(bool activated)
 {
     m_inter.setRoomFacilityBarrier(m_coords, m_elementID, activated);
-}
-
-void Facility::lua_removeTunnels()
-{
-    m_facilityInfo->tunnels.clear();
 }
 
 //----- Lighting

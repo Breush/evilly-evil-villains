@@ -20,5 +20,6 @@ namespace dungeon
     {
         const TrapData* common = nullptr;   //!< All the common data.
         ElementData data;                   //!< Its data.
+        bool barrier = false;               //!< Does the trap blocks the room?
     };
 }

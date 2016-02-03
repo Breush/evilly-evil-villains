@@ -22,6 +22,15 @@ namespace dungeon
         std::string detectKey() const final { return "trap"; }
         std::string _name() const final { return "dungeon::Trap"; }
 
+        //---------------------//
+        //! @name Element data
+        //! @{
+
+        //! Binds the element data.
+        void bindTrapInfo(TrapInfo& trapInfo);
+
+        //! @}
+
         //------------------//
         //! @name Resources
         //! @{
@@ -43,10 +52,19 @@ namespace dungeon
         //! Indicate that harvestable dosh has changed.
         void lua_warnHarvestableDosh();
 
+        //----- Barrieres
+
+        //! Checks if a barrier exists.
+        bool lua_hasBarrier() const;
+
+        //! Set the barrier state.
+        void lua_setBarrier(bool activated);
+
         //! @}
 
     protected:
 
-        RoomCoords m_coords;    //!< The room in which the trap is set.
+        RoomCoords m_coords;            //!< The room in which the trap is set.
+        TrapInfo* m_trapInfo = nullptr; //!< The trap data reference.
     };
 }

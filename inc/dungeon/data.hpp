@@ -238,6 +238,9 @@ namespace dungeon
         //! Will emit an event if a change occured.
         void removeRoomTrap(const RoomCoords& coords);
 
+        //! Set the specified room trap's barrier.
+        void setRoomTrapBarrier(const RoomCoords& coords, bool activated);
+
         //! Set all traps generic unlocked state.
         void setTrapsGenericUnlocked(bool unlocked);
 

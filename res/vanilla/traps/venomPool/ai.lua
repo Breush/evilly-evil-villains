@@ -16,6 +16,10 @@
 
 -- Called on new data
 function _reinit()
+    -- No blocked yet, block it then
+    if not eev_hasBarrier() then
+        eev_setBarrier(true)
+    end
 end
 
 -- Called once on object creation
