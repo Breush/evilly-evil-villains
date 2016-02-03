@@ -56,6 +56,15 @@ namespace dungeon
 
         //! @}
 
+        //------------//
+        //! @name Lua
+        //! @{
+
+        //! Access the lua state.
+        sel::State& lua() { return *m_lua; }
+
+        //! @}
+
     protected:
 
         //----------------//
@@ -93,9 +102,6 @@ namespace dungeon
         //----------------//
         //! @name Lua API
         //! @{
-
-        //! Access the lua state.
-        sel::State& lua() { return *m_lua; }
 
         //! Calling detector.
         void lua_callbackRegister(const std::string& luaKey, const std::string& entityType, const std::string& condition);

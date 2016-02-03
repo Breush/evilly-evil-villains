@@ -21,6 +21,10 @@
 \begin{document}
 \maketitle
 
+\section{Basics and concepts}
+\subsection{Comments}
+A commented line start with a \texttt{\#}, anything else on the line is ignored. Empty lines are also ignored. However if you let a non-commented line with any character like just a space, this will be interpreted as a command and the script will loop silently trying desperately to execute it.
+
 \section{Tools}
 \subsection{Structure control}
 \begin{apiCode}{wait $N$}
@@ -139,6 +143,20 @@ Remove a facility $FacilityID$ in the room at position $(X_1, X_2)$.
 \item If the specified room is not yet contructed, nothing happens.
 \item If the specified room contains no facility $FacilityID$, nothing happens.
 \item If \verb#loss# is indicated, the player won't get resources back.
+\end{itemize}
+\end{apiCode}
+\begin{apiCode}{dungeon room $X_1$ $X_2$ facility find $FacilityID$ ...}
+Locate a facility $FacilityID$ in the room at position $(X_1, X_2)$.\newline
+\textit{One need to complete the command with some other action on the located facility.}
+\end{apiCode}
+
+\subsubsection*{Located facilities}
+\begin{apiCode}{...$LocFacility$... ai $FuncName$}
+Calls the function $FuncName$ from the Artificial Intelligence file (\texttt{ai.lua}) of the located facility.
+\begin{itemize}
+\itemsep 0em
+\item If the located facility does not exist, nothing happens.
+\item If the specified function does not exist, nothing happens.
 \end{itemize}
 \end{apiCode}
 
