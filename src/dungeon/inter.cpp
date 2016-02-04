@@ -332,6 +332,7 @@ void Inter::addLayer(const RoomCoords& coords, const std::string& textureID, flo
     layer->setLocalPosition(positionFromRoomCoords(coords));
     layer->setSize(tileSize());
     layer->setDepth(depth);
+    layer->setDetectable(false);
 
     tile.layers.emplace_back(std::move(layer));
     attachChild(*tile.layers.back());
