@@ -17,9 +17,9 @@ function _reinit()
     local frontUID = eev_getSiblingFacility("stairsFront")
 
     -- Does our explicit link exist?
-    if eev_hasLink() then
-        local linkX = eev_getLinkRoomX()
-        local linkY = eev_getLinkRoomY()
+    if eev_linkExists() then
+        local linkX = eev_linkGetX()
+        local linkY = eev_linkGetY()
         local roomX = eev_getCurrentRoomX()
         local roomY = eev_getCurrentRoomY()
 
@@ -66,8 +66,8 @@ function _onEntityEnterTunnel(UID)
     eev_setDetectVisibleUID(UID, false)
 
     -- Add the both exits clipping
-    local linkX = eev_getLinkRoomX()
-    local linkY = eev_getLinkRoomY()
+    local linkX = eev_linkGetX()
+    local linkY = eev_linkGetY()
     local roomX = eev_getCurrentRoomX()
     local roomY = eev_getCurrentRoomY()
 

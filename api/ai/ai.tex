@@ -62,6 +62,9 @@ TODO UID sysem
 \subsection{Metrics}
 TODO relative to room size
 
+\subsection{Signals}
+TODO for facilities only, implement \mintinline{lua}{function _energyOnPulse()}
+
 \newpage
 \section{Common functions}
 The following functions are shared between all elements.
@@ -98,7 +101,26 @@ Set the function to be called whenever a right click occurs over the element.
 
 \newpage
 \section{Facilities specific functions}
-\subsection{Structure control}
+\subsection{Link}
+\begin{apiCode}{bool eev_linkExists()}
+Check whether the facility controled has an active linked room.
+\end{apiCode}
+\begin{apiCode}{uint eev_linkGetX()}
+Get the linked room first coordinate of the facility controled.\newline
+If no linked room, returns -1.
+\end{apiCode}
+\begin{apiCode}{uint eev_linkGetY()}
+Get the linked room second coordinate of the facility controled.\newline
+If no linked room, returns -1.
+\end{apiCode}
+
+\subsection{Signals}
+\begin{apiCode}{void eev_energySendPulseRoom(uint X1, uint X2)}
+Send a pulse of energy to all energy-friendly facilities within the room at position $(X_1, x_2)$.
+\end{apiCode}
+
+\subsection{Barrier}
+TODO (The following information are not up-to-date)\newline
 \begin{apiCode}{bool eev_hasBarrier()}
 Check whether the facility controled has an activated barrier.
 \end{apiCode}

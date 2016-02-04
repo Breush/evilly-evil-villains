@@ -37,6 +37,9 @@ namespace dungeon
         //! Binds the element data.
         void bindFacilityInfo(FacilityInfo& facilityInfo);
 
+        //! Access the element data.
+        inline FacilityInfo& facilityInfo() { return *m_facilityInfo; }
+
         //! @}
 
         //---------------------------//
@@ -78,19 +81,26 @@ namespace dungeon
         //! Set the treasure held by the facility.
         void lua_setTreasure(const uint32 value);
 
-        //----- Links
+        //----- Implicit link
 
         //! Get the state of this facility: are we created as a link?
         bool lua_isLink();
 
+        //----- Link
+
         //! Has the facility an absolute link to an other room?
-        bool lua_hasLink() const;
+        bool lua_linkExists() const;
 
         //! The x coordinate of the absolute link. (Return -1u if none.)
-        uint32 lua_getLinkRoomX() const;
+        uint32 lua_linkGetX() const;
 
-        //! The x coordinate of the absolute link. (Return -1u if none.)
-        uint32 lua_getLinkRoomY() const;
+        //! The y coordinate of the absolute link. (Return -1u if none.)
+        uint32 lua_linkGetY() const;
+
+        //----- Energy
+
+        //! Send a plus of enerdy to the specified room.
+        void lua_energySendPulseRoom(const uint32 x, const uint32 y);
 
         //----- Tunnels
 

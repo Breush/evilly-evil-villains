@@ -1,4 +1,7 @@
 <?xml version="1.0"?>
 <facility id="sensor" trName="Sensor" lock="wall">
     <data name="baseCost" dosh="20" />
+    <link style="explicit" id="sensorLink">
+        <constraint mode="exclude" x="0" />
+    </link>
 </facility>

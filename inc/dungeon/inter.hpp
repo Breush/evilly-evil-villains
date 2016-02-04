@@ -169,6 +169,15 @@ namespace dungeon
 
         //! @}
 
+        //---------------//
+        //! @name Energy
+        //! @{
+
+        //! Send a pulse of energy to all energy-friendly facilities in the specified room.
+        void energySendPulseRoom(const RoomCoords& coords);
+
+        //! @}
+
         //-------------------//
         //! @name Facilities
         //! @{

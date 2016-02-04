@@ -56,7 +56,8 @@ void FacilitiesDB::add(const std::string& filename)
     std::wstring trName = facilityNode.attribute(L"trName").as_string();
     facilityData.name = _(toString(trName).c_str());
     facilityData.listed = facilityNode.attribute(L"listed").as_bool(true);
-    facilityData.entrance = facilityNode.attribute(L"entrance").as_bool();
+    facilityData.entrance = facilityNode.attribute(L"entrance").as_bool(false);
+    facilityData.energetic = facilityNode.attribute(L"energetic").as_bool(false);
     readRoomFlagsAttribute(facilityData.lock, facilityNode.attribute(L"lock"));
     readRoomFlagsAttribute(facilityData.hide, facilityNode.attribute(L"hide"));
     if (facilityData.listed) ++m_listedCount;

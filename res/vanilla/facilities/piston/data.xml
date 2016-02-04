@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
-<facility id="piston" trName="Piston" lock="full">
+<facility id="piston" trName="Piston" lock="full" energetic="true">
     <data name="baseCost" dosh="260" />
 </facility>

@@ -33,10 +33,15 @@ Facility::Facility(const RoomCoords& coords, ElementData& edata, dungeon::Inter&
     lua()["eev_getCurrentRoomY"] = [this] { return lua_getCurrentRoomY(); };
     lua()["eev_hasTreasure"] = [this] { return lua_hasTreasure(); };
     lua()["eev_setTreasure"] = [this] (const uint32 value) { lua_setTreasure(value); };
+
+    // TODO Rename (this implicit link name is really confusing)
     lua()["eev_isLink"] = [this] { return lua_isLink(); };
-    lua()["eev_hasLink"] = [this] { return lua_hasLink(); };
-    lua()["eev_getLinkRoomX"] = [this] { return lua_getLinkRoomX(); };
-    lua()["eev_getLinkRoomY"] = [this] { return lua_getLinkRoomY(); };
+
+    lua()["eev_linkExists"] = [this] { return lua_linkExists(); };
+    lua()["eev_linkGetX"] = [this] { return lua_linkGetX(); };
+    lua()["eev_linkGetY"] = [this] { return lua_linkGetY(); };
+
+    lua()["eev_energySendPulseRoom"] = [this] (const uint32 x, const uint32 y) { return lua_energySendPulseRoom(x, y); };
 
     lua()["eev_hasTunnel"] = [this] { return lua_hasTunnel(); };
     lua()["eev_addTunnel"] = [this] (const int32 x, const int32 y, bool relative) { lua_addTunnel(x, y, relative); };
@@ -111,6 +116,8 @@ uint32 Facility::lua_getCurrentRoomY() const
     return m_coords.y;
 }
 
+//----- Treasure
+
 bool Facility::lua_hasTreasure() const
 {
     return m_facilityInfo->treasure != -1u;
@@ -121,25 +128,38 @@ void Facility::lua_setTreasure(const uint32 value)
     m_inter.setRoomFacilityTreasure(m_coords, m_elementID, value);
 }
 
+//----- Implicit links
+
 bool Facility::lua_isLink()
 {
     return m_facilityInfo->isLink;
 }
 
-bool Facility::lua_hasLink() const
+//----- Link
+
+bool Facility::lua_linkExists() const
 {
     return (m_facilityInfo->link.x != 0xff_u8) && (m_facilityInfo->link.y != 0xff_u8);
 }
 
-uint32 Facility::lua_getLinkRoomX() const
+uint32 Facility::lua_linkGetX() const
 {
     return m_facilityInfo->link.x;
 }
 
-uint32 Facility::lua_getLinkRoomY() const
+uint32 Facility::lua_linkGetY() const
 {
     return m_facilityInfo->link.y;
 }
+
+//----- Signals
+
+void Facility::lua_energySendPulseRoom(const uint32 x, const uint32 y)
+{
+    m_inter.energySendPulseRoom({static_cast<uint8>(x), static_cast<uint8>(y)});
+}
+
+//----- Tunnels
 
 bool Facility::lua_hasTunnel() const
 {
@@ -155,6 +175,8 @@ void Facility::lua_removeTunnels()
 {
     m_facilityInfo->tunnels.clear();
 }
+
+//----- Barrier
 
 bool Facility::lua_hasBarrier() const
 {

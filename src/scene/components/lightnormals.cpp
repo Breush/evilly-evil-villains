@@ -38,7 +38,7 @@ void LightNormals::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void LightNormals::draw(sf::RenderTarget& target, sf::RenderStates states, const sf::FloatRect& clipArea) const
 {
-    // TODO
+    // TODO Draw normals with the same clipping as entity
 }
 
 void LightNormals::onSizeChanged()

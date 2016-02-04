@@ -17,8 +17,10 @@ local WEST  = 3
 ------------
 -- Locals --
 
-local on        -- Always equal to its data homonym
-local direction -- The direction the piston is pointing
+local pulsing = false   -- Pulsing the piston (turn it on, then off)
+local pulsingToOff      -- When pulsing, are we going to off?
+local on                -- Always equal to its data homonym
+local direction         -- The direction the piston is pointing
 
 ---------------
 -- Callbacks --
@@ -47,13 +49,16 @@ function _register()
     eev_setDepth(10)
 end
 
+-- Called whenever an energy pulse occurs in the room we're in
+function _energyOnPulse()
+    if not pulsing then
+        pulsePiston()
+    end
+end
+
 -- Called whenever a left click occurs
 function cbLeftClick()
-    if on then
-        deactivatePiston()
-    else
-        activatePiston()
-    end
+    switchPistonActivation()
 end
 
 -- Called whenever a right click occurs
@@ -66,10 +71,42 @@ end
 
 -- Regular call
 function _update(dt)
+    if pulsing then
+        if eev_isAnimationStopped() then
+            if not pulsingToOff then
+                pulsingToOff = true
+                deactivatePiston()
+            else
+                pulsing = false
+            end
+        end
+    end
 end
 
 --------------------
 -- Piston control --
+
+-- Pulse piston (turn it on, then off
+function pulsePiston()
+    pulsing = true
+
+    if on then
+        deactivatePiston()
+        pulsingToOff = true
+    else
+        activatePiston()
+        pulsingToOff = false
+    end
+end
+
+-- Switch piston state
+function switchPistonActivation()
+    if on then
+        deactivatePiston()
+    else
+        activatePiston()
+    end
+end
 
 -- If the piston is off, turn it on
 function activatePiston()

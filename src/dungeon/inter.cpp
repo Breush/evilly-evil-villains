@@ -663,6 +663,16 @@ void Inter::setFloorRoomsCount(uint value)
     m_data->setRoomsByFloor(value);
 }
 
+//------------------//
+//----- Energy -----//
+
+void Inter::energySendPulseRoom(const RoomCoords& coords)
+{
+    for (auto& facility : m_tiles[coords].facilities)
+        if (facility->facilityInfo().common->energetic)
+            facility->lua()["_energyOnPulse"]();
+}
+
 //----------------------//
 //----- Facilities -----//
 

@@ -25,6 +25,7 @@ namespace dungeon
         std::wstring name = L"(Unknown)";       //!< Translated name.
         bool entrance = false;                  //!< Does this facility provide an entry point to the dungeon.
         bool listed = true;                     //!< Is the facility constructible by the player?
+        bool energetic = false;                 //!< Whether the facility can be controlled with energy.
         Cost baseCost;                          //!< Construction price.
         std::vector<Link> links;                //!< All the links upon creation.
         std::vector<Constraint> constraints;    //!< Construction constraints (absolute).
