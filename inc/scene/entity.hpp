@@ -126,7 +126,7 @@ namespace scene
         sf::FloatRect localBounds() const;
 
         //! Returns the localBounds transformed to global coordinates.
-        sf::FloatRect globalBounds();
+        sf::FloatRect globalBounds() const;
 
         //! Set the shader applied to the whole entity.
         void setShader(const std::string& shaderID);

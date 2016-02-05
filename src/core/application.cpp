@@ -131,7 +131,9 @@ void Application::run()
         // See http://gameprogrammingpatterns.com/game-loop.html
         //  However, this seems a bit too much,
         // and SFML would not let us do that easily.
+        debugClock.restart();
         render();
+        s_visualDebug.setRenderTickTime(debugClock.getElapsedTime());
     }
 
     // Finish closing

@@ -50,10 +50,13 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
     // Check if this entity is not visible because completely out
     // of the view rect. If so, no need for drawing itself and its children.
-    // OPTIM: do not recompute that each time
-    /*sf::FloatRect viewRect{target.getView().getCenter() - target.getView().getSize() / 2.f, target.getView().getSize()};
-    viewRect = tools::intersect(viewRect, localBounds() + getPosition() - getOrigin());
-    returnif (viewRect.width < 0.f || viewRect.height < 0.f);*/
+    // Note: we're not checking entities with no size for they might just not know themself (scene::AnimatedSprite).
+    if (m_size.x > 0.f && m_size.y > 0.f) {
+        // OPTIM do not recompute that each time
+        sf::FloatRect viewRect{target.getView().getCenter() - target.getView().getSize() / 2.f, target.getView().getSize()};
+        viewRect = tools::intersect(viewRect, globalBounds());
+        returnif (viewRect.width < 0.f || viewRect.height < 0.f);
+    }
 
     states.transform = getTransform();
     states.shader = m_shader;
@@ -90,9 +93,7 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
         clipArea = tools::mapRectCoordsToPixel(target, globalClipArea);
         if (parentClipping) clipArea = tools::intersect(parentClippingArea, clipArea);
 
-        // Fully clipped
-        // TODO Add a pre-clipping test: does it worth it to draw itself?
-        // i.e. Are we invisible because of the clip area?
+        // Fully clipped, i.e. we're invisible because of the clip area
         if (clipArea.width <= 0.f || clipArea.height <= 0.f) continue;
 
         target.setClippingArea(sf::IntRect(clipArea.left, clipArea.top, clipArea.width, clipArea.height));
@@ -500,9 +501,9 @@ sf::FloatRect Entity::localBounds() const
     return {0.f, 0.f, m_size.x, m_size.y};
 }
 
-sf::FloatRect Entity::globalBounds()
+sf::FloatRect Entity::globalBounds() const
 {
-    return getInverseTransform().transformRect(localBounds());
+    return getTransform().transformRect(localBounds());
 }
 
 void Entity::setSize(const sf::Vector2f& inSize)

@@ -34,7 +34,7 @@ namespace scene
         //! Destructor, will unregister this animated sprite from the context.
         virtual ~AnimatedSprite();
 
-        std::string _name() const final { return "AnimatedSprite"; }
+        std::string _name() const final { return "scene::AnimatedSprite"; }
 
         //------------------//
         //! @name Animation
