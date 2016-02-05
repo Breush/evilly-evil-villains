@@ -143,18 +143,18 @@ void MovingElement::setCurrentNode(const NodeWay& nodeWay)
     bool firstNode = (m_currentNode == nullptr);
 
     if (!firstNode) {
-        // We're staying in the same room, pausing
-        if (m_currentNode == nodeWay.nodeData) {
-            m_pauseTime = 0.f;
-            return;
-        }
-
         // We are getting out of a tunnel, warn the orgin facility
         if (m_inTunnel) {
             auto tunnelOriginFacility = m_inter.findRoomFacility(m_tunnelOriginCoords, m_tunnelOriginFacilityID);
             if (tunnelOriginFacility != nullptr) tunnelOriginFacility->movingElementLeaveTunnel(*this);
             else resetClipAreas();
             m_inTunnel = false;
+        }
+
+        // We're staying in the same room, pausing
+        if (m_currentNode == nodeWay.nodeData) {
+            m_pauseTime = 0.f;
+            return;
         }
 
         if (nodeWay.neighbourData != nullptr)
