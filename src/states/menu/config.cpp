@@ -248,7 +248,6 @@ void MenuConfig::applyChanges()
 
     // Audio
     // So far, it's all updated directly
-
     display.save();
     Application::refreshFromConfig(windowRefresh, false);
 }

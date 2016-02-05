@@ -68,13 +68,6 @@ void ScrollArea::onChildSizeChanges(scene::Entity& entity)
     refreshContentStatus();
 }
 
-void ScrollArea::refreshNUI(const config::NUIGuides& cNUI)
-{
-    baseClass::refreshNUI(cNUI);
-    // TODO Remember and use some NUI size factor
-    // refreshBars();
-}
-
 //------------------//
 //----- Events -----//
 

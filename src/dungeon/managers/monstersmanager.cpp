@@ -59,7 +59,6 @@ void MonstersManager::update(const sf::Time& dt)
     }
 
     // Monsters count changed, update all reference to their data
-    // TODO See HeroesManager
     if (monstersCountChanged)
         refreshMonstersData();
 }
@@ -72,7 +71,6 @@ void MonstersManager::receive(const context::Event& event)
     const auto& devent = *reinterpret_cast<const dungeon::Event*>(&event);
     RoomCoords coords = {devent.room.x, devent.room.y};
 
-    // TODO See HeroesManager
     if (devent.type == "room_destroyed") {
         removeRoomMonsters(coords);
     }

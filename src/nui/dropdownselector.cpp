@@ -115,8 +115,8 @@ void DropDownSelector::handleGlobalMouseButtonPressed(const sf::Mouse::Button bu
 {
     returnif (button == sf::Mouse::Middle);
 
-    // TODO This will just work if this entity is in the nui view.
-    // One work-around would be to pass view relative coordinates too (or only those)
+    // Note: This will just work if this entity is in the nui view.
+    // But this is a nui Entity and therefore should be used exclusively there.
 
     // If we are not in the bounds, just hide the list
     auto mousePos = getInverseTransform().transformPoint(nuiPos);

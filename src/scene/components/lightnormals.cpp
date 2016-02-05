@@ -21,6 +21,7 @@ LightNormals::~LightNormals()
 void LightNormals::update(const sf::Time& dt)
 {
     // TODO The current way the minimap works force us to use such a variable
+    // As an entity can be drawn twice
     m_drawn = false;
 }
 

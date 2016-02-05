@@ -94,10 +94,10 @@ bool MonsterLocker::handleMouseButtonPressed(const sf::Mouse::Button, const sf::
     returnif (!m_data.fameWallet().required(m_monsterGeneric->common->unlockRequirement.fame)) true;
 
     // Unlock cost
-    // TODO Full cost (soul/fame)
-    returnif (!m_data.doshWallet().sub(m_monsterGeneric->common->unlockCost.dosh)) true;
+    m_data.doshWallet().sub(m_monsterGeneric->common->unlockCost.dosh);
+    m_data.soulWallet().sub(m_monsterGeneric->common->unlockCost.soul);
+    m_data.fameWallet().sub(m_monsterGeneric->common->unlockCost.fame);
 
-    // TODO See trap locker
     context::context.sounds.play("core/resources/dosh/gain");
 
     // We know the player has enough money and already paid, unlock it

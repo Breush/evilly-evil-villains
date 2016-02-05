@@ -83,6 +83,7 @@ void HeroesManager::update(const sf::Time& dt)
     // because we are only interested in keeping the reference (pointer) OK,
     // and not to reinitialize LUA/etc.
     // Ultimately, we won't need _reinit() function in lua (just one _register on _init)
+    // Do that for all managers
     if (heroesCountChanged)
         refreshHeroesData();
 

@@ -12,7 +12,7 @@
 namespace resources
 {
     //! Holder for sounds.
-    // TODO OPTIM Make a sound pool?
+    // OPTIM Make a sound pool?
 
     class SoundPlayer final : private sf::NonCopyable
     {

@@ -82,9 +82,19 @@ void TrapLocker::onSizeChanges()
 bool TrapLocker::handleMouseButtonPressed(const sf::Mouse::Button, const sf::Vector2f&, const sf::Vector2f&)
 {
     returnif (!m_locked) true;
-    returnif (!m_data.villain().doshWallet.sub(m_trapGeneric->common->unlockCost.dosh)) true;
+
+    // Unlock requirement
+    returnif (!m_data.doshWallet().required(m_trapGeneric->common->unlockCost.dosh)) true;
+    returnif (!m_data.soulWallet().required(m_trapGeneric->common->unlockCost.soul)) true;
+    returnif (!m_data.fameWallet().required(m_trapGeneric->common->unlockCost.fame)) true;
+
+    // Unlock cost
+    m_data.doshWallet().sub(m_trapGeneric->common->unlockCost.dosh);
+    m_data.soulWallet().sub(m_trapGeneric->common->unlockCost.soul);
+    m_data.fameWallet().sub(m_trapGeneric->common->unlockCost.fame);
 
     // TODO Yeah... well, have something more rewarding I guess
+    // And do that to MonsterLocked too
     context::context.sounds.play("core/resources/dosh/gain");
 
     // We know the player has enough money and already paid, unlock it

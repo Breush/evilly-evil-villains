@@ -40,7 +40,6 @@ namespace nui
         //! @{
 
         void onSizeChanges() final;
-        void refreshNUI(const config::NUIGuides& cNUI) final;
 
         //! @}
 

@@ -40,7 +40,6 @@ void DynamicsManager::update(const sf::Time& dt)
     }
 
     // Dynamics count changed, update all reference to their data
-    // TODO See HeroesManager comment
     if (dynamicsCountChanged)
         refreshDynamicsData();
 }

@@ -35,6 +35,7 @@ void Hero::onDeath()
 void Hero::setDamaged(bool damaged)
 {
     // TODO we should probably select an animation
+    // And do this for monster too
     m_sprite.setTiltColor(damaged? sf::Color::Red : sf::Color::White);
 }
 

@@ -25,14 +25,6 @@ void CheckBox::onSizeChanges()
     m_sprite.setSize(size());
 }
 
-void CheckBox::refreshNUI(const config::NUIGuides& cNUI)
-{
-    baseClass::refreshNUI(cNUI);
-
-    // TODO: We should adapt the size to the NUI factor
-    // updateSize();
-}
-
 //------------------//
 //----- Status -----//
 

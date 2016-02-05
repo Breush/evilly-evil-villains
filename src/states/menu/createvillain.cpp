@@ -59,11 +59,8 @@ void MenuCreateVillain::handleEvent(const sf::Event& event)
     // Escape quits current state
     if (event.type == sf::Event::KeyPressed
         && event.key.code == sf::Keyboard::Escape) {
-
-        // TODO Make PopDialog a state somehow?
         if (m_popDialog.opened()) m_popDialog.close();
         else stackPop();
-
         return;
     }
 

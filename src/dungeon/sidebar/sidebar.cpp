@@ -212,8 +212,6 @@ void Sidebar::refreshTabFacilitiesContent()
 
 void Sidebar::refreshTabToolsContent()
 {
-    // TODO Merge facilities, tools and mechanics
-
     auto& toolsStacker = m_tabContents[TabsID::TOOLS].stacker;
     auto& toolsButtons = m_tabContents[TabsID::TOOLS].buttons;
     toolsStacker.unstackAll();

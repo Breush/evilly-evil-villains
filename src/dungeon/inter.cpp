@@ -833,13 +833,13 @@ void Inter::addMonsterToReserve(const std::wstring& monsterID)
     const auto& hireCountdown = (context::worlds.selected().gamemode == context::Gamemode::RICHMAN)? 0u : monsterData.hireCountdown;
 
     // Check for cost
-    returnif (!m_data->villain().doshWallet.required(monsterData.baseCost.dosh));
+    returnif (!m_data->doshWallet().required(monsterData.baseCost.dosh));
     returnif (!m_data->soulWallet().required(monsterData.baseCost.soul));
     returnif (!m_data->fameWallet().required(monsterData.baseCost.fame));
 
     // Do pay
     // TODO Let some globalWallet manage all resources
-    m_data->villain().doshWallet.sub(monsterData.baseCost.dosh);
+    m_data->doshWallet().sub(monsterData.baseCost.dosh);
     m_data->soulWallet().sub(monsterData.baseCost.soul);
     m_data->fameWallet().sub(monsterData.baseCost.fame);
 
@@ -959,8 +959,6 @@ void Inter::refreshTileDoshLabel(const RoomCoords& coords)
 
 void Inter::refreshTileLayers(const RoomCoords& coords)
 {
-    // TODO Do not refresh is locked because of moving
-
     returnif (coords.x >= m_data->floorsCount());
     returnif (coords.y >= m_data->roomsByFloor());
 
