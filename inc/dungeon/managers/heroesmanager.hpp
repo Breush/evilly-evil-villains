@@ -34,7 +34,6 @@ namespace dungeon
             HeroStatus status = HeroStatus::TO_SPAWN;   //!< Hero status.
             float spawnDelay = 0.f;                     //!< Seconds to wait before effective spawning.
             float hp = 0.f;                             //!< How many HP the hero has left.
-            bool reward = false;                        //!< Do the player get a reward when this hero is removed?
 
             // Not saved states
             bool spawnHard = false;                     //!< Is the spawn point already defined?

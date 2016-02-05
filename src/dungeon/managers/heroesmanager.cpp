@@ -69,10 +69,6 @@ void HeroesManager::update(const sf::Time& dt)
         // Remove the hero
         else if (heroInfo.status == HeroStatus::TO_BE_REMOVED) {
             if (heroInfo.locked) goto _continue;
-
-            if (heroInfo.reward && heroInfo.hero != nullptr)
-                heroInfo.hero->onDeath();
-
             it = m_heroesInfo.erase(it);
             heroesCountChanged = true;
             continue;
@@ -226,7 +222,7 @@ void HeroesManager::damage(const Hero* hero, float amount)
         heroInfo.hp -= amount;
         if (heroInfo.hp <= 0.f) {
             heroInfo.status = HeroStatus::TO_BE_REMOVED;
-            heroInfo.reward = true;
+            if (heroInfo.hero != nullptr) heroInfo.hero->onDeath();
         }
 
         // Player feedback
@@ -273,7 +269,7 @@ void HeroesManager::removeRoomHeroes(const RoomCoords& coords)
 
         if (heroCoords == coords) {
             heroInfo.status = HeroStatus::TO_BE_REMOVED;
-            heroInfo.reward = true;
+            if (heroInfo.hero != nullptr) heroInfo.hero->onDeath();
         }
     }
 }
