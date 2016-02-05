@@ -29,6 +29,9 @@ Facility::Facility(const RoomCoords& coords, ElementData& edata, dungeon::Inter&
     // Lua API
     lua()["eev_hasSiblingFacility"] = [this] (const std::string& facilityID) { return lua_hasSiblingFacility(facilityID); };
     lua()["eev_getSiblingFacility"] = [this] (const std::string& facilityID) { return lua_getSiblingFacility(facilityID); };
+
+    lua()["eev_facilityExistsRelative"] = [this] (const int x, const int y, const std::string& facilityID) { return lua_facilityExistsRelative(x, y, facilityID); };
+
     lua()["eev_getCurrentRoomX"] = [this] { return lua_getCurrentRoomX(); };
     lua()["eev_getCurrentRoomY"] = [this] { return lua_getCurrentRoomY(); };
     lua()["eev_hasTreasure"] = [this] { return lua_hasTreasure(); };
@@ -104,6 +107,12 @@ uint32 Facility::lua_getSiblingFacility(const std::string& facilityID) const
     auto pFacility = m_inter.findRoomFacility(m_coords, toWString(facilityID));
     returnif (pFacility == nullptr) 0u;
     return pFacility->UID();
+}
+
+bool Facility::lua_facilityExistsRelative(const int x, const int y, const std::string& facilityID) const
+{
+    RoomCoords coords{static_cast<uint8>(m_coords.x + x), static_cast<uint8>(m_coords.y + y)};
+    return m_inter.hasRoomFacility(coords, toWString(facilityID));
 }
 
 uint32 Facility::lua_getCurrentRoomX() const

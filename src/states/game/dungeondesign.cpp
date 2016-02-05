@@ -169,6 +169,7 @@ void GameDungeonDesign::handleEvent(const sf::Event& event)
 
         // Decelerate time
         if (event.key.code == sf::Keyboard::F8) {
+            returnif (timeFactor() <= 0.125f);
             setTimeFactor(timeFactor() / 2.f);
             Application::visualDebug().setDisplayedTimeFactor(timeFactor());
             return;
@@ -176,6 +177,7 @@ void GameDungeonDesign::handleEvent(const sf::Event& event)
 
         // Accelerate time
         if (event.key.code == sf::Keyboard::F9) {
+            returnif (timeFactor() >= 32.f);
             setTimeFactor(timeFactor() * 2.f);
             Application::visualDebug().setDisplayedTimeFactor(timeFactor());
             return;

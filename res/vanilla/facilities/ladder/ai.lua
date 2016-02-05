@@ -13,8 +13,9 @@
 
 -- Called on new data
 function _reinit()
-    -- No relative tunnel yet
-    if not eev_hasTunnel() then
+    -- Add a tunnel only if we have a ladderExit facility in the northern room
+    eev_removeTunnels()
+    if eev_facilityExistsRelative(1, 0, "ladderExit") then
         eev_addTunnel(1, 0, true)
     end
 

@@ -64,8 +64,12 @@ namespace dungeon
         bool lua_hasSiblingFacility(const std::string& facilityID) const;
 
         //! If the facility with the specified exists in the same room we are in, returns its UID.
-        //! If not, returns an unknown value.
+        //! If not, returns 0u.
         uint32 lua_getSiblingFacility(const std::string& facilityID) const;
+
+        //! Get the UID for the facility specified in the relative room.
+        //! If not, returns 0u.
+        bool lua_facilityExistsRelative(const int x, const int y, const std::string& facilityID) const;
 
         //! Get the current room x coordinate.
         uint32 lua_getCurrentRoomX() const;
