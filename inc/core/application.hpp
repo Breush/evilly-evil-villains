@@ -71,9 +71,11 @@ public:
     //! @{
 
     static void loadTextures(const std::initializer_list<std::string>& folders);    //!< Load all textures inside folders into memory.
+    static void loadSounds(const std::initializer_list<std::string>& folders);      //!< Load all sounds inside folders into memory.
     static void loadAnimations(const std::initializer_list<std::string>& folders);  //!< Load all animations inside folders into memory.
 
     static void freeTextures(const std::initializer_list<std::string>& folders);    //!< Free all textures in folders from memory.
+    static void freeSounds(const std::initializer_list<std::string>& folders);      //!< Free all sounds in folders from memory.
     static void freeAnimations(const std::initializer_list<std::string>& folders);  //!< Free all animations in folders from memory.
 
     //! @}
@@ -154,7 +156,7 @@ protected:
     void loadShaders();         //!< Load shaders into memory.
     void loadFonts();           //!< Load fonts into memory.
     void loadMusics();          //!< Load musics file information.
-    void loadSounds();          //!< Load sounds file information.
+    void preloadSounds();       //!< Load all shared sounds.
     void preloadAnimations();   //!< Load all shared animations.
     void loadStates();          //!< Register states.
     void loadComponents();      //!< Register components.

@@ -72,7 +72,7 @@ Application::Application(const std::vector<std::string>& args)
     loadShaders();
     loadFonts();
     loadMusics();
-    loadSounds();
+    preloadSounds();
     preloadAnimations();
     loadStates();
     loadComponents();

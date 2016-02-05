@@ -107,9 +107,9 @@ namespace resources
     }
 
     template <typename Resource>
-    inline Resource& Holder<Resource>::insertResource(std::string id, std::unique_ptr<Resource> resource)
+    inline Resource& Holder<Resource>::insertResource(const std::string& id, std::unique_ptr<Resource> resource)
     {
-        auto inserted = m_resourcesMap.insert(std::make_pair(std::move(id), std::move(resource)));
+        auto inserted = m_resourcesMap.insert(std::make_pair(id, std::move(resource)));
         if (!inserted.second)
             throw std::runtime_error("[resources::Holder] Unable to insert resource '" + id + "'. Ouch.");
 

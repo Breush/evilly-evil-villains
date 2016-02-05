@@ -4,27 +4,39 @@
 #include "context/context.hpp"
 #include "tools/filesystem.hpp"
 
-// FIXME Should be on the same structure that textures and animations,
-// as more and more sounds will be loaded
-
-void Application::loadSounds()
+void Application::loadSounds(const std::initializer_list<std::string>& folders)
 {
-    uint soundsCount = 0u;
-
     // Recursively load all files in resource directory
-    for (const auto& fileInfo : listFiles("res", true)) {
-        // Load only sounds files
-        if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "wav")
-            continue;
+    for (const auto& folder : folders) {
+        uint soundsCount = 0u;
 
-        context::context.sounds.load(fileInfo.fullName);
+        for (const auto& fileInfo : listFiles("res/" + folder, true)) {
+            // Load only wav files
+            if (fileInfo.isDirectory || fileExtension(fileInfo.name) != "wav")
+                continue;
 
-        ++soundsCount;
+            context::context.sounds.load(fileInfo.fullName);
+
+            ++soundsCount;
+        }
+
+        mdebug_core_2("Loaded " << soundsCount << " sounds from " << folder << ".");
     }
 
-    mdebug_core_2("Loaded " << soundsCount << " sounds.");
-
     refreshSounds();
+}
+
+void Application::freeSounds(const std::initializer_list<std::string>& folders)
+{
+    for (const auto& folder : folders) {
+        context::context.sounds.freeMatchingPrefix(folder);
+        mdebug_core_2("Freed sounds from " << folder << ".");
+    }
+}
+
+void Application::preloadSounds()
+{
+    loadSounds({"core"});
 }
 
 void Application::refreshSounds()

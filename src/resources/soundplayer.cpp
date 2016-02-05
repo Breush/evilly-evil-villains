@@ -29,6 +29,11 @@ std::string SoundPlayer::getID(const std::string& filename)
     return m_soundBuffers.getID(filename);
 }
 
+void SoundPlayer::freeMatchingPrefix(const std::string& prefix)
+{
+    m_soundBuffers.freeMatchingPrefix(prefix);
+}
+
 //-------------------------//
 //----- Sound control -----//
 

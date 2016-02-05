@@ -78,8 +78,9 @@ GameDungeonDesign::~GameDungeonDesign()
     context::context.musics.stop("core/global/musics/angevin_70");
 
     // Freeing resources
-    Application::freeTextures({"vanilla", "core/dungeon", "core/resources", "core/tools", "core/menu/hub"});
     Application::freeAnimations({"vanilla", "core/menu/hub"});
+    Application::freeTextures({"vanilla", "core/dungeon", "core/resources", "core/tools", "core/menu/hub"});
+    Application::freeSounds({"vanilla"});
 }
 
 //-------------------//
@@ -276,6 +277,8 @@ void GameDungeonDesign::updateLoading(const sf::Time& dt)
     LOAD( 9u, Application::loadTextures({"vanilla/monsters"}))
     LOAD(10u, Application::loadTextures({"vanilla/traps"}))
     LOAD(11u, Application::loadTextures({"vanilla/heroes"}))
+
+    LOAD(15u, Application::loadSounds({"vanilla"}))
 
     LOAD(20u, Application::loadAnimations({"core/dungeon/effects"}))
     LOAD(21u, Application::loadAnimations({"vanilla/dynamics"}))

@@ -34,6 +34,9 @@ namespace resources
         //! Gets the ID of the resource from filename.
         std::string getID(const std::string& filename);
 
+        //! Remove all resource from memory with id starting with specified prefix.
+        void freeMatchingPrefix(const std::string& prefix);
+
         //! @}
 
         //----------------------//

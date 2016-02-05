@@ -69,7 +69,7 @@ namespace resources
         //! @{
 
         //! Stores resource into memory.
-        Resource& insertResource(std::string id, std::unique_ptr<Resource> resource);
+        Resource& insertResource(const std::string& id, std::unique_ptr<Resource> resource);
 
         //! @}
 

@@ -1,8 +1,11 @@
 EEV.layout
+EEV.cbp
 
+Makefile
 CMakeCache.txt
 cmake_install.cmake
 CTestTestfile.cmake
+CMakeLists.txt.user
 
 CMakeFiles
 Testing
