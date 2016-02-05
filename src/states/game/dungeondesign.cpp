@@ -17,7 +17,7 @@ using namespace states;
 GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     : State(stack)
     , m_dungeonInter(m_contextMenu)
-    , m_dungeonSidebar(sceneGraph(), m_dungeonInter, m_dungeonData)
+    , m_dungeonSidebar(sceneGraph(), m_dungeonInter)
 {
     // Creating scene
     sf::Vector2f sceneSize(1200.f, 2700.f);

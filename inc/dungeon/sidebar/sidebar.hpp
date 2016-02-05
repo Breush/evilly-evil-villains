@@ -35,7 +35,7 @@ namespace dungeon
     public:
 
         //! Constructor.
-        Sidebar(scene::Graph& graph, Inter& inter, Data& data);
+        Sidebar(scene::Graph& graph, Inter& inter);
 
         //! Destructor.
         ~Sidebar();
@@ -87,6 +87,9 @@ namespace dungeon
         //! @name Internal change updates
         //! @{
 
+        //! Refresh the number of monsters cages.
+        void refreshKnownMonsters();
+
         //! Refresh the monsters tab contents.
         void refreshTabMonstersContent();
 
@@ -134,7 +137,7 @@ namespace dungeon
     private:
 
         Inter& m_inter;         //!< Reference to the dungeon inter.
-        Data& m_data;           //!< Reference to the whole data.
+        Data* m_data = nullptr; //!< Reference to the whole data.
         scene::Scene& m_scene;  //!< The main scene, reference here for minimap interaction.
 
         // Stacker

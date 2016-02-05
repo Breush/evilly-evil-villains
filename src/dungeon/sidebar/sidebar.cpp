@@ -13,9 +13,8 @@
 
 using namespace dungeon;
 
-Sidebar::Sidebar(scene::Graph& graph, Inter& inter, Data& data)
+Sidebar::Sidebar(scene::Graph& graph, Inter& inter)
     : m_inter(inter)
-    , m_data(data)
     , m_scene(graph.scene())
     , m_minimap(graph)
 {
@@ -65,15 +64,6 @@ void Sidebar::init()
     m_tabHolder.stackBack(_("Traps"),       "core/dungeon/sidebar/tabs/traps/icon",       m_tabContents[TabsID::TRAPS].scrollArea);
     m_tabHolder.stackBack(_("Facilities"),  "core/dungeon/sidebar/tabs/facilities/icon",  m_tabContents[TabsID::FACILITIES].scrollArea);
     m_tabHolder.stackBack(_("Tools"),       "core/dungeon/sidebar/tabs/tools/icon",       m_tabContents[TabsID::TOOLS].scrollArea);
-
-    // Monsters
-    auto& monstersCages = m_tabContents[TabsID::MONSTERS].monsterCages;
-    const auto& monstersList = m_data.monstersGenerics();
-    for (const auto& monsterPair : monstersList) {
-        const auto& monsterID = monsterPair.first;
-        auto monsterCage = std::make_unique<MonsterCage>(monsterID, m_inter, m_data);
-        monstersCages.emplace_back(std::move(monsterCage));
-    }
 }
 
 //-------------------//
@@ -124,16 +114,31 @@ void Sidebar::receive(const context::Event& event)
 //------------------------//
 //----- Dungeon data -----//
 
-// TODO CleanUp Why is there a useData if passed to the constructor?
 void Sidebar::useData(Data& data)
 {
+    m_data = &data;
     setEmitter(&data);
     m_summary.useData(data);
+
+    refreshKnownMonsters();
     refreshTabContents();
 }
 
 //-----------------------------------//
 //----- Internal change updates -----//
+
+void Sidebar::refreshKnownMonsters()
+{
+    auto& monstersCages = m_tabContents[TabsID::MONSTERS].monsterCages;
+    monstersCages.clear();
+
+    const auto& monstersList = m_data->monstersGenerics();
+    for (const auto& monsterPair : monstersList) {
+        const auto& monsterID = monsterPair.first;
+        auto monsterCage = std::make_unique<MonsterCage>(monsterID, m_inter, *m_data);
+        monstersCages.emplace_back(std::move(monsterCage));
+    }
+}
 
 void Sidebar::refreshScrollAreasSize()
 {
@@ -175,7 +180,7 @@ void Sidebar::refreshTabTrapsContent()
     trapsStacker.unstackAll();
     trapsButtons.clear();
 
-    const auto& trapsGenerics = m_data.trapsGenerics();
+    const auto& trapsGenerics = m_data->trapsGenerics();
     for (const auto& trapGenericPair : trapsGenerics) {
         if (!trapGenericPair.second.unlocked) continue;
         const auto& trapID = trapGenericPair.first;
@@ -192,8 +197,8 @@ void Sidebar::refreshTabFacilitiesContent()
     facilitiesStacker.unstackAll();
     facilitiesButtons.clear();
 
-    const auto& facilitiesList = m_data.facilitiesDB().get();
-    auto facilitiesCount = m_data.facilitiesDB().listedCount();
+    const auto& facilitiesList = m_data->facilitiesDB().get();
+    auto facilitiesCount = m_data->facilitiesDB().listedCount();
     facilitiesButtons.reserve(facilitiesCount);
 
     for (const auto& facilityPair : facilitiesList) {
