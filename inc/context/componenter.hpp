@@ -54,7 +54,7 @@ namespace context
         {
             uint index = poolIndex<Component_t>();
             massert(index != -1u, "This component type has not been registered. No pool available.");
-            auto pool = reinterpret_cast<MemoryPool<Component_t, sizeof(Component_t) * 4096u>*>(m_data[index].pool);
+            auto pool = reinterpret_cast<MemoryPool<Component_t>*>(m_data[index].pool);
 
             auto pComponent = pool->newElement(std::forward<Args>(args)...);
             m_data[index].components.emplace_back(pComponent);
@@ -67,7 +67,7 @@ namespace context
         {
             uint index = poolIndex<Component_t>();
             massert(index != -1u, "This component type has not been registered. No pool available.");
-            auto pool = reinterpret_cast<MemoryPool<Component_t, sizeof(Component_t) * 4096u>*>(m_data[index].pool);
+            auto pool = reinterpret_cast<MemoryPool<Component_t>*>(m_data[index].pool);
 
             pool->deleteElement(pComponent);
             std::erase_if(m_data[index].components, [pComponent] (void* component) { return component == pComponent; });
@@ -89,7 +89,7 @@ namespace context
             m_data.emplace_back();
 
             auto& pool = m_data.back().pool;
-            pool = new MemoryPool<Component_t, sizeof(Component_t) * 4096u>();
+            pool = new MemoryPool<Component_t>();
         }
 
         //! Removes a component from the pools list.
@@ -101,7 +101,7 @@ namespace context
         {
             uint index = poolIndex<Component_t>();
             massert(index != -1u, "This component type has not been registered. No pool available.");
-            delete reinterpret_cast<MemoryPool<Component_t, sizeof(Component_t) * 4096u>*>(m_data[index].pool);
+            delete reinterpret_cast<MemoryPool<Component_t>*>(m_data[index].pool);
             m_data[index].components.clear();
         }
 

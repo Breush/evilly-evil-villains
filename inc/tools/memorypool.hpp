@@ -1,11 +1,16 @@
 #pragma once
 
+#include "tools/int.hpp"
+
 #include <climits>
 #include <cstddef>
 
+#include <array>
+#include <deque>
+
 //! A memory pool.
 
-template <typename T, size_t BlockSize = 4096>
+template <typename T, size_t BlockSize = 4096u>
 class MemoryPool
 {
     using value_type =      T;
@@ -19,9 +24,9 @@ class MemoryPool
 public:
 
     //! Constructor.
-    MemoryPool() noexcept;
+    MemoryPool();
 
-    //! Destructor.
+    //! Destructor, won't call per element destructors.
     ~MemoryPool() noexcept;
 
     //-------------------//
@@ -46,44 +51,18 @@ public:
     //! Delete an element.
     void deleteElement(pointer p);
 
-    //! Construct a different element, with all its arguments.
+    //! Construct a different element type, with all its arguments.
     template <class U, class... Args> void construct(U* p, Args&&... args);
 
-    //! Delete a different element.
+    //! Delete a different element type.
     template <class U> void destroy(U* p);
 
     //! @}
 
-protected:
-
-    //---------------------------//
-    //! @name Alignement control
-    //! @{
-
-    //! Align the pointer.
-    size_t padPointer(data_pointer p, size_t align) const noexcept;
-
-    //! Allocate the whole block.
-    void allocateBlock();
-
-    //! @}
-
-    //! All available space.
-    union Slot_
-    {
-        value_type element; //!< An element.
-        Slot_* next;        //!< Next free slot.
-    };
-
-    using slot_type    = Slot_ ;
-    using slot_pointer = Slot_*;
-
 private:
 
-    slot_pointer m_currentBlock = nullptr;
-    slot_pointer m_currentSlot  = nullptr;
-    slot_pointer m_lastSlot     = nullptr;
-    slot_pointer m_freeSlots    = nullptr;
+    pointer m_blocks;                       //!< The memory pool blocks.
+    std::deque<uint> m_freeBlocksIndexes;   //!< The indexes of all free blocks.
 };
 
 #include "tools/memorypool.inl"
