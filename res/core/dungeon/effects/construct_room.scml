@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r5">
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r6">
     <folder id="0" name="dust">
         <file id="0" name="dust/round.png" width="171" height="172" pivot_x="0.5" pivot_y="0.5"/>
+    </folder>
+    <folder id="1">
+        <file id="0" name="build.wav" type="sound"/>
     </folder>
     <entity id="0" name="construct_room">
         <obj_info name="construct_room_round" realname="round" type="sprite">
@@ -12,20 +15,25 @@
         <animation id="0" name="anim" length="500" interval="100" looping="false">
             <mainline>
                 <key id="0">
-                    <object_ref id="0" name="round" folder="0" file="0" abs_x="-8.55" abs_y="8.6" abs_angle="360" abs_scale_x="0.1" abs_scale_y="0.1" abs_a="1" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="0" name="round" folder="0" file="0" abs_x="-8.55" abs_y="8.6" abs_angle="0" abs_scale_x="0.1" abs_scale_y="0.1" abs_a="1" timeline="0" key="0" z_index="0"/>
                 </key>
                 <key id="1" time="500">
                     <object_ref id="0" timeline="0" key="1" z_index="0"/>
                 </key>
             </mainline>
             <timeline id="0" obj="0" name="round">
-                <key id="0" spin="-1">
-                    <object folder="0" file="0" scale_x="0.1" scale_y="0.1"/>
+                <key id="0">
+                    <object folder="0" file="0" angle="0" scale_x="0.1" scale_y="0.1"/>
                 </key>
-                <key id="1" time="500">
+                <key id="1" time="500" spin="-1">
                     <object folder="0" file="0" angle="180" scale_x="2" scale_y="2" a="0"/>
                 </key>
             </timeline>
+            <soundline id="-1" name="build">
+                <key id="0">
+                    <object folder="1" file="0"/>
+                </key>
+            </soundline>
         </animation>
     </entity>
 </spriter_data>
