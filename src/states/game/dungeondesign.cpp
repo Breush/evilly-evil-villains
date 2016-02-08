@@ -200,7 +200,7 @@ void GameDungeonDesign::handleEvent(const sf::Event& event)
 //-----------------------//
 //----- Interpreter -----//
 
-context::CommandPtr GameDungeonDesign::interpret(const std::vector<std::wstring>& tokens)
+context::CommandPtr GameDungeonDesign::interpret(std::vector<std::wstring>& tokens)
 {
     returnif (!m_loading || m_loadingPercent < 100u) nullptr;
 

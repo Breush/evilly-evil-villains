@@ -11,7 +11,7 @@ using namespace dungeon;
 
 const ai::Node* Graph::node(const RoomCoords& coords) const
 {
-    if (coords.x >= m_floorsCount || coords.y >= m_roomsByFloor)
+    if (coords.x >= m_floorsCount || coords.y >= m_floorRoomsCount)
         return nullptr;
 
     return m_nodes[coords.x][coords.y].node;
@@ -19,7 +19,7 @@ const ai::Node* Graph::node(const RoomCoords& coords) const
 
 const Graph::NodeData* Graph::nodeData(const RoomCoords& coords) const
 {
-    if (coords.x >= m_floorsCount || coords.y >= m_roomsByFloor)
+    if (coords.x >= m_floorsCount || coords.y >= m_floorRoomsCount)
         return nullptr;
 
     return &m_nodes[coords.x][coords.y];
@@ -93,19 +93,19 @@ void Graph::reconstructFromData()
     massert(m_data != nullptr, "Reconstructing dungeon::Graph with dungeon::Data not set.");
 
     m_floorsCount = m_data->floorsCount();
-    m_roomsByFloor = m_data->roomsByFloor();
+    m_floorRoomsCount = m_data->floorRoomsCount();
 
     // Soft reset: will keep memory as it was if same dungeon size.
-    if (m_floorsCount != m_nodes.size() || m_roomsByFloor != m_nodes[0u].size()) {
-        reset(m_floorsCount * m_roomsByFloor);
+    if (m_floorsCount != m_nodes.size() || m_floorRoomsCount != m_nodes[0u].size()) {
+        reset(m_floorsCount * m_floorRoomsCount);
         m_nodes.resize(m_floorsCount);
         for (auto& floorNodes : m_nodes)
-            floorNodes.resize(m_roomsByFloor);
+            floorNodes.resize(m_floorRoomsCount);
     }
 
     // Affect invariable attributes
     for (uint8 floorIndex = 0u; floorIndex < m_floorsCount; ++floorIndex)
-    for (uint8 roomIndex = 0u; roomIndex < m_roomsByFloor; ++roomIndex) {
+    for (uint8 roomIndex = 0u; roomIndex < m_floorRoomsCount; ++roomIndex) {
         auto& nodeData = m_nodes.at(floorIndex).at(roomIndex);
         nodeData.coords = {floorIndex, roomIndex};
         nodeData.altitude = floorIndex + 1u;

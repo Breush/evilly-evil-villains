@@ -3,7 +3,7 @@
 #include "scene/entity.hpp"
 #include "context/event.hpp"
 #include "dungeon/data.hpp"
-#include "dungeon/commandable.hpp"
+#include "dungeon/command/interpreter.hpp"
 #include "dungeon/elements/trap.hpp"
 #include "dungeon/elements/facility.hpp"
 #include "dungeon/effecter.hpp"
@@ -437,7 +437,7 @@ namespace dungeon
     private:
 
         Data* m_data = nullptr;                 //!< Dungeon data.
-        Commandable m_commandable;              //!< The interpreter.
+        Interpreter m_interpreter;              //!< The interpreter.
 
         // Display
         sfe::Grid m_grid;                               //!< The internal grid for overlay display.

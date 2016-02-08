@@ -16,7 +16,7 @@ using namespace dungeon;
 
 Data::Data()
     : m_floorsCount(0u)
-    , m_roomsByFloor(0u)
+    , m_floorRoomsCount(0u)
     , m_timeGameHour(1.f)
 {
     // Wallets
@@ -160,8 +160,8 @@ void Data::loadDungeon(const std::wstring& file)
     m_name = dungeon.attribute(L"name").as_string();
     m_time = dungeon.attribute(L"time").as_uint();
     m_floorsCount = dungeon.attribute(L"floorsCount").as_uint();
-    m_roomsByFloor = dungeon.attribute(L"roomsByFloor").as_uint();
-    wdebug_dungeon_1(L"Dungeon is " << m_name << L" of size " << m_floorsCount << L"x" << m_roomsByFloor << L".");
+    m_floorRoomsCount = dungeon.attribute(L"floorRoomsCount").as_uint();
+    wdebug_dungeon_1(L"Dungeon is " << m_name << L" of size " << m_floorsCount << L"x" << m_floorRoomsCount << L".");
 
     //---- Resources
 
@@ -224,7 +224,7 @@ void Data::loadDungeon(const std::wstring& file)
         mdebug_dungeon_2("Found floor " << floorPos);
 
         // Rooms
-        m_floors[floorPos].rooms.reserve(m_roomsByFloor);
+        m_floors[floorPos].rooms.reserve(m_floorRoomsCount);
         for (const auto& roomNode : floor.children(L"room")) {
             Room room;
             room.coords.x = floorPos;
@@ -287,7 +287,7 @@ void Data::saveDungeon(const std::wstring& file)
     dungeon.append_attribute(L"name") = m_name.c_str();
     dungeon.append_attribute(L"time") = m_time;
     dungeon.append_attribute(L"floorsCount") = m_floorsCount;
-    dungeon.append_attribute(L"roomsByFloor") = m_roomsByFloor;
+    dungeon.append_attribute(L"floorRoomsCount") = m_floorRoomsCount;
 
     //---- Resources
 
@@ -397,8 +397,8 @@ void Data::correctFloorsRooms()
         floor.pos = floorPos;
 
         // Rooms by floor
-        floor.rooms.resize(m_roomsByFloor);
-        for (uint roomPos = 0; roomPos < m_roomsByFloor; ++roomPos) {
+        floor.rooms.resize(m_floorRoomsCount);
+        for (uint roomPos = 0; roomPos < m_floorRoomsCount; ++roomPos) {
             auto& ownRoom = floor.rooms[roomPos];
             ownRoom.coords.x = floorPos;
             ownRoom.coords.y = roomPos;
@@ -429,14 +429,14 @@ void Data::addEvent(std::string eventType, const RoomCoords& coords)
 bool Data::isRoomConstructed(const RoomCoords& coords) const
 {
     returnif (coords.x >= m_floorsCount) false;
-    returnif (coords.y >= m_roomsByFloor) false;
+    returnif (coords.y >= m_floorRoomsCount) false;
     return (room(coords).state != RoomState::EMPTY);
 }
 
 bool Data::isRoomWalkable(const RoomCoords& coords) const
 {
     returnif (coords.x >= m_floorsCount) false;
-    returnif (coords.y >= m_roomsByFloor) false;
+    returnif (coords.y >= m_floorRoomsCount) false;
     const auto& selectedRoom = room(coords);
     returnif (selectedRoom.state == RoomState::EMPTY) false;
 
@@ -451,7 +451,7 @@ bool Data::isRoomWalkable(const RoomCoords& coords) const
 void Data::constructRoom(const RoomCoords& coords)
 {
     returnif (coords.x >= m_floorsCount);
-    returnif (coords.y >= m_roomsByFloor);
+    returnif (coords.y >= m_floorRoomsCount);
     returnif (room(coords).state != RoomState::EMPTY);
 
     // Do construct
@@ -491,7 +491,7 @@ void Data::destroyRoom(const RoomCoords& coords)
 bool Data::pushRoom(const RoomCoords& coords, Direction direction)
 {
     returnif (coords.x >= m_floorsCount)  false;
-    returnif (coords.y >= m_roomsByFloor) false;
+    returnif (coords.y >= m_floorRoomsCount) false;
 
     // We look for the first void in the direction,
     // if none, it's impossible to move the rooms
@@ -500,7 +500,7 @@ bool Data::pushRoom(const RoomCoords& coords, Direction direction)
         voidCoords = roomNeighbourCoords(voidCoords, direction);
 
     returnif (voidCoords.x >= m_floorsCount)  false;
-    returnif (voidCoords.y >= m_roomsByFloor) false;
+    returnif (voidCoords.y >= m_floorRoomsCount) false;
 
     // We're all right, let's move the rooms
     auto antiDirection = oppositeDirection(direction);
@@ -1040,7 +1040,7 @@ void Data::changedFloorsCount()
     correctFloorsRooms();
 }
 
-void Data::changedRoomsByFloor()
+void Data::changedFloorRoomsCount()
 {
     correctFloorsRooms();
 }

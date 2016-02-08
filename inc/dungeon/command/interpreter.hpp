@@ -1,28 +1,25 @@
 #pragma once
 
 #include "context/command.hpp"
+#include "dungeon/command/roomsinterpreter.hpp"
 
 namespace dungeon
 {
-    // Forward declarations
-
-    class Inter;
-
     //! The interpreter of the dungeon.
 
-    class Commandable final : private context::Interpreter
+    class Interpreter final : private context::Interpreter
     {
-        using baseClass = Commandable;
+        using baseClass = Interpreter;
 
         std::wstring interpreterKey() const final { return L"dungeon"; }
 
     public:
 
         //! Constructor.
-        Commandable(Inter* inter);
+        Interpreter(Inter* inter);
 
         //! Default destructor.
-        ~Commandable() = default;
+        ~Interpreter() = default;
 
     protected:
 
@@ -30,7 +27,7 @@ namespace dungeon
         //! @name Interpreter
         //! @{
 
-        context::CommandPtr interpret(const std::vector<std::wstring>& tokens) final;
+        context::CommandPtr interpret(std::vector<std::wstring>& tokens) final;
         void autoComplete(std::vector<std::wstring>& possibilities,
                           const std::vector<std::wstring>& tokens, const std::wstring& lastToken) final;
 
@@ -38,6 +35,9 @@ namespace dungeon
 
     private:
 
-        Inter& m_inter;     //!< Reference to the inter;
+        Inter& m_inter;     //!< Reference to the inter.
+
+        RoomsInterpreter m_roomsInterpreter;    //!< Rooms interpreter.
+        RoomInterpreter m_roomInterpreter;      //!< Room interpreter.
     };
 }

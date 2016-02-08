@@ -16,7 +16,7 @@
 using namespace dungeon;
 
 Inter::Inter(nui::ContextMenu& contextMenu)
-    : m_commandable(this)
+    : m_interpreter(this)
     , m_contextMenu(contextMenu)
 {
     // Grid
@@ -254,17 +254,17 @@ void Inter::refreshFromData()
 {
     returnif (m_data == nullptr);
 
-    const auto& roomsByFloor = m_data->roomsByFloor();
+    const auto& floorRoomsCount = m_data->floorRoomsCount();
     const auto& floorsCount = m_data->floorsCount();
 
     // Grid
-    m_grid.setRowsColumns(floorsCount, roomsByFloor);
+    m_grid.setRowsColumns(floorsCount, floorRoomsCount);
 
     // Room tiles
     clearTiles();
 
     for (uint8 floor = 0u; floor < floorsCount; ++floor)
-    for (uint8 room = 0u; room < roomsByFloor; ++room) {
+    for (uint8 room = 0u; room < floorRoomsCount; ++room) {
         Tile tile;
         tile.coords = {floor, room};
         m_tiles[tile.coords] = std::move(tile);
@@ -390,7 +390,7 @@ void Inter::deselectTile()
 void Inter::setHoveredTile(const RoomCoords& coords)
 {
     returnif (coords.x >= m_data->floorsCount());
-    returnif (coords.y >= m_data->roomsByFloor());
+    returnif (coords.y >= m_data->floorRoomsCount());
 
     auto hoveredTile = &m_tiles.at(coords);
     returnif (m_hoveredTile == hoveredTile);
@@ -590,10 +590,10 @@ void Inter::destroyRoom(const RoomCoords& coords, bool loss)
 bool Inter::pushRoom(const RoomCoords& coords, Direction direction, uint animationDelay)
 {
     const auto& floorsCount = m_data->floorsCount();
-    const auto& roomsByFloor = m_data->roomsByFloor();
+    const auto& floorRoomsCount = m_data->floorRoomsCount();
 
     returnif (coords.x >= floorsCount)  false;
-    returnif (coords.y >= roomsByFloor) false;
+    returnif (coords.y >= floorRoomsCount) false;
 
     // We look for the first void in the direction,
     // if none, it's impossible to move the rooms
@@ -604,7 +604,7 @@ bool Inter::pushRoom(const RoomCoords& coords, Direction direction, uint animati
     }
 
     returnif (voidCoords.x >= floorsCount)  false;
-    returnif (voidCoords.y >= roomsByFloor) false;
+    returnif (voidCoords.y >= floorRoomsCount) false;
     returnif (coords == voidCoords) true;
 
     // The velocity is the offset to go each second
@@ -650,7 +650,7 @@ void Inter::addFloorsCount(int relativeValue)
 
 void Inter::addFloorRoomsCount(int relativeValue)
 {
-    setFloorRoomsCount(m_data->roomsByFloor() + relativeValue);
+    setFloorRoomsCount(m_data->floorRoomsCount() + relativeValue);
 }
 
 void Inter::setFloorsCount(uint value)
@@ -660,7 +660,7 @@ void Inter::setFloorsCount(uint value)
 
 void Inter::setFloorRoomsCount(uint value)
 {
-    m_data->setRoomsByFloor(value);
+    m_data->setFloorRoomsCount(value);
 }
 
 //------------------//
@@ -899,10 +899,10 @@ void Inter::refreshSize()
 {
     returnif (m_data == nullptr);
 
-    const auto& roomsByFloor = m_data->roomsByFloor();
+    const auto& floorRoomsCount = m_data->floorRoomsCount();
     const auto& floorsCount = m_data->floorsCount();
     const auto roomSize = m_roomScale * m_refRoomSize;
-    setSize({roomSize.x * roomsByFloor, roomSize.y * floorsCount});
+    setSize({roomSize.x * floorRoomsCount, roomSize.y * floorsCount});
 }
 
 void Inter::refreshTiles()
@@ -914,7 +914,7 @@ void Inter::refreshTiles()
 void Inter::refreshTile(const RoomCoords& coords)
 {
     returnif (coords.x >= m_data->floorsCount());
-    returnif (coords.y >= m_data->roomsByFloor());
+    returnif (coords.y >= m_data->floorRoomsCount());
 
     refreshTileDoshLabel(coords);
     refreshTileLayers(coords);
@@ -933,7 +933,7 @@ void Inter::refreshNeighboursLayers(const RoomCoords& coords)
 void Inter::refreshTileDoshLabel(const RoomCoords& coords)
 {
     returnif (coords.x >= m_data->floorsCount());
-    returnif (coords.y >= m_data->roomsByFloor());
+    returnif (coords.y >= m_data->floorRoomsCount());
 
     const auto& room = m_data->room(coords);
     const auto& localPosition = positionFromRoomCoords(coords);
@@ -960,7 +960,7 @@ void Inter::refreshTileDoshLabel(const RoomCoords& coords)
 void Inter::refreshTileLayers(const RoomCoords& coords)
 {
     returnif (coords.x >= m_data->floorsCount());
-    returnif (coords.y >= m_data->roomsByFloor());
+    returnif (coords.y >= m_data->floorRoomsCount());
 
     const auto& room = m_data->room(coords);
     const auto state = room.state;
@@ -1000,7 +1000,7 @@ void Inter::refreshTileLayers(const RoomCoords& coords)
 void Inter::refreshTileFacilities(const RoomCoords& coords)
 {
     returnif (coords.x >= m_data->floorsCount());
-    returnif (coords.y >= m_data->roomsByFloor());
+    returnif (coords.y >= m_data->floorRoomsCount());
 
     auto& roomFacilities = m_data->room(coords).facilities;
     auto& tileFacilities = m_tiles[coords].facilities;
@@ -1025,7 +1025,7 @@ void Inter::refreshTileFacilities(const RoomCoords& coords)
 void Inter::refreshTileTraps(const RoomCoords& coords)
 {
     returnif (coords.x >= m_data->floorsCount());
-    returnif (coords.y >= m_data->roomsByFloor());
+    returnif (coords.y >= m_data->floorRoomsCount());
 
     auto& room = m_data->room(coords);
     auto& tile = m_tiles[coords];

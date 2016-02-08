@@ -47,7 +47,7 @@ namespace states
         //! @{
 
         inline std::wstring interpreterKey() const { return L"menuSelectWorld"; }
-        context::CommandPtr interpret(const std::vector<std::wstring>& tokens) final;
+        context::CommandPtr interpret(std::vector<std::wstring>& tokens) final;
         void autoComplete(std::vector<std::wstring>& possibilities, const std::vector<std::wstring>& tokens, const std::wstring& lastToken) final;
 
         //! @}

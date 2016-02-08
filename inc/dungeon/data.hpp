@@ -356,8 +356,8 @@ namespace dungeon
         PARAMGSU(uint, m_floorsCount, floorsCount, setFloorsCount, changedFloorsCount)
 
         //! Number of rooms in each floor.
-        //! @access roomsByFloor setRoomsByFloor changedRoomsByFloor
-        PARAMGSU(uint, m_roomsByFloor, roomsByFloor, setRoomsByFloor, changedRoomsByFloor)
+        //! @access floorRoomsCount setFloorRoomsCount changedFloorRoomsCount
+        PARAMGSU(uint, m_floorRoomsCount, floorRoomsCount, setFloorRoomsCount, changedFloorRoomsCount)
 
         //! @}
 
@@ -400,13 +400,13 @@ namespace dungeon
         //! Callback on floorCount property.
         void changedFloorsCount();
 
-        //! Callback on roomsByFloor property.
-        void changedRoomsByFloor();
+        //! Callback on floorRoomsCount property.
+        void changedFloorRoomsCount();
 
         //! Correct the dungeon data.
         /*!
          *  Will resize the room/floor vectors to current values
-         *  held in floorsCount and roomsByFloor properties,
+         *  held in floorsCount and floorRoomsCount properties,
          *  and replace all RoomState::UNKNOWN to RoomState::EMPTY.
          */
         void correctFloorsRooms();

@@ -86,7 +86,7 @@ CommandPtr Commander::interpret(const std::wstring& commandLine)
         if (pInterpreter->interpreterKey() == key) {
             auto pCommand = pInterpreter->interpret(tokens);
             if (pCommand != nullptr)
-                pCommand->line = key + L" " + join(tokens, std::wstring(L" "));
+                pCommand->line = commandLine;
             return std::move(pCommand);
         }
     }

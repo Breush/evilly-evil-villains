@@ -25,15 +25,15 @@
 \subsection{Comments}
 A commented line start with a \texttt{\#}, anything else on the line is ignored. Empty lines are also ignored. However if you let a non-commented line with any character like just a space, this will be interpreted as a command and the script will loop silently trying desperately to execute it.
 
-\section{Tools}
-\subsection{Structure control}
+\subsection{Tools}
 \begin{apiCode}{wait $N$}
 Pause the script reading for $N$ milliseconds.\newline
 \textit{That function only works for input scripts (specified as application argument).}
 \end{apiCode}
 
 \section{Dungeon design}
-\subsection{Structure control}
+\subsection{Top-level functions}
+\subsubsection{Structure control}
 \begin{apiCode}{dungeon structure floorsCount (add|set) $N$}
 Change the floors count.
 \begin{itemize}
@@ -51,7 +51,7 @@ Change the rooms count on each floor.
 \end{itemize}
 \end{apiCode}
 
-\subsection{Generics control}
+\subsubsection{Generics control}
 \begin{apiCode}{dungeon generic monsters unlock (*|$MonsterID$) [free]}
 Unlock a monster of a generic.
 \begin{itemize}
@@ -73,9 +73,29 @@ Unlock a trap of a generic.
 \end{itemize}
 \end{apiCode}
 
+\subsubsection{Rooms location}
+\begin{apiCode}{dungeon room $X_1$ $X_2$ ...}
+Locate the room at position $(X_1, X_2)$.\newline
+\textit{One need to complete the command with some other action on the located room.}
+\end{apiCode}
+\begin{apiCode}{dungeon rooms ...}
+Locate all the rooms of the dungeon as a multiple rooms set.\newline
+\textit{One need to complete the command with some other action on the located multiple rooms.}
+\end{apiCode}
+
+\subsection{Multiple rooms control}
+\begin{apiCode}{...\{rooms\}... foreach ...}
+For all rooms, apply a located room command.\newline
+\textit{One need to complete the command with some other action on each located room.}
+\end{apiCode}
+%\begin{apiCode}{...\{rooms\}... keep constructed ...}
+%Filter the rooms to keep only the constructed ones.\newline
+%\textit{One need to complete the command with some other action on the located multiple rooms.}
+%\end{apiCode}
+
 \subsection{Room control}
-\begin{apiCode}{dungeon room $X_1$ $X_2$ construct [free]}
-Construct the room at position $(X_1, X_2)$.
+\begin{apiCode}{...\{room\}... construct [free]}
+Construct the room.
 \begin{itemize}
 \itemsep 0em
 \item If the specified room is already contructed, nothing happens.
@@ -83,88 +103,98 @@ Construct the room at position $(X_1, X_2)$.
 	  otherwise if the player cannot afford the room creation tax, nothing happens.
 \end{itemize}
 \end{apiCode}
-\begin{apiCode}{dungeon room $X_1$ $X_2$ destroy [loss]}
-Destroy the room at position $(X_1, X_2)$.
+\begin{apiCode}{...\{room\}... destroy [loss]}
+Destroy the room.
 \begin{itemize}
 \itemsep 0em
-\item If the specified room is not yet contructed, nothing happens.
+\item If the specified room is not constructed yet, nothing happens.
 \item If \verb#loss# is indicated, the player won't get resources back.
 \end{itemize}
 \end{apiCode}
-\begin{apiCode}{dungeon room $X_1$ $X_2$ push (north|south|west|east) [$T$]}
-Push from the room at position $(X_1, X_2)$ into the specified direction.\newline
+\begin{apiCode}{...\{room\}... push (north|south|west|east) [$T$]}
+Push from the room into the specified direction.\newline
 The animation will be $T$ milliseconds long (defaulting to $250ms$ if not specified).
 \begin{itemize}
 \itemsep 0em
-\item If the specified room is not yet contructed, nothing happens.
+\item If the specified room is not constructed yet, nothing happens.
 \item If there is no constructed room from the specified room\newline
 	  into the direction, nothing happens.
 \end{itemize}
 \end{apiCode}
-
-\subsection{Room trap}
-\begin{apiCode}{dungeon room $X_1$ $X_2$ trap set $TrapID$ [free]}
-Set the trap $TrapID$ in the room at position $(X_1, X_2)$.
+\begin{apiCode}{...\{room\}... trap ...}
+Locate the trap in the room.\newline
+\textit{One need to complete the command with some other action on the located trap.}
 \begin{itemize}
 \itemsep 0em
-\item If the specified room is not yet contructed, nothing happens.
-\item If the specified room already contains a trap $TrapID$, nothing happens.
-\item If \verb#free# is indicated, the player won't pay nor get resources back,\newline
-	  otherwise if the player cannot afford the trap creation tax, nothing happens.
-\item If the specified room contains a trap with a different $TrapID$, it will be removed first,\newline
-	  giving back resources if not \verb#free#.
+\item If the specified room is not constructed yet, nothing happens.
 \end{itemize}
 \end{apiCode}
-\begin{apiCode}{dungeon room $X_1$ $X_2$ trap remove [loss]}
-Remove the trap in the room at position $(X_1, X_2)$.
+\begin{apiCode}{...\{room\}... facilities ...}
+Locate the facilities in the room.\newline
+\textit{One need to complete the command with some other action on the located facilities.}
 \begin{itemize}
 \itemsep 0em
-\item If the specified room is not yet contructed, nothing happens.
-\item If the specified room contains no trap, nothing happens.
+\item If the specified room is not constructed yet, nothing happens.
+\end{itemize}
+\end{apiCode}
+
+\subsection{Trap control}
+\begin{apiCode}{...\{trap\}... set $TrapID$ [free]}
+Set the trap to $TrapID$.
+\begin{itemize}
+\itemsep 0em
+\item If the trap is already a $TrapID$, nothing happens.
+\item If \verb#free# is indicated, the player won't pay nor get resources back,\newline
+	  otherwise if the player cannot afford the trap creation tax, nothing happens.
+\item If the trap is not set yet, it will be removed first, giving back resources if not \verb#free#.
+\end{itemize}
+\end{apiCode}
+\begin{apiCode}{...\{trap\}... remove [loss]}
+Remove the trap.
+\begin{itemize}
+\itemsep 0em
+\item If the trap is not set yet, nothing happens.
 \item If \verb#loss# is indicated, the player won't get resources back.
 \end{itemize}
 \end{apiCode}
 
-\subsection{Room facilities}
-\begin{apiCode}{dungeon room $X_1$ $X_2$ facility create $FacilityID$ [free]}
-Set a facility $FacilityID$ in the room at position $(X_1, X_2)$.
+\subsection{Facilities control}
+\begin{apiCode}{...\{facilities\}... create $FacilityID$ [free]}
+Create the facility $FacilityID$.
 \begin{itemize}
 \itemsep 0em
-\item If the specified room is not yet contructed, nothing happens.
-\item If the specified room already contains a facility $FacilityID$, nothing happens.
+\item If there already is a facility $FacilityID$, nothing happens.
 \item If \verb#free# is indicated, the player won't pay anything,\newline
 	  otherwise if the player cannot afford the facility creation tax, nothing happens.
 \end{itemize}
 \end{apiCode}
-\begin{apiCode}{dungeon room $X_1$ $X_2$ facility remove $FacilityID$ [loss]}
-Remove a facility $FacilityID$ in the room at position $(X_1, X_2)$.
+\begin{apiCode}{...\{facilities\}... remove $FacilityID$ [loss]}
+Remove the facility $FacilityID$.
 \begin{itemize}
 \itemsep 0em
-\item If the specified room is not yet contructed, nothing happens.
-\item If the specified room contains no facility $FacilityID$, nothing happens.
+\item If there is no facility $FacilityID$, nothing happens.
 \item If \verb#loss# is indicated, the player won't get resources back.
 \end{itemize}
 \end{apiCode}
-\begin{apiCode}{dungeon room $X_1$ $X_2$ facility find $FacilityID$ ...}
-Locate a facility $FacilityID$ in the room at position $(X_1, X_2)$.\newline
+\begin{apiCode}{...\{facilities\}... find $FacilityID$ ...}
+Locate a facility $FacilityID$.\newline
 \textit{One need to complete the command with some other action on the located facility.}
-\end{apiCode}
-
-\subsubsection*{Located facilities}
-\begin{apiCode}{...$LocFacility$... ai $FuncName$}
-Calls the function $FuncName$ from the Artificial Intelligence file (\texttt{ai.lua}) of the located facility.
 \begin{itemize}
 \itemsep 0em
 \item If the located facility does not exist, nothing happens.
+\end{itemize}
+\end{apiCode}
+
+\subsubsection*{Facility control}
+\begin{apiCode}{...\{facility\}... ai $FuncName$}
+Calls the function $FuncName$ from the Artificial Intelligence file (\texttt{ai.lua}).
+\begin{itemize}
+\itemsep 0em
 \item If the specified function does not exist, nothing happens.
 \end{itemize}
 \end{apiCode}
-\begin{apiCode}{...$LocFacility$... link set $Y_1$ $Y_2$}
+\begin{apiCode}{...\{facility\}... link set $Y_1$ $Y_2$}
 Set the link of the located facility to the room at position $(Y_1, Y_2)$.
-\begin{itemize}
-\itemsep 0em
-\item If the located facility does not exist, nothing happens.
-\end{itemize}
 \end{apiCode}
 
 \end{document}

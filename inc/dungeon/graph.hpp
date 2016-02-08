@@ -115,6 +115,6 @@ namespace dungeon
         std::vector<std::vector<NodeData>> m_nodes;
 
         uint8 m_floorsCount = 0u;   //!< Number of nodes.
-        uint8 m_roomsByFloor = 0u;  //!< Number of nodes.
+        uint8 m_floorRoomsCount = 0u;  //!< Number of nodes.
     };
 }

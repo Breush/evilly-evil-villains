@@ -79,7 +79,7 @@ void MenuSelectWorld::handleEvent(const sf::Event& event)
 //-----------------------//
 //----- Interpreter -----//
 
-context::CommandPtr MenuSelectWorld::interpret(const std::vector<std::wstring>& tokens)
+context::CommandPtr MenuSelectWorld::interpret(std::vector<std::wstring>& tokens)
 {
     std::wstring logMessage;
     auto nTokens = tokens.size();

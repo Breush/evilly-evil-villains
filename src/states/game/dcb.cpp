@@ -176,7 +176,7 @@ void GameDCB::confirmDungeonCreation()
     const auto& name = m_nameEntry.text();
     uint loanValue = static_cast<uint>(1024.f + 2.f * appreciation * appreciation);
     uint floorsCount = static_cast<uint>(1.f + 16.f * (trust + conviction) / 200.f);
-    uint roomsByFloor = static_cast<uint>(2.f + 6.f * (trust * conviction) / 10000.f);
+    uint floorRoomsCount = static_cast<uint>(2.f + 6.f * (trust * conviction) / 10000.f);
 
     float interestRate = 1.05f + 1.f / static_cast<float>(1u + confusion);
     uint debtWeeksDuration = 24u;
@@ -191,7 +191,7 @@ void GameDCB::confirmDungeonCreation()
     dungeon::Data dungeonData;
     dungeonData.setName(name);
     dungeonData.setFloorsCount(floorsCount);
-    dungeonData.setRoomsByFloor(roomsByFloor);
+    dungeonData.setFloorRoomsCount(floorRoomsCount);
     dungeonData.setDebt(weeklyDebt, debtWeeksDuration);
     dungeonData.createFiles(worldInfo.folder);
 

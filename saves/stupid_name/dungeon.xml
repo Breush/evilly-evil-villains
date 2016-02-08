@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<dungeon name="Château d'eau" time="42" floorsCount="17" roomsByFloor="2">
+<dungeon name="Château d'eau" time="42" floorsCount="17" floorRoomsCount="2">
 	<resources>
 		<soul value="0" />
 		<fame value="17" />

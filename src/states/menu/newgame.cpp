@@ -113,7 +113,7 @@ void MenuNewGame::startPlay()
     else if (gamemode == context::Gamemode::RICHMAN) {
         // Max dimensions for a dungeon
         uint floorsCount = 12;
-        uint roomsByFloor = 7;
+        uint floorRoomsCount = 7;
 
         // TODO Have a state so that the player can change this name?
         // Set up the world name to match dungeon one (will create the folder too)
@@ -125,7 +125,7 @@ void MenuNewGame::startPlay()
         dungeon::Data dungeonData;
         dungeonData.setName(name);
         dungeonData.setFloorsCount(floorsCount);
-        dungeonData.setRoomsByFloor(roomsByFloor);
+        dungeonData.setFloorRoomsCount(floorRoomsCount);
         dungeonData.constructRoomsAll();
         dungeonData.createFiles(worldInfo.folder);
 

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<dungeon name="Croesus Home" time="0" floorsCount="12" roomsByFloor="7">
+<dungeon name="Croesus Home" time="0" floorsCount="12" floorRoomsCount="7">
 	<resources>
 		<soul value="0" />
 		<fame value="0" />

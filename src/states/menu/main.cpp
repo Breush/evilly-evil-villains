@@ -152,7 +152,7 @@ void MenuMain::refreshWindow(const config::WindowInfo& cWindow)
 //-----------------------//
 //----- Interpreter -----//
 
-context::CommandPtr MenuMain::interpret(const std::vector<std::wstring>& tokens)
+context::CommandPtr MenuMain::interpret(std::vector<std::wstring>& tokens)
 {
     std::wstring logMessage;
     auto nTokens = tokens.size();

@@ -85,7 +85,7 @@ namespace context
         virtual std::wstring interpreterKey() const = 0;
 
         //! Interpret a specific command line.
-        virtual CommandPtr interpret(const std::vector<std::wstring>& tokens) = 0;
+        virtual CommandPtr interpret(std::vector<std::wstring>& tokens) = 0;
 
         //! Attempt to autocomplete the command line.
         //! The possibilities to complete the last token will be added at the back of the vector.

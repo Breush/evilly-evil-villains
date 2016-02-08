@@ -36,6 +36,7 @@ Terminal::Terminal(StateStack& stack)
     m_entry.setRelativeOrigin({0.f, 1.f});
     m_entry.setRelativePosition({0.f, 1.f});
     m_entry.setOnValidateCallback([this] { onEntryValidated(); });
+    m_entry.setMaxCharacters(256u);
 
     // Pause/unpause button
     nuiRoot.attachChild(m_pauseButton);
