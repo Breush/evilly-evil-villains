@@ -149,7 +149,6 @@ void Graph::updateFromData()
             for (const auto& tunnel : facilityInfo.tunnels) {
                 auto tunnelCoords = sf::v2u8(tunnel.coords);
                 if (tunnel.relative) tunnelCoords += coords;
-
                 if (m_data->isRoomWalkable(tunnelCoords))
                     addNodeNeighbour(nodeData, tunnelCoords, facilityInfo.data.type());
             }

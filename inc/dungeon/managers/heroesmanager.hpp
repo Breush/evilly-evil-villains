@@ -151,6 +151,9 @@ namespace dungeon
         //! Refresh all element data reference for heroes.
         void refreshHeroesData();
 
+        //! Refresh all heroes information about the current graph.
+        void refreshHeroesFromGraph();
+
         //! @}
 
     private:

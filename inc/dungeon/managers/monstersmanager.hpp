@@ -95,6 +95,9 @@ namespace dungeon
         //! Refresh all element data references.
         void refreshMonstersData();
 
+        //! Refresh all monsters information about the current graph.
+        void refreshMonstersFromGraph();
+
         //! @}
 
     private:

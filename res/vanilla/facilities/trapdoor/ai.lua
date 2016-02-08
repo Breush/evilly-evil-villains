@@ -9,9 +9,11 @@
 ------------
 -- Locals --
 
-local pulsing = false   -- Pulsing the door (turn it on, then off)
-local pulsingToOff      -- When pulsing, are we going to off?
-local on                -- Always equal to its data homonym
+local pulsing = false           -- Pulsing the door (turn it on, then off)
+local pulsingToOff              -- When pulsing, are we going to off?
+local pulsingWaiting = false    -- When pulsing, are we waiting?
+local pulsingDelay              -- When pulsing, the delay to wait with the door on
+local on                        -- Always equal to its data homonym
 
 ---------------
 -- Callbacks --
@@ -22,6 +24,7 @@ function _reinit()
     on = eev_initEmptyDataBool("on", false)
 
     refreshDisplay()
+    refreshTunnel()
 end
 
 -- Called once on object creation
@@ -36,16 +39,31 @@ function _energyOnPulse()
     end
 end
 
+-- Called whenever an entity enters in one of our tunnel
+function _onEntityEnterTunnel(UID)
+end
+
+-- Called whenever an entity leaves in one of our tunnel
+function _onEntityLeaveTunnel(UID)
+end
+
 -------------
 -- Routine --
 
 -- Regular call
 function _update(dt)
     if pulsing then
-        if eev_isAnimationStopped() then
+        if pulsingWaiting then
+            pulsingDelay = pulsingDelay - dt
+            if pulsingDelay <= 0 then
+                pulsingWaiting = false
+                closeDoor()
+            end
+        elseif eev_isAnimationStopped() then
             if not pulsingToOff then
                 pulsingToOff = true
-                closeDoor()
+                pulsingWaiting = true
+                pulsingDelay = 0.8
             else
                 pulsing = false
             end
@@ -75,6 +93,7 @@ function openDoor()
 
     on = eev_setDataBool("on", true)
     eev_selectAnimation("open")
+    refreshTunnel()
 end
 
 -- If the door is on, turn it off
@@ -83,10 +102,20 @@ function closeDoor()
 
     on = eev_setDataBool("on", false)
     eev_selectAnimation("close")
+    refreshTunnel()
 end
 
--------------
--- Display --
+---------------
+-- Refreshes --
+
+function refreshTunnel()
+    eev_removeTunnels()
+    if on then
+        local roomX = eev_getCurrentRoomX()
+        local roomY = eev_getCurrentRoomY()
+        eev_addTunnel(-1, 0, true)
+    end
+end
 
 function refreshDisplay()
     if on then  eev_selectAnimation("opened")

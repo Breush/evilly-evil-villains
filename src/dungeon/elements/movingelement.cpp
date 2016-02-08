@@ -196,6 +196,7 @@ void MovingElement::updateFromGraph()
 
     // Refresh the pointer
     m_currentNode = nodeData;
+    m_pauseTime = -1.f;
 }
 
 //-----------------------------------//

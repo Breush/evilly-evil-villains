@@ -43,6 +43,9 @@ namespace dungeon
         //! @name Element data
         //! @{
 
+        //! Refresh the position from the graph.
+        void updateFromGraph();
+
         //! Rebinds the element data.
         void bindElementData(ElementData& edata);
 
@@ -89,9 +92,6 @@ namespace dungeon
         //--------------------------------//
         //! @name Artificial intelligence
         //! @{
-
-        //! Refresh the position from the graph.
-        void updateFromGraph();
 
         //! Convert a node to a node data.
         const Graph::NodeData* toNodeData(const ai::Node* node);

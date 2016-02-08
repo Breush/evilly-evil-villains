@@ -75,7 +75,7 @@ void MonstersManager::receive(const context::Event& event)
         removeRoomMonsters(coords);
     }
     else if (devent.type == "dungeon_graph_changed") {
-        refreshMonstersData();
+        refreshMonstersFromGraph();
     }
 }
 
@@ -218,4 +218,11 @@ void MonstersManager::refreshMonstersData()
     for (auto& monsterInfo : m_monstersInfo)
         if (monsterInfo.status == MonsterStatus::RUNNING)
             monsterInfo.monster->bindElementData(monsterInfo.data);
+}
+
+void MonstersManager::refreshMonstersFromGraph()
+{
+    for (auto& monsterInfo : m_monstersInfo)
+        if (monsterInfo.status == MonsterStatus::RUNNING)
+            monsterInfo.monster->updateFromGraph();
 }

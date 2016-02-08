@@ -182,7 +182,9 @@ void Facility::lua_addTunnel(const int32 x, const int32 y, bool relative)
 
 void Facility::lua_removeTunnels()
 {
+    // TODO Let data do that properly...
     m_facilityInfo->tunnels.clear();
+    m_inter.data().addEvent("dungeon_changed", m_coords);
 }
 
 //----- Barrier

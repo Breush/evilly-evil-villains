@@ -106,7 +106,7 @@ void HeroesManager::receive(const context::Event& event)
         removeRoomHeroes(coords);
     }
     else if (devent.type == "dungeon_graph_changed") {
-        refreshHeroesData();
+        refreshHeroesFromGraph();
     }
 }
 
@@ -309,4 +309,11 @@ void HeroesManager::refreshHeroesData()
     for (auto& heroInfo : m_heroesInfo)
         if (heroInfo.status == HeroStatus::RUNNING)
             heroInfo.hero->bindElementData(heroInfo.data);
+}
+
+void HeroesManager::refreshHeroesFromGraph()
+{
+    for (auto& heroInfo : m_heroesInfo)
+        if (heroInfo.status == HeroStatus::RUNNING)
+            heroInfo.hero->updateFromGraph();
 }
