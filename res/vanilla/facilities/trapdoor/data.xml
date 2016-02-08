@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<facility id="trapdoor" trName="Trapdoor" lock="floor" energetic="true">
+    <data name="baseCost" dosh="25" />
+</facility>

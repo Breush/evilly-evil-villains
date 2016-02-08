@@ -25,8 +25,6 @@ void RoomInterpreter::roomSet(const RoomCoords& coords)
 
 context::CommandPtr RoomInterpreter::interpret(std::vector<std::wstring>& tokens, std::wstring& logMessage)
 {
-    // TODO push / differed trap
-
     logMessage += L"> [room] ";
     auto nTokens = tokens.size();
 

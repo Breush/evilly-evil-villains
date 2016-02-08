@@ -28,7 +28,7 @@ void RoomsInterpreter::roomsAdd(const RoomCoords& coords)
 
 context::CommandPtr RoomsInterpreter::interpret(std::vector<std::wstring>& tokens, std::wstring& logMessage)
 {
-    // TODO keep
+    // TODO command keep to filter the rooms
 
     logMessage += L"> [rooms] ";
     auto nTokens = tokens.size();
