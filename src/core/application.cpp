@@ -375,9 +375,19 @@ void Application::scriptNextLine()
     bool theEnd;
 
     // This loop allows us to skip comments and blank lines
+    bool empty = false;
+    bool comment = false;
+    bool commentBlock = false;
     do {
         theEnd = !std::getline(m_scriptStream, m_scriptCommandLine);
-    } while (!theEnd && (m_scriptCommandLine.empty() || m_scriptCommandLine[0u] == L'#'));
+        empty = m_scriptCommandLine.empty();
+        if (!theEnd && !empty) {
+            comment = (m_scriptCommandLine[0u] == L'#');
+            if (!comment) continue;
+            if (commentBlock)   commentBlock = !(m_scriptCommandLine.size() >= 3u && m_scriptCommandLine[1u] == L'<' && m_scriptCommandLine[2u] == L'<');
+            else                commentBlock =  (m_scriptCommandLine.size() >= 3u && m_scriptCommandLine[1u] == L'>' && m_scriptCommandLine[2u] == L'>');
+        }
+    } while (!theEnd && (empty || comment || commentBlock));
 
     if (theEnd) {
         m_scriptCommandLine.clear();
