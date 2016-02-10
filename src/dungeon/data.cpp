@@ -249,6 +249,7 @@ void Data::loadDungeon(const std::wstring& file)
             for (const auto& facilityNode : roomNode.children(L"facility")) {
                 room.facilities.emplace_back();
                 auto& facility = room.facilities.back();
+                facility.coords = room.coords;
                 facility.data.loadXML(facilityNode);
                 facility.stronglyLinked = facilityNode.attribute(L"stronglyLinked").as_bool();
                 facility.barrier = facilityNode.attribute(L"barrier").as_bool();
@@ -795,8 +796,8 @@ void Data::facilityLinksIncomingRemove(const RoomCoords& coords, const std::wstr
     for (auto& facility : room.facilities) {
         auto links = facility.links;
         for (auto& link : links) {
-            if (link.common == nullptr || link.common->facilityID.empty()) continue;
             if (link.coords != coords) continue;
+            if (link.common == nullptr || link.common->facilityID.empty()) continue;
             if (!link.relink && link.common->facilityID != facilityID) continue;
             else if (link.relink && link.common->originFacilityID != facilityID) continue;
             facilityLinksRemove(facility.coords, facility.data.type(), coords, facilityID);
