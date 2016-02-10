@@ -15,6 +15,7 @@
 function _reinit()
     -- Add a tunnel only if we have a ladderExit facility in the northern room
     eev_removeTunnels()
+    eev_log("rm tunnels")
     if eev_facilityExistsRelative(1, 0, "ladderExit") or eev_facilityExistsRelative(1, 0, "ladder") then
         eev_addTunnel(1, 0, true)
     end
@@ -23,6 +24,7 @@ function _reinit()
     local double = eev_facilityExistsRelative(-1, 0, "ladder")
     if double then
         eev_selectAnimation("exit_main")
+        eev_addTunnel(-1, 0, true)
     else
         eev_selectAnimation("main")
     end

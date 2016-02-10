@@ -695,6 +695,11 @@ bool Data::facilitiesCreate(const RoomCoords& coords, const std::wstring& facili
     returnif (!createRoomFacilityValid(coords, facilityID)) false;
     auto& roomInfo = room(coords);
 
+    // Note: This event needs to be before the permissive removals,
+    //       so that it is correctly queued for dungeon::Inter
+    //       (fixing a bug where the lua of ladder was not aware of the ladderExit removal)
+    addEvent("facility_changed", coords);
+
     // Remove permissive facilities that are in the way
     const auto& facilityData = facilitiesDB().get(facilityID);
     facilitiesPermissiveRemoveLocking(coords, facilityData.lock);
@@ -706,7 +711,6 @@ bool Data::facilitiesCreate(const RoomCoords& coords, const std::wstring& facili
     facility.common = &facilityData;
     facility.coords = coords;
 
-    addEvent("facility_changed", coords);
     if (facility.common->entrance)
         EventEmitter::addEvent("dungeon_changed");
 
@@ -723,25 +727,29 @@ void Data::facilitiesRemove(const RoomCoords& coords, const std::wstring& facili
 {
     returnif (!isRoomConstructed(coords));
 
+    // Note: This event needs to be before the incoming removals,
+    //       so that it is correctly queued for dungeon::Inter
+    addEvent("facility_changed", coords);
+
     auto& roomInfo = room(coords);
     auto pFacility = std::find_if(roomInfo.facilities, [facilityID] (const FacilityInfo& facilityInfo) { return facilityInfo.data.type() == facilityID; });
     returnif (pFacility == std::end(roomInfo.facilities));
     returnif (!evenStronglyLinked && pFacility->stronglyLinked);
 
+    // Event checking
     bool dungeonChanged = pFacility->common->entrance;
     dungeonChanged |= !pFacility->tunnels.empty();
     dungeonChanged |= pFacility->barrier;
 
     bool treasureChanged = pFacility->treasure != -1u;
 
+    if (dungeonChanged)     EventEmitter::addEvent("dungeon_changed");
+    if (treasureChanged)    addEvent("treasure_changed", coords);
+
+    // Complete removal
     facilityLinksIncomingRemove(coords, facilityID);
     facilityLinksStrongRemoveFacilities(*pFacility);
     roomInfo.facilities.erase(pFacility);
-
-    // Events
-    addEvent("facility_changed", coords);
-    if (dungeonChanged)     EventEmitter::addEvent("dungeon_changed");
-    if (treasureChanged)    addEvent("treasure_changed", coords);
 
     // Removing a facility could allow a strongly linked one to be recreated
     if (!evenStronglyLinked)
@@ -802,8 +810,9 @@ void Data::facilityLinksRemove(const RoomCoords& coords, const std::wstring& fac
 {
     auto pFacility = facilitiesFind(coords, facilityID);
     returnif (pFacility == nullptr);
+    // TODO Why aren't managing relinks? And can't just a linkID be sufficient?
     std::erase_if(pFacility->links, [&linkCoords, &linkFacilityID] (const FacilityLink& link)
-                  { return link.coords == linkCoords && link.common->facilityID == linkFacilityID;});
+                  { return link.coords == linkCoords && link.common->facilityID == linkFacilityID; });
     addEvent("facility_changed", coords);
 }
 
@@ -1006,6 +1015,10 @@ void Data::setRoomTrap(const RoomCoords& coords, const std::wstring& trapID)
     returnif (!trapSetValid(coords, trapID));
     auto& trapInfo = room(coords).trap;
 
+    // Note: This event needs to be before the permissive removals,
+    //       so that it is correctly queued for Inter.
+    addEvent("trap_changed", coords);
+
     // Remove permissive facilities that are in the way
     auto& trapData = m_trapsDB.get(trapID);
     facilitiesPermissiveRemoveLocking(coords, trapData.lock);
@@ -1020,8 +1033,6 @@ void Data::setRoomTrap(const RoomCoords& coords, const std::wstring& trapID)
 
     // Changing the trap, some strongly linked facilities might be able to be recreated
     roomLinksIncomingStrongRecreateFacilities(coords);
-
-    addEvent("trap_changed", coords);
 }
 
 void Data::removeRoomTrap(const RoomCoords& coords)
