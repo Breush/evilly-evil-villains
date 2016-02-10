@@ -182,41 +182,50 @@ namespace dungeon
         //! @name Facilities
         //! @{
 
-        //! Get the handle to the facility in that room if any.
-        Facility* findRoomFacility(const RoomCoords& coords, const std::wstring& facilityID);
-
         //! Return true if a facility exists in this room.
-        bool hasRoomFacility(const RoomCoords& coords, const std::wstring& facilityID) const;
+        inline bool facilitiesExists(const RoomCoords& coords, const std::wstring& facilityID) const { return facilitiesFind(coords, facilityID) != nullptr; }
+
+        //! Get the handle to the facility in that room if any.
+        Facility* facilitiesFind(const RoomCoords& coords, const std::wstring& facilityID);
+
+        //! Get the handle to the facility in that room if any (const).
+        const Facility* facilitiesFind(const RoomCoords& coords, const std::wstring& facilityID) const;
 
         //! How much money do you get back if you're removing the facility in the specified room.
-        uint gainRemoveRoomFacility(const RoomCoords& coords, const std::wstring& facilityID) const;
+        uint facilitiesRemoveGain(const RoomCoords& coords, const std::wstring& facilityID) const;
 
         //! How much money do you get back if you're removing all the facilities in the specified room.
-        uint gainRemoveRoomFacilities(const RoomCoords& coords) const;
+        uint facilitiesRemoveGain(const RoomCoords& coords) const;
 
         //! Find the room and forward change to data.
-        bool createRoomFacility(const RoomCoords& coords, const std::wstring& facilityID, bool free = false);
+        bool facilitiesCreate(const RoomCoords& coords, const std::wstring& facilityID, bool free = false);
 
-        //! Create a facility, and try to link it to another one.
-        bool createRoomFacilityLinked(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords, const std::wstring& linkFacilityID, bool free = false);
+        //! Find the room below the specified relative position and remove all the facilities in it if any.
+        inline void facilitiesRemove(const sf::Vector2f& relPos) { facilitiesRemove(roomCoordsFromPosition(relPos)); }
+
+        //! Remove all the facilities in the room.
+        void facilitiesRemove(const RoomCoords& coords, bool loss = false);
+
+        //! Remove a specific facility in the room if possible.
+        void facilitiesRemove(const RoomCoords& coords, const std::wstring& facilityID, bool loss = false);
+
+        //----- Links
+
+        //! Tries to link a facility, given an specific link procedure.
+        void facilityLinksInteractiveCreate(const RoomCoords& coords, const std::wstring& facilityID, const InteractiveLink* link, const RoomCoords& linkCoords);
 
         //! Set the room facility link to specific coordinates.
-        void setRoomFacilityLink(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords);
+        void facilityLinksAdd(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords);
+
+        //----- Barrier
 
         //! Set the specified room facility's barrier.
         void setRoomFacilityBarrier(const RoomCoords& coords, const std::wstring& facilityID, bool activated);
 
+        //----- Treasure
+
         //! Set the specified room facility's treasure.
         void setRoomFacilityTreasure(const RoomCoords& coords, const std::wstring& facilityID, uint32 amount);
-
-        //! Find the room below the specified relative position and remove all the facilities in it if any.
-        inline void removeRoomFacilities(const sf::Vector2f& relPos) { removeRoomFacilities(roomCoordsFromPosition(relPos)); }
-
-        //! Remove all the facilities in the room.
-        void removeRoomFacilities(const RoomCoords& coords, bool loss = false);
-
-        //! Remove a specific facility in the room if possible.
-        void removeRoomFacility(const RoomCoords& coords, const std::wstring& facilityID, bool loss);
 
         //! @}
 

@@ -22,15 +22,30 @@ namespace dungeon
     //! All infos that we can find in each facility.
     struct FacilityData
     {
-        std::wstring name = L"(Unknown)";       //!< Translated name.
-        bool entrance = false;                  //!< Does this facility provide an entry point to the dungeon.
-        bool listed = true;                     //!< Is the facility constructible by the player?
-        bool energetic = false;                 //!< Whether the facility can be controlled with energy.
-        Cost baseCost;                          //!< Construction price.
-        std::vector<Link> links;                //!< All the links upon creation.
-        std::vector<Constraint> constraints;    //!< Construction constraints (absolute).
-        uint8 lock = RoomFlag::NONE;            //!< What part of the room the facility blocks for access.
-        uint8 hide = RoomFlag::NONE;            //!< What part of the room the facility hides.
+        std::wstring name = L"(Unknown)";               //!< Translated name.
+        bool entrance = false;                          //!< Does this facility provide an entry point to the dungeon.
+        bool listed = true;                             //!< Is the facility constructible by the player?
+        bool energetic = false;                         //!< Whether the facility can be controlled with energy.
+        Cost baseCost;                                  //!< Construction price.
+        std::vector<FixedLink> fixedLinks;              //!< All the links that do not require player's intervention.
+        std::vector<InteractiveLink> interactiveLinks;  //!< All the links that require player's intervention to position.
+        std::vector<Constraint> constraints;            //!< Construction constraints (absolute).
+        uint8 lock = RoomFlag::NONE;                    //!< What part of the room the facility blocks for access.
+        uint8 hide = RoomFlag::NONE;                    //!< What part of the room the facility hides.
+
+        //! Find a link (fixed or interactive) from its ID.
+        inline const Link* linkFind(uint linkID) const
+        {
+            for (const auto& link : fixedLinks)
+                if (link.id == linkID)
+                    return &link;
+
+            for (const auto& link : interactiveLinks)
+                if (link.id == linkID)
+                    return &link;
+
+            return nullptr;
+        }
     };
 
     //! All common info for each facility and should never change.
@@ -74,6 +89,9 @@ namespace dungeon
 
         //! Load the xml file and add its data to the map.
         void add(const std::string& filename);
+
+        //! Read node and affect it to a link variable (fixed or interactive).
+        void readLinkNode(Link& link, const pugi::xml_node& node);
 
         //! Read attribute and affect it to a lock variable.
         void readRoomFlagsAttribute(uint8& lock, const pugi::xml_attribute& attribute);

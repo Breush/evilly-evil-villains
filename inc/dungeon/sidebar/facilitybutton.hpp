@@ -39,9 +39,6 @@ namespace dungeon
         //! Refresh the grabbable look and the facility created.
         void setGrabbableFacilityID(const std::wstring& facilityID);
 
-        //! Get current link.
-        const Link& getCurrentExplicitLink() const;
-
         //! @}
 
     private:
@@ -52,13 +49,13 @@ namespace dungeon
         std::wstring m_facilityID;          //!< The identifier for the facility.
 
         // Grabbable
-        std::wstring m_grabbableFacilityID;                 //!< The identifier for the facility to create when the grabbable is going.
-        std::string m_imageTextureID;                            //!< The texture of the grabbable and button.
+        std::wstring m_grabbableFacilityID;     //!< The identifier for the facility to create when the grabbable is going.
+        std::string m_imageTextureID;           //!< The texture of the grabbable and button.
 
         // Explicit links
-        RoomCoords m_explicitLinkCoords;    //!< Memory for the coords to link to.
-        uint m_explicitLinksCount = 0u;     //!< Number of explicit links.
-        uint m_explicitLinksDone = 0u;      //!< How many explicit links have we done so far.
+        RoomCoords m_originalLinkCoords;    //!< Memory for the coords to link to.
+        uint m_interactiveLinksCount = 0u;  //!< Number of explicit links.
+        uint m_interactiveLinksDone = 0u;   //!< How many explicit links have we done so far.
     };
 
     //! A facility temporary object.

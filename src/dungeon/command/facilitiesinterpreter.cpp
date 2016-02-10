@@ -31,12 +31,12 @@ context::CommandPtr FacilitiesInterpreter::interpret(std::vector<std::wstring>& 
         if (tokens[0u] == L"create") {
             logMessage += L"Creating facility " + tokens[1u];
             bool free = (nTokens >= 3u) && (tokens[2u] == L"free");
-            m_inter.createRoomFacility(m_roomCoords, tokens[1u], free);
+            m_inter.facilitiesCreate(m_roomCoords, tokens[1u], free);
             goto logging;
         }
         else if (tokens[0u] == L"find") {
             logMessage += L"Accessing facility " + tokens[1u];
-            auto pFacility = m_inter.findRoomFacility(m_roomCoords, tokens[1u]);
+            auto pFacility = m_inter.facilitiesFind(m_roomCoords, tokens[1u]);
             if (pFacility == nullptr) {
                 logMessage += L" -> not found";
                 goto logging;
@@ -50,7 +50,7 @@ context::CommandPtr FacilitiesInterpreter::interpret(std::vector<std::wstring>& 
         else if (tokens[0u] == L"remove") {
             logMessage += L"Removing facility " + tokens[1u];
             bool loss = (nTokens >= 3u) && (tokens[2u] == L"loss");
-            m_inter.removeRoomFacility(m_roomCoords, tokens[1u], loss);
+            m_inter.facilitiesRemove(m_roomCoords, tokens[1u], loss);
             goto logging;
         }
     }

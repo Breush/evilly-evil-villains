@@ -37,12 +37,8 @@ Facility::Facility(const RoomCoords& coords, ElementData& edata, dungeon::Inter&
     lua()["eev_hasTreasure"] = [this] { return lua_hasTreasure(); };
     lua()["eev_setTreasure"] = [this] (const uint32 value) { lua_setTreasure(value); };
 
-    // TODO Rename (this implicit link name is really confusing)
-    lua()["eev_isLink"] = [this] { return lua_isLink(); };
-
-    lua()["eev_linkExists"] = [this] { return lua_linkExists(); };
-    lua()["eev_linkGetX"] = [this] { return lua_linkGetX(); };
-    lua()["eev_linkGetY"] = [this] { return lua_linkGetY(); };
+    lua()["eev_linkExists"] = [this] (uint32 linkID) { return lua_linkExists(linkID); };
+    lua()["eev_linkGet"]    = [this] (uint32 linkID) { return lua_linkGet(linkID); };
 
     lua()["eev_energySendPulseRoom"] = [this] (const uint32 x, const uint32 y) { return lua_energySendPulseRoom(x, y); };
 
@@ -99,12 +95,12 @@ void Facility::movingElementLeaveTunnel(MovingElement& movingElement)
 
 bool Facility::lua_hasSiblingFacility(const std::string& facilityID) const
 {
-    return m_inter.hasRoomFacility(m_coords, toWString(facilityID));
+    return m_inter.facilitiesExists(m_coords, toWString(facilityID));
 }
 
 uint32 Facility::lua_getSiblingFacility(const std::string& facilityID) const
 {
-    auto pFacility = m_inter.findRoomFacility(m_coords, toWString(facilityID));
+    auto pFacility = m_inter.facilitiesFind(m_coords, toWString(facilityID));
     returnif (pFacility == nullptr) 0u;
     return pFacility->UID();
 }
@@ -112,7 +108,7 @@ uint32 Facility::lua_getSiblingFacility(const std::string& facilityID) const
 bool Facility::lua_facilityExistsRelative(const int x, const int y, const std::string& facilityID) const
 {
     RoomCoords coords{static_cast<uint8>(m_coords.x + x), static_cast<uint8>(m_coords.y + y)};
-    return m_inter.hasRoomFacility(coords, toWString(facilityID));
+    return m_inter.facilitiesExists(coords, toWString(facilityID));
 }
 
 uint32 Facility::lua_getCurrentRoomX() const
@@ -137,28 +133,23 @@ void Facility::lua_setTreasure(const uint32 value)
     m_inter.setRoomFacilityTreasure(m_coords, m_elementID, value);
 }
 
-//----- Implicit links
-
-bool Facility::lua_isLink()
-{
-    return m_facilityInfo->isLink;
-}
-
 //----- Link
 
-bool Facility::lua_linkExists() const
+bool Facility::lua_linkExists(uint32 linkID) const
 {
-    return (m_facilityInfo->link.x != 0xff_u8) && (m_facilityInfo->link.y != 0xff_u8);
+    for (const auto& link : m_facilityInfo->links)
+        if (link.common != nullptr && link.common->id == linkID)
+            return true;
+    return false;
 }
 
-uint32 Facility::lua_linkGetX() const
+// TODO Update API text
+std::tuple<uint32, uint32> Facility::lua_linkGet(uint32 linkID) const
 {
-    return m_facilityInfo->link.x;
-}
-
-uint32 Facility::lua_linkGetY() const
-{
-    return m_facilityInfo->link.y;
+    for (const auto& link : m_facilityInfo->links)
+        if (link.common != nullptr && link.common->id == linkID)
+            return std::tuple<uint32, uint32>{link.coords.x, link.coords.y};
+    return std::tuple<uint32, uint32>{-1u, -1u};
 }
 
 //----- Signals

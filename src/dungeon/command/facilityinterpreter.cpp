@@ -40,10 +40,11 @@ context::CommandPtr FacilityInterpreter::interpret(std::vector<std::wstring>& to
 
     if (nTokens >= 4u) {
         if (tokens[0u] == L"link") {
+            // TODO Link Should be add
             if (tokens[1u] == L"set") {
                 logMessage += L"Setting link to room " + tokens[2u] + L"/" + tokens[3u];
                 RoomCoords linkCoords{to<uint8>(tokens[2u]), to<uint8>(tokens[3u])};
-                m_inter.setRoomFacilityLink(m_pFacility->coords(), m_pFacility->edata().type(), linkCoords);
+                m_inter.facilityLinksAdd(m_pFacility->coords(), m_pFacility->edata().type(), linkCoords);
                 goto logging;
             }
         }

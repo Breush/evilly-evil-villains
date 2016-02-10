@@ -30,12 +30,12 @@ end
 -- Whenever a moving element comes too close
 function cbMovingElementClose(UID)
     if not detecting then
-        if eev_linkExists() then
+        if eev_linkExists(0) then
             detecting = true
-            eev_selectAnimation("detection")
-            local linkX = eev_linkGetX()
-            local linkY = eev_linkGetY()
+            local linkX, linkY
+            linkX, linkY = eev_linkGet(0)
             eev_energySendPulseRoom(linkX, linkY)
+            eev_selectAnimation("detection")
         end
     end
 end

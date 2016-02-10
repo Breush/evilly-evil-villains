@@ -579,7 +579,7 @@ void Inter::destroyRoom(const RoomCoords& coords, bool loss)
 
     if (!loss) {
         uint gainedDosh = m_data->onDestroyRoomGain;
-        gainedDosh += gainRemoveRoomFacilities(coords);
+        gainedDosh += facilitiesRemoveGain(coords);
         gainedDosh += gainRemoveRoomTrap(coords);
         villain().doshWallet.add(gainedDosh);
     }
@@ -676,26 +676,26 @@ void Inter::energySendPulseRoom(const RoomCoords& coords)
 //----------------------//
 //----- Facilities -----//
 
-Facility* Inter::findRoomFacility(const RoomCoords& coords, const std::wstring& facilityID)
+Facility* Inter::facilitiesFind(const RoomCoords& coords, const std::wstring& facilityID)
 {
     for (auto& facility : m_tiles[coords].facilities)
         if (facility->edata().type() == facilityID)
             return facility.get();
-
-    // Not found
     return nullptr;
 }
 
-bool Inter::hasRoomFacility(const RoomCoords& coords, const std::wstring& facilityID) const
+const Facility* Inter::facilitiesFind(const RoomCoords& coords, const std::wstring& facilityID) const
 {
-    return m_data->hasFacility(coords, facilityID);
+    for (const auto& facility : m_tiles.at(coords).facilities)
+        if (facility->edata().type() == facilityID)
+            return facility.get();
+    return nullptr;
 }
 
-uint Inter::gainRemoveRoomFacility(const RoomCoords& coords, const std::wstring& facilityID) const
+uint Inter::facilitiesRemoveGain(const RoomCoords& coords, const std::wstring& facilityID) const
 {
-    const auto pFacilityInfo = m_data->getFacility(coords, facilityID);
+    const auto pFacilityInfo = m_data->facilitiesFind(coords, facilityID);
     returnif (pFacilityInfo == nullptr) 0u;
-    returnif (pFacilityInfo->isLink) 0u;
 
     uint gainedDosh = 0u;
     if (pFacilityInfo->treasure != -1u) gainedDosh += pFacilityInfo->treasure;
@@ -704,47 +704,58 @@ uint Inter::gainRemoveRoomFacility(const RoomCoords& coords, const std::wstring&
     return gainedDosh;
 }
 
-uint Inter::gainRemoveRoomFacilities(const RoomCoords& coords) const
+uint Inter::facilitiesRemoveGain(const RoomCoords& coords) const
 {
     returnif (!m_data->isRoomConstructed(coords)) 0u;
     const auto& facilitiesData = m_data->room(coords).facilities;
 
     uint gainedDosh = 0u;
     for (const auto& facilityData : facilitiesData)
-        gainedDosh += gainRemoveRoomFacility(coords, facilityData.data.type());
+        gainedDosh += facilitiesRemoveGain(coords, facilityData.data.type());
 
     return gainedDosh;
 }
 
-bool Inter::createRoomFacility(const RoomCoords& coords, const std::wstring& facilityID, bool free)
+bool Inter::facilitiesCreate(const RoomCoords& coords, const std::wstring& facilityID, bool free)
 {
     returnif (m_tiles[coords].movingLocked) false;
 
     auto cost = facilitiesDB().get(facilityID).baseCost.dosh;
     if (!free) returnif (!villain().doshWallet.required(cost)) false;
 
-    bool created = m_data->createRoomFacility(coords, facilityID);
+    bool created = m_data->facilitiesCreate(coords, facilityID);
     returnif (!created) false;
 
     if (!free) villain().doshWallet.sub(cost);
     return true;
 }
 
-bool Inter::createRoomFacilityLinked(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords, const std::wstring& linkFacilityID, bool free)
+void Inter::facilitiesRemove(const RoomCoords& coords, const std::wstring& facilityID, bool loss)
 {
-    auto cost = facilitiesDB().get(facilityID).baseCost.dosh;
-    if (!free) returnif (!villain().doshWallet.required(cost)) false;
-
-    bool created = m_data->createRoomFacilityLinked(coords, facilityID, linkCoords, linkFacilityID);
-    returnif (!created) false;
-
-    if (!free) villain().doshWallet.sub(cost);
-    return true;
+    returnif (m_tiles[coords].movingLocked);
+    if (!loss) villain().doshWallet.add(facilitiesRemoveGain(coords, facilityID));
+    m_data->facilitiesRemove(coords, facilityID);
 }
 
-void Inter::setRoomFacilityLink(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords)
+void Inter::facilitiesRemove(const RoomCoords& coords, bool loss)
 {
-    m_data->setRoomFacilityLink(coords, facilityID, linkCoords);
+    returnif (m_tiles[coords].movingLocked);
+    if (!loss) villain().doshWallet.add(facilitiesRemoveGain(coords));
+    m_data->facilitiesRemove(coords);
+}
+
+//----- Links
+
+void Inter::facilityLinksInteractiveCreate(const RoomCoords& coords, const std::wstring& facilityID, const InteractiveLink* link, const RoomCoords& linkCoords)
+{
+    m_data->facilityLinksAdd(coords, facilityID, link, linkCoords);
+    if (link != nullptr && link->relink && !link->facilityID.empty())
+        m_data->facilityLinksAdd(linkCoords, link->facilityID, link, coords, true);
+}
+
+void Inter::facilityLinksAdd(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords)
+{
+    m_data->facilityLinksAdd(coords, facilityID, nullptr, linkCoords);
 }
 
 void Inter::setRoomFacilityTreasure(const RoomCoords& coords, const std::wstring& facilityID, uint32 amount)
@@ -755,20 +766,6 @@ void Inter::setRoomFacilityTreasure(const RoomCoords& coords, const std::wstring
 void Inter::setRoomFacilityBarrier(const RoomCoords& coords, const std::wstring& facilityID, bool activated)
 {
     m_data->setRoomFacilityBarrier(coords, facilityID, activated);
-}
-
-void Inter::removeRoomFacility(const RoomCoords& coords, const std::wstring& facilityID, bool loss)
-{
-    returnif (m_tiles[coords].movingLocked);
-    if (!loss) villain().doshWallet.add(gainRemoveRoomFacility(coords, facilityID));
-    m_data->removeRoomFacility(coords, facilityID);
-}
-
-void Inter::removeRoomFacilities(const RoomCoords& coords, bool loss)
-{
-    returnif (m_tiles[coords].movingLocked);
-    if (!loss) villain().doshWallet.add(gainRemoveRoomFacilities(coords));
-    m_data->removeRoomFacilities(coords);
 }
 
 //-----------------//

@@ -13,13 +13,15 @@
 
 -- Called on new data
 function _reinit()
-    -- Facility stairsFront will always exist because it is an implicit link
+    -- Facility stairsFront will always exist because it is an strong link on the same room
     local frontUID = eev_getSiblingFacility("stairsFront")
 
     -- Does our explicit link exist?
-    if eev_linkExists() then
-        local linkX = eev_linkGetX()
-        local linkY = eev_linkGetY()
+    if eev_linkExists(0) then
+        local linkX, linkY
+        linkX, linkY = eev_linkGet(0)
+
+        -- TODO Do std::tuple also for this function
         local roomX = eev_getCurrentRoomX()
         local roomY = eev_getCurrentRoomY()
 
@@ -66,8 +68,7 @@ function _onEntityEnterTunnel(UID)
     eev_setDetectVisibleUID(UID, false)
 
     -- Add the both exits clipping
-    local linkX = eev_linkGetX()
-    local linkY = eev_linkGetY()
+    linkX, linkY = eev_linkGet(0)
     local roomX = eev_getCurrentRoomX()
     local roomY = eev_getCurrentRoomY()
 

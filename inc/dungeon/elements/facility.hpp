@@ -85,21 +85,13 @@ namespace dungeon
         //! Set the treasure held by the facility.
         void lua_setTreasure(const uint32 value);
 
-        //----- Implicit link
-
-        //! Get the state of this facility: are we created as a link?
-        bool lua_isLink();
-
         //----- Link
 
-        //! Has the facility an absolute link to an other room?
-        bool lua_linkExists() const;
+        //! Does the facility has this link active?
+        bool lua_linkExists(const uint32 linkID) const;
 
-        //! The x coordinate of the absolute link. (Return -1u if none.)
-        uint32 lua_linkGetX() const;
-
-        //! The y coordinate of the absolute link. (Return -1u if none.)
-        uint32 lua_linkGetY() const;
+        //! The coordinates of the link specified. (Undefined behavior if not existing.)
+        std::tuple<uint32, uint32> lua_linkGet(uint32 linkID) const;
 
         //----- Energy
 

@@ -51,6 +51,15 @@ function _onEntityLeaveTunnel(UID)
     eev_setDetectVisibleUID(UID, true)
 end
 
+-- Called whenever the linked facility is created
+function _onLinkCreated(ID)
+    -- TODO Be clever with those callbacks, creating and removing the tunnel
+end
+
+-- Called whenever the linked facility is removed
+function _onLinkRemoved(ID)
+end
+
 -------------
 -- Routine --
 

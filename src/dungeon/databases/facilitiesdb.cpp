@@ -76,29 +76,43 @@ void FacilitiesDB::add(const std::string& filename)
         facilityData.constraints.emplace_back(std::move(constraint));
     }
 
-    // Adding links
-    for (const auto& linkNode : facilityNode.children(L"link")) {
-        Link link;
-        link.id = linkNode.attribute(L"id").as_string();
+    // Fixed links
+    for (const auto& linkNode : facilityNode.children(L"fixedLink")) {
+        FixedLink link;
+        readLinkNode(link, linkNode);
+        link.originFacilityID = id;
+        link.relative = linkNode.attribute(L"relative").as_bool();
+        link.coords.x = linkNode.attribute(L"x").as_int();
+        link.coords.y = linkNode.attribute(L"y").as_int();
+        facilityData.fixedLinks.emplace_back(std::move(link));
+    }
 
-        std::wstring style = linkNode.attribute(L"style").as_string();
-        if (style == L"implicit") {
-            link.style = Link::Style::IMPLICIT;
-            link.x = linkNode.attribute(L"x").as_int();
-            link.y = linkNode.attribute(L"y").as_int();
+    // Interactive links
+    for (const auto& linkNode : facilityNode.children(L"interactiveLink")) {
+        InteractiveLink link;
+        readLinkNode(link, linkNode);
+        link.originFacilityID = id;
+        for (const auto& constraintNode : linkNode.children(L"constraint")) {
+            Constraint constraint;
+            readConstraintNode(constraint, constraintNode);
+            link.constraints.emplace_back(std::move(constraint));
         }
-        else if (style == L"explicit") {
-            link.style = Link::Style::EXPLICIT;
-            link.id = linkNode.attribute(L"id").as_string();
+        facilityData.interactiveLinks.emplace_back(std::move(link));
+    }
+}
 
-            for (const auto& constraintNode : linkNode.children(L"constraint")) {
-                Constraint constraint;
-                readConstraintNode(constraint, constraintNode);
-                link.constraints.emplace_back(std::move(constraint));
-            }
-        }
+void FacilitiesDB::readLinkNode(Link& link, const pugi::xml_node& node)
+{
+    link.id = node.attribute(L"id").as_uint(-1u);
+    link.facilityID = node.attribute(L"facilityID").as_string();
+    link.unbreakable = node.attribute(L"unbreakable").as_bool();
 
-        facilityData.links.emplace_back(std::move(link));
+    if (!link.facilityID.empty()) {
+        link.strong = node.attribute(L"strong").as_bool();
+        link.permissive = node.attribute(L"permissive").as_bool();
+
+        link.relink = node.attribute(L"relink").as_bool();
+        link.relinkID = node.attribute(L"relinkID").as_uint(link.id);
     }
 }
 

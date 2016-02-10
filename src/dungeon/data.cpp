@@ -248,14 +248,12 @@ void Data::loadDungeon(const std::wstring& file)
             // Facilities
             for (const auto& facilityNode : roomNode.children(L"facility")) {
                 room.facilities.emplace_back();
-                auto& facility= room.facilities.back();
+                auto& facility = room.facilities.back();
                 facility.data.loadXML(facilityNode);
-                facility.isLink = facilityNode.attribute(L"isLink").as_bool();
+                facility.stronglyLinked = facilityNode.attribute(L"stronglyLinked").as_bool();
                 facility.barrier = facilityNode.attribute(L"barrier").as_bool();
                 facility.common = &facilitiesDB().get(facility.data.type());
                 facility.treasure = facilityNode.attribute(L"treasure").as_uint(-1u);
-                facility.link.x = facilityNode.attribute(L"linkX").as_uint(-1u);
-                facility.link.y = facilityNode.attribute(L"linkY").as_uint(-1u);
                 room.hide |= facility.common->hide;
 
                 // Tunnels
@@ -265,6 +263,16 @@ void Data::loadDungeon(const std::wstring& file)
                     tunnel.coords.y = tunnelNode.attribute(L"y").as_int();
                     tunnel.relative = tunnelNode.attribute(L"relative").as_bool();
                     facility.tunnels.emplace_back(std::move(tunnel));
+                }
+
+                // Links
+                for (auto linkNode : facilityNode.children(L"link")) {
+                    FacilityLink link;
+                    link.coords.x = linkNode.attribute(L"x").as_int();
+                    link.coords.y = linkNode.attribute(L"y").as_int();
+                    link.relink = linkNode.attribute(L"relink").as_bool();
+                    link.common = facility.common->linkFind(linkNode.attribute(L"id").as_uint());
+                    facility.links.emplace_back(std::move(link));
                 }
             }
 
@@ -364,11 +372,9 @@ void Data::saveDungeon(const std::wstring& file)
             // Facilities
             for (const auto& facility : room.facilities) {
                 auto facilityNode = roomNode.append_child(L"facility");
-                if (facility.isLink) facilityNode.append_attribute(L"isLink") = true;
+                if (facility.stronglyLinked) facilityNode.append_attribute(L"stronglyLinked") = true;
                 if (facility.barrier) facilityNode.append_attribute(L"barrier") = true;
                 if (facility.treasure != -1u) facilityNode.append_attribute(L"treasure") = facility.treasure;
-                if (facility.link.x != 0xff_u8) facilityNode.append_attribute(L"linkX") = facility.link.x;
-                if (facility.link.y != 0xff_u8) facilityNode.append_attribute(L"linkY") = facility.link.y;
                 facility.data.saveXML(facilityNode);
 
                 // Tunnels
@@ -377,6 +383,15 @@ void Data::saveDungeon(const std::wstring& file)
                     tunnelNode.append_attribute(L"x") = tunnel.coords.x;
                     tunnelNode.append_attribute(L"y") = tunnel.coords.y;
                     if (tunnel.relative) tunnelNode.append_attribute(L"relative") = true;
+                }
+
+                // Links
+                for (const auto& link : facility.links) {
+                    auto linkNode = facilityNode.append_child(L"link");
+                    if (link.common != nullptr) linkNode.append_attribute(L"id") = link.common->id;
+                    if (link.relink) linkNode.append_attribute(L"relink") = true;
+                    linkNode.append_attribute(L"x") = link.coords.x;
+                    linkNode.append_attribute(L"y") = link.coords.y;
                 }
             }
         }
@@ -456,7 +471,7 @@ void Data::constructRoom(const RoomCoords& coords)
 
     // Do construct
     room(coords).state = RoomState::CONSTRUCTED;
-    createRoomFacilitiesLinks(coords);
+    roomLinksIncomingStrongRecreateFacilities(coords);
 
     addEvent("room_constructed", coords);
     EventEmitter::addEvent("dungeon_changed");
@@ -474,8 +489,7 @@ void Data::destroyRoom(const RoomCoords& coords)
     returnif (!isRoomConstructed(coords));
 
     // Clear elements
-    removeRoomFacilitiesLinks(coords);
-    removeRoomFacilities(coords);
+    facilitiesRemove(coords);
     removeRoomTrap(coords);
     removeRoomMonsters(coords);
 
@@ -506,9 +520,12 @@ bool Data::pushRoom(const RoomCoords& coords, Direction direction)
     auto antiDirection = oppositeDirection(direction);
     RoomCoords targetCoords = voidCoords;
     while (targetCoords != coords) {
-        // Remove previous links if any (and explicit ones are broken)
+        // Remove previous links if any
         auto movingCoords = roomNeighbourCoords(targetCoords, antiDirection);
-        removeRoomFacilitiesLinks(movingCoords);
+        roomLinksStrongRemoveFacilities(movingCoords);
+        roomLinksIncomingStrongRemoveFacilities(movingCoords);
+        roomLinksIncomingRemove(movingCoords);
+        roomLinksBreakableRemove(movingCoords);
 
         // Swapping the rooms
         auto& roomFrom = room(movingCoords);
@@ -518,9 +535,12 @@ bool Data::pushRoom(const RoomCoords& coords, Direction direction)
         // Reset coords
         roomFrom.coords = movingCoords;
         roomTo.coords = targetCoords;
+        for (auto& facilityInfo : roomTo.facilities)
+            facilityInfo.coords = targetCoords;
 
         // Create the new links
-        createRoomFacilitiesLinks(targetCoords);
+        roomLinksIncomingStrongRecreateFacilities(targetCoords);
+        roomLinksStrongRecreateFacilities(targetCoords);
         addEvent("room_changed", targetCoords);
 
         // Note: It is not our job to move the moving elements (monsters/heroes)
@@ -614,10 +634,10 @@ void Data::updateRoomHide(const RoomCoords& coords)
 
 bool Data::hasFacility(const RoomCoords& coords, const std::wstring& facilityID) const
 {
-    return getFacility(coords, facilityID) != nullptr;
+    return facilitiesFind(coords, facilityID) != nullptr;
 }
 
-FacilityInfo* Data::getFacility(const RoomCoords& coords, const std::wstring& facilityID)
+FacilityInfo* Data::facilitiesFind(const RoomCoords& coords, const std::wstring& facilityID)
 {
     returnif (!isRoomConstructed(coords)) nullptr;
     auto& roomInfo = room(coords);
@@ -626,7 +646,7 @@ FacilityInfo* Data::getFacility(const RoomCoords& coords, const std::wstring& fa
     return &(*found);
 }
 
-const FacilityInfo* Data::getFacility(const RoomCoords& coords, const std::wstring& facilityID) const
+const FacilityInfo* Data::facilitiesFind(const RoomCoords& coords, const std::wstring& facilityID) const
 {
     returnif (!isRoomConstructed(coords)) nullptr;
     const auto& roomInfo = room(coords);
@@ -655,27 +675,10 @@ bool Data::createRoomFacilityValid(const RoomCoords& coords, const std::wstring&
             return false;
 
     // Check againt absolute constraints for this facility
-    bool excluded = false;
-    for (const auto& constraint : facilityData.constraints) {
-        // Are the coordinates concerned by this constraint?
-        if (constraint.x.type == ConstraintParameter::Type::EQUAL)
-            if (static_cast<uint>(constraint.x.value) != coords.x) continue;
-
-        if (constraint.y.type == ConstraintParameter::Type::EQUAL)
-            if (static_cast<uint>(constraint.y.value) != coords.y) continue;
-
-        // If in include list, that's all right
-        if (constraint.mode == Constraint::Mode::INCLUDE)
-            return true;
-        // If in exclude list, wait till the end (it might be in include list too)
-        else if (constraint.mode == Constraint::Mode::EXCLUDE)
-            excluded = true;
-    }
-
-    return !excluded;
+    return !constraintsExclude(facilityData.constraints, coords);
 }
 
-bool Data::createRoomFacility(const RoomCoords& coords, const std::wstring& facilityID, bool isLink)
+bool Data::facilitiesCreate(const RoomCoords& coords, const std::wstring& facilityID)
 {
     returnif (!createRoomFacilityValid(coords, facilityID)) false;
 
@@ -684,9 +687,8 @@ bool Data::createRoomFacility(const RoomCoords& coords, const std::wstring& faci
     roomInfo.facilities.emplace_back();
     auto& facility = roomInfo.facilities.back();
     facility.data.create(facilityID);
-    facility.isLink = isLink;
     facility.common = &facilitiesDB().get(facilityID);
-
+    facility.coords = coords;
 
     addEvent("facility_changed", coords);
     if (facility.common->entrance)
@@ -695,151 +697,13 @@ bool Data::createRoomFacility(const RoomCoords& coords, const std::wstring& faci
     updateRoomHide(coords);
 
     // Keep last, as this function could change the pending reference to facility
-    // by creating a implicit link in the same room we are.
-    createFacilityLinks(coords, facility);
+    // by creating another facility in the same room we are
+    facilityLinksStrongRecreateFacilities(facility);
 
     return true;
 }
 
-bool Data::createRoomFacilityLinked(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords, const std::wstring& linkFacilityID)
-{
-    returnif (!createRoomFacility(coords, facilityID)) false;
-    returnif (!hasFacility(linkCoords, linkFacilityID)) true;
-
-    // If both exist, link them together
-    setRoomFacilityLink(coords, facilityID, linkCoords);
-    setRoomFacilityLink(linkCoords, linkFacilityID, coords);
-    return true;
-}
-
-void Data::setRoomFacilityLink(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords)
-{
-    auto pFacilityInfo = getFacility(coords, facilityID);
-    returnif (pFacilityInfo == nullptr);
-
-    pFacilityInfo->link = linkCoords;
-    addEvent("facility_changed", coords);
-}
-
-void Data::createFacilityLinks(const RoomCoords& coords, const FacilityInfo& facility)
-{
-    const auto& facilityData = *facility.common;
-    for (const auto& link : facilityData.links) {
-        // Create implicit links, ignore the explicit ones
-        if (link.style == Link::Style::IMPLICIT) {
-            RoomCoords linkCoords(coords.x + link.x, coords.y + link.y);
-            createRoomFacility(linkCoords, link.id, true);
-        }
-    }
-}
-
-void Data::createRoomFacilitiesLinks(const RoomCoords& coords)
-{
-    returnif (!isRoomConstructed(coords));
-    const auto& selectedRoom = room(coords);
-    const auto& selectedRoomFacilities = selectedRoom.facilities;
-
-    // For each facility in the room, create its links
-    // Note: as a facility implicit could create a facility in that same room,
-    // we need to keep the original count for this facility.
-    auto facilitiesCount = selectedRoomFacilities.size();
-    for (uint i = 0u; i < facilitiesCount; ++i)
-        createFacilityLinks(coords, selectedRoomFacilities[i]);
-
-    // Note: The following code block seems a bit fat,
-    // but beside keeping up-to-date a list of facilities
-    // pointing to this room, there is no choice.
-    // Implementing that selectedRoom.incomingLinks list would be awesome!
-    // But be careful with the pushRoom() function moving memory as it wants.
-
-    // We check all implicit links getting to this room
-    // and create those which need to be there
-    for (const auto& floor : m_floors)
-    for (const auto& room : floor.rooms)
-    for (const auto& facility : room.facilities) {
-        const auto& facilityInfo = *facility.common;
-        for (const auto& link : facilityInfo.links) {
-            if (link.style == Link::Style::IMPLICIT) {
-                RoomCoords linkCoords(room.coords.x + link.x, room.coords.y + link.y);
-                if (linkCoords == coords)
-                    createRoomFacility(coords, link.id, true);
-            }
-        }
-    }
-}
-
-void Data::removeRoomFacilityLink(const RoomCoords& coords, const std::wstring& facilityID)
-{
-    auto pFacilityInfo = getFacility(coords, facilityID);
-    returnif (pFacilityInfo == nullptr);
-
-    pFacilityInfo->link = {0xff_u8, 0xff_u8};
-    addEvent("facility_changed", coords);
-}
-
-void Data::removeFacilityLinks(const RoomCoords& coords, FacilityInfo& facility)
-{
-    const auto& facilityData = facilitiesDB().get(facility.data.type());
-    for (const auto& link : facilityData.links) {
-        // Remove all implicit links
-        if (link.style == Link::Style::IMPLICIT) {
-            RoomCoords linkCoords(coords.x + link.x, coords.y + link.y);
-            removeRoomFacility(linkCoords, link.id);
-        }
-
-        // Remove all explicit links of a change
-        else if (link.style == Link::Style::EXPLICIT && (facility.link.x != -1u && facility.link.y != -1u)) {
-            removeRoomFacilityLink(facility.link, link.id);
-        }
-    }
-
-    // Also break this facility explicit link if any
-    facility.link = {0xff_u8, 0xff_u8};
-}
-
-void Data::removeRoomFacilitiesLinks(const RoomCoords& coords)
-{
-    returnif (!isRoomConstructed(coords));
-    auto& selectedRoom = room(coords);
-
-    // For each facility of the room, delete its links
-    for (auto& facility : selectedRoom.facilities)
-        removeFacilityLinks(coords, facility);
-
-    // Also remove all implicit links in this room
-    std::erase_if(selectedRoom.facilities, [] (const FacilityInfo& facility) { return facility.isLink; });
-}
-
-void Data::setRoomFacilityBarrier(const RoomCoords& coords, const std::wstring& facilityID, bool activated)
-{
-    auto pFacilityInfo = getFacility(coords, facilityID);
-    returnif (pFacilityInfo == nullptr);
-
-    pFacilityInfo->barrier = activated;
-    addEvent("facility_changed", coords);
-    EventEmitter::addEvent("dungeon_changed");
-}
-
-void Data::setRoomFacilityTreasure(const RoomCoords& coords, const std::wstring& facilityID, uint32 amount)
-{
-    auto pFacilityInfo = getFacility(coords, facilityID);
-    returnif (pFacilityInfo == nullptr);
-
-    pFacilityInfo->treasure = amount;
-    addEvent("treasure_changed", coords);
-}
-
-void Data::addFacilityTunnel(FacilityInfo& facilityInfo, const sf::Vector2i& tunnelCoords, bool relative)
-{
-    Tunnel tunnel;
-    tunnel.coords = tunnelCoords;
-    tunnel.relative = relative;
-    facilityInfo.tunnels.emplace_back(std::move(tunnel));
-
-    EventEmitter::addEvent("dungeon_changed");
-}
-
-void Data::removeRoomFacility(const RoomCoords& coords, const std::wstring& facilityID)
+void Data::facilitiesRemove(const RoomCoords& coords, const std::wstring& facilityID)
 {
     returnif (!isRoomConstructed(coords));
 
@@ -853,7 +717,8 @@ void Data::removeRoomFacility(const RoomCoords& coords, const std::wstring& faci
 
     bool treasureChanged = pFacility->treasure != -1u;
 
-    removeFacilityLinks(coords, *pFacility);
+    facilityLinksIncomingRemove(coords, facilityID);
+    facilityLinksStrongRemoveFacilities(*pFacility);
     roomInfo.facilities.erase(pFacility);
 
     // Events
@@ -864,7 +729,7 @@ void Data::removeRoomFacility(const RoomCoords& coords, const std::wstring& faci
     updateRoomHide(coords);
 }
 
-void Data::removeRoomFacilities(const RoomCoords& coords)
+void Data::facilitiesRemove(const RoomCoords& coords)
 {
     returnif (!isRoomConstructed(coords));
 
@@ -874,8 +739,202 @@ void Data::removeRoomFacilities(const RoomCoords& coords)
     const auto& roomInfo = room(coords);
     const auto facilities = roomInfo.facilities;
     for (const auto& facility : facilities)
-        if (!facility.isLink)
-            removeRoomFacility(coords, facility.data.type());
+        facilitiesRemove(coords, facility.data.type());
+}
+
+//----- Links
+
+void Data::facilityLinksAdd(const RoomCoords& coords, const std::wstring& facilityID, const Link* common, const RoomCoords& linkCoords, bool relink)
+{
+    auto pFacility = facilitiesFind(coords, facilityID);
+    returnif (pFacility == nullptr);
+    facilityLinksAdd(*pFacility, common, linkCoords, relink);
+}
+
+void Data::facilityLinksAdd(FacilityInfo& facilityInfo, const Link* common, const RoomCoords& linkCoords, bool relink)
+{
+    facilityInfo.links.emplace_back();
+    auto& link = facilityInfo.links.back();
+    link.common = common;
+    link.coords = linkCoords;
+    link.relink = relink;
+    addEvent("facility_changed", facilityInfo.coords);
+}
+
+void Data::facilityLinksRemove(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords, const std::wstring& linkFacilityID)
+{
+    auto pFacility = facilitiesFind(coords, facilityID);
+    returnif (pFacility == nullptr);
+    std::erase_if(pFacility->links, [&linkCoords, &linkFacilityID] (const FacilityLink& link)
+                  { return link.coords == linkCoords && link.common->facilityID == linkFacilityID;});
+    addEvent("facility_changed", coords);
+}
+
+void Data::facilityLinksStrongRemoveFacilities(FacilityInfo& facilityInfo)
+{
+    auto links = facilityInfo.links;
+    for (auto& link : links)
+        if (link.common->strong)
+            facilitiesRemove(link.coords, link.common->facilityID);
+}
+
+void Data::facilityLinksIncomingRemove(const RoomCoords& coords, const std::wstring& facilityID)
+{
+    for (auto& floor : m_floors)
+    for (auto& room : floor.rooms)
+    for (auto& facility : room.facilities) {
+        auto links = facility.links;
+        for (auto& link : links) {
+            if (link.common == nullptr || link.common->facilityID.empty()) continue;
+            if (link.coords != coords) continue;
+            if (!link.relink && link.common->facilityID != facilityID) continue;
+            else if (link.relink && link.common->originFacilityID != facilityID) continue;
+            facilityLinksRemove(facility.coords, facility.data.type(), coords, facilityID);
+        }
+    }
+}
+
+void Data::facilityLinksStrongRecreateFacilities(FacilityInfo& facility)
+{
+    auto coords = facility.coords;
+    auto facilityID = facility.data.type();
+
+    const auto& facilityData = *facility.common;
+    for (const auto& link : facilityData.fixedLinks) {
+        if (link.facilityID.empty()) continue;
+        if (!link.strong) continue;
+
+        RoomCoords linkCoords{static_cast<uint8>(link.coords.x), static_cast<uint8>(link.coords.y)};
+        if (link.relative) linkCoords += coords;
+        bool success = facilitiesCreate(linkCoords, link.facilityID);
+        if (!success) continue;
+
+        // Our facility registers a new link
+        auto pFacility = facilitiesFind(linkCoords, link.facilityID);
+        pFacility->stronglyLinked = true;
+        facilityLinksAdd(coords, facilityID, &link, linkCoords);
+    }
+}
+
+void Data::roomLinksIncomingStrongRecreateFacilities(const RoomCoords& coords)
+{
+    returnif (!isRoomConstructed(coords));
+
+    // Note: The following code block seems a bit fat,
+    // but beside keeping up-to-date a list of facilities
+    // pointing to this room, there is no choice.
+    // Implementing that selectedRoom.incomingLinks list would be awesome!
+    // But be careful with the pushRoom() function moving memory as it wants.
+
+    // We check all links getting to this room
+    // and create those which need to be there
+    for (auto& floor : m_floors)
+    for (auto& room : floor.rooms)
+    for (auto& facility : room.facilities)
+    for (const auto& link : facility.common->fixedLinks) {
+        if (link.facilityID.empty()) continue;
+        if (!link.strong) continue;
+
+        RoomCoords linkCoords{static_cast<uint8>(link.coords.x), static_cast<uint8>(link.coords.y)};
+        if (link.relative) linkCoords += room.coords;
+        if (linkCoords != coords) continue;
+        bool success = facilitiesCreate(linkCoords, link.facilityID);
+        if (!success) continue;
+
+        // We registers the linked facility as a new link
+        auto pFacility = facilitiesFind(linkCoords, link.facilityID);
+        pFacility->stronglyLinked = true;
+        facilityLinksAdd(facility, &link, linkCoords);
+    }
+}
+
+void Data::roomLinksStrongRemoveFacilities(const RoomCoords& coords)
+{
+    auto& roomInfo = room(coords);
+    for (auto& facility : roomInfo.facilities)
+        facilityLinksStrongRemoveFacilities(facility);
+}
+
+void Data::roomLinksStrongRecreateFacilities(const RoomCoords& coords)
+{
+    auto& roomInfo = room(coords);
+    auto facilities = roomInfo.facilities;
+    for (auto& facility : facilities)
+        facilityLinksStrongRecreateFacilities(facility);
+}
+
+void Data::roomLinksIncomingStrongRemoveFacilities(const RoomCoords& coords)
+{
+    auto& roomInfo = room(coords);
+    auto facilities = roomInfo.facilities;
+    for (auto& facility : facilities)
+        if (facility.stronglyLinked)
+            facilitiesRemove(facility.coords, facility.data.type());
+}
+
+void Data::roomLinksIncomingRemove(const RoomCoords& coords)
+{
+    for (auto& floor : m_floors)
+    for (auto& room : floor.rooms)
+    for (auto& facility : room.facilities) {
+        auto& links = facility.links;
+        auto newEnd = std::remove_if(std::begin(links), std::end(links), [&coords] (const FacilityLink& link) { return link.coords == coords; });
+        if (newEnd != std::end(facility.links)) {
+            facility.links.erase(newEnd, std::end(facility.links));
+            addEvent("facility_changed", facility.coords);
+        }
+    }
+}
+
+void Data::roomLinksBreakableRemove(const RoomCoords& coords)
+{
+    bool facilitiesChanged = false;
+
+    auto& roomInfo = room(coords);
+    for (auto& facility : roomInfo.facilities) {
+        auto& links = facility.links;
+        auto newEnd = std::remove_if(std::begin(links), std::end(links), [] (const FacilityLink& link) { return link.common != nullptr && !link.common->unbreakable; });
+        facilitiesChanged = (newEnd != std::end(links));
+        if (!facilitiesChanged) continue;
+        facility.links.erase(newEnd, std::end(links));
+    }
+
+    if (facilitiesChanged)
+        addEvent("facility_changed", coords);
+}
+
+//----- Barrier
+
+void Data::setRoomFacilityBarrier(const RoomCoords& coords, const std::wstring& facilityID, bool activated)
+{
+    auto pFacilityInfo = facilitiesFind(coords, facilityID);
+    returnif (pFacilityInfo == nullptr);
+
+    pFacilityInfo->barrier = activated;
+    addEvent("facility_changed", coords);
+    EventEmitter::addEvent("dungeon_changed");
+}
+
+//----- Treasure
+
+void Data::setRoomFacilityTreasure(const RoomCoords& coords, const std::wstring& facilityID, uint32 amount)
+{
+    auto pFacilityInfo = facilitiesFind(coords, facilityID);
+    returnif (pFacilityInfo == nullptr);
+
+    pFacilityInfo->treasure = amount;
+    addEvent("treasure_changed", coords);
+}
+
+//----- Tunnels
+
+void Data::addFacilityTunnel(FacilityInfo& facilityInfo, const sf::Vector2i& tunnelCoords, bool relative)
+{
+    Tunnel tunnel;
+    tunnel.coords = tunnelCoords;
+    tunnel.relative = relative;
+    facilityInfo.tunnels.emplace_back(std::move(tunnel));
+    EventEmitter::addEvent("dungeon_changed");
 }
 
 //-----------------//

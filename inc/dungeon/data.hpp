@@ -170,59 +170,83 @@ namespace dungeon
 
         //! Quick access to facility info.
         //! Returns nullptr if not found or invalid coordinates.
-        FacilityInfo* getFacility(const RoomCoords& coords, const std::wstring& facilityID);
+        FacilityInfo* facilitiesFind(const RoomCoords& coords, const std::wstring& facilityID);
 
         //! Quick access to facility info (const).
         //! Returns nullptr if not found or invalid coordinates.
-        const FacilityInfo* getFacility(const RoomCoords& coords, const std::wstring& facilityID) const;
+        const FacilityInfo* facilitiesFind(const RoomCoords& coords, const std::wstring& facilityID) const;
+
+        //! Add the specified facility to the dungeon if it does not exists yet, if mark it as a link.
+        //! Will emit an event if a change occured.
+        bool facilitiesCreate(const RoomCoords& coords, const std::wstring& facilityID, uint fixedLinkID);
 
         //! Add the specified facility to the dungeon if it does not exists yet.
         //! Will emit an event if a change occured.
-        bool createRoomFacility(const RoomCoords& coords, const std::wstring& facilityID, bool isLink = false);
+        bool facilitiesCreate(const RoomCoords& coords, const std::wstring& facilityID);
 
-        //! Create a facility, and try to link it to another one.
-        bool createRoomFacilityLinked(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords, const std::wstring& linkFacilityID);
+        //! Remove the specified facility from the dungeon.
+        //! This will also remove all strong links the facility had.
+        //! Will emit an event if a change occured.
+        void facilitiesRemove(const RoomCoords& coords, const std::wstring& facilityID);
 
-        //! Set the room facility link to specific coordinates.
-        void setRoomFacilityLink(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords);
+        //! Remove all the facilities from the room specified.
+        //! Will emit an event if a change occured.
+        void facilitiesRemove(const RoomCoords& coords);
 
-        //! Remove the room facility link if any.
-        void removeRoomFacilityLink(const RoomCoords& coords, const std::wstring& facilityID);
+        //----- Links
 
-        //! Remove all links (leaving/entering) of a facility.
-        void removeFacilityLinks(const RoomCoords& coords, FacilityInfo& facility);
+        //! Add a link to a facility.
+        void facilityLinksAdd(const RoomCoords& coords, const std::wstring& facilityID, const Link* common, const RoomCoords& linkCoords, bool relink = false);
 
-        //! Remove all links (leaving/entering) of all facilities in the room.
-        void removeRoomFacilitiesLinks(const RoomCoords& coords);
+        //! Add a link to a facility.
+        void facilityLinksAdd(FacilityInfo& facilityInfo, const Link* common, const RoomCoords& linkCoords, bool relink = false);
 
-        //! Create all links (leaving/entering) of a facility.
-        void createFacilityLinks(const RoomCoords& coords, const FacilityInfo& facility);
+        //! Remove a specific link of a facility.
+        void facilityLinksRemove(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords, const std::wstring& linkFacilityID);
 
-        //! Create all links (leaving/entering) of all facilities in the room.
-        /*! One can except the following code
-         *  removeRoomFacilitiesLinks(coords);
-         *  createRoomFacilitiesLinks(coords);
-         *  to delete only explicit links.
-         *  Because implicit links in/out will be destroyed and recreated.
-         */
-        void createRoomFacilitiesLinks(const RoomCoords& coords);
+        //! Remove all strongly linked facilities.
+        void facilityLinksStrongRemoveFacilities(FacilityInfo& facilityInfo);
+
+        //! Recreate all strongly linked facilities.
+        void facilityLinksStrongRecreateFacilities(FacilityInfo& facility);
+
+        //! Remove all links pointing to the facility (using the relink).
+        void facilityLinksIncomingRemove(const RoomCoords& coords, const std::wstring& facilityID);
+
+        //! Create all linked facilities that should exist in this room.
+        void roomLinksIncomingStrongRecreateFacilities(const RoomCoords& coords);
+
+        //! Remove all strongly linked facilities of a room.
+        void roomLinksStrongRemoveFacilities(const RoomCoords& coords);
+
+        //! Recreate all strongly linked facilities of a room.
+        void roomLinksStrongRecreateFacilities(const RoomCoords& coords);
+
+        //! Remove all strongly facilities with the room.
+        void roomLinksIncomingStrongRemoveFacilities(const RoomCoords& coords);
+
+        //! Remove all incoming links of a room.
+        void roomLinksIncomingRemove(const RoomCoords& coords);
+
+        //! Remove all breakable links of a room.
+        //! For instance, when pushing a room with a sensor, its link won't be broken.
+        //! But if the room contains stairs, it will.
+        void roomLinksBreakableRemove(const RoomCoords& coords);
+
+        //----- Barrier
 
         //! Set the specified room facility's barrier.
         void setRoomFacilityBarrier(const RoomCoords& coords, const std::wstring& facilityID, bool activated);
 
+        //----- Treasure
+
         //! Set the specified room facility's treasure.
         void setRoomFacilityTreasure(const RoomCoords& coords, const std::wstring& facilityID, uint32 amount);
 
+        //----- Tunnels
+
         //! Add a tunnel to the specificed room facility.
         void addFacilityTunnel(FacilityInfo& facilityInfo, const sf::Vector2i& tunnelCoords, bool relative);
-
-        //! Remove the specified facility from the dungeon.
-        //! Will emit an event if a change occured.
-        void removeRoomFacility(const RoomCoords& coords, const std::wstring& facilityID);
-
-        //! Remove all the facilities from the room specified.
-        //! Will emit an event if a change occured.
-        void removeRoomFacilities(const RoomCoords& coords);
 
         //! @}
 

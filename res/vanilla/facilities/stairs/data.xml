@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <facility id="stairs" trName="Stairs" lock="wall" hide="wall">
     <data name="baseCost" dosh="140" />
-    <link style="implicit" id="stairsFront" x="0" y="0" />
-    <link style="explicit" id="stairs">
+    <fixedLink id="1" facilityID="stairsFront" strong="true" relative="true" x="0" y="0" />
+    <interactiveLink id="0" facilityID="stairs" callback="true" relink="true" relinkID="0" relinkCallback="true">
         <constraint mode="exclude" x="0" />
         <constraint mode="exclude" y="0" />
     </link>

@@ -21,10 +21,7 @@ FacilityGrabButton::FacilityGrabButton(const FacilityData& facilityData, std::ws
     m_imageTextureID = "vanilla/facilities/" + toString(m_facilityID) + "/icon";
     set(m_facilityData.name, m_imageTextureID);
 
-    // Explicit links (m_explicitLinksCount is constructed to 0u)
-    for (const auto& link : m_facilityData.links)
-        if (link.style == Link::Style::EXPLICIT)
-            ++m_explicitLinksCount;
+    m_interactiveLinksCount = m_facilityData.interactiveLinks.size();
 }
 
 void FacilityGrabButton::grabbableMoved(scene::Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f&)
@@ -43,9 +40,9 @@ void FacilityGrabButton::grabbableMoved(scene::Entity* entity, const sf::Vector2
     m_inter.setPredictionFacility(interRelPos, m_facilityID);
 
     // Show link if linking
-    returnif (m_explicitLinksCount == 0u || m_explicitLinksDone == 0u);
+    returnif (m_interactiveLinksCount == 0u || m_interactiveLinksDone == 0u);
     auto targetCoords = inter->roomCoordsFromPosition(interRelPos);
-    inter->setPredictionLink(m_explicitLinkCoords, targetCoords);
+    inter->setPredictionLink(m_originalLinkCoords, targetCoords);
 }
 
 void FacilityGrabButton::grabbableButtonPressed(scene::Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
@@ -56,7 +53,7 @@ void FacilityGrabButton::grabbableButtonPressed(scene::Entity* entity, const sf:
         m_inter.resetPrediction();
         m_inter.resetPredictionLink();
         graph()->removeGrabbable();
-        m_explicitLinksDone = 0u;
+        m_interactiveLinksDone = 0u;
         return;
     }
 
@@ -66,63 +63,43 @@ void FacilityGrabButton::grabbableButtonPressed(scene::Entity* entity, const sf:
     auto inter = entity->findParent<Inter>(interRelPos);
     returnif (inter == nullptr);
 
-    // TODO In fact, facility does only remember one link,
-    // hence that multiple links thingy is useless for now.
-    // The first room will only get the last one as a link.
-    // + We might want link patterns:
-    //  - All linked to the first one
-    //  - Linked as a chain (possibliy a circle)
-    auto coords = inter->roomCoordsFromPosition(interRelPos);
-    if (m_explicitLinksDone == 0u) {
-        m_explicitLinkCoords = coords;
-        returnif (!inter->createRoomFacility(coords, m_grabbableFacilityID));
+    // TODO We might want link patterns:
+    //      - All linked to the first one (star)
+    //      - Linked as a chain (possibliy a circle)
+    auto coords = m_inter.roomCoordsFromPosition(interRelPos);
+    if (m_interactiveLinksDone == 0u) {
+        m_originalLinkCoords = coords;
+        returnif (!m_inter.facilitiesCreate(coords, m_grabbableFacilityID));
     }
     else {
         // Checking constraints
-        // TODO Factor out that checking constraints function
-        // and merge it with the one from Data::createRoomFacilityValid()
-        const auto& link = getCurrentExplicitLink();
-        for (const auto& constraint : link.constraints) {
-            if (constraint.mode == Constraint::Mode::EXCLUDE) {
-                if (constraint.x.type == ConstraintParameter::Type::EQUAL)
-                    returnif (m_explicitLinkCoords.x + constraint.x.value == coords.x);
-                if (constraint.y.type == ConstraintParameter::Type::EQUAL)
-                    returnif (m_explicitLinkCoords.y + constraint.y.value == coords.y);
-            }
-        }
+        const auto& link = m_facilityData.interactiveLinks[m_interactiveLinksDone - 1u];
+        returnif (constraintsExclude(link.constraints, coords - m_originalLinkCoords));
 
-        // If all constraints are OK, create the facility
-        returnif (!inter->createRoomFacilityLinked(coords, m_grabbableFacilityID, m_explicitLinkCoords, m_facilityID));
+        // Create the associated facility (if any)
+        if (!link.facilityID.empty())
+            returnif (!m_inter.facilitiesCreate(coords, link.facilityID));
+
+        // Simply create the link
+        m_inter.facilityLinksInteractiveCreate(m_originalLinkCoords, m_facilityID, &link, coords);
     }
 
-    returnif (m_explicitLinksCount == 0u);
+    returnif (m_interactiveLinksCount == 0u);
 
     // Find and use next link info
-    if (m_explicitLinksDone < m_explicitLinksCount) {
-        ++m_explicitLinksDone;
-        const auto& link = getCurrentExplicitLink();
-        setGrabbableFacilityID(link.id);
+    if (m_interactiveLinksDone < m_interactiveLinksCount) {
+        const auto& link = m_facilityData.interactiveLinks[m_interactiveLinksDone];
+        if (!link.facilityID.empty())
+            setGrabbableFacilityID(link.facilityID);
+        ++m_interactiveLinksDone;
     }
 
     // If we did enough links, go back to the main
-    else if (m_explicitLinksDone == m_explicitLinksCount) {
-        m_explicitLinksDone = 0u;
+    else if (m_interactiveLinksDone == m_interactiveLinksCount) {
+        m_interactiveLinksDone = 0u;
         inter->resetPredictionLink();
         setGrabbableFacilityID(m_facilityID);
     }
-}
-
-const Link& FacilityGrabButton::getCurrentExplicitLink() const
-{
-    const Link* pLink = nullptr;
-    uint explicitLinkCount = 0u;
-
-    for (const auto& link : m_facilityData.links)
-        if (link.style == Link::Style::EXPLICIT)
-            if (++explicitLinkCount == m_explicitLinksDone)
-                pLink = &link;
-
-    return *pLink;
 }
 
 std::unique_ptr<scene::Grabbable> FacilityGrabButton::spawnGrabbable()

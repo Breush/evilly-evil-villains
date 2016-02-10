@@ -65,7 +65,7 @@ void ToolGrabButton::grabbableButtonPressed(scene::Entity* entity, const sf::Mou
             break;
 
         case ToolID::FACILITIES_REMOVER:
-            inter->removeRoomFacilities(interRelPos);
+            inter->facilitiesRemove(interRelPos);
             break;
     }
 }
