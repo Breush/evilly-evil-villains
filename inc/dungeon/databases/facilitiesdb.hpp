@@ -23,13 +23,19 @@ namespace dungeon
     struct FacilityData
     {
         std::wstring name = L"(Unknown)";               //!< Translated name.
-        bool entrance = false;                          //!< Does this facility provide an entry point to the dungeon.
+
         bool listed = true;                             //!< Is the facility constructible by the player?
+        bool entrance = false;                          //!< Does this facility provide an entry point to the dungeon.
         bool energetic = false;                         //!< Whether the facility can be controlled with energy.
+        bool permissive = false;                        //!< Can we destroy this facility to make space for others?
+
         Cost baseCost;                                  //!< Construction price.
+
         std::vector<FixedLink> fixedLinks;              //!< All the links that do not require player's intervention.
         std::vector<InteractiveLink> interactiveLinks;  //!< All the links that require player's intervention to position.
+
         std::vector<Constraint> constraints;            //!< Construction constraints (absolute).
+
         uint8 lock = RoomFlag::NONE;                    //!< What part of the room the facility blocks for access.
         uint8 hide = RoomFlag::NONE;                    //!< What part of the room the facility hides.
 

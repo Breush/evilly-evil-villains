@@ -153,8 +153,11 @@ namespace dungeon
          */
         RoomCoords roomNeighbourCoords(const RoomCoords& coords, Direction direction);
 
-        //! Gets the dosh contained in the treasure facility if any (returns 0u if no treasure facility).
+        //! Get the dosh contained in the treasure facility if any (returns 0u if no treasure facility).
         uint roomTreasureDosh(const RoomCoords& coords);
+
+        //! Get the full room lock, being the sum all facilities and trap.
+        uint8 roomLock(const RoomCoords& coords, bool withPermissive, bool withTrap) const;
 
         //! @}
 
@@ -192,6 +195,9 @@ namespace dungeon
         //! Remove all the facilities from the room specified.
         //! Will emit an event if a change occured.
         void facilitiesRemove(const RoomCoords& coords, bool evenStronglyLinked = false);
+
+        //! Remove all permissive facilities that are in the way of the room lock.
+        void facilitiesPermissiveRemoveLocking(const RoomCoords& coords, uint8 lock);
 
         //----- Links
 
@@ -253,6 +259,12 @@ namespace dungeon
         //--------------//
         //! @name Traps
         //! @{
+
+        //! Check if the trap is constructed and is the one specified.
+        bool trapIs(const RoomCoords& coords, const std::wstring& trapID) const;
+
+        //! Check if the current room lock allows us the construction of the trap.
+        bool trapSetValid(const RoomCoords& coords, const std::wstring& trapID) const;
 
         //! Set the trap of the specified room.
         //! Will emit an event if a change occured.

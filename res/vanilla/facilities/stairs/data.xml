@@ -2,7 +2,7 @@
 <facility id="stairs" trName="Stairs" lock="wall" hide="wall">
     <data name="baseCost" dosh="140" />
     <fixedLink id="1" facilityID="stairsFront" strong="true" relative="true" x="0" y="0" />
-    <interactiveLink id="0" facilityID="stairs" relink="true" relinkID="0">
+    <interactiveLink id="0" facilityID="stairs" relink="true">
         <constraint mode="exclude" x="0" />
         <constraint mode="exclude" y="0" />
     </link>

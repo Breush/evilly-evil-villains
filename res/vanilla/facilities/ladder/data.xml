@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <facility id="ladder" trName="Ladder" lock="wall">
     <data name="baseCost" dosh="10" />
-    <fixedLink id="0" facilityID="ladderExit" strong="true" permissive="true" relative="true" x="1" y="0" />
+    <fixedLink id="0" facilityID="ladderExit" strong="true" relative="true" x="1" y="0" />
 </facility>

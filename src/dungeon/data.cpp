@@ -630,6 +630,26 @@ void Data::updateRoomHide(const RoomCoords& coords)
     addEvent("room_hide_changed", coords);
 }
 
+uint8 Data::roomLock(const RoomCoords& coords, bool withPermissive, bool withTrap) const
+{
+    uint8 lock = RoomFlag::NONE;
+    const auto& roomInfo = room(coords);
+
+    // Facilities
+    for (const auto& facility : roomInfo.facilities)
+        if (withPermissive || !facility.common->permissive)
+            lock |= facility.common->lock;
+
+    // Trap
+    if (withTrap) {
+        const auto& trap = roomInfo.trap;
+        if (trap.data.exists())
+            lock |= trap.common->lock;
+    }
+
+    return lock;
+}
+
 //----------------------//
 //----- Facilities -----//
 
@@ -660,20 +680,11 @@ bool Data::createRoomFacilityValid(const RoomCoords& coords, const std::wstring&
 {
     returnif (!isRoomConstructed(coords)) false;
     returnif (hasFacility(coords, facilityID)) false;
-    const auto& selectedRoom = room(coords);
+
+    // Check lock validity
     const auto& facilityData = facilitiesDB().get(facilityID);
-
-    // Check if no other facilities block the construction
-    uint8 facilityLock = facilityData.lock;
-    for (const auto& facility : selectedRoom.facilities)
-        if ((facility.common->lock & facilityLock) != 0u)
-            return false;
-
-    // Check if the trap blocks the construction
-    const auto& trap = selectedRoom.trap;
-    if (trap.data.exists())
-        if ((trap.common->lock & facilityLock) != 0u)
-            return false;
+    auto facilityPrint = facilityData.lock & roomLock(coords, false, true);
+    returnif (facilityPrint != 0_u8) false;
 
     // Check againt absolute constraints for this facility
     return !constraintsExclude(facilityData.constraints, coords);
@@ -682,13 +693,17 @@ bool Data::createRoomFacilityValid(const RoomCoords& coords, const std::wstring&
 bool Data::facilitiesCreate(const RoomCoords& coords, const std::wstring& facilityID)
 {
     returnif (!createRoomFacilityValid(coords, facilityID)) false;
+    auto& roomInfo = room(coords);
+
+    // Remove permissive facilities that are in the way
+    const auto& facilityData = facilitiesDB().get(facilityID);
+    facilitiesPermissiveRemoveLocking(coords, facilityData.lock);
 
     // Facility creation, indeed
-    auto& roomInfo = room(coords);
     roomInfo.facilities.emplace_back();
     auto& facility = roomInfo.facilities.back();
     facility.data.create(facilityID);
-    facility.common = &facilitiesDB().get(facilityID);
+    facility.common = &facilityData;
     facility.coords = coords;
 
     addEvent("facility_changed", coords);
@@ -751,6 +766,17 @@ void Data::facilitiesRemove(const RoomCoords& coords, bool evenStronglyLinked)
     // Just be sure to recreate all incoming strong links
     if (!evenStronglyLinked)
         roomLinksIncomingStrongRecreateFacilities(coords);
+}
+
+void Data::facilitiesPermissiveRemoveLocking(const RoomCoords& coords, uint8 lock)
+{
+    auto& roomInfo = room(coords);
+    auto facilities = roomInfo.facilities;
+    for (auto& facility : facilities) {
+        if (!facility.common->permissive) continue;
+        if ((facility.common->lock & lock) == 0u) continue;
+        facilitiesRemove(coords, facility.data.type(), true);
+    }
 }
 
 //----- Links
@@ -951,23 +977,49 @@ void Data::addFacilityTunnel(FacilityInfo& facilityInfo, const sf::Vector2i& tun
 //-----------------//
 //----- Traps -----//
 
+bool Data::trapIs(const RoomCoords& coords, const std::wstring& trapID) const
+{
+    returnif (!isRoomConstructed(coords)) false;
+    auto& trapData = room(coords).trap.data;
+    return (trapData.exists() && trapData.type() == trapID);
+}
+
+bool Data::trapSetValid(const RoomCoords& coords, const std::wstring& trapID) const
+{
+    returnif (trapIs(coords, trapID)) false;
+
+    // Note: The previous trap does not block construction as it is going to be replaced
+    //       by the new one. However, we prevent changing traps if they are of the same type.
+
+    // Check lock validity
+    const auto& trapData = trapsDB().get(trapID);
+    auto trapPrint = trapData.lock & roomLock(coords, false, false);
+    returnif (trapPrint != 0_u8) false;
+
+    // TODO Check againt absolute constraints for this trap
+    // Well, when traps will have constraints
+    return true;
+}
+
 void Data::setRoomTrap(const RoomCoords& coords, const std::wstring& trapID)
 {
-    returnif (!isRoomConstructed(coords));
+    returnif (!trapSetValid(coords, trapID));
+    auto& trapInfo = room(coords).trap;
 
-    auto& roomInfo = room(coords);
-    returnif (roomInfo.trap.data.exists() && roomInfo.trap.data.type() == trapID);
+    // Remove permissive facilities that are in the way
+    auto& trapData = m_trapsDB.get(trapID);
+    facilitiesPermissiveRemoveLocking(coords, trapData.lock);
 
     // Destroy previous trap if any
-    roomInfo.trap.data.clear();
-    roomInfo.trap.barrier = false;
+    trapInfo.data.clear();
+    trapInfo.barrier = false;
 
     // And and set it to the new one
-    roomInfo.trap.data.create(trapID);
-    roomInfo.trap.common = &m_trapsDB.get(trapID);
+    trapInfo.data.create(trapID);
+    trapInfo.common = &m_trapsDB.get(trapID);
 
-    // TODO Have a setRoomTrapValid()
-    // that checks for the lock
+    // Changing the trap, some strongly linked facilities might be able to be recreated
+    roomLinksIncomingStrongRecreateFacilities(coords);
 
     addEvent("trap_changed", coords);
 }
@@ -979,6 +1031,9 @@ void Data::removeRoomTrap(const RoomCoords& coords)
     auto& roomInfo = room(coords);
     returnif (!roomInfo.trap.data.exists());
     roomInfo.trap.data.clear();
+
+    // Some strongly linked facilities might be able to be recreated
+    roomLinksIncomingStrongRecreateFacilities(coords);
 
     addEvent("trap_changed", coords);
 }

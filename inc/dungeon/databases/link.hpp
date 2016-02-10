@@ -16,13 +16,11 @@ namespace dungeon
         std::wstring originFacilityID;  //!< The facility that can create this link.
         bool unbreakable = false;       //!< Whether moving origin facility should destroy this link or not.
 
-        std::wstring facilityID;    //!< A facility to create (can be empty for none).
-        bool strong = false;        //!< If the origin facility is deleted, then the linked facility (if any) too.
-        bool permissive = false;    //!< Whether the linked facility (if any) does not block construction.
+        std::wstring facilityID;        //!< A facility to create (can be empty for none).
+        bool strong = false;            //!< If the origin facility is deleted, then the linked facility (if any) too.
 
         bool relink = false;            //!< Whether the linked facility (if any) has a link-back to the origin facility.
         uint relinkID = -1u;            //!< The link-back ID.
-        bool relinkFacilityID = false;  //!< The facilityID to use if link-backing.
     };
 
     //! Fixed link to a room.

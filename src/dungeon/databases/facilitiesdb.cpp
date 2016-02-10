@@ -58,6 +58,7 @@ void FacilitiesDB::add(const std::string& filename)
     facilityData.listed = facilityNode.attribute(L"listed").as_bool(true);
     facilityData.entrance = facilityNode.attribute(L"entrance").as_bool(false);
     facilityData.energetic = facilityNode.attribute(L"energetic").as_bool(false);
+    facilityData.permissive = facilityNode.attribute(L"permissive").as_bool(false);
     readRoomFlagsAttribute(facilityData.lock, facilityNode.attribute(L"lock"));
     readRoomFlagsAttribute(facilityData.hide, facilityNode.attribute(L"hide"));
     if (facilityData.listed) ++m_listedCount;
@@ -109,8 +110,6 @@ void FacilitiesDB::readLinkNode(Link& link, const pugi::xml_node& node)
 
     if (!link.facilityID.empty()) {
         link.strong = node.attribute(L"strong").as_bool();
-        link.permissive = node.attribute(L"permissive").as_bool();
-
         link.relink = node.attribute(L"relink").as_bool();
         link.relinkID = node.attribute(L"relinkID").as_uint(link.id);
     }
