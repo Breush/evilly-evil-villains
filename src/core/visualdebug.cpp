@@ -32,8 +32,10 @@ void VisualDebug::update(const sf::Time& dt)
         std::wstringstream str;
         str << L"FPS: " << m_renderedFrames << L" [" << m_renderedUpdates << L"]" << std::endl;
         str << L"Time factor: " << m_timeFactor << std::endl;
-        str << L"Average LTT (µs): " << m_logicTickTimeSum / m_renderedUpdates << std::endl;
-        str << L"Average RTT (µs): " << m_renderTickTimeSum / m_renderedFrames;
+        if (m_renderedUpdates != 0u)
+            str << L"Average LTT (µs): " << m_logicTickTimeSum / m_renderedUpdates << std::endl;
+        if (m_renderedFrames != 0u)
+            str << L"Average RTT (µs): " << m_renderTickTimeSum / m_renderedFrames;
         m_text.setString(str.str());
         updateBackgroundSize();
 
