@@ -187,11 +187,11 @@ namespace dungeon
         //! Remove the specified facility from the dungeon.
         //! This will also remove all strong links the facility had.
         //! Will emit an event if a change occured.
-        void facilitiesRemove(const RoomCoords& coords, const std::wstring& facilityID);
+        void facilitiesRemove(const RoomCoords& coords, const std::wstring& facilityID, bool evenStronglyLinked = false);
 
         //! Remove all the facilities from the room specified.
         //! Will emit an event if a change occured.
-        void facilitiesRemove(const RoomCoords& coords);
+        void facilitiesRemove(const RoomCoords& coords, bool evenStronglyLinked = false);
 
         //----- Links
 

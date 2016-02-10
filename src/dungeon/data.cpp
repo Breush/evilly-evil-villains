@@ -489,7 +489,7 @@ void Data::destroyRoom(const RoomCoords& coords)
     returnif (!isRoomConstructed(coords));
 
     // Clear elements
-    facilitiesRemove(coords);
+    facilitiesRemove(coords, true);
     removeRoomTrap(coords);
     removeRoomMonsters(coords);
 
@@ -703,13 +703,14 @@ bool Data::facilitiesCreate(const RoomCoords& coords, const std::wstring& facili
     return true;
 }
 
-void Data::facilitiesRemove(const RoomCoords& coords, const std::wstring& facilityID)
+void Data::facilitiesRemove(const RoomCoords& coords, const std::wstring& facilityID, bool evenStronglyLinked)
 {
     returnif (!isRoomConstructed(coords));
 
     auto& roomInfo = room(coords);
     auto pFacility = std::find_if(roomInfo.facilities, [facilityID] (const FacilityInfo& facilityInfo) { return facilityInfo.data.type() == facilityID; });
     returnif (pFacility == std::end(roomInfo.facilities));
+    returnif (!evenStronglyLinked && pFacility->stronglyLinked);
 
     bool dungeonChanged = pFacility->common->entrance;
     dungeonChanged |= !pFacility->tunnels.empty();
@@ -726,20 +727,29 @@ void Data::facilitiesRemove(const RoomCoords& coords, const std::wstring& facili
     if (dungeonChanged)     EventEmitter::addEvent("dungeon_changed");
     if (treasureChanged)    addEvent("treasure_changed", coords);
 
+    // Removing a facility could allow a strongly linked one to be recreated
+    if (!evenStronglyLinked)
+        roomLinksIncomingStrongRecreateFacilities(coords);
+
     updateRoomHide(coords);
 }
 
-void Data::facilitiesRemove(const RoomCoords& coords)
+void Data::facilitiesRemove(const RoomCoords& coords, bool evenStronglyLinked)
 {
     returnif (!isRoomConstructed(coords));
 
     // OPTIM The variable facilities here is a copy, so that progressive
-    // removals won't change that.
+    // removals won't change what's to remove.
     // A more optimized version could exist, but is it necessary?
     const auto& roomInfo = room(coords);
     const auto facilities = roomInfo.facilities;
     for (const auto& facility : facilities)
-        facilitiesRemove(coords, facility.data.type());
+        if (evenStronglyLinked || !facility.stronglyLinked)
+            facilitiesRemove(coords, facility.data.type(), true);
+
+    // Just be sure to recreate all incoming strong links
+    if (!evenStronglyLinked)
+        roomLinksIncomingStrongRecreateFacilities(coords);
 }
 
 //----- Links
@@ -775,7 +785,7 @@ void Data::facilityLinksStrongRemoveFacilities(FacilityInfo& facilityInfo)
     auto links = facilityInfo.links;
     for (auto& link : links)
         if (link.common->strong)
-            facilitiesRemove(link.coords, link.common->facilityID);
+            facilitiesRemove(link.coords, link.common->facilityID, true);
 }
 
 void Data::facilityLinksIncomingRemove(const RoomCoords& coords, const std::wstring& facilityID)
@@ -869,7 +879,7 @@ void Data::roomLinksIncomingStrongRemoveFacilities(const RoomCoords& coords)
     auto facilities = roomInfo.facilities;
     for (auto& facility : facilities)
         if (facility.stronglyLinked)
-            facilitiesRemove(facility.coords, facility.data.type());
+            facilitiesRemove(facility.coords, facility.data.type(), true);
 }
 
 void Data::roomLinksIncomingRemove(const RoomCoords& coords)
