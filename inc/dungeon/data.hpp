@@ -199,6 +199,11 @@ namespace dungeon
         //! Remove all permissive facilities that are in the way of the room lock.
         void facilitiesPermissiveRemoveLocking(const RoomCoords& coords, uint8 lock);
 
+        //----- Warnings
+
+        //! Send all the warnings.
+        void warningsSend(const std::vector<Warning>& warnings, const RoomCoords& coords, const std::string& eventType);
+
         //----- Links
 
         //! Add a link to a facility.

@@ -694,14 +694,19 @@ bool Data::facilitiesCreate(const RoomCoords& coords, const std::wstring& facili
 {
     returnif (!createRoomFacilityValid(coords, facilityID)) false;
     auto& roomInfo = room(coords);
+    const auto& facilityData = facilitiesDB().get(facilityID);
 
     // Note: This event needs to be before the permissive removals,
     //       so that it is correctly queued for dungeon::Inter
     //       (fixing a bug where the lua of ladder was not aware of the ladderExit removal)
     addEvent("facility_changed", coords);
 
+    // Send the warnings
+    // TODO Make a specific event for the warnings?
+    const auto& warnings = facilityData.warnings;
+    warningsSend(warnings, coords, "facility_changed");
+
     // Remove permissive facilities that are in the way
-    const auto& facilityData = facilitiesDB().get(facilityID);
     facilitiesPermissiveRemoveLocking(coords, facilityData.lock);
 
     // Facility creation, indeed
@@ -726,15 +731,19 @@ bool Data::facilitiesCreate(const RoomCoords& coords, const std::wstring& facili
 void Data::facilitiesRemove(const RoomCoords& coords, const std::wstring& facilityID, bool evenStronglyLinked)
 {
     returnif (!isRoomConstructed(coords));
+    auto& roomInfo = room(coords);
 
     // Note: This event needs to be before the incoming removals,
     //       so that it is correctly queued for dungeon::Inter
     addEvent("facility_changed", coords);
 
-    auto& roomInfo = room(coords);
     auto pFacility = std::find_if(roomInfo.facilities, [facilityID] (const FacilityInfo& facilityInfo) { return facilityInfo.data.type() == facilityID; });
     returnif (pFacility == std::end(roomInfo.facilities));
     returnif (!evenStronglyLinked && pFacility->stronglyLinked);
+
+    // Send the warnings
+    const auto& warnings = pFacility->common->warnings;
+    warningsSend(warnings, coords, "facility_changed");
 
     // Event checking
     bool dungeonChanged = pFacility->common->entrance;
@@ -784,6 +793,18 @@ void Data::facilitiesPermissiveRemoveLocking(const RoomCoords& coords, uint8 loc
         if (!facility.common->permissive) continue;
         if ((facility.common->lock & lock) == 0u) continue;
         facilitiesRemove(coords, facility.data.type(), true);
+    }
+}
+
+//----- Warnings
+
+void Data::warningsSend(const std::vector<Warning>& warnings, const RoomCoords& coords, const std::string& eventType)
+{
+    for (const auto& warning : warnings) {
+        RoomCoords warningCoords{sf::v2u8(warning.coords)};
+        if (warning.relative) warningCoords += coords;
+        if (coords.x >= m_floorsCount || coords.y >= m_floorRoomsCount) continue;
+        addEvent(eventType, warningCoords);
     }
 }
 

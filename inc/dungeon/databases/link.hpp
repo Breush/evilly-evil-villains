@@ -9,6 +9,13 @@
 
 namespace dungeon
 {
+    //! Specifies another room to warn when the element is created or destroyed.
+    struct Warning
+    {
+        bool relative = false;      //!< Whether the coordinates are specified in relative coordinates.
+        sf::Vector2<int8> coords;   //!< The coordinates of the room (relative or absolute).
+    };
+
     //! Common data for links to a room.
     struct Link
     {

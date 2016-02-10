@@ -85,7 +85,17 @@ void EventEmitter::addEvent(std::unique_ptr<Event> event, bool direct)
 
     // Add it to the broadcast list
     else {
-        // TODO Do not add it twice if event exists
+        // TODO Do not add it twice if event already exists in the list
+        // Be careful, though, because something like
+        //  - facility_changed 0 1
+        //  - room_destroyed 0 1
+        //  - room_created 0 1
+        //  - facility_changed 0 1
+        // Could drop the very useful last facility_changed
+        // Two possibilities :
+        //  - Drop the event if the last is the same (quick check and no problem with that)
+        //  - OR Move the event to the end. Leaving it with one copy but being sure the other things are done well before
+        //      (checking the list from the end would be the quickest)
         m_events.emplace_back(std::move(event));
     }
 }

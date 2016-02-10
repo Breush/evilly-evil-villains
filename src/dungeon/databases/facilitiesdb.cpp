@@ -70,6 +70,15 @@ void FacilitiesDB::add(const std::string& filename)
         if (name == L"baseCost")    readCostNode(facilityData.baseCost, dataNode);
     }
 
+    // Warnings
+    for (const auto& warningNode : facilityNode.children(L"warning")) {
+        Warning warning;
+        warning.relative = warningNode.attribute(L"relative").as_bool();
+        warning.coords.x = warningNode.attribute(L"x").as_int();
+        warning.coords.y = warningNode.attribute(L"y").as_int();
+        facilityData.warnings.emplace_back(std::move(warning));
+    }
+
     // Constraints
     for (const auto& constraintNode : facilityNode.children(L"constraint")) {
         Constraint constraint;
