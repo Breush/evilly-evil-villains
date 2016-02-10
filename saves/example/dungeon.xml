@@ -46,9 +46,7 @@
 	</trapsGenerics>
 	<floor pos="0">
 		<room pos="0" state="constructed">
-			<facility type="ladder">
-				<tunnel x="1" y="0" relative="true" />
-			</facility>
+			<facility type="ladder" />
 		</room>
 		<room pos="1" state="constructed">
 			<facility type="entrance" />
@@ -58,19 +56,19 @@
 			<facility type="entrance" />
 		</room>
 		<room pos="4" state="constructed">
-			<facility type="stairs" linkX="1" linkY="3">
+			<facility type="stairs">
 				<tunnel x="1" y="3" />
+				<link id="1" x="0" y="4" />
+				<link id="0" x="1" y="3" />
 			</facility>
-			<facility isLink="true" type="stairsFront" />
+			<facility stronglyLinked="true" type="stairsFront" />
 		</room>
 	</floor>
 	<floor pos="1">
 		<room pos="0" state="constructed">
 			<facility type="ladder">
 				<tunnel x="1" y="0" relative="true" />
-			</facility>
-			<facility type="ladderExit" isLink="true">
-				<tunnel x="-1" y="0" relative="true" />
+				<link id="0" x="2" y="0" />
 			</facility>
 		</room>
 		<room pos="1" state="void" />
@@ -80,30 +78,30 @@
 			</facility>
 		</room>
 		<room pos="3" state="constructed">
-			<facility type="stairs" linkX="0" linkY="4">
+			<facility type="stairs">
 				<tunnel x="0" y="4" />
+				<link id="1" x="1" y="3" />
+				<link id="0" relink="true" x="0" y="4" />
 			</facility>
-			<facility isLink="true" type="stairsFront" />
+			<facility stronglyLinked="true" type="stairsFront" />
 		</room>
 		<room pos="4" state="constructed" />
 	</floor>
 	<floor pos="2">
 		<room pos="0" state="constructed">
-			<facility type="ladderExit" isLink="true">
+			<facility stronglyLinked="true" type="ladderExit">
 				<tunnel x="-1" y="0" relative="true" />
 			</facility>
 		</room>
 		<room pos="1" state="constructed">
 			<trap type="pickpock">
-				<dosh type="uint32" value="0" />
+				<dosh type="uint32" value="30" />
 			</trap>
 		</room>
 		<room pos="2" state="constructed">
 			<facility type="ladder">
 				<tunnel x="1" y="0" relative="true" />
-			</facility>
-			<facility type="ladderExit" isLink="true">
-				<tunnel x="-1" y="0" relative="true" />
+				<link id="0" x="3" y="2" />
 			</facility>
 		</room>
 		<room pos="3" state="constructed" />
@@ -113,11 +111,11 @@
 		<room pos="0" state="void" />
 		<room pos="1" state="constructed">
 			<trap type="pickpock">
-				<dosh type="uint32" value="0" />
+				<dosh type="uint32" value="30" />
 			</trap>
 		</room>
 		<room pos="2" state="constructed">
-			<facility type="ladderExit" isLink="true">
+			<facility stronglyLinked="true" type="ladderExit">
 				<tunnel x="-1" y="0" relative="true" />
 			</facility>
 		</room>
@@ -127,6 +125,7 @@
 		<room pos="4" state="constructed">
 			<facility type="ladder">
 				<tunnel x="1" y="0" relative="true" />
+				<link id="0" x="4" y="4" />
 			</facility>
 		</room>
 	</floor>
@@ -140,7 +139,7 @@
 		</room>
 		<room pos="3" state="constructed" />
 		<room pos="4" state="constructed">
-			<facility type="ladderExit" isLink="true">
+			<facility stronglyLinked="true" type="ladderExit">
 				<tunnel x="-1" y="0" relative="true" />
 			</facility>
 		</room>
@@ -154,33 +153,23 @@
 			</trap>
 			<facility type="ladder">
 				<tunnel x="1" y="0" relative="true" />
-			</facility>
-			<facility type="ladderExit" isLink="true">
-				<tunnel x="-1" y="0" relative="true" />
+				<link id="0" x="6" y="2" />
 			</facility>
 		</room>
 		<room pos="3" state="void" />
-		<room pos="4" state="constructed">
-			<facility type="ladder">
-				<tunnel x="1" y="0" relative="true" />
-			</facility>
-		</room>
+		<room pos="4" state="constructed" />
 	</floor>
 	<floor pos="6">
 		<room pos="0" state="constructed" />
 		<room pos="1" state="constructed">
-			<facility type="smallChest" treasure="198" />
+			<facility treasure="198" type="smallChest" />
 		</room>
 		<room pos="2" state="constructed">
-			<facility type="ladderExit" isLink="true">
+			<facility stronglyLinked="true" type="ladderExit">
 				<tunnel x="-1" y="0" relative="true" />
 			</facility>
 		</room>
 		<room pos="3" state="constructed" />
-		<room pos="4" state="constructed">
-			<facility type="ladderExit" isLink="true">
-				<tunnel x="-1" y="0" relative="true" />
-			</facility>
-		</room>
+		<room pos="4" state="constructed" />
 	</floor>
 </dungeon>
