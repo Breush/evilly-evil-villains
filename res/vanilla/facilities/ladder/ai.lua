@@ -15,14 +15,12 @@
 function _reinit()
     -- Add a tunnel only if we have a ladderExit facility in the northern room
     eev_removeTunnels()
-    if eev_facilityExistsRelative(1, 0, "ladderExit") then
+    if eev_facilityExistsRelative(1, 0, "ladderExit") or eev_facilityExistsRelative(1, 0, "ladder") then
         eev_addTunnel(1, 0, true)
     end
 
-    -- Is this a double entry ladder or a simple one?
-    local double = eev_hasSiblingFacility("ladderExit")
-
     -- Set the correct visual given the graph link
+    local double = eev_facilityExistsRelative(-1, 0, "ladder")
     if double then
         eev_selectAnimation("exit_main")
     else
@@ -49,15 +47,6 @@ function _onEntityLeaveTunnel(UID)
     eev_setDepthUID(UID, 50)
     eev_setDetectActiveUID(UID, true)
     eev_setDetectVisibleUID(UID, true)
-end
-
--- Called whenever the linked facility is created
-function _onLinkCreated(ID)
-    -- TODO Be clever with those callbacks, creating and removing the tunnel
-end
-
--- Called whenever the linked facility is removed
-function _onLinkRemoved(ID)
 end
 
 -------------

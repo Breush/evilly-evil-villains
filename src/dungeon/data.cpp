@@ -268,8 +268,8 @@ void Data::loadDungeon(const std::wstring& file)
                 // Links
                 for (auto linkNode : facilityNode.children(L"link")) {
                     FacilityLink link;
-                    link.coords.x = linkNode.attribute(L"x").as_int();
-                    link.coords.y = linkNode.attribute(L"y").as_int();
+                    link.coords.x = linkNode.attribute(L"x").as_uint();
+                    link.coords.y = linkNode.attribute(L"y").as_uint();
                     link.relink = linkNode.attribute(L"relink").as_bool();
                     link.common = facility.common->linkFind(linkNode.attribute(L"id").as_uint());
                     facility.links.emplace_back(std::move(link));

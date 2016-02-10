@@ -678,17 +678,25 @@ void Inter::energySendPulseRoom(const RoomCoords& coords)
 
 Facility* Inter::facilitiesFind(const RoomCoords& coords, const std::wstring& facilityID)
 {
+    returnif (coords.x >= m_data->floorsCount()) nullptr;
+    returnif (coords.y >= m_data->floorRoomsCount()) nullptr;
+
     for (auto& facility : m_tiles[coords].facilities)
         if (facility->edata().type() == facilityID)
             return facility.get();
+
     return nullptr;
 }
 
 const Facility* Inter::facilitiesFind(const RoomCoords& coords, const std::wstring& facilityID) const
 {
+    returnif (coords.x >= m_data->floorsCount()) nullptr;
+    returnif (coords.y >= m_data->floorRoomsCount()) nullptr;
+
     for (const auto& facility : m_tiles.at(coords).facilities)
         if (facility->edata().type() == facilityID)
             return facility.get();
+
     return nullptr;
 }
 
