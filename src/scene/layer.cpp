@@ -42,35 +42,48 @@ void Layer::update(const sf::Time& dt, const float factor)
 
 void Layer::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    // No lights? Easy drawing.
-    if (!m_lightsOn) {
+    // Nothing? Direct drawing.
+    if (m_posteffects.empty() && !m_lightsOn) {
         target.setView(m_view);
         target.draw(m_root, states);
         return;
     }
 
-    // Normals prologue
-    m_lightSystem.normalsTargetClear();
-    m_lightSystem.normalsTargetSetView(m_internView);
+    // TODO Make lights a post effect!
+    // No lights? Easy drawing.
+    if (!m_lightsOn) {
+        m_tmpTarget.clear(sf::Color::Transparent);
+        m_tmpTarget.draw(m_root, states);
+    }
+    else {
+        // Normals prologue
+        m_lightSystem.normalsTargetClear();
+        m_lightSystem.normalsTargetSetView(m_internView);
 
-    // We keep an intermediate RenderTarget so that the lighting can affect only this layer
-    m_tmpTarget.clear(sf::Color::Transparent);
-    m_tmpTarget.setView(m_internView);
-    m_tmpTarget.draw(m_root, states);
+        // We keep an intermediate RenderTarget so that the lighting can affect only this layer
+        m_tmpTarget.clear(sf::Color::Transparent);
+        m_tmpTarget.setView(m_internView);
+        m_tmpTarget.draw(m_root, states);
 
-    // Normals epilogue
-    m_lightSystem.normalsTargetDisplay();
+        // Normals epilogue
+        m_lightSystem.normalsTargetDisplay();
 
-    // We are rendering within the effective view
-    m_lightSystem.render(m_internView, *m_unshadowShader, *m_lightOverShapeShader, *m_normalsShader);
+        // We are rendering within the effective view
+        m_lightSystem.render(m_internView, *m_unshadowShader, *m_lightOverShapeShader, *m_normalsShader);
 
-    // But we show the lighting sprite in {0.f, 0.f}
-    sf::Sprite lightSprite(m_lightSystem.getLightingTexture());
-    m_tmpTarget.setView(m_tmpTarget.getDefaultView());
-    m_tmpTarget.draw(lightSprite, m_lightRenderStates);
-    m_tmpTarget.display();
+        // But we show the lighting sprite in {0.f, 0.f}
+        sf::Sprite lightSprite(m_lightSystem.getLightingTexture());
+        m_tmpTarget.setView(m_tmpTarget.getDefaultView());
+        m_tmpTarget.draw(lightSprite, m_lightRenderStates);
+        m_tmpTarget.display();
+    }
 
-    // Draw to the final target
+    // Apply the post effects to the final target if any
+    for (const auto& posteffect : m_posteffects) {
+        posteffect->apply(m_tmpTarget, m_tmpTarget);
+        m_tmpTarget.display();
+    }
+
     sf::Sprite screenSprite(m_tmpTarget.getTexture());
     target.setView(m_basicView);
     target.draw(screenSprite);
@@ -113,6 +126,14 @@ void Layer::turnLights(bool on)
 {
     m_lightsOn = on;
     refreshLightSystem();
+}
+
+//------------------------//
+//----- Post-effects -----//
+
+void Layer::postEffectsAdd(std::unique_ptr<PostEffect>&& postEffect)
+{
+    m_posteffects.emplace_back(std::move(postEffect));
 }
 
 //-------------------//

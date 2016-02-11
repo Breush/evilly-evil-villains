@@ -4,6 +4,7 @@
 #include "core/application.hpp"
 #include "states/hub/main.hpp"
 #include "dungeon/detector.hpp"
+#include "scene/posteffects/bloom.hpp"
 #include "context/logger.hpp"
 #include "context/context.hpp"
 #include "context/worlds.hpp"
@@ -32,7 +33,9 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     auto& skyRoot =     scene().addLayer("SKY",     m_depthSky).root();
 
     // Dungeon lighting is on
-    scene().layer("DUNGEON").turnLights(true);
+    auto& dungeonLayer = scene().layer("DUNGEON");
+    dungeonLayer.turnLights(true);
+    // dungeonLayer.postEffectsAdd(std::make_unique<scene::Bloom>());
 
     // Dungeon data
     m_dungeonData.load(context::worlds.selected().folder);

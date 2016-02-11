@@ -1,6 +1,7 @@
 #pragma once
 
 #include "scene/entity.hpp"
+#include "scene/posteffects/posteffect.hpp"
 
 #include <SFML/Graphics/View.hpp>
 #include <ltbl/lighting/LightSystem.h>
@@ -86,6 +87,15 @@ namespace scene
         //! Enable the lighting rendering over the layer.
         //! All entities with the corresponding components will influence this.
         void turnLights(bool on);
+
+        //! @}
+
+        //---------------------//
+        //! @name Post-effects
+        //! @{
+
+        //! Add a post-effect to the list.
+        void postEffectsAdd(std::unique_ptr<PostEffect>&& postEffect);
 
         //! @}
 
@@ -223,6 +233,9 @@ namespace scene
         sf::Shader* m_normalsShader = nullptr;          //!< The normals shader.
 
         bool m_lightDebugFirstTime = true;  // FIXME Debug thing.
+
+        // Post effects
+        mutable std::vector<std::unique_ptr<PostEffect>> m_posteffects; //!< All the post effects to be applied.
 
     };
 }
