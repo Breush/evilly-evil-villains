@@ -37,10 +37,10 @@ namespace scene
         //! Resize and create all the textures if necessary.
         void prepareTextures(const sf::Vector2u& size);
 
-        //! Resize all the textures if necessary.
+        //! Applying the bright detection shader.
         void filterBright(sf::RenderTexture& out, const sf::RenderTexture& in);
 
-        //! Resize all the textures if necessary.
+        //! Applying the blur shader (multipass).
         void blurMultipass(RenderTextureArray& textures);
 
         //! Applying the blur shader.

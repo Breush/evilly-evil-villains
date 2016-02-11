@@ -4,7 +4,7 @@
 #include "core/application.hpp"
 #include "states/hub/main.hpp"
 #include "dungeon/detector.hpp"
-#include "scene/posteffects/bloom.hpp"
+#include "scene/posteffects/floomzig.hpp"
 #include "context/logger.hpp"
 #include "context/context.hpp"
 #include "context/worlds.hpp"
@@ -35,7 +35,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     // Dungeon lighting is on
     auto& dungeonLayer = scene().layer("DUNGEON");
     dungeonLayer.turnLights(true);
-    // dungeonLayer.postEffectsAdd(std::make_unique<scene::Bloom>());
+    dungeonLayer.postEffectsAdd(std::make_unique<scene::Floomzig>());
 
     // Dungeon data
     m_dungeonData.load(context::worlds.selected().folder);

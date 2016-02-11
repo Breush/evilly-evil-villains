@@ -41,6 +41,6 @@ namespace scene
     private:
 
         sf::VertexArray m_vertices; //!< The drawing rect.
-        mutable sf::RenderStates m_states;  //!< The states used for drawing.
+        sf::RenderStates m_states;  //!< The states used for drawing.
     };
 }
