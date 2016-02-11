@@ -22,12 +22,10 @@ DetectEntity::~DetectEntity()
 
 void DetectEntity::update(const sf::Time& dt, const float factor)
 {
-    uint32 UID;
-
     // Run callbacks which condition are met
     if (m_detectActive)
         for (const auto& signal : m_detectSignals)
-            if ((UID = signal.condition()) != -1u)
+            for (auto UID : signal.condition())
                 signal.callback(UID);
 
     baseClass::update(dt, factor);
@@ -47,12 +45,12 @@ DetectEntity::DetectCondition DetectEntity::interpretDetectCondition(const std::
             str << tokens[2u];
             float range;
             str >> range;
-            return [this, key, range] { return isInRange(key, range); };
+            return [this, key, range] { return inRangeUIDs(key, range); };
         }
     }
 
-    std::cerr << "ERROR: Cannot interpret condition '" << condition << "'." << std::endl;
-    return [] { return -1u; };
+    std::cerr << "[DetectEntity] ERROR: Cannot interpret condition '" << condition << "'." << std::endl;
+    return [] { return std::vector<UID_t>(); };
 }
 
 void DetectEntity::addDetectSignal(const std::string& key, const std::string& condition, DetectCallback callback)
@@ -68,7 +66,7 @@ void DetectEntity::removeDetectSignals()
     m_detectSignals.clear();
 }
 
-uint32 DetectEntity::isInRange(const std::string& key, float range) const
+std::vector<DetectEntity::UID_t> DetectEntity::inRangeUIDs(const std::string& key, float range) const
 {
-    return s_detector.isInRange(*this, key, m_detectRangeFactor * range);
+    return s_detector.inRangeUIDs(*this, key, m_detectRangeFactor * range);
 }

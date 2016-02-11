@@ -18,8 +18,9 @@ namespace dungeon
 
         friend class Detector;
 
-        using DetectCondition = std::function<uint32()>;
-        using DetectCallback = std::function<void(const uint32)>;
+        using UID_t = uint32;
+        using DetectCondition = std::function<std::vector<UID_t>()>;
+        using DetectCallback = std::function<void(const UID_t)>;
 
     public:
 
@@ -37,7 +38,7 @@ namespace dungeon
         //! @{
 
         //! The UID of the entity.
-        inline uint32 UID() const { return m_UID; }
+        inline UID_t UID() const { return m_UID; }
 
         //! Whether this entity is to be considered in signal checks.
         inline bool detectVisible() const { return m_detectVisible; }
@@ -79,7 +80,7 @@ namespace dungeon
         DetectCondition interpretDetectCondition(const std::string& key, const std::string& condition);
 
         //! Check if an entity with matching key is currently in range.
-        uint32 isInRange(const std::string& key, const float range) const;
+        std::vector<UID_t> inRangeUIDs(const std::string& key, const float range) const;
 
         //! Factor applied to all range checks.
         inline void setDetectRangeFactor(const float detectRangeFactor) { m_detectRangeFactor = detectRangeFactor; }
@@ -88,7 +89,7 @@ namespace dungeon
         inline float detectRangeFactor() const { return m_detectRangeFactor; }
 
         //! Set the UID of the entity, should be called by detector.
-        inline void setUID(uint32 inUID) { m_UID = inUID; }
+        inline void setUID(UID_t inUID) { m_UID = inUID; }
 
         //! @}
 
@@ -102,7 +103,7 @@ namespace dungeon
     private:
 
         //! The UID of the entity, will be defined by the detector.
-        uint32 m_UID = -1u;
+        UID_t m_UID = -1u;
 
         //! Signals to activate regularly.
         std::vector<DetectSignal> m_detectSignals;

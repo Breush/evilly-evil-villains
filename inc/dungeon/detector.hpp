@@ -23,7 +23,7 @@ namespace dungeon
     {
         friend class DetectEntity;
 
-        //! A lambda signature for loops.
+        using UID_t = uint32;
         using DetectionLambda = std::function<void(DetectEntity& entity, float distance)>;
 
     public:
@@ -39,10 +39,10 @@ namespace dungeon
         //! @{
 
         //! Find an entity with the corresponding UID.
-        DetectEntity* find(const uint32 UID);
+        DetectEntity* find(const UID_t UID);
 
         //! Find an entity with the corresponding UID.
-        const DetectEntity* find(const uint32 UID) const;
+        const DetectEntity* find(const UID_t UID) const;
 
         //! Apply a lambda for each entity in the range.
         void applyInRange(const sf::Vector2f& position, float range, DetectionLambda rangeEntityFunc);
@@ -57,7 +57,7 @@ namespace dungeon
 
         //! Check if there is an entity with matching key in range of the one specified.
         //! @return The UID of the entity detected, or -1u if none.
-        uint32 isInRange(const DetectEntity& entity, const std::string& key, const float range) const;
+        std::vector<UID_t> inRangeUIDs(const DetectEntity& entity, const std::string& key, const float range) const;
 
         //! @}
 
@@ -98,7 +98,7 @@ namespace dungeon
         std::vector<PendingAction> m_pendingActions;
 
         //! Remember the next UID to be set.
-        uint32 m_UIDGenerator = 0u;
+        UID_t m_UIDGenerator = 0u;
     };
 
     //! Global detector.

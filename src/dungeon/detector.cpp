@@ -29,32 +29,31 @@ void Detector::removeEntity(DetectEntity& entity)
 //---------------------//
 //----- Detection -----//
 
-DetectEntity* Detector::find(const uint32 UID)
+DetectEntity* Detector::find(const UID_t UID)
 {
     for (auto& pEntity : m_entities)
         if (pEntity->UID() == UID)
             return pEntity;
-
-    // Not found
     return nullptr;
 }
 
-const DetectEntity* Detector::find(const uint32 UID) const
+const DetectEntity* Detector::find(const UID_t UID) const
 {
     for (const auto& pEntity : m_entities)
         if (pEntity->UID() == UID)
             return pEntity;
-
-    // Not found
     return nullptr;
 }
 
-uint32 Detector::isInRange(const DetectEntity& entity, const std::string& key, const float range) const
+std::vector<Detector::UID_t> Detector::inRangeUIDs(const DetectEntity& entity, const std::string& key, const float range) const
 {
+    std::vector<Detector::UID_t> UIDs;
+
     // Range squared
     const auto sqRange = range * range;
 
     // Check if any in range for all corresponding key
+    // OPTIM Think about implementing a QuadTree for the DetectEntities
     const auto& position = entity.localPosition();
     for (const auto& pEntity : m_entities) {
         if (!pEntity->detectVisible()) continue;
@@ -63,10 +62,10 @@ uint32 Detector::isInRange(const DetectEntity& entity, const std::string& key, c
         const auto distance = position - pEntity->localPosition();
         const auto sqDistance = distance.x * distance.x + distance.y * distance.y;
         if (sqDistance <= sqRange)
-            return pEntity->UID();
+            UIDs.emplace_back(pEntity->UID());
     }
 
-    return -1u;
+    return UIDs;
 }
 
 void Detector::applyInRange(const sf::Vector2f& position, float range, DetectionLambda rangeEntityFunc)
