@@ -49,13 +49,16 @@ void Inter::init()
 {
     m_effecter.init();
 
+    // Inner walls
+    innerWallsVariantsLoad();
+
     // Outer walls
     m_voidBackground.setTexture(&context::context.textures.get("core/dungeon/inter/void_room"));
     m_outerWalls[0].setTexture(&context::context.textures.get("core/dungeon/inter/outer_wall_west"));
     m_outerWalls[1].setTexture(&context::context.textures.get("core/dungeon/inter/outer_wall_east"));
 
     // Ref size
-    m_refRoomSize = sf::v2f(context::context.textures.get("core/dungeon/inter/inner_wall").getSize());
+    m_refRoomSize = sf::v2f(context::context.textures.get("core/dungeon/inter/void_room").getSize());
 }
 
 //-------------------//
@@ -352,6 +355,22 @@ void Inter::clearTiles()
     m_tiles.clear();
     m_selectedTile = nullptr;
     m_hoveredTile = nullptr;
+}
+
+void Inter::innerWallsVariantsLoad()
+{
+    // FIXME Make and use
+    m_innerWallsVariants.emplace_back("core/dungeon/inter/inner_walls/1");
+    m_innerWallsVariants.emplace_back("core/dungeon/inter/inner_walls/2");
+}
+
+const std::string& Inter::innerWallsVariant(const RoomCoords& coords)
+{
+    auto variantsCount = m_innerWallsVariants.size();
+    auto seed = std::hash<std::wstring>()(m_data->name()) + coords.y * m_data->floorsCount() + coords.x;
+    seed = 214013 * seed + 2531011;
+    seed = (seed >> 16) & 0x7FFF;
+    return m_innerWallsVariants[seed % variantsCount];
 }
 
 //-------------------------//
@@ -995,7 +1014,7 @@ void Inter::refreshTileLayers(const RoomCoords& coords)
     }
 
     // Add room textures if not hidden
-    if (!(room.hide & RoomFlag::WALL))  addLayer(coords, "core/dungeon/inter/inner_wall", 100.f);
+    if (!(room.hide & RoomFlag::WALL))  addLayer(coords, innerWallsVariant(coords), 100.f);
     if (!(room.hide & RoomFlag::FLOOR)) addLayer(coords, "core/dungeon/inter/floor", 75.f);
 
     if (!m_data->isRoomConstructed(m_data->roomNeighbourCoords(coords, EAST)))

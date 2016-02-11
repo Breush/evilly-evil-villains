@@ -357,6 +357,12 @@ namespace dungeon
         //! Remove all tiles.
         void clearTiles();
 
+        //! Load all inner walls variants.
+        void innerWallsVariantsLoad();
+
+        //! Get the textureID of the inner walls variant.
+        const std::string& innerWallsVariant(const RoomCoords& coords);
+
         //! @}
 
         //----------------------//
@@ -455,6 +461,7 @@ namespace dungeon
         sf::Vector2f m_refRoomSize;                     //!< The original room size.
 
         // Decorum
+        std::vector<std::string> m_innerWallsVariants;      //!< The list of all inner walls variants texturesID.
         std::array<sf::RectangleShape, 2u> m_outerWalls;    //!< Sprites for left/right outer walls.
         sf::RectangleShape m_voidBackground;                //!< The void background of each room.
 
