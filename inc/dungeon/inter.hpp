@@ -111,6 +111,9 @@ namespace dungeon
         //! Set the prediction overlay to a facility.
         void setPredictionFacility(const sf::Vector2f& relPos, const std::wstring& facilityID);
 
+        //! Set the prediction overlay to a trap.
+        void setPredictionTrap(const sf::Vector2f& relPos, const std::wstring& trapID);
+
         //! Remove the current link prediction.
         void resetPredictionLink();
 

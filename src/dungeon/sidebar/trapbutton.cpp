@@ -13,23 +13,42 @@ using namespace dungeon;
 //----------------------//
 //----- GrabButton -----//
 
-TrapGrabButton::TrapGrabButton(const std::wstring& text, std::wstring trapID)
-    : m_trapID(std::move(trapID))
+TrapGrabButton::TrapGrabButton(const std::wstring& text, std::wstring trapID, Inter& inter)
+    : m_inter(inter)
+    , m_trapID(std::move(trapID))
 {
     set(text, toString(L"vanilla/traps/" + m_trapID + L"/icon"));
 }
 
-void TrapGrabButton::grabbableButtonReleased(scene::Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
+void TrapGrabButton::grabbableMoved(scene::Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f&)
 {
-    returnif (button != sf::Mouse::Left);
-    graph()->removeGrabbable();
+    sf::Vector2f interRelPos(relPos);
+    returnif (entity == nullptr);
+    auto inter = entity->findParent<Inter>(interRelPos);
+
+    if (inter == nullptr) {
+        m_inter.resetPrediction();
+        return;
+    }
+
+    m_inter.setPredictionTrap(interRelPos, m_trapID);
+}
+
+void TrapGrabButton::grabbableButtonPressed(scene::Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f&)
+{
+    // If right button, deselect
+    if (button == sf::Mouse::Right) {
+        m_inter.resetPrediction();
+        graph()->removeGrabbable();
+        return;
+    }
 
     // Forward to dungeon::Inter if it is below
     sf::Vector2f interRelPos(relPos);
     returnif (entity == nullptr);
     auto inter = entity->findParent<Inter>(interRelPos);
     returnif (inter == nullptr);
-    inter->setRoomTrap(interRelPos, m_trapID);
+    m_inter.setRoomTrap(interRelPos, m_trapID);
 }
 
 std::unique_ptr<scene::Grabbable> TrapGrabButton::spawnGrabbable()

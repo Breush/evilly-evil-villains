@@ -184,7 +184,7 @@ void Sidebar::refreshTabTrapsContent()
     for (const auto& trapGenericPair : trapsGenerics) {
         if (!trapGenericPair.second.unlocked) continue;
         const auto& trapID = trapGenericPair.first;
-        trapsButtons.emplace_back(std::make_unique<TrapGrabButton>(trapGenericPair.second.common->name, trapID));
+        trapsButtons.emplace_back(std::make_unique<TrapGrabButton>(trapGenericPair.second.common->name, trapID, m_inter));
         auto& trapButton = *trapsButtons.back();
         trapsStacker.stackBack(trapButton);
     }

@@ -12,6 +12,10 @@
 
 namespace dungeon
 {
+    // Forward declarations
+
+    class Inter;
+
     //! A TrapGrabbable spawner.
     /*!
      *  Implements the scene::GrabbableSpawner for a dungeon trap.
@@ -25,7 +29,7 @@ namespace dungeon
     public:
 
         //! Constructor, affecting texture and look.
-        TrapGrabButton(const std::wstring& text, std::wstring trapID);
+        TrapGrabButton(const std::wstring& text, std::wstring trapID, Inter& inter);
 
         //! Default destructor.
         ~TrapGrabButton() = default;
@@ -36,15 +40,18 @@ namespace dungeon
         //! @name Spawn and react
         //! @{
 
-        void grabbableButtonReleased(scene::Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
+        void grabbableMoved(scene::Entity* entity, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
+        void grabbableButtonPressed(scene::Entity* entity, const sf::Mouse::Button button, const sf::Vector2f& relPos, const sf::Vector2f& nuiPos) final;
         std::unique_ptr<scene::Grabbable> spawnGrabbable() final;
 
         //! @}
 
     private:
 
-        std::string m_imageTextureID;    //!< The texture of the grabbable and button.
-        std::wstring m_trapID;      //!< The trap to be constructed in the dungeon inter.
+        Inter& m_inter; //!< Reference to the dungeon inter.
+
+        std::string m_imageTextureID;   //!< The texture of the grabbable and button.
+        std::wstring m_trapID;          //!< The trap to be constructed in the dungeon inter.
     };
 
     //! A trap temporary object.

@@ -512,7 +512,7 @@ void Inter::resetPrediction()
     m_predictionSprite.setVisible(false);
 }
 
-// TODO These two functions setPredictionXXX can definitely be factorized
+// TODO These three functions setPredictionXXX can definitely be factorized
 
 void Inter::setPredictionMonster(const sf::Vector2f& relPos, const std::wstring& monsterID)
 {
@@ -547,6 +547,25 @@ void Inter::setPredictionFacility(const sf::Vector2f& relPos, const std::wstring
     m_predictionSprite.setLocalPosition(rPosition * tileSize());
 
     if (m_data->createRoomFacilityValid(roomCoordsFromPosition(relPos), facilityID))
+        m_predictionSprite.setTiltColor({119u, 192u, 119u, 200u});
+    else
+        m_predictionSprite.setTiltColor({192u, 119u, 119u, 200u});
+}
+
+void Inter::setPredictionTrap(const sf::Vector2f& relPos, const std::wstring& trapID)
+{
+    if (m_predictionID != trapID) {
+        m_predictionID = trapID;
+        m_predictionSprite.load(toString(L"vanilla/traps/" + trapID + L"/anim"));
+        m_predictionSprite.setVisible(true);
+    }
+
+    auto rPosition = relPos / tileSize();
+    rPosition.x = std::floor(rPosition.x) + 0.5f;
+    rPosition.y = std::floor(rPosition.y) + 0.5f;
+    m_predictionSprite.setLocalPosition(rPosition * tileSize());
+
+    if (m_data->trapSetValid(roomCoordsFromPosition(relPos), trapID))
         m_predictionSprite.setTiltColor({119u, 192u, 119u, 200u});
     else
         m_predictionSprite.setTiltColor({192u, 119u, 119u, 200u});
