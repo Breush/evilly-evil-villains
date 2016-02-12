@@ -29,12 +29,17 @@ void Scene::update(const sf::Time& dt, const float factor)
 
     // Smooth moving
     if (std::abs(m_moveVelocity.x) >= 0.01f || std::abs(m_moveVelocity.y) >= 0.01f) {
-        sf::Vector2f offset;
-
-        offset += m_moveVelocity;
+        m_moveOffset += m_moveVelocity;
         m_moveVelocity -= dt.asSeconds() * m_moveFriction * m_moveVelocity;
 
-        m_refView.move(offset);
+        auto movePixelSize = m_refView.getSize() / m_effectiveDisplay;
+        sf::Vector2f moveOffsetReal;
+        moveOffsetReal.x = movePixelSize.x * std::round(m_moveOffset.x / movePixelSize.x);
+        moveOffsetReal.y = movePixelSize.y * std::round(m_moveOffset.y / movePixelSize.y);
+
+        // Moving only to pixel-perfect to reduce image shaking
+        m_moveOffset -= moveOffsetReal;
+        m_refView.move(moveOffsetReal);
         adaptViewPosition();
     }
 }
@@ -189,16 +194,17 @@ void Scene::adaptViewPosition()
 {
     const auto& viewHalfSize = m_refView.getSize() / 2.f;
     const auto& viewCenter = m_refView.getCenter();
+    auto topLeft = viewCenter - viewHalfSize;
+    auto botRight = viewCenter + viewHalfSize;
 
-    const auto offLeft = (viewCenter.x - viewHalfSize.x);
-    const auto offRight = (viewCenter.x + viewHalfSize.x) - m_size.x;
+    // Make it stay in the range
+    const auto& offLeft = topLeft.x;
+    const auto& offRight = botRight.x - m_size.x;
+    const auto& offTop = topLeft.y;
+    const auto& offBottom = botRight.y - m_size.y;
 
     if (offLeft < 0.f) m_refView.move(-offLeft, 0.f);
     else if (offRight > 0.f) m_refView.move(-offRight, 0.f);
-
-    const auto offTop = (viewCenter.y - viewHalfSize.y);
-    const auto offBottom = (viewCenter.y + viewHalfSize.y) - m_size.y;
-
     if (offTop < 0.f) m_refView.move(0.f, -offTop);
     else if (offBottom > 0.f) m_refView.move(0.f, -offBottom);
 
@@ -226,16 +232,21 @@ void Scene::updateReferenceMinMax()
 {
     const auto& viewport = (m_ownViewport)? m_viewport : context::context.windowInfo.viewport;
     const auto& screenSize = context::context.windowInfo.screenSize;
-    sf::Vector2f viewportSize{viewport.width * screenSize.x, viewport.height * screenSize.y};
 
-    auto viewRatio = viewportSize.x / viewportSize.y;
+    m_effectiveDisplay = {viewport.width * screenSize.x, viewport.height * screenSize.y};
+
+    auto viewRatio = m_effectiveDisplay.x / m_effectiveDisplay.y;
     auto layerRatio = m_size.x / m_size.y;
 
     // The view reference size is the maximum valid size that
     // does not show anything beyond what displayRect tells.
     sf::Vector2f viewRefSize;
-    if (viewRatio < layerRatio) viewRefSize = viewportSize * m_size.y / viewportSize.y;
-    else viewRefSize = viewportSize * m_size.x / viewportSize.x;
+    if (viewRatio < layerRatio) viewRefSize = m_effectiveDisplay * m_size.y / m_effectiveDisplay.y;
+    else viewRefSize = m_effectiveDisplay * m_size.x / m_effectiveDisplay.x;
+
+    /* TODO Is it useful to prevent shaking?*/
+    viewRefSize.x = std::round(viewRefSize.x);
+    viewRefSize.y = std::round(viewRefSize.y);
 
     m_minSize = m_minZoom * viewRefSize;
     m_maxSize = m_maxZoom * viewRefSize;

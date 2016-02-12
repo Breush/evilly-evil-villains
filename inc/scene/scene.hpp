@@ -188,9 +188,11 @@ namespace scene
         // Smooth moving
         sf::Vector2f m_moveVelocity;    //!< The force to move the view.
         const float m_moveFriction;     //!< Resistance of moving the view.
+        sf::Vector2f m_moveOffset;      //!< The current offset to move.
 
         // Viewports
-        bool m_ownViewport = false; //!< Whether or not we use a provided viewport.
-        sf::FloatRect m_viewport;   //!< The provided viewport if any.
+        bool m_ownViewport = false;         //!< Whether or not we use a provided viewport.
+        sf::FloatRect m_viewport;           //!< The provided viewport if any.
+        sf::Vector2f m_effectiveDisplay;    //!< Effective display of the scene.
     };
 }
