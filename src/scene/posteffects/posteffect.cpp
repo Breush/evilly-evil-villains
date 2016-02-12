@@ -11,14 +11,12 @@ PostEffect::PostEffect()
     m_vertices[1u].texCoords = {1.f, 1.f};
     m_vertices[2u].texCoords = {0.f, 0.f};
     m_vertices[3u].texCoords = {1.f, 0.f};
-
-    m_states.blendMode = sf::BlendNone;
 }
 
 //-----------------//
 //----- Tools -----//
 
-void PostEffect::shaderize(sf::RenderTarget& out, const sf::Shader& shader)
+void PostEffect::shaderize(sf::RenderTarget& out, const sf::Shader& shader, sf::BlendMode blendMode)
 {
     auto size = sf::v2f(out.getSize());
     m_vertices[0u].position = {0.f, 0.f};
@@ -27,6 +25,7 @@ void PostEffect::shaderize(sf::RenderTarget& out, const sf::Shader& shader)
     m_vertices[3u].position = size;
 
     m_states.shader = &shader;
+    m_states.blendMode = blendMode;
 
     out.draw(m_vertices, m_states);
 }

@@ -34,7 +34,7 @@ namespace scene
         //! @{
 
         //! Apply a shader to the whole target.
-        void shaderize(sf::RenderTarget& out, const sf::Shader& shader);
+        void shaderize(sf::RenderTarget& out, const sf::Shader& shader, sf::BlendMode blendMode = sf::BlendNone);
 
         //! @}
 

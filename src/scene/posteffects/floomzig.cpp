@@ -22,7 +22,6 @@ void Floomzig::apply(sf::RenderTarget& out, const sf::RenderTexture& in)
     prepareTextures(in.getSize());
 
     // Note: we need the temporary target because out could be our in
-    // TODO No use of sobel texture so far
     sobel(m_sobelTexture, in);
     m_sobelTexture.display();
 

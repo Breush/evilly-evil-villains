@@ -5,6 +5,7 @@
 #include "states/hub/main.hpp"
 #include "dungeon/detector.hpp"
 #include "scene/posteffects/floomzig.hpp"
+#include "scene/posteffects/motionblur.hpp"
 #include "context/logger.hpp"
 #include "context/context.hpp"
 #include "context/worlds.hpp"
@@ -36,6 +37,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     auto& dungeonLayer = scene().layer("DUNGEON");
     dungeonLayer.turnLights(true);
     dungeonLayer.postEffectsAdd(std::make_unique<scene::Floomzig>());
+    dungeonLayer.postEffectsAdd(std::make_unique<scene::MotionBlur>());
 
     // Dungeon data
     m_dungeonData.load(context::worlds.selected().folder);
