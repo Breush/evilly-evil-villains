@@ -244,10 +244,6 @@ void Scene::updateReferenceMinMax()
     if (viewRatio < layerRatio) viewRefSize = m_effectiveDisplay * m_size.y / m_effectiveDisplay.y;
     else viewRefSize = m_effectiveDisplay * m_size.x / m_effectiveDisplay.x;
 
-    /* TODO Is it useful to prevent shaking?*/
-    viewRefSize.x = std::round(viewRefSize.x);
-    viewRefSize.y = std::round(viewRefSize.y);
-
     m_minSize = m_minZoom * viewRefSize;
     m_maxSize = m_maxZoom * viewRefSize;
 
