@@ -8,6 +8,7 @@
 #include "tools/debug.hpp"
 #include "tools/event.hpp"
 #include "tools/tools.hpp"
+#include "tools/filesystem.hpp"
 #include "tools/platform-fixes.hpp" // make_unique
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -359,9 +360,13 @@ void Inter::clearTiles()
 
 void Inter::innerWallsVariantsLoad()
 {
-    // FIXME Make and use
-    m_innerWallsVariants.emplace_back("core/dungeon/inter/inner_walls/1");
-    m_innerWallsVariants.emplace_back("core/dungeon/inter/inner_walls/2");
+    m_innerWallsVariants.clear();
+    for (const auto& fileInfo : listFiles("res/core/dungeon/inter/inner_walls", false)) {
+        if (fileInfo.isDirectory) continue;
+        if (fileExtension(fileInfo.name) != "png") continue;
+        if (fileInfo.name.find("_NORMALS") != std::string::npos) continue;
+        m_innerWallsVariants.emplace_back(context::context.textures.getID(fileInfo.fullName));
+    }
 }
 
 const std::string& Inter::innerWallsVariant(const RoomCoords& coords)
