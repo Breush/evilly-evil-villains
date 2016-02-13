@@ -608,6 +608,7 @@ void Inter::constructRoom(const RoomCoords& coords, bool free)
 {
     returnif (m_data->isRoomConstructed(coords));
     returnif (m_tiles[coords].movingLocked);
+    returnif (!m_tiles[coords].facilityLocks.empty());
 
     if (!free) returnif (!villain().doshWallet.sub(m_data->onConstructRoomCost));
 
@@ -619,6 +620,7 @@ void Inter::destroyRoom(const RoomCoords& coords, bool loss)
 {
     returnif (!m_data->isRoomConstructed(coords));
     returnif (m_tiles[coords].movingLocked);
+    returnif (!m_tiles[coords].facilityLocks.empty());
 
     if (!loss) {
         uint gainedDosh = m_data->onDestroyRoomGain;
@@ -642,12 +644,14 @@ bool Inter::pushRoom(const RoomCoords& coords, Direction direction, uint animati
     // if none, it's impossible to move the rooms
     auto voidCoords = coords;
     while (m_data->isRoomConstructed(voidCoords)) {
-        returnif (m_tiles[voidCoords].movingLocked) false;
+        const auto& tile = m_tiles[voidCoords];
+        returnif (tile.movingLocked || !tile.facilityLocks.empty()) false;
         voidCoords = m_data->roomNeighbourCoords(voidCoords, direction);
     }
 
     returnif (voidCoords.x >= floorsCount)  false;
     returnif (voidCoords.y >= floorRoomsCount) false;
+    returnif (!m_tiles[voidCoords].facilityLocks.empty()) false;
     returnif (coords == voidCoords) true;
 
     // The velocity is the offset to go each second
@@ -809,14 +813,33 @@ void Inter::facilityLinksAdd(const RoomCoords& coords, const std::wstring& facil
     m_data->facilityLinksAdd(coords, facilityID, nullptr, linkCoords);
 }
 
+//----- Treasure
+
 void Inter::setRoomFacilityTreasure(const RoomCoords& coords, const std::wstring& facilityID, uint32 amount)
 {
     m_data->setRoomFacilityTreasure(coords, facilityID, amount);
 }
 
+//----- Barrier
+
 void Inter::setRoomFacilityBarrier(const RoomCoords& coords, const std::wstring& facilityID, bool activated)
 {
     m_data->setRoomFacilityBarrier(coords, facilityID, activated);
+}
+
+//----- Room locks
+
+void Inter::facilityRoomLocksClear(const RoomCoords& coords, const std::wstring& facilityID)
+{
+    auto facilityHash = std::hash<std::wstring>()(facilityID) ^ std::hash<RoomCoords>()(coords);
+    for (auto& tile : m_tiles)
+        std::erase_if(tile.second.facilityLocks, [facilityHash] (const FacilityLock& lock) { return lock == facilityHash; });
+}
+
+void Inter::facilityRoomLocksAdd(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& lockingCoords)
+{
+    auto facilityHash = std::hash<std::wstring>()(facilityID) ^ std::hash<RoomCoords>()(coords);
+    m_tiles[lockingCoords].facilityLocks.emplace_back(facilityHash);
 }
 
 //-----------------//

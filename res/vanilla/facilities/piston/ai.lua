@@ -37,6 +37,7 @@ function _reinit()
     direction = eev_initEmptyDataU32("direction", NORTH)
 
     refreshDisplay(true)
+    refreshRoomLocking()
 end
 
 -- Called once on object creation
@@ -112,19 +113,15 @@ end
 function activatePiston()
     if on then return end
 
+    local x, y
     local success = false
-    local x = eev_getCurrentRoomX()
-    local y = eev_getCurrentRoomY()
-
-    if direction == NORTH then      success = eev_dungeonPushRoom(x + 1, y, "north", 500)
-    elseif direction == SOUTH then  success = eev_dungeonPushRoom(x - 1, y, "south", 500)
-    elseif direction == WEST then   success = eev_dungeonPushRoom(x, y - 1, "west", 500)
-    elseif direction == EAST then   success = eev_dungeonPushRoom(x, y + 1, "east", 500)
-    end
+    x, y = roomFront()
+    success = eev_dungeonPushRoom(x, y, directionString(), 500)
 
     if not success then return end
     on = eev_setDataBool("on", true)
     refreshDisplay(false)
+    refreshRoomLocking()
 end
 
 -- If the piston is on, turn it off
@@ -136,6 +133,7 @@ function deactivatePiston()
 
     on = eev_setDataBool("on", false)
     refreshDisplay(false)
+    refreshRoomLocking()
 end
 
 -- Turn the piston clockwise
@@ -152,10 +150,34 @@ function orientPiston()
     -- Deactivate the piston
     on = eev_setDataBool("on", false)
     refreshDisplay(true)
+    refreshRoomLocking()
 end
 
--------------
--- Display --
+-- Find the coordinates of the room in front of the piston
+function roomFront()
+    local x = eev_getCurrentRoomX()
+    local y = eev_getCurrentRoomY()
+
+    if direction == NORTH then      x = x + 1
+    elseif direction == SOUTH then  x = x - 1
+    elseif direction == WEST then   y = y - 1
+    elseif direction == EAST then   y = y + 1
+    end
+
+    return x, y
+end
+
+-- Convert the current direction to a string
+function directionString()
+    if direction == NORTH then      return "north"
+    elseif direction == SOUTH then  return "south"
+    elseif direction == WEST then   return "west"
+    elseif direction == EAST then   return "east"
+    end
+end
+
+---------------
+-- Refreshes --
 
 function refreshDisplay(forward)
     if direction == NORTH then
@@ -178,5 +200,15 @@ function refreshDisplay(forward)
 
     if forward then
         eev_forwardAnimation(0.5)
+    end
+end
+
+function refreshRoomLocking()
+    eev_roomLocksClear()
+
+    if on then
+        local x, y
+        x, y = roomFront()
+        eev_roomLocksAdd(x, y)
     end
 end

@@ -49,6 +49,10 @@ Facility::Facility(const RoomCoords& coords, ElementData& edata, dungeon::Inter&
     lua()["eev_hasBarrier"] = [this] { return lua_hasBarrier(); };
     lua()["eev_setBarrier"] = [this] (bool activated) { lua_setBarrier(activated); };
 
+    // Room locks
+    lua()["eev_roomLocksClear"] = [this] () { lua_roomLocksClear(); };
+    lua()["eev_roomLocksAdd"] = [this] (const uint x, const uint y) { lua_roomLocksAdd(x, y); };
+
     // Lighting
     lua()["eev_lightAddPoint"] = [this] (lua_Number x, lua_Number y, lua_Number s) { return lua_lightAddPoint(x, y, s); };
     lua()["eev_lightSetColor"] = [this] (uint32 lightID, uint r, uint g, uint b) { return lua_lightSetColor(lightID, r, g, b); };
@@ -64,6 +68,10 @@ Facility::~Facility()
 {
     // Might not exist
     removeComponent<scene::LightEmitter>();
+
+    // Remove all our locks
+    if (m_facilityInfo != nullptr)
+        m_inter.facilityRoomLocksClear(m_coords, m_facilityInfo->data.type());
 }
 
 //------------------------//
@@ -71,6 +79,9 @@ Facility::~Facility()
 
 void Facility::bindFacilityInfo(FacilityInfo& facilityInfo)
 {
+    if (m_facilityInfo != nullptr)
+        m_inter.facilityRoomLocksClear(m_coords, m_facilityInfo->data.type());
+
     m_facilityInfo = &facilityInfo;
 
     // Lua update
@@ -188,6 +199,19 @@ bool Facility::lua_hasBarrier() const
 void Facility::lua_setBarrier(bool activated)
 {
     m_inter.setRoomFacilityBarrier(m_coords, m_elementID, activated);
+}
+
+//----- Room locks
+
+void Facility::lua_roomLocksClear()
+{
+    m_inter.facilityRoomLocksClear(m_coords, m_facilityInfo->data.type());
+}
+
+void Facility::lua_roomLocksAdd(const uint x, const uint y)
+{
+    RoomCoords lockingCoords{static_cast<uint8>(x), static_cast<uint8>(y)};
+    m_inter.facilityRoomLocksAdd(m_coords, m_facilityInfo->data.type(), lockingCoords);
 }
 
 //----- Lighting

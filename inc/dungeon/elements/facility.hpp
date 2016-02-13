@@ -117,6 +117,14 @@ namespace dungeon
         //! Set the barrier state.
         void lua_setBarrier(bool activated);
 
+        //----- Room locks
+
+        //! Remove all room locks of this facility.
+        void lua_roomLocksClear();
+
+        //! Add a room lock managed by this facility.
+        void lua_roomLocksAdd(const uint x, const uint y);
+
         //----- Lighting
 
         //! Add a lightPoint in position (x, y) and scale s.
