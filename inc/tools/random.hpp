@@ -15,7 +15,7 @@ namespace alea
         std::uniform_int_distribution<difference_type>
             distribution(static_cast<difference_type>(0),
             std::distance(start, end) - static_cast<difference_type>(1));
-        return start + distribution(s_generator);
+        return std::next(start, distribution(s_generator));
     }
 
     //! Returns a random element from a standard container.

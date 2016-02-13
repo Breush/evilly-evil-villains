@@ -187,19 +187,22 @@ const Graph::NodeData* HeroesManager::toNodeData(const ai::Node* node)
 
 void HeroesManager::spawnHeroesGroup()
 {
+    // FIXME We should make a more complex group theory
     uint newHeroesCount = 1u + rand() % 5u;
+    std::vector<std::wstring> heroesID(newHeroesCount);
+    const auto& heroesData = m_data->heroesDB().get();
 
     float delay = 0.f;
     for (uint i = 0u; i < newHeroesCount; ++i) {
         m_heroesInfo.emplace_back();
         auto& heroInfo = m_heroesInfo.back();
 
-        // FIXME We're spawning only Gr'oo right now...
-        // We should make a more complex group theory
-        std::wstring heroID(L"groo");
-        const auto& heroData = m_data->heroesDB().get(heroID);
+        const auto& hero = alea::rand(heroesData);
+        const auto& heroID = hero.first;
+        const auto& heroData = hero.second;
 
         heroInfo.data.create(heroID);
+        heroInfo.data[L"dosh"].init_uint32(0u);
         heroInfo.spawnDelay = delay;
         heroInfo.hp = heroData.startingHP;
 

@@ -3,4 +3,4 @@
     <data name="startingHP" value="20" />
     <data name="speed" vx="0.66" vy="0.35" />
     <data name="pause" delay="1." />
-</monster>
+</hero>

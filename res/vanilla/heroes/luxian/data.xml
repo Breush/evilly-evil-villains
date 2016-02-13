@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<hero id="luxian" trName="Luxian">
+    <data name="startingHP" value="100" />
+    <data name="speed" vx="0.5" vy="0.5" />
+    <data name="pause" delay="3." />
+</hero>
