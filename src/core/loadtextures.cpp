@@ -34,12 +34,15 @@ void Application::freeTextures(const std::initializer_list<std::string>& folders
 
 void Application::preloadTextures()
 {
-    loadTextures({"core/default", "core/cursor", "core/global", "core/ltbl", "core/menu/main", "core/menu/loading", "core/nui"});
+    loadTextures({"core/default", "core/cursor", "core/global", "core/ltbl", "core/menu/main", "core/menu/loading", "core/nui", "core/posteffects"});
 
     // Force default
     context::context.textures.get("core/default/default").setRepeated(true);
     context::context.textures.setDefault("core/default/default");
 
-    // And NUI
+    // Post-effects
+    context::context.textures.get("core/posteffects/floomzig/floom").setRepeated(true);
+
+    // NUI
     context::context.textures.get("core/nui/focus/background").setRepeated(true);
 }

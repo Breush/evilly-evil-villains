@@ -12,6 +12,10 @@ Floomzig::Floomzig()
 {
     m_sobelShader = &context::context.shaders.get("core/posteffects/floomzig/sobel");
     m_addShader = &context::context.shaders.get("core/posteffects/floomzig/add");
+
+    const auto& floomTexture = context::context.textures.get("core/posteffects/floomzig/floom");
+    m_sobelShader->setParameter("floom", floomTexture);
+    m_sobelShader->setParameter("floomSize", sf::v2f(floomTexture.getSize()));
 }
 
 //-------------------//
@@ -43,6 +47,12 @@ void Floomzig::sobel(sf::RenderTarget& out, const sf::RenderTexture& in)
 {
     m_sobelShader->setParameter("source", in.getTexture());
     m_sobelShader->setParameter("sourceSize", sf::v2f(in.getSize()));
+
+    sf::Vector2f floomOffset;
+    floomOffset.x = static_cast<float>(15.f * sin(rand()));
+    floomOffset.y = static_cast<float>(15.f * cos(rand()));
+    m_sobelShader->setParameter("floomOffset", floomOffset);
+
     shaderize(out, *m_sobelShader);
 }
 

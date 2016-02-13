@@ -1,7 +1,7 @@
 uniform sampler2D source1;
 uniform sampler2D source2;
 
-const float factor = 0.3f;
+const float factor = 0.5f;
 
 void main()
 {

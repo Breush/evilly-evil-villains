@@ -36,7 +36,7 @@ GameDungeonDesign::GameDungeonDesign(StateStack& stack)
     // Dungeon lighting is on
     auto& dungeonLayer = scene().layer("DUNGEON");
     dungeonLayer.turnLights(true);
-    dungeonLayer.postEffectsAdd(std::make_unique<scene::Floomzig>());
+    // dungeonLayer.postEffectsAdd(std::make_unique<scene::Floomzig>());
     dungeonLayer.postEffectsAdd(std::make_unique<scene::MotionBlur>());
 
     // Dungeon data
