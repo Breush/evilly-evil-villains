@@ -43,7 +43,15 @@ if (CMAKE_BUILD_TYPE MATCHES "Debug")
     set(EEV_DEBUG_MODE ON)
 
     # Warnings flags
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmax-errors=2 -Wall")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmax-errors=2 -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare")
+
+    # GCC 5-sepcific warnings
+    if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+        execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
+        if (GCC_VERSION VERSION_GREATER 5)
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wsuggest-final-types -Wsuggest-final-methods")
+        endif ()
+    endif ()
 
 elseif (CMAKE_BUILD_TYPE MATCHES "Release")
     set(EEV_DEBUG_MODE OFF)
@@ -52,11 +60,11 @@ elseif (CMAKE_BUILD_TYPE MATCHES "Release")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 
     # Static libc++ for distribution
-	if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
-	elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Bstatic")
-	endif ()
+    if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
+    elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Bstatic")
+    endif ()
 
 else ()
     # Configuration error
@@ -64,8 +72,10 @@ else ()
 endif ()
 
 # Under Linux with GCC, enable call-stack generation
-if (CMAKE_CXX_COMPILER_ID MATCHES "GNU" AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -rdynamic")
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -rdynamic")
+    endif ()
 endif ()
 
 # Files for project
