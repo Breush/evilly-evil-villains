@@ -115,7 +115,7 @@ namespace context
 
         //! Get or set the pool index in the vector.
         template<typename T>
-        inline constexpr uint poolIndex(uint index = -1u)
+        inline uint poolIndex(uint index = -1u) const
         {
             static uint value = index;
             return value;

@@ -34,7 +34,7 @@ inline bool createDirectory(const std::wstring& directory)
 inline bool fileExists(const std::string& filename)
 {
     std::ifstream fstr(filename);
-    return fstr;
+    return fstr.is_open();
 }
 
 inline bool fileExists(const std::wstring& filename)
