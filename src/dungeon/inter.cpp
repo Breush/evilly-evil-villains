@@ -350,8 +350,11 @@ void Inter::clearLayers(const RoomCoords& coords)
 
 void Inter::clearTiles()
 {
-    for (auto& tile : m_tiles)
+    for (auto& tile : m_tiles) {
+        tile.second.facilityLocks.clear();
+        tile.second.facilities.clear();
         clearLayers(tile.second.coords);
+    }
 
     m_tiles.clear();
     m_selectedTile = nullptr;
