@@ -66,9 +66,32 @@ CommandPtr Commander::interpret(const std::wstring& commandLine)
     returnif (commandLine.empty()) nullptr;
 
     // Get tokens
-    auto tokens = split(commandLine);
-    auto key = tokens.front();
-    tokens.erase(std::begin(tokens));
+    auto baseTokens = split(commandLine);
+    auto key = baseTokens.front();
+    baseTokens.erase(std::begin(baseTokens));
+
+    // Merging tokens base on back-quotes
+    bool inQuotes = false;
+    std::vector<std::wstring> tokens;
+    for (auto& token : baseTokens) {
+        if (!inQuotes) {
+            tokens.emplace_back(token);
+            if (token.front() == L'`') {
+                auto& lastToken = tokens.back();
+                lastToken.erase(std::begin(lastToken));
+                inQuotes = true;
+            }
+        }
+        else {
+            tokens.back() += L' ' + token;
+        }
+
+        if (inQuotes && (token.back() == L'`')) {
+            auto& lastToken = tokens.back();
+            lastToken.erase(std::prev(std::end(lastToken)));
+            inQuotes = false;
+        }
+    }
 
     // Help - list possibilities
     if (key == L"help") {

@@ -31,9 +31,9 @@ context::CommandPtr FacilityInterpreter::interpret(std::vector<std::wstring>& to
 
     if (nTokens >= 2u) {
         if (tokens[0u] == L"ai") {
-            logMessage += L"Calling AI function " + tokens[1u];
+            logMessage += L"Executing AI: " + tokens[1u];
             auto luaKey = toString(tokens[1u]);
-            m_pFacility->lua()[luaKey.c_str()]();
+            m_pFacility->lua()(luaKey.c_str());
             goto logging;
         }
     }

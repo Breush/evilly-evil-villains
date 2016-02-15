@@ -153,6 +153,23 @@ function orientPiston()
     refreshRoomLocking()
 end
 
+-- Turn the piston into a specific direction
+function turnPiston(turnDirection)
+    -- Change direction
+    if turnDirection == "north" then      direction = NORTH
+    elseif turnDirection == "south" then  direction = SOUTH
+    elseif turnDirection == "west" then   direction = WEST
+    elseif turnDirection == "east" then   direction = EAST
+    end
+
+    eev_setDataU32("direction", direction)
+
+    -- Deactivate the piston
+    on = eev_setDataBool("on", false)
+    refreshDisplay(true)
+    refreshRoomLocking()
+end
+
 -- Find the coordinates of the room in front of the piston
 function roomFront()
     local x = eev_getCurrentRoomX()

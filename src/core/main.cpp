@@ -110,6 +110,7 @@ int main(int argc, char *argv[])
     try {
         Application app(args);
         app.run();
+        mdebug_core_1("Quitting game safely.")
     }
     catch(std::exception& e) {
         std::stringstream str;
