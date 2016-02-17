@@ -70,8 +70,7 @@ Facility::~Facility()
     removeComponent<scene::LightEmitter>();
 
     // Remove all our locks
-    if (m_facilityInfo != nullptr)
-        m_inter.facilityRoomLocksClear(m_coords, m_facilityInfo->data.type());
+    m_inter.facilityRoomLocksClear(m_coords, m_elementID);
 }
 
 //------------------------//
@@ -79,9 +78,7 @@ Facility::~Facility()
 
 void Facility::bindFacilityInfo(FacilityInfo& facilityInfo)
 {
-    if (m_facilityInfo != nullptr)
-        m_inter.facilityRoomLocksClear(m_coords, m_facilityInfo->data.type());
-
+    m_inter.facilityRoomLocksClear(m_coords, m_elementID);
     m_facilityInfo = &facilityInfo;
 
     // Lua update
@@ -205,13 +202,13 @@ void Facility::lua_setBarrier(bool activated)
 
 void Facility::lua_roomLocksClear()
 {
-    m_inter.facilityRoomLocksClear(m_coords, m_facilityInfo->data.type());
+    m_inter.facilityRoomLocksClear(m_coords, m_elementID);
 }
 
 void Facility::lua_roomLocksAdd(const uint x, const uint y)
 {
     RoomCoords lockingCoords{static_cast<uint8>(x), static_cast<uint8>(y)};
-    m_inter.facilityRoomLocksAdd(m_coords, m_facilityInfo->data.type(), lockingCoords);
+    m_inter.facilityRoomLocksAdd(m_coords, m_elementID, lockingCoords);
 }
 
 //----- Lighting
