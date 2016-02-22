@@ -268,9 +268,9 @@ void Application::update(const sf::Time& dt)
             m_scriptWaitTime = std::max(0, m_scriptWaitTime);
         }
         else {
-            auto command = context::context.commander.interpret(m_scriptCommandLine);
-            if (command != nullptr) {
-                context::context.commander.push(*command);
+            auto commands = context::context.commander.interpret(m_scriptCommandLine);
+            context::context.commander.push(commands);
+            if (!commands.empty()) {
                 wdebug_core_2(L"Script command: " << m_scriptCommandLine);
                 scriptNextLine();
             }

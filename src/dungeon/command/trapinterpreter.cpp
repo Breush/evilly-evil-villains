@@ -21,9 +21,9 @@ void TrapInterpreter::roomSet(const RoomCoords& coords)
 //-----------------------//
 //----- Interpreter -----//
 
-context::CommandPtr TrapInterpreter::interpret(std::vector<std::wstring>& tokens, std::wstring& logMessage)
+void TrapInterpreter::interpret(std::vector<context::Command>& commands, std::vector<std::wstring>& tokens)
 {
-    logMessage += L"> [trap] ";
+    std::wstring logMessage = L"> [trap] ";
     auto nTokens = tokens.size();
 
     if (nTokens >= 1u) {
@@ -48,9 +48,7 @@ context::CommandPtr TrapInterpreter::interpret(std::vector<std::wstring>& tokens
 
     // Generate log
     logging:
-    auto pCommand = std::make_unique<context::Command>();
-    context::setCommandLog(*pCommand, logMessage);
-    return std::move(pCommand);
+    context::addCommandLog(commands, logMessage);
 }
 
 void TrapInterpreter::autoComplete(std::vector<std::wstring>& tokens, const std::function<void(const std::wstring&)>& checkAdd) const

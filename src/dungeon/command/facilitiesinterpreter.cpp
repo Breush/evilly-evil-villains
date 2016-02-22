@@ -22,9 +22,9 @@ void FacilitiesInterpreter::roomSet(const RoomCoords& coords)
 //-----------------------//
 //----- Interpreter -----//
 
-context::CommandPtr FacilitiesInterpreter::interpret(std::vector<std::wstring>& tokens, std::wstring& logMessage)
+void FacilitiesInterpreter::interpret(std::vector<context::Command>& commands, std::vector<std::wstring>& tokens)
 {
-    logMessage += L"> [facilities] ";
+    std::wstring logMessage = L"> [facilities] ";
     auto nTokens = tokens.size();
 
     if (nTokens >= 2u) {
@@ -42,10 +42,10 @@ context::CommandPtr FacilitiesInterpreter::interpret(std::vector<std::wstring>& 
                 goto logging;
             }
 
-            logMessage += L"\n";
             tokens.erase(std::begin(tokens), std::begin(tokens) + 2u);
             m_facilityInterpreter.facilitySet(pFacility);
-            return m_facilityInterpreter.interpret(tokens, logMessage);
+            m_facilityInterpreter.interpret(commands, tokens);
+            goto logging;
         }
         else if (tokens[0u] == L"remove") {
             logMessage += L"Removing facility " + tokens[1u];
@@ -59,9 +59,7 @@ context::CommandPtr FacilitiesInterpreter::interpret(std::vector<std::wstring>& 
 
     // Generate log
     logging:
-    auto pCommand = std::make_unique<context::Command>();
-    context::setCommandLog(*pCommand, logMessage);
-    return std::move(pCommand);
+    context::addCommandLog(commands, logMessage);
 }
 
 void FacilitiesInterpreter::autoComplete(std::vector<std::wstring>& tokens, const std::function<void(const std::wstring&)>& checkAdd) const

@@ -79,25 +79,24 @@ void MenuSelectWorld::handleEvent(const sf::Event& event)
 //-----------------------//
 //----- Interpreter -----//
 
-context::CommandPtr MenuSelectWorld::interpret(std::vector<std::wstring>& tokens)
+void MenuSelectWorld::interpret(std::vector<context::Command>& commands, std::vector<std::wstring>& tokens)
 {
-    std::wstring logMessage;
+    std::wstring logMessage = L"> [menuSelectWorld] ";
     auto nTokens = tokens.size();
 
     if (nTokens == 2u) {
         if (tokens[0u] == L"start") {
-            logMessage = L"> [menuSelectWorld] Playing on world " + tokens[1u];
+            logMessage += L"Playing on world " + tokens[1u];
             auto line = to<uint>(tokens[1u]);
             m_list.selectLine(line);
             playOnSelectedWorld();
+            goto logging;
         }
     }
 
-    if (logMessage.empty()) return nullptr;
-
-    auto pCommand = std::make_unique<context::Command>();
-    context::setCommandLog(*pCommand, logMessage);
-    return std::move(pCommand);
+    return;
+    logging:
+    context::addCommandLog(commands, logMessage);
 }
 
 void MenuSelectWorld::autoComplete(std::vector<std::wstring>& possibilities, const std::vector<std::wstring>& tokens, const std::wstring& lastToken)

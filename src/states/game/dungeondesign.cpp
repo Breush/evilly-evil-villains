@@ -205,25 +205,24 @@ void GameDungeonDesign::handleEvent(const sf::Event& event)
 //-----------------------//
 //----- Interpreter -----//
 
-context::CommandPtr GameDungeonDesign::interpret(std::vector<std::wstring>& tokens)
+void GameDungeonDesign::interpret(std::vector<context::Command>& commands, std::vector<std::wstring>& tokens)
 {
-    returnif (!m_loading || m_loadingPercent < 100u) nullptr;
+    returnif (!m_loading || m_loadingPercent < 100u);
 
-    std::wstring logMessage;
+    std::wstring logMessage = L"> [gameDungeonDesign] ";
     auto nTokens = tokens.size();
 
     if (nTokens == 1u) {
         if (tokens[0u] == L"closeLoadingScreen") {
-            logMessage = L"> [gameDungeonDesign] Closing the loading screen";
+            logMessage += L"Closing the loading screen";
             closeLoadingScreen();
+            goto logging;
         }
     }
 
-    if (logMessage.empty()) return nullptr;
-
-    auto pCommand = std::make_unique<context::Command>();
-    context::setCommandLog(*pCommand, logMessage);
-    return std::move(pCommand);
+    return;
+    logging:
+    context::addCommandLog(commands, logMessage);
 }
 
 void GameDungeonDesign::autoComplete(std::vector<std::wstring>& possibilities, const std::vector<std::wstring>& tokens, const std::wstring& lastToken)

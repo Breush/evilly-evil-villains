@@ -15,16 +15,16 @@ Interpreter::Interpreter(Inter* inter)
 //-----------------------//
 //----- Interpreter -----//
 
-context::CommandPtr Interpreter::interpret(std::vector<std::wstring>& tokens)
+// TODO really make commands, used by a commandable inside dungeon
+void Interpreter::interpret(std::vector<context::Command>& commands, std::vector<std::wstring>& tokens)
 {
-    std::wstring logMessage;
-    const std::wstring logStart(L"> [dungeon] ");
+    std::wstring logMessage = L"> [dungeon] ";
     auto nTokens = tokens.size();
 
     if (nTokens >= 1u) {
         if (tokens[0u] == L"rooms") {
             auto newTokens = tokens;
-            logMessage += logStart + L"Located all dungeon rooms\n";
+            logMessage += L"Located all dungeon rooms\n";
             m_roomsInterpreter.roomsClear();
             for (uint floor = 0u; floor < m_inter.data().floorsCount(); ++floor)
             for (uint floorRoom = 0u; floorRoom < m_inter.data().floorRoomsCount(); ++floorRoom) {
@@ -33,19 +33,21 @@ context::CommandPtr Interpreter::interpret(std::vector<std::wstring>& tokens)
             }
 
             newTokens.erase(std::begin(newTokens));
-            return m_roomsInterpreter.interpret(newTokens, logMessage);
+            m_roomsInterpreter.interpret(commands, newTokens);
+            goto logging;
         }
     }
 
     if (nTokens >= 3u) {
         if (tokens[0u] == L"room") {
             auto newTokens = tokens;
-            logMessage += logStart + L"Located room " + tokens[1u] + L"/" + tokens[2u] + L"\n";
+            logMessage += L"Located room " + tokens[1u] + L"/" + tokens[2u] + L"\n";
             RoomCoords coords{to<uint8>(tokens[1u]), to<uint8>(tokens[2u])};
 
             m_roomInterpreter.roomSet(coords);
             newTokens.erase(std::begin(newTokens), std::begin(newTokens) + 3u);
-            return m_roomInterpreter.interpret(newTokens, logMessage);
+            m_roomInterpreter.interpret(commands, newTokens);
+            goto logging;
         }
     }
 
@@ -53,19 +55,21 @@ context::CommandPtr Interpreter::interpret(std::vector<std::wstring>& tokens)
         if (tokens[0u] == L"generic") {
             if (tokens[1u] == L"monsters") {
                 if (tokens[2u] == L"unlock") {
-                // TODO Use "free" parameter -> let m_inter manage the cost, and therefore update the Hub Market/Inn states
-                logMessage += logStart + L"Unlocking generic monster " + tokens[3u];
-                bool all = (tokens[3u] == L"*");
-                if (all)    m_inter.data().setMonstersGenericUnlocked(true);
-                else        m_inter.data().setMonsterGenericUnlocked(tokens[3u], true);
+                    // TODO Use "free" parameter -> let m_inter manage the cost, and therefore update the Hub Market/Inn states
+                    logMessage += L"Unlocking generic monster " + tokens[3u];
+                    bool all = (tokens[3u] == L"*");
+                    if (all)    m_inter.data().setMonstersGenericUnlocked(true);
+                    else        m_inter.data().setMonsterGenericUnlocked(tokens[3u], true);
+                    goto logging;
                 }
             }
             else if (tokens[1u] == L"traps") {
                 if (tokens[2u] == L"unlock") {
-                    logMessage += logStart + L"Unlocking generic trap " + tokens[3u];
+                    logMessage += L"Unlocking generic trap " + tokens[3u];
                     bool all = (tokens[3u] == L"*");
                     if (all)    m_inter.data().setTrapsGenericUnlocked(true);
                     else        m_inter.data().setTrapGenericUnlocked(tokens[3u], true);
+                    goto logging;
                 }
             }
         }
@@ -73,35 +77,37 @@ context::CommandPtr Interpreter::interpret(std::vector<std::wstring>& tokens)
             // Floors count
             if (tokens[1u] == L"floorsCount") {
                 if (tokens[2u] == L"add") {
-                    logMessage += logStart + L"Adding " + tokens[3u] + L" floors to floors count";
+                    logMessage += L"Adding " + tokens[3u] + L" floors to floors count";
                     m_inter.addFloorsCount(to<int>(tokens[3u]));
+                    goto logging;
                 }
                 else if (tokens[2u] == L"set") {
-                    logMessage += logStart + L"Setting floors count to " + tokens[3u] + L" floors";
+                    logMessage += L"Setting floors count to " + tokens[3u] + L" floors";
                     m_inter.setFloorsCount(to<uint>(tokens[3u]));
+                    goto logging;
                 }
             }
 
             // Floor rooms count
             else if (tokens[1u] == L"floorRoomsCount") {
                 if (tokens[2u] == L"add") {
-                    logMessage += logStart + L"Adding " + tokens[3u] + L" rooms to floor rooms count";
+                    logMessage += L"Adding " + tokens[3u] + L" rooms to floor rooms count";
                     m_inter.addFloorRoomsCount(to<int>(tokens[3u]));
+                    goto logging;
                 }
                 else if (tokens[2u] == L"set") {
-                    logMessage += logStart + L"Setting floor rooms count to " + tokens[3u] + L" rooms";
+                    logMessage += L"Setting floor rooms count to " + tokens[3u] + L" rooms";
                     m_inter.setFloorRoomsCount(to<uint>(tokens[3u]));
+                    goto logging;
                 }
             }
         }
     }
 
-    returnif (logMessage.empty()) nullptr;
+    return;
 
-    // Generate log
-    auto pCommand = std::make_unique<context::Command>();
-    context::setCommandLog(*pCommand, logMessage);
-    return std::move(pCommand);
+    logging:
+    context::addCommandLog(commands, logMessage);
 }
 
 void Interpreter::autoComplete(std::vector<std::wstring>& possibilities,

@@ -41,6 +41,9 @@ namespace context
         //! Add a command to the queue.
         void push(const Command& command);
 
+        //! Add commands to the queue.
+        void push(const std::vector<Command>& commands);
+
         //! Get last command.
         Command pop();
 
@@ -51,7 +54,7 @@ namespace context
         //! @{
 
         //! Interpret the command line into commands.
-        CommandPtr interpret(const std::wstring& commandLine);
+        std::vector<Command> interpret(const std::wstring& commandLine);
 
         //! Attempt to auto-complete the command line.
         //! @return The command line completed or the original one.

@@ -58,6 +58,7 @@ namespace context
         //! @{
 
         //! Downcast to a specific type.
+        // OPTIM reinterpret_cast instead
         template<class T> T& as() { return *dynamic_cast<T*>(this); }
 
         //! @}
@@ -85,7 +86,7 @@ namespace context
         virtual std::wstring interpreterKey() const = 0;
 
         //! Interpret a specific command line.
-        virtual CommandPtr interpret(std::vector<std::wstring>& tokens) = 0;
+        virtual void interpret(std::vector<Command>& commands, std::vector<std::wstring>& tokens) = 0;
 
         //! Attempt to autocomplete the command line.
         //! The possibilities to complete the last token will be added at the back of the vector.

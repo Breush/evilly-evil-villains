@@ -23,9 +23,9 @@ void RoomInterpreter::roomSet(const RoomCoords& coords)
 //-----------------------//
 //----- Interpreter -----//
 
-context::CommandPtr RoomInterpreter::interpret(std::vector<std::wstring>& tokens, std::wstring& logMessage)
+void RoomInterpreter::interpret(std::vector<context::Command>& commands, std::vector<std::wstring>& tokens)
 {
-    logMessage += L"> [room] ";
+    std::wstring logMessage = L"> [room] ";
     auto nTokens = tokens.size();
 
     if (nTokens >= 1u) {
@@ -45,13 +45,15 @@ context::CommandPtr RoomInterpreter::interpret(std::vector<std::wstring>& tokens
             logMessage += L"Accessing facilities\n";
             tokens.erase(std::begin(tokens));
             m_facilitiesInterpreter.roomSet(m_roomCoords);
-            return m_facilitiesInterpreter.interpret(tokens, logMessage);
+            m_facilitiesInterpreter.interpret(commands, tokens);
+            goto logging;
         }
         else if (tokens[0u] == L"trap") {
             logMessage += L"Accessing trap\n";
             tokens.erase(std::begin(tokens));
             m_trapInterpreter.roomSet(m_roomCoords);
-            return m_trapInterpreter.interpret(tokens, logMessage);
+            m_trapInterpreter.interpret(commands, tokens);
+            goto logging;
         }
     }
 
@@ -68,9 +70,7 @@ context::CommandPtr RoomInterpreter::interpret(std::vector<std::wstring>& tokens
 
     // Generate log
     logging:
-    auto pCommand = std::make_unique<context::Command>();
-    context::setCommandLog(*pCommand, logMessage);
-    return std::move(pCommand);
+    context::addCommandLog(commands, logMessage);
 }
 
 void RoomInterpreter::autoComplete(std::vector<std::wstring>& tokens, const std::function<void(const std::wstring&)>& checkAdd) const

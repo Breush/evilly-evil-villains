@@ -89,23 +89,23 @@ void SplashScreen::handleEvent(const sf::Event& event)
 //-----------------------//
 //----- Interpreter -----//
 
-context::CommandPtr SplashScreen::interpret(std::vector<std::wstring>& tokens)
+void SplashScreen::interpret(std::vector<context::Command>& commands, std::vector<std::wstring>& tokens)
 {
-    std::wstring logMessage;
+    std::wstring logMessage = L"> [splashScreen] ";
     auto nTokens = tokens.size();
 
     if (nTokens == 1u) {
         if (tokens[0u] == L"skip") {
-            logMessage = L"> [splashScreen] Skipping";
+            logMessage += L"Skipping";
             skip();
+            goto logging;
         }
     }
 
-    if (logMessage.empty()) return nullptr;
+    return;
 
-    auto pCommand = std::make_unique<context::Command>();
-    context::setCommandLog(*pCommand, logMessage);
-    return std::move(pCommand);
+    logging:
+    context::addCommandLog(commands, logMessage);
 }
 
 void SplashScreen::autoComplete(std::vector<std::wstring>& possibilities, const std::vector<std::wstring>& tokens, const std::wstring& lastToken)

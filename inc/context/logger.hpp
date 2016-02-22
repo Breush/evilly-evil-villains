@@ -23,8 +23,10 @@ namespace context
     };
 
     //! Utility function to set up a command as a log.
-    inline Command& setCommandLog(Command& command, const std::wstring& message)
+    inline Command& addCommandLog(std::vector<Command>& commands, const std::wstring& message)
     {
+        commands.emplace_back();
+        auto& command = commands.back();
         command.category = Command::Category::LOG;
         command.action = [message] (Commandable& commandable, const sf::Time&)
             { commandable.as<Logger>().commandLog(message); };

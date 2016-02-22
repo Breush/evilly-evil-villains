@@ -152,27 +152,28 @@ void MenuMain::refreshWindow(const config::WindowInfo& cWindow)
 //-----------------------//
 //----- Interpreter -----//
 
-context::CommandPtr MenuMain::interpret(std::vector<std::wstring>& tokens)
+void MenuMain::interpret(std::vector<context::Command>& commands, std::vector<std::wstring>& tokens)
 {
-    std::wstring logMessage;
+    std::wstring logMessage = L"> [menuMain] ";
     auto nTokens = tokens.size();
 
     if (nTokens == 1u) {
         if (tokens[0u] == L"exit") {
-            logMessage = L"> [menuMain] Exit";
+            logMessage += L"Exit";
             stackPop();
+            goto logging;
         }
         else if (tokens[0u] == L"playSolo") {
-            logMessage = L"> [menuMain] Single player";
+            logMessage += L"> [menuMain] Single player";
             stackPush(StateID::MENU_SELECTWORLD);
+            goto logging;
         }
     }
 
-    if (logMessage.empty()) return nullptr;
+    return;
 
-    auto pCommand = std::make_unique<context::Command>();
-    context::setCommandLog(*pCommand, logMessage);
-    return std::move(pCommand);
+    logging:
+    context::addCommandLog(commands, logMessage);
 }
 
 void MenuMain::autoComplete(std::vector<std::wstring>& possibilities, const std::vector<std::wstring>& tokens, const std::wstring& lastToken)

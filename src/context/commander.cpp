@@ -50,6 +50,12 @@ void Commander::push(const Command& command)
     m_commandQueue.push(command);
 }
 
+void Commander::push(const std::vector<Command>& commands)
+{
+    for (auto& command : commands)
+        m_commandQueue.push(command);
+}
+
 Command Commander::pop()
 {
     auto command = m_commandQueue.front();
@@ -60,10 +66,10 @@ Command Commander::pop()
 //-----------------------//
 //----- Interpreter -----//
 
-// TODO We should return a vector of commands, right?
-CommandPtr Commander::interpret(const std::wstring& commandLine)
+std::vector<Command> Commander::interpret(const std::wstring& commandLine)
 {
-    returnif (commandLine.empty()) nullptr;
+    std::vector<Command> commands;
+    returnif (commandLine.empty()) commands;
 
     // Get tokens
     auto baseTokens = split(commandLine);
@@ -99,23 +105,19 @@ CommandPtr Commander::interpret(const std::wstring& commandLine)
         for (const auto& interpreter : m_interpreters)
             keys.emplace_back(interpreter->interpreterKey());
 
-        auto pCommand = std::make_unique<Command>();
-        setCommandLog(*pCommand, L"> Available command keys: " + join(keys, std::wstring(L", ")));
-        return std::move(pCommand);
+        addCommandLog(commands, L"> Available command keys: " + join(keys, std::wstring(L", ")));
+        goto end;
     }
 
     // Forward to interpreters
     for (auto pInterpreter : m_interpreters) {
-        if (pInterpreter->interpreterKey() == key) {
-            auto pCommand = pInterpreter->interpret(tokens);
-            if (pCommand != nullptr)
-                pCommand->line = commandLine;
-            return std::move(pCommand);
-        }
+        if (pInterpreter->interpreterKey() != key) continue;
+        pInterpreter->interpret(commands, tokens);
+        goto end;
     }
 
-    // Unknown command
-    return nullptr;
+    end:
+    return commands;
 }
 
 std::wstring Commander::autoComplete(std::wstring commandLine)
@@ -163,8 +165,13 @@ std::wstring Commander::autoComplete(std::wstring commandLine)
             newToken = prefix(newToken, possibility);
 
         // Log them
+        auto possibilitiesList = join(possibilities);
+
         Command command;
-        push(setCommandLog(command, join(possibilities)));
+        command.category = Command::Category::LOG;
+        command.action = [possibilitiesList] (Commandable& commandable, const sf::Time&)
+            { commandable.as<Logger>().commandLog(possibilitiesList); };
+        push(command);
     }
 
     // No new token to set

@@ -48,7 +48,7 @@ namespace states
         //! @{
 
         inline std::wstring interpreterKey() const { return L"splashScreen"; }
-        context::CommandPtr interpret(std::vector<std::wstring>& tokens) final;
+        void interpret(std::vector<context::Command>& commands, std::vector<std::wstring>& tokens) final;
         void autoComplete(std::vector<std::wstring>& possibilities, const std::vector<std::wstring>& tokens, const std::wstring& lastToken) final;
 
         //! @}

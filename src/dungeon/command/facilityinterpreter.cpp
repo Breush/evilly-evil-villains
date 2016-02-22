@@ -21,9 +21,9 @@ void FacilityInterpreter::facilitySet(Facility* pFacility)
 //-----------------------//
 //----- Interpreter -----//
 
-context::CommandPtr FacilityInterpreter::interpret(std::vector<std::wstring>& tokens, std::wstring& logMessage)
+void FacilityInterpreter::interpret(std::vector<context::Command>& commands, std::vector<std::wstring>& tokens)
 {
-    logMessage += L"> [facility] ";
+    std::wstring logMessage = L"> [facility] ";
     auto nTokens = tokens.size();
 
     // Note: If ai or link become way bigger,
@@ -54,9 +54,7 @@ context::CommandPtr FacilityInterpreter::interpret(std::vector<std::wstring>& to
 
     // Generate log
     logging:
-    auto pCommand = std::make_unique<context::Command>();
-    context::setCommandLog(*pCommand, logMessage);
-    return std::move(pCommand);
+    context::addCommandLog(commands, logMessage);
 }
 
 void FacilityInterpreter::autoComplete(std::vector<std::wstring>& tokens, const std::function<void(const std::wstring&)>& checkAdd) const

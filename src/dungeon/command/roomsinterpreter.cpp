@@ -26,11 +26,11 @@ void RoomsInterpreter::roomsAdd(const RoomCoords& coords)
 //-----------------------//
 //----- Interpreter -----//
 
-context::CommandPtr RoomsInterpreter::interpret(std::vector<std::wstring>& tokens, std::wstring& logMessage)
+void RoomsInterpreter::interpret(std::vector<context::Command>& commands, std::vector<std::wstring>& tokens)
 {
     // TODO command keep to filter the rooms
 
-    logMessage += L"> [rooms] ";
+    std::wstring logMessage = L"> [rooms] ";
     auto nTokens = tokens.size();
 
     if (nTokens >= 1u) {
@@ -42,8 +42,7 @@ context::CommandPtr RoomsInterpreter::interpret(std::vector<std::wstring>& token
             logMessage += L"For each room... ";
             for (auto& roomInterpreter : m_roomInterpreters) {
                 auto newTokens = tokens;
-                std::wstring dropLogMessage;
-                roomInterpreter.interpret(newTokens, dropLogMessage);
+                roomInterpreter.interpret(commands, newTokens);
             }
             goto logging;
         }
@@ -53,9 +52,7 @@ context::CommandPtr RoomsInterpreter::interpret(std::vector<std::wstring>& token
 
     // Generate log
     logging:
-    auto pCommand = std::make_unique<context::Command>();
-    context::setCommandLog(*pCommand, logMessage);
-    return std::move(pCommand);
+    context::addCommandLog(commands, logMessage);
 }
 
 void RoomsInterpreter::autoComplete(std::vector<std::wstring>& tokens, const std::function<void(const std::wstring&)>& checkAdd) const

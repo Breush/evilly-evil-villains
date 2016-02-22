@@ -34,7 +34,7 @@ namespace dungeon
         //! @{
 
         //! Interpret a command line.
-        context::CommandPtr interpret(std::vector<std::wstring>& tokens, std::wstring& logMessage);
+        void interpret(std::vector<context::Command>& commands, std::vector<std::wstring>& tokens);
 
         //! Tries to auto-complete.
         void autoComplete(std::vector<std::wstring>& tokens, const std::function<void(const std::wstring&)>& checkAdd) const;
