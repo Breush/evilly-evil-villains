@@ -46,6 +46,13 @@ Inter::Inter(nui::ContextMenu& contextMenu)
     addPart(&m_outerWalls[1]);
 }
 
+Inter::~Inter()
+{
+    // Clearing all facilities and their links before the deletion of m_tiles
+    for (auto& tile : m_tiles)
+        tile.second.facilities.clear();
+}
+
 void Inter::init()
 {
     m_effecter.init();

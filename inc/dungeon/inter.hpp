@@ -65,8 +65,8 @@ namespace dungeon
         //! Constructor.
         Inter(nui::ContextMenu& contextMenu);
 
-        //! Default destructor.
-        virtual ~Inter() = default;
+        //! Destructor.
+        ~Inter();
 
         //! Initialize after textures are loaded.
         void init();
