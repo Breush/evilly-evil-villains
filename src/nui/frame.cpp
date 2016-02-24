@@ -99,8 +99,8 @@ void Frame::refreshNUI(const config::NUIGuides& cNUI)
 {
     baseClass::refreshNUI(cNUI);
 
-    m_hPadding = cNUI.hPadding * 2.f;
-    m_vPadding = cNUI.vPadding * 2.f;
+    m_hPadding = cNUI.hPadding * 1.5f;
+    m_vPadding = cNUI.vPadding * 1.5f;
     m_fontSize = cNUI.fontSize;
 
     m_titleHeight = m_fontSize + 0.5f * m_vPadding;

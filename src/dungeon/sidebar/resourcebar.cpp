@@ -1,10 +1,10 @@
-#include "dungeon/sidebar/summarybar.hpp"
+#include "dungeon/sidebar/resourcebar.hpp"
 
 #include "context/context.hpp"
 
 using namespace dungeon;
 
-SummaryBar::SummaryBar()
+ResourceBar::ResourceBar()
 {
     // Background
     addPart(&m_backgroundLeft);
@@ -18,7 +18,7 @@ SummaryBar::SummaryBar()
     m_text.setFont(context::context.fonts.get("core/global/fonts/nui"));
 }
 
-void SummaryBar::init()
+void ResourceBar::init()
 {
     const auto& backgroundLeftTexture = context::context.textures.get("core/dungeon/sidebar/summary/bar/background_left");
     const auto& backgroundMiddleTexture = context::context.textures.get("core/dungeon/sidebar/summary/bar/background_middle");
@@ -39,17 +39,17 @@ void SummaryBar::init()
 //-------------------//
 //----- Routine -----//
 
-void SummaryBar::onSizeChanges()
+void ResourceBar::onSizeChanges()
 {
     refresh();
 }
 
-void SummaryBar::refreshNUI(const config::NUIGuides& cNUI)
+void ResourceBar::refreshNUI(const config::NUIGuides& cNUI)
 {
-    m_logoSide = 0.9f * cNUI.fontVSpace;
-    m_fontSize = 0.9f * cNUI.fontSize;
+    m_logoSide = 0.7f * cNUI.fontVSpace;
+    m_fontSize = 0.8f * cNUI.fontSize;
     m_hPadding = cNUI.hPadding;
-    m_vPadding = 0.5f * cNUI.vPadding;
+    m_vPadding = 0.4f * cNUI.vPadding;
 
     m_height = 2.f * m_vPadding + m_logoSide;
 
@@ -59,7 +59,7 @@ void SummaryBar::refreshNUI(const config::NUIGuides& cNUI)
     updateSize();
 }
 
-void SummaryBar::updateSize()
+void ResourceBar::updateSize()
 {
     setSize({m_width, m_height});
 }
@@ -67,22 +67,25 @@ void SummaryBar::updateSize()
 //-------------------//
 //----- Control -----//
 
-void SummaryBar::setText(const std::wstring& text)
+void ResourceBar::setText(const std::wstring& text)
 {
     m_text.setString(text);
 }
 
-void SummaryBar::setLogo(const std::string& textureID)
+void ResourceBar::setLogo(const std::string& textureID)
 {
     m_logo.setTexture(textureID.empty()? nullptr : &context::context.textures.get(textureID));
 }
 
-void SummaryBar::setTextColor(const sf::Color& color)
+void ResourceBar::setColor(const sf::Color& color)
 {
     m_text.setFillColor(color);
+    m_backgroundLeft.setFillColor(color);
+    m_backgroundMiddle.setFillColor(color);
+    m_backgroundRight.setFillColor(color);
 }
 
-void SummaryBar::setWidth(float width)
+void ResourceBar::setWidth(float width)
 {
     m_width = width;
     updateSize();
@@ -91,7 +94,7 @@ void SummaryBar::setWidth(float width)
 //---------------//
 //----- ICU -----//
 
-void SummaryBar::refresh()
+void ResourceBar::refresh()
 {
     // Background
     m_backgroundLeft.setPosition(0.f, 0.f);
@@ -103,7 +106,7 @@ void SummaryBar::refresh()
     m_backgroundRight.setSize({m_backgroundRightWidth, size().y});
 
     // Text
-    m_text.setPosition(m_logoSide + 2.f * m_hPadding, m_vPadding);
+    m_text.setPosition(m_logoSide + 2.f * m_hPadding, 0.8f * m_vPadding);
 
     // Logo
     m_logo.setPosition({m_hPadding, m_vPadding});

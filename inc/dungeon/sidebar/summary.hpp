@@ -2,7 +2,8 @@
 
 #include "scene/entity.hpp"
 #include "context/event.hpp"
-#include "dungeon/sidebar/summarybar.hpp"
+#include "dungeon/sidebar/rankingbar.hpp"
+#include "dungeon/sidebar/resourcebar.hpp"
 #include "nui/vstacker.hpp"
 #include "nui/frame.hpp"
 
@@ -15,21 +16,28 @@ namespace dungeon
 
     class Data;
 
-    //! The different bars in the summary.
-    enum SummaryBarID : uint8
-    {
-        BAR_TIME,
-        BAR_DOSH,
-        BAR_SOUL,
-        BAR_FAME,
-        BAR_COUNT,  //!< Keep last.
-    };
-
     //! A small window with main dungeon information.
 
     class Summary final : public scene::Entity, private context::EventReceiver
     {
         using baseClass = scene::Entity;
+
+        //! The resources bars.
+        enum ResourceBarID : uint8
+        {
+            RESOURCE_TIME,
+            RESOURCE_DOSH,
+            RESOURCE_SOUL,
+            RESOURCE_COUNT, //!< Keep last.
+        };
+
+        //! The ranking bars.
+        enum RankingBarID : uint8
+        {
+            RANKING_RANK,   //!< Based on villain's evilness.
+            RANKING_CLASS,  //!< Based on dungeon's fame.
+            RANKING_COUNT,  //!< Keep last.
+        };
 
     public:
 
@@ -103,8 +111,11 @@ namespace dungeon
         //! To be called whenever soul changed.
         void refreshSoulBar();
 
+        //! To be called whenever evil changed.
+        void refreshRankBar();
+
         //! To be called whenever fame changed.
-        void refreshFameBar();
+        void refreshClassBar();
 
         //! @}
 
@@ -115,7 +126,8 @@ namespace dungeon
         // Content
         nui::Frame m_frame;                                         //!< The box around.
         nui::VStacker m_stacker;                                    //!< The bars' stacker.
-        std::array<std::unique_ptr<SummaryBar>, BAR_COUNT> m_bars;  //!< The bars specifing a ressource.
+        std::array<RankingBar, RANKING_COUNT> m_rankingBars;        //!< The bars specifing ranking.
+        std::array<ResourceBar, RESOURCE_COUNT> m_resourcesBars;    //!< The bars specifing resources.
 
         // Control
         float m_width = 0.f;    //!< The width of the entity, as defined by the user.

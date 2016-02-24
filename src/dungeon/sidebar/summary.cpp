@@ -4,6 +4,7 @@
 #include "context/villains.hpp"
 #include "context/worlds.hpp"
 #include "dungeon/data.hpp"
+#include "tools/random.hpp"
 #include "tools/string.hpp"
 
 #include <iomanip>
@@ -19,27 +20,34 @@ Summary::Summary()
     m_stacker.setPadding(0.f);
 
     // Bars
-    for (auto& bar : m_bars) {
-        bar = std::make_unique<SummaryBar>();
-        m_stacker.stackBack(*bar);
-    }
+    for (auto& bar : m_rankingBars)     m_stacker.stackBack(bar);
+    for (auto& bar : m_resourcesBars)   m_stacker.stackBack(bar);
 }
 
 void Summary::init()
 {
-    // Bars
-    for (auto& bar : m_bars)
-        bar->init();
+    // Ranking bars
+    for (auto& bar : m_rankingBars) bar.init();
 
-    m_bars[BAR_TIME]->setLogo("core/resources/time/icon");
-    m_bars[BAR_DOSH]->setLogo("core/resources/dosh/icon");
-    m_bars[BAR_SOUL]->setLogo("core/resources/soul/icon");
-    m_bars[BAR_FAME]->setLogo("core/resources/fame/icon");
+    m_rankingBars[RANKING_RANK].setLogo("core/resources/evil/icon");
+    m_rankingBars[RANKING_CLASS].setLogo("core/resources/fame/icon");
 
-    m_bars[BAR_TIME]->setTextColor(sf::Color::White);
-    m_bars[BAR_DOSH]->setTextColor({190u, 171u, 21u});
-    m_bars[BAR_SOUL]->setTextColor({102u, 190u, 21u});
-    m_bars[BAR_FAME]->setTextColor({102u, 151u, 196u});
+    m_rankingBars[RANKING_RANK].setTextColor(sf::Color::White);
+    m_rankingBars[RANKING_CLASS].setTextColor({200u, 200u, 200u});
+
+    m_rankingBars[RANKING_RANK].setProgressionColor({160u, 42u, 42u});
+    m_rankingBars[RANKING_CLASS].setProgressionColor({102u, 102u, 190u});
+
+    // Resource bars
+    for (auto& bar : m_resourcesBars) bar.init();
+
+    m_resourcesBars[RESOURCE_TIME].setLogo("core/resources/time/icon");
+    m_resourcesBars[RESOURCE_DOSH].setLogo("core/resources/dosh/icon");
+    m_resourcesBars[RESOURCE_SOUL].setLogo("core/resources/soul/icon");
+
+    m_resourcesBars[RESOURCE_TIME].setColor({190u, 190u, 190u});
+    m_resourcesBars[RESOURCE_DOSH].setColor({190u, 171u, 21u});
+    m_resourcesBars[RESOURCE_SOUL].setColor({102u, 190u, 21u});
 }
 
 //-------------------//
@@ -55,10 +63,11 @@ void Summary::refreshNUI(const config::NUIGuides& cNUI)
     baseClass::refreshNUI(cNUI);
 
     // Translations
-    m_bars[BAR_TIME]->setTooltip(_("Date and Time"));
-    m_bars[BAR_DOSH]->setTooltip(_("Dosh"));
-    m_bars[BAR_SOUL]->setTooltip(_("Souls"));
-    m_bars[BAR_FAME]->setTooltip(_("Fame"));
+    m_resourcesBars[RESOURCE_TIME].setTooltip(_("Date and Time"));
+    m_resourcesBars[RESOURCE_DOSH].setTooltip(_("Dosh"));
+    m_resourcesBars[RESOURCE_SOUL].setTooltip(_("Souls"));
+
+    // TODO Should refresh ranking bars for translations
 
     updateSize();
 }
@@ -82,7 +91,9 @@ void Summary::receive(const context::Event& event)
     else if (devent.type == "soul_changed")
         refreshSoulBar();
     else if (devent.type == "fame_changed")
-        refreshFameBar();
+        refreshClassBar();
+    else if (devent.type == "evil_changed")
+        refreshRankBar();
 }
 
 //------------------------//
@@ -114,9 +125,8 @@ void Summary::refresh()
 
     // Bars
     float barWidth = m_width - 2.f * m_frame.paddings().x;
-    for (auto& bar : m_bars)
-        if (bar != nullptr)
-            bar->setWidth(barWidth);
+    for (auto& bar : m_rankingBars)     bar.setWidth(barWidth);
+    for (auto& bar : m_resourcesBars)   bar.setWidth(barWidth);
 }
 
 void Summary::refreshFromData()
@@ -126,7 +136,8 @@ void Summary::refreshFromData()
     refreshTimeBar();
     refreshDoshBar();
     refreshSoulBar();
-    refreshFameBar();
+    refreshRankBar();
+    refreshClassBar();
 }
 
 void Summary::refreshTimeBar()
@@ -144,7 +155,7 @@ void Summary::refreshTimeBar()
     std::wstringstream str;
     str << std::setfill(L'0') << std::setw(2) << day << L' ' << months[month] << L' ' << year;
 
-    m_bars[BAR_TIME]->setText(str.str());
+    m_resourcesBars[RESOURCE_TIME].setText(str.str());
 }
 
 void Summary::refreshDoshBar()
@@ -155,7 +166,7 @@ void Summary::refreshDoshBar()
         text = toWString(dosh);
     }
 
-    m_bars[BAR_DOSH]->setText(text);
+    m_resourcesBars[RESOURCE_DOSH].setText(text);
 }
 
 void Summary::refreshSoulBar()
@@ -166,16 +177,32 @@ void Summary::refreshSoulBar()
         text = toWString(soul);
     }
 
-    m_bars[BAR_SOUL]->setText(text);
+    m_resourcesBars[RESOURCE_SOUL].setText(text);
 }
 
-void Summary::refreshFameBar()
+void Summary::refreshRankBar()
 {
-    std::wstring text(L"∞");
-    if (context::worlds.selected().gamemode != context::Gamemode::RICHMAN) {
-        auto fame = m_data->fameWallet().value();
-        text = toWString(fame);
-    }
+    // TODO Select rank name given the current villain's evilness
+    auto rankNames = {_("Teddy bear"), _("Casual villain"), _("Baby Jafar")};
 
-    m_bars[BAR_FAME]->setText(text);
+    m_rankingBars[RANKING_RANK].setText(alea::rand(rankNames));
+    m_rankingBars[RANKING_RANK].setPercent(0.75f);
+}
+
+void Summary::refreshClassBar()
+{
+    constexpr uint FAME_LEVEL_BASE = 5u;
+
+    auto fame = m_data->fameWallet().value();
+    auto level = static_cast<uint>(std::log(fame) / std::log(FAME_LEVEL_BASE));
+
+    std::wstring text(L"∞");
+    if (context::worlds.selected().gamemode != context::Gamemode::RICHMAN)
+        text = L"Level " + toWString(level);
+
+    auto levelLimit = std::pow(FAME_LEVEL_BASE, level);
+    auto levelSize = std::pow(FAME_LEVEL_BASE, level + 1u) - levelLimit;
+
+    m_rankingBars[RANKING_CLASS].setText(text);
+    m_rankingBars[RANKING_CLASS].setPercent((fame - levelLimit) / levelSize);
 }

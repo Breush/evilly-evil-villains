@@ -7,21 +7,21 @@
 
 namespace dungeon
 {
-    //! A summary bar showing a ressource value and logo.
+    //! A bar showing a resource value and logo.
 
-    class SummaryBar final : public nui::Entity
+    class ResourceBar final : public nui::Entity
     {
         using baseClass = scene::Entity;
 
     public:
 
         //! Constructor.
-        SummaryBar();
+        ResourceBar();
 
         //! Default destructor.
-        ~SummaryBar() = default;
+        ~ResourceBar() = default;
 
-        std::string _name() const final { return "dungeon::SummaryBar"; }
+        std::string _name() const final { return "dungeon::ResourceBar"; }
 
         //! Initialize after textures are loaded.
         void init();
@@ -37,7 +37,7 @@ namespace dungeon
         void setLogo(const std::string& textureID);
 
         //! Set the color of the text.
-        void setTextColor(const sf::Color& color);
+        void setColor(const sf::Color& color);
 
         //! Set the width used.
         void setWidth(float width);
