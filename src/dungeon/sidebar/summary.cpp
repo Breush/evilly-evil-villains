@@ -185,8 +185,10 @@ void Summary::refreshRankBar()
     // TODO Select rank name given the current villain's evilness
     auto rankNames = {_("Teddy bear"), _("Casual villain"), _("Baby Jafar")};
 
+    auto evil = m_data->evilWallet().value();
+
     m_rankingBars[RANKING_RANK].setText(alea::rand(rankNames));
-    m_rankingBars[RANKING_RANK].setPercent(0.75f);
+    m_rankingBars[RANKING_RANK].setPercent((evil % 100u) / 100.f);
 }
 
 void Summary::refreshClassBar()

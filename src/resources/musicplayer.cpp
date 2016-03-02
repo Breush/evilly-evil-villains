@@ -13,7 +13,7 @@ using namespace resources;
 void MusicPlayer::play(const std::string& id)
 {
     if (!m_music.openFromFile("res/" + id + ".ogg"))
-        throw std::runtime_error("Music '" + id + "' could not be loaded.");
+        mquit("Music '" + id + "' could not be loaded.");
 
     m_currentID = id;
     m_music.setVolume(m_volume);

@@ -10,7 +10,7 @@
 using namespace config;
 
 Display::Display()
-    : window({true, false, {1360.f, 768.f}})
+    : window({true, false, {1360.f, 768.f}, 1})
     , nui({2u, 1.f})
     , global({L"en_EN", 20.f, 0.05f})
 {

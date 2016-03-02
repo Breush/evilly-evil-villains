@@ -32,7 +32,7 @@ Trap::Trap(const RoomCoords& coords, ElementData& edata, Inter& inter)
     // Lua
     std::string luaFilename = "res/vanilla/traps/" + sTrapID + "/ai.lua";
     if (!lua().load(luaFilename))
-        throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
+        mquit("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
     lua()["_register"]();
 }
 

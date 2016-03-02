@@ -124,7 +124,7 @@ bool MovingElement::lua_isLookingDirection(const std::string& direction) const
 {
     if (direction == "left")        return m_left;
     else if (direction == "right")  return !m_left;
-    else throw std::runtime_error("Unknown direction '" + direction + "' from LUA isLookingDirection().");
+    else mquit("Unknown direction '" + direction + "' from LUA isLookingDirection().");
 }
 
 //---------------------------//
@@ -270,7 +270,7 @@ void MovingElement::bindElementData(ElementData& edata)
         // Lua
         std::string luaFilename = "res/" + m_folder + sElementID + "/ai.lua";
         if (!lua().load(luaFilename))
-            throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
+            mquit("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
 
         // Clear all previous callbacks
         removeDetectSignals();

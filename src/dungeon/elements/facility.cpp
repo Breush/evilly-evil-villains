@@ -60,7 +60,7 @@ Facility::Facility(const RoomCoords& coords, ElementData& edata, dungeon::Inter&
     // Load lua file
     std::string luaFilename = "res/vanilla/facilities/" + sElementID + "/ai.lua";
     if (!lua().load(luaFilename))
-        throw std::runtime_error("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
+        mquit("Failed to load Lua file: '" + luaFilename + "'. It might be a syntax error or a missing file.");
     lua()["_register"]();
 }
 

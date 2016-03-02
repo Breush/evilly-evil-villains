@@ -26,7 +26,7 @@ namespace dungeon
         else if (sDirection == "south") return Direction::SOUTH;
         else if (sDirection == "east")  return Direction::EAST;
         else if (sDirection == "west")  return Direction::WEST;
-        else throw std::runtime_error("Unknown direction key " + sDirection);
+        else mquit("Unknown direction key " + sDirection);
     }
 
     //! Convert a direction wide string into the enum.
@@ -36,7 +36,7 @@ namespace dungeon
         else if (sDirection == L"south") return Direction::SOUTH;
         else if (sDirection == L"east")  return Direction::EAST;
         else if (sDirection == L"west")  return Direction::WEST;
-        else throw std::runtime_error("Unknown direction key.");
+        else wquit(L"Unknown direction key " + sDirection);
     }
 
     //! Returns the opposite direction.

@@ -41,14 +41,14 @@ void MonstersDB::add(const std::string& filename)
     // Check that its a correct file
     const auto& monsterNode = doc.child(L"monster");
     if (!monsterNode)
-        throw std::logic_error("File '" + filename + "' is not a correct monster data file.");
+        mquit("File '" + filename + "' is not a correct monster data file.");
 
     // Getting the ID
     std::wstring id = monsterNode.attribute(L"id").as_string();
     if (id.empty())
-        throw std::logic_error("Monster ID is unspecified. Cannot add '" + filename + "' file.");
+        mquit("Monster ID is unspecified. Cannot add '" + filename + "' file.");
     if (m_monstersData.find(id) != std::end(m_monstersData))
-        throw std::logic_error("Monster ID already exists. Cannot add '" + filename + "' file.");
+        mquit("Monster ID already exists. Cannot add '" + filename + "' file.");
 
     // Create the corresponding data
     auto& monsterData = m_monstersData[id];

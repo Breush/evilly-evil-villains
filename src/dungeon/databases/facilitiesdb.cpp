@@ -42,14 +42,14 @@ void FacilitiesDB::add(const std::string& filename)
     // Check that its a correct file
     const auto& facilityNode = doc.child(L"facility");
     if (!facilityNode)
-        throw std::logic_error("File '" + filename + "' is not a correct facility data file.");
+        mquit("File '" + filename + "' is not a correct facility data file.");
 
     // Getting the ID
     std::wstring id = facilityNode.attribute(L"id").as_string();
     if (id.empty())
-        throw std::logic_error("Facility ID is unspecified. Cannot add '" + filename + "' file.");
+        mquit("Facility ID is unspecified. Cannot add '" + filename + "' file.");
     if (m_facilitiesData.find(id) != std::end(m_facilitiesData))
-        throw std::logic_error("Facility ID already exists. Cannot add '" + filename + "' file.");
+        mquit("Facility ID already exists. Cannot add '" + filename + "' file.");
 
     // Create the corresponding data
     auto& facilityData = m_facilitiesData[id];

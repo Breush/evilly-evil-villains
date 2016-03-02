@@ -17,9 +17,9 @@ namespace detail {
 
 inline int _lua_dispatcher(lua_State *l) {
     BaseFun *fun = (BaseFun *)lua_touserdata(l, lua_upvalueindex(1));
-    try {
+    //try {
         return fun->Apply(l);
-    } catch (std::exception & e) {
+    /*} catch (std::exception & e) {
         lua_pushstring(l, e.what());
         Traceback(l);
         store_current_exception(l, lua_tostring(l, -1));
@@ -28,7 +28,7 @@ inline int _lua_dispatcher(lua_State *l) {
         Traceback(l);
         store_current_exception(l, lua_tostring(l, -1));
     }
-    return lua_error(l);
+    return lua_error(l);*/
 }
 
 template <typename Ret, typename... Args, std::size_t... N>

@@ -132,7 +132,7 @@ void MenuNewGame::startPlay()
         stackClear(StateID::GAME_DUNGEON_DESIGN);
     }
     else if (gamemode == context::Gamemode::HARDCORE) {
-        throw std::runtime_error("Hardcore Gamemode has not been implemented yet.");
+        mquit("Hardcore Gamemode has not been implemented yet.");
     }
 }
 

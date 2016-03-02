@@ -53,7 +53,7 @@ void Villains::load()
     doc.load_file(file.c_str());
 
     const auto& root = doc.child(L"villains");
-    if (!root) throw std::runtime_error("File " + toString(file) + " is not a valid villain file.");
+    if (!root) mquit("File " + toString(file) + " is not a valid villain file.");
 
     // Worlds
     for (auto& info : root.children(L"villain")) {
@@ -62,6 +62,7 @@ void Villains::load()
         villain.index = m_villains.size();
         villain.name = info.attribute(L"name").as_string();
         villain.doshWallet.set(info.attribute(L"dosh").as_uint());
+        villain.evilWallet.set(info.attribute(L"evil").as_uint());
         villain.man = info.attribute(L"man").as_bool();
 
         m_villains.emplace_back(std::move(villain));
@@ -88,6 +89,7 @@ void Villains::save()
 
         info.append_attribute(L"name") = villain.name.c_str();
         info.append_attribute(L"dosh") = villain.doshWallet.value();
+        info.append_attribute(L"evil") = villain.evilWallet.value();
         info.append_attribute(L"man") = villain.man;
     }
 

@@ -60,7 +60,7 @@ SpriterEngine::SpriterModel& AnimationHolder::getModel(const std::string& id)
     if (found == std::end(m_models)) {
         found = m_models.find(m_defaultID);
         if (found == std::end(m_models))
-            throw std::runtime_error("Animation id '" + id + "' was not found and there's no default back-up. Ouch.");
+            mquit("Animation id '" + id + "' was not found and there's no default back-up. Ouch.");
     }
     return *found->second;
 }

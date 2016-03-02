@@ -1,5 +1,7 @@
 #pragma once
 
+#include "tools/stack.hpp"
+
 //----------------------------//
 //---- CMAKE defines here ----//
 
@@ -8,6 +10,26 @@
 
 //--------------------//
 //---- Debug mode ----//
+
+#include <csignal>
+
+#define mquit(MESSAGE)                                                              \
+    do {                                                                            \
+        tools::CallStack callStack;                                                 \
+        callStack.refresh(0);                                                       \
+        std::cerr << std::endl << "[!] Force quitting: " << MESSAGE << std::endl;   \
+        std::cerr << std::endl << callStack.toString();                             \
+        std::raise(SIGINT);                                                         \
+        abort();                                                                    \
+    } while (false);
+
+// TODO Have the callstack as a wide-string too.
+#define wquit(MESSAGE)                                                              \
+    do {                                                                            \
+        std::wcout << std::endl << L"[!] Force quitting: " << MESSAGE << std::endl; \
+        std::raise(SIGINT);                                                         \
+        abort();                                                                    \
+    } while (false);
 
 #if defined(EEV_DEBUG_MODE)
     #define DEBUG_GLOBAL 1
@@ -32,7 +54,6 @@
 #else
     #include <iostream>
     #include <cstdlib>
-    #include <stdexcept>
 
     // Generic, if LEVEL >= BASE then execute
     #define debug_generic(...) \
@@ -52,7 +73,7 @@
             std::cerr << "Assertion failed: " << #bool_expr << std::endl;\
             std::cerr << "    File: " << __FILE__ << " l." << __LINE__ << std::endl;\
             std::cerr << "    Function: " << __func__ << std::endl;\
-            throw std::runtime_error("Assertion failed.");\
+            mquit("Assertion failed.");\
         } } while (false)
 
     #define massert(bool_expr, ...) \
@@ -61,7 +82,7 @@
             std::cerr << "Message: " << __VA_ARGS__ << std::endl;\
             std::cerr << "    File: " << __FILE__ << " l." << __LINE__ << std::endl;\
             std::cerr << "    Function: " << __func__ << std::endl;\
-            throw std::runtime_error("Assertion failed.");\
+            mquit("Assertion failed.");\
         } } while (false)
 
     #define wassert(bool_expr, ...) \
@@ -70,7 +91,7 @@
             std::wcout << L"Message: " << __VA_ARGS__ << std::endl;\
             std::wcout << L"    File: " << __FILE__ << L" l." << __LINE__ << std::endl;\
             std::wcout << L"    Function: " << __func__ << std::endl;\
-            throw std::runtime_error("Assertion failed.");\
+            mquit("Assertion failed.");\
         } } while (false)
 #endif
 

@@ -99,6 +99,8 @@ std::wstring Data::load(const std::wstring& folder)
         uint walletsFactor = (context::worlds.selected().gamemode == context::Gamemode::RICHMAN)? 0u : 1u;
         m_villain->doshWallet.setEvents(this, "dosh_changed");
         m_villain->doshWallet.setFactor(walletsFactor);
+        m_villain->evilWallet.setEvents(this, "evil_changed");
+        m_villain->evilWallet.setFactor(walletsFactor);
         m_fameWallet.setFactor(walletsFactor);
         m_soulWallet.setFactor(walletsFactor);
     }
@@ -153,7 +155,7 @@ void Data::loadDungeon(const std::wstring& file)
     const auto& dungeon = doc.child(L"dungeon");
 
     if (!dungeon)
-        throw std::runtime_error("File " + toString(file) + " is not a valid dungeon file.");
+        mquit("File " + toString(file) + " is not a valid dungeon file.");
 
     //---- Dungeon
 

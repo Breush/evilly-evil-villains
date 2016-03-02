@@ -70,7 +70,7 @@ void ElementData::saveXML(pugi::xml_node& node) const
             child.append_attribute(L"y") = v.y;
         }
 
-        else throw std::logic_error("Some MetaData (saveXML) has an invalid type.");
+        else mquit("Some MetaData (saveXML) has an invalid type.");
     }
 }
 
@@ -120,6 +120,6 @@ void ElementData::loadXML(const pugi::xml_node& node)
             v.y = child.attribute(L"y").as_float();
             m_attributes[name] = v;
         }
-        else throw std::logic_error("Some MetaData (loadXML) has an invalid type.");
+        else mquit("Some MetaData (loadXML) has an invalid type.");
     }
 }

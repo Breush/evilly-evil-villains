@@ -129,7 +129,7 @@ public:
         if (_functor) {
             _traverse();
             _get();
-            if (std::uncaught_exception())
+            /*if (std::uncaught_exception())
             {
                 try {
                     _functor(0);
@@ -137,9 +137,9 @@ public:
                     // We are already unwinding, ignore further exceptions.
                     // As of C++17 consider std::uncaught_exceptions()
                 }
-            } else {
+            } else {*/
                 _functor(0);
-            }
+            //}
         }
         lua_settop(_state, 0);
     }
@@ -411,7 +411,7 @@ public:
         _check_create_table();
         _traversal.push_back(_get);
         const auto state = _state; // gcc-5.1 doesn't support implicit member capturing
-	// `name' is passed by value because lambda lifetime may be longer than `name'
+    // `name' is passed by value because lambda lifetime may be longer than `name'
         _get = [state, name]() {
             lua_getfield(state, -1, name.c_str());
         };
@@ -426,9 +426,9 @@ public:
         return std::move(*this)[std::string{name}];
     }
     Selector&& operator[](const int index) && {
-		std::stringstream ss;
+        std::stringstream ss;
         ss << '.' << index;
-		_name += ss.str();
+        _name += ss.str();
         _check_create_table();
         _traversal.push_back(_get);
         const auto state = _state; // gcc-5.1 doesn't support implicit member capturing
@@ -451,7 +451,7 @@ public:
         auto traversal = _traversal;
         traversal.push_back(_get);
         const auto state = _state; // gcc-5.1 doesn't support implicit member capturing
-	// `name' is passed by value because lambda lifetime may be longer than `name'
+    // `name' is passed by value because lambda lifetime may be longer than `name'
         Fun get = [state, name]() {
             lua_getfield(state, -1, name.c_str());
         };
@@ -466,8 +466,8 @@ public:
         return (*this)[std::string{name}];
     }
     Selector operator[](const int index) const REF_QUAL_LVALUE {
-		std::stringstream ss;
-		ss << _name << '.' << index;
+        std::stringstream ss;
+        ss << _name << '.' << index;
         auto name = ss.str();
         _check_create_table();
         auto traversal = _traversal;

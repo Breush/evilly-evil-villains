@@ -226,7 +226,10 @@ void HeroesManager::damage(const Hero* hero, float amount)
         heroInfo.hp -= amount;
         if (heroInfo.hp <= 0.f) {
             heroInfo.status = HeroStatus::TO_BE_REMOVED;
-            if (heroInfo.hero != nullptr) heroInfo.hero->onDeath();
+            if (heroInfo.hero != nullptr) {
+                heroInfo.hero->onDeath();
+                m_data->evilWallet().add(7u);  // TODO What to do with that, move it in onDeath()?
+            }
         }
 
         // Player feedback

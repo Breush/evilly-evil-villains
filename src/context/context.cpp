@@ -31,7 +31,7 @@ void Context::recreateWindow()
     window.create(videoMode, title, style, contextSettings);
 
     if (!window.isOpen())
-        throw std::runtime_error("Cannot initialize window.");
+        mquit("Cannot initialize window.");
 
     // Window parameters
     sf::Image icon;

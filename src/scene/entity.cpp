@@ -425,7 +425,7 @@ void Entity::addPart(sf::Drawable* drawable)
     // Do not re-add part
     for (auto& part : m_parts)
         if (part.drawable == drawable)
-            throw std::logic_error("Trying to add a part that was already added.");
+            mquit("Trying to add a part that was already added.");
 
     m_parts.push_back({drawable, nullptr, false});
 }
@@ -439,7 +439,7 @@ void Entity::removePart(sf::Drawable* drawable)
         }
     }
 
-    throw std::logic_error("Trying to remove a part that was not previously added.");
+    mquit("Trying to remove a part that was not previously added.");
 }
 
 void Entity::setPartShader(sf::Drawable* drawable, const std::string& shaderID)

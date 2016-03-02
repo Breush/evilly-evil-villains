@@ -1,4 +1,5 @@
 #include "tools/platform-fixes.hpp" // make_unique
+#include "tools/debug.hpp"
 
 #include <stdexcept> // runtime_error
 
@@ -13,7 +14,7 @@ namespace resources
         // Create and load resource
         auto resource = std::make_unique<Resource>();
         if (!resource->loadFromFile(filename))
-            throw std::runtime_error("[resources::Holder] Failed to load '" + filename + "'. Ouch.");
+            mquit("Failed to load '" + filename + "'. Ouch.");
 
         // If loading successful, insert resource to map
         return insertResource(getID(filename), std::move(resource));
@@ -26,7 +27,7 @@ namespace resources
         // Create and load resource
         auto resource = std::make_unique<Resource>();
         if (!resource->loadFromFile(filename, parameter))
-            throw std::runtime_error("[resources::Holder] Failed to load '" + filename + "'. Ouch.");
+            mquit("Failed to load '" + filename + "'. Ouch.");
 
         // If loading successful, insert resource to map
         return insertResource(getID(filename), std::move(resource));
@@ -57,7 +58,7 @@ namespace resources
     {
         auto found = m_resourcesMap.find(id);
         if (found == m_resourcesMap.end())
-            throw std::runtime_error("[resources::Holder] Resource '" + id + "' not found. Cannot set it as default backup.");
+            mquit("Resource '" + id + "' not found. Cannot set it as default backup.");
 
         m_default = found->second.get();
     }
@@ -86,7 +87,7 @@ namespace resources
         auto found = m_resourcesMap.find(id);
         if (found == m_resourcesMap.end()) {
             if (m_default == nullptr)
-                throw std::runtime_error("[resources::Holder] Resource '" + id + "' is not a valid ID. No default backup. Ouch.");
+                mquit("Resource '" + id + "' is not a valid ID. No default backup. Ouch.");
             return *m_default;
         }
 
@@ -99,7 +100,7 @@ namespace resources
         auto found = m_resourcesMap.find(id);
         if (found == m_resourcesMap.end()) {
             if (m_default == nullptr)
-                throw std::runtime_error("[resources::Holder] Resource '" + id + "' is not a valid ID. No default backup. Ouch.");
+                mquit("Resource '" + id + "' is not a valid ID. No default backup. Ouch.");
             return *m_default;
         }
 
@@ -111,7 +112,7 @@ namespace resources
     {
         auto inserted = m_resourcesMap.insert(std::make_pair(id, std::move(resource)));
         if (!inserted.second)
-            throw std::runtime_error("[resources::Holder] Unable to insert resource '" + id + "'. Ouch.");
+            mquit("Unable to insert resource '" + id + "'. Ouch.");
 
         return *inserted.first->second;
     }

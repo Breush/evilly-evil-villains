@@ -452,7 +452,7 @@ const sf::View& Graph::viewFromLayerRoot(const Entity* root) const
             return layer->view();
 
     // Not found: problem
-    throw std::runtime_error("Scene graph is inconsistent.");
+    mquit("Scene graph is inconsistent.");
 }
 
 //---------------------------//

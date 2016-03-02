@@ -67,7 +67,7 @@ void TableLayout::setRowAdapt(uint row, Adapt adapt, float param)
     assert(row < m_rows.size());
 
     if (m_autoSize && adapt != Adapt::FIT)
-        throw std::logic_error("AutoSize forces all adapt to be FIT.");
+        mquit("AutoSize forces all adapt to be FIT.");
 
     m_rows[row].adapt = adapt;
     if (adapt == Adapt::FIXED) m_rows[row].height = param;
@@ -80,7 +80,7 @@ void TableLayout::setColAdapt(uint col, Adapt adapt, float param)
     assert(col < m_cols.size());
 
     if (m_autoSize && adapt != Adapt::FIT)
-        throw std::logic_error("AutoSize forces all adapt to be FIT.");
+        mquit("AutoSize forces all adapt to be FIT.");
 
     m_cols[col].adapt = adapt;
     if (adapt == Adapt::FIXED) m_cols[col].width = param;
@@ -346,7 +346,7 @@ void TableLayout::refreshDimensions()
     }
 
     if (m_autoSize && (m_rowsDimension == 0u || m_colsDimension == 0u))
-        throw std::logic_error("AutoSize demands precise table dimensions.");
+        mquit("AutoSize demands precise table dimensions.");
 
     // Estimating from step
     uint rows = (m_rowsDimension == 0u)? size().y / m_rowsStep : m_rowsDimension;

@@ -328,6 +328,12 @@ namespace dungeon
         //! Access to the villain's dosh wallet (const).
         inline const context::Wallet& doshWallet() const { return m_villain->doshWallet; }
 
+        //! Access to the villain's evilness wallet.
+        inline context::Wallet& evilWallet() { return m_villain->evilWallet; }
+
+        //! Access to the villain's evilness wallet (const).
+        inline const context::Wallet& evilWallet() const { return m_villain->evilWallet; }
+
         //! Access to the fame wallet.
         inline context::Wallet& fameWallet() { return m_fameWallet; }
 

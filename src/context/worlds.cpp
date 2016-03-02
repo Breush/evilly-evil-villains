@@ -45,7 +45,7 @@ void Worlds::load()
     doc.load_file(file.c_str());
 
     const auto& root = doc.child(L"worlds");
-    if (!root) throw std::runtime_error("File " + toString(file) + " is not a valid worlds file.");
+    if (!root) mquit("File " + toString(file) + " is not a valid worlds file.");
 
     // Worlds
     for (auto& worldInfo : root.children(L"world")) {
@@ -136,7 +136,7 @@ void Worlds::setNameCreation(World& world, std::wstring name)
 
         // If it seems like we cannot create directories, just throw an error then...
         if (iFolderPostfix > 42)
-            throw std::runtime_error("Cannot create directories inside saves/.");
+            mquit("Cannot create directories inside saves/.");
     }
 
     world.folder += folderPostfix;

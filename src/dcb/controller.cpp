@@ -76,7 +76,7 @@ void Controller::load(const std::string& file)
     const auto& dcb = doc.child(L"dcb");
 
     if (!dcb)
-        throw std::runtime_error("File " + toString(file) + " is not a valid DCB file.");
+        mquit("File " + toString(file) + " is not a valid DCB file.");
 
     // Get all messages
     for (const auto& message : dcb.children(L"message")) {
@@ -139,7 +139,7 @@ void Controller::addPointsFromType(AnswersPoints& answersPoints, const std::wstr
         points[GaugesManager::GaugeID::CONVICTION]      = fmod(rand(), 31.f) - 15.f;
     }
     else {
-        throw std::runtime_error("Unknown answer type loading DCB file.");
+        mquit("Unknown answer type loading DCB file.");
     }
 
     answersPoints.emplace_back(points);

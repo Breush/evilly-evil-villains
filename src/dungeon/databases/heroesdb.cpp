@@ -40,14 +40,14 @@ void HeroesDB::add(const std::string& filename)
     // Check that its a correct file
     const auto& heroNode = doc.child(L"hero");
     if (!heroNode)
-        throw std::logic_error("File '" + filename + "' is not a correct hero data file.");
+        mquit("File '" + filename + "' is not a correct hero data file.");
 
     // Getting the ID
     std::wstring id = heroNode.attribute(L"id").as_string();
     if (id.empty())
-        throw std::logic_error("Hero ID is unspecified. Cannot add '" + filename + "' file.");
+        mquit("Hero ID is unspecified. Cannot add '" + filename + "' file.");
     if (m_heroesData.find(id) != std::end(m_heroesData))
-        throw std::logic_error("Hero ID already exists. Cannot add '" + filename + "' file.");
+        mquit("Hero ID already exists. Cannot add '" + filename + "' file.");
 
     // Create the corresponding data
     auto& heroData = m_heroesData[id];
