@@ -98,13 +98,7 @@ void AnimatedSprite::restart()
     m_spriterEntity->isPlaying = true;
 
     // Setting the hitbox to some default if none
-    m_hasHitbox = (m_spriterEntity->getObjectInstance("hitbox") != nullptr);
-    if (!m_hasHitbox) {
-        m_hitbox.width  = 50.f;
-        m_hitbox.height = 50.f;
-        m_hitbox.left   = -25.f;
-        m_hitbox.top    = -25.f;
-    }
+    refreshHitbox();
 }
 
 //------------------//
@@ -147,4 +141,22 @@ void AnimatedSprite::refreshSpriterEntityTransform()
     returnif (m_spriterEntity == nullptr);
 
     m_spriterEntity->setScale({scale().x, scale().y});
+}
+
+void AnimatedSprite::refreshHitbox()
+{
+    if (m_hitboxActive) {
+        m_hasHitbox = (m_spriterEntity->getObjectInstance("hitbox") != nullptr);
+        m_hitbox.width  = 50.f;
+        m_hitbox.height = 50.f;
+        m_hitbox.left   = -25.f;
+        m_hitbox.top    = -25.f;
+    }
+    else {
+        m_hasHitbox = false;
+        m_hitbox.width  = 0.f;
+        m_hitbox.height = 0.f;
+        m_hitbox.left   = 0.f;
+        m_hitbox.top    = 0.f;
+    }
 }

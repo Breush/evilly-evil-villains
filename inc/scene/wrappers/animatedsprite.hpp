@@ -80,6 +80,9 @@ namespace scene
         //! Find an object, returns its bounds.
         sf::FloatRect findBox(const std::string& objectName) const;
 
+        //! Whether we need to keep the hitbox updated.
+        inline void hitboxActive(bool hitboxActive) { m_hitboxActive = hitboxActive; refreshHitbox(); }
+
         //! @}
 
     protected:
@@ -101,6 +104,9 @@ namespace scene
         //! Refresh the spriter entity transform to the current position/scale/etc.
         void refreshSpriterEntityTransform();
 
+        //! Refresh the hitbox.
+        void refreshHitbox();
+
         //! @}
 
     private:
@@ -115,6 +121,7 @@ namespace scene
 
         // Hitbox
         sf::FloatRect m_hitbox;     //!< The current hitbox as defined in the animation file (if any).
+        bool m_hitboxActive = true; //!< Should we check for hitbox?
         bool m_hasHitbox = false;   //!< Do we evaluate the hitbox?
     };
 }

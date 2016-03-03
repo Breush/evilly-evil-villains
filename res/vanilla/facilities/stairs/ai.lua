@@ -58,6 +58,8 @@ end
 
 -- Called once on object creation
 function _register()
+    eev_callbackClickRightSet("cbClickRight", "Set link")
+
     eev_setDepth(110)
 end
 
@@ -85,6 +87,11 @@ function _onEntityLeaveTunnel(UID)
     eev_setDetectActiveUID(UID, true)
     eev_setDetectVisibleUID(UID, true)
     eev_resetClipAreasUID(UID)
+end
+
+-- Called whenever a right click occurs
+function cbClickRight()
+    -- TODO
 end
 
 -------------

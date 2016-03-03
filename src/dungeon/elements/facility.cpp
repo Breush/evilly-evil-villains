@@ -81,6 +81,8 @@ void Facility::bindFacilityInfo(FacilityInfo& facilityInfo)
     m_inter.facilityRoomLocksClear(m_coords, m_elementID);
     m_facilityInfo = &facilityInfo;
 
+    m_sprite.hitboxActive(facilityInfo.common->hitbox);
+
     // Lua update
     lua()["_reinit"]();
 }
