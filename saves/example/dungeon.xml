@@ -1,234 +1,175 @@
 <?xml version="1.0"?>
-<dungeon name="Château d'eau" time="189" floorsCount="17" floorRoomsCount="6">
-	<resources>
-		<soul value="146" />
-		<fame value="9" />
-		<debt perWeekDosh="200" weeksLeft="0" />
-	</resources>
-	<dynamics />
-	<heroes nextWaveDelay="74.7207489" />
+<dungeon name="The Mighty Example" time="4555" floorsCount="7" floorRoomsCount="5">
+    <resources>
+        <soul value="3" />
+        <fame value="41" />
+        <debt perWeekDosh="20" weeksLeft="40" />
+    </resources>
+	<dynamics>
+		<dynamic type="loot">
+			<fame type="uint32" value="0" />
+			<soul type="uint32" value="1" />
+			<dosh type="uint32" value="150" />
+			<ry type="float" value="0.5" />
+			<rx type="float" value="4.5" />
+		</dynamic>
+	</dynamics>
+	<heroes nextWaveDelay="12">
+		<hero type="groo" hp="10" status="running">
+		    <dosh type="uint32" value="10" />
+			<rx type="float" value="0.5" />
+			<ry type="float" value="0.2" />
+		</hero>
+	</heroes>
 	<monstersGenerics>
-		<creepim unlocked="true" reserve="0" countdown="7" />
-		<sand_spirit unlocked="true" reserve="1" countdown="0" />
+		<sand_spirit unlocked="false" reserve="0" countdown="0" />
+		<creepim unlocked="true" reserve="3" countdown="5" />
 	</monstersGenerics>
 	<monsters>
-		<monster type="creepim" hp="50" status="running">
+		<monster type="creepim" hp="23" status="running">
 			<fusingTime type="float" value="0" />
-			<rx type="float" value="2.5" />
-			<tx type="float" value="2.5" />
-			<ry type="float" value="5.5" />
-			<ty type="float" value="5.5" />
-		</monster>
-		<monster type="creepim" hp="50" status="running">
-			<fusingTime type="float" value="0" />
-			<rx type="float" value="3.5" />
-			<tx type="float" value="3.5" />
-			<ry type="float" value="5.5" />
-			<ty type="float" value="5.5" />
-		</monster>
-		<monster type="creepim" hp="50" status="running">
-			<fusingTime type="float" value="0" />
-			<rx type="float" value="3.5" />
-			<tx type="float" value="3.5" />
-			<ry type="float" value="0.5" />
-			<ty type="float" value="0.5" />
-		</monster>
-		<monster type="creepim" hp="50" status="running">
-			<fusingTime type="float" value="0" />
-			<rx type="float" value="2.5" />
-			<tx type="float" value="2.5" />
-			<ry type="float" value="0.5" />
-			<ty type="float" value="0.5" />
-		</monster>
-		<monster type="creepim" hp="50" status="running">
-			<fusingTime type="float" value="0" />
-			<rx type="float" value="1.5" />
 			<tx type="float" value="1.5" />
+			<ty type="float" value="3.5" />
+			<rx type="float" value="1.5" />
 			<ry type="float" value="4.5" />
-			<ty type="float" value="4.5" />
+		</monster>
+		<monster type="creepim" hp="15" status="running">
+			<fusingTime type="float" value="1.5" />
+			<rx type="float" value="2.5" />
+			<ry type="float" value="3.2" />
 		</monster>
 	</monsters>
 	<trapsGenerics>
 		<pickpock unlocked="true" />
-		<razor unlocked="false" />
-		<trompe_loeil unlocked="true" />
-		<venomPool unlocked="false" />
+		<trompe_loeil unlocked="false" />
+		<razor unlocked="true" />
 	</trapsGenerics>
 	<floor pos="0">
-		<room pos="0" state="void" />
-		<room pos="1" state="void" />
+		<room pos="0" state="constructed">
+			<facility type="ladder" />
+		</room>
+		<room pos="1" state="constructed">
+			<facility type="entrance" />
+		</room>
 		<room pos="2" state="void" />
 		<room pos="3" state="constructed">
-			<facility barrier="true" type="piston">
-				<direction type="uint32" value="0" />
-				<on type="bool" value="false" />
-			</facility>
+			<facility type="entrance" />
 		</room>
-		<room pos="4" state="void" />
-		<room pos="5" state="void" />
+		<room pos="4" state="constructed">
+			<facility type="stairs">
+				<tunnel x="1" y="3" />
+				<link id="1" x="0" y="4" />
+				<link id="0" x="1" y="3" />
+			</facility>
+			<facility stronglyLinked="true" type="stairsFront" />
+		</room>
 	</floor>
 	<floor pos="1">
-		<room pos="0" state="void" />
-		<room pos="1" state="constructed">
-			<facility barrier="true" type="piston">
-				<direction type="uint32" value="2" />
-				<on type="bool" value="true" />
-			</facility>
-		</room>
-		<room pos="2" state="void" />
-		<room pos="3" state="void" />
-		<room pos="4" state="constructed" />
-		<room pos="5" state="void" />
-	</floor>
-	<floor pos="2">
 		<room pos="0" state="constructed">
-			<facility type="sensor">
-				<link id="0" x="1" y="1" />
-			</facility>
-		</room>
-		<room pos="1" state="void" />
-		<room pos="2" state="void" />
-		<room pos="3" state="constructed" />
-		<room pos="4" state="constructed">
-			<facility barrier="true" type="piston">
-				<direction type="uint32" value="3" />
-				<on type="bool" value="true" />
-			</facility>
-		</room>
-		<room pos="5" state="constructed">
-			<facility type="sensor">
-				<link id="0" x="0" y="3" />
-			</facility>
-		</room>
-	</floor>
-	<floor pos="3">
-		<room pos="0" state="constructed">
-			<facility type="sensor">
-				<link id="0" x="3" y="2" />
+			<facility type="ladder">
+				<tunnel x="1" y="0" relative="true" />
+				<link id="0" x="2" y="0" />
 			</facility>
 		</room>
 		<room pos="1" state="void" />
 		<room pos="2" state="constructed">
-			<facility barrier="true" type="piston">
-				<direction type="uint32" value="1" />
-				<on type="bool" value="false" />
+			<facility type="ladder">
+				<tunnel x="1" y="0" relative="true" />
 			</facility>
 		</room>
-		<room pos="3" state="void" />
+		<room pos="3" state="constructed">
+			<facility type="stairs">
+				<tunnel x="0" y="4" />
+				<link id="1" x="1" y="3" />
+				<link id="0" relink="true" x="0" y="4" />
+			</facility>
+			<facility stronglyLinked="true" type="stairsFront" />
+		</room>
+		<room pos="4" state="constructed" />
+	</floor>
+	<floor pos="2">
+		<room pos="0" state="constructed">
+			<facility stronglyLinked="true" type="ladderExit">
+				<tunnel x="-1" y="0" relative="true" />
+			</facility>
+		</room>
+		<room pos="1" state="constructed">
+			<trap type="pickpock">
+				<dosh type="uint32" value="30" />
+			</trap>
+		</room>
+		<room pos="2" state="constructed">
+			<facility type="ladder">
+				<tunnel x="1" y="0" relative="true" />
+				<link id="0" x="3" y="2" />
+			</facility>
+		</room>
+		<room pos="3" state="constructed" />
 		<room pos="4" state="void" />
-		<room pos="5" state="constructed">
-			<facility type="sensor">
-				<link id="0" x="2" y="4" />
+	</floor>
+	<floor pos="3">
+		<room pos="0" state="void" />
+		<room pos="1" state="constructed">
+			<trap type="pickpock">
+				<dosh type="uint32" value="30" />
+			</trap>
+		</room>
+		<room pos="2" state="constructed">
+			<facility stronglyLinked="true" type="ladderExit">
+				<tunnel x="-1" y="0" relative="true" />
+			</facility>
+		</room>
+		<room pos="3" state="constructed">
+			<trap type="trompe_loeil" />
+		</room>
+		<room pos="4" state="constructed">
+			<facility type="ladder">
+				<tunnel x="1" y="0" relative="true" />
+				<link id="0" x="4" y="4" />
 			</facility>
 		</room>
 	</floor>
 	<floor pos="4">
 		<room pos="0" state="constructed" />
 		<room pos="1" state="constructed" />
-		<room pos="2" state="void" />
-		<room pos="3" state="void" />
-		<room pos="4" state="void" />
-		<room pos="5" state="void" />
+		<room pos="2" state="constructed">
+			<facility type="ladder">
+				<tunnel x="1" y="0" relative="true" />
+			</facility>
+		</room>
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed">
+			<facility stronglyLinked="true" type="ladderExit">
+				<tunnel x="-1" y="0" relative="true" />
+			</facility>
+		</room>
 	</floor>
 	<floor pos="5">
 		<room pos="0" state="void" />
 		<room pos="1" state="void" />
-		<room pos="2" state="void" />
+		<room pos="2" state="constructed">
+			<trap type="pickpock">
+				<dosh type="uint32" value="2" />
+			</trap>
+			<facility type="ladder">
+				<tunnel x="1" y="0" relative="true" />
+				<link id="0" x="6" y="2" />
+			</facility>
+		</room>
 		<room pos="3" state="void" />
-		<room pos="4" state="void" />
-		<room pos="5" state="void" />
+		<room pos="4" state="constructed" />
 	</floor>
 	<floor pos="6">
 		<room pos="0" state="constructed" />
 		<room pos="1" state="constructed">
-			<facility barrier="true" type="piston">
-				<direction type="uint32" value="1" />
-				<on type="bool" value="true" />
+			<facility treasure="198" type="smallChest" />
+		</room>
+		<room pos="2" state="constructed">
+			<facility stronglyLinked="true" type="ladderExit">
+				<tunnel x="-1" y="0" relative="true" />
 			</facility>
 		</room>
-		<room pos="2" state="void" />
-		<room pos="3" state="void" />
-		<room pos="4" state="void" />
-		<room pos="5" state="void" />
-	</floor>
-	<floor pos="7">
-		<room pos="0" state="constructed" />
-		<room pos="1" state="void" />
-		<room pos="2" state="void" />
-		<room pos="3" state="void" />
-		<room pos="4" state="void" />
-		<room pos="5" state="void" />
-	</floor>
-	<floor pos="8">
-		<room pos="0" state="constructed" />
-		<room pos="1" state="void" />
-		<room pos="2" state="void" />
-		<room pos="3" state="void" />
-		<room pos="4" state="void" />
-		<room pos="5" state="void" />
-	</floor>
-	<floor pos="9">
-		<room pos="0" state="constructed" />
-		<room pos="1" state="constructed" />
-		<room pos="2" state="void" />
-		<room pos="3" state="void" />
-		<room pos="4" state="void" />
-		<room pos="5" state="void" />
-	</floor>
-	<floor pos="10">
-		<room pos="0" state="constructed" />
-		<room pos="1" state="constructed" />
-		<room pos="2" state="void" />
-		<room pos="3" state="void" />
-		<room pos="4" state="void" />
-		<room pos="5" state="void" />
-	</floor>
-	<floor pos="11">
-		<room pos="0" state="void" />
-		<room pos="1" state="constructed" />
-		<room pos="2" state="void" />
-		<room pos="3" state="void" />
-		<room pos="4" state="void" />
-		<room pos="5" state="void" />
-	</floor>
-	<floor pos="12">
-		<room pos="0" state="constructed" />
-		<room pos="1" state="constructed" />
-		<room pos="2" state="void" />
-		<room pos="3" state="void" />
-		<room pos="4" state="void" />
-		<room pos="5" state="void" />
-	</floor>
-	<floor pos="13">
-		<room pos="0" state="constructed" />
-		<room pos="1" state="void" />
-		<room pos="2" state="void" />
-		<room pos="3" state="void" />
-		<room pos="4" state="void" />
-		<room pos="5" state="void" />
-	</floor>
-	<floor pos="14">
-		<room pos="0" state="constructed" />
-		<room pos="1" state="void" />
-		<room pos="2" state="void" />
-		<room pos="3" state="void" />
-		<room pos="4" state="void" />
-		<room pos="5" state="void" />
-	</floor>
-	<floor pos="15">
-		<room pos="0" state="constructed" />
-		<room pos="1" state="void" />
-		<room pos="2" state="void" />
-		<room pos="3" state="void" />
-		<room pos="4" state="void" />
-		<room pos="5" state="void" />
-	</floor>
-	<floor pos="16">
-		<room pos="0" state="constructed" />
-		<room pos="1" state="constructed" />
-		<room pos="2" state="void" />
-		<room pos="3" state="void" />
-		<room pos="4" state="void" />
-		<room pos="5" state="void" />
+		<room pos="3" state="constructed" />
+		<room pos="4" state="constructed" />
 	</floor>
 </dungeon>
