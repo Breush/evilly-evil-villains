@@ -25,7 +25,7 @@ The Steamworks API has been integrated too. It provides access too Steam interfa
 You need development packages. The following list is for debian-based systems:
 ```
 sudo apt-get install libfreetype6 libjpeg8 libopenal1 libvorbisenc2 libvorbisfile3
-sudo apt-get install libfreetype6-dev libjpeg-dev libx11-dev libxrandr-dev libxcb1-dev libx11-xcb-dev libxcb-randr0-dev libxcb-image0-dev libflac-dev libogg-dev libvorbis-dev libopenal-dev libpthread-stubs0-dev
+sudo apt-get install libfreetype6-dev libjpeg-dev libx11-dev libxrandr-dev libxcb1-dev libx11-xcb-dev libxcb-randr0-dev libxcb-image0-dev libflac-dev libogg-dev libvorbis-dev libopenal-dev libpthread-stubs0-dev libudev-dev
 sudo apt-get install libgl1-mesa-dev
 sudo apt-get install liblua5.2-0 liblua5.2-dev
 sudo apt-get install gettext
