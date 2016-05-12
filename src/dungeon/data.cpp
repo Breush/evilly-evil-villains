@@ -826,6 +826,21 @@ void Data::facilityLinksAdd(FacilityInfo& facilityInfo, const Link* common, cons
     link.common = common;
     link.coords = linkCoords;
     link.relink = relink;
+    if (common != nullptr) link.id = common->id;
+    addEvent("facility_changed", facilityInfo.coords);
+}
+
+void Data::facilityLinkLastSetID(const RoomCoords& coords, const std::wstring& facilityID, uint8 id)
+{
+    auto pFacility = facilitiesFind(coords, facilityID);
+    returnif (pFacility == nullptr);
+    facilityLinkLastSetID(*pFacility, id);
+}
+
+void Data::facilityLinkLastSetID(FacilityInfo& facilityInfo, uint8 id)
+{
+    auto& link = facilityInfo.links.back();
+    link.id = id;
     addEvent("facility_changed", facilityInfo.coords);
 }
 

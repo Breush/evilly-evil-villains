@@ -190,8 +190,9 @@ Locate a facility $FacilityID$.\newline
 Execute the $LuaCode$ from the Artificial Intelligence file (\texttt{ai.lua}) of the located facility.\newline
 \textit{One can use spaces in the $LuaCode$ by using back-quotes \texttt{`} around the full argument.}
 \end{apiCode}
-\begin{apiCode}{...\{facility\}... link set $Y_1$ $Y_2$}
+\begin{apiCode}{...\{facility\}... link set $Y_1$ $Y_2$ [id $ID$]}
 Set the link of the located facility to the room at position $(Y_1, Y_2)$.
+Optionnally set the id of the link to $ID$, without any collision checks.
 \end{apiCode}
 
 \end{document}

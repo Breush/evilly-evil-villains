@@ -222,7 +222,10 @@ namespace dungeon
         void facilityLinksInteractiveCreate(const RoomCoords& coords, const std::wstring& facilityID, const InteractiveLink* link, const RoomCoords& linkCoords);
 
         //! Set the room facility link to specific coordinates.
-        void facilityLinksAdd(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords);
+        void facilityLinksAdd(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords, const uint8 id = 0xFF);
+
+        //! Set the room facility link to specific coordinates from its info.
+        void facilityLinksAdd(FacilityInfo& facilityInfo, const RoomCoords& linkCoords, const uint8 id = 0xFF);
 
         //----- Barrier
 

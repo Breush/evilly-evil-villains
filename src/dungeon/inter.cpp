@@ -818,9 +818,18 @@ void Inter::facilityLinksInteractiveCreate(const RoomCoords& coords, const std::
         m_data->facilityLinksAdd(linkCoords, link->facilityID, link, coords, true);
 }
 
-void Inter::facilityLinksAdd(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords)
+void Inter::facilityLinksAdd(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords, const uint8 id)
 {
     m_data->facilityLinksAdd(coords, facilityID, nullptr, linkCoords);
+    if (id != 0xFF)
+        m_data->facilityLinkLastSetID(coords, facilityID, id);
+}
+
+void Inter::facilityLinksAdd(FacilityInfo& facilityInfo, const RoomCoords& linkCoords, const uint8 id)
+{
+    m_data->facilityLinksAdd(facilityInfo, nullptr, linkCoords, id);
+    if (id != 0xFF)
+        m_data->facilityLinkLastSetID(facilityInfo, id);
 }
 
 //----- Treasure

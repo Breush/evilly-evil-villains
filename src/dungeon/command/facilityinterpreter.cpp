@@ -40,11 +40,12 @@ void FacilityInterpreter::interpret(std::vector<context::Command>& commands, std
 
     if (nTokens >= 4u) {
         if (tokens[0u] == L"link") {
-            // TODO Link Should be add
+            // TODO [easyfix] Should be "add", not "set" (update API doc too)
             if (tokens[1u] == L"set") {
                 logMessage += L"Setting link to room " + tokens[2u] + L"/" + tokens[3u];
                 RoomCoords linkCoords{to<uint8>(tokens[2u]), to<uint8>(tokens[3u])};
-                m_inter.facilityLinksAdd(m_pFacility->coords(), m_pFacility->edata().type(), linkCoords);
+                uint8 id = (nTokens >= 6u && tokens[4u] == L"id")? to<uint8>(tokens[5u]) : 0xFF;
+                m_inter.facilityLinksAdd(m_pFacility->facilityInfo(), linkCoords, id);
                 goto logging;
             }
         }

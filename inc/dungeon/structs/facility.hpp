@@ -13,6 +13,7 @@ namespace dungeon
     //! A facility link.
     struct FacilityLink
     {
+        uint8 id = 0xFF;                //!< The link id.
         const Link* common = nullptr;   //!< The base link from the database.
         sf::Vector2<uint8> coords;      //!< The final position of the link.
         bool relink = false;            //!< Are we a link created through an automated relink?

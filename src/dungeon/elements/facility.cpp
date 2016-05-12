@@ -148,16 +148,16 @@ void Facility::lua_setTreasure(const uint32 value)
 bool Facility::lua_linkExists(uint32 linkID) const
 {
     for (const auto& link : m_facilityInfo->links)
-        if (link.common != nullptr && link.common->id == linkID)
+        if (link.id == linkID)
             return true;
     return false;
 }
 
-// TODO Update API text
+// TODO [easyfix] Update API doc
 std::tuple<uint32, uint32> Facility::lua_linkGet(uint32 linkID) const
 {
     for (const auto& link : m_facilityInfo->links)
-        if (link.common != nullptr && link.common->id == linkID)
+        if (link.id == linkID)
             return std::tuple<uint32, uint32>{link.coords.x, link.coords.y};
     return std::tuple<uint32, uint32>{-1u, -1u};
 }
