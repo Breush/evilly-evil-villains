@@ -212,6 +212,9 @@ namespace dungeon
         //! Add a link to a facility.
         void facilityLinksAdd(FacilityInfo& facilityInfo, const Link* common, const RoomCoords& linkCoords, bool relink = false);
 
+        //! Redirect the specified link to other coords.
+        void facilityLinkRedirect(FacilityInfo& facilityInfo, const uint8 id, const RoomCoords& linkCoords);
+
         //! Set the link ID of the last existing link for the facility.
         void facilityLinkLastSetID(const RoomCoords& coords, const std::wstring& facilityID, uint8 id);
 
@@ -219,7 +222,16 @@ namespace dungeon
         void facilityLinkLastSetID(FacilityInfo& facilityInfo, uint8 id);
 
         //! Remove a specific link of a facility.
+        //! This is a hard removal, it does not check for broken incoming links.
         void facilityLinksRemove(const RoomCoords& coords, const std::wstring& facilityID, const RoomCoords& linkCoords, const std::wstring& linkFacilityID);
+
+        //! Remove a specific link of a facility.
+        //! This is a hard removal, it does not check for broken incoming links.
+        void facilityLinksRemove(FacilityInfo& facilityInfo, const RoomCoords& linkCoords, const std::wstring& linkFacilityID);
+
+        //! Remove a specific link of a facility.
+        //! This will also remove the associated relinked link if any.
+        void facilityLinksRemove(FacilityInfo& facilityInfo, uint8 id);
 
         //! Remove all strongly linked facilities.
         void facilityLinksStrongRemoveFacilities(FacilityInfo& facilityInfo);

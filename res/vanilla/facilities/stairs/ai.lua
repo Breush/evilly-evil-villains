@@ -58,7 +58,7 @@ end
 
 -- Called once on object creation
 function _register()
-    eev_callbackClickRightSet("cbClickRight", "Set link")
+    eev_callbackClickRightSet("cbClickRight", "Redirect")
 
     eev_setDepth(110)
 end
@@ -91,7 +91,7 @@ end
 
 -- Called whenever a right click occurs
 function cbClickRight()
-    -- TODO
+    redirectInteractive()
 end
 
 -------------
@@ -101,3 +101,27 @@ end
 function _update(dt)
 end
 
+--------------------
+-- Stairs control --
+
+-- Let the player redirect the linked stairs to another one
+function redirectInteractive()
+    -- TODO Have a way to detect what the player is thinking
+    redirect(1, 1)
+end
+
+-- Redirect the linked stairs to another one
+function redirect(linkX, linkY)
+    if eev_facilityExists(linkX, linkY, "stairs") then
+        local roomX = eev_getCurrentRoomX()
+        local roomY = eev_getCurrentRoomY()
+
+        eev_linksRemove(0)
+        eev_linksAdd(linkX, linkY)
+        eev_linksLastBind(0)
+
+        eev_facilityLinksRemove(linkX, linkY, "stairs", 0)
+        eev_facilityLinksAdd(linkX, linkY, "stairs", roomX, roomY)
+        eev_facilityLinksLastBind(linkX, linkY, "stairs", 0)
+    end
+end

@@ -222,7 +222,8 @@ void Data::loadDungeon(const std::wstring& file)
     for (const auto& floor : dungeon.children(L"floor")) {
         auto floorPos = floor.attribute(L"pos").as_uint();
 
-        m_floors.push_back({floorPos});
+        m_floors.emplace_back();
+        m_floors.back().pos = floorPos;
         mdebug_dungeon_2("Found floor " << floorPos);
 
         // Rooms
@@ -830,6 +831,16 @@ void Data::facilityLinksAdd(FacilityInfo& facilityInfo, const Link* common, cons
     addEvent("facility_changed", facilityInfo.coords);
 }
 
+void Data::facilityLinkRedirect(FacilityInfo& facilityInfo, const uint8 id, const RoomCoords& linkCoords)
+{
+    for (auto& link : facilityInfo.links) {
+        if (link.id != id) continue;
+        link.coords = linkCoords;
+        addEvent("facility_changed", facilityInfo.coords);
+        return;
+    }
+}
+
 void Data::facilityLinkLastSetID(const RoomCoords& coords, const std::wstring& facilityID, uint8 id)
 {
     auto pFacility = facilitiesFind(coords, facilityID);
@@ -848,17 +859,35 @@ void Data::facilityLinksRemove(const RoomCoords& coords, const std::wstring& fac
 {
     auto pFacility = facilitiesFind(coords, facilityID);
     returnif (pFacility == nullptr);
-    // TODO Why aren't managing relinks? And can't just a linkID be sufficient?
-    std::erase_if(pFacility->links, [&linkCoords, &linkFacilityID] (const FacilityLink& link)
+    facilityLinksRemove(*pFacility, linkCoords, linkFacilityID);
+}
+
+void Data::facilityLinksRemove(FacilityInfo& facilityInfo, const RoomCoords& linkCoords, const std::wstring& linkFacilityID)
+{
+    std::erase_if(facilityInfo.links, [&linkCoords, &linkFacilityID] (const FacilityLink& link)
                   { return link.coords == linkCoords && link.common->facilityID == linkFacilityID; });
-    addEvent("facility_changed", coords);
+    addEvent("facility_changed", facilityInfo.coords);
+}
+
+void Data::facilityLinksRemove(FacilityInfo& facilityInfo, uint8 id)
+{
+    auto iLink = std::find_if(facilityInfo.links, [id] (const FacilityLink& link) { return link.id == id; });
+    if (iLink == std::end(facilityInfo.links)) return;
+
+    // We might need to remove a relinked link
+    if (iLink->common != nullptr && iLink->common->relink)
+        facilityLinksRemove(iLink->coords, iLink->common->facilityID, facilityInfo.coords, facilityInfo.data.type());
+
+    facilityInfo.links.erase(iLink);
+    addEvent("facility_changed", facilityInfo.coords);
 }
 
 void Data::facilityLinksStrongRemoveFacilities(FacilityInfo& facilityInfo)
 {
+    // Note: Intended copy of the links because of the removals
     auto links = facilityInfo.links;
     for (auto& link : links)
-        if (link.common->strong)
+        if (link.common != nullptr && link.common->strong)
             facilitiesRemove(link.coords, link.common->facilityID, true);
 }
 
@@ -873,7 +902,7 @@ void Data::facilityLinksIncomingRemove(const RoomCoords& coords, const std::wstr
             if (link.common == nullptr || link.common->facilityID.empty()) continue;
             if (!link.relink && link.common->facilityID != facilityID) continue;
             else if (link.relink && link.common->originFacilityID != facilityID) continue;
-            facilityLinksRemove(facility.coords, facility.data.type(), coords, facilityID);
+            facilityLinksRemove(facility, coords, facilityID);
         }
     }
 }

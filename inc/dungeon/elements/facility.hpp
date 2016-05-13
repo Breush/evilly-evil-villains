@@ -67,8 +67,10 @@ namespace dungeon
         //! If not, returns 0u.
         uint32 lua_getSiblingFacility(const std::string& facilityID) const;
 
-        //! Get the UID for the facility specified in the relative room.
-        //! If not, returns 0u.
+        //! Check if the facility exists in the target room.
+        bool lua_facilityExists(const uint32 x, const uint32 y, const std::string& facilityID) const;
+
+        //! Check if the facility exists in the target room.
         bool lua_facilityExistsRelative(const int x, const int y, const std::string& facilityID) const;
 
         //! Get the current room x coordinate.
@@ -92,6 +94,27 @@ namespace dungeon
 
         //! The coordinates of the link specified. (Undefined behavior if not existing.)
         std::tuple<uint32, uint32> lua_linkGet(uint32 linkID) const;
+
+        //! Change the specified link to another room.
+        void lua_linkRedirect(uint32 linkID, uint32 linkX, uint32 linkY);
+
+        //! Add a link to the list.
+        void lua_linksAdd(uint32 linkX, uint32 linkY);
+
+        //! Remove a link from the list.
+        void lua_linksRemove(uint32 linkID);
+
+        //! Set the last link to a specific ID (the common informations will be binded).
+        void lua_linksLastBind(uint32 linkID);
+
+        //! Add a link to the specified facility.
+        void lua_facilityLinksAdd(uint32 x, uint32 y, const std::string& facilityID, uint32 linkX, uint32 linkY);
+
+        //! Remove a link from the specified facility.
+        void lua_facilityLinksRemove(uint32 x, uint32 y, const std::string& facilityID, uint32 linkID);
+
+        //! Set the last link to a specific ID (the common informations will be binded) of the specified facility.
+        void lua_facilityLinksLastBind(uint32 x, uint32 y, const std::string& facilityID, uint32 linkID);
 
         //----- Energy
 

@@ -227,6 +227,15 @@ namespace dungeon
         //! Set the room facility link to specific coordinates from its info.
         void facilityLinksAdd(FacilityInfo& facilityInfo, const RoomCoords& linkCoords, const uint8 id = 0xFF);
 
+        //! Remove a specified link.
+        void facilityLinksRemove(FacilityInfo& facilityInfo, const uint8 id);
+
+        //! Bind the last link of a facility to a specified ID.
+        void facilityLinksLastBind(FacilityInfo& facilityInfo, const uint8 id);
+
+        //! Change the coords of the specified link.
+        void facilityLinkRedirect(FacilityInfo& facilityInfo, const uint8 id, const RoomCoords& linkCoords);
+
         //----- Barrier
 
         //! Set the specified room facility's barrier.

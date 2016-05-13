@@ -832,6 +832,23 @@ void Inter::facilityLinksAdd(FacilityInfo& facilityInfo, const RoomCoords& linkC
         m_data->facilityLinkLastSetID(facilityInfo, id);
 }
 
+void Inter::facilityLinksRemove(FacilityInfo& facilityInfo, const uint8 id)
+{
+    m_data->facilityLinksRemove(facilityInfo, id);
+}
+
+void Inter::facilityLinksLastBind(FacilityInfo& facilityInfo, const uint8 id)
+{
+    auto& link = facilityInfo.links.back();
+    link.common = facilityInfo.common->linkFind(id);
+    link.id = id;
+}
+
+void Inter::facilityLinkRedirect(FacilityInfo& facilityInfo, const uint8 id, const RoomCoords& linkCoords)
+{
+    m_data->facilityLinkRedirect(facilityInfo, id, linkCoords);
+}
+
 //----- Treasure
 
 void Inter::setRoomFacilityTreasure(const RoomCoords& coords, const std::wstring& facilityID, uint32 amount)
