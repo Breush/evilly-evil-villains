@@ -182,18 +182,26 @@ bool Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::V
     returnif (button == sf::Mouse::Middle) false;
 
     // Selected the tile below
-    selectTile(relPos);
+    auto coords = roomCoordsFromPosition(relPos);
+    selectTile(coords);
 
-    // Harvest the money
-    if (button == sf::Mouse::Left)
-        harvestTileDosh(m_selectedTile->coords);
+    if (button == sf::Mouse::Left) {
+        // Harvest the money
+        harvestTileDosh(coords);
+
+        // Launch the callbacks for clicked tiles
+        if (m_tileClickedCallback != nullptr) {
+            m_tileClickedCallback(coords);
+            m_tileClickedCallback = nullptr;
+        }
+    }
 
     // Remove spinbox interface if any
     m_treasureEditSpinBox.markForVisible(false);
 
     // Pop the context menu up
     if (button == sf::Mouse::Right)
-        showTileContextMenu(m_selectedTile->coords, nuiPos);
+        showTileContextMenu(coords, nuiPos);
 
     return true;
 }
@@ -390,11 +398,6 @@ const std::string& Inter::innerWallsVariant(const RoomCoords& coords)
 
 //-------------------------//
 //----- Selected tile -----//
-
-void Inter::selectTile(const sf::Vector2f& pos)
-{
-    selectTile(roomCoordsFromPosition(pos));
-}
 
 void Inter::selectTile(const RoomCoords& coords)
 {
@@ -718,6 +721,13 @@ void Inter::setFloorsCount(uint value)
 void Inter::setFloorRoomsCount(uint value)
 {
     m_data->setFloorRoomsCount(value);
+}
+
+void Inter::roomClickedInteractive(const RoomCoordsCallback& callback)
+{
+    // TODO Having a visual effect noticing this is active would be awesome
+    // (like some mouse cursor change)
+    m_tileClickedCallback = callback;
 }
 
 //------------------//

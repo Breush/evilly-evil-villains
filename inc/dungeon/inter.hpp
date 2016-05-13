@@ -30,6 +30,9 @@ namespace dungeon
         //! A basic void callback.
         using Callback = std::function<void()>;
 
+        //! A callback that gets a room coords.
+        using RoomCoordsCallback = std::function<void(const RoomCoords& coords)>;
+
         //! A tile is just a bunch a layers and some fixed entities (facilities/traps).
         using TileLayer = scene::LightSprite;
 
@@ -173,6 +176,9 @@ namespace dungeon
 
         //! Set the number of rooms by floor.
         void setFloorRoomsCount(uint value);
+
+        //! Wait for the next room to be clicked, and warn the callback when done.
+        void roomClickedInteractive(const RoomCoordsCallback& callback);
 
         //! @}
 
@@ -396,9 +402,6 @@ namespace dungeon
         //! @name Selected tile
         //! @{
 
-        //! Select the tile at the specified local position (if any).
-        void selectTile(const sf::Vector2f& pos);
-
         //! Select the select at specified coordinates.
         void selectTile(const RoomCoords& coords);
 
@@ -486,6 +489,9 @@ namespace dungeon
         std::unordered_map<RoomCoords, Tile> m_tiles;   //!< All tiles constituing the dungeon.
         sf::Vector2f m_roomScale = {1.f, 1.f};          //!< The room scale.
         sf::Vector2f m_refRoomSize;                     //!< The original room size.
+
+        // Callbacks
+        RoomCoordsCallback m_tileClickedCallback = nullptr; //!< Called when a room is clicked, then set to nullptr.
 
         // Decorum
         std::vector<std::string> m_innerWallsVariants;      //!< The list of all inner walls variants texturesID.

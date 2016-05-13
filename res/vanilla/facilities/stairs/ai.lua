@@ -106,12 +106,11 @@ end
 
 -- Let the player redirect the linked stairs to another one
 function redirectInteractive()
-    -- TODO Have a way to detect what the player is thinking
-    redirect(1, 1)
+    eev_roomClickedInteractive("cbRedirect");
 end
 
 -- Redirect the linked stairs to another one
-function redirect(linkX, linkY)
+function cbRedirect(linkX, linkY)
     if eev_facilityExists(linkX, linkY, "stairs") then
         local roomX = eev_getCurrentRoomX()
         local roomY = eev_getCurrentRoomY()

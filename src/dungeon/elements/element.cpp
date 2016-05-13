@@ -47,6 +47,8 @@ Element::Element(dungeon::Inter& inter)
     lua()["eev_callbackClickLeftSet"] = eev_callbackClickLeftSet;
     lua()["eev_callbackClickRightSet"] = eev_callbackClickRightSet;
 
+    lua()["eev_roomClickedInteractive"] = [this] (const std::string& luaKey) { lua_roomClickedInteractive(luaKey); };
+
     lua()["eev_setDataBool"] = [this] (const std::string& s, const bool value) { return lua_setDataBool(s, value); };
     lua()["eev_getDataBool"] = [this] (const std::string& s) { return lua_getDataBool(s); };
     lua()["eev_initEmptyDataBool"] = [this] (const std::string& s, const bool value) { return lua_initEmptyDataBool(s, value); };
@@ -199,6 +201,20 @@ void Element::lua_callbackClickRightSet(const std::string& luaKey, const std::st
     m_rightClickAction.name = actionName;
     m_rightClickAction.callback = [this, luaKey] { lua()[luaKey.c_str()](); };
     m_mouseOverlay.setRight(_(m_rightClickAction.name.c_str()));
+}
+
+void Element::lua_roomClickedInteractive(const std::string& luaKey)
+{
+    // TODO If "this" is destroyed while waiting for the click,
+    // Inter will emit this callback with a pending reference => crash
+    // Two possible fixes:
+    // - Do not send "this" but pass the facility coords and its facilityID as parameters for roomClickedInteractive,
+    //   so that Inter will search for the facility once it needs it (and do nothing if it does not exists anymore).
+    // - Have a procedure that asks Inter to remove the current callback when "this" is destroyed.
+    //
+    // The first solution is better, as it is more robust against facilities same room reloads.
+    auto callback = [this, luaKey] (const RoomCoords& coords) { lua()[luaKey.c_str()](coords.x, coords.y); };
+    m_inter.roomClickedInteractive(callback);
 }
 
 //----- Element data

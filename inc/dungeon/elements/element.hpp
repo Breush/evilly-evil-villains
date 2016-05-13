@@ -112,6 +112,9 @@ namespace dungeon
         //! Add action callback whenever a right click happens.
         void lua_callbackClickRightSet(const std::string& luaKey, const std::string& actionName);
 
+        //! Return the room coordinates of the next room clicked by the player.
+        void lua_roomClickedInteractive(const std::string& luaKey);
+
         //----- Element data
 
         //! Set the eData with the value specified.
