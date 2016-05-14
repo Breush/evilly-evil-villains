@@ -177,8 +177,20 @@ namespace dungeon
         //! Set the number of rooms by floor.
         void setFloorRoomsCount(uint value);
 
+        //! @}
+
+        //-----------------------//
+        //! @name Room selection
+        //! @{
+
         //! Wait for the next room to be clicked, and warn the callback when done.
         void roomClickedInteractive(const RoomCoordsCallback& callback);
+
+        //! Start the effect of waiting for a room selection.
+        void roomClickedInteractiveStart();
+
+        //! End the effect of waiting for a room selection.
+        void roomClickedInteractiveEnd();
 
         //! @}
 
@@ -490,8 +502,9 @@ namespace dungeon
         sf::Vector2f m_roomScale = {1.f, 1.f};          //!< The room scale.
         sf::Vector2f m_refRoomSize;                     //!< The original room size.
 
-        // Callbacks
+        // Tile selection
         RoomCoordsCallback m_tileClickedCallback = nullptr; //!< Called when a room is clicked, then set to nullptr.
+        scene::RectangleShape m_tileSelectionOverlay;       //!< Overlay to denote that we are waiting for a tile to be clicked.
 
         // Decorum
         std::vector<std::string> m_innerWallsVariants;      //!< The list of all inner walls variants texturesID.

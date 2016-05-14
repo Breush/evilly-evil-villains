@@ -115,6 +115,10 @@ function cbRedirect(linkX, linkY)
         local roomX = eev_getCurrentRoomX()
         local roomY = eev_getCurrentRoomY()
 
+        if linkX == roomX and linkY == roomY then
+            return
+        end
+
         eev_linksRemove(0)
         eev_linksAdd(linkX, linkY)
         eev_linksLastBind(0)

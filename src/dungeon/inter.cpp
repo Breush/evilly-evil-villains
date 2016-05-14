@@ -24,6 +24,12 @@ Inter::Inter(nui::ContextMenu& contextMenu)
     m_grid.setVisible(false);
     addPart(&m_grid);
 
+    // Overlay
+    attachChild(m_tileSelectionOverlay);
+    m_tileSelectionOverlay.setFillColor({100u, 150u, 80u, 100u});
+    m_tileSelectionOverlay.setSize({500.f, 500.f});
+    m_tileSelectionOverlay.setVisible(false);
+
     // Spinbox
     attachChild(m_treasureEditSpinBox);
     m_treasureEditSpinBox.setDepth(-1.f);
@@ -121,6 +127,8 @@ void Inter::updateRoutine(const sf::Time& dt)
 void Inter::onSizeChanges()
 {
     m_grid.setSize(size());
+    m_tileSelectionOverlay.setSize(size());
+
     refreshOuterWalls();
 
     returnif (m_data == nullptr);
@@ -192,7 +200,7 @@ bool Inter::handleMouseButtonPressed(const sf::Mouse::Button button, const sf::V
         // Launch the callbacks for clicked tiles
         if (m_tileClickedCallback != nullptr) {
             m_tileClickedCallback(coords);
-            m_tileClickedCallback = nullptr;
+            roomClickedInteractiveEnd();
         }
     }
 
@@ -725,9 +733,19 @@ void Inter::setFloorRoomsCount(uint value)
 
 void Inter::roomClickedInteractive(const RoomCoordsCallback& callback)
 {
-    // TODO Having a visual effect noticing this is active would be awesome
-    // (like some mouse cursor change)
     m_tileClickedCallback = callback;
+    roomClickedInteractiveStart();
+}
+
+void Inter::roomClickedInteractiveStart()
+{
+    m_tileSelectionOverlay.setVisible(true);
+}
+
+void Inter::roomClickedInteractiveEnd()
+{
+    m_tileSelectionOverlay.setVisible(false);
+    m_tileClickedCallback = nullptr;
 }
 
 //------------------//
