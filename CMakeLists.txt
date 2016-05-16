@@ -60,9 +60,7 @@ elseif (CMAKE_BUILD_TYPE MATCHES "Release")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 
     # Static libc++ for distribution
-    if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
-    elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Bstatic")
     endif ()
 
@@ -71,6 +69,11 @@ else ()
     message(FATAL_ERROR "Wrong CMAKE_BUILD_TYPE, should be Debug or Release")
 endif ()
 
+# Windows needs everything statically linked to be happy
+if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
+endif ()
+		
 # Under Linux with GCC, enable call-stack generation
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
     if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
