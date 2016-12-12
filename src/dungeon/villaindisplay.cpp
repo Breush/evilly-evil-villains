@@ -6,6 +6,8 @@
 
 #include <SFML/Graphics/Texture.hpp>
 
+#include <cmath>
+
 using namespace dungeon;
 
 VillainDisplay::VillainDisplay()

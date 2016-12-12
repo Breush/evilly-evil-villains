@@ -5,6 +5,18 @@
 
 namespace std
 {
+    #if __cplusplus < 201402L
+
+        // std::make_unique does not exist in C++11 (but in C++14 it does)
+
+        template<typename T, typename... Args>
+        unique_ptr<T> make_unique(Args&&... args)
+        {
+            return unique_ptr<T>(new T(forward<Args>(args)...));
+        }
+
+    #endif
+
     // std::find_if with container directly passed
 
     template<typename T, typename F>
@@ -20,14 +32,6 @@ namespace std
     {
         auto newEnd = std::remove_if(std::begin(container), std::end(container), func);
         container.erase(newEnd, std::end(container));
-    }
-
-    // std::make_unique does not exist in C++11 (but in C++14 it does)
-
-    template<typename T, typename... Args>
-    unique_ptr<T> make_unique(Args&&... args)
-    {
-        return unique_ptr<T>(new T(forward<Args>(args)...));
     }
 
     // Let the user to do for (auto& x : reverse(container))

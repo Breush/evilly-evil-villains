@@ -4,6 +4,8 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
+#include <cmath>
+
 using namespace sfe;
 
 //-----------------//

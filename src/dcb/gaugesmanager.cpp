@@ -2,6 +2,8 @@
 
 #include "core/gettext.hpp"
 
+#include <cmath>
+
 using namespace dcb;
 
 GaugesManager::GaugesManager()

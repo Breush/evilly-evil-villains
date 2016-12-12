@@ -6,6 +6,8 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 
+#include <cmath>
+
 using namespace scene;
 
 Floomzig::Floomzig()
@@ -49,8 +51,8 @@ void Floomzig::sobel(sf::RenderTarget& out, const sf::RenderTexture& in)
     m_sobelShader->setParameter("sourceSize", sf::v2f(in.getSize()));
 
     sf::Vector2f floomOffset;
-    floomOffset.x = static_cast<float>(15.f * sin(rand()));
-    floomOffset.y = static_cast<float>(15.f * cos(rand()));
+    floomOffset.x = static_cast<float>(15.f * std::sin(rand()));
+    floomOffset.y = static_cast<float>(15.f * std::cos(rand()));
     m_sobelShader->setParameter("floomOffset", floomOffset);
 
     shaderize(out, *m_sobelShader);

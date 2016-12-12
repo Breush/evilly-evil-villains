@@ -1,5 +1,7 @@
 #include "sfe/sprite3d.hpp"
 
+#include <cmath>
+
 using namespace sfe;
 
 Sprite3D::Sprite3D()

@@ -5,6 +5,8 @@
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
 
+#include <cmath>
+
 using namespace nui;
 
 Slider::Slider()

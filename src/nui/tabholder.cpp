@@ -7,6 +7,8 @@
 #include "tools/debug.hpp"
 #include "tools/tools.hpp"
 
+#include <cmath>
+
 using namespace nui;
 
 TabHolder::TabHolder()

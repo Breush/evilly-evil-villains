@@ -5,6 +5,8 @@
 #include <SFML/Graphics/Vertex.hpp>
 #include <SFML/Graphics/PrimitiveType.hpp>
 
+#include <vector>
+
 namespace sfe
 {
     //! A parametrable spline.

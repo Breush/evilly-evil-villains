@@ -3,7 +3,7 @@
 	<group type="window">
 		<param name="vsync" enabled="true" />
 		<param name="fullscreen" enabled="false" />
-		<param name="resolution" width="1360" height="768" />
+		<param name="resolution" width="3840" height="1080" />
 		<param name="antialiasing" level="0" />
 	</group>
 	<group type="nui">
@@ -11,8 +11,8 @@
 		<param name="fontFactor" value="1" />
 	</group>
 	<group type="global">
-		<param name="language" code="en_GB" />
+		<param name="language" code="fr_FR" />
 		<param name="scrollingFactor" value="20" />
-		<param name="zoomSpeed" value="0.05" />
+		<param name="zoomSpeed" value="0.0500000007" />
 	</group>
 </config>
