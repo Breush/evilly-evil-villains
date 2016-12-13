@@ -112,10 +112,10 @@ void Graph::focusHandleEvent(const sf::Event& event)
         changeFocus = true;
         focusToNext = !sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
     }
-    else if (event.key.code == sf::Keyboard::BackTab) {
+    /* FIXME else if (event.key.code == sf::Keyboard::BackTab) {
         changeFocus = true;
         focusToNext = false;
-    }
+    }*/
     else {
         focusToNext = (event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::Down);
         changeFocus = focusToNext || (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::Up);

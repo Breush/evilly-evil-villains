@@ -18,12 +18,12 @@ namespace detail {
 
 inline int _lua_dispatcher(lua_State *l) {
     BaseFun *fun = (BaseFun *)lua_touserdata(l, lua_upvalueindex(1));
-    _lua_check_get raiseParameterConversionError = nullptr;
-    const char * wrong_meta_table = nullptr;
-    int erroneousParameterIndex = 0;
-    try {
+    //_lua_check_get raiseParameterConversionError = nullptr;
+    //const char * wrong_meta_table = nullptr;
+    //int erroneousParameterIndex = 0;
+    /*try {*/
         return fun->Apply(l);
-    } catch (GetParameterFromLuaTypeError & e) {
+    /*} catch (GetParameterFromLuaTypeError & e) {
         raiseParameterConversionError = e.checked_get;
         erroneousParameterIndex = e.index;
     } catch (GetUserdataParameterFromLuaTypeError & e) {
@@ -45,7 +45,7 @@ inline int _lua_dispatcher(lua_State *l) {
     }
     else if(wrong_meta_table) {
         luaL_checkudata(l, erroneousParameterIndex, wrong_meta_table);
-    }
+    }*/
 
     return lua_error(l);
 }

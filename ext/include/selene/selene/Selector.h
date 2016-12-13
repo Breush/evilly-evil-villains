@@ -168,12 +168,12 @@ public:
             _get();
             if (std::uncaught_exception())
             {
-                try {
+                //try {
                     _evaluate_function_call(0);
-                } catch (...) {
+                /*} catch (...) {
                     // We are already unwinding, ignore further exceptions.
                     // As of C++17 consider std::uncaught_exceptions()
-                }
+                }*/
             } else {
                 _evaluate_function_call(0);
             }

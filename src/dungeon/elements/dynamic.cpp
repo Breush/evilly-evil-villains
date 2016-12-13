@@ -25,7 +25,7 @@ void Dynamic::lua_dynamicRemoveSelf()
 
 void Dynamic::bindElementData(ElementData& edata)
 {
-    // It's our first time is previous data is not the same monster type
+    // It's our first time if previous data is not the same monster type
     bool firstTime = (m_edata == nullptr) || (m_elementID != edata.type());
     m_edata = &edata;
 

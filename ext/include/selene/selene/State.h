@@ -22,7 +22,7 @@ public:
     State() : State(false) {}
     State(bool should_open_libs) : _l(nullptr), _l_owner(true), _exception_handler(new ExceptionHandler) {
         _l = luaL_newstate();
-        if (_l == nullptr) throw 0;
+        //if (_l == nullptr) throw 0;
         if (should_open_libs) luaL_openlibs(_l);
         _registry.reset(new Registry(_l));
         HandleExceptionsPrintingToStdOut();
@@ -57,6 +57,10 @@ public:
 
     int Size() const {
         return lua_gettop(_l);
+    }
+
+    bool load(const std::string &file) {
+        return Load(file);
     }
 
     bool Load(const std::string &file) {

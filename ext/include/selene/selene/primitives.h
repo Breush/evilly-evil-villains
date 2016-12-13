@@ -65,15 +65,15 @@ inline T* _get(_id<T*>, lua_State *l, const int index) {
 template <typename T>
 inline T& _get(_id<T&>, lua_State *l, const int index) {
     if(!MetatableRegistry::IsType(l, typeid(T), index)) {
-        throw TypeError{
+        /*throw TypeError{
             MetatableRegistry::GetTypeName(l, typeid(T)),
             MetatableRegistry::GetTypeName(l, index)
-        };
+        };*/
     }
 
     T *ptr = (T*)lua_topointer(l, index);
     if(ptr == nullptr) {
-        throw TypeError{MetatableRegistry::GetTypeName(l, typeid(T))};
+        //throw TypeError{MetatableRegistry::GetTypeName(l, typeid(T))};
     }
     return *ptr;
 }
@@ -137,10 +137,10 @@ inline T& _check_get(_id<T&>, lua_State *l, const int index) {
     T *ptr = _check_get(_id<T*>{}, l, index);
 
     if(ptr == nullptr) {
-        throw GetUserdataParameterFromLuaTypeError{
+        /*throw GetUserdataParameterFromLuaTypeError{
             MetatableRegistry::GetTypeName(l, typeid(T)),
             index
-        };
+        };*/
     }
 
     return *ptr;
@@ -165,14 +165,14 @@ inline int _check_get(_id<int>, lua_State *l, const int index) {
     int isNum = 0;
     auto res = static_cast<int>(lua_tointegerx(l, index, &isNum));
     if(!isNum){
-        throw GetParameterFromLuaTypeError{
+        /*throw GetParameterFromLuaTypeError{
 #if LUA_VERSION_NUM >= 503
             [](lua_State *l, int index){luaL_checkinteger(l, index);},
 #else
             [](lua_State *l, int index){luaL_checkint(l, index);},
 #endif
             index
-        };
+        };*/
     }
     return res;
 #else
@@ -185,18 +185,18 @@ inline unsigned int _check_get(_id<unsigned int>, lua_State *l, const int index)
 #if LUA_VERSION_NUM >= 503
     auto res = static_cast<unsigned>(lua_tointegerx(l, index, &isNum));
     if(!isNum) {
-        throw GetParameterFromLuaTypeError{
+        /*throw GetParameterFromLuaTypeError{
             [](lua_State *l, int index){luaL_checkinteger(l, index);},
             index
-        };
+        };*/
     }
 #elif LUA_VERSION_NUM >= 502
     auto res = static_cast<unsigned>(lua_tounsignedx(l, index, &isNum));
     if(!isNum) {
-        throw GetParameterFromLuaTypeError{
+        /*throw GetParameterFromLuaTypeError{
             [](lua_State *l, int index){luaL_checkunsigned(l, index);},
             index
-        };
+        };*/
     }
 #else
 #error "Not supported for Lua versions <5.2"
@@ -208,10 +208,10 @@ inline lua_Number _check_get(_id<lua_Number>, lua_State *l, const int index) {
     int isNum = 0;
     auto res = lua_tonumberx(l, index, &isNum);
     if(!isNum){
-        throw GetParameterFromLuaTypeError{
+        /*throw GetParameterFromLuaTypeError{
             [](lua_State *l, int index){luaL_checknumber(l, index);},
             index
-        };
+        };*/
     }
     return res;
 }
@@ -224,10 +224,10 @@ inline std::string _check_get(_id<std::string>, lua_State *l, const int index) {
     size_t size = 0;
     char const * buff = lua_tolstring(l, index, &size);
     if(buff == nullptr) {
-        throw GetParameterFromLuaTypeError{
+        /*throw GetParameterFromLuaTypeError{
             [](lua_State *l, int index){luaL_checkstring(l, index);},
             index
-        };
+        };*/
     }
     return std::string{buff, size};
 }
@@ -297,7 +297,7 @@ inline typename std::enable_if<
     !is_primitive<typename std::decay<T>::type>::value
 >::type
 _push(lua_State *l, T& t) {
-    lua_pushlightuserdata(l, &t);
+    lua_pushlightuserdata(l, const_cast<std::remove_const_t<T>*>(&t));
     MetatableRegistry::SetMetatable(l, typeid(T));
 }
 
@@ -309,7 +309,7 @@ inline typename std::enable_if<
 _push(lua_State *l, T&& t) {
     if(!MetatableRegistry::IsRegisteredType(l, typeid(t)))
     {
-        throw CopyUnregisteredType(typeid(t));
+        //throw CopyUnregisteredType(typeid(t));
     }
 
     void *addr = lua_newuserdata(l, sizeof(T));

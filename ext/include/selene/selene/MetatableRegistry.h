@@ -157,12 +157,12 @@ static inline bool IsType(lua_State *state, TypeID type, const int index) {
 }
 
 static inline void CheckType(lua_State *state, TypeID type, const int index) {
-    if(!IsType(state, type, index)) {
+    /*if(!IsType(state, type, index)) {
         throw sel::detail::GetUserdataParameterFromLuaTypeError{
             GetTypeName(state, type),
             index
         };
-    }
+    }*/
 }
 
 }
