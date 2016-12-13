@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2016 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -259,7 +259,8 @@ void Http::Response::parse(const std::string& data)
 
             // Copy the actual content data
             std::istreambuf_iterator<char> it(in);
-            for (std::size_t i = 0; i < length; i++)
+            std::istreambuf_iterator<char> itEnd;
+            for (std::size_t i = 0; ((i < length) && (it != itEnd)); i++)
                 m_body.push_back(*it++);
         }
 

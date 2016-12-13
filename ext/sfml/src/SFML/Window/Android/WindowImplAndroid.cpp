@@ -179,6 +179,13 @@ void WindowImplAndroid::setMouseCursorVisible(bool visible)
 
 
 ////////////////////////////////////////////////////////////
+void WindowImplAndroid::setMouseCursorGrabbed(bool grabbed)
+{
+    // Not applicable
+}
+
+
+////////////////////////////////////////////////////////////
 void WindowImplAndroid::setKeyRepeatEnabled(bool enabled)
 {
     // Not applicable
@@ -433,7 +440,7 @@ int WindowImplAndroid::processMotionEvent(AInputEvent* _event, ActivityStates* s
 
     if (device == AINPUT_SOURCE_MOUSE)
         event.type = Event::MouseMoved;
-    else if (device == AINPUT_SOURCE_TOUCHSCREEN)
+    else if (device & AINPUT_SOURCE_TOUCHSCREEN)
         event.type = Event::TouchMoved;
 
     int pointerCount = AMotionEvent_getPointerCount(_event);
@@ -452,7 +459,7 @@ int WindowImplAndroid::processMotionEvent(AInputEvent* _event, ActivityStates* s
 
             states->mousePosition = Vector2i(event.mouseMove.x, event.mouseMove.y);
         }
-        else if (device == AINPUT_SOURCE_TOUCHSCREEN)
+        else if (device & AINPUT_SOURCE_TOUCHSCREEN)
         {
             if (states->touchEvents[id].x == x && states->touchEvents[id].y == y)
                 continue;
@@ -496,7 +503,7 @@ int WindowImplAndroid::processPointerEvent(bool isDown, AInputEvent* _event, Act
             if (id >= 0 && id < Mouse::ButtonCount)
                 states->isButtonPressed[id] = true;
         }
-        else if (device == AINPUT_SOURCE_TOUCHSCREEN)
+        else if (device & AINPUT_SOURCE_TOUCHSCREEN)
         {
             event.type = Event::TouchBegan;
             event.touch.finger = id;
@@ -518,7 +525,7 @@ int WindowImplAndroid::processPointerEvent(bool isDown, AInputEvent* _event, Act
             if (id >= 0 && id < Mouse::ButtonCount)
                 states->isButtonPressed[id] = false;
         }
-        else if (device == AINPUT_SOURCE_TOUCHSCREEN)
+        else if (device & AINPUT_SOURCE_TOUCHSCREEN)
         {
             event.type = Event::TouchEnded;
             event.touch.finger = id;

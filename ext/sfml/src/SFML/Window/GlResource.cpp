@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2016 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -27,6 +27,7 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/Window/GlResource.hpp>
 #include <SFML/Window/GlContext.hpp>
+#include <SFML/Window/Context.hpp>
 #include <SFML/System/Mutex.hpp>
 #include <SFML/System/Lock.hpp>
 
@@ -44,20 +45,15 @@ namespace sf
 ////////////////////////////////////////////////////////////
 GlResource::GlResource()
 {
-    {
-        // Protect from concurrent access
-        Lock lock(mutex);
+    // Protect from concurrent access
+    Lock lock(mutex);
 
-        // If this is the very first resource, trigger the global context initialization
-        if (count == 0)
-            priv::GlContext::globalInit();
+    // If this is the very first resource, trigger the global context initialization
+    if (count == 0)
+        priv::GlContext::globalInit();
 
-        // Increment the resources counter
-        count++;
-    }
-
-    // Now make sure that there is an active OpenGL context in the current thread
-    priv::GlContext::ensureContext();
+    // Increment the resources counter
+    count++;
 }
 
 
@@ -79,7 +75,36 @@ GlResource::~GlResource()
 ////////////////////////////////////////////////////////////
 void GlResource::ensureGlContext()
 {
-    priv::GlContext::ensureContext();
+    // Empty function for ABI compatibility, use acquireTransientContext instead
+}
+
+
+////////////////////////////////////////////////////////////
+GlResource::TransientContextLock::TransientContextLock() :
+m_context(0)
+{
+    Lock lock(mutex);
+
+    if (count == 0)
+    {
+        m_context = new Context;
+        return;
+    }
+
+    priv::GlContext::acquireTransientContext();
+}
+
+
+////////////////////////////////////////////////////////////
+GlResource::TransientContextLock::~TransientContextLock()
+{
+    if (m_context)
+    {
+        delete m_context;
+        return;
+    }
+
+    priv::GlContext::releaseTransientContext();
 }
 
 } // namespace sf

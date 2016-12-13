@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Marco Antognini (antognini.marco@gmail.com),
+// Copyright (C) 2007-2016 Marco Antognini (antognini.marco@gmail.com),
 //                         Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
@@ -185,7 +185,7 @@ void InputImpl::setMousePosition(const Vector2i& position)
     CGEventRef event = CGEventCreateMouseEvent(NULL,
                                                kCGEventMouseMoved,
                                                pos,
-                                               /*we don't care about this: */0);
+                                               /* we don't care about this: */ kCGMouseButtonLeft);
     CGEventPost(kCGHIDEventTap, event);
     CFRelease(event);
     // This is a workaround to deprecated CGSetLocalEventsSuppressionInterval.

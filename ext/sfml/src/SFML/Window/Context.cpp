@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2016 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -27,7 +27,14 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/Window/Context.hpp>
 #include <SFML/Window/GlContext.hpp>
+#include <SFML/System/ThreadLocalPtr.hpp>
 
+
+namespace
+{
+    // This per-thread variable holds the current context for each thread
+    sf::ThreadLocalPtr<sf::Context> currentContext(NULL);
+}
 
 namespace sf
 {
@@ -42,6 +49,7 @@ Context::Context()
 ////////////////////////////////////////////////////////////
 Context::~Context()
 {
+    setActive(false);
     delete m_context;
 }
 
@@ -49,7 +57,33 @@ Context::~Context()
 ////////////////////////////////////////////////////////////
 bool Context::setActive(bool active)
 {
-    return m_context->setActive(active);
+    bool result = m_context->setActive(active);
+
+    if (result)
+        currentContext = (active ? this : NULL);
+
+    return result;
+}
+
+
+////////////////////////////////////////////////////////////
+const ContextSettings& Context::getSettings() const
+{
+    return m_context->getSettings();
+}
+
+
+////////////////////////////////////////////////////////////
+const Context* Context::getActiveContext()
+{
+    return currentContext;
+}
+
+
+////////////////////////////////////////////////////////////
+bool Context::isExtensionAvailable(const char* name)
+{
+    return priv::GlContext::isExtensionAvailable(name);
 }
 
 

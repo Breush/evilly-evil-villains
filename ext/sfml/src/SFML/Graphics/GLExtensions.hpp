@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2016 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -64,6 +64,7 @@
     #define GLEXT_glBlendEquation                     glBlendEquationOES
     #define GLEXT_GL_FUNC_ADD                         GL_FUNC_ADD_OES
     #define GLEXT_GL_FUNC_SUBTRACT                    GL_FUNC_SUBTRACT_OES
+    #define GLEXT_GL_FUNC_REVERSE_SUBTRACT            GL_FUNC_REVERSE_SUBTRACT_OES
 
     // The following extensions are optional.
 
@@ -100,6 +101,7 @@
     #define GLEXT_glCheckFramebufferStatus            glCheckFramebufferStatusOES
     #define GLEXT_glFramebufferTexture2D              glFramebufferTexture2DOES
     #define GLEXT_glFramebufferRenderbuffer           glFramebufferRenderbufferOES
+    #define GLEXT_glGenerateMipmap                    glGenerateMipmapOES
     #define GLEXT_GL_FRAMEBUFFER                      GL_FRAMEBUFFER_OES
     #define GLEXT_GL_RENDERBUFFER                     GL_RENDERBUFFER_OES
     #define GLEXT_GL_DEPTH_COMPONENT                  GL_DEPTH_COMPONENT16_OES
@@ -108,6 +110,15 @@
     #define GLEXT_GL_FRAMEBUFFER_COMPLETE             GL_FRAMEBUFFER_COMPLETE_OES
     #define GLEXT_GL_FRAMEBUFFER_BINDING              GL_FRAMEBUFFER_BINDING_OES
     #define GLEXT_GL_INVALID_FRAMEBUFFER_OPERATION    GL_INVALID_FRAMEBUFFER_OPERATION_OES
+
+    // Core since 3.0 - EXT_sRGB
+    #ifdef GL_EXT_sRGB
+        #define GLEXT_texture_sRGB                        GL_EXT_sRGB
+        #define GLEXT_GL_SRGB8_ALPHA8                     GL_SRGB8_ALPHA8_EXT
+    #else
+        #define GLEXT_texture_sRGB                        false
+        #define GLEXT_GL_SRGB8_ALPHA8                     0
+    #endif
 
 #else
 
@@ -120,7 +131,6 @@
     // Core since 1.1
     #define GLEXT_GL_DEPTH_COMPONENT                  GL_DEPTH_COMPONENT
     #define GLEXT_GL_CLAMP                            GL_CLAMP
-    #define GLEXT_GL_STENCIL_INDEX                    GL_STENCIL_INDEX
 
     // The following extensions are listed chronologically
     // Extension macro first, followed by tokens then
@@ -143,6 +153,7 @@
     // Core since 1.2 - EXT_blend_subtract
     #define GLEXT_blend_subtract                      sfogl_ext_EXT_blend_subtract
     #define GLEXT_GL_FUNC_SUBTRACT                    GL_FUNC_SUBTRACT_EXT
+    #define GLEXT_GL_FUNC_REVERSE_SUBTRACT            GL_FUNC_REVERSE_SUBTRACT_EXT
 
     // Core since 1.3 - ARB_multitexture
     #define GLEXT_multitexture                        sfogl_ext_ARB_multitexture
@@ -173,6 +184,15 @@
     #define GLEXT_glUniform3f                         glUniform3fARB
     #define GLEXT_glUniform4f                         glUniform4fARB
     #define GLEXT_glUniform1i                         glUniform1iARB
+    #define GLEXT_glUniform2i                         glUniform2iARB
+    #define GLEXT_glUniform3i                         glUniform3iARB
+    #define GLEXT_glUniform4i                         glUniform4iARB
+    #define GLEXT_glUniform1fv                        glUniform1fvARB
+    #define GLEXT_glUniform2fv                        glUniform2fvARB
+    #define GLEXT_glUniform2iv                        glUniform2ivARB
+    #define GLEXT_glUniform3fv                        glUniform3fvARB
+    #define GLEXT_glUniform4fv                        glUniform4fvARB
+    #define GLEXT_glUniformMatrix3fv                  glUniformMatrix3fvARB
     #define GLEXT_glUniformMatrix4fv                  glUniformMatrix4fvARB
     #define GLEXT_glGetObjectParameteriv              glGetObjectParameterivARB
     #define GLEXT_glGetInfoLog                        glGetInfoLogARB
@@ -198,6 +218,10 @@
     #define GLEXT_blend_equation_separate             sfogl_ext_EXT_blend_equation_separate
     #define GLEXT_glBlendEquationSeparate             glBlendEquationSeparateEXT
 
+    // Core since 2.1 - EXT_texture_sRGB
+    #define GLEXT_texture_sRGB                        sfogl_ext_EXT_texture_sRGB
+    #define GLEXT_GL_SRGB8_ALPHA8                     GL_SRGB8_ALPHA8_EXT
+
     // Core since 3.0 - EXT_framebuffer_object
     #define GLEXT_framebuffer_object                  sfogl_ext_EXT_framebuffer_object
     #define GLEXT_glBindRenderbuffer                  glBindRenderbufferEXT
@@ -210,14 +234,18 @@
     #define GLEXT_glCheckFramebufferStatus            glCheckFramebufferStatusEXT
     #define GLEXT_glFramebufferTexture2D              glFramebufferTexture2DEXT
     #define GLEXT_glFramebufferRenderbuffer           glFramebufferRenderbufferEXT
+    #define GLEXT_glGenerateMipmap                    glGenerateMipmapEXT
     #define GLEXT_GL_FRAMEBUFFER                      GL_FRAMEBUFFER_EXT
     #define GLEXT_GL_RENDERBUFFER                     GL_RENDERBUFFER_EXT
     #define GLEXT_GL_COLOR_ATTACHMENT0                GL_COLOR_ATTACHMENT0_EXT
     #define GLEXT_GL_DEPTH_ATTACHMENT                 GL_DEPTH_ATTACHMENT_EXT
-    #define GLEXT_GL_STENCIL_ATTACHMENT               GL_STENCIL_ATTACHMENT_EXT
     #define GLEXT_GL_FRAMEBUFFER_COMPLETE             GL_FRAMEBUFFER_COMPLETE_EXT
     #define GLEXT_GL_FRAMEBUFFER_BINDING              GL_FRAMEBUFFER_BINDING_EXT
     #define GLEXT_GL_INVALID_FRAMEBUFFER_OPERATION    GL_INVALID_FRAMEBUFFER_OPERATION_EXT
+
+    // Core since 3.2 - ARB_geometry_shader4
+    #define GLEXT_geometry_shader4                    sfogl_ext_ARB_geometry_shader4
+    #define GLEXT_GL_GEOMETRY_SHADER                  GL_GEOMETRY_SHADER_ARB
 
 #endif
 

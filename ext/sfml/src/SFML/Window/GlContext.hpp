@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2016 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -73,10 +73,16 @@ public:
     static void globalCleanup();
 
     ////////////////////////////////////////////////////////////
-    /// \brief Ensures that an OpenGL context is active in the current thread
+    /// \brief Acquires a context for short-term use on the current thread
     ///
     ////////////////////////////////////////////////////////////
-    static void ensureContext();
+    static void acquireTransientContext();
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Releases a context after short-term use on the current thread
+    ///
+    ////////////////////////////////////////////////////////////
+    static void releaseTransientContext();
 
     ////////////////////////////////////////////////////////////
     /// \brief Create a new context, not associated to a window
@@ -120,6 +126,16 @@ public:
     static GlContext* create(const ContextSettings& settings, unsigned int width, unsigned int height);
 
 public:
+    ////////////////////////////////////////////////////////////
+    /// \brief Check whether a given OpenGL extension is available
+    ///
+    /// \param name Name of the extension to check for
+    ///
+    /// \return True if available, false if unavailable
+    ///
+    ////////////////////////////////////////////////////////////
+    static bool isExtensionAvailable(const char* name);
+
     ////////////////////////////////////////////////////////////
     /// \brief Get the address of an OpenGL function
     ///
@@ -197,10 +213,12 @@ protected:
     /// \brief Activate the context as the current target
     ///        for rendering
     ///
+    /// \param current Whether to make the context current or no longer current
+    ///
     /// \return True on success, false if any error happened
     ///
     ////////////////////////////////////////////////////////////
-    virtual bool makeCurrent() = 0;
+    virtual bool makeCurrent(bool current) = 0;
 
     ////////////////////////////////////////////////////////////
     /// \brief Evaluate a pixel format configuration
@@ -217,11 +235,12 @@ protected:
     /// \param stencilBits  Stencil bits of the configuration to evaluate
     /// \param antialiasing Antialiasing level of the configuration to evaluate
     /// \param accelerated  Whether the pixel format is hardware accelerated
+    /// \param sRgb         Whether the pixel format is sRGB capable
     ///
     /// \return Score of the configuration
     ///
     ////////////////////////////////////////////////////////////
-    static int evaluateFormat(unsigned int bitsPerPixel, const ContextSettings& settings, int colorBits, int depthBits, int stencilBits, int antialiasing, bool accelerated);
+    static int evaluateFormat(unsigned int bitsPerPixel, const ContextSettings& settings, int colorBits, int depthBits, int stencilBits, int antialiasing, bool accelerated, bool sRgb);
 
     ////////////////////////////////////////////////////////////
     // Member data
@@ -232,9 +251,10 @@ private:
 
     ////////////////////////////////////////////////////////////
     /// \brief Perform various initializations after the context construction
+    /// \param requestedSettings Requested settings during context creation
     ///
     ////////////////////////////////////////////////////////////
-    void initialize();
+    void initialize(const ContextSettings& requestedSettings);
 
     ////////////////////////////////////////////////////////////
     /// \brief Check whether the context is compatible with the requested settings

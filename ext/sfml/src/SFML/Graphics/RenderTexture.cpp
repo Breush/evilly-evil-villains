@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2016 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -49,7 +49,7 @@ RenderTexture::~RenderTexture()
 
 
 ////////////////////////////////////////////////////////////
-bool RenderTexture::create(unsigned int width, unsigned int height, bool depthBuffer, bool stencilBuffer)
+bool RenderTexture::create(unsigned int width, unsigned int height, bool depthBuffer)
 {
     // Create the texture
     if (!m_texture.create(width, height))
@@ -78,7 +78,7 @@ bool RenderTexture::create(unsigned int width, unsigned int height, bool depthBu
     }
 
     // Initialize the render texture
-    if (!m_impl->create(width, height, m_texture.m_texture, depthBuffer, stencilBuffer))
+    if (!m_impl->create(width, height, m_texture.m_texture, depthBuffer))
         return false;
 
     // We can now initialize the render target part
@@ -117,6 +117,13 @@ bool RenderTexture::isRepeated() const
 
 
 ////////////////////////////////////////////////////////////
+bool RenderTexture::generateMipmap()
+{
+    return m_texture.generateMipmap();
+}
+
+
+////////////////////////////////////////////////////////////
 bool RenderTexture::setActive(bool active)
 {
     return m_impl && m_impl->activate(active);
@@ -131,6 +138,7 @@ void RenderTexture::display()
     {
         m_impl->updateTexture(m_texture.m_texture);
         m_texture.m_pixelsFlipped = true;
+        m_texture.invalidateMipmap();
     }
 }
 

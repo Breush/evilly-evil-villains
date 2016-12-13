@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2016 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -26,6 +26,7 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Network/Unix/SocketImpl.hpp>
+#include <SFML/System/Err.hpp>
 #include <errno.h>
 #include <fcntl.h>
 #include <cstring>
@@ -71,9 +72,16 @@ void SocketImpl::setBlocking(SocketHandle sock, bool block)
 {
     int status = fcntl(sock, F_GETFL);
     if (block)
-        fcntl(sock, F_SETFL, status & ~O_NONBLOCK);
+    {
+        if (fcntl(sock, F_SETFL, status & ~O_NONBLOCK) == -1)
+            err() << "Failed to set file status flags: " << errno << std::endl;
+    }
     else
-        fcntl(sock, F_SETFL, status | O_NONBLOCK);
+    {
+        if (fcntl(sock, F_SETFL, status | O_NONBLOCK) == -1)
+            err() << "Failed to set file status flags: " << errno << std::endl;
+
+    }
 }
 
 

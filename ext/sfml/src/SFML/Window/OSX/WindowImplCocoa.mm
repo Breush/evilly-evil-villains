@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Marco Antognini (antognini.marco@gmail.com),
+// Copyright (C) 2007-2016 Marco Antognini (antognini.marco@gmail.com),
 //                         Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
@@ -28,10 +28,10 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/Window/OSX/WindowImplCocoa.hpp>
 #include <SFML/System/Err.hpp>
-#include <SFML/System/String.hpp>
 
 #import <SFML/Window/OSX/AutoreleasePoolWrapper.h>
 #import <SFML/Window/OSX/cpp_objc_conversion.h>
+#import <SFML/Window/OSX/Scaling.h>
 #import <SFML/Window/OSX/SFApplication.h>
 #import <SFML/Window/OSX/SFApplicationDelegate.h>
 #import <SFML/Window/OSX/SFKeyboardModifiersHelper.h>
@@ -42,76 +42,6 @@ namespace sf
 {
 namespace priv
 {
-
-////////////////////////////////////////////////////////////
-/// \brief Get the scale factor of the main screen
-///
-////////////////////////////////////////////////////////////
-CGFloat getDefaultScaleFactor()
-{
-    return [[NSScreen mainScreen] backingScaleFactor];
-}
-
-////////////////////////////////////////////////////////////
-/// \brief Scale SFML coordinates to backing coordinates
-///
-/// Use -[NSScreen backingScaleFactor] to find out if the user
-/// has a retina display or not.
-///
-/// \param in SFML coordinates to be converted
-/// \param delegate a object implementing WindowImplDelegateProtocol, or nil for default scale
-///
-////////////////////////////////////////////////////////////
-template <class T>
-void scaleIn(T& in, id<WindowImplDelegateProtocol> delegate)
-{
-    in /= delegate ? [delegate displayScaleFactor] : getDefaultScaleFactor();
-}
-
-template <class T>
-void scaleInWidthHeight(T& in, id<WindowImplDelegateProtocol> delegate)
-{
-    scaleIn(in.width, delegate);
-    scaleIn(in.height, delegate);
-}
-
-template <class T>
-void scaleInXY(T& in, id<WindowImplDelegateProtocol> delegate)
-{
-    scaleIn(in.x, delegate);
-    scaleIn(in.y, delegate);
-}
-
-////////////////////////////////////////////////////////////
-/// \brief Scale backing coordinates to SFML coordinates
-///
-/// Use -[NSScreen backingScaleFactor] to find out if the user
-/// has a retina display or not.
-///
-/// \param out backing coordinates to be converted
-/// \param delegate a object implementing WindowImplDelegateProtocol, or nil for default scale
-///
-////////////////////////////////////////////////////////////
-template <class T>
-void scaleOut(T& out, id<WindowImplDelegateProtocol> delegate)
-{
-    out *= delegate ? [delegate displayScaleFactor] : getDefaultScaleFactor();
-}
-
-template <class T>
-void scaleOutWidthHeight(T& out, id<WindowImplDelegateProtocol> delegate)
-{
-    scaleOut(out.width, delegate);
-    scaleOut(out.height, delegate);
-}
-
-template <class T>
-void scaleOutXY(T& out, id<WindowImplDelegateProtocol> delegate)
-{
-    scaleOut(out.x, delegate);
-    scaleOut(out.y, delegate);
-}
-
 
 ////////////////////////////////////////////////////////////
 /// According to Apple's documentation, each invocation of
@@ -155,7 +85,7 @@ WindowImplCocoa::WindowImplCocoa(WindowHandle handle) :
 m_showCursor(true)
 {
     // Ask for a pool.
-    retainPool();
+    ensureThreadHasPool();
 
     // Treat the handle as it real type
     id nsHandle = (id)handle;
@@ -200,7 +130,7 @@ m_showCursor(true)
     setUpProcess();
 
     // Ask for a pool.
-    retainPool();
+    ensureThreadHasPool();
 
     // Use backing size
     scaleInWidthHeight(mode, nil);
@@ -226,11 +156,9 @@ WindowImplCocoa::~WindowImplCocoa()
     if ([windows count] > 0)
         [[windows objectAtIndex:0] makeKeyAndOrderFront:nil];
 
-    drainCurrentPool(); // Make sure everything was freed
+    drainThreadPool(); // Make sure everything was freed
     // This solve some issue when sf::Window::Create is called for the
     // second time (nothing was render until the function was called again)
-
-    releasePool();
 }
 
 
@@ -467,7 +395,7 @@ void WindowImplCocoa::textEntered(unichar charcode)
 void WindowImplCocoa::processEvents()
 {
     [m_delegate processEvent];
-    drainCurrentPool(); // Reduce memory footprint
+    drainThreadPool(); // Reduce memory footprint
 }
 
 #pragma mark
@@ -559,6 +487,13 @@ void WindowImplCocoa::setMouseCursorVisible(bool visible)
 
 
 ////////////////////////////////////////////////////////////
+void WindowImplCocoa::setMouseCursorGrabbed(bool grabbed)
+{
+    [m_delegate setCursorGrabbed:grabbed];
+}
+
+
+////////////////////////////////////////////////////////////
 void WindowImplCocoa::setKeyRepeatEnabled(bool enabled)
 {
     if (enabled)
@@ -585,3 +520,4 @@ bool WindowImplCocoa::hasFocus() const
 } // namespace priv
 
 } // namespace sf
+

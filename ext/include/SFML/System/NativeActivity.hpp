@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2016 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -22,51 +22,41 @@
 //
 ////////////////////////////////////////////////////////////
 
-
-////////////////////////////////////////////////////////////
-template <typename T>
-inline ScopedXcbPtr<T>::ScopedXcbPtr(T* pointer) :
-m_pointer(pointer)
-{
-
-}
+#ifndef SFML_NATIVEACTIVITY_HPP
+#define SFML_NATIVEACTIVITY_HPP
 
 
 ////////////////////////////////////////////////////////////
-template <typename T>
-inline ScopedXcbPtr<T>::~ScopedXcbPtr()
-{
-    std::free(m_pointer);
-}
-
-
+// Headers
 ////////////////////////////////////////////////////////////
-template <typename T>
-inline T* ScopedXcbPtr<T>::operator ->() const
+#include <SFML/System/Export.hpp>
+
+
+#if !defined(SFML_SYSTEM_ANDROID)
+#error NativeActivity.hpp: This header is Android only.
+#endif
+
+
+struct ANativeActivity;
+
+namespace sf
 {
-    return m_pointer;
-}
-
-
 ////////////////////////////////////////////////////////////
-template <typename T>
-inline T** ScopedXcbPtr<T>::operator &()
-{
-    return &m_pointer;
-}
-
-
+/// \ingroup system
+/// \brief Return a pointer to the Android native activity
+///
+/// You shouldn't have to use this function, unless you want
+/// to implement very specific details, that SFML doesn't
+/// support, or to use a workaround for a known issue.
+///
+/// \return Pointer to Android native activity structure
+///
+/// \sfplatform{Android,SFML/System/NativeActivity.hpp}
+///
 ////////////////////////////////////////////////////////////
-template <typename T>
-inline ScopedXcbPtr<T>::operator bool() const
-{
-    return m_pointer != NULL;
-}
+SFML_SYSTEM_API ANativeActivity* getNativeActivity();
+
+} // namespace sf
 
 
-////////////////////////////////////////////////////////////
-template <typename T>
-inline T* ScopedXcbPtr<T>::get() const
-{
-    return m_pointer;
-}
+#endif // SFML_NATIVEACTIVITY_HPP

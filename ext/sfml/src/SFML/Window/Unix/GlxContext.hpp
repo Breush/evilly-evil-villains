@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2016 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -30,7 +30,7 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/Window/GlContext.hpp>
 #include <SFML/Window/Unix/GlxExtensions.hpp>
-#include <X11/Xlib-xcb.h>
+#include <X11/Xlib.h>
 
 
 namespace sf
@@ -94,10 +94,12 @@ public:
     ////////////////////////////////////////////////////////////
     /// \brief Activate the context as the current target for rendering
     ///
+    /// \param current Whether to make the context current or no longer current
+    ///
     /// \return True on success, false if any error happened
     ///
     ////////////////////////////////////////////////////////////
-    virtual bool makeCurrent();
+    virtual bool makeCurrent(bool current);
 
     ////////////////////////////////////////////////////////////
     /// \brief Display what has been rendered to the context so far
@@ -133,22 +135,53 @@ public:
 private:
 
     ////////////////////////////////////////////////////////////
-    /// \brief Create the context
+    /// \brief Update the context visual settings from XVisualInfo
     ///
-    /// \param shared       Context to share the new one with (can be NULL)
-    /// \param bitsPerPixel Pixel depth, in bits per pixel
-    /// \param settings     Creation parameters
+    /// \param visualInfo XVisualInfo to update settings from
     ///
     ////////////////////////////////////////////////////////////
-    void createContext(GlxContext* shared, unsigned int bitsPerPixel, const ContextSettings& settings);
+    void updateSettingsFromVisualInfo(XVisualInfo* visualInfo);
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Update the context visual settings from the window
+    ///
+    ////////////////////////////////////////////////////////////
+    void updateSettingsFromWindow();
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Create the context's drawing surface
+    ///
+    /// \param shared       Context to share the new one with (can be NULL)
+    /// \param width        Back buffer width, in pixels
+    /// \param height       Back buffer height, in pixels
+    /// \param bitsPerPixel Pixel depth, in bits per pixel
+    ///
+    ////////////////////////////////////////////////////////////
+    void createSurface(GlxContext* shared, unsigned int width, unsigned int height, unsigned int bitsPerPixel);
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Create the context's drawing surface from an existing window
+    ///
+    /// \param window Window ID of the owning window
+    ///
+    ////////////////////////////////////////////////////////////
+    void createSurface(::Window window);
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Create the context
+    ///
+    /// \param shared Context to share the new one with (can be NULL)
+    ///
+    ////////////////////////////////////////////////////////////
+    void createContext(GlxContext* shared);
 
     ////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////
     ::Display*        m_display;    ///< Connection to the X server
     ::Window          m_window;     ///< Window to which the context is attached
-    xcb_connection_t* m_connection; ///< Pointer to the xcb connection
     GLXContext        m_context;    ///< OpenGL context
+    GLXPbuffer        m_pbuffer;    ///< GLX pbuffer ID if one was created
     bool              m_ownsWindow; ///< Do we own the window associated to the context?
 };
 

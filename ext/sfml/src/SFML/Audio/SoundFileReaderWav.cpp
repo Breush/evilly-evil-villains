@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2016 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -65,13 +65,13 @@ namespace
         return true;
     }
 
-    bool decode(sf::InputStream& stream, sf::Int32& value)
+    bool decode24bit(sf::InputStream& stream, sf::Uint32& value)
     {
-        unsigned char bytes[sizeof(value)];
+        unsigned char bytes[3];
         if (stream.read(bytes, sizeof(bytes)) != sizeof(bytes))
             return false;
 
-        value = bytes[0] | (bytes[1] << 8) | (bytes[2] << 16) | (bytes[3] << 24);
+        value = bytes[0] | (bytes[1] << 8) | (bytes[2] << 16);
 
         return true;
     }
@@ -110,7 +110,8 @@ bool SoundFileReaderWav::check(InputStream& stream)
 SoundFileReaderWav::SoundFileReaderWav() :
 m_stream        (NULL),
 m_bytesPerSample(0),
-m_dataStart     (0)
+m_dataStart     (0),
+m_dataEnd       (0)
 {
 }
 
@@ -145,7 +146,7 @@ Uint64 SoundFileReaderWav::read(Int16* samples, Uint64 maxCount)
     assert(m_stream);
 
     Uint64 count = 0;
-    while (count < maxCount)
+    while ((count < maxCount) && (m_stream->tell() < m_dataEnd))
     {
         switch (m_bytesPerSample)
         {
@@ -169,14 +170,30 @@ Uint64 SoundFileReaderWav::read(Int16* samples, Uint64 maxCount)
                 break;
             }
 
+            case 3:
+            {
+                Uint32 sample = 0;
+                if (decode24bit(*m_stream, sample))
+                    *samples++ = sample >> 8;
+                else
+                    return count;
+                break;
+            }
+
             case 4:
             {
-                Int32 sample = 0;
+                Uint32 sample = 0;
                 if (decode(*m_stream, sample))
                     *samples++ = sample >> 16;
                 else
                     return count;
                 break;
+            }
+
+            default:
+            {
+                assert(false);
+                return 0;
             }
         }
 
@@ -248,6 +265,11 @@ bool SoundFileReaderWav::parseHeader(Info& info)
             Uint16 bitsPerSample = 0;
             if (!decode(*m_stream, bitsPerSample))
                 return false;
+            if (bitsPerSample != 8 && bitsPerSample != 16 && bitsPerSample != 24 && bitsPerSample != 32)
+            {
+                err() << "Unsupported sample size: " << bitsPerSample << " bit (Supported sample sizes are 8/16/24/32 bit)" << std::endl;
+                return false;
+            }
             m_bytesPerSample = bitsPerSample / 8;
 
             // Skip potential extra information (should not exist for PCM)
@@ -264,8 +286,9 @@ bool SoundFileReaderWav::parseHeader(Info& info)
             // Compute the total number of samples
             info.sampleCount = subChunkSize / m_bytesPerSample;
 
-            // Store the starting position of samples in the file
+            // Store the start and end position of samples in the file
             m_dataStart = m_stream->tell();
+            m_dataEnd = m_dataStart + info.sampleCount * m_bytesPerSample;
 
             dataChunkFound = true;
         }

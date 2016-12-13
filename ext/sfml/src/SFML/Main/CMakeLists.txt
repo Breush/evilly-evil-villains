@@ -1,6 +1,6 @@
 
-set(INCROOT ${SFML_INCLUDE_DIR}/Main)
-set(SRCROOT ${SFML_SOURCE_DIR}/Main)
+set(INCROOT ${PROJECT_SOURCE_DIR}/include/SFML/Main)
+set(SRCROOT ${PROJECT_SOURCE_DIR}/src/SFML/Main)
 
 # sources
 if(SFML_OS_WINDOWS)
@@ -33,8 +33,5 @@ install(TARGETS sfml-main ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT devel)
 # from depending on shared libraries), we need a boostrap activity which
 # will load our shared libraries manually
 if(SFML_OS_ANDROID)
-    sfml_add_library(sfml-activity SOURCES ${SFML_SOURCE_DIR}/Main/SFMLActivity.cpp)
+    sfml_add_library(sfml-activity SOURCES ${PROJECT_SOURCE_DIR}/src/SFML/Main/SFMLActivity.cpp)
 endif()
-                 
-set(SFML_MAIN_LIBS sfml-main)
-

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2016 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -71,6 +71,7 @@ Font::Font() :
 m_library  (NULL),
 m_face     (NULL),
 m_streamRec(NULL),
+m_stroker  (NULL),
 m_refCount (NULL),
 m_info     ()
 {
@@ -85,6 +86,7 @@ Font::Font(const Font& copy) :
 m_library    (copy.m_library),
 m_face       (copy.m_face),
 m_streamRec  (copy.m_streamRec),
+m_stroker    (copy.m_stroker),
 m_refCount   (copy.m_refCount),
 m_info       (copy.m_info),
 m_pages      (copy.m_pages),
@@ -448,10 +450,15 @@ Font& Font::operator =(const Font& right)
     std::swap(m_library,     temp.m_library);
     std::swap(m_face,        temp.m_face);
     std::swap(m_streamRec,   temp.m_streamRec);
+    std::swap(m_stroker,     temp.m_stroker);
     std::swap(m_refCount,    temp.m_refCount);
     std::swap(m_info,        temp.m_info);
     std::swap(m_pages,       temp.m_pages);
     std::swap(m_pixelBuffer, temp.m_pixelBuffer);
+
+    #ifdef SFML_SYSTEM_ANDROID
+        std::swap(m_stream, temp.m_stream);
+    #endif
 
     return *this;
 }
@@ -637,10 +644,6 @@ Glyph Font::loadGlyph(Uint32 codePoint, unsigned int characterSize, bool bold, f
 
     // Delete the FT glyph
     FT_Done_Glyph(glyphDesc);
-
-    // Force an OpenGL flush, so that the font's texture will appear updated
-    // in all contexts immediately (solves problems in multi-threaded apps)
-    glCheck(glFlush());
 
     // Done :)
     return glyph;

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2016 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -37,6 +37,7 @@ namespace priv
 {
 ////////////////////////////////////////////////////////////
 RenderTextureImplFBO::RenderTextureImplFBO() :
+m_context    (NULL),
 m_frameBuffer(0),
 m_depthBuffer(0)
 {
@@ -47,7 +48,7 @@ m_depthBuffer(0)
 ////////////////////////////////////////////////////////////
 RenderTextureImplFBO::~RenderTextureImplFBO()
 {
-    ensureGlContext();
+    m_context->setActive(true);
 
     // Destroy the depth buffer
     if (m_depthBuffer)
@@ -71,7 +72,7 @@ RenderTextureImplFBO::~RenderTextureImplFBO()
 ////////////////////////////////////////////////////////////
 bool RenderTextureImplFBO::isAvailable()
 {
-    ensureGlContext();
+    TransientContextLock lock;
 
     // Make sure that extensions are initialized
     priv::ensureExtensionsInit();
@@ -81,7 +82,7 @@ bool RenderTextureImplFBO::isAvailable()
 
 
 ////////////////////////////////////////////////////////////
-bool RenderTextureImplFBO::create(unsigned int width, unsigned int height, unsigned int textureId, bool depthBuffer, bool stencilBuffer)
+bool RenderTextureImplFBO::create(unsigned int width, unsigned int height, unsigned int textureId, bool depthBuffer)
 {
     // Create the context
     m_context = new Context;
@@ -111,22 +112,6 @@ bool RenderTextureImplFBO::create(unsigned int width, unsigned int height, unsig
         glCheck(GLEXT_glBindRenderbuffer(GLEXT_GL_RENDERBUFFER, m_depthBuffer));
         glCheck(GLEXT_glRenderbufferStorage(GLEXT_GL_RENDERBUFFER, GLEXT_GL_DEPTH_COMPONENT, width, height));
         glCheck(GLEXT_glFramebufferRenderbuffer(GLEXT_GL_FRAMEBUFFER, GLEXT_GL_DEPTH_ATTACHMENT, GLEXT_GL_RENDERBUFFER, m_depthBuffer));
-    }
-
-    // Create the stencil buffer if requested
-    if (stencilBuffer)
-    {
-        GLuint stencil = 0;
-        glCheck(GLEXT_glGenRenderbuffers(1, &stencil));
-        m_stencilBuffer = static_cast<unsigned int>(stencil);
-        if (!m_stencilBuffer)
-        {
-            err() << "Impossible to create render texture (failed to create the attached stencil buffer)" << std::endl;
-            return false;
-        }
-        glCheck(GLEXT_glBindRenderbuffer(GLEXT_GL_RENDERBUFFER, m_stencilBuffer));
-        glCheck(GLEXT_glRenderbufferStorage(GLEXT_GL_RENDERBUFFER, GLEXT_GL_STENCIL_INDEX, width, height));
-        glCheck(glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GLEXT_GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER_EXT, m_stencilBuffer));
     }
 
     // Link the texture to the frame buffer

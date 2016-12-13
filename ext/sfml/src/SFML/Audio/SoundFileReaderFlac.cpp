@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2016 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -209,7 +209,9 @@ bool SoundFileReaderFlac::check(InputStream& stream)
 
 ////////////////////////////////////////////////////////////
 SoundFileReaderFlac::SoundFileReaderFlac() :
-m_decoder(NULL)
+m_decoder(NULL),
+m_clientData(),
+m_channelCount(0)
 {
 }
 
@@ -247,6 +249,9 @@ bool SoundFileReaderFlac::open(InputStream& stream, Info& info)
     // Retrieve the sound properties
     info = m_clientData.info; // was filled in the "metadata" callback
 
+    // We must keep the channel count for the seek function
+    m_channelCount = info.channelCount;
+
     return true;
 }
 
@@ -261,7 +266,8 @@ void SoundFileReaderFlac::seek(Uint64 sampleOffset)
     m_clientData.remaining = 0;
     m_clientData.leftovers.clear();
 
-    FLAC__stream_decoder_seek_absolute(m_decoder, sampleOffset);
+    // FLAC decoder expects absolute sample offset, so we take the channel count out
+    FLAC__stream_decoder_seek_absolute(m_decoder, sampleOffset / m_channelCount);
 }
 
 

@@ -37,6 +37,7 @@ macro(sfml_add_library target)
         set_target_properties(${target} PROPERTIES DEBUG_POSTFIX -s-d)
         set_target_properties(${target} PROPERTIES RELEASE_POSTFIX -s)
         set_target_properties(${target} PROPERTIES MINSIZEREL_POSTFIX -s)
+        set_target_properties(${target} PROPERTIES RELWITHDEBINFO_POSTFIX -s)
     endif()
 
     # set the version and soversion of the target (for compatible systems -- mostly Linuxes)
@@ -55,6 +56,28 @@ macro(sfml_add_library target)
             set_target_properties(${target} PROPERTIES LINK_FLAGS "-static-libgcc -static-libstdc++")
         elseif(NOT SFML_USE_STATIC_STD_LIBS AND SFML_COMPILER_GCC_TDM)
             set_target_properties(${target} PROPERTIES LINK_FLAGS "-shared-libgcc -shared-libstdc++")
+        endif()
+    endif()
+
+    # For Visual Studio on Windows, export debug symbols (PDB files) to lib directory
+    if(SFML_GENERATE_PDB)
+        # PDB files are only generated in Debug and RelWithDebInfo configurations, find out which one
+        if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+            set(SFML_PDB_POSTFIX "-d")
+        else()
+            set(SFML_PDB_POSTFIX "")
+        endif()
+
+        if(BUILD_SHARED_LIBS)
+            # DLLs export debug symbols in the linker PDB (the compiler PDB is an intermediate file)
+            set_target_properties(${target} PROPERTIES
+                                  PDB_NAME "${target}${SFML_PDB_POSTFIX}"
+                                  PDB_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
+        else()
+            # Static libraries have no linker PDBs, thus the compiler PDBs are relevant
+            set_target_properties(${target} PROPERTIES
+                                  COMPILE_PDB_NAME "${target}-s${SFML_PDB_POSTFIX}"
+                                  COMPILE_PDB_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
         endif()
     endif()
 
@@ -110,11 +133,11 @@ macro(sfml_add_library target)
     endif()
 
     # add the install rule
-    #install(TARGETS ${target}
-    #        RUNTIME DESTINATION bin COMPONENT bin
-    #        LIBRARY DESTINATION lib${LIB_SUFFIX} COMPONENT bin
-    #        ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT devel
-    #        FRAMEWORK DESTINATION ${CMAKE_INSTALL_FRAMEWORK_PREFIX} COMPONENT bin)
+    install(TARGETS ${target}
+            RUNTIME DESTINATION bin COMPONENT bin
+            LIBRARY DESTINATION lib${LIB_SUFFIX} COMPONENT bin
+            ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT devel
+            FRAMEWORK DESTINATION ${CMAKE_INSTALL_FRAMEWORK_PREFIX} COMPONENT bin)
 endmacro()
 
 # add a new target which is a SFML example
