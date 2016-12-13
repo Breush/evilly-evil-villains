@@ -47,7 +47,7 @@ inline void store_current_exception(lua_State * l, char const * what) {
 
     luaL_getmetatable(l, _stored_exception_metatable_name()->c_str());
     if(lua_isnil(l, -1)) {
-        lua_settop(l, -2);
+        lua_pop(l, 1);
         _register_stored_exception_metatable(l);
     }
 
@@ -109,7 +109,7 @@ public:
         } else {
             Handle(
                 luaStatusCode,
-                detail::_pop(detail::_id<std::string>(), L));
+                detail::_get(detail::_id<std::string>(), L, -1));
         }
     }
 

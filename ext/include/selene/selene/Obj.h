@@ -4,6 +4,7 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include "util.h"
 #include <utility>
 #include <vector>
 
@@ -35,14 +36,15 @@ private:
             return t->*member;
         };
         _funs.emplace_back(
-            new ObjFun<1, M>{state, std::string{member_name}, lambda_get});
+            sel::make_unique<ObjFun<1, M>>(
+                state, std::string{member_name}, lambda_get));
 
         std::function<void(M)> lambda_set = [t, member](M value) {
             t->*member = value;
         };
         _funs.emplace_back(
-            new ObjFun<0, void, M>
-            {state, std::string{"set_"} + member_name, lambda_set});
+            sel::make_unique<ObjFun<0, void, M>>(
+                state, std::string{"set_"} + member_name, lambda_set));
     }
 
     template <typename M>
@@ -55,7 +57,8 @@ private:
             return t->*member;
         };
         _funs.emplace_back(
-            new ObjFun<1, M>{state, std::string{member_name}, lambda_get});
+            sel::make_unique<ObjFun<1, M>>(
+                state, std::string{member_name}, lambda_get));
     }
 
     template <typename Ret, typename... Args>
@@ -63,13 +66,13 @@ private:
                           T *t,
                           const char *fun_name,
                           Ret(T::*fun)(Args&&...)) {
-        std::function<Ret(Args&&...)> lambda = [t, fun](Args&&... args) {
+        std::function<Ret(Args&&...)> lambda = [t, fun](Args&&... args) -> Ret {
             return (t->*fun)(std::forward<Args>(args)...);
         };
         constexpr int arity = detail::_arity<Ret>::value;
         _funs.emplace_back(
-            new ObjFun<arity, Ret, Args...>
-            {state, std::string(fun_name), lambda});
+            sel::make_unique<ObjFun<arity, Ret, Args...>>(
+                state, std::string(fun_name), lambda));
     }
 
     template <typename Ret, typename... Args>
@@ -82,9 +85,10 @@ private:
         };
         constexpr int arity = detail::_arity<Ret>::value;
         _funs.emplace_back(
-            new ObjFun<arity, Ret, Args...>
-            {state, std::string(fun_name), lambda});
+            sel::make_unique<ObjFun<arity, Ret, Args...>>(
+                state, std::string(fun_name), lambda));
     }
+
 
     void _register_members(lua_State *state, T *t) {}
 

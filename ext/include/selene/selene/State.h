@@ -1,6 +1,6 @@
 #pragma once
 
-#include "exception.h"
+#include "ExceptionHandler.h"
 #include <iostream>
 #include <memory>
 #include <string>
@@ -22,7 +22,7 @@ public:
     State() : State(false) {}
     State(bool should_open_libs) : _l(nullptr), _l_owner(true), _exception_handler(new ExceptionHandler) {
         _l = luaL_newstate();
-        if (_l == nullptr) abort();
+        if (_l == nullptr) throw 0;
         if (should_open_libs) luaL_openlibs(_l);
         _registry.reset(new Registry(_l));
         HandleExceptionsPrintingToStdOut();
@@ -59,9 +59,8 @@ public:
         return lua_gettop(_l);
     }
 
-    inline bool load(const std::string &file) { return Load(file); }
-
     bool Load(const std::string &file) {
+        ResetStackOnScopeExit savedStack(_l);
         int status = luaL_loadfile(_l, file.c_str());
 #if LUA_VERSION_NUM >= 502
         auto const lua_ok = LUA_OK;
@@ -76,7 +75,6 @@ public:
                 const char *msg = lua_tostring(_l, -1);
                 _exception_handler->Handle(status, msg ? msg : file + ": file error");
             }
-            lua_remove(_l , -1);
             return false;
         }
 
@@ -87,11 +85,11 @@ public:
 
         const char *msg = lua_tostring(_l, -1);
         _exception_handler->Handle(status, msg ? msg : file + ": dofile failed");
-        lua_remove(_l, -1);
         return false;
     }
 
     void OpenLib(const std::string& modname, lua_CFunction openf) {
+        ResetStackOnScopeExit savedStack(_l);
 #if LUA_VERSION_NUM >= 502
         luaL_requiref(_l, modname.c_str(), openf, 1);
 #else
@@ -109,36 +107,19 @@ public:
         *_exception_handler = ExceptionHandler(std::move(handler));
     }
 
-    void Push() {} // Base case
-
-    template <typename T, typename... Ts>
-    void Push(T &&value, Ts&&... values) {
-        detail::_push(_l, std::forward<T>(value));
-        Push(std::forward<Ts>(values)...);
-    }
-
-    // Lua stacks are 1 indexed from the bottom and -1 indexed from
-    // the top
-    template <typename T>
-    T Read(const int index) const {
-        return detail::_get(detail::_id<T>{}, _l, index);
-    }
-
-    bool CheckNil(const std::string &global) {
-        lua_getglobal(_l, global.c_str());
-        const bool result = lua_isnil(_l, -1);
-        lua_pop(_l, 1);
-        return result;
-    }
 public:
     Selector operator[](const char *name) {
         return Selector(_l, *_registry, *_exception_handler, name);
     }
 
     bool operator()(const char *code) {
-        bool result = !luaL_dostring(_l, code);
-        if(result) lua_settop(_l, 0);
-        return result;
+        ResetStackOnScopeExit savedStack(_l);
+        int status = luaL_dostring(_l, code);
+        if(status) {
+            _exception_handler->Handle_top_of_stack(status, _l);
+            return false;
+        }
+        return true;
     }
     void ForceGC() {
         lua_gc(_l, LUA_GCCOLLECT, 0);

@@ -7,10 +7,9 @@ namespace sel {
 template <typename... T>
 class Tuple {
 private:
-    std::tuple<T...> _tuple;
+    std::tuple<T&...> _tuple;
 public:
     Tuple(T&... args) : _tuple(args...) {}
-    Tuple(std::tuple<T...>&& tuple) : _tuple(std::move(tuple)) {}
 
     void operator=(const sel::Selector &s) {
         _tuple = s.GetTuple<typename std::remove_reference<T>::type...>();
@@ -18,7 +17,7 @@ public:
 };
 
 template <typename... T>
-Tuple<T...> tie(T&... args) {
-    return Tuple<T...>(args...);
+Tuple<T&...> tie(T&... args) {
+    return Tuple<T&...>(args...);
 }
 }

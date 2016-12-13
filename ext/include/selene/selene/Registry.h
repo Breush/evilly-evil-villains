@@ -1,9 +1,11 @@
 #pragma once
 
 #include "Class.h"
-#include "exotics.h"
+#include <functional>
 #include "Fun.h"
+#include "MetatableRegistry.h"
 #include "Obj.h"
+#include "util.h"
 #include <vector>
 
 namespace sel {
@@ -18,13 +20,14 @@ struct lambda_traits<Ret(T::*)(Args...) const> {
 }
 class Registry {
 private:
-    MetatableRegistry _metatables;
     std::vector<std::unique_ptr<BaseFun>> _funs;
     std::vector<std::unique_ptr<BaseObj>> _objs;
     std::vector<std::unique_ptr<BaseClass>> _classes;
     lua_State *_state;
 public:
-    Registry(lua_State *state) : _state(state) {}
+    Registry(lua_State *state) : _state(state) {
+        MetatableRegistry::Create(_state);
+    }
 
     template <typename L>
     void Register(L lambda) {
@@ -34,17 +37,17 @@ public:
     template <typename Ret, typename... Args>
     void Register(std::function<Ret(Args...)> fun) {
         constexpr int arity = detail::_arity<Ret>::value;
-        auto tmp = std::unique_ptr<BaseFun>(
-            new Fun<arity, Ret, Args...>{_state, _metatables, fun});
-        _funs.push_back(std::move(tmp));
+        _funs.emplace_back(
+            sel::make_unique<Fun<arity, Ret, Args...>>(
+                _state, fun));
     }
 
     template <typename Ret, typename... Args>
     void Register(Ret (*fun)(Args...)) {
         constexpr int arity = detail::_arity<Ret>::value;
-        auto tmp = std::unique_ptr<BaseFun>(
-            new Fun<arity, Ret, Args...>{_state, _metatables, fun});
-        _funs.push_back(std::move(tmp));
+        _funs.emplace_back(
+            sel::make_unique<Fun<arity, Ret, Args...>>(
+                _state, fun));
     }
 
     template <typename T, typename... Funs>
@@ -60,9 +63,7 @@ public:
 
     template <typename T, typename... Funs>
     void RegisterObj(T &t, Funs... funs) {
-        auto tmp = std::unique_ptr<BaseObj>(
-            new Obj<T, Funs...>{_state, &t, funs...});
-        _objs.push_back(std::move(tmp));
+        _objs.emplace_back(sel::make_unique<Obj<T, Funs...>>(_state, &t, funs...));
     }
 
     template <typename T, typename... CtorArgs, typename... Funs, size_t... N>
@@ -73,10 +74,9 @@ public:
 
     template <typename T, typename... CtorArgs, typename... Funs>
     void RegisterClassWorker(const std::string &name, Funs... funs) {
-        auto tmp = std::unique_ptr<BaseClass>(
-            new Class<T, Ctor<T, CtorArgs...>, Funs...>
-            {_state, _metatables, name, funs...});
-        _classes.push_back(std::move(tmp));
+        _classes.emplace_back(
+            sel::make_unique<Class<T, Ctor<T, CtorArgs...>, Funs...>>(
+                _state, name, funs...));
     }
 };
 }
