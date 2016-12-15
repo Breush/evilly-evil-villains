@@ -13,6 +13,7 @@
 
 local altitude_ref  -- The reference altitude
 
+local fusingTime    -- Time spent fusing
 local fusing        -- Whether the Creepim is exploding
 
 ---------------
@@ -24,7 +25,7 @@ function _reinit()
     eev_initEmptyDataFloat("fusingTime", 0)
 
     -- Was I fusing?
-    local fusingTime = eev_getDataFloat("fusingTime")
+    fusingTime = eev_getDataFloat("fusingTime")
     if fusingTime ~= 0 then
         startFusing(fusingTime)
     end
@@ -76,13 +77,14 @@ function _update(dt)
         if eev_isAnimationStopped() then
             local rx = eev_getDataFloat("rx")
             local ry = eev_getDataFloat("ry")
-            eev_damageRange(rx, ry, 1.5, 100)
             fusingTime = 0
             fusing = false
 
+            -- Will kill ourself
+            eev_damageRange(rx, ry, 1.5, 100)
+
         -- Else, just saved how far we got into the animation
         else
-            local fusingTime = eev_getDataFloat("fusingTime")
             fusingTime = fusingTime + dt
             eev_setDataFloat("fusingTime", fusingTime)
         end

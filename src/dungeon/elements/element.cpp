@@ -103,7 +103,7 @@ Element::Element(dungeon::Inter& inter)
 void Element::updateRoutine(const sf::Time& dt)
 {
     // Forward to lua
-    lua()["_update"](dt.asSeconds());
+    lua()["_update"](static_cast<lua_Number>(dt.asSeconds()));
 }
 
 bool Element::isPointOverable(const sf::Vector2f& relPos) const noexcept

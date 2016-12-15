@@ -48,7 +48,7 @@ void MovingElement::updateAI(const sf::Time& dt)
         setCurrentNode(findNextNode(m_currentNode));
 
     // Forward to lua
-    lua()["_update"](dt.asSeconds());
+    lua()["_update"](static_cast<lua_Number>(dt.asSeconds()));
 }
 
 void MovingElement::updateRoutine(const sf::Time& dt)
