@@ -7,6 +7,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 
 #include <map>
+#include <functional>
 
 namespace nui
 {

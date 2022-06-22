@@ -73,7 +73,7 @@ endif ()
 if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
 endif ()
-		
+
 # Under Linux with GCC, enable call-stack generation
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
     if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -133,13 +133,9 @@ get_directory_property(LTBL_LIBRARIES DIRECTORY ${LTBL_ROOT_DIR} DEFINITION LTBL
 #=====
 # Create SFML libraries
 
-set(SFML_ROOT_DIR ${CMAKE_SOURCE_DIR}/ext/sfml)
-set(SFML_SOURCE_DIR ${CMAKE_SOURCE_DIR}/ext/sfml/src/SFML)
-set(SFML_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/ext/include/SFML)
+find_package (SFML REQUIRED system window graphics network audio)
 
-add_subdirectory(${SFML_ROOT_DIR})
-
-get_directory_property(SFML_LIBRARIES DIRECTORY ${SFML_SOURCE_DIR} DEFINITION SFML_LIBRARIES)
+include_directories(${SFML_INCLUDE_DIR})
 
 #=====
 # Create library

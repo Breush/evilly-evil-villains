@@ -894,6 +894,8 @@ namespace SpriterEngine
                 objectInfo = entity->getNewObjectInfoInstance(object->getId());
             }
 
+            if (!objectInfo) objectInfo = new EntityObjectInfo();
+
             objectInfo->setSpin(spin);
 
             int folder = NO_FILE;

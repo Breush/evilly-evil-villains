@@ -81,22 +81,23 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
         return;
     }
 
+    // @fixme This was an extension...
     // Was there a previous clipping?
-    const auto& parentClippingAreaInt = target.getClippingArea();
-    auto parentClippingArea = sf::toFloatRect(parentClippingAreaInt);
-    bool parentClipping = (parentClippingAreaInt != sf::IntRect());
+    // const auto& parentClippingAreaInt = target.getClippingArea();
+    // auto parentClippingArea = sf::toFloatRect(parentClippingAreaInt);
+    // bool parentClipping = (parentClippingAreaInt != sf::IntRect());
 
     // Multiple global clipping
     for (const auto& globalClipArea : m_globalClipAreas)
     {
         sf::FloatRect clipArea;
         clipArea = tools::mapRectCoordsToPixel(target, globalClipArea);
-        if (parentClipping) clipArea = tools::intersect(parentClippingArea, clipArea);
+        // if (parentClipping) clipArea = tools::intersect(parentClippingArea, clipArea);
 
         // Fully clipped, i.e. we're invisible because of the clip area
         if (clipArea.width <= 0.f || clipArea.height <= 0.f) continue;
 
-        target.setClippingArea(sf::IntRect(clipArea.left, clipArea.top, clipArea.width, clipArea.height));
+    //     target.setClippingArea(sf::IntRect(clipArea.left, clipArea.top, clipArea.width, clipArea.height));
 
         // Draw self
         if (!m_transparent) {
@@ -112,10 +113,10 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
             child->draw(target, states);
     }
 
-    // Reset previous clipping
-    // Note: If there was no clipping, the setClippingArea(sf::IntRect())
-    // is the behavior of clearClippingArea()
-    target.setClippingArea(parentClippingAreaInt);
+    // // Reset previous clipping
+    // // Note: If there was no clipping, the setClippingArea(sf::IntRect())
+    // // is the behavior of clearClippingArea()
+    // target.setClippingArea(parentClippingAreaInt);
 }
 
 void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
@@ -129,22 +130,22 @@ void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states) const
         if (part.shader != nullptr)
             states.shader = part.shader;
 
-        // Part clipping
-        if (part.clipping) {
-            sf::FloatRect partClipArea(part.clippingRect);
-            partClipArea = states.transform.transformRect(partClipArea);
-            partClipArea = tools::mapRectCoordsToPixel(target, partClipArea);
+        // // Part clipping
+        // if (part.clipping) {
+        //     sf::FloatRect partClipArea(part.clippingRect);
+        //     partClipArea = states.transform.transformRect(partClipArea);
+        //     partClipArea = tools::mapRectCoordsToPixel(target, partClipArea);
 
-            if (partClipArea.width <= 0.f || partClipArea.height <= 0.f) continue;
-            target.setClippingArea(sf::IntRect(partClipArea.left, partClipArea.top, partClipArea.width, partClipArea.height));
-        }
+        //     if (partClipArea.width <= 0.f || partClipArea.height <= 0.f) continue;
+        //     target.setClippingArea(sf::IntRect(partClipArea.left, partClipArea.top, partClipArea.width, partClipArea.height));
+        // }
 
         // Effectively drawing this part
         target.draw(*part.drawable, states);
 
-        // Restore the previous clipping
-        if (part.clipping)
-            target.clearClippingArea();
+        // // Restore the previous clipping
+        // if (part.clipping)
+        // target.clearClippingArea();
 
         // Reset the shader
         if (part.shader != nullptr)
@@ -163,23 +164,23 @@ void Entity::drawParts(sf::RenderTarget& target, sf::RenderStates states, const 
         if (part.shader != nullptr)
             states.shader = part.shader;
 
-        // Part clipping
-        if (part.clipping) {
-            sf::FloatRect partClipArea(part.clippingRect);
-            partClipArea = states.transform.transformRect(partClipArea);
-            partClipArea = tools::mapRectCoordsToPixel(target, partClipArea);
-            partClipArea = tools::intersect(partClipArea, clipArea);
+        // // Part clipping
+        // if (part.clipping) {
+        //     sf::FloatRect partClipArea(part.clippingRect);
+        //     partClipArea = states.transform.transformRect(partClipArea);
+        //     partClipArea = tools::mapRectCoordsToPixel(target, partClipArea);
+        //     partClipArea = tools::intersect(partClipArea, clipArea);
 
-            if (partClipArea.width <= 0.f || partClipArea.height <= 0.f) continue;
-            target.setClippingArea(sf::IntRect(partClipArea.left, partClipArea.top, partClipArea.width, partClipArea.height));
-        }
+        //     if (partClipArea.width <= 0.f || partClipArea.height <= 0.f) continue;
+        //     target.setClippingArea(sf::IntRect(partClipArea.left, partClipArea.top, partClipArea.width, partClipArea.height));
+        // }
 
         // Effectively drawing this part
         target.draw(*part.drawable, states);
 
-        // Restore the previous clipping
-        if (part.clipping)
-            target.setClippingArea(sf::IntRect(clipArea.left, clipArea.top, clipArea.width, clipArea.height));
+        // // Restore the previous clipping
+        // if (part.clipping)
+        //     target.setClippingArea(sf::IntRect(clipArea.left, clipArea.top, clipArea.width, clipArea.height));
 
         // Reset the shader
         if (part.shader != nullptr)

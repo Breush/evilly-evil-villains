@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "*.msg_log": "log",
+        ".bashrc.mine": "shellscript",
+        "*.rgen": "glsl",
+        "*.rmiss": "glsl",
+        "*.rchit": "glsl",
+        "*.set": "glsl",
+        "*.odin": "jai",
+        "*.dbg": "csharp",
+        "*.json": "jsonc",
+        "*.suif": "c",
+        "string": "cpp"
+    }
+}
